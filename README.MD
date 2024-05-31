@@ -1,4 +1,5 @@
 # Admin suit
+Solution for Linux server administration and monitoring
 
 ## ROADMAP 1.0
 - [ ] Dev docker env
@@ -6,6 +7,8 @@
 - [ ] APP base
     - [ ] Home controller
     - [ ] Security middlewares
+    - [ ] Email service
+    - [ ] Implement symfony messenger
 - [ ] User system
 - [ ] Auth system
 - [ ] Default user register
@@ -33,4 +36,7 @@
 - [ ] Account settings component
 
 ## ROADMAP 7.0
-- [ ] API for external apps (log, error report system)
+- [ ] Connecting other services (line contact inbox, visitor systems, etc)
+
+## License
+The framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
