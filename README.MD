@@ -2,8 +2,13 @@
 Solution for Linux server with custom services administration and monitoring
 
 ## ROADMAP 0.1
+- [X] Setup symfony framework
+    - [X] Install dependencies
+    - [X] Install webpack
+    - [X] Install phpunit
+    - [X] Install phpstan
+    - [X] Install phpdocumentor
 - [ ] Dev docker env
-- [ ] Setup symfony framework
 - [ ] APP base
     - [ ] Home controller
     - [ ] Security middlewares

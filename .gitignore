@@ -1,0 +1,37 @@
+# env files
+/.env.local
+/.env.prod
+/.env.local.php
+/.env.*.local
+
+# config files
+/config/secrets/prod/prod.decrypt.private.php
+
+# bundles assets files
+/public/bundles/
+
+# cache files
+/var
+
+# composer files
+/composer.lock
+/vendor/
+
+# migrations
+/migrations
+
+# phpunit files
+.phpunit.result.cache
+
+# php codesniffer cache
+/.phpcs-cache
+
+# php documentor files
+/.phpdoc
+
+# npm files
+/public/build/
+/node_modules/
+/npm-debug.log
+/yarn-error.log
+/package-lock.json
