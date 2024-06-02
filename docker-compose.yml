@@ -1,0 +1,47 @@
+# This Docker Compose configuration defines local development services.
+version: '3'
+
+# docker network config
+networks:
+    dev:
+        driver: bridge
+
+services:
+    # database container
+    mysql:
+        image: mysql:latest
+        container_name: admin_suite_mysql
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+        volumes:
+            - ./_docker/configs/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+            - ./_docker/services/mysql_database:/var/lib/mysql
+            - ./_docker/services/log:/var/log
+        mem_limit: 1g
+        ports:
+            - "3306:3306"
+        networks:
+            - dev
+
+    # web server container
+    apache_php:
+        build:
+            context: .
+            dockerfile: ./_docker/Dockerfile
+        container_name: admin_suite_apache
+        restart: always
+        depends_on:
+            - mysql
+        environment:
+            - DATABASE_HOST=mysql
+        volumes:
+            - ./_docker/configs/apache-site.conf:/etc/apache2/sites-available/000-default.conf
+            - ./_docker/configs/php.ini:/usr/local/etc/php/php.ini:ro
+            - ./_docker/services/log:/var/log
+            - ./:/var/www
+        mem_limit: 2g
+        ports:
+            - "80:80"
+        networks:
+            - dev

@@ -8,7 +8,7 @@ Solution for Linux server with custom services administration and monitoring
     - [X] Install phpunit
     - [X] Install phpstan
     - [X] Install phpdocumentor
-- [ ] Dev docker env
+- [X] Dev docker env
 - [ ] Github actions
 - [ ] APP base
     - [ ] Home controller

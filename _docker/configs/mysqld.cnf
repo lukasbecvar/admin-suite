@@ -1,0 +1,12 @@
+[mysqld]
+user      = mysql
+pid-file  = /var/run/mysqld/mysqld.pid
+socket    = /var/run/mysqld/mysqld.sock
+port      = 3306
+datadir   = /var/lib/mysql
+
+# size of the buffer used for index blocks
+key_buffer_size = 256M
+
+# maximum size of one packet or any generated or intermediate string
+max_allowed_packet = 256M

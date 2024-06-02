@@ -1,5 +1,5 @@
 /*
- * becvar-site frontend webpack builder
+ * admin-suite frontend webpack builder
  */
 const Encore = require('@symfony/webpack-encore');
 
