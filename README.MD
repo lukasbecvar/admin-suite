@@ -11,7 +11,9 @@ Solution for Linux server with custom services administration and monitoring
 - [X] Dev docker env
 - [ ] Github actions
 - [ ] APP base
-    - [ ] Home controller
+    - [ ] Index controller
+    - [ ] Log manager
+    - [ ] Error handler
     - [ ] Security middlewares
     - [ ] Email service
     - [ ] Implement symfony messenger
