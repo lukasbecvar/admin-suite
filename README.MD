@@ -9,7 +9,7 @@ Solution for Linux server with custom services administration and monitoring
     - [X] Install phpstan
     - [X] Install phpdocumentor
 - [X] Dev docker env
-- [ ] Github actions
+- [X] Github actions
 - [ ] APP base
     - [ ] Index controller
     - [ ] Log manager

@@ -35,3 +35,6 @@
 /npm-debug.log
 /yarn-error.log
 /package-lock.json
+
+# docker services files
+_docker/services
