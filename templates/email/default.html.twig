@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin-suite alert</title>
+</head>
+<body style="background-color: #121212; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0;">
+    <div class="container" style="padding: 20px;">
+        <div class="header" style="padding: 10px 0; border-bottom: 1px solid #ff2a2a;">
+            <h1 style="color: #ff2a2a; margin: 0;">{{ subject }}</h1>
+        </div>
+        <div class="content" style="margin: 20px 0; padding: 10px 0;">
+            <p style="font-size: 16px; line-height: 1.5; margin: 0;">{{ message }}</p>
+        </div>
+    </div>
+    <div class="footer" style="margin-top: 30px; padding: 10px 0; text-align: center; font-size: 12px; color: #d3d3d3; border-top: 1px solid #b1b1b1;">
+        This is an automated email from admin-suite ({{ time }})
+    </div>
+</body>
+</html>
