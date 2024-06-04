@@ -14,3 +14,39 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    # --------------------------------------------------------------------------------- #
+    # error handeling controller for error manager
+    Symfony\Component\HttpKernel\EventListener\ErrorListener:
+        arguments:
+            $controller: 'App\Controller\ErrorController::show'
+
+    # internal exception error event
+    App\Event\Subscriber\ExceptionEventSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
+
+    # resources build checker
+    App\Middleware\AssetsCheckMiddleware:
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 5 }
+
+    # escape request data
+    App\Middleware\EscapeRequestDataMiddleware:
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 4 }
+
+    # database online checker
+    App\Middleware\DatabaseOnlineMiddleware:
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 3 }
+
+    # security check service
+    App\Middleware\SecurityCheckMiddleware:
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 2 }
+
+    # maintenance mode checker
+    App\Middleware\MaintenanceMiddleware:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 1 }

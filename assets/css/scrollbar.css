@@ -1,0 +1,31 @@
+/* admin-suite: custom dark scrollbar */ 
+::-webkit-scrollbar {
+	width: 15px;
+	height: 15px;
+} 
+
+::-webkit-scrollbar-track {
+	background: rgb(37, 37, 37);
+}
+ 
+::-webkit-scrollbar-thumb {
+	background: #40444b;
+	-webkit-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+	min-height: 80px;
+} 
+
+::-webkit-scrollbar-thumb:hover {
+	background: #5c646b;
+}
+
+/* mobile devices style */
+@media screen and (max-width: 800px) { 
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+    ::-webkit-scrollbar-thumb {
+        min-height: 40px;
+    } 
+}

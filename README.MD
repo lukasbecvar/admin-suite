@@ -14,17 +14,23 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [X] Dev docker env
 - [X] Github actions
 - [ ] APP base
-    - [ ] Index controller
-    - [ ] Log manager
-    - [ ] Error handler
-    - [ ] Security middlewares
-    - [ ] Email service
-    - [ ] Implement symfony messenger
+    - [X] Index controller
+    - [X] Log manager
+    - [X] Error handler
+    - [X] Security middlewares
+    - [X] Email service
+    - [X] Log level config
+    - [X] Basic templates layout
+    - [ ] Base unit tests
+    - [ ] Base refactor
 
 ## ROADMAP 0.2
 - [ ] User system
 - [ ] Auth system
 - [ ] Default user register
+- [ ] Index redirect to dashboard or login
+- [ ] User -> log one to many
+- [ ] User ban system
 
 ## ROADMAP 0.3
 - [ ] Main dashboard
@@ -53,8 +59,9 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [ ] Connecting other services (line contact inbox, visitor systems, etc)
 
 ## ROADMAP 1.0
+- [ ] About component (developer, github, version, info, etc..)
 - [ ] Refactor
-- [ ] User manual
+- [ ] User manual with config & setup doc
 
 ## License
 The framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

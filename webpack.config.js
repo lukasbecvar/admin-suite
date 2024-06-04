@@ -8,8 +8,17 @@ Encore
     .setOutputPath('public/build/')
     .setPublicPath('/build')
 
-    // add entry points
+    // register css entries
     .addEntry('main-css', './assets/css/main.css')
+    .addEntry('scrollbar-css', './assets/css/scrollbar.css')
+
+    // copy static assets
+    .copyFiles(
+        {
+            from: './assets/images', 
+            to: 'images/[path][name].[ext]' 
+        }
+    )
 
     // other webpack configs
     .splitEntryChunks()

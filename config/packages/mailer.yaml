@@ -1,0 +1,3 @@
+framework:
+    mailer:
+        dsn: 'smtps://%env(MAILER_USERNAME)%:%env(MAILER_PASSWORD)%@%env(MAILER_HOST)%:%env(MAILER_PORT)%'
