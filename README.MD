@@ -4,7 +4,8 @@ Solution for Linux server with custom services administration and monitoring
 ## Documentation
 The complete source documentation is [here](https://lordbecvold.github.io/admin-suite/)
 
-## ROADMAP 0.1
+## ROADMAP
+## 0.1
 - [X] Setup symfony framework
     - [X] Install dependencies
     - [X] Install webpack
@@ -24,7 +25,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Base unit tests
     - [X] Base refactor
 
-## ROADMAP 0.2
+## 0.2
 - [ ] User system
 - [ ] Auth system
 - [ ] Default user register
@@ -32,34 +33,39 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [ ] User -> log one to many
 - [ ] User ban system
 
-## ROADMAP 0.3
+## 0.3
 - [ ] Main dashboard
 - [ ] Server info
+- [ ] Server diagnostics component
 - [ ] Dashboard warning box
+- [ ] Check requirements warning
 
-## ROADMAP 0.4
+## 0.4
 - [ ] Service manager component
 - [ ] Service monitoring component
 
-## ROADMAP 0.5
+## 0.5
 - [ ] Terminal component
+
+## 0.6
 - [ ] File browser & editor
 
-## ROADMAP 0.6
+## 0.7
 - [ ] Database browser
 
-## ROADMAP 0.7
+## 0.8
 - [ ] Log manager
 - [ ] Server diagnostic
 
-## ROADMAP 0.8
+## 0.9
+- [ ] Todo manager
 - [ ] Internal chat component
 - [ ] Account settings component
 
-## ROADMAP 0.9
+## 1.0
 - [ ] Connecting other services (line contact inbox, visitor systems, etc)
 
-## ROADMAP 1.0
+## ROADMAP 1.1
 - [ ] About component (developer, github, version, info, etc..)
 - [ ] Refactor
 - [ ] User manual with config & setup doc
