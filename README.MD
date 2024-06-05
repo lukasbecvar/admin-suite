@@ -23,7 +23,6 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Basic templates layout
     - [X] Base unit tests
     - [X] Base refactor
-    - [ ] Custom async process worker
 
 ## ROADMAP 0.2
 - [ ] User system
