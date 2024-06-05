@@ -4,10 +4,10 @@ namespace App\Exception;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-/*
+/**
  * Class AppErrorException
  *
- * The exception for the application error
+ * An exception for application errors
  *
  * @package App\Exception
  */
