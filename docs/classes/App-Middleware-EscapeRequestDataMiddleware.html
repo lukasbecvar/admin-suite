@@ -57,7 +57,7 @@
                     <section class="phpdocumentor-sidebar__category -namespaces">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
-    <a href="namespaces/app.html" class="-active">App</a>
+    <a href="namespaces/app.html" class="">App</a>
 </h4>
     <ul class="phpdocumentor-list">
                     <li>
@@ -161,60 +161,253 @@
             <div class="phpdocumentor-column -nine phpdocumentor-content">
                                 <section>
                                         <ul class="phpdocumentor-breadcrumbs">
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app.html">App</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-middleware.html">Middleware</a></li>
     </ul>
 
-    <article class="phpdocumentor-element -namespace">
-        <h2 class="phpdocumentor-content__title">App</h2>
+    <article class="phpdocumentor-element -class">
+        <h2 class="phpdocumentor-content__title">
+    EscapeRequestDataMiddleware
 
-        
+    
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App.html">App</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Service.html">Service</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Service-Middleware.html">Middleware</a></li>
+                            </ul>
+        </div>
+    
+    
+    </h2>
+
+<div class="phpdocumentor-label-line">
+
+
+</div>
+
+        <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Middleware/EscapeRequestDataMiddleware.php"><a href="files/src-middleware-escaperequestdatamiddleware.html"><abbr title="src/Middleware/EscapeRequestDataMiddleware.php">EscapeRequestDataMiddleware.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">15</span>
+
+    </aside>
+
+            <p class="phpdocumentor-summary">Class EscapeRequestDataMiddleware</p>
+
+    <section class="phpdocumentor-description"><p>Middleware to escape request data for security purposes.</p>
+</section>
+
+
+
+
+
+
+
 <h3 id="toc">
     Table of Contents
-    <a href="namespaces/app.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h3>
 
 
-<h4 id="namespaces">
-    Namespaces
-    <a href="namespaces/app.html#namespaces" class="headerlink"><i class="fas fa-link"></i></a>
+
+
+
+
+
+
+
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
-            <dt class="phpdocumentor-table-of-contents__entry -namespace"><a href="namespaces/app-controller.html"><abbr title="\App\Controller">Controller</abbr></a></dt>
-            <dt class="phpdocumentor-table-of-contents__entry -namespace"><a href="namespaces/app-datafixtures.html"><abbr title="\App\DataFixtures">DataFixtures</abbr></a></dt>
-            <dt class="phpdocumentor-table-of-contents__entry -namespace"><a href="namespaces/app-entity.html"><abbr title="\App\Entity">Entity</abbr></a></dt>
-            <dt class="phpdocumentor-table-of-contents__entry -namespace"><a href="namespaces/app-event.html"><abbr title="\App\Event">Event</abbr></a></dt>
-            <dt class="phpdocumentor-table-of-contents__entry -namespace"><a href="namespaces/app-exception.html"><abbr title="\App\Exception">Exception</abbr></a></dt>
-            <dt class="phpdocumentor-table-of-contents__entry -namespace"><a href="namespaces/app-manager.html"><abbr title="\App\Manager">Manager</abbr></a></dt>
-            <dt class="phpdocumentor-table-of-contents__entry -namespace"><a href="namespaces/app-middleware.html"><abbr title="\App\Middleware">Middleware</abbr></a></dt>
-            <dt class="phpdocumentor-table-of-contents__entry -namespace"><a href="namespaces/app-repository.html"><abbr title="\App\Repository">Repository</abbr></a></dt>
-            <dt class="phpdocumentor-table-of-contents__entry -namespace"><a href="namespaces/app-util.html"><abbr title="\App\Util">Util</abbr></a></dt>
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#property_securityUtil">$securityUtil</a>
+    <span>
+                        &nbsp;: <a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a>            </span>
+</dt>
+
+    </dl>
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#method___construct">__construct()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>EscapeRequestDataMiddleware constructor.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#method_onKernelRequest">onKernelRequest()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Handles the kernel request by escaping request data.</dd>
+
     </dl>
 
 
-    <h4 id="toc-classes">
-        Classes
-        <a href="namespaces/app.html#toc-classes" class="headerlink"><i class="fas fa-link"></i></a>
+
+        
+
+        
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_securityUtil">
+        $securityUtil
+        <a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#property_securityUtil" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Middleware/EscapeRequestDataMiddleware.php"><a href="files/src-middleware-escaperequestdatamiddleware.html"><abbr title="src/Middleware/EscapeRequestDataMiddleware.php">EscapeRequestDataMiddleware.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">17</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$securityUtil</span>
+    </code>
+
+    
+    
+    
+
+    
+
+</article>
+            </section>
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
-    <dl class="phpdocumentor-table-of-contents">
-                    <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/App-Kernel.html"><abbr title="\App\Kernel">Kernel</abbr></a></dt><dd>Class Kernel</dd>    </dl>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Middleware/EscapeRequestDataMiddleware.php"><a href="files/src-middleware-escaperequestdatamiddleware.html"><abbr title="src/Middleware/EscapeRequestDataMiddleware.php">EscapeRequestDataMiddleware.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">24</span>
 
+    </aside>
 
+        <p class="phpdocumentor-summary">EscapeRequestDataMiddleware constructor.</p>
 
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$securityUtil</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$securityUtil</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The security utility instance.</p>
+</section>
 
+            </dd>
+            </dl>
 
+    
 
+    
 
-        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_onKernelRequest">
+        onKernelRequest()
+        <a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#method_onKernelRequest" class="headerlink"><i class="fas fa-link"></i></a>
 
-        
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Middleware/EscapeRequestDataMiddleware.php"><a href="files/src-middleware-escaperequestdatamiddleware.html"><abbr title="src/Middleware/EscapeRequestDataMiddleware.php">EscapeRequestDataMiddleware.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">36</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Handles the kernel request by escaping request data.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">onKernelRequest</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpKernel\Event\RequestEvent">RequestEvent</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$event</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$event</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpKernel\Event\RequestEvent">RequestEvent</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The event triggered on kernel request.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+
+    
+</article>
+            </section>
+
         <div class="phpdocumentor-modal" id="source-view">
     <div class="phpdocumentor-modal-bg" data-exit-button></div>
     <div class="phpdocumentor-modal-container">
         <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="" class="language-php line-numbers linkable-line-numbers"></pre>
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Middleware/EscapeRequestDataMiddleware.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
         </div>
         <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
     </div>
@@ -305,7 +498,7 @@
     </article>
                                 </section>
                 <section class="phpdocumentor-on-this-page__sidebar">
-                            
+                                
     <section class="phpdocumentor-on-this-page__content">
         <strong class="phpdocumentor-on-this-page__title">On this page</strong>
 
@@ -313,11 +506,25 @@
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                                                                    <li><a href="namespaces/app.html#toc-classes">Classes</a></li>
-                                                                                                                    </ul>
+                                                            <li><a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#toc-methods">Methods</a></li>
+                                    </ul>
             </li>
-
             
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li><a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#property_securityUtil">$securityUtil<a href="classes/App-Middleware-EscapeRequestDataMiddleware.html"></li>
+                                            </ul>
+                </li>
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li><a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#method___construct">__construct()</a></li>
+                                            <li><a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#method_onKernelRequest">onKernelRequest()</a></li>
+                                    </ul>
+            </li>
                     </ul>
     </section>
 
@@ -335,7 +542,7 @@
     </section>
 </section>
         </div>
-        <a href="namespaces/app.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/App-Middleware-EscapeRequestDataMiddleware.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 
