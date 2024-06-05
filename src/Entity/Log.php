@@ -6,6 +6,13 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\LogRepository;
 
+/**
+ * The Log database entity
+ * 
+ * The Log entity is used to store log messages in the database
+ * 
+ * @package App\Entity
+ */
 #[ORM\Table(name: 'logs')]
 #[ORM\Entity(repositoryClass: LogRepository::class)]
 class Log

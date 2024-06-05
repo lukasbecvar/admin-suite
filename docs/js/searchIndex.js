@@ -53,7 +53,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Entity\\Log",
             "name": "Log",
-            "summary": "",
+            "summary": "The\u0020Log\u0020database\u0020entity",
             "url": "classes/App-Entity-Log.html"
         },                {
             "fqsen": "\\App\\Entity\\Log\u003A\u003AgetId\u0028\u0029",
@@ -163,7 +163,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Exception\\AppErrorException",
             "name": "AppErrorException",
-            "summary": "",
+            "summary": "Class\u0020AppErrorException",
             "url": "classes/App-Exception-AppErrorException.html"
         },                {
             "fqsen": "\\App\\Exception\\AppErrorException\u003A\u003A__construct\u0028\u0029",
