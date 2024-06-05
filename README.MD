@@ -1,4 +1,4 @@
-# Admin suit
+# Admin suite
 Solution for Linux server with custom services administration and monitoring
 
 ## Documentation
