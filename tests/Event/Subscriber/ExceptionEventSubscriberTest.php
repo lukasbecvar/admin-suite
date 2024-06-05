@@ -8,21 +8,26 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use App\Event\Subscriber\ExceptionEventSubscriber;
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /**
  * Class ExceptionEventSubscriberTest
  *
  * Test the exception event subscriber
- * 
+ *
  * @package App\Tests\Event\Subscriber
  */
 class ExceptionEventSubscriberTest extends TestCase
 {
-    private LogManager|MockObject $logManager;
-    private LoggerInterface|MockObject $logger;
-    private ExceptionEventSubscriber|MockObject $subscriber;
+    /** @var MockObject|LogManager The log manager instance */
+    private MockObject|LogManager $logManager;
+
+    /** @var MockObject|LoggerInterface The monolog logger instance */
+    private MockObject|LoggerInterface $logger;
+
+    /** @var ExceptionEventSubscriber The exception event subscriber instance */
+    private ExceptionEventSubscriber $subscriber;
 
     protected function setUp(): void
     {
@@ -33,13 +38,13 @@ class ExceptionEventSubscriberTest extends TestCase
 
     /**
      * Test if the error message can be logged
-     * 
+     *
      * @return void
      */
     public function testCanBeEventLogged(): void
     {
         // test error message without blocked pattern
-        $this->assertTrue($this->subscriber->canBeEventLogged('Normal error message'));
+        $this->assertTrue($this->subscriber->canBeEventLogged('normal error message'));
 
         // test error message with blocked pattern
         $this->assertFalse($this->subscriber->canBeEventLogged('log-error: Something went wrong'));
@@ -47,7 +52,7 @@ class ExceptionEventSubscriberTest extends TestCase
 
     /**
      * Test if the error message can be logged
-     * 
+     *
      * @return void
      */
     public function testExceptionLogsHandledError(): void
@@ -85,7 +90,7 @@ class ExceptionEventSubscriberTest extends TestCase
 
     /**
      * Test if the error message can be logged
-     * 
+     *
      * @return void
      */
     public function testExceptionDoesNotLogBlockedError(): void
@@ -106,10 +111,15 @@ class ExceptionEventSubscriberTest extends TestCase
         );
 
         // check if the log manager logs the exception
-        $this->logManager->expects($this->never())->method('log');
+        $this->logManager
+            ->expects($this->never())
+            ->method('log');
 
         // check if the logger logs the error message
-        $this->logger->expects($this->once())->method('error')->with('Unknown database error');
+        $this->logger
+            ->expects($this->once())
+            ->method('error')
+            ->with('Unknown database error');
 
         // handle the exception event
         $this->subscriber->onKernelException($event);
@@ -117,7 +127,7 @@ class ExceptionEventSubscriberTest extends TestCase
 
     /**
      * Test if the error message can be logged
-     * 
+     *
      * @return void
      */
     public function testExceptionDoesNotLogUnhandledFunction(): void

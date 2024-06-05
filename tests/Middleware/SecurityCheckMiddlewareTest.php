@@ -67,7 +67,7 @@ class SecurityCheckMiddlewareTest extends TestCase
      *
      * @return void
      */
-    public function testRequestWhenSslEnabledAndSSLDetected(): void
+    public function testRequestWhenSslEnabledAndSslDetected(): void
     {
         // create the AppUtil mock
         $appUtilMock = $this->createMock(AppUtil::class);
@@ -91,10 +91,14 @@ class SecurityCheckMiddlewareTest extends TestCase
         $event = $this->createMock(RequestEvent::class);
 
         // expect no errors to be handled
-        $errorManagerMock->expects($this->never())->method('handleError');
+        $errorManagerMock
+            ->expects($this->never())
+            ->method('handleError');
 
         // expect no response to be set
-        $event->expects($this->never())->method('setResponse');
+        $event
+            ->expects($this->never())
+            ->method('setResponse');
 
         // execute the middleware
         $middleware->onKernelRequest($event);
@@ -109,7 +113,10 @@ class SecurityCheckMiddlewareTest extends TestCase
     {
         // create the AppUtil mock
         $appUtilMock = $this->createMock(AppUtil::class);
-        $appUtilMock->expects($this->once())->method('isSSLOnly')->willReturn(false);
+        $appUtilMock
+            ->expects($this->once())
+            ->method('isSSLOnly')
+            ->willReturn(false);
 
         // create the logger mock
         $loggerMock = $this->createMock(LoggerInterface::class);
@@ -124,10 +131,14 @@ class SecurityCheckMiddlewareTest extends TestCase
         $event = $this->createMock(RequestEvent::class);
 
         // expect no errors to be handled
-        $errorManagerMock->expects($this->never())->method('handleError');
+        $errorManagerMock
+            ->expects($this->never())
+            ->method('handleError');
 
         // expect no response to be set
-        $event->expects($this->never())->method('setResponse');
+        $event
+            ->expects($this->never())
+            ->method('setResponse');
 
         // execute the middleware
         $middleware->onKernelRequest($event);

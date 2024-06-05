@@ -333,7 +333,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Middleware\\EscapeRequestDataMiddleware\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "EscapeRequestDataMiddleware\u0020constructor.",
+            "summary": "",
             "url": "classes/App-Middleware-EscapeRequestDataMiddleware.html#method___construct"
         },                {
             "fqsen": "\\App\\Middleware\\EscapeRequestDataMiddleware\u003A\u003AonKernelRequest\u0028\u0029",
