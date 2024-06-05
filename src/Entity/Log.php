@@ -8,9 +8,9 @@ use App\Repository\LogRepository;
 
 /**
  * The Log database entity
- * 
+ *
  * The Log entity is used to store log messages in the database
- * 
+ *
  * @package App\Entity
  */
 #[ORM\Table(name: 'logs')]
