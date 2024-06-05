@@ -7,12 +7,12 @@ clear
 
 # run phpcs process
 yellow_echo 'PHPCS: testing...'
-php vendor/bin/phpcbf
-php vendor/bin/phpcs
+php bin/phpcbf
+php bin/phpcs
 
 # analyze phpstan
 yellow_echo 'PHPSTAN: testing...'
-php vendor/bin/phpstan analyze
+php bin/phpstan analyze
 
 # PHPUnit tests
 yellow_echo 'PHPUnit: testing...'

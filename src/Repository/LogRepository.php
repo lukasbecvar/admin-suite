@@ -7,7 +7,13 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
+ * Class LogRepository
+ *
+ * Repository for the Log entity
+ *
  * @extends ServiceEntityRepository<Log>
+ *
+ * @package App\Repository
  */
 class LogRepository extends ServiceEntityRepository
 {

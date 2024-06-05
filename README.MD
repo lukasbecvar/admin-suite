@@ -13,7 +13,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Install phpdocumentor
 - [X] Dev docker env
 - [X] Github actions
-- [ ] APP base
+- [X] APP base
     - [X] Index controller
     - [X] Log manager
     - [X] Error handler
@@ -21,8 +21,9 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Email service
     - [X] Log level config
     - [X] Basic templates layout
-    - [ ] Base unit tests
-    - [ ] Base refactor
+    - [X] Base unit tests
+    - [X] Base refactor
+    - [ ] Custom async process worker
 
 ## ROADMAP 0.2
 - [ ] User system
@@ -43,6 +44,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 
 ## ROADMAP 0.5
 - [ ] Terminal component
+- [ ] File browser & editor
 
 ## ROADMAP 0.6
 - [ ] Database browser
