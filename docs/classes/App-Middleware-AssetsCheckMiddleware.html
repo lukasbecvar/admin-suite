@@ -162,22 +162,19 @@
                                 <section>
                                         <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/app.html">App</a></li>
-            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-controller.html">Controller</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-middleware.html">Middleware</a></li>
     </ul>
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    IndexController
+    AssetsCheckMiddleware
 
-        <span class="phpdocumentor-element__extends">
-        extends <abbr title="\Symfony\Bundle\FrameworkBundle\Controller\AbstractController">AbstractController</abbr>
-    </span>
     
             <div class="phpdocumentor-element__package">
             in package
             <ul class="phpdocumentor-breadcrumbs">
                                     <li class="phpdocumentor-breadcrumb"><a href="packages/App.html">App</a></li>
-                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Controller.html">Controller</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Middleware.html">Middleware</a></li>
                             </ul>
         </div>
     
@@ -190,15 +187,15 @@
 </div>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/IndexController.php"><a href="files/src-controller-indexcontroller.html"><abbr title="src/Controller/IndexController.php">IndexController.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Middleware/AssetsCheckMiddleware.php"><a href="files/src-middleware-assetscheckmiddleware.html"><abbr title="src/Middleware/AssetsCheckMiddleware.php">AssetsCheckMiddleware.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">16</span>
+    <span class="phpdocumentor-element-found-in__line">17</span>
 
     </aside>
 
-            <p class="phpdocumentor-summary">Class IndexController</p>
+            <p class="phpdocumentor-summary">Class AssetsCheckMiddleware</p>
 
-    <section class="phpdocumentor-description"><p>The controller for the index page</p>
+    <section class="phpdocumentor-description"><p>The middleware for checking assets</p>
 </section>
 
 
@@ -209,7 +206,7 @@
 
 <h3 id="toc">
     Table of Contents
-    <a href="classes/App-Controller-IndexController.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Middleware-AssetsCheckMiddleware.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h3>
 
@@ -221,19 +218,44 @@
 
 
 
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/App-Middleware-AssetsCheckMiddleware.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/App-Middleware-AssetsCheckMiddleware.html#property_appUtil">$appUtil</a>
+    <span>
+                        &nbsp;: <a href="classes/App-Util-AppUtil.html"><abbr title="\App\Util\AppUtil">AppUtil</abbr></a>            </span>
+</dt>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/App-Middleware-AssetsCheckMiddleware.html#property_logger">$logger</a>
+    <span>
+                        &nbsp;: <abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>            </span>
+</dt>
+
+    </dl>
 
 <h4 id="toc-methods">
     Methods
-    <a href="classes/App-Controller-IndexController.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Middleware-AssetsCheckMiddleware.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Controller-IndexController.html#method_index">index()</a>
+    <a href="classes/App-Middleware-AssetsCheckMiddleware.html#method___construct">__construct()</a>
     <span>
-                                &nbsp;: <abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr>    </span>
+                                &nbsp;: mixed    </span>
 </dt>
-<dd>Show the app index</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Middleware-AssetsCheckMiddleware.html#method_onKernelRequest">onKernelRequest()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Handle the assets check</dd>
 
     </dl>
 
@@ -242,11 +264,88 @@
         
 
         
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/App-Middleware-AssetsCheckMiddleware.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_appUtil">
+        $appUtil
+        <a href="classes/App-Middleware-AssetsCheckMiddleware.html#property_appUtil" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Middleware/AssetsCheckMiddleware.php"><a href="files/src-middleware-assetscheckmiddleware.html"><abbr title="src/Middleware/AssetsCheckMiddleware.php">AssetsCheckMiddleware.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">19</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/App-Util-AppUtil.html"><abbr title="\App\Util\AppUtil">AppUtil</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$appUtil</span>
+    </code>
+
+    
+    
+    
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_logger">
+        $logger
+        <a href="classes/App-Middleware-AssetsCheckMiddleware.html#property_logger" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Middleware/AssetsCheckMiddleware.php"><a href="files/src-middleware-assetscheckmiddleware.html"><abbr title="src/Middleware/AssetsCheckMiddleware.php">AssetsCheckMiddleware.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">20</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+    <span class="phpdocumentor-signature__name">$logger</span>
+    </code>
+
+    
+    
+    
+
+    
+
+</article>
+            </section>
 
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/App-Controller-IndexController.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/App-Middleware-AssetsCheckMiddleware.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article
@@ -255,58 +354,95 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_index">
-        index()
-        <a href="classes/App-Controller-IndexController.html#method_index" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/App-Middleware-AssetsCheckMiddleware.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/IndexController.php"><a href="files/src-controller-indexcontroller.html"><abbr title="src/Controller/IndexController.php">IndexController.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Middleware/AssetsCheckMiddleware.php"><a href="files/src-middleware-assetscheckmiddleware.html"><abbr title="src/Middleware/AssetsCheckMiddleware.php">AssetsCheckMiddleware.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">22</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Show the app index</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">index</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-AppUtil.html"><abbr title="\App\Util\AppUtil">AppUtil</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$appUtil</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
     
-    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$appUtil</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-AppUtil.html"><abbr title="\App\Util\AppUtil">AppUtil</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$logger</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
     
 
     
-    <section class="phpdocumentor-attributes">
-        <h5 class="phpdocumentor-elements__header" id="attributes">
-            Attributes <a href="classes/App-Controller-IndexController.html#method_index#attributes" class="headerlink"><i class="fas fa-link"></i></a>
 
-        </h5>
-                    <dl class="phpdocumentor-argument-list">
-    <dt class="phpdocumentor-argument-list__entry">
-        #[<abbr title="\Symfony\Component\Routing\Attribute\Route">Route</abbr>]
-    </dt>
-        <dd class="phpdocumentor-argument-list__entry">
-        &#039;/&#039;
-    </dd>
-        <dd class="phpdocumentor-argument-list__entry">
-        $name: &#039;app_index&#039;
-    </dd>
-    </dl>
-            </section>
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_onKernelRequest">
+        onKernelRequest()
+        <a href="classes/App-Middleware-AssetsCheckMiddleware.html#method_onKernelRequest" class="headerlink"><i class="fas fa-link"></i></a>
 
-            <section>
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span>
-                    &mdash;
-                <section class="phpdocumentor-description"><p>The index view</p>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Middleware/AssetsCheckMiddleware.php"><a href="files/src-middleware-assetscheckmiddleware.html"><abbr title="src/Middleware/AssetsCheckMiddleware.php">AssetsCheckMiddleware.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">35</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Handle the assets check</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">onKernelRequest</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpKernel\Event\RequestEvent">RequestEvent</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$event</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$event</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpKernel\Event\RequestEvent">RequestEvent</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The request event</p>
 </section>
 
-            </section>
+            </dd>
+            </dl>
 
+    
+
+    
+
+    
 </article>
             </section>
 
@@ -314,7 +450,7 @@
     <div class="phpdocumentor-modal-bg" data-exit-button></div>
     <div class="phpdocumentor-modal-container">
         <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Controller/IndexController.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Middleware/AssetsCheckMiddleware.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
         </div>
         <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
     </div>
@@ -413,15 +549,24 @@
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                                                <li><a href="classes/App-Controller-IndexController.html#toc-methods">Methods</a></li>
+                                                            <li><a href="classes/App-Middleware-AssetsCheckMiddleware.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/App-Middleware-AssetsCheckMiddleware.html#toc-methods">Methods</a></li>
                                     </ul>
             </li>
             
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li><a href="classes/App-Middleware-AssetsCheckMiddleware.html#property_appUtil">$appUtil<a href="classes/App-Middleware-AssetsCheckMiddleware.html"></li>
+                                                    <li><a href="classes/App-Middleware-AssetsCheckMiddleware.html#property_logger">$logger<a href="classes/App-Middleware-AssetsCheckMiddleware.html"></li>
+                                            </ul>
+                </li>
             
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                            <li><a href="classes/App-Controller-IndexController.html#method_index">index()</a></li>
+                                            <li><a href="classes/App-Middleware-AssetsCheckMiddleware.html#method___construct">__construct()</a></li>
+                                            <li><a href="classes/App-Middleware-AssetsCheckMiddleware.html#method_onKernelRequest">onKernelRequest()</a></li>
                                     </ul>
             </li>
                     </ul>
@@ -441,7 +586,7 @@
     </section>
 </section>
         </div>
-        <a href="classes/App-Controller-IndexController.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/App-Middleware-AssetsCheckMiddleware.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 

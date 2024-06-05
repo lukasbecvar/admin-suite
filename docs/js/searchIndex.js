@@ -1,70 +1,470 @@
 Search.appendIndex(
     [
                 {
+            "fqsen": "\\App\\Controller\\ErrorController",
+            "name": "ErrorController",
+            "summary": "Class\u0020ErrorController",
+            "url": "classes/App-Controller-ErrorController.html"
+        },                {
+            "fqsen": "\\App\\Controller\\ErrorController\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Controller-ErrorController.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Controller\\ErrorController\u003A\u003AerrorHandle\u0028\u0029",
+            "name": "errorHandle",
+            "summary": "Handle\u0020errors\u0020by\u0020code",
+            "url": "classes/App-Controller-ErrorController.html#method_errorHandle"
+        },                {
+            "fqsen": "\\App\\Controller\\ErrorController\u003A\u003Ashow\u0028\u0029",
+            "name": "show",
+            "summary": "Show\u0020the\u0020error\u0020page",
+            "url": "classes/App-Controller-ErrorController.html#method_show"
+        },                {
+            "fqsen": "\\App\\Controller\\ErrorController\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Controller-ErrorController.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Controller\\ErrorController\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Controller-ErrorController.html#property_errorManager"
+        },                {
             "fqsen": "\\App\\Controller\\IndexController",
             "name": "IndexController",
-            "summary": "",
+            "summary": "Class\u0020IndexController",
             "url": "classes/App-Controller-IndexController.html"
         },                {
             "fqsen": "\\App\\Controller\\IndexController\u003A\u003Aindex\u0028\u0029",
             "name": "index",
-            "summary": "",
+            "summary": "Show\u0020the\u0020app\u0020index",
             "url": "classes/App-Controller-IndexController.html#method_index"
         },                {
-            "fqsen": "\\App\\DataFixtures\\AppFixtures",
-            "name": "AppFixtures",
-            "summary": "",
-            "url": "classes/App-DataFixtures-AppFixtures.html"
+            "fqsen": "\\App\\DataFixtures\\LogFixtures",
+            "name": "LogFixtures",
+            "summary": "Class\u0020LogFixtures",
+            "url": "classes/App-DataFixtures-LogFixtures.html"
         },                {
-            "fqsen": "\\App\\DataFixtures\\AppFixtures\u003A\u003Aload\u0028\u0029",
+            "fqsen": "\\App\\DataFixtures\\LogFixtures\u003A\u003Aload\u0028\u0029",
             "name": "load",
-            "summary": "",
-            "url": "classes/App-DataFixtures-AppFixtures.html#method_load"
+            "summary": "Load\u0020the\u0020log\u0020fixtures",
+            "url": "classes/App-DataFixtures-LogFixtures.html#method_load"
         },                {
-            "fqsen": "\\App\\Entity\\User",
-            "name": "User",
+            "fqsen": "\\App\\Entity\\Log",
+            "name": "Log",
             "summary": "",
-            "url": "classes/App-Entity-User.html"
+            "url": "classes/App-Entity-Log.html"
         },                {
-            "fqsen": "\\App\\Entity\\User\u003A\u003AgetId\u0028\u0029",
+            "fqsen": "\\App\\Entity\\Log\u003A\u003AgetId\u0028\u0029",
             "name": "getId",
             "summary": "",
-            "url": "classes/App-Entity-User.html#method_getId"
+            "url": "classes/App-Entity-Log.html#method_getId"
         },                {
-            "fqsen": "\\App\\Entity\\User\u003A\u003AgetName\u0028\u0029",
+            "fqsen": "\\App\\Entity\\Log\u003A\u003AgetName\u0028\u0029",
             "name": "getName",
             "summary": "",
-            "url": "classes/App-Entity-User.html#method_getName"
+            "url": "classes/App-Entity-Log.html#method_getName"
         },                {
-            "fqsen": "\\App\\Entity\\User\u003A\u003AsetName\u0028\u0029",
+            "fqsen": "\\App\\Entity\\Log\u003A\u003AsetName\u0028\u0029",
             "name": "setName",
             "summary": "",
-            "url": "classes/App-Entity-User.html#method_setName"
+            "url": "classes/App-Entity-Log.html#method_setName"
         },                {
-            "fqsen": "\\App\\Entity\\User\u003A\u003A\u0024id",
+            "fqsen": "\\App\\Entity\\Log\u003A\u003AgetMessage\u0028\u0029",
+            "name": "getMessage",
+            "summary": "",
+            "url": "classes/App-Entity-Log.html#method_getMessage"
+        },                {
+            "fqsen": "\\App\\Entity\\Log\u003A\u003AsetMessage\u0028\u0029",
+            "name": "setMessage",
+            "summary": "",
+            "url": "classes/App-Entity-Log.html#method_setMessage"
+        },                {
+            "fqsen": "\\App\\Entity\\Log\u003A\u003AgetTime\u0028\u0029",
+            "name": "getTime",
+            "summary": "",
+            "url": "classes/App-Entity-Log.html#method_getTime"
+        },                {
+            "fqsen": "\\App\\Entity\\Log\u003A\u003AsetTime\u0028\u0029",
+            "name": "setTime",
+            "summary": "",
+            "url": "classes/App-Entity-Log.html#method_setTime"
+        },                {
+            "fqsen": "\\App\\Entity\\Log\u003A\u003AgetStatus\u0028\u0029",
+            "name": "getStatus",
+            "summary": "",
+            "url": "classes/App-Entity-Log.html#method_getStatus"
+        },                {
+            "fqsen": "\\App\\Entity\\Log\u003A\u003AsetStatus\u0028\u0029",
+            "name": "setStatus",
+            "summary": "",
+            "url": "classes/App-Entity-Log.html#method_setStatus"
+        },                {
+            "fqsen": "\\App\\Entity\\Log\u003A\u003A\u0024id",
             "name": "id",
             "summary": "",
-            "url": "classes/App-Entity-User.html#property_id"
+            "url": "classes/App-Entity-Log.html#property_id"
         },                {
-            "fqsen": "\\App\\Entity\\User\u003A\u003A\u0024name",
+            "fqsen": "\\App\\Entity\\Log\u003A\u003A\u0024name",
             "name": "name",
             "summary": "",
-            "url": "classes/App-Entity-User.html#property_name"
+            "url": "classes/App-Entity-Log.html#property_name"
+        },                {
+            "fqsen": "\\App\\Entity\\Log\u003A\u003A\u0024message",
+            "name": "message",
+            "summary": "",
+            "url": "classes/App-Entity-Log.html#property_message"
+        },                {
+            "fqsen": "\\App\\Entity\\Log\u003A\u003A\u0024time",
+            "name": "time",
+            "summary": "",
+            "url": "classes/App-Entity-Log.html#property_time"
+        },                {
+            "fqsen": "\\App\\Entity\\Log\u003A\u003A\u0024status",
+            "name": "status",
+            "summary": "",
+            "url": "classes/App-Entity-Log.html#property_status"
+        },                {
+            "fqsen": "\\App\\Event\\Subscriber\\ExceptionEventSubscriber",
+            "name": "ExceptionEventSubscriber",
+            "summary": "Class\u0020ExceptionEventSubscriber",
+            "url": "classes/App-Event-Subscriber-ExceptionEventSubscriber.html"
+        },                {
+            "fqsen": "\\App\\Event\\Subscriber\\ExceptionEventSubscriber\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Event-Subscriber-ExceptionEventSubscriber.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Event\\Subscriber\\ExceptionEventSubscriber\u003A\u003AgetSubscribedEvents\u0028\u0029",
+            "name": "getSubscribedEvents",
+            "summary": "Get\u0020the\u0020subscribed\u0020events",
+            "url": "classes/App-Event-Subscriber-ExceptionEventSubscriber.html#method_getSubscribedEvents"
+        },                {
+            "fqsen": "\\App\\Event\\Subscriber\\ExceptionEventSubscriber\u003A\u003AonKernelException\u0028\u0029",
+            "name": "onKernelException",
+            "summary": "Handle\u0020the\u0020exception\u0020event",
+            "url": "classes/App-Event-Subscriber-ExceptionEventSubscriber.html#method_onKernelException"
+        },                {
+            "fqsen": "\\App\\Event\\Subscriber\\ExceptionEventSubscriber\u003A\u003AcanBeEventLogged\u0028\u0029",
+            "name": "canBeEventLogged",
+            "summary": "Check\u0020if\u0020an\u0020event\u0020can\u0020be\u0020logged",
+            "url": "classes/App-Event-Subscriber-ExceptionEventSubscriber.html#method_canBeEventLogged"
+        },                {
+            "fqsen": "\\App\\Event\\Subscriber\\ExceptionEventSubscriber\u003A\u003A\u0024logManager",
+            "name": "logManager",
+            "summary": "",
+            "url": "classes/App-Event-Subscriber-ExceptionEventSubscriber.html#property_logManager"
+        },                {
+            "fqsen": "\\App\\Event\\Subscriber\\ExceptionEventSubscriber\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/App-Event-Subscriber-ExceptionEventSubscriber.html#property_logger"
+        },                {
+            "fqsen": "\\App\\Exception\\AppErrorException",
+            "name": "AppErrorException",
+            "summary": "",
+            "url": "classes/App-Exception-AppErrorException.html"
+        },                {
+            "fqsen": "\\App\\Exception\\AppErrorException\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "The\u0020AppErrorException\u0020constructor",
+            "url": "classes/App-Exception-AppErrorException.html#method___construct"
         },                {
             "fqsen": "\\App\\Kernel",
             "name": "Kernel",
-            "summary": "",
+            "summary": "Class\u0020Kernel",
             "url": "classes/App-Kernel.html"
         },                {
-            "fqsen": "\\App\\Repository\\UserRepository",
-            "name": "UserRepository",
-            "summary": "",
-            "url": "classes/App-Repository-UserRepository.html"
+            "fqsen": "\\App\\Manager\\EmailManager",
+            "name": "EmailManager",
+            "summary": "Class\u0020EmailManager",
+            "url": "classes/App-Manager-EmailManager.html"
         },                {
-            "fqsen": "\\App\\Repository\\UserRepository\u003A\u003A__construct\u0028\u0029",
+            "fqsen": "\\App\\Manager\\EmailManager\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
             "summary": "",
-            "url": "classes/App-Repository-UserRepository.html#method___construct"
+            "url": "classes/App-Manager-EmailManager.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Manager\\EmailManager\u003A\u003AsendDefaultEmail\u0028\u0029",
+            "name": "sendDefaultEmail",
+            "summary": "Send\u0020a\u0020default\u0020email",
+            "url": "classes/App-Manager-EmailManager.html#method_sendDefaultEmail"
+        },                {
+            "fqsen": "\\App\\Manager\\EmailManager\u003A\u003AsendEmail\u0028\u0029",
+            "name": "sendEmail",
+            "summary": "Send\u0020an\u0020email",
+            "url": "classes/App-Manager-EmailManager.html#method_sendEmail"
+        },                {
+            "fqsen": "\\App\\Manager\\EmailManager\u003A\u003A\u0024logManager",
+            "name": "logManager",
+            "summary": "",
+            "url": "classes/App-Manager-EmailManager.html#property_logManager"
+        },                {
+            "fqsen": "\\App\\Manager\\EmailManager\u003A\u003A\u0024mailer",
+            "name": "mailer",
+            "summary": "",
+            "url": "classes/App-Manager-EmailManager.html#property_mailer"
+        },                {
+            "fqsen": "\\App\\Manager\\EmailManager\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Manager-EmailManager.html#property_errorManager"
+        },                {
+            "fqsen": "\\App\\Manager\\ErrorManager",
+            "name": "ErrorManager",
+            "summary": "Class\u0020ErrorManager",
+            "url": "classes/App-Manager-ErrorManager.html"
+        },                {
+            "fqsen": "\\App\\Manager\\ErrorManager\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Manager-ErrorManager.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Manager\\ErrorManager\u003A\u003AhandleError\u0028\u0029",
+            "name": "handleError",
+            "summary": "Handle\u0020an\u0020error",
+            "url": "classes/App-Manager-ErrorManager.html#method_handleError"
+        },                {
+            "fqsen": "\\App\\Manager\\ErrorManager\u003A\u003AgetErrorView\u0028\u0029",
+            "name": "getErrorView",
+            "summary": "Get\u0020the\u0020error\u0020view",
+            "url": "classes/App-Manager-ErrorManager.html#method_getErrorView"
+        },                {
+            "fqsen": "\\App\\Manager\\ErrorManager\u003A\u003A\u0024twig",
+            "name": "twig",
+            "summary": "",
+            "url": "classes/App-Manager-ErrorManager.html#property_twig"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager",
+            "name": "LogManager",
+            "summary": "Class\u0020LogManager",
+            "url": "classes/App-Manager-LogManager.html"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Manager-LogManager.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003Alog\u0028\u0029",
+            "name": "log",
+            "summary": "Log\u0020a\u0020message",
+            "url": "classes/App-Manager-LogManager.html#method_log"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Manager-LogManager.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Manager-LogManager.html#property_errorManager"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003A\u0024entityManager",
+            "name": "entityManager",
+            "summary": "",
+            "url": "classes/App-Manager-LogManager.html#property_entityManager"
+        },                {
+            "fqsen": "\\App\\Middleware\\AssetsCheckMiddleware",
+            "name": "AssetsCheckMiddleware",
+            "summary": "Class\u0020AssetsCheckMiddleware",
+            "url": "classes/App-Middleware-AssetsCheckMiddleware.html"
+        },                {
+            "fqsen": "\\App\\Middleware\\AssetsCheckMiddleware\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Middleware-AssetsCheckMiddleware.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Middleware\\AssetsCheckMiddleware\u003A\u003AonKernelRequest\u0028\u0029",
+            "name": "onKernelRequest",
+            "summary": "Handle\u0020the\u0020assets\u0020check",
+            "url": "classes/App-Middleware-AssetsCheckMiddleware.html#method_onKernelRequest"
+        },                {
+            "fqsen": "\\App\\Middleware\\AssetsCheckMiddleware\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Middleware-AssetsCheckMiddleware.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Middleware\\AssetsCheckMiddleware\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/App-Middleware-AssetsCheckMiddleware.html#property_logger"
+        },                {
+            "fqsen": "\\App\\Middleware\\DatabaseOnlineMiddleware",
+            "name": "DatabaseOnlineMiddleware",
+            "summary": "Class\u0020DatabaseOnlineMiddleware",
+            "url": "classes/App-Middleware-DatabaseOnlineMiddleware.html"
+        },                {
+            "fqsen": "\\App\\Middleware\\DatabaseOnlineMiddleware\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Middleware-DatabaseOnlineMiddleware.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Middleware\\DatabaseOnlineMiddleware\u003A\u003AonKernelRequest\u0028\u0029",
+            "name": "onKernelRequest",
+            "summary": "Handle\u0020the\u0020database\u0020connection\u0020check",
+            "url": "classes/App-Middleware-DatabaseOnlineMiddleware.html#method_onKernelRequest"
+        },                {
+            "fqsen": "\\App\\Middleware\\DatabaseOnlineMiddleware\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Middleware-DatabaseOnlineMiddleware.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Middleware\\DatabaseOnlineMiddleware\u003A\u003A\u0024connection",
+            "name": "connection",
+            "summary": "",
+            "url": "classes/App-Middleware-DatabaseOnlineMiddleware.html#property_connection"
+        },                {
+            "fqsen": "\\App\\Middleware\\DatabaseOnlineMiddleware\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/App-Middleware-DatabaseOnlineMiddleware.html#property_logger"
+        },                {
+            "fqsen": "\\App\\Middleware\\DatabaseOnlineMiddleware\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Middleware-DatabaseOnlineMiddleware.html#property_errorManager"
+        },                {
+            "fqsen": "\\App\\Middleware\\EscapeRequestDataMiddleware",
+            "name": "EscapeRequestDataMiddleware",
+            "summary": "Class\u0020EscapeRequestDataMiddleware",
+            "url": "classes/App-Middleware-EscapeRequestDataMiddleware.html"
+        },                {
+            "fqsen": "\\App\\Middleware\\EscapeRequestDataMiddleware\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "EscapeRequestDataMiddleware\u0020constructor.",
+            "url": "classes/App-Middleware-EscapeRequestDataMiddleware.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Middleware\\EscapeRequestDataMiddleware\u003A\u003AonKernelRequest\u0028\u0029",
+            "name": "onKernelRequest",
+            "summary": "Handles\u0020the\u0020kernel\u0020request\u0020by\u0020escaping\u0020request\u0020data.",
+            "url": "classes/App-Middleware-EscapeRequestDataMiddleware.html#method_onKernelRequest"
+        },                {
+            "fqsen": "\\App\\Middleware\\EscapeRequestDataMiddleware\u003A\u003A\u0024securityUtil",
+            "name": "securityUtil",
+            "summary": "",
+            "url": "classes/App-Middleware-EscapeRequestDataMiddleware.html#property_securityUtil"
+        },                {
+            "fqsen": "\\App\\Middleware\\MaintenanceMiddleware",
+            "name": "MaintenanceMiddleware",
+            "summary": "Class\u0020MaintenanceMiddleware",
+            "url": "classes/App-Middleware-MaintenanceMiddleware.html"
+        },                {
+            "fqsen": "\\App\\Middleware\\MaintenanceMiddleware\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Middleware-MaintenanceMiddleware.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Middleware\\MaintenanceMiddleware\u003A\u003AonKernelRequest\u0028\u0029",
+            "name": "onKernelRequest",
+            "summary": "Handle\u0020the\u0020maintenance\u0020mode\u0020check",
+            "url": "classes/App-Middleware-MaintenanceMiddleware.html#method_onKernelRequest"
+        },                {
+            "fqsen": "\\App\\Middleware\\MaintenanceMiddleware\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Middleware-MaintenanceMiddleware.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Middleware\\MaintenanceMiddleware\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/App-Middleware-MaintenanceMiddleware.html#property_logger"
+        },                {
+            "fqsen": "\\App\\Middleware\\MaintenanceMiddleware\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Middleware-MaintenanceMiddleware.html#property_errorManager"
+        },                {
+            "fqsen": "\\App\\Middleware\\SecurityCheckMiddleware",
+            "name": "SecurityCheckMiddleware",
+            "summary": "Class\u0020SecurityCheckMiddleware",
+            "url": "classes/App-Middleware-SecurityCheckMiddleware.html"
+        },                {
+            "fqsen": "\\App\\Middleware\\SecurityCheckMiddleware\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Middleware-SecurityCheckMiddleware.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Middleware\\SecurityCheckMiddleware\u003A\u003AonKernelRequest\u0028\u0029",
+            "name": "onKernelRequest",
+            "summary": "Handle\u0020the\u0020security\u0020check",
+            "url": "classes/App-Middleware-SecurityCheckMiddleware.html#method_onKernelRequest"
+        },                {
+            "fqsen": "\\App\\Middleware\\SecurityCheckMiddleware\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Middleware-SecurityCheckMiddleware.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Middleware\\SecurityCheckMiddleware\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/App-Middleware-SecurityCheckMiddleware.html#property_logger"
+        },                {
+            "fqsen": "\\App\\Middleware\\SecurityCheckMiddleware\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Middleware-SecurityCheckMiddleware.html#property_errorManager"
+        },                {
+            "fqsen": "\\App\\Repository\\LogRepository",
+            "name": "LogRepository",
+            "summary": "Class\u0020LogRepository",
+            "url": "classes/App-Repository-LogRepository.html"
+        },                {
+            "fqsen": "\\App\\Repository\\LogRepository\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Repository-LogRepository.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Util\\AppUtil",
+            "name": "AppUtil",
+            "summary": "Class\u0020AppUtil",
+            "url": "classes/App-Util-AppUtil.html"
+        },                {
+            "fqsen": "\\App\\Util\\AppUtil\u003A\u003AisSsl\u0028\u0029",
+            "name": "isSsl",
+            "summary": "Check\u0020if\u0020the\u0020request\u0020is\u0020SSL",
+            "url": "classes/App-Util-AppUtil.html#method_isSsl"
+        },                {
+            "fqsen": "\\App\\Util\\AppUtil\u003A\u003AisAssetsExist\u0028\u0029",
+            "name": "isAssetsExist",
+            "summary": "Check\u0020if\u0020the\u0020assets\u0020exist",
+            "url": "classes/App-Util-AppUtil.html#method_isAssetsExist"
+        },                {
+            "fqsen": "\\App\\Util\\AppUtil\u003A\u003AisDevMode\u0028\u0029",
+            "name": "isDevMode",
+            "summary": "Check\u0020if\u0020the\u0020application\u0020is\u0020in\u0020development\u0020mode",
+            "url": "classes/App-Util-AppUtil.html#method_isDevMode"
+        },                {
+            "fqsen": "\\App\\Util\\AppUtil\u003A\u003AisSSLOnly\u0028\u0029",
+            "name": "isSSLOnly",
+            "summary": "Check\u0020if\u0020the\u0020application\u0020is\u0020in\u0020production\u0020mode",
+            "url": "classes/App-Util-AppUtil.html#method_isSSLOnly"
+        },                {
+            "fqsen": "\\App\\Util\\AppUtil\u003A\u003AisMaintenance\u0028\u0029",
+            "name": "isMaintenance",
+            "summary": "Check\u0020if\u0020the\u0020application\u0020is\u0020in\u0020maintenance\u0020mode",
+            "url": "classes/App-Util-AppUtil.html#method_isMaintenance"
+        },                {
+            "fqsen": "\\App\\Util\\AppUtil\u003A\u003AisDatabaseLoggingEnabled\u0028\u0029",
+            "name": "isDatabaseLoggingEnabled",
+            "summary": "Check\u0020if\u0020the\u0020database\u0020logging\u0020is\u0020enabled",
+            "url": "classes/App-Util-AppUtil.html#method_isDatabaseLoggingEnabled"
+        },                {
+            "fqsen": "\\App\\Util\\AppUtil\u003A\u003AgetLogLevel\u0028\u0029",
+            "name": "getLogLevel",
+            "summary": "Get\u0020the\u0020log\u0020level",
+            "url": "classes/App-Util-AppUtil.html#method_getLogLevel"
+        },                {
+            "fqsen": "\\App\\Util\\SecurityUtil",
+            "name": "SecurityUtil",
+            "summary": "Class\u0020SecurityUtil",
+            "url": "classes/App-Util-SecurityUtil.html"
+        },                {
+            "fqsen": "\\App\\Util\\SecurityUtil\u003A\u003AescapeString\u0028\u0029",
+            "name": "escapeString",
+            "summary": "Escape\u0020the\u0020string",
+            "url": "classes/App-Util-SecurityUtil.html#method_escapeString"
         },                {
             "fqsen": "\\",
             "name": "\\",
@@ -86,14 +486,44 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/app-entity.html"
         },                {
+            "fqsen": "\\App\\Event\\Subscriber",
+            "name": "Subscriber",
+            "summary": "",
+            "url": "namespaces/app-event-subscriber.html"
+        },                {
+            "fqsen": "\\App\\Event",
+            "name": "Event",
+            "summary": "",
+            "url": "namespaces/app-event.html"
+        },                {
+            "fqsen": "\\App\\Exception",
+            "name": "Exception",
+            "summary": "",
+            "url": "namespaces/app-exception.html"
+        },                {
             "fqsen": "\\App",
             "name": "App",
             "summary": "",
             "url": "namespaces/app.html"
         },                {
+            "fqsen": "\\App\\Manager",
+            "name": "Manager",
+            "summary": "",
+            "url": "namespaces/app-manager.html"
+        },                {
+            "fqsen": "\\App\\Middleware",
+            "name": "Middleware",
+            "summary": "",
+            "url": "namespaces/app-middleware.html"
+        },                {
             "fqsen": "\\App\\Repository",
             "name": "Repository",
             "summary": "",
             "url": "namespaces/app-repository.html"
+        },                {
+            "fqsen": "\\App\\Util",
+            "name": "Util",
+            "summary": "",
+            "url": "namespaces/app-util.html"
         }            ]
 );
