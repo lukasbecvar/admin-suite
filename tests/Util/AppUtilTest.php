@@ -73,7 +73,7 @@ class AppUtilTest extends TestCase
      *
      * @return void
      */
-    public function testIsSSLOnly(): void
+    public function testIsSslOnly(): void
     {
         $_ENV['SSL_ONLY'] = 'true';
         $this->assertTrue($this->appUtil->isSSLOnly());

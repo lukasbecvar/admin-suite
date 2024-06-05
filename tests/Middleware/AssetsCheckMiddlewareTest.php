@@ -27,8 +27,8 @@ class AssetsCheckMiddlewareTest extends TestCase
     {
         // create mock objects for dependencies
         $appUtilMock = $this->createMock(AppUtil::class);
-        $loggerMock = $this->createMock(LoggerInterface::class);
         $eventMock = $this->createMock(RequestEvent::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
 
         // set up expectations for the mock objects
         $appUtilMock->expects($this->once())
