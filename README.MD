@@ -26,7 +26,8 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Base refactor
 
 ## 0.2
-- [ ] User system
+- [X] User system
+- [X] User register & admin role grant command
 - [ ] Auth system
 - [ ] Default user register
 - [ ] Index redirect to dashboard or login
@@ -56,6 +57,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 ## 0.8
 - [ ] Log manager
 - [ ] Server diagnostic
+- [ ] CLI log reader command
 
 ## 0.9
 - [ ] Todo manager

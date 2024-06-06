@@ -76,6 +76,12 @@ class UserRegisterCommand extends Command
             return Command::FAILURE;
         }
 
+        // check username length
+        if (strlen($username) < 3 || strlen($username) > 155) {
+            $io->error('Username must be between 3 and 155 characters.');
+            return Command::FAILURE;
+        }
+
         // check if username is used
         if ($this->userManager->getUserRepo(['username' => $username]) != null) {
             $io->error('Error username: ' . $username . ' is already used!');
