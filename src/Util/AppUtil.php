@@ -85,4 +85,18 @@ class AppUtil
     {
         return (int) $_ENV['LOG_LEVEL'];
     }
+
+    /**
+     * Get the hasher configuration
+     *
+     * @return array<int> The hasher configuration
+     */
+    public function getHasherConfig(): array
+    {
+        return [
+            'memory_cost' => (int) $_ENV['MEMORY_COST'],
+            'time_cost' => (int) $_ENV['TIME_COST'],
+            'threads' => (int) $_ENV['THREADS']
+        ];
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Tests\Util;
 
+use App\Util\AppUtil;
 use App\Util\SecurityUtil;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +19,7 @@ class SecurityUtilTest extends TestCase
 
     public function setUp(): void
     {
-        $this->securityUtil = new SecurityUtil();
+        $this->securityUtil = new SecurityUtil(new AppUtil());
     }
 
     /**
@@ -45,5 +46,52 @@ class SecurityUtilTest extends TestCase
         $input = 'Hello, World!';
         $expectedOutput = 'Hello, World!';
         $this->assertEquals($expectedOutput, $this->securityUtil->escapeString($input));
+    }
+
+    /**
+     * Tests generating an Argon2 hash for a password.
+     *
+     * @return void
+     */
+    public function testGenerateHash(): void
+    {
+        $password = 'testPassword123';
+        $hash = $this->securityUtil->generateHash($password);
+
+        // assert that the hash is not false or null
+        $this->assertNotFalse($hash);
+        $this->assertNotNull($hash);
+
+        // assert that the hash is a valid Argon2 hash
+        $info = password_get_info($hash);
+        $this->assertEquals('argon2id', $info['algoName']);
+    }
+
+    /**
+     * Tests verifying a password using an Argon2 hash.
+     *
+     * @return void
+     */
+    public function testVerifyPasswordValid(): void
+    {
+        $password = 'testPassword123';
+        $hash = $this->securityUtil->generateHash($password);
+
+        // verify the password with the correct hash
+        $this->assertTrue($this->securityUtil->verifyPassword('testPassword123', $hash));
+    }
+
+    /**
+     * Tests verifying an invalid password using an Argon2 hash.
+     *
+     * @return void
+     */
+    public function testVerifyPasswordInvalid(): void
+    {
+        $password = 'testPassword123';
+        $hash = $this->securityUtil->generateHash($password);
+
+        // verify the password with an incorrect hash
+        $this->assertFalse($this->securityUtil->verifyPassword('wrongPassword123', $hash));
     }
 }
