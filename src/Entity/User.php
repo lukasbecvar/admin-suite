@@ -6,6 +6,13 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 
+/**
+ * The User database entity
+ *
+ * The User entity is used to store user data in the database
+ *
+ * @package App\Entity
+ */
 #[ORM\Table(name: 'users')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
@@ -17,9 +24,6 @@ class User
 
     #[ORM\Column(length: 255)]
     private ?string $username = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
@@ -42,7 +46,7 @@ class User
     #[ORM\Column(length: 255)]
     private ?string $token = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $profile_pic = null;
 
     public function getId(): ?int
@@ -58,18 +62,6 @@ class User
     public function setUsername(string $username): static
     {
         $this->username = $username;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
 
         return $this;
     }
