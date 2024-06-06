@@ -34,17 +34,19 @@ class UserFixtures extends Fixture
     {
         // create the owner user
         $user = new User();
-        $user->setUsername('test');
-        $user->setEmail('lukas@becvar.xyz');
 
         // generate a hash for the password
-        $user->setPassword($this->securityUtil->generateHash('test'));
-        $user->setRoles(['ROLE_OWNER']);
-        $user->setIpAddress('127.0.0.1');
-        $user->setRegisterTime(new \DateTime());
-        $user->setLastLoginTime(new \DateTime());
-        $user->setToken(md5(random_bytes(30)));
-        $user->setProfilePic('default_pic');
+        $hash = $this->securityUtil->generateHash('test');
+
+        // set owner user data
+        $user->setUsername('test')
+            ->setPassword($hash)
+            ->setRoles(['ROLE_OWNER'])
+            ->setIpAddress('127.0.0.1')
+            ->setRegisterTime(new \DateTime())
+            ->setLastLoginTime(new \DateTime())
+            ->setToken(md5(random_bytes(32)))
+            ->setProfilePic('default_pic');
 
         // persist the owner user
         $manager->persist($user);
@@ -54,25 +56,21 @@ class UserFixtures extends Fixture
 
         // create 100 random users
         for ($i = 1; $i <= 10; $i++) {
+            // get current time
+            $time = new \DateTime();
+
+            // create the test user
             $user = new User();
 
             // set user data
-            $user->setUsername('user' . $i);
-            $user->setEmail('user' . $i . '@becvar.xyz');
-
-            // generate a hash for the password
-            $hash = $this->securityUtil->generateHash('test');
-
-            // set user password
-            $user->setPassword($hash);
-
-            // set random role
-            $user->setRoles([$roles[array_rand($roles)]]);
-            $user->setIpAddress('127.0.0.1');
-            $user->setRegisterTime(new \DateTime());
-            $user->setLastLoginTime(new \DateTime());
-            $user->setToken(md5(random_bytes(30)));
-            $user->setProfilePic('default_pic');
+            $user->setUsername('user' . $i)
+                ->setPassword($hash)
+                ->setRoles([$roles[array_rand($roles)]])
+                ->setIpAddress('127.0.0.1')
+                ->setRegisterTime($time)
+                ->setLastLoginTime($time)
+                ->setToken(md5(random_bytes(32)))
+                ->setProfilePic('default_pic');
 
             // persist the user
             $manager->persist($user);
