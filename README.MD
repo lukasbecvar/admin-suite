@@ -29,14 +29,19 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [X] User system
 - [X] User register & admin role grant command
 - [ ] Auth system
-- [ ] Default user register
-- [ ] Index redirect to dashboard or login
-- [ ] User -> log one to many
-- [ ] User managment system (only for admin users)
-- [ ] User ban system
+    - [ ] Register (only if users table is empty)
+    - [ ] Login component with remember me
+    - [ ] Logout component
+    - [ ] Allow login & register route only if user not logged
+    - [ ] Login check middleware
+    - [ ] End-to-end auth tests
+    - [ ] Index redirect to dashboard or login
+    - [ ] User -> log one to many
 
 ## 0.3
 - [ ] Main dashboard
+- [ ] User managment system (only for admin users)
+- [ ] User ban system
 - [ ] Server info
 - [ ] Server diagnostics component
 - [ ] Dashboard warning box
