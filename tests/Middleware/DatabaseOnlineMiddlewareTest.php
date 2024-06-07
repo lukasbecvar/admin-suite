@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 class DatabaseOnlineMiddlewareTest extends TestCase
 {
     /**
-     * Test if the middleware is an instance of DatabaseOnlineMiddleware
+     * Test if the database connection is successful
      *
      * @return void
      */
@@ -54,7 +54,7 @@ class DatabaseOnlineMiddlewareTest extends TestCase
     }
 
     /**
-     * Test if the middleware is an instance of DatabaseOnlineMiddleware
+     * Test if the database offline error is handled
      *
      * @return void
      */

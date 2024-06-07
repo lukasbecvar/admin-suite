@@ -11,6 +11,13 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * Class UserUpdateRoleCommandTest
+ *
+ * Test the user update role command.
+ *
+ * @package App\Tests\Command
+ */
 class UserUpdateRoleCommandTest extends TestCase
 {
     /** @var UserManager|MockObject */

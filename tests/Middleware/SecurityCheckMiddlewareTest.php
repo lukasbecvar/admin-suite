@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 class SecurityCheckMiddlewareTest extends TestCase
 {
     /**
-     * Test if the middleware is an instance of SecurityCheckMiddleware
+     * Test if ssl is enabled and ssl is not detected
      *
      * @return void
      */
@@ -63,7 +63,7 @@ class SecurityCheckMiddlewareTest extends TestCase
     }
 
     /**
-     * Test if the middleware is an instance of SecurityCheckMiddleware
+     * Test if ssl is enabled and detected
      *
      * @return void
      */
@@ -105,7 +105,7 @@ class SecurityCheckMiddlewareTest extends TestCase
     }
 
     /**
-     * Test if the middleware is an instance of SecurityCheckMiddleware
+     * Test if the ssl is not enabled
      *
      * @return void
      */

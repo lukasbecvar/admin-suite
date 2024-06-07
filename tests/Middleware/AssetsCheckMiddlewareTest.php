@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 class AssetsCheckMiddlewareTest extends TestCase
 {
     /**
-     * Test if the middleware is an instance of AssetsCheckMiddleware
+     * Test if the assets exist
      *
      * @return void
      */

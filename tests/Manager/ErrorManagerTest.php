@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class ErrorManagerTest extends TestCase
 {
     /**
-     * Test if the error can be handled
+     * Test error handling
      *
      * @return void
      */

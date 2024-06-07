@@ -22,7 +22,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test if the app util is an instance of AppUtil
+     * Test is SSL
      *
      * @return void
      */
@@ -42,7 +42,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test if the app util is an instance of AppUtil
+     * Test assets exist
      *
      * @return void
      */
@@ -52,7 +52,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test if the app util is an instance of AppUtil
+     * Test dev mode check
      *
      * @return void
      */
@@ -69,7 +69,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test if the app util is an instance of AppUtil
+     * Test SSl only check
      *
      * @return void
      */
@@ -83,7 +83,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test if the app util is an instance of AppUtil
+     * Test maintenance check
      *
      * @return void
      */
@@ -97,7 +97,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test if the app util is an instance of AppUtil
+     * Test loging enabled check
      *
      * @return void
      */
@@ -111,7 +111,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test if the app util is an instance of AppUtil
+     * Test get log level
      *
      * @return void
      */

@@ -27,7 +27,7 @@ class EmailManager
     }
 
     /**
-     * Send a default email
+     * Send a default email with a subject and message
      *
      * @param string $recipient The recipient email
      * @param string $subject The email subject
@@ -45,7 +45,7 @@ class EmailManager
     }
 
     /**
-     * Send an email
+     * Send an email with a template and context data
      *
      * @param string $recipient The recipient email
      * @param string $subject The email subject

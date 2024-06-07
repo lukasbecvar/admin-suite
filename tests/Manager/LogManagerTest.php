@@ -19,7 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class LogManagerTest extends TestCase
 {
     /**
-     * Test if the log can be saved
+     * Test log with database logging enabled
      *
      * @return void
      */
@@ -55,7 +55,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test if the log can be saved
+     * Test log with disabled database logging
      *
      * @return void
      */
@@ -87,7 +87,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test if the log can be saved
+     * Test log with log level below required
      *
      * @return void
      */
@@ -122,7 +122,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test if the log can be saved
+     * Test exception log
      *
      * @return void
      */

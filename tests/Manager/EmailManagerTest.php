@@ -18,7 +18,7 @@ use Symfony\Component\Mailer\MailerInterface;
 class EmailManagerTest extends TestCase
 {
     /**
-     * Test if the email can be sent
+     * Test send email with disabled mailer
      *
      * @return void
      */
@@ -57,7 +57,7 @@ class EmailManagerTest extends TestCase
     }
 
     /**
-     * Test if the email can be sent
+     * Test send email with exception
      *
      * @return void
      */

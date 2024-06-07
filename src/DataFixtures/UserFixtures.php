@@ -24,7 +24,7 @@ class UserFixtures extends Fixture
     }
 
     /**
-     * Load data fixtures with the passed EntityManager
+     * Load the user fixtures
      *
      * @param ObjectManager $manager
      *

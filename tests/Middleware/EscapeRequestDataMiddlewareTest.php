@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 class EscapeRequestDataMiddlewareTest extends TestCase
 {
     /**
-     * Test the escapeRequestData method of EscapeRequestDataMiddleware.
+     * Test the security escaping of request data.
      *
      * @return void
      */

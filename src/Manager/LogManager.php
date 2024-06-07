@@ -27,7 +27,7 @@ class LogManager
     }
 
     /**
-     * Log a message
+     * Log a message to the database
      *
      * @param string $name The log name
      * @param string $message The log message

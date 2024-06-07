@@ -26,7 +26,7 @@ class VisitorInfoUtilTest extends TestCase
      *
      * @return void
      */
-    public function testGetIpWithClientIp()
+    public function testGetIpWithClientIp(): void
     {
         // set the server variables
         $_SERVER['HTTP_CLIENT_IP'] = '192.168.0.1';
@@ -47,7 +47,7 @@ class VisitorInfoUtilTest extends TestCase
      *
      * @return void
      */
-    public function testGetIpWithForwardedFor()
+    public function testGetIpWithForwardedFor(): void
     {
         // set the server variables
         $_SERVER['HTTP_CLIENT_IP'] = '';
@@ -68,7 +68,7 @@ class VisitorInfoUtilTest extends TestCase
      *
      * @return void
      */
-    public function testGetIpWithRemoteAddr()
+    public function testGetIpWithRemoteAddr(): void
     {
         // set the server variables
         $_SERVER['HTTP_CLIENT_IP'] = '';
@@ -89,7 +89,7 @@ class VisitorInfoUtilTest extends TestCase
      *
      * @return void
      */
-    public function testGetBrowserWithUserAgent()
+    public function testGetBrowserWithUserAgent(): void
     {
         // set the server variable
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0';
@@ -106,7 +106,7 @@ class VisitorInfoUtilTest extends TestCase
      *
      * @return void
      */
-    public function testGetBrowserWithNoUserAgent()
+    public function testGetBrowserWithNoUserAgent(): void
     {
         // unset the server variable
         unset($_SERVER['HTTP_USER_AGENT']);

@@ -83,7 +83,7 @@ class ErrorControllerTest extends WebTestCase
     }
 
     /**
-     * Test error controller with invalid code
+     * Test error controller with 400 code
      *
      * @return void
      */
@@ -98,7 +98,7 @@ class ErrorControllerTest extends WebTestCase
     }
 
     /**
-     * Test error controller with invalid code
+     * Test error controller with 401 code
      *
      * @return void
      */
@@ -113,7 +113,7 @@ class ErrorControllerTest extends WebTestCase
     }
 
     /**
-     * Test error controller with invalid code
+     * Test error controller with 403 code
      *
      * @return void
      */
@@ -128,7 +128,7 @@ class ErrorControllerTest extends WebTestCase
     }
 
     /**
-     * Test error controller with invalid code
+     * Test error controller with 404 code
      *
      * @return void
      */
@@ -143,7 +143,7 @@ class ErrorControllerTest extends WebTestCase
     }
 
     /**
-     * Test error controller with invalid code
+     * Test error controller with 426 code
      *
      * @return void
      */
@@ -158,7 +158,7 @@ class ErrorControllerTest extends WebTestCase
     }
 
     /**
-     * Test error controller with invalid code
+     * Test error controller with 429 code
      *
      * @return void
      */
@@ -173,7 +173,7 @@ class ErrorControllerTest extends WebTestCase
     }
 
     /**
-     * Test error controller with invalid code
+     * Test error controller with 500 code
      *
      * @return void
      */

@@ -20,13 +20,13 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
  */
 class ExceptionEventSubscriberTest extends TestCase
 {
-    /** @var MockObject|LogManager The log manager instance */
+    /** @var MockObject|LogManager */
     private MockObject|LogManager $logManager;
 
-    /** @var MockObject|LoggerInterface The monolog logger instance */
+    /** @var MockObject|LoggerInterface */
     private MockObject|LoggerInterface $logger;
 
-    /** @var ExceptionEventSubscriber The exception event subscriber instance */
+    /** @var ExceptionEventSubscriber */
     private ExceptionEventSubscriber $subscriber;
 
     protected function setUp(): void
@@ -89,7 +89,7 @@ class ExceptionEventSubscriberTest extends TestCase
     }
 
     /**
-     * Test if the error message can be logged
+     * Test if message log is blocked
      *
      * @return void
      */
@@ -126,7 +126,7 @@ class ExceptionEventSubscriberTest extends TestCase
     }
 
     /**
-     * Test if the error message can be logged
+     * Test exception does not log unhandled function
      *
      * @return void
      */
