@@ -76,7 +76,7 @@ class UserRegisterCommand extends Command
         }
 
         // check if username is used
-        if ($this->userManager->getUserRepo(['username' => $username]) != null) {
+        if ($this->userManager->checkIfUserExist($username)) {
             $io->error('Error username: ' . $username . ' is already used!');
             return Command::FAILURE;
         }

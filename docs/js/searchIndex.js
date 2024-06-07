@@ -51,6 +51,46 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Command-UserUpdateRoleCommand.html#property_userManager"
         },                {
+            "fqsen": "\\App\\Controller\\Auth\\LoginController",
+            "name": "LoginController",
+            "summary": "",
+            "url": "classes/App-Controller-Auth-LoginController.html"
+        },                {
+            "fqsen": "\\App\\Controller\\Auth\\LoginController\u003A\u003Aindex\u0028\u0029",
+            "name": "index",
+            "summary": "",
+            "url": "classes/App-Controller-Auth-LoginController.html#method_index"
+        },                {
+            "fqsen": "\\App\\Controller\\Auth\\LogoutController",
+            "name": "LogoutController",
+            "summary": "",
+            "url": "classes/App-Controller-Auth-LogoutController.html"
+        },                {
+            "fqsen": "\\App\\Controller\\Auth\\LogoutController\u003A\u003Aindex\u0028\u0029",
+            "name": "index",
+            "summary": "",
+            "url": "classes/App-Controller-Auth-LogoutController.html#method_index"
+        },                {
+            "fqsen": "\\App\\Controller\\Auth\\RegisterController",
+            "name": "RegisterController",
+            "summary": "Class\u0020RegisterController",
+            "url": "classes/App-Controller-Auth-RegisterController.html"
+        },                {
+            "fqsen": "\\App\\Controller\\Auth\\RegisterController\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Controller-Auth-RegisterController.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Controller\\Auth\\RegisterController\u003A\u003Aindex\u0028\u0029",
+            "name": "index",
+            "summary": "Handle\u0020the\u0020registration\u0020of\u0020a\u0020new\u0020user.",
+            "url": "classes/App-Controller-Auth-RegisterController.html#method_index"
+        },                {
+            "fqsen": "\\App\\Controller\\Auth\\RegisterController\u003A\u003A\u0024userManager",
+            "name": "userManager",
+            "summary": "",
+            "url": "classes/App-Controller-Auth-RegisterController.html#property_userManager"
+        },                {
             "fqsen": "\\App\\Controller\\ErrorController",
             "name": "ErrorController",
             "summary": "Class\u0020ErrorController",
@@ -376,6 +416,21 @@ Search.appendIndex(
             "summary": "The\u0020AppErrorException\u0020constructor",
             "url": "classes/App-Exception-AppErrorException.html#method___construct"
         },                {
+            "fqsen": "\\App\\Form\\RegistrationFormType",
+            "name": "RegistrationFormType",
+            "summary": "Class\u0020RegistrationFormType",
+            "url": "classes/App-Form-RegistrationFormType.html"
+        },                {
+            "fqsen": "\\App\\Form\\RegistrationFormType\u003A\u003AbuildForm\u0028\u0029",
+            "name": "buildForm",
+            "summary": "Builds\u0020the\u0020registration\u0020form.",
+            "url": "classes/App-Form-RegistrationFormType.html#method_buildForm"
+        },                {
+            "fqsen": "\\App\\Form\\RegistrationFormType\u003A\u003AconfigureOptions\u0028\u0029",
+            "name": "configureOptions",
+            "summary": "Configures\u0020the\u0020options\u0020for\u0020the\u0020registration\u0020form.",
+            "url": "classes/App-Form-RegistrationFormType.html#method_configureOptions"
+        },                {
             "fqsen": "\\App\\Kernel",
             "name": "Kernel",
             "summary": "Class\u0020Kernel",
@@ -490,6 +545,11 @@ Search.appendIndex(
             "name": "registerUser",
             "summary": "Register\u0020a\u0020new\u0020user.",
             "url": "classes/App-Manager-UserManager.html#method_registerUser"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AcheckIfUserExist\u0028\u0029",
+            "name": "checkIfUserExist",
+            "summary": "Check\u0020if\u0020a\u0020user\u0020exists.",
+            "url": "classes/App-Manager-UserManager.html#method_checkIfUserExist"
         },                {
             "fqsen": "\\App\\Manager\\UserManager\u003A\u003AgetUsername\u0028\u0029",
             "name": "getUsername",
@@ -801,6 +861,11 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/app-command.html"
         },                {
+            "fqsen": "\\App\\Controller\\Auth",
+            "name": "Auth",
+            "summary": "",
+            "url": "namespaces/app-controller-auth.html"
+        },                {
             "fqsen": "\\App\\Controller",
             "name": "Controller",
             "summary": "",
@@ -830,6 +895,11 @@ Search.appendIndex(
             "name": "Exception",
             "summary": "",
             "url": "namespaces/app-exception.html"
+        },                {
+            "fqsen": "\\App\\Form",
+            "name": "Form",
+            "summary": "",
+            "url": "namespaces/app-form.html"
         },                {
             "fqsen": "\\App",
             "name": "App",
