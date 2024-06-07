@@ -41,7 +41,7 @@ class UserFixtures extends Fixture
         // set owner user data
         $user->setUsername('test')
             ->setPassword($hash)
-            ->setRoles(['ROLE_OWNER'])
+            ->setRole('OWNER')
             ->setIpAddress('127.0.0.1')
             ->setRegisterTime(new \DateTime())
             ->setLastLoginTime(new \DateTime())
@@ -52,7 +52,7 @@ class UserFixtures extends Fixture
         $manager->persist($user);
 
         // testing roles
-        $roles = ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_DEVELOPER', 'ROLE_OWNER'];
+        $roles = ['USER', 'ADMIN', 'DEVELOPER', 'OWNER'];
 
         // create 100 random users
         for ($i = 1; $i <= 10; $i++) {
@@ -65,7 +65,7 @@ class UserFixtures extends Fixture
             // set user data
             $user->setUsername('user' . $i)
                 ->setPassword($hash)
-                ->setRoles([$roles[array_rand($roles)]])
+                ->setRole($roles[array_rand($roles)])
                 ->setIpAddress('127.0.0.1')
                 ->setRegisterTime($time)
                 ->setLastLoginTime($time)
