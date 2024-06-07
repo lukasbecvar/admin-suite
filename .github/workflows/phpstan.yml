@@ -1,6 +1,6 @@
 name: PHPStan
 
-# specify when the workflow should be triggered
+# specify when the workflow should be triggered 
 on:
   push:
     branches:
