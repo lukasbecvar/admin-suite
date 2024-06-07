@@ -34,6 +34,9 @@ class User
     #[ORM\Column(length: 255)]
     private ?string $ip_address = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $user_agent = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $register_time = null;
 
@@ -95,6 +98,23 @@ class User
     public function setIpAddress(string $ip_address): static
     {
         $this->ip_address = $ip_address;
+
+        return $this;
+    }
+
+    public function getUserAgent(): ?string
+    {
+        return $this->user_agent;
+    }
+
+    public function setUserAgent(string $user_agent): static
+    {
+        // prevent maximal user agent length
+        if (strlen($user_agent) > 255) {
+            $user_agent = substr($user_agent, 0, 250) . "...";
+        }
+
+        $this->user_agent = $user_agent;
 
         return $this;
     }

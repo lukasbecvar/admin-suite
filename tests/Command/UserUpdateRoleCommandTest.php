@@ -134,7 +134,7 @@ class UserUpdateRoleCommandTest extends TestCase
 
         // mock methods
         $this->userManager->method('getUserRepo')->willReturn($user);
-        $this->userManager->method('getUserRole')->willReturn('ADMIN');
+        $this->userManager->method('getUserRoleById')->willReturn('ADMIN');
 
         // create command tester
         $commandTester = $this->createCommandTester();
@@ -161,7 +161,7 @@ class UserUpdateRoleCommandTest extends TestCase
 
         // mock methods
         $this->userManager->method('getUserRepo')->willReturn($user);
-        $this->userManager->method('getUserRole')->willReturn('USER');
+        $this->userManager->method('getUserRoleById')->willReturn('USER');
 
         // create command tester
         $commandTester = $this->createCommandTester();
@@ -188,7 +188,7 @@ class UserUpdateRoleCommandTest extends TestCase
 
         // mock methods
         $this->userManager->method('getUserRepo')->willReturn($user);
-        $this->userManager->method('getUserRole')->willReturn('USER');
+        $this->userManager->method('getUserRoleById')->willReturn('USER');
         $this->userManager->method('updateUserRole')->will($this->throwException(new \Exception('Some error')));
 
         // create command tester

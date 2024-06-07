@@ -3,10 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\User;
-use App\Util\SecurityUtil;
-use App\Util\VisitorInfoUtil;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\String\ByteString;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -20,17 +17,13 @@ class UserManager
 {
     private LogManager $logManager;
     private ErrorManager $errorManager;
-    private SecurityUtil $securityUtil;
-    private VisitorInfoUtil $visitorInfoUtil;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(LogManager $logManager, ErrorManager $errorManager, SecurityUtil $securityUtil, EntityManagerInterface $entityManager, VisitorInfoUtil $visitorInfoUtil)
+    public function __construct(LogManager $logManager, ErrorManager $errorManager, EntityManagerInterface $entityManager)
     {
         $this->logManager = $logManager;
         $this->errorManager = $errorManager;
-        $this->securityUtil = $securityUtil;
         $this->entityManager = $entityManager;
-        $this->visitorInfoUtil = $visitorInfoUtil;
     }
 
     /**
@@ -44,72 +37,6 @@ class UserManager
     {
         // get user repo
         return $this->entityManager->getRepository(User::class)->findOneBy($search);
-    }
-
-    /**
-     * Register a new user.
-     *
-     * @param string $username The username of the new user
-     * @param string $password The password of the new user
-     *
-     * @throws \Exception If there is an error while registering the new user
-     *
-     * @return void
-     */
-    public function registerUser(string $username, string $password): void
-    {
-        // check if user already exist
-        if ($this->checkIfUserExist($username)) {
-            return;
-        }
-
-        // generate entity token
-        $token = ByteString::fromRandom(32)->toString();
-
-        // check if token not exist
-        if ($this->getUserRepo(['token' => $token]) != null) {
-            $this->registerUser($username, $password);
-        }
-
-        // hash password
-        $password = $this->securityUtil->generateHash($password);
-
-        // get current time
-        $time = new \DateTime();
-
-        // get ip address
-        $ip_address = $this->visitorInfoUtil->getIP();
-
-        // check if ip address is null
-        if ($ip_address == null) {
-            $ip_address = 'Unknown';
-        }
-
-        // check if user exist
-        if ($this->getUserRepo(['username' => $username]) == null) {
-            try {
-                // init user entity
-                $user = new User();
-
-                $user->setUsername($username)
-                    ->setPassword($password)
-                    ->setRole('USER')
-                    ->setIpAddress($ip_address)
-                    ->setToken(md5(random_bytes(32)))
-                    ->setProfilePic('default_pic')
-                    ->setRegisterTime($time)
-                    ->setLastLoginTime($time);
-
-                // flush user to database
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
-
-                // log action
-                $this->logManager->log('authenticator', 'new registration user: ' . $username);
-            } catch (\Exception $e) {
-                $this->errorManager->handleError('error to register new user: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
-        }
     }
 
     /**
@@ -131,7 +58,7 @@ class UserManager
      *
      * @return string The username of the user
      */
-    public function getUsername(int $id): ?string
+    public function getUsernameById(int $id): ?string
     {
         $repo = $this->getUserRepo(['id' => $id]);
 
@@ -150,32 +77,13 @@ class UserManager
      *
      * @return string The role of the user
      */
-    public function getUserRole(int $id): ?string
+    public function getUserRoleById(int $id): ?string
     {
         $repo = $this->getUserRepo(['id' => $id]);
 
         // check if user exist
         if ($repo != null) {
             return $repo->getRole();
-        }
-
-        return null;
-    }
-
-    /**
-     * Get the token of a user.
-     *
-     * @param int $id The id of the user to get the token
-     *
-     * @return string The token of the user
-     */
-    public function getUserToken(int $id): ?string
-    {
-        $repo = $this->getUserRepo(['id' => $id]);
-
-        // check if user exist
-        if ($repo != null) {
-            return $repo->getToken();
         }
 
         return null;
@@ -190,8 +98,9 @@ class UserManager
      */
     public function isUserAdmin(int $id): bool
     {
-        $role = $this->getUserRole($id);
+        $role = $this->getUserRoleById($id);
 
+        // check if user has admin role
         if ($role == 'ADMIN' || $role == 'DEVELOPER' || $role == 'OWNER') {
             return true;
         }
@@ -224,10 +133,30 @@ class UserManager
                 $this->entityManager->flush();
 
                 // log action
-                $this->logManager->log('role-granted', 'role admin granted to user: ' . $this->getUsername($id));
+                $this->logManager->log('role-update', 'update role (' . $role . ') for user: ' . $repo->getUsername());
             } catch (\Exception $e) {
                 $this->errorManager->handleError('error to grant admin permissions: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
+    }
+
+    /**
+     * Checks if the user repository is empty.
+     *
+     * @return bool True if the user repository is empty, false otherwise.
+     */
+    public function isUsersEmpty(): bool
+    {
+        $repository = $this->entityManager->getRepository(User::class);
+
+        // get users count
+        $count = $repository->createQueryBuilder('p')->select('COUNT(p.id)')->getQuery()->getSingleScalarResult();
+
+        // check if count is zero
+        if ($count == 0) {
+            return true;
+        }
+
+        return false;
     }
 }

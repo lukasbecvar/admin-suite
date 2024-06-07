@@ -85,33 +85,33 @@ class VisitorInfoUtilTest extends TestCase
     }
 
     /**
-     * Tests the getBrowser method when the HTTP_USER_AGENT server variable is set.
+     * Tests the GetUserAgent method when the HTTP_USER_AGENT server variable is set.
      *
      * @return void
      */
-    public function testGetBrowserWithUserAgent(): void
+    public function testGetUserAgentWithUserAgent(): void
     {
         // set the server variable
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0';
 
         // assert user agent is 'Mozilla/5.0' when the server variable is set
-        $this->assertEquals('Mozilla/5.0', $this->visitorInfoUtil->getBrowser());
+        $this->assertEquals('Mozilla/5.0', $this->visitorInfoUtil->getUserAgent());
 
         // unset the server variable
         unset($_SERVER['HTTP_USER_AGENT']);
     }
 
     /**
-     * Tests the getBrowser method when the HTTP_USER_AGENT server variable is not set.
+     * Tests the GetUserAgent method when the HTTP_USER_AGENT server variable is not set.
      *
      * @return void
      */
-    public function testGetBrowserWithNoUserAgent(): void
+    public function testGetUserAgentWithNoUserAgent(): void
     {
         // unset the server variable
         unset($_SERVER['HTTP_USER_AGENT']);
 
         // assert user agent is 'Unknown' when the server variable is not set
-        $this->assertEquals('Unknown', $this->visitorInfoUtil->getBrowser());
+        $this->assertEquals('Unknown', $this->visitorInfoUtil->getUserAgent());
     }
 }

@@ -53,6 +53,10 @@ class UserUpdateRoleCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        // fix get CLI ip address
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+        $_SERVER['HTTP_USER_AGENT'] = 'console';
+
         // get arguments
         $username = $input->getArgument('username');
         $role = $input->getArgument('role');
@@ -87,7 +91,7 @@ class UserUpdateRoleCommand extends Command
         }
 
         // get current role
-        $currentRole = $this->userManager->getUserRole($userId);
+        $currentRole = $this->userManager->getUserRoleById($userId);
 
         // check if role is the same
         if ($currentRole == $role) {

@@ -13,11 +13,11 @@
         </div>
     {% endfor %}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.password.first) }}
-        {{ form_row(registrationForm.password.second) }}
+    {{ form_start(registration_form) }}
+        {{ form_row(registration_form.username) }}
+        {{ form_row(registration_form.password.first) }}
+        {{ form_row(registration_form.password.second) }}
 
         <button>Register</button>
-    {{ form_end(registrationForm) }}
+    {{ form_end(registration_form) }}
 {% endblock %}

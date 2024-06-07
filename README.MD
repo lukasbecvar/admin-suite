@@ -30,14 +30,20 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [X] User register & admin role grant command
 - [ ] Auth system
     - [X] Register (only if users table is empty)
-    - [ ] Login component with remember me
-    - [ ] Logout component
-    - [ ] Allow login & register route only if user not logged
-    - [ ] Login check middleware
-    - [ ] Index redirect to dashboard or login
-    - [ ] End-to-end auth tests
-    - [ ] User -> log one to many
+    - [X] Login component with remember me
+    - [X] Allow login & register route only if user not logged
+    - [X] Logout component
+    - [X] Index redirect to dashboard or login
+    - [X] Login check middleware
+    - [X] Split auth methods to Auth manager from User manager
+    - [X] User -> log one to many
+    - [X] Store user-agent in user entity
+    - [X] Update last login time, ip address & user agent in login process
+    - [X] Implement log to auth process
     - [ ] Auth components style
+    - [ ] End-to-end auth tests
+- [ ] Base refactor
+- [ ] Deep user system test
 
 ## 0.3
 - [ ] Main dashboard

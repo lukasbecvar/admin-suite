@@ -39,9 +39,9 @@ class RegistrationFormType extends AbstractType
                         'min' => 3,
                         'max' => 155,
                         'minMessage' => 'Your username should be at least {{ limit }} characters',
-                        'maxMessage' => 'Your username cannot be longer than {{ limit }} characters',
-                    ]),
-                ],
+                        'maxMessage' => 'Your username cannot be longer than {{ limit }} characters'
+                    ])
+                ]
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -53,11 +53,11 @@ class RegistrationFormType extends AbstractType
                             'min' => 8,
                             'max' => 155,
                             'minMessage' => 'Your password should be at least {{ limit }} characters',
-                            'maxMessage' => 'Your password cannot be longer than {{ limit }} characters',
-                        ]),
+                            'maxMessage' => 'Your password cannot be longer than {{ limit }} characters'
+                        ])
                     ],
                 ],
-                'second_options' => ['label' => 'Repeat Password'],
+                'second_options' => ['label' => 'Repeat Password']
             ]);
     }
 
@@ -71,7 +71,7 @@ class RegistrationFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => User::class
         ]);
     }
 }
