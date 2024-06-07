@@ -22,7 +22,7 @@ class EscapeRequestDataMiddleware
     }
 
     /**
-     * Handles the kernel request by escaping request data.
+     * Handles the escaping of request data.
      *
      * @param RequestEvent $event The event triggered on kernel request.
      *

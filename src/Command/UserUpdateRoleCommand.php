@@ -31,8 +31,6 @@ class UserUpdateRoleCommand extends Command
     /**
      * Configure the command.
      *
-     * This method is responsible for configuring the command by defining its name, description, and any arguments or options it accepts.
-     *
      * @return void
      */
     protected function configure(): void

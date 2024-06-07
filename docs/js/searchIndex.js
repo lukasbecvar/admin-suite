@@ -1,6 +1,56 @@
 Search.appendIndex(
     [
                 {
+            "fqsen": "\\App\\Command\\UserRegisterCommand",
+            "name": "UserRegisterCommand",
+            "summary": "Class\u0020UserRegisterCommand",
+            "url": "classes/App-Command-UserRegisterCommand.html"
+        },                {
+            "fqsen": "\\App\\Command\\UserRegisterCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Command-UserRegisterCommand.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Command\\UserRegisterCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020the\u0020current\u0020command.",
+            "url": "classes/App-Command-UserRegisterCommand.html#method_configure"
+        },                {
+            "fqsen": "\\App\\Command\\UserRegisterCommand\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "Executes\u0020the\u0020command\u0020to\u0020register\u0020a\u0020new\u0020user.",
+            "url": "classes/App-Command-UserRegisterCommand.html#method_execute"
+        },                {
+            "fqsen": "\\App\\Command\\UserRegisterCommand\u003A\u003A\u0024userManager",
+            "name": "userManager",
+            "summary": "",
+            "url": "classes/App-Command-UserRegisterCommand.html#property_userManager"
+        },                {
+            "fqsen": "\\App\\Command\\UserUpdateRoleCommand",
+            "name": "UserUpdateRoleCommand",
+            "summary": "Class\u0020UserUpdateRoleCommand",
+            "url": "classes/App-Command-UserUpdateRoleCommand.html"
+        },                {
+            "fqsen": "\\App\\Command\\UserUpdateRoleCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Command-UserUpdateRoleCommand.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Command\\UserUpdateRoleCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configure\u0020the\u0020command.",
+            "url": "classes/App-Command-UserUpdateRoleCommand.html#method_configure"
+        },                {
+            "fqsen": "\\App\\Command\\UserUpdateRoleCommand\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "Execute\u0020the\u0020command\u0020to\u0020update\u0020user\u0020role.",
+            "url": "classes/App-Command-UserUpdateRoleCommand.html#method_execute"
+        },                {
+            "fqsen": "\\App\\Command\\UserUpdateRoleCommand\u003A\u003A\u0024userManager",
+            "name": "userManager",
+            "summary": "",
+            "url": "classes/App-Command-UserUpdateRoleCommand.html#property_userManager"
+        },                {
             "fqsen": "\\App\\Controller\\ErrorController",
             "name": "ErrorController",
             "summary": "Class\u0020ErrorController",
@@ -50,6 +100,26 @@ Search.appendIndex(
             "name": "load",
             "summary": "Load\u0020the\u0020log\u0020fixtures",
             "url": "classes/App-DataFixtures-LogFixtures.html#method_load"
+        },                {
+            "fqsen": "\\App\\DataFixtures\\UserFixtures",
+            "name": "UserFixtures",
+            "summary": "Class\u0020UserFixtures",
+            "url": "classes/App-DataFixtures-UserFixtures.html"
+        },                {
+            "fqsen": "\\App\\DataFixtures\\UserFixtures\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-DataFixtures-UserFixtures.html#method___construct"
+        },                {
+            "fqsen": "\\App\\DataFixtures\\UserFixtures\u003A\u003Aload\u0028\u0029",
+            "name": "load",
+            "summary": "Load\u0020the\u0020user\u0020fixtures",
+            "url": "classes/App-DataFixtures-UserFixtures.html#method_load"
+        },                {
+            "fqsen": "\\App\\DataFixtures\\UserFixtures\u003A\u003A\u0024securityUtil",
+            "name": "securityUtil",
+            "summary": "",
+            "url": "classes/App-DataFixtures-UserFixtures.html#property_securityUtil"
         },                {
             "fqsen": "\\App\\Entity\\Log",
             "name": "Log",
@@ -126,6 +196,141 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Entity-Log.html#property_status"
         },                {
+            "fqsen": "\\App\\Entity\\User",
+            "name": "User",
+            "summary": "The\u0020User\u0020database\u0020entity",
+            "url": "classes/App-Entity-User.html"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AgetId\u0028\u0029",
+            "name": "getId",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_getId"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AgetUsername\u0028\u0029",
+            "name": "getUsername",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_getUsername"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AsetUsername\u0028\u0029",
+            "name": "setUsername",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_setUsername"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AgetPassword\u0028\u0029",
+            "name": "getPassword",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_getPassword"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AsetPassword\u0028\u0029",
+            "name": "setPassword",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_setPassword"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AgetRole\u0028\u0029",
+            "name": "getRole",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_getRole"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AsetRole\u0028\u0029",
+            "name": "setRole",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_setRole"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AgetIpAddress\u0028\u0029",
+            "name": "getIpAddress",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_getIpAddress"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AsetIpAddress\u0028\u0029",
+            "name": "setIpAddress",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_setIpAddress"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AgetRegisterTime\u0028\u0029",
+            "name": "getRegisterTime",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_getRegisterTime"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AsetRegisterTime\u0028\u0029",
+            "name": "setRegisterTime",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_setRegisterTime"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AgetLastLoginTime\u0028\u0029",
+            "name": "getLastLoginTime",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_getLastLoginTime"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AsetLastLoginTime\u0028\u0029",
+            "name": "setLastLoginTime",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_setLastLoginTime"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AgetToken\u0028\u0029",
+            "name": "getToken",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_getToken"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AsetToken\u0028\u0029",
+            "name": "setToken",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_setToken"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AgetProfilePic\u0028\u0029",
+            "name": "getProfilePic",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_getProfilePic"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003AsetProfilePic\u0028\u0029",
+            "name": "setProfilePic",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#method_setProfilePic"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003A\u0024id",
+            "name": "id",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#property_id"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003A\u0024username",
+            "name": "username",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#property_username"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003A\u0024password",
+            "name": "password",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#property_password"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003A\u0024role",
+            "name": "role",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#property_role"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003A\u0024ip_address",
+            "name": "ip_address",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#property_ip_address"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003A\u0024register_time",
+            "name": "register_time",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#property_register_time"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003A\u0024last_login_time",
+            "name": "last_login_time",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#property_last_login_time"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003A\u0024token",
+            "name": "token",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#property_token"
+        },                {
+            "fqsen": "\\App\\Entity\\User\u003A\u003A\u0024profile_pic",
+            "name": "profile_pic",
+            "summary": "",
+            "url": "classes/App-Entity-User.html#property_profile_pic"
+        },                {
             "fqsen": "\\App\\Event\\Subscriber\\ExceptionEventSubscriber",
             "name": "ExceptionEventSubscriber",
             "summary": "Class\u0020ExceptionEventSubscriber",
@@ -188,12 +393,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Manager\\EmailManager\u003A\u003AsendDefaultEmail\u0028\u0029",
             "name": "sendDefaultEmail",
-            "summary": "Send\u0020a\u0020default\u0020email",
+            "summary": "Send\u0020a\u0020default\u0020email\u0020with\u0020a\u0020subject\u0020and\u0020message",
             "url": "classes/App-Manager-EmailManager.html#method_sendDefaultEmail"
         },                {
             "fqsen": "\\App\\Manager\\EmailManager\u003A\u003AsendEmail\u0028\u0029",
             "name": "sendEmail",
-            "summary": "Send\u0020an\u0020email",
+            "summary": "Send\u0020an\u0020email\u0020with\u0020a\u0020template\u0020and\u0020context\u0020data",
             "url": "classes/App-Manager-EmailManager.html#method_sendEmail"
         },                {
             "fqsen": "\\App\\Manager\\EmailManager\u003A\u003A\u0024logManager",
@@ -248,7 +453,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Manager\\LogManager\u003A\u003Alog\u0028\u0029",
             "name": "log",
-            "summary": "Log\u0020a\u0020message",
+            "summary": "Log\u0020a\u0020message\u0020to\u0020the\u0020database",
             "url": "classes/App-Manager-LogManager.html#method_log"
         },                {
             "fqsen": "\\App\\Manager\\LogManager\u003A\u003A\u0024appUtil",
@@ -265,6 +470,76 @@ Search.appendIndex(
             "name": "entityManager",
             "summary": "",
             "url": "classes/App-Manager-LogManager.html#property_entityManager"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager",
+            "name": "UserManager",
+            "summary": "Class\u0020UserManager",
+            "url": "classes/App-Manager-UserManager.html"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Manager-UserManager.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AgetUserRepo\u0028\u0029",
+            "name": "getUserRepo",
+            "summary": "Retrieve\u0020a\u0020user\u0020from\u0020the\u0020repository\u0020based\u0020on\u0020search\u0020criteria.",
+            "url": "classes/App-Manager-UserManager.html#method_getUserRepo"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AregisterUser\u0028\u0029",
+            "name": "registerUser",
+            "summary": "Register\u0020a\u0020new\u0020user.",
+            "url": "classes/App-Manager-UserManager.html#method_registerUser"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AgetUsername\u0028\u0029",
+            "name": "getUsername",
+            "summary": "Get\u0020the\u0020username\u0020of\u0020a\u0020user.",
+            "url": "classes/App-Manager-UserManager.html#method_getUsername"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AgetUserRole\u0028\u0029",
+            "name": "getUserRole",
+            "summary": "Get\u0020the\u0020role\u0020of\u0020a\u0020user.",
+            "url": "classes/App-Manager-UserManager.html#method_getUserRole"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AgetUserToken\u0028\u0029",
+            "name": "getUserToken",
+            "summary": "Get\u0020the\u0020token\u0020of\u0020a\u0020user.",
+            "url": "classes/App-Manager-UserManager.html#method_getUserToken"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AisUserAdmin\u0028\u0029",
+            "name": "isUserAdmin",
+            "summary": "Checks\u0020if\u0020the\u0020specified\u0020user\u0020has\u0020the\u0020admin\u0020role.",
+            "url": "classes/App-Manager-UserManager.html#method_isUserAdmin"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AupdateUserRole\u0028\u0029",
+            "name": "updateUserRole",
+            "summary": "Update\u0020the\u0020role\u0020of\u0020a\u0020user.",
+            "url": "classes/App-Manager-UserManager.html#method_updateUserRole"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003A\u0024logManager",
+            "name": "logManager",
+            "summary": "",
+            "url": "classes/App-Manager-UserManager.html#property_logManager"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Manager-UserManager.html#property_errorManager"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003A\u0024securityUtil",
+            "name": "securityUtil",
+            "summary": "",
+            "url": "classes/App-Manager-UserManager.html#property_securityUtil"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003A\u0024visitorInfoUtil",
+            "name": "visitorInfoUtil",
+            "summary": "",
+            "url": "classes/App-Manager-UserManager.html#property_visitorInfoUtil"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003A\u0024entityManager",
+            "name": "entityManager",
+            "summary": "",
+            "url": "classes/App-Manager-UserManager.html#property_entityManager"
         },                {
             "fqsen": "\\App\\Middleware\\AssetsCheckMiddleware",
             "name": "AssetsCheckMiddleware",
@@ -338,7 +613,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Middleware\\EscapeRequestDataMiddleware\u003A\u003AonKernelRequest\u0028\u0029",
             "name": "onKernelRequest",
-            "summary": "Handles\u0020the\u0020kernel\u0020request\u0020by\u0020escaping\u0020request\u0020data.",
+            "summary": "Handles\u0020the\u0020escaping\u0020of\u0020request\u0020data.",
             "url": "classes/App-Middleware-EscapeRequestDataMiddleware.html#method_onKernelRequest"
         },                {
             "fqsen": "\\App\\Middleware\\EscapeRequestDataMiddleware\u003A\u003A\u0024securityUtil",
@@ -416,6 +691,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Repository-LogRepository.html#method___construct"
         },                {
+            "fqsen": "\\App\\Repository\\UserRepository",
+            "name": "UserRepository",
+            "summary": "Class\u0020UserRepository",
+            "url": "classes/App-Repository-UserRepository.html"
+        },                {
+            "fqsen": "\\App\\Repository\\UserRepository\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Repository-UserRepository.html#method___construct"
+        },                {
             "fqsen": "\\App\\Util\\AppUtil",
             "name": "AppUtil",
             "summary": "Class\u0020AppUtil",
@@ -456,20 +741,65 @@ Search.appendIndex(
             "summary": "Get\u0020the\u0020log\u0020level",
             "url": "classes/App-Util-AppUtil.html#method_getLogLevel"
         },                {
+            "fqsen": "\\App\\Util\\AppUtil\u003A\u003AgetHasherConfig\u0028\u0029",
+            "name": "getHasherConfig",
+            "summary": "Get\u0020the\u0020hasher\u0020configuration",
+            "url": "classes/App-Util-AppUtil.html#method_getHasherConfig"
+        },                {
             "fqsen": "\\App\\Util\\SecurityUtil",
             "name": "SecurityUtil",
             "summary": "Class\u0020SecurityUtil",
             "url": "classes/App-Util-SecurityUtil.html"
+        },                {
+            "fqsen": "\\App\\Util\\SecurityUtil\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Util-SecurityUtil.html#method___construct"
         },                {
             "fqsen": "\\App\\Util\\SecurityUtil\u003A\u003AescapeString\u0028\u0029",
             "name": "escapeString",
             "summary": "Escape\u0020the\u0020string",
             "url": "classes/App-Util-SecurityUtil.html#method_escapeString"
         },                {
+            "fqsen": "\\App\\Util\\SecurityUtil\u003A\u003AgenerateHash\u0028\u0029",
+            "name": "generateHash",
+            "summary": "Generate\u0020hash\u0020for\u0020a\u0020given\u0020password.",
+            "url": "classes/App-Util-SecurityUtil.html#method_generateHash"
+        },                {
+            "fqsen": "\\App\\Util\\SecurityUtil\u003A\u003AverifyPassword\u0028\u0029",
+            "name": "verifyPassword",
+            "summary": "Verify\u0020a\u0020password\u0020against\u0020a\u0020given\u0020Argon2\u0020hash.",
+            "url": "classes/App-Util-SecurityUtil.html#method_verifyPassword"
+        },                {
+            "fqsen": "\\App\\Util\\SecurityUtil\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Util-SecurityUtil.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Util\\VisitorInfoUtil",
+            "name": "VisitorInfoUtil",
+            "summary": "Class\u0020VisitorInfoUtil",
+            "url": "classes/App-Util-VisitorInfoUtil.html"
+        },                {
+            "fqsen": "\\App\\Util\\VisitorInfoUtil\u003A\u003AgetIP\u0028\u0029",
+            "name": "getIP",
+            "summary": "Get\u0020the\u0020client\u0027s\u0020IP\u0020address.",
+            "url": "classes/App-Util-VisitorInfoUtil.html#method_getIP"
+        },                {
+            "fqsen": "\\App\\Util\\VisitorInfoUtil\u003A\u003AgetBrowser\u0028\u0029",
+            "name": "getBrowser",
+            "summary": "Get\u0020the\u0020user\u0020agent\u0020\u0028browser\u0029.",
+            "url": "classes/App-Util-VisitorInfoUtil.html#method_getBrowser"
+        },                {
             "fqsen": "\\",
             "name": "\\",
             "summary": "",
             "url": "namespaces/default.html"
+        },                {
+            "fqsen": "\\App\\Command",
+            "name": "Command",
+            "summary": "",
+            "url": "namespaces/app-command.html"
         },                {
             "fqsen": "\\App\\Controller",
             "name": "Controller",

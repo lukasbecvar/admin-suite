@@ -23,7 +23,7 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Test if the security util is an instance of SecurityUtil
+     * Test XSS escaping.
      *
      * @return void
      */
@@ -36,7 +36,7 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Test if the security util is an instance of SecurityUtil
+     * Test security escaping without XSS.
      *
      * @return void
      */

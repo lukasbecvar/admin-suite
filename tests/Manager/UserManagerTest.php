@@ -70,7 +70,7 @@ class UserManagerTest extends TestCase
     }
 
     /**
-     * Test the registerUser method with a user that already exists.
+     * Test successful user registration.
      *
      * @return void
      */
@@ -98,7 +98,7 @@ class UserManagerTest extends TestCase
     }
 
     /**
-     * Test the registerUser method with a user that already exists.
+     * Test get user repo method.
      *
      * @return void
      */
@@ -116,7 +116,7 @@ class UserManagerTest extends TestCase
     }
 
     /**
-     * Test the registerUser method with a user that already exists.
+     * Test get username method.
      *
      * @return void
      */
@@ -137,7 +137,7 @@ class UserManagerTest extends TestCase
     }
 
     /**
-     * Test the registerUser method with a user that already exists.
+     * Test get user role method.
      *
      * @return void
      */
@@ -158,7 +158,7 @@ class UserManagerTest extends TestCase
     }
 
     /**
-     * Test the registerUser method with a user that already exists.
+     * Test check if user is admin method.
      *
      * @return void
      */
@@ -179,7 +179,7 @@ class UserManagerTest extends TestCase
     }
 
     /**
-     * Test the registerUser method with a user that already exists.
+     * Test update user role method.
      *
      * @return void
      */
@@ -207,7 +207,7 @@ class UserManagerTest extends TestCase
     }
 
     /**
-     * Test the registerUser method with a user that already exists.
+     * Test update user role method user not found.
      *
      * @return void
      */
