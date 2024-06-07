@@ -58,6 +58,11 @@ class UserManager
      */
     public function registerUser(string $username, string $password): void
     {
+        // check if user already exist
+        if ($this->checkIfUserExist($username)) {
+            return;
+        }
+
         // generate entity token
         $token = ByteString::fromRandom(32)->toString();
 
@@ -105,6 +110,18 @@ class UserManager
                 $this->errorManager->handleError('error to register new user: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
+    }
+
+    /**
+     * Check if a user exists.
+     *
+     * @param string $username The username to check
+     *
+     * @return bool True if the user exists, otherwise false
+     */
+    public function checkIfUserExist(string $username): bool
+    {
+        return $this->getUserRepo(['username' => $username]) != null;
     }
 
     /**

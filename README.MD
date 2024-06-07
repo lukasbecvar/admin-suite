@@ -29,14 +29,15 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [X] User system
 - [X] User register & admin role grant command
 - [ ] Auth system
-    - [ ] Register (only if users table is empty)
+    - [X] Register (only if users table is empty)
     - [ ] Login component with remember me
     - [ ] Logout component
     - [ ] Allow login & register route only if user not logged
     - [ ] Login check middleware
-    - [ ] End-to-end auth tests
     - [ ] Index redirect to dashboard or login
+    - [ ] End-to-end auth tests
     - [ ] User -> log one to many
+    - [ ] Auth components style
 
 ## 0.3
 - [ ] Main dashboard

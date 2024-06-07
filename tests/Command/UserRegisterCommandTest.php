@@ -67,7 +67,7 @@ class UserRegisterCommandTest extends TestCase
         $userManager = $this->createMock(UserManager::class);
 
         // configure the UserManager mock to return the existing user
-        $userManager->method('getUserRepo')->willReturn($existingUser);
+        $userManager->method('checkIfUserExist')->willReturn(true);
 
         // create the command and the command tester
         $command = new UserRegisterCommand($userManager);
@@ -95,12 +95,6 @@ class UserRegisterCommandTest extends TestCase
     {
         // mock UserManager
         $userManager = $this->createMock(UserManager::class);
-
-        // configure the UserManager mock.
-        $userManager->expects($this->once())
-            ->method('getUserRepo')
-            ->with(['username' => 'newuser'])
-            ->willReturn(null); // Simulate user not existing
 
         $userManager->expects($this->once())
             ->method('registerUser')

@@ -98,6 +98,43 @@ class UserManagerTest extends TestCase
     }
 
     /**
+     * Test the checkIfUserExist method with an existing user.
+     *
+     * @return void
+     */
+    public function testCheckIfUserExistUserExists(): void
+    {
+        // create a new user object
+        $user = new User();
+
+        // Mock the findOneBy method to return the user object
+        $this->userRepository->method('findOneBy')->willReturn($user);
+
+        // Call the checkIfUserExist method with an existing username
+        $result = $this->userManager->checkIfUserExist('existing_user');
+
+        // Assert that the result is true
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Test the checkIfUserExist method with a non-existing user.
+     *
+     * @return void
+     */
+    public function testCheckIfUserExistUserNotExists(): void
+    {
+        // Mock the findOneBy method to return null
+        $this->userRepository->method('findOneBy')->willReturn(null);
+
+        // Call the checkIfUserExist method with a non-existing username
+        $result = $this->userManager->checkIfUserExist('non_existing_user');
+
+        // Assert that the result is false
+        $this->assertFalse($result);
+    }
+
+    /**
      * Test get user repo method.
      *
      * @return void

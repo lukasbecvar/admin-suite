@@ -1,1 +1,23 @@
-<p>register</p>
+{% extends 'common/base.html.twig' %}
+
+{% block component %}
+    {% for message in app.flashes('error') %}
+        <div>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.username) }}
+        {{ form_row(registrationForm.password.first) }}
+        {{ form_row(registrationForm.password.second) }}
+
+        <button>Register</button>
+    {{ form_end(registrationForm) }}
+{% endblock %}
