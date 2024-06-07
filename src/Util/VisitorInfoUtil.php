@@ -33,11 +33,11 @@ class VisitorInfoUtil
     }
 
     /**
-     * Get the user agent (browser).
+     * Get the user agent.
      *
      * @return string|null The user agent.
      */
-    public function getBrowser(): ?string
+    public function getUserAgent(): ?string
     {
         // get user agent
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;

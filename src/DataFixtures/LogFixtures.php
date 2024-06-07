@@ -35,6 +35,8 @@ class LogFixtures extends Fixture
             $log->setName($faker->word)
                 ->setMessage($faker->sentence)
                 ->setTime($faker->dateTimeThisYear)
+                ->setUserAgent($faker->userAgent)
+                ->setIpAdderss($faker->ipv4)
                 ->setStatus('UNREADED');
 
             // save the log

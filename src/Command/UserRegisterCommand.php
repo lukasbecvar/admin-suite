@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use Symfony\Component\String\ByteString;
 use Symfony\Component\Console\Command\Command;
@@ -21,10 +22,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:user:register', description: 'Register new user')]
 class UserRegisterCommand extends Command
 {
+    private AuthManager $authManager;
     private UserManager $userManager;
 
-    public function __construct(UserManager $userManager)
+    public function __construct(AuthManager $authManager, UserManager $userManager)
     {
+        $this->authManager = $authManager;
         $this->userManager = $userManager;
         parent::__construct();
     }
@@ -53,6 +56,7 @@ class UserRegisterCommand extends Command
 
         // fix get CLI ip address
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+        $_SERVER['HTTP_USER_AGENT'] = 'console';
 
         // get input arguments
         $username = $input->getArgument('username');
@@ -86,7 +90,7 @@ class UserRegisterCommand extends Command
             $password = ByteString::fromRandom(32)->toString();
 
             // register user
-            $this->userManager->registerUser(strval($username), $password);
+            $this->authManager->registerUser(strval($username), $password);
 
             // return success message
             $io->success('New user registered username: ' . $username . ' with password: ' . $password);

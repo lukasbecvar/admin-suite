@@ -32,6 +32,12 @@ class Log
     private ?\DateTimeInterface $time = null;
 
     #[ORM\Column(length: 255)]
+    private ?string $user_agent = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $ip_adderss = null;
+
+    #[ORM\Column(length: 255)]
     private ?string $status = null;
 
     public function getId(): ?int
@@ -71,6 +77,35 @@ class Log
     public function setTime(\DateTimeInterface $time): static
     {
         $this->time = $time;
+
+        return $this;
+    }
+
+    public function getUserAgent(): ?string
+    {
+        return $this->user_agent;
+    }
+
+    public function setUserAgent(string $user_agent): static
+    {
+        // prevent maximal user agent length
+        if (strlen($user_agent) > 255) {
+            $user_agent = substr($user_agent, 0, 250) . "...";
+        }
+
+        $this->user_agent = $user_agent;
+
+        return $this;
+    }
+
+    public function getIpAdderss(): ?string
+    {
+        return $this->ip_adderss;
+    }
+
+    public function setIpAdderss(string $ip_adderss): static
+    {
+        $this->ip_adderss = $ip_adderss;
 
         return $this;
     }

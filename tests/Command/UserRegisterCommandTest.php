@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Manager\UserManager;
 use PHPUnit\Framework\TestCase;
 use App\Command\UserRegisterCommand;
+use App\Manager\AuthManager;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -26,11 +27,14 @@ class UserRegisterCommandTest extends TestCase
      */
     public function testEmptyUsername(): void
     {
+        // mock AuthManager
+        $authManager = $this->createMock(AuthManager::class);
+
         // mock UserManager
         $userManager = $this->createMock(UserManager::class);
 
         // create the command with the mocked UserManager.
-        $command = new UserRegisterCommand($userManager);
+        $command = new UserRegisterCommand($authManager, $userManager);
 
         // create application and add command
         $application = new Application();
@@ -63,6 +67,9 @@ class UserRegisterCommandTest extends TestCase
         $existingUser = new User();
         $existingUser->setUsername('testuser');
 
+        // mock AuthManager
+        $authManager = $this->createMock(AuthManager::class);
+
         // mock UserManager
         $userManager = $this->createMock(UserManager::class);
 
@@ -70,7 +77,7 @@ class UserRegisterCommandTest extends TestCase
         $userManager->method('checkIfUserExist')->willReturn(true);
 
         // create the command and the command tester
-        $command = new UserRegisterCommand($userManager);
+        $command = new UserRegisterCommand($authManager, $userManager);
         $application = new Application();
         $application->add($command);
         $commandTester = new CommandTester($application->find('app:user:register'));
@@ -93,15 +100,18 @@ class UserRegisterCommandTest extends TestCase
      */
     public function testRegisterUserSuccess(): void
     {
+        // mock AuthManager
+        $authManager = $this->createMock(AuthManager::class);
+
         // mock UserManager
         $userManager = $this->createMock(UserManager::class);
 
-        $userManager->expects($this->once())
+        $authManager->expects($this->once())
             ->method('registerUser')
             ->with('newuser');
 
         // create the command with the mocked UserManager.
-        $command = new UserRegisterCommand($userManager);
+        $command = new UserRegisterCommand($authManager, $userManager);
 
         // create application and add command
         $application = new Application();

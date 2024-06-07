@@ -4,6 +4,7 @@ namespace App\Controller\Auth;
 
 use App\Manager\UserManager;
 use App\Form\RegistrationFormType;
+use App\Manager\AuthManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,10 +19,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class RegisterController extends AbstractController
 {
+    private AuthManager $authManager;
     private UserManager $userManager;
 
-    public function __construct(UserManager $userManager)
+    public function __construct(AuthManager $authManager, UserManager $userManager)
     {
+        $this->authManager = $authManager;
         $this->userManager = $userManager;
     }
 
@@ -33,8 +36,18 @@ class RegisterController extends AbstractController
      * @return Response The response object
      */
     #[Route('/register', name: 'app_auth_register')]
-    public function index(Request $request): Response
+    public function register(Request $request): Response
     {
+        // check if user is already logged in
+        if ($this->authManager->isUserLogedin()) {
+            return $this->redirectToRoute('app_index');
+        }
+
+        // check if user database is empty
+        if (!$this->userManager->isUsersEmpty()) {
+            return $this->redirectToRoute('app_auth_login');
+        }
+
         // create the registration form
         $form = $this->createForm(RegistrationFormType::class);
         $form->handleRequest($request);
@@ -56,7 +69,10 @@ class RegisterController extends AbstractController
 
             // register the new user
             try {
-                $this->userManager->registerUser($username, $password);
+                $this->authManager->registerUser($username, $password);
+
+                // auto login
+                $this->authManager->login($username, false);
 
                 // redirect to the login page
                 return $this->redirectToRoute('app_auth_login');
@@ -67,7 +83,7 @@ class RegisterController extends AbstractController
 
         // render the registration component view
         return $this->render('auth/register.html.twig', [
-            'registrationForm' => $form->createView(),
+            'registration_form' => $form->createView(),
         ]);
     }
 }

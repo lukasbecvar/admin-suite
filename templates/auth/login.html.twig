@@ -1,1 +1,26 @@
-<p>login</p>
+{% extends 'common/base.html.twig' %}
+
+{% block component %}
+    {% if is_users_empty %}
+        users table is empty <a href="/register">register</a>
+    {% endif %}
+
+    {% for message in app.flashes('error') %}
+        <div>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {{ form_start(login_form) }}
+        {{ form_row(login_form.username) }}
+        {{ form_row(login_form.password) }}
+
+        <button>Login</button>
+    {{ form_end(login_form) }}
+{% endblock %}

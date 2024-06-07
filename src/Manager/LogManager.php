@@ -4,7 +4,10 @@ namespace App\Manager;
 
 use App\Entity\Log;
 use App\Util\AppUtil;
+use App\Util\SessionUtil;
+use App\Util\VisitorInfoUtil;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class LogManager
@@ -17,13 +20,15 @@ class LogManager
 {
     private AppUtil $appUtil;
     private ErrorManager $errorManager;
+    private VisitorInfoUtil $visitorInfoUtil;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(AppUtil $appUtil, ErrorManager $errorManager, EntityManagerInterface $entityManager)
+    public function __construct(AppUtil $appUtil, ErrorManager $errorManager, VisitorInfoUtil $visitorInfoUtil, EntityManagerInterface $entityManager)
     {
         $this->appUtil = $appUtil;
         $this->errorManager = $errorManager;
         $this->entityManager = $entityManager;
+        $this->visitorInfoUtil = $visitorInfoUtil;
     }
 
     /**
@@ -49,6 +54,15 @@ class LogManager
             return;
         }
 
+        // get user data
+        $userAgent = (string) $this->visitorInfoUtil->getUserAgent();
+        $ipAddress = $this->visitorInfoUtil->getIP();
+
+        // check if the ip address is null
+        if ($ipAddress == null) {
+            $ipAddress = 'Unknown';
+        }
+
         // init log entity
         $log = new Log();
 
@@ -56,6 +70,8 @@ class LogManager
         $log->setName($name)
             ->setMessage($message)
             ->setStatus('UNREADED')
+            ->setUserAgent($userAgent)
+            ->setIpAdderss($ipAddress)
             ->setTime(new \DateTime());
 
         try {

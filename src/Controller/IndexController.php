@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Manager\AuthManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -9,20 +10,33 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class IndexController
  *
- * The controller for the index page
+ * The controller for the index component.
  *
  * @package App\Controller
  */
 class IndexController extends AbstractController
 {
+    private AuthManager $authManager;
+
+    public function __construct(AuthManager $authManager)
+    {
+        $this->authManager = $authManager;
+    }
+
     /**
-     * Show the app index
+     * Handle the index component.
      *
      * @return Response The index view
      */
     #[Route('/', name: 'app_index')]
     public function index(): Response
     {
-        return $this->render('index.html.twig');
+        // check if user is logged in
+        if (!$this->authManager->isUserLogedin()) {
+            return $this->redirectToRoute('app_auth_login');
+        }
+
+        // redirect to main dashboard component
+        return $this->redirectToRoute('app_dashboard');
     }
 }
