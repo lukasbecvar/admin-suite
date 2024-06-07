@@ -32,6 +32,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [ ] Default user register
 - [ ] Index redirect to dashboard or login
 - [ ] User -> log one to many
+- [ ] User managment system (only for admin users)
 - [ ] User ban system
 
 ## 0.3
@@ -40,7 +41,6 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [ ] Server diagnostics component
 - [ ] Dashboard warning box
 - [ ] Check requirements warning
-- [ ] User system manager
 
 ## 0.4
 - [ ] Service manager component
