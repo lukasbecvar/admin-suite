@@ -6,8 +6,8 @@ use App\Entity\User;
 use App\Util\SecurityUtil;
 use App\Manager\LogManager;
 use App\Manager\UserManager;
-use App\Manager\ErrorManager;
 use App\Util\VisitorInfoUtil;
+use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,178 +16,215 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Class UserManagerTest
  *
- * Test cases for the UserManager class.
+ * Contains unit tests for the UserManager class.
  *
  * @package App\Tests\Manager
  */
 class UserManagerTest extends TestCase
 {
-     /** @var MockObject|LogManager The log manager instance */
-    private MockObject|LogManager $logManager;
+    /** @var UserManager */
+    private UserManager $userManager;
 
-     /** @var MockObject|SecurityUtil The security util instance */
-    private MockObject|SecurityUtil $securityUtil;
+    /** @var MockObject|LogManager */
+    private LogManager|MockObject $logManager;
 
-     /** @var MockObject|ErrorManager The error manager instance */
-    private MockObject|ErrorManager $errorManager;
+    /** @var ErrorManager|MockObject */
+    private ErrorManager|MockObject $errorManager;
 
-     /** @var MockObject|VisitorInfoUtil The visitor info util instance */
-    private MockObject|VisitorInfoUtil $visitorInfoUtil;
+    /** @var MockObject|SecurityUtil */
+    private SecurityUtil|MockObject $securityUtil;
 
-     /** @var MockObject|EntityManagerInterface The entity manager instance */
-    private MockObject|EntityManagerInterface $entityManager;
+    /** @var MockObject|UserRepository */
+    private UserRepository|MockObject $userRepository;
 
-    /**
-     * Set up the test environment.
-     *
-     * @return void
-     */
+    /** @var MockObject|VisitorInfoUtil */
+    private VisitorInfoUtil|MockObject $visitorInfoUtil;
+
+    /** @var MockObject|EntityManagerInterface */
+    private EntityManagerInterface|MockObject $entityManager;
+
     protected function setUp(): void
     {
         $this->logManager = $this->createMock(LogManager::class);
-        $this->securityUtil = $this->createMock(SecurityUtil::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
+        $this->securityUtil = $this->createMock(SecurityUtil::class);
         $this->visitorInfoUtil = $this->createMock(VisitorInfoUtil::class);
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
+
+        // create a mock repository that extends EntityRepository
+        $this->userRepository = $this->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // set the getRepository method to return the mock repository
+        $this->entityManager->method('getRepository')->willReturn($this->userRepository);
+
+        // create a new instance of the UserManager class
+        $this->userManager = new UserManager(
+            $this->logManager,
+            $this->errorManager,
+            $this->securityUtil,
+            $this->entityManager,
+            $this->visitorInfoUtil
+        );
     }
 
     /**
-     * Test case for the getUserRepo method.
+     * Test the registerUser method with a user that already exists.
+     *
+     * @return void
+     */
+    public function testRegisterUserSuccessfully(): void
+    {
+        // create a new user object
+        $this->userRepository->method('findOneBy')->willReturn(null);
+
+        // mock the log method
+        $this->logManager->expects($this->once())
+            ->method('log')
+            ->with('authenticator', 'new registration user: testuser');
+
+        // mock the persist method
+        $this->entityManager->expects($this->once())
+            ->method('persist')
+            ->with($this->isInstanceOf(User::class));
+
+        // mock the flush method
+        $this->entityManager->expects($this->once())
+            ->method('flush');
+
+        // call the registerUser method
+        $this->userManager->registerUser('testuser', 'password');
+    }
+
+    /**
+     * Test the registerUser method with a user that already exists.
      *
      * @return void
      */
     public function testGetUserRepo(): void
     {
-        // mock search criteria
-        $search = ['email' => 'test@example.com'];
+        // create a new user object
+        $user = new User();
+        $this->userRepository->method('findOneBy')->willReturn($user);
 
-        // mock UserRepository
-        $userRepository = $this->createMock(UserRepository::class);
+        // call the getUserRepo method
+        $result = $this->userManager->getUserRepo(['username' => 'testuser']);
 
-        // mock EntityManager to return UserRepository
-        $this->entityManager->expects($this->once())->method('getRepository')->willReturn($userRepository);
-
-        // mock findOneBy method on UserRepository
-        $userRepository->expects($this->once())->method('findOneBy')->with($search)->willReturn(new User());
-
-        // create UserManager instance
-        $userManager = new UserManager($this->logManager, $this->errorManager, $this->securityUtil, $this->entityManager, $this->visitorInfoUtil);
-
-        // call getUserRepo method
-        $result = $userManager->getUserRepo($search);
-
-        // assert that result is an instance of User
+        // assert that the result is an instance of the User class
         $this->assertInstanceOf(User::class, $result);
     }
 
     /**
-     * Test case for the registerUser method.
+     * Test the registerUser method with a user that already exists.
      *
      * @return void
      */
-    public function testRegisterUser(): void
+    public function testGetUsername(): void
     {
-        // create UserManager instance
-        $userManager = new UserManager($this->logManager, $this->errorManager, $this->securityUtil, $this->entityManager, $this->visitorInfoUtil);
-
-        // mock user registration data
-        $email = 'test@example.com';
-        $password = 'password123';
-
-        // mock UserRepository
-        $userRepository = $this->createMock(UserRepository::class);
-
-        // mock EntityManager to return UserRepository
-        $this->entityManager->expects($this->atLeastOnce())->method('getRepository')->willReturn($userRepository);
-
-        // mock findOneBy method on UserRepository
-        $userRepository->expects($this->atLeastOnce())->method('findOneBy')->willReturn(null);
-
-        // mock SecurityUtil to return a hashed password
-        $this->securityUtil->expects($this->once())->method('generateHash')->willReturn('hashed_password');
-
-        // mock VisitorInfoUtil to return an IP address
-        $this->visitorInfoUtil->expects($this->once())->method('getIP')->willReturn('127.0.0.1');
-
-        // mock EntityManager to persist and flush user
-        $this->entityManager->expects($this->once())->method('persist');
-        $this->entityManager->expects($this->once())->method('flush');
-
-        // mock LogManager to log registration action
-        $this->logManager->expects($this->once())->method('log');
-
-        // call registerUser method
-        $userManager->registerUser($email, $password);
-    }
-
-    /**
-     * Test case for the addAdminRoleToUser method.
-     *
-     * @return void
-     */
-    public function testAddAdminRoleToUser(): void
-    {
-        // create UserManager instance
-        $userManager = new UserManager($this->logManager, $this->errorManager, $this->securityUtil, $this->entityManager, $this->visitorInfoUtil);
-
-        // mock user
+        // create a new user object
         $user = new User();
         $user->setUsername('testuser');
 
-        // mock UserRepository
-        $this->entityManager->expects($this->once())
-            ->method('getRepository')
-            ->with(User::class)
-            ->willReturn($userRepository = $this->createMock(UserRepository::class));
+        // mock the findOneBy method
+        $this->userRepository->method('findOneBy')->willReturn($user);
 
-        // mock findOneBy method on UserRepository
-        $userRepository->expects($this->once())
-            ->method('findOneBy')
-            ->with(['username' => 'testuser'])
-            ->willReturn($user);
+        // call the getUsername method
+        $result = $this->userManager->getUsername(1);
 
-        // mock LogManager to log action
-        $this->entityManager->expects($this->once())
-            ->method('flush');
-
-        // call addAdminRoleToUser method
-        $userManager->addAdminRoleToUser('testuser');
+        // assert that the result is equal to 'testuser'
+        $this->assertEquals('testuser', $result);
     }
 
     /**
-     * Test case for the isUserAdmin method.
+     * Test the registerUser method with a user that already exists.
+     *
+     * @return void
+     */
+    public function testGetUserRole(): void
+    {
+        // create a new user object
+        $user = new User();
+        $user->setRole('USER');
+
+        // mock the findOneBy method
+        $this->userRepository->method('findOneBy')->willReturn($user);
+
+        // call the getUserRole method
+        $result = $this->userManager->getUserRole(1);
+
+        // assert that the result is equal to 'USER'
+        $this->assertEquals('USER', $result);
+    }
+
+    /**
+     * Test the registerUser method with a user that already exists.
      *
      * @return void
      */
     public function testIsUserAdmin(): void
     {
-        // create UserManager instance
-        $userManager = new UserManager($this->logManager, $this->errorManager, $this->securityUtil, $this->entityManager, $this->visitorInfoUtil);
+        // create a new user object
+        $user = new User();
+        $user->setRole('ADMIN');
 
-        // mock admin and regular users
-        $adminUser = new User();
-        $adminUser->setUsername('adminuser');
-        $adminUser->setRoles(['ROLE_ADMIN']);
+        // mock the findOneBy method
+        $this->userRepository->method('findOneBy')->willReturn($user);
 
-        $regularUser = new User();
-        $regularUser->setUsername('regularuser');
-        $regularUser->setRoles(['ROLE_USER']);
+        // call the isUserAdmin method
+        $result = $this->userManager->isUserAdmin(1);
 
-        // mock UserRepository
-        $this->entityManager->expects($this->exactly(2))
-            ->method('getRepository')
-            ->with(User::class)
-            ->willReturn($userRepository = $this->createMock(UserRepository::class));
+        // assert that the result is true
+        $this->assertTrue($result);
+    }
 
-        // mock findOneBy method on UserRepository
-        $userRepository->expects($this->exactly(2))
-            ->method('findOneBy')
-            ->willReturnOnConsecutiveCalls($adminUser, $regularUser);
+    /**
+     * Test the registerUser method with a user that already exists.
+     *
+     * @return void
+     */
+    public function testUpdateUserRole(): void
+    {
+        // create a new user object
+        $user = new User();
+        $user->setUsername('testuser');
+        $user->setRole('USER');
 
-        // assert that admin user is admin
-        $this->assertTrue($userManager->isUserAdmin('adminuser'));
+        // mock the findOneBy method
+        $this->userRepository->method('findOneBy')->willReturn($user);
 
-        // assert that regular user is not admin
-        $this->assertFalse($userManager->isUserAdmin('regularuser'));
+        // mock the flush method
+        $this->entityManager->expects($this->once())
+            ->method('flush');
+
+        // mock the log method
+        $this->logManager->expects($this->once())
+            ->method('log')
+            ->with('role-granted', 'role admin granted to user: testuser');
+
+        // call the updateUserRole method
+        $this->userManager->updateUserRole(1, 'ADMIN');
+    }
+
+    /**
+     * Test the registerUser method with a user that already exists.
+     *
+     * @return void
+     */
+    public function testUpdateUserRoleUserNotFound(): void
+    {
+        // mock the findOneBy method
+        $this->userRepository->method('findOneBy')->willReturn(null);
+
+        // mock the flush method
+        $this->entityManager->expects($this->never())
+            ->method('flush');
+
+        // mock the log method
+        $this->logManager->expects($this->never())
+            ->method('log');
+
+        // call the updateUserRole method
+        $this->userManager->updateUserRole(1, 'ADMIN');
     }
 }

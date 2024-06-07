@@ -88,7 +88,7 @@ class UserManager
 
                 $user->setUsername($username)
                     ->setPassword($password)
-                    ->setRoles(['ROLE_USER'])
+                    ->setRole('USER')
                     ->setIpAddress($ip_address)
                     ->setToken(md5(random_bytes(32)))
                     ->setProfilePic('default_pic')
@@ -108,49 +108,106 @@ class UserManager
     }
 
     /**
+     * Get the username of a user.
+     *
+     * @param int $id The id of the user to get the username
+     *
+     * @return string The username of the user
+     */
+    public function getUsername(int $id): ?string
+    {
+        $repo = $this->getUserRepo(['id' => $id]);
+
+        // check if user exist
+        if ($repo != null) {
+            return $repo->getUsername();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the role of a user.
+     *
+     * @param int $id The id of the user to get the role
+     *
+     * @return string The role of the user
+     */
+    public function getUserRole(int $id): ?string
+    {
+        $repo = $this->getUserRepo(['id' => $id]);
+
+        // check if user exist
+        if ($repo != null) {
+            return $repo->getRole();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the token of a user.
+     *
+     * @param int $id The id of the user to get the token
+     *
+     * @return string The token of the user
+     */
+    public function getUserToken(int $id): ?string
+    {
+        $repo = $this->getUserRepo(['id' => $id]);
+
+        // check if user exist
+        if ($repo != null) {
+            return $repo->getToken();
+        }
+
+        return null;
+    }
+
+    /**
      * Checks if the specified user has the admin role.
      *
-     * @param string $username The username of the user to check
+     * @param int $id The id of the user to check the admin role
      *
      * @return bool True if the user has the admin role, otherwise false
      */
-    public function isUserAdmin(string $username): bool
+    public function isUserAdmin(int $id): bool
     {
-        $user = $this->getUserRepo(['username' => $username]);
+        $role = $this->getUserRole($id);
 
-        if ($user !== null) {
-            $roles = $user->getRoles();
-            return in_array('ROLE_ADMIN', $roles) || in_array('ROLE_DEVELOPER', $roles) || in_array('ROLE_OWNER', $roles);
+        if ($role == 'ADMIN' || $role == 'DEVELOPER' || $role == 'OWNER') {
+            return true;
         }
 
         return false;
     }
 
     /**
-     * Adds the admin role to a user.
+     * Update the role of a user.
      *
-     * @param string $username The username of the user to add the admin role
+     * @param int $id The id of the user to add the admin role
+     * @param string $role The role to add
      *
      * @throws \Exception If there is an error while adding the admin role
      *
      * @return void
      */
-    public function addAdminRoleToUser(string $username): void
+    public function updateUserRole(int $id, string $role): void
     {
         // get user repo
-        $repo = $this->getUserRepo(['username' => $username]);
+        $repo = $this->getUserRepo(['id' => $id]);
 
         // check if user exist
         if ($repo != null) {
             try {
                 // update role
-                $repo->setRoles(['ROLE_ADMIN']);
+                $repo->setRole(strtoupper($role));
 
                 // flush updated user data
                 $this->entityManager->flush();
 
                 // log action
-                $this->logManager->log('role-granted', 'role admin granted to user: ' . $username);
+                $this->logManager->log('role-granted', 'role admin granted to user: ' . $this->getUsername($id));
             } catch (\Exception $e) {
                 $this->errorManager->handleError('error to grant admin permissions: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }

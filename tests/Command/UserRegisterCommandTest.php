@@ -2,10 +2,12 @@
 
 namespace App\Tests\Command;
 
+use App\Entity\User;
 use App\Manager\UserManager;
 use PHPUnit\Framework\TestCase;
 use App\Command\UserRegisterCommand;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -48,6 +50,40 @@ class UserRegisterCommandTest extends TestCase
 
         // assert error message
         $this->assertStringContainsString('Username cannot be empty.', $output);
+    }
+
+    /**
+     * Test case for username already exists.
+     *
+     * @return void
+     */
+    public function testUsernameAlreadyExists(): void
+    {
+        // create a mock user
+        $existingUser = new User();
+        $existingUser->setUsername('testuser');
+
+        // mock UserManager
+        $userManager = $this->createMock(UserManager::class);
+
+        // configure the UserManager mock to return the existing user
+        $userManager->method('getUserRepo')->willReturn($existingUser);
+
+        // create the command and the command tester
+        $command = new UserRegisterCommand($userManager);
+        $application = new Application();
+        $application->add($command);
+        $commandTester = new CommandTester($application->find('app:user:register'));
+
+        // execute the command with an existing username
+        $commandTester->execute(['username' => 'testuser']);
+
+        // assert the output contains the error message
+        $output = $commandTester->getDisplay();
+
+        // Assert the output contains the error message
+        $this->assertStringContainsString('Error username: testuser is already used!', $output);
+        $this->assertSame(Command::FAILURE, $commandTester->getStatusCode());
     }
 
     /**

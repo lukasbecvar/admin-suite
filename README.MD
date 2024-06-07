@@ -40,6 +40,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [ ] Server diagnostics component
 - [ ] Dashboard warning box
 - [ ] Check requirements warning
+- [ ] User system manager
 
 ## 0.4
 - [ ] Service manager component

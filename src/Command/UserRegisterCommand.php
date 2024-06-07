@@ -23,11 +23,6 @@ class UserRegisterCommand extends Command
 {
     private UserManager $userManager;
 
-    /**
-     * UserRegisterCommand constructor
-     *
-     * @param UserManager $userManager The user manager instance.
-     */
     public function __construct(UserManager $userManager)
     {
         $this->userManager = $userManager;

@@ -28,11 +28,8 @@ class User
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    /**
-     * @var array<string>
-     */
-    #[ORM\Column]
-    private array $roles = [];
+    #[ORM\Column(length: 255)]
+    private ?string $role = null;
 
     #[ORM\Column(length: 255)]
     private ?string $ip_address = null;
@@ -78,22 +75,14 @@ class User
         return $this;
     }
 
-    /**
-     * @return array<string>
-     */
-    public function getRoles(): array
+    public function getRole(): ?string
     {
-        return $this->roles;
+        return $this->role;
     }
 
-    /**
-     * @param array<string> $roles
-     *
-     * @return static
-     */
-    public function setRoles(array $roles): static
+    public function setRole(string $role): static
     {
-        $this->roles = $roles;
+        $this->role = $role;
 
         return $this;
     }
