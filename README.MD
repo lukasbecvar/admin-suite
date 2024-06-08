@@ -92,6 +92,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 ## 1.2
 - [ ] About component (developer, github, version, info, etc..)
 - [ ] Refactor
+- [ ] Mini readme doc
 - [ ] User manual with config & setup doc
 - [ ] Setup script (for non docker env)
 
