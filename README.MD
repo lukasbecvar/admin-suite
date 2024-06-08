@@ -42,11 +42,12 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Implement log to auth process
     - [X] Auth components style
     - [X] End-to-end auth tests
-- [ ] Main dashboard
+- [ ] Get user info in admin dashboard
 - [ ] Deep user system test
 - [ ] Base refactor & recode
 
 ## 0.3
+- [ ] Main dashboard
 - [ ] User managment system (only for admin users)
 - [ ] User ban system
 - [ ] View apache access info
