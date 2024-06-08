@@ -186,24 +186,19 @@
                                 <section>
                                         <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/app.html">App</a></li>
-            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-controller.html">Controller</a></li>
-            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-controller-auth.html">Auth</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-util.html">Util</a></li>
     </ul>
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    LoginController
+    SessionUtil
 
-        <span class="phpdocumentor-element__extends">
-        extends <abbr title="\Symfony\Bundle\FrameworkBundle\Controller\AbstractController">AbstractController</abbr>
-    </span>
     
             <div class="phpdocumentor-element__package">
             in package
             <ul class="phpdocumentor-breadcrumbs">
                                     <li class="phpdocumentor-breadcrumb"><a href="packages/App.html">App</a></li>
-                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Controller.html">Controller</a></li>
-                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Controller-Auth.html">Auth</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Util.html">Util</a></li>
                             </ul>
         </div>
     
@@ -216,15 +211,15 @@
 </div>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Auth/LoginController.php"><a href="files/src-controller-auth-logincontroller.html"><abbr title="src/Controller/Auth/LoginController.php">LoginController.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">20</span>
+    <span class="phpdocumentor-element-found-in__line">14</span>
 
     </aside>
 
-            <p class="phpdocumentor-summary">Class LoginController</p>
+            <p class="phpdocumentor-summary">Class SessionUtil</p>
 
-    <section class="phpdocumentor-description"><p>The controller for the login page</p>
+    <section class="phpdocumentor-description"><p>SessionUtil provides session management functions.</p>
 </section>
 
 
@@ -235,7 +230,7 @@
 
 <h3 id="toc">
     Table of Contents
-    <a href="classes/App-Controller-Auth-LoginController.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Util-SessionUtil.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h3>
 
@@ -249,42 +244,70 @@
 
 <h4 id="toc-properties">
     Properties
-    <a href="classes/App-Controller-Auth-LoginController.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Util-SessionUtil.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/App-Controller-Auth-LoginController.html#property_authManager">$authManager</a>
+    <a href="classes/App-Util-SessionUtil.html#property_errorManager">$errorManager</a>
     <span>
-                        &nbsp;: <a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a>            </span>
+                        &nbsp;: <a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/App-Controller-Auth-LoginController.html#property_userManager">$userManager</a>
+    <a href="classes/App-Util-SessionUtil.html#property_securityUtil">$securityUtil</a>
     <span>
-                        &nbsp;: <a href="classes/App-Manager-UserManager.html"><abbr title="\App\Manager\UserManager">UserManager</abbr></a>            </span>
+                        &nbsp;: <a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a>            </span>
 </dt>
 
     </dl>
 
 <h4 id="toc-methods">
     Methods
-    <a href="classes/App-Controller-Auth-LoginController.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Util-SessionUtil.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Controller-Auth-LoginController.html#method___construct">__construct()</a>
+    <a href="classes/App-Util-SessionUtil.html#method___construct">__construct()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Controller-Auth-LoginController.html#method_login">login()</a>
+    <a href="classes/App-Util-SessionUtil.html#method_checkSession">checkSession()</a>
     <span>
-                                &nbsp;: <abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr>    </span>
+                                &nbsp;: bool    </span>
 </dt>
-<dd>Handle the user login component.</dd>
+<dd>Check if a session with the specified name exists.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Util-SessionUtil.html#method_destroySession">destroySession()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Destroy the current session.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Util-SessionUtil.html#method_getSessionValue">getSessionValue()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Get the decrypted value of a session.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Util-SessionUtil.html#method_setSession">setSession()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Set a session value.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Util-SessionUtil.html#method_startSession">startSession()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Start a new session if not already started.</dd>
 
     </dl>
 
@@ -296,7 +319,7 @@
     <section class="phpdocumentor-properties">
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
-            <a href="classes/App-Controller-Auth-LoginController.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/App-Util-SessionUtil.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article
@@ -306,25 +329,25 @@
             -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_authManager">
-        $authManager
-        <a href="classes/App-Controller-Auth-LoginController.html#property_authManager" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_errorManager">
+        $errorManager
+        <a href="classes/App-Util-SessionUtil.html#property_errorManager" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Auth/LoginController.php"><a href="files/src-controller-auth-logincontroller.html"><abbr title="src/Controller/Auth/LoginController.php">LoginController.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">17</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a></span>
-    <span class="phpdocumentor-signature__name">$authManager</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$errorManager</span>
     </code>
 
     
@@ -341,25 +364,25 @@
             -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_userManager">
-        $userManager
-        <a href="classes/App-Controller-Auth-LoginController.html#property_userManager" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_securityUtil">
+        $securityUtil
+        <a href="classes/App-Util-SessionUtil.html#property_securityUtil" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Auth/LoginController.php"><a href="files/src-controller-auth-logincontroller.html"><abbr title="src/Controller/Auth/LoginController.php">LoginController.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">16</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/App-Manager-UserManager.html"><abbr title="\App\Manager\UserManager">UserManager</abbr></a></span>
-    <span class="phpdocumentor-signature__name">$userManager</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$securityUtil</span>
     </code>
 
     
@@ -374,7 +397,7 @@
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/App-Controller-Auth-LoginController.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/App-Util-SessionUtil.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article
@@ -385,20 +408,20 @@
 >
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
-        <a href="classes/App-Controller-Auth-LoginController.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/App-Util-SessionUtil.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Auth/LoginController.php"><a href="files/src-controller-auth-logincontroller.html"><abbr title="src/Controller/Auth/LoginController.php">LoginController.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">25</span>
+    <span class="phpdocumentor-element-found-in__line">19</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$authManager</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-UserManager.html"><abbr title="\App\Manager\UserManager">UserManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$userManager</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$securityUtil</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$errorManager</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -406,15 +429,15 @@
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$authManager</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a></span>
+                <span class="phpdocumentor-signature__argument__name">$securityUtil</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$userManager</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-UserManager.html"><abbr title="\App\Manager\UserManager">UserManager</abbr></a></span>
+                <span class="phpdocumentor-signature__argument__name">$errorManager</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -433,23 +456,23 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_login">
-        login()
-        <a href="classes/App-Controller-Auth-LoginController.html#method_login" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_checkSession">
+        checkSession()
+        <a href="classes/App-Util-SessionUtil.html#method_checkSession" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Auth/LoginController.php"><a href="files/src-controller-auth-logincontroller.html"><abbr title="src/Controller/Auth/LoginController.php">LoginController.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
+    <span class="phpdocumentor-element-found-in__line">57</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Handle the user login component.</p>
+        <p class="phpdocumentor-summary">Check if a session with the specified name exists.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">login</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpFoundation\Request">Request</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$request</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">checkSession</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sessionName</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -457,11 +480,11 @@
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$request</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpFoundation\Request">Request</abbr></span>
+                <span class="phpdocumentor-signature__argument__name">$sessionName</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The request object</p>
+                    <section class="phpdocumentor-description"><p>The name of the session to check.</p>
 </section>
 
             </dd>
@@ -470,36 +493,193 @@
     
 
     
-    <section class="phpdocumentor-attributes">
-        <h5 class="phpdocumentor-elements__header" id="attributes">
-            Attributes <a href="classes/App-Controller-Auth-LoginController.html#method_login#attributes" class="headerlink"><i class="fas fa-link"></i></a>
-
-        </h5>
-                    <dl class="phpdocumentor-argument-list">
-    <dt class="phpdocumentor-argument-list__entry">
-        #[<abbr title="\Symfony\Component\Routing\Attribute\Route">Route</abbr>]
-    </dt>
-        <dd class="phpdocumentor-argument-list__entry">
-        &#039;/login&#039;
-    </dd>
-        <dd class="phpdocumentor-argument-list__entry">
-        $methods: [&#039;GET&#039;, &#039;POST&#039;]
-    </dd>
-        <dd class="phpdocumentor-argument-list__entry">
-        $name: &#039;app_auth_login&#039;
-    </dd>
-    </dl>
-            </section>
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span>
+        <span class="phpdocumentor-signature__response_type">bool</span>
                     &mdash;
-                <section class="phpdocumentor-description"><p>The login view</p>
+                <section class="phpdocumentor-description"><p>Whether the session exists.</p>
 </section>
 
             </section>
 
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_destroySession">
+        destroySession()
+        <a href="classes/App-Util-SessionUtil.html#method_destroySession" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">42</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Destroy the current session.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">destroySession</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getSessionValue">
+        getSessionValue()
+        <a href="classes/App-Util-SessionUtil.html#method_getSessionValue" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">84</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Get the decrypted value of a session.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getSessionValue</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sessionName</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$sessionName</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of the session.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The decrypted session value.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_setSession">
+        setSession()
+        <a href="classes/App-Util-SessionUtil.html#method_setSession" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">71</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Set a session value.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">setSession</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sessionName</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sessionValue</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$sessionName</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of the session.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$sessionValue</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The value to set for the session.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_startSession">
+        startSession()
+        <a href="classes/App-Util-SessionUtil.html#method_startSession" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">30</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Start a new session if not already started.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">startSession</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+    
+
+    
 </article>
             </section>
 
@@ -507,7 +687,7 @@
     <div class="phpdocumentor-modal-bg" data-exit-button></div>
     <div class="phpdocumentor-modal-container">
         <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Controller/Auth/LoginController.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Util/SessionUtil.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
         </div>
         <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
     </div>
@@ -606,24 +786,28 @@
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                            <li><a href="classes/App-Controller-Auth-LoginController.html#toc-properties">Properties</a></li>
-                                                            <li><a href="classes/App-Controller-Auth-LoginController.html#toc-methods">Methods</a></li>
+                                                            <li><a href="classes/App-Util-SessionUtil.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/App-Util-SessionUtil.html#toc-methods">Methods</a></li>
                                     </ul>
             </li>
             
                             <li class="phpdocumentor-on-this-page-section__title">Properties</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
-                                                    <li><a href="classes/App-Controller-Auth-LoginController.html#property_authManager">$authManager<a href="classes/App-Controller-Auth-LoginController.html"></li>
-                                                    <li><a href="classes/App-Controller-Auth-LoginController.html#property_userManager">$userManager<a href="classes/App-Controller-Auth-LoginController.html"></li>
+                                                    <li><a href="classes/App-Util-SessionUtil.html#property_errorManager">$errorManager<a href="classes/App-Util-SessionUtil.html"></li>
+                                                    <li><a href="classes/App-Util-SessionUtil.html#property_securityUtil">$securityUtil<a href="classes/App-Util-SessionUtil.html"></li>
                                             </ul>
                 </li>
             
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                            <li><a href="classes/App-Controller-Auth-LoginController.html#method___construct">__construct()</a></li>
-                                            <li><a href="classes/App-Controller-Auth-LoginController.html#method_login">login()</a></li>
+                                            <li><a href="classes/App-Util-SessionUtil.html#method___construct">__construct()</a></li>
+                                            <li><a href="classes/App-Util-SessionUtil.html#method_checkSession">checkSession()</a></li>
+                                            <li><a href="classes/App-Util-SessionUtil.html#method_destroySession">destroySession()</a></li>
+                                            <li><a href="classes/App-Util-SessionUtil.html#method_getSessionValue">getSessionValue()</a></li>
+                                            <li><a href="classes/App-Util-SessionUtil.html#method_setSession">setSession()</a></li>
+                                            <li><a href="classes/App-Util-SessionUtil.html#method_startSession">startSession()</a></li>
                                     </ul>
             </li>
                     </ul>
@@ -643,7 +827,7 @@
     </section>
 </section>
         </div>
-        <a href="classes/App-Controller-Auth-LoginController.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/App-Util-SessionUtil.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 

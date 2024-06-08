@@ -201,7 +201,9 @@
             <div class="phpdocumentor-element__package">
             in package
             <ul class="phpdocumentor-breadcrumbs">
-                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Application.html">Application</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App.html">App</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Controller.html">Controller</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Controller-Auth.html">Auth</a></li>
                             </ul>
         </div>
     
@@ -216,11 +218,14 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Auth/LogoutController.php"><a href="files/src-controller-auth-logoutcontroller.html"><abbr title="src/Controller/Auth/LogoutController.php">LogoutController.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">9</span>
+    <span class="phpdocumentor-element-found-in__line">18</span>
 
     </aside>
 
-        
+            <p class="phpdocumentor-summary">Class LogoutController</p>
+
+    <section class="phpdocumentor-description"><p>The controller for the logout page</p>
+</section>
 
 
 
@@ -242,6 +247,25 @@
 
 
 
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/App-Controller-Auth-LogoutController.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/App-Controller-Auth-LogoutController.html#property_authManager">$authManager</a>
+    <span>
+                        &nbsp;: <a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a>            </span>
+</dt>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/App-Controller-Auth-LogoutController.html#property_errorManager">$errorManager</a>
+    <span>
+                        &nbsp;: <a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>            </span>
+</dt>
+
+    </dl>
 
 <h4 id="toc-methods">
     Methods
@@ -250,10 +274,17 @@
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Controller-Auth-LogoutController.html#method_index">index()</a>
+    <a href="classes/App-Controller-Auth-LogoutController.html#method___construct">__construct()</a>
     <span>
-                                &nbsp;: <abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr>    </span>
+                                &nbsp;: mixed    </span>
 </dt>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Controller-Auth-LogoutController.html#method_logout">logout()</a>
+    <span>
+                                &nbsp;: <abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr>|null    </span>
+</dt>
+<dd>Handle the user logout component.</dd>
 
     </dl>
 
@@ -262,6 +293,83 @@
         
 
         
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/App-Controller-Auth-LogoutController.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_authManager">
+        $authManager
+        <a href="classes/App-Controller-Auth-LogoutController.html#property_authManager" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Auth/LogoutController.php"><a href="files/src-controller-auth-logoutcontroller.html"><abbr title="src/Controller/Auth/LogoutController.php">LogoutController.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">20</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$authManager</span>
+    </code>
+
+    
+    
+    
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_errorManager">
+        $errorManager
+        <a href="classes/App-Controller-Auth-LogoutController.html#property_errorManager" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Auth/LogoutController.php"><a href="files/src-controller-auth-logoutcontroller.html"><abbr title="src/Controller/Auth/LogoutController.php">LogoutController.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">21</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$errorManager</span>
+    </code>
+
+    
+    
+    
+
+    
+
+</article>
+            </section>
 
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
@@ -275,22 +383,73 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_index">
-        index()
-        <a href="classes/App-Controller-Auth-LogoutController.html#method_index" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/App-Controller-Auth-LogoutController.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Auth/LogoutController.php"><a href="files/src-controller-auth-logoutcontroller.html"><abbr title="src/Controller/Auth/LogoutController.php">LogoutController.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">11</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">index</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$authManager</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$errorManager</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$authManager</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$errorManager</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_logout">
+        logout()
+        <a href="classes/App-Controller-Auth-LogoutController.html#method_logout" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Auth/LogoutController.php"><a href="files/src-controller-auth-logoutcontroller.html"><abbr title="src/Controller/Auth/LogoutController.php">LogoutController.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">34</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Handle the user logout component.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">logout</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr>|null</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -301,7 +460,7 @@
     
     <section class="phpdocumentor-attributes">
         <h5 class="phpdocumentor-elements__header" id="attributes">
-            Attributes <a href="classes/App-Controller-Auth-LogoutController.html#method_index#attributes" class="headerlink"><i class="fas fa-link"></i></a>
+            Attributes <a href="classes/App-Controller-Auth-LogoutController.html#method_logout#attributes" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h5>
                     <dl class="phpdocumentor-argument-list">
@@ -312,6 +471,9 @@
         &#039;/logout&#039;
     </dd>
         <dd class="phpdocumentor-argument-list__entry">
+        $methods: [&#039;GET&#039;]
+    </dd>
+        <dd class="phpdocumentor-argument-list__entry">
         $name: &#039;app_auth_logout&#039;
     </dd>
     </dl>
@@ -319,7 +481,11 @@
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr>|null</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The logout view</p>
+</section>
+
             </section>
 
 </article>
@@ -428,15 +594,24 @@
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                                                <li><a href="classes/App-Controller-Auth-LogoutController.html#toc-methods">Methods</a></li>
+                                                            <li><a href="classes/App-Controller-Auth-LogoutController.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/App-Controller-Auth-LogoutController.html#toc-methods">Methods</a></li>
                                     </ul>
             </li>
             
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li><a href="classes/App-Controller-Auth-LogoutController.html#property_authManager">$authManager<a href="classes/App-Controller-Auth-LogoutController.html"></li>
+                                                    <li><a href="classes/App-Controller-Auth-LogoutController.html#property_errorManager">$errorManager<a href="classes/App-Controller-Auth-LogoutController.html"></li>
+                                            </ul>
+                </li>
             
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                            <li><a href="classes/App-Controller-Auth-LogoutController.html#method_index">index()</a></li>
+                                            <li><a href="classes/App-Controller-Auth-LogoutController.html#method___construct">__construct()</a></li>
+                                            <li><a href="classes/App-Controller-Auth-LogoutController.html#method_logout">logout()</a></li>
                                     </ul>
             </li>
                     </ul>
