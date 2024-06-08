@@ -1,0 +1,31 @@
+name: PHPStan
+
+# specify when the workflow should be triggered 
+on:
+  push:
+    branches:
+      - main
+
+# define the jobs to be executed in the workflow
+jobs:
+  phpstan:
+    name: PHPStan analyse
+    runs-on: ubuntu-latest
+
+    # define the steps to be executed as part of the job
+    steps:
+    # checkout code
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # set up PHP environment
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+
+    # install project dependencies
+    - name: Install dependencies
+      run: composer install
+
+    # run PHPStan analysis
+    - name: Run PHPStan
+      run: ./vendor/bin/phpstan analyse --configuration phpstan.neon
