@@ -1,0 +1,48 @@
+name: PHPUnit Tests
+
+# specify when the workflow should be triggered 
+on:
+  push:
+    branches:
+      - main
+
+# define the jobs to be executed in the workflow
+jobs:
+  phpunit:
+    name: Run PHPUnit
+    runs-on: ubuntu-latest
+
+    # define services required for the job
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    # define the steps to be executed as part of the job
+    steps:
+      # checkout code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # setup PHP environment
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: mbstring, intl, pdo_mysql, pdo, mysqli, zip
+
+      # install dependencies
+      - name: Install dependencies
+        run: sh scripts/install.sh
+      
+      # migrate database
+      - name: Migrate database
+        run: sh scripts/migrate.sh
+
+      # run PHPUnit tests
+      - name: Run PHPUnit tests
+        run: php bin/phpunit
