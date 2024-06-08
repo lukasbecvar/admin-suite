@@ -43,6 +43,10 @@ jobs:
       - name: Migrate database
         run: sh scripts/migrate.sh
 
+      # load testing data
+      - name: Load fixtures
+        run: php bin/console doctrine:fixtures:load --no-interaction --purge-with-truncate --env=test
+
       # run PHPUnit tests
       - name: Run PHPUnit tests
         run: php bin/phpunit
