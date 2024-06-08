@@ -45,7 +45,7 @@ jobs:
 
       # load testing data
       - name: Load fixtures
-        run: php bin/console doctrine:fixtures:load --no-interaction --purge-with-truncate --env=test
+        run: php bin/console doctrine:fixtures:load --no-interaction --env=test
 
       # run PHPUnit tests
       - name: Run PHPUnit tests
