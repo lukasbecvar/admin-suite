@@ -2,7 +2,7 @@
 
 {% block component %}
 <div class="flex justify-center items-center h-screen">
-    <div class="max-w-md w-full bg-dark shadow-md px-4 py-6 mb-4 border border-gray-600 background-dark opacity-90">
+    <div class="text-white max-w-md w-full bg-dark shadow-md px-4 py-4 mb-1 border border-gray-600 background-dark opacity-90 m-w-95">
 
         <h2 class="text-2xl mb-4 text-center text-white">Register</h2>
 
@@ -16,18 +16,16 @@
 
         {{ form_start(registration_form) }}
         
-        <p class="text-white mt-1">Username</p>
-        {{ form_row(registration_form.username, {'attr': {'class': 'auth-form-input'}}) }}
+        {{ form_row(registration_form.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
 
-        <p class="text-white mt-1">Password</p>
-        {{ form_row(registration_form.password.first, {'attr': {'class': 'auth-form-input'}}) }}
+        {{ form_row(registration_form.password.first, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
         
-        <p class="text-white mt-1">Confirm Password</p>
-        {{ form_row(registration_form.password.second, {'attr': {'class': 'auth-form-input'}}) }}
+        {{ form_row(registration_form.password.second, {'attr': {'class': 'auth-form-input', 'placeholder': 'Confirm Password'}}) }}
 
-        <button type="submit" class="mt-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Register</button>
+        <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Register</button>
         
         {{ form_end(registration_form) }}
+        <p class="text-white">You can login <a class="text-blue-400 font-bold hover:text-blue-500" href="/login">here</a></p>
     </div>
 </div>
 {% endblock %}

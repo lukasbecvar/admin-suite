@@ -41,12 +41,20 @@ body::before {
     margin-bottom: 3px;
 }
 
-.auth-form-input:-webkit-autofill, .auth-form-input:-webkit-autofill:hover, .auth-form-input:-webkit-autofill:focus {
-	border: 1px solid rgba(230, 230, 230, 0.24);
-	-webkit-text-fill-color: white;
-	background: rgba(255, 255, 255, 0.062);
-	-webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.062) inset;
-	transition: background-color 5000s ease-in-out 0s;
+.auth-form-input:-webkit-autofill, 
+.auth-form-input:-webkit-autofill:hover, 
+.auth-form-input:-webkit-autofill:focus 
+.auth-form-input:-moz-autofill, 
+.auth-form-input:-moz-autofill:hover, 
+.auth-form-input:-moz-autofill-preview, 
+.auth-form-input:-moz-autofill:focus {
+	border: 1px solid rgba(230, 230, 230, 0.24) !important;
+	-webkit-text-fill-color: white !important;
+	background-color: rgba(255, 255, 255, 0.062) !important;
+	-webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.062) inset !important;
+	transition: background-color 5000s ease-in-out 0s !important;
+	filter: none !important;
+	box-shadow: 0 0 0 100px #8f88 inset !important;
 }
 
 .auth-form-input:focus {
@@ -78,4 +86,11 @@ body::before {
 	position: relative;
 	width: 25px;
 	height: 20px;
+}
+
+/* mobile devices style */
+@media screen and (max-width: 800px) { 
+	.m-w-95 {
+		max-width: 95%;
+	}
 }
