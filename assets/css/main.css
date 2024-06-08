@@ -1,4 +1,6 @@
 /* admin-suite: main css sytle */
+
+/* import tailwindcss */
 @import '../../node_modules/tailwindcss/base.css';
 @import '../../node_modules/tailwindcss/utilities';
 @import '../../node_modules/tailwindcss//components';

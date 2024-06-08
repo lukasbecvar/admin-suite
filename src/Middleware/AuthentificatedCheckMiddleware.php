@@ -3,7 +3,6 @@
 namespace App\Middleware;
 
 use App\Manager\AuthManager;
-use App\Manager\UserManager;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

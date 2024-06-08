@@ -43,49 +43,57 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Auth components style
     - [X] End-to-end auth tests
 - [X] Get user info in admin dashboard
-- [ ] User system test
-- [ ] Base refactor & recode
+- [X] Base refactor & recode
 
 ## 0.3
+- [ ] Link logs to users
+- [ ] Online users list & online count
 - [ ] Main dashboard
+    - [ ] Main nav panel
+    - [ ] Sidebar
 - [ ] User managment system (only for admin users)
-- [ ] User ban system
-- [ ] View apache access info
+    - [ ] View user list table
+    - [ ] Add new users
+    - [ ] Update role
+    - [ ] Ban system
+
+## 0.4
 - [ ] Server info
 - [ ] Server diagnostics component
 - [ ] Dashboard warning box
 - [ ] Check requirements warning
 
-## 0.4
+## 0.5
 - [ ] Service manager component
 - [ ] Service monitoring component
 
-## 0.5
+## 0.6
 - [ ] Terminal component
 
-## 0.6
+## 0.7
 - [ ] File browser & editor
 
-## 0.7
+## 0.8
 - [ ] Database browser
 
-## 0.8
+## 0.9
 - [ ] Log manager
 - [ ] Server diagnostic
 - [ ] CLI log reader command
 
-## 0.9
+## 1.0
 - [ ] Todo manager
 - [ ] Internal chat component
 - [ ] Account settings component
 
-## 1.0
+## 1.1
 - [ ] Connecting other services (line contact inbox, visitor systems, etc)
 
-## ROADMAP 1.1
+## 1.2
 - [ ] About component (developer, github, version, info, etc..)
 - [ ] Refactor
 - [ ] User manual with config & setup doc
+- [ ] Setup script (for non docker env)
 
 ## License
 The framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

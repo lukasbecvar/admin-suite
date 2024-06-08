@@ -4,7 +4,6 @@ namespace App\Tests\Util;
 
 use App\Util\AppUtil;
 use App\Util\SecurityUtil;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**

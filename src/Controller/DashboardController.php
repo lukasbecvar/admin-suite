@@ -8,6 +8,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * Class DashboardController
+ *
+ * Controller to handle the dashboard page.
+ *
+ * @package App\Controller
+ */
 class DashboardController extends AbstractController
 {
     private AuthManager $authManager;
@@ -19,7 +26,12 @@ class DashboardController extends AbstractController
         $this->userManager = $userManager;
     }
 
-    #[Route('/dashboard', name: 'app_dashboard')]
+    /**
+     * Handle the dashboard page.
+     *
+     * @return Response The dashboard view
+     */
+    #[Route('/dashboard', methods:['GET'], name: 'app_dashboard')]
     public function index(): Response
     {
         // get current user id

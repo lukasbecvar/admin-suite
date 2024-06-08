@@ -2,41 +2,44 @@
 
 namespace App\Tests\Controller\Auth;
 
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Class LogoutControllerTest
+ *
+ * Test the logout controller.
+ *
+ * @package App\Tests\Controller\Auth
+ */
 class LogoutControllerTest extends WebTestCase
 {
+    /**
+     * Test logout.
+     *
+     * @return void
+     */
     public function testLogout(): void
     {
         $client = static::createClient();
 
-        $userCredentials = ['username' => 'test_user', 'password' => 'test_password'];
-        $this->fakeLoginUser($client, $userCredentials);
-
+        // logout request
         $client->request('GET', '/logout');
 
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
         $this->assertResponseRedirects('/login');
 
+        // follow redirect
         $client->followRedirect();
-        $this->assertSelectorTextContains('div', 'Login');
 
+        // assert response
+        $this->assertSelectorTextContains('h2', 'Login');
+        $this->assertSelectorExists('form[name="login_form"]');
+        $this->assertSelectorExists('input[name="login_form[username]"]');
+        $this->assertSelectorExists('input[name="login_form[password]"]');
+        $this->assertSelectorExists('input[name="login_form[remember]"]');
+        $this->assertSelectorTextContains('button', 'Login');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    }
-
-    /**
-     * @param KernelBrowser $client
-     * @param array<string> $userCredentials
-     *
-     * @return void
-     */
-    private function fakeLoginUser(KernelBrowser $client, array $userCredentials): void
-    {
-        $client->request('GET', '/login');
-        $client->submitForm('Login', [
-            'login_form[username]' => $userCredentials['username'],
-            'login_form[password]' => $userCredentials['password'],
-        ]);
     }
 }

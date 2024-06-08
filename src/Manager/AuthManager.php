@@ -4,12 +4,12 @@ namespace App\Manager;
 
 use App\Entity\User;
 use App\Util\CookieUtil;
-use App\Util\SecurityUtil;
 use App\Util\SessionUtil;
+use App\Util\SecurityUtil;
 use App\Util\VisitorInfoUtil;
+use Symfony\Component\String\ByteString;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\String\ByteString;
 
 /**
  * Class AuthManager
@@ -158,6 +158,9 @@ class AuthManager
             if ($this->securityUtil->verifyPassword($password, (string) $repo->getPassword())) {
                 return true;
             }
+        } else {
+            // log invalid credentials
+            $this->logManager->log('authenticator', 'invalid login user: ' . $username . ':' . $password, 2);
         }
 
         return false;
@@ -194,7 +197,7 @@ class AuthManager
                 $this->updateDataOnLogin($token);
 
                 // log action
-                $this->logManager->log('authenticator', 'User login: ' . $username);
+                $this->logManager->log('authenticator', 'login user: ' . $username);
             } catch (\Exception $e) {
                 $this->errorManager->handleError('error to login user: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -300,7 +303,7 @@ class AuthManager
             }
 
             // log logout event
-            $this->logManager->log('authenticator', 'user: ' . $user->getUsername() . ' logout');
+            $this->logManager->log('authenticator', 'logout user: ' . $user->getUsername());
 
             // unset login cookie
             $this->cookieUtil->unset('user-token');

@@ -3,16 +3,22 @@
 namespace App\Tests\Middleware;
 
 use App\Manager\AuthManager;
-use App\Middleware\AuthentificatedCheckMiddleware;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
+use App\Middleware\AuthentificatedCheckMiddleware;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * Class AuthentificatedCheckMiddlewareTest
+ *
+ * Test the authentificated middleware
+ *
+ * @package App\Tests\Middleware
+ */
 class AuthentificatedCheckMiddlewareTest extends TestCase
 {
     /** @var AuthManager|MockObject */
@@ -35,6 +41,14 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
         );
     }
 
+    /**
+     * Create request event.
+     *
+     * @param string $pathInfo
+     * @return RequestEvent
+     *
+     * @return RequestEvent
+     */
     private function createRequestEvent(string $pathInfo): RequestEvent
     {
         $request = new Request([], [], [], [], [], ['REQUEST_URI' => $pathInfo]);
@@ -42,96 +56,161 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
         return new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
     }
 
-    public function testOnKernelRequestUserAlreadyLoggedIn(): void
+    /**
+     * Test already logged in user
+     *
+     * @return void
+     */
+    public function testRequestUserAlreadyLoggedIn(): void
     {
+        // mock the auth manager
         $this->authManagerMock->expects($this->once())
             ->method('isUserLogedin')
             ->willReturn(true);
 
+        // mock the url generator
         $event = $this->createRequestEvent('/admin');
 
+        // call the method under test
         $this->middleware->onKernelRequest($event);
 
+        // assert the result
         $this->assertNull($event->getResponse());
     }
 
-    public function testOnKernelRequestLoginPage(): void
+    /**
+     * Test login page request
+     *
+     * @return void
+     */
+    public function testRequestLoginPage(): void
     {
+        // mock the auth manager
         $this->authManagerMock->expects($this->never())
             ->method('isUserLogedin');
 
+        // create request event
         $event = $this->createRequestEvent('/login');
 
+        // call the method under test
         $this->middleware->onKernelRequest($event);
 
+        // assert the result
         $this->assertNull($event->getResponse());
     }
 
-    public function testOnKernelRequestRegisterPage(): void
+    /**
+     * Test register page request
+     *
+     * @return void
+     */
+    public function testRequestRegisterPage(): void
     {
+        // mock the auth manager
         $this->authManagerMock->expects($this->never())
             ->method('isUserLogedin');
 
+        // create request event
         $event = $this->createRequestEvent('/register');
 
+        // call the method under test
         $this->middleware->onKernelRequest($event);
 
+        // assert the result
         $this->assertNull($event->getResponse());
     }
 
-    public function testOnKernelRequestRootPage(): void
+    /**
+     * Test index component request
+     *
+     * @return void
+     */
+    public function testRequestRootPage(): void
     {
+        // mock the auth manager
         $this->authManagerMock->expects($this->never())
             ->method('isUserLogedin');
 
+        // create request event
         $event = $this->createRequestEvent('/');
 
+        // call the method under test
         $this->middleware->onKernelRequest($event);
 
+        // assert the result
         $this->assertNull($event->getResponse());
     }
 
-    public function testOnKernelRequestErrorPage(): void
+    /**
+     * Test error page request
+     *
+     * @return void
+     */
+    public function testRequestErrorPage(): void
     {
+        // mock the auth manager
         $this->authManagerMock->expects($this->never())
             ->method('isUserLogedin');
 
+        // create request event
         $event = $this->createRequestEvent('/error');
 
+        // call the method under test
         $this->middleware->onKernelRequest($event);
 
+        // assert the result
         $this->assertNull($event->getResponse());
     }
 
-    public function testOnKernelRequestProfilerPage(): void
+    /**
+     * Test profiler page request
+     *
+     * @return void
+     */
+    public function testRequestProfilerPage(): void
     {
+        // mock the auth manager
         $this->authManagerMock->expects($this->never())
             ->method('isUserLogedin');
 
+        // create request event
         $event = $this->createRequestEvent('/_profiler');
 
+        // call the method under test
         $this->middleware->onKernelRequest($event);
 
+        // assert the result
         $this->assertNull($event->getResponse());
     }
 
-    public function testOnKernelRequestRedirectToLogin(): void
+    /**
+     * Test admin page (dashboard) request
+     *
+     * @return void
+     */
+    public function testRequestRedirectToLogin(): void
     {
+        // mock the auth manager
         $this->authManagerMock->expects($this->once())
             ->method('isUserLogedin')
             ->willReturn(false);
 
-        $loginUrl = '/login';
+        // mock the url generator
         $this->urlGeneratorMock->expects($this->once())
             ->method('generate')
             ->with('app_auth_login')
-            ->willReturn($loginUrl);
+            ->willReturn('/login');
 
+        // create request event
         $event = $this->createRequestEvent('/dashboard');
 
+        // call the method under test
         $this->middleware->onKernelRequest($event);
 
+        // assert the result
         $response = $event->getResponse();
+
+        // assert the result
         $this->assertInstanceOf(RedirectResponse::class, $response);
     }
 }

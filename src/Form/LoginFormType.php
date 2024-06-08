@@ -11,8 +11,23 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
+/**
+ * Class LoginFormType
+ *
+ * The login form type
+ *
+ * @package App\Form
+ */
 class LoginFormType extends AbstractType
 {
+    /**
+     * Build the form
+     *
+     * @param FormBuilderInterface $builder The form builder
+     * @param array<string> $options The form options
+     *
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -35,7 +50,14 @@ class LoginFormType extends AbstractType
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    /**
+     * Configure the options
+     *
+     * @param OptionsResolver $resolver The options resolver
+     *
+     * @return void
+     */
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => User::class

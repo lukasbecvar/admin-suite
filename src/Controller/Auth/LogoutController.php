@@ -4,11 +4,17 @@ namespace App\Controller\Auth;
 
 use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
-use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * Class LogoutController
+ *
+ * The controller for the logout page
+ *
+ * @package App\Controller\Auth
+ */
 class LogoutController extends AbstractController
 {
     private AuthManager $authManager;
@@ -20,7 +26,12 @@ class LogoutController extends AbstractController
         $this->errorManager = $errorManager;
     }
 
-    #[Route('/logout', name: 'app_auth_logout')]
+    /**
+     * Handle the user logout component.
+     *
+     * @return Response|null The logout view
+     */
+    #[Route('/logout', methods:['GET'], name: 'app_auth_logout')]
     public function logout(): ?Response
     {
         // check if user loggedin

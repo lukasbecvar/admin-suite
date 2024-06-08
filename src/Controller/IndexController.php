@@ -26,9 +26,9 @@ class IndexController extends AbstractController
     /**
      * Handle the index component.
      *
-     * @return Response The index view
+     * @return Response The redirect response to the main dashboard or login component
      */
-    #[Route('/', name: 'app_index')]
+    #[Route('/', methods:['GET'], name: 'app_index')]
     public function index(): Response
     {
         // check if user is logged in
