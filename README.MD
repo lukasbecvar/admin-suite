@@ -49,6 +49,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [ ] Main dashboard
 - [ ] User managment system (only for admin users)
 - [ ] User ban system
+- [ ] View apache access info
 - [ ] Server info
 - [ ] Server diagnostics component
 - [ ] Dashboard warning box
