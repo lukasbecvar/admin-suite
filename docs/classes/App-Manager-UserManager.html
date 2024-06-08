@@ -213,7 +213,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">19</span>
+    <span class="phpdocumentor-element-found-in__line">16</span>
 
     </aside>
 
@@ -266,18 +266,6 @@
                         &nbsp;: <a href="classes/App-Manager-LogManager.html"><abbr title="\App\Manager\LogManager">LogManager</abbr></a>            </span>
 </dt>
 
-            <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/App-Manager-UserManager.html#property_securityUtil">$securityUtil</a>
-    <span>
-                        &nbsp;: <a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a>            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/App-Manager-UserManager.html#property_visitorInfoUtil">$visitorInfoUtil</a>
-    <span>
-                        &nbsp;: <a href="classes/App-Util-VisitorInfoUtil.html"><abbr title="\App\Util\VisitorInfoUtil">VisitorInfoUtil</abbr></a>            </span>
-</dt>
-
     </dl>
 
 <h4 id="toc-methods">
@@ -300,7 +288,7 @@
 <dd>Check if a user exists.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Manager-UserManager.html#method_getUsername">getUsername()</a>
+    <a href="classes/App-Manager-UserManager.html#method_getUsernameById">getUsernameById()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
@@ -314,18 +302,11 @@
 <dd>Retrieve a user from the repository based on search criteria.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Manager-UserManager.html#method_getUserRole">getUserRole()</a>
+    <a href="classes/App-Manager-UserManager.html#method_getUserRoleById">getUserRoleById()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
 <dd>Get the role of a user.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Manager-UserManager.html#method_getUserToken">getUserToken()</a>
-    <span>
-                                &nbsp;: string    </span>
-</dt>
-<dd>Get the token of a user.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/App-Manager-UserManager.html#method_isUserAdmin">isUserAdmin()</a>
@@ -335,11 +316,11 @@
 <dd>Checks if the specified user has the admin role.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Manager-UserManager.html#method_registerUser">registerUser()</a>
+    <a href="classes/App-Manager-UserManager.html#method_isUsersEmpty">isUsersEmpty()</a>
     <span>
-                                &nbsp;: void    </span>
+                                &nbsp;: bool    </span>
 </dt>
-<dd>Register a new user.</dd>
+<dd>Checks if the user repository is empty.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/App-Manager-UserManager.html#method_updateUserRole">updateUserRole()</a>
@@ -378,7 +359,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">25</span>
+    <span class="phpdocumentor-element-found-in__line">20</span>
 
     </aside>
 
@@ -413,7 +394,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">19</span>
 
     </aside>
 
@@ -448,7 +429,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">21</span>
+    <span class="phpdocumentor-element-found-in__line">18</span>
 
     </aside>
 
@@ -457,76 +438,6 @@
     <span class="phpdocumentor-signature__visibility">private</span>
         <span class="phpdocumentor-signature__type"><a href="classes/App-Manager-LogManager.html"><abbr title="\App\Manager\LogManager">LogManager</abbr></a></span>
     <span class="phpdocumentor-signature__name">$logManager</span>
-    </code>
-
-    
-    
-    
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_securityUtil">
-        $securityUtil
-        <a href="classes/App-Manager-UserManager.html#property_securityUtil" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">23</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a></span>
-    <span class="phpdocumentor-signature__name">$securityUtil</span>
-    </code>
-
-    
-    
-    
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_visitorInfoUtil">
-        $visitorInfoUtil
-        <a href="classes/App-Manager-UserManager.html#property_visitorInfoUtil" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">24</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/App-Util-VisitorInfoUtil.html"><abbr title="\App\Util\VisitorInfoUtil">VisitorInfoUtil</abbr></a></span>
-    <span class="phpdocumentor-signature__name">$visitorInfoUtil</span>
     </code>
 
     
@@ -558,14 +469,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">27</span>
+    <span class="phpdocumentor-element-found-in__line">22</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-LogManager.html"><abbr title="\App\Manager\LogManager">LogManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logManager</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$errorManager</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$securityUtil</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Doctrine\ORM\EntityManagerInterface">EntityManagerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$entityManager</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-VisitorInfoUtil.html"><abbr title="\App\Util\VisitorInfoUtil">VisitorInfoUtil</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$visitorInfoUtil</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-LogManager.html"><abbr title="\App\Manager\LogManager">LogManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logManager</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$errorManager</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Doctrine\ORM\EntityManagerInterface">EntityManagerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$entityManager</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -587,22 +498,8 @@
                 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$securityUtil</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$entityManager</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Doctrine\ORM\EntityManagerInterface">EntityManagerInterface</abbr></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$visitorInfoUtil</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-VisitorInfoUtil.html"><abbr title="\App\Util\VisitorInfoUtil">VisitorInfoUtil</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -629,7 +526,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">122</span>
+    <span class="phpdocumentor-element-found-in__line">49</span>
 
     </aside>
 
@@ -675,15 +572,15 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_getUsername">
-        getUsername()
-        <a href="classes/App-Manager-UserManager.html#method_getUsername" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_getUsernameById">
+        getUsernameById()
+        <a href="classes/App-Manager-UserManager.html#method_getUsernameById" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">134</span>
+    <span class="phpdocumentor-element-found-in__line">61</span>
 
     </aside>
 
@@ -691,7 +588,7 @@
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getUsername</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">getUsernameById</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -737,7 +634,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">43</span>
+    <span class="phpdocumentor-element-found-in__line">36</span>
 
     </aside>
 
@@ -783,15 +680,15 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_getUserRole">
-        getUserRole()
-        <a href="classes/App-Manager-UserManager.html#method_getUserRole" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_getUserRoleById">
+        getUserRoleById()
+        <a href="classes/App-Manager-UserManager.html#method_getUserRoleById" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">153</span>
+    <span class="phpdocumentor-element-found-in__line">80</span>
 
     </aside>
 
@@ -799,7 +696,7 @@
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getUserRole</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">getUserRoleById</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -837,60 +734,6 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_getUserToken">
-        getUserToken()
-        <a href="classes/App-Manager-UserManager.html#method_getUserToken" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">172</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Get the token of a user.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getUserToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
-
-    <div class="phpdocumentor-label-line">
-        </div>
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$id</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The id of the user to get the token</p>
-</section>
-
-            </dd>
-            </dl>
-
-    
-
-    
-
-            <section>
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">string</span>
-                    &mdash;
-                <section class="phpdocumentor-description"><p>The token of the user</p>
-</section>
-
-            </section>
-
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
     <h4 class="phpdocumentor-element__name" id="method_isUserAdmin">
         isUserAdmin()
         <a href="classes/App-Manager-UserManager.html#method_isUserAdmin" class="headerlink"><i class="fas fa-link"></i></a>
@@ -899,7 +742,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">191</span>
+    <span class="phpdocumentor-element-found-in__line">99</span>
 
     </aside>
 
@@ -945,71 +788,41 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_registerUser">
-        registerUser()
-        <a href="classes/App-Manager-UserManager.html#method_registerUser" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_isUsersEmpty">
+        isUsersEmpty()
+        <a href="classes/App-Manager-UserManager.html#method_isUsersEmpty" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">59</span>
+    <span class="phpdocumentor-element-found-in__line">148</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Register a new user.</p>
+        <p class="phpdocumentor-summary">Checks if the user repository is empty.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">registerUser</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$username</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$password</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">isUsersEmpty</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
     
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$username</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The username of the new user</p>
-</section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$password</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The password of the new user</p>
-</section>
-
-            </dd>
-            </dl>
-
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
-        Tags
-        <a href="classes/App-Manager-UserManager.html#method_registerUser#tags" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h5>
-    <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">throws</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
-                                                            
-                                                 <section class="phpdocumentor-description"><p>If there is an error while registering the new user</p>
-</section>
-
-                                    </dd>
-                                            </dl>
-
     
 
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True if the user repository is empty, false otherwise.</p>
+</section>
+
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1025,7 +838,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/UserManager.php"><a href="files/src-manager-usermanager.html"><abbr title="src/Manager/UserManager.php">UserManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">212</span>
+    <span class="phpdocumentor-element-found-in__line">121</span>
 
     </aside>
 
@@ -1199,8 +1012,6 @@
                                                     <li><a href="classes/App-Manager-UserManager.html#property_entityManager">$entityManager<a href="classes/App-Manager-UserManager.html"></li>
                                                     <li><a href="classes/App-Manager-UserManager.html#property_errorManager">$errorManager<a href="classes/App-Manager-UserManager.html"></li>
                                                     <li><a href="classes/App-Manager-UserManager.html#property_logManager">$logManager<a href="classes/App-Manager-UserManager.html"></li>
-                                                    <li><a href="classes/App-Manager-UserManager.html#property_securityUtil">$securityUtil<a href="classes/App-Manager-UserManager.html"></li>
-                                                    <li><a href="classes/App-Manager-UserManager.html#property_visitorInfoUtil">$visitorInfoUtil<a href="classes/App-Manager-UserManager.html"></li>
                                             </ul>
                 </li>
             
@@ -1209,12 +1020,11 @@
                 <ul class="phpdocumentor-list -clean">
                                             <li><a href="classes/App-Manager-UserManager.html#method___construct">__construct()</a></li>
                                             <li><a href="classes/App-Manager-UserManager.html#method_checkIfUserExist">checkIfUserExist()</a></li>
-                                            <li><a href="classes/App-Manager-UserManager.html#method_getUsername">getUsername()</a></li>
+                                            <li><a href="classes/App-Manager-UserManager.html#method_getUsernameById">getUsernameById()</a></li>
                                             <li><a href="classes/App-Manager-UserManager.html#method_getUserRepo">getUserRepo()</a></li>
-                                            <li><a href="classes/App-Manager-UserManager.html#method_getUserRole">getUserRole()</a></li>
-                                            <li><a href="classes/App-Manager-UserManager.html#method_getUserToken">getUserToken()</a></li>
+                                            <li><a href="classes/App-Manager-UserManager.html#method_getUserRoleById">getUserRoleById()</a></li>
                                             <li><a href="classes/App-Manager-UserManager.html#method_isUserAdmin">isUserAdmin()</a></li>
-                                            <li><a href="classes/App-Manager-UserManager.html#method_registerUser">registerUser()</a></li>
+                                            <li><a href="classes/App-Manager-UserManager.html#method_isUsersEmpty">isUsersEmpty()</a></li>
                                             <li><a href="classes/App-Manager-UserManager.html#method_updateUserRole">updateUserRole()</a></li>
                                     </ul>
             </li>
