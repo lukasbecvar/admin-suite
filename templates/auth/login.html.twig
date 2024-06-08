@@ -2,7 +2,7 @@
 
 {% block component %}
 <div class="flex justify-center items-center h-screen">
-    <div class="max-w-md w-full bg-dark shadow-md px-4 py-6 mb-4 border border-gray-600 background-dark opacity-90">
+    <div class="max-w-md w-full bg-dark shadow-md px-4 py-6 mb-4 border border-gray-600 background-dark opacity-90 m-w-95">
 
         <h2 class="text-2xl mb-4 text-center text-white">Login</h2>
 
@@ -22,11 +22,9 @@
 
         {{ form_start(login_form) }}
         
-        <p class="text-white mt-1">Username</p>
-        {{ form_row(login_form.username, {'attr': {'class': 'auth-form-input'}}) }}
+        {{ form_row(login_form.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
 
-        <p class="text-white mt-1">Password</p>
-        {{ form_row(login_form.password, {'attr': {'class': 'auth-form-input'}}) }}
+        {{ form_row(login_form.password, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
         
         <div class="flex items-center text-white mt-1 mb-1">
             <label for="login_form_remember" class="mr-1">Remember me</label>
