@@ -42,7 +42,9 @@ class SessionUtil
     public function destroySession(): void
     {
         $this->startSession();
-        session_destroy();
+        if (session_status() == PHP_SESSION_ACTIVE) {
+            session_destroy();
+        }
     }
 
     /**

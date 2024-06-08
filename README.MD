@@ -28,7 +28,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 ## 0.2
 - [X] User system
 - [X] User register & admin role grant command
-- [ ] Auth system
+- [X] Auth system
     - [X] Register (only if users table is empty)
     - [X] Login component with remember me
     - [X] Allow login & register route only if user not logged
@@ -41,12 +41,12 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Update last login time, ip address & user agent in login process
     - [X] Implement log to auth process
     - [X] Auth components style
-    - [ ] End-to-end auth tests
-- [ ] Base refactor
+    - [X] End-to-end auth tests
+- [ ] Main dashboard
 - [ ] Deep user system test
+- [ ] Base refactor & recode
 
 ## 0.3
-- [ ] Main dashboard
 - [ ] User managment system (only for admin users)
 - [ ] User ban system
 - [ ] View apache access info
