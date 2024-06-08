@@ -27,6 +27,26 @@ Encore
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
+
+    // postcss configs (tailwindcss)
+    .enablePostCssLoader((options) => {
+        options.postcssOptions = {
+            plugins: {
+                tailwindcss: {
+                    content: [
+                        "./assets/**/*.js",
+                        "./templates/**/*.html.twig",
+                    ],
+                    theme: {
+                        extend: {},
+                    },
+                    plugins: [],
+                },
+                autoprefixer: {},
+            }
+        };
+    })
+
     .configureBabelPresetEnv((config) => {
         config.useBuiltIns = 'usage';
         config.corejs = '3.23';

@@ -17,18 +17,19 @@ class LoginFormType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
+                'label' => false,
                 'constraints' => [
                     new NotBlank(['message' => 'Please enter a username'])
-                ],
+                ]
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'Password',
+                'label' => false,
                 'constraints' => [
                     new NotBlank(['message' => 'Please enter a password'])
                 ]
             ])
             ->add('remember', CheckboxType::class, [
-                'label' => 'Remember me',
+                'label' => false,
                 'mapped' => false,
                 'required' => false
             ]);

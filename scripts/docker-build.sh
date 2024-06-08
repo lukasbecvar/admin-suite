@@ -4,7 +4,7 @@
 sh scripts/install.sh
 
 # start npm watch in background
-npm run watch &
+npm run dev
 
 # build docker containers
 docker-compose up --build

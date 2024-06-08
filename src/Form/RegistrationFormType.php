@@ -33,6 +33,7 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
+                'label' => false,
                 'constraints' => [
                     new NotBlank(['message' => 'Please enter a username']),
                     new Length([
@@ -46,7 +47,7 @@ class RegistrationFormType extends AbstractType
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
-                    'label' => 'Password',
+                    'label' => false,
                     'constraints' => [
                         new NotBlank(['message' => 'Please enter a password']),
                         new Length([
@@ -57,7 +58,7 @@ class RegistrationFormType extends AbstractType
                         ])
                     ],
                 ],
-                'second_options' => ['label' => 'Repeat Password']
+                'second_options' => ['label' => false]
             ]);
     }
 
