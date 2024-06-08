@@ -4,6 +4,7 @@ namespace App\Tests\Util;
 
 use App\Util\AppUtil;
 use App\Util\SecurityUtil;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,6 +16,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SecurityUtilTest extends TestCase
 {
+    /** @var SecurityUtil */
     private SecurityUtil $securityUtil;
 
     public function setUp(): void
@@ -93,5 +95,19 @@ class SecurityUtilTest extends TestCase
 
         // verify the password with an incorrect hash
         $this->assertFalse($this->securityUtil->verifyPassword('wrongPassword123', $hash));
+    }
+
+    /**
+     * Test encryptAes method.
+     *
+     * @return void
+     */
+    public function testEncryptAes(): void
+    {
+        $encryptedData = $this->securityUtil->encryptAes('test value');
+        $decryptedData = $this->securityUtil->decryptAes($encryptedData);
+
+        // assert
+        $this->assertSame('test value', $decryptedData);
     }
 }

@@ -20,6 +20,7 @@
         <env name="KERNEL_CLASS" value="App\Kernel"/>
         <env name="SYMFONY_DEBUG" value="0"/>
         <env name="HTTP_USER_AGENT" value="test"/>
+        <env name="REMOTE_ADDR" value="127.0.0.1"/>
     </php>
 
     <testsuites>
