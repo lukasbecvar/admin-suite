@@ -40,7 +40,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Store user-agent in user entity
     - [X] Update last login time, ip address & user agent in login process
     - [X] Implement log to auth process
-    - [ ] Auth components style
+    - [X] Auth components style
     - [ ] End-to-end auth tests
 - [ ] Base refactor
 - [ ] Deep user system test
