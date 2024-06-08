@@ -3,10 +3,9 @@
 namespace App\Middleware;
 
 use App\Entity\User;
-use App\Manager\AuthManager;
-use App\Manager\ErrorManager;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
+use App\Manager\AuthManager;
 use App\Manager\UserManager;
 
 /**

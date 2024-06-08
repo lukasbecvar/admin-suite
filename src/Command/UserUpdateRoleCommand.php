@@ -75,23 +75,26 @@ class UserUpdateRoleCommand extends Command
             return Command::FAILURE;
         }
 
+        // get user repo
+        $repo = $this->userManager->getUserRepo(['username' => $username]);
+
         // check if username is used
-        if ($this->userManager->getUserRepo(['username' => $username]) == null) {
+        if ($repo == null) {
             $io->error('Error username: ' . $username . ' does not exist.');
             return Command::FAILURE;
         }
 
-        // get user id
-        $userId = $this->userManager->getUserRepo(['username' => $username])->getId();
-
         // check is id is valid
-        if ($userId == null) {
+        if ($repo->getId() == null) {
             $io->error('Error user id not found.');
             return Command::FAILURE;
         }
 
         // get current role
-        $currentRole = $this->userManager->getUserRoleById($userId);
+        $currentRole = $this->userManager->getUserRoleById($repo->getId());
+
+        // convert role to uppercase
+        $role = strtoupper($role);
 
         // check if role is the same
         if ($currentRole == $role) {
@@ -102,7 +105,7 @@ class UserUpdateRoleCommand extends Command
         // update role
         try {
             // update role
-            $this->userManager->updateUserRole($userId, $role);
+            $this->userManager->updateUserRole($repo->getId(), $role);
 
             // success message
             $io->success('Role updated successfully.');

@@ -15,7 +15,7 @@ services:
         environment:
             - MYSQL_ROOT_PASSWORD=root
         volumes:
-            - ./_docker/configs/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+            - ./_docker/configs/mysqld.conf:/etc/mysql/mysql.conf.d/mysqld.cnf
             - ./_docker/services/mysql_database:/var/lib/mysql
             - ./_docker/services/log:/var/log
         mem_limit: 1g

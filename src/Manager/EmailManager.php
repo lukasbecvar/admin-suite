@@ -76,9 +76,9 @@ class EmailManager
             $this->mailer->send($email);
 
             // log email sending
-            $this->logManager->log('email-send', 'Email sent to ' . $recipient . ' with subject: ' . $subject, 3);
+            $this->logManager->log('email-send', 'email sent to ' . $recipient . ' with subject: ' . $subject, 3);
         } catch (TransportExceptionInterface $e) {
-            $this->errorManager->handleError('Email sending failed: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('email sending failed: ' . $e->getMessage(), 500);
         }
     }
 }

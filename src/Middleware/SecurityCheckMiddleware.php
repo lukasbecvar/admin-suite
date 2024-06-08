@@ -41,9 +41,9 @@ class SecurityCheckMiddleware
         if ($this->appUtil->isSSLOnly() && !$this->appUtil->isSsl()) {
             // handle debug mode exception
             if ($this->appUtil->isDevMode()) {
-                $this->errorManager->handleError('SSL is required to access this site.', 426);
+                $this->errorManager->handleError('ssl is required to access this site.', 426);
             } else {
-                $this->logger->error('SSL is required to access this site.');
+                $this->logger->error('ssl is required to access this site.');
             }
 
             // render the maintenance template

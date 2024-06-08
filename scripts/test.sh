@@ -6,7 +6,7 @@ yellow_echo () { echo "\033[33m\033[1m$1\033[0m"; }
 clear
 
 # load testing data fixtures
-sh scripts/load-fixtures.sh
+php bin/console doctrine:fixtures:load --no-interaction --env=test
 
 # run phpcs process
 yellow_echo 'PHPCS: testing...'

@@ -3,8 +3,8 @@
 namespace App\Controller\Auth;
 
 use App\Manager\UserManager;
-use App\Form\RegistrationFormType;
 use App\Manager\AuthManager;
+use App\Form\RegistrationFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,7 +35,7 @@ class RegisterController extends AbstractController
      *
      * @return Response The response object
      */
-    #[Route('/register', name: 'app_auth_register')]
+    #[Route('/register', methods:['GET', 'POST'], name: 'app_auth_register')]
     public function register(Request $request): Response
     {
         // check if user is already logged in

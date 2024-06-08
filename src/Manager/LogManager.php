@@ -4,10 +4,8 @@ namespace App\Manager;
 
 use App\Entity\Log;
 use App\Util\AppUtil;
-use App\Util\SessionUtil;
 use App\Util\VisitorInfoUtil;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class LogManager

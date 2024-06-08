@@ -2,15 +2,21 @@
 
 namespace App\Tests\Manager;
 
-use PHPUnit\Framework\TestCase;
-use App\Manager\LogManager;
-use App\Entity\Log;
-use App\Manager\ErrorManager;
 use App\Util\AppUtil;
+use App\Manager\LogManager;
 use App\Util\VisitorInfoUtil;
+use App\Manager\ErrorManager;
+use PHPUnit\Framework\TestCase;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * Class LogManagerTest
+ *
+ * Test the log manager
+ *
+ * @package App\Tests\Manager
+ */
 class LogManagerTest extends TestCase
 {
     /** @var AppUtil|MockObject */
@@ -43,16 +49,26 @@ class LogManagerTest extends TestCase
         );
     }
 
+    /**
+     * Test log
+     *
+     * @return void
+     */
     public function testLog(): void
     {
+        // mock the app util
         $this->appUtilMock->method('isDatabaseLoggingEnabled')->willReturn(true);
         $this->appUtilMock->method('getLogLevel')->willReturn(3);
+
+        // mock the visitor info util
         $this->visitorInfoUtilMock->method('getUserAgent')->willReturn('Test User Agent');
         $this->visitorInfoUtilMock->method('getIP')->willReturn('127.0.0.1');
 
+        // mock the entity manager
         $this->entityManagerMock->expects($this->once())->method('persist');
         $this->entityManagerMock->expects($this->once())->method('flush');
 
-        $this->logManager->log('Test Name', 'Test Message');
+        // call the log method
+        $this->logManager->log('test name', 'test message');
     }
 }

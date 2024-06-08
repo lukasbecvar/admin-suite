@@ -91,7 +91,7 @@ class SessionUtil
         // check if session data is decrypted
         if ($value == null) {
             $this->destroySession();
-            $this->errorManager->handleError('Error to decrypt session data', 500);
+            $this->errorManager->handleError('error to decrypt session data', 500);
         }
 
         return $value;

@@ -1,38 +1,43 @@
 {% extends 'common/base.html.twig' %}
 
+{# user login form component #}
 {% block component %}
 <div class="flex justify-center items-center h-screen">
     <div class="max-w-md w-full bg-dark shadow-md px-4 py-6 mb-4 border border-gray-600 background-dark opacity-90 m-w-95">
-
         <h2 class="text-2xl mb-4 text-center text-white">Login</h2>
 
+        {# first admin user register alert #}
         {% if is_users_empty %}
             <div class="bg-red-700 text-white p-3 mb-4 rounded text-center">
                 <p>Users table is empty Register now <a href="/register" class="text-blue-400 font-bold hover:text-blue-500">here</a></p>
             </div>
         {% endif %}
 
-        {% for message in app.flashes('error') %}
-            <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message }}</div>
-        {% endfor %}
-
+        {# login success message box #}
         {% for message in app.flashes('success') %}
             <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message }}</div>
         {% endfor %}
 
+        {# login error message box #}
+        {% for message in app.flashes('error') %}
+            <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message }}</div>
+        {% endfor %}
+
+        {# login form #}
         {{ form_start(login_form) }}
         
-        {{ form_row(login_form.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
+            {# login form fields #}
+            {{ form_row(login_form.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
+            {{ form_row(login_form.password, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
+            
+            {# remember me checkbox #}
+            <div class="flex items-center text-white mt-1 mb-1">
+                <label for="login_form_remember" class="mr-1">Remember me</label>
+                {{ form_widget(login_form.remember, {'attr': {'class': 'rememberme-checkbox'}}) }}
+            </div>
 
-        {{ form_row(login_form.password, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
-        
-        <div class="flex items-center text-white mt-1 mb-1">
-            <label for="login_form_remember" class="mr-1">Remember me</label>
-            {{ form_widget(login_form.remember, {'attr': {'class': 'rememberme-checkbox'}}) }}
-        </div>
-
-        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Login</button>
-        
+            {# login form submit button #}
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Login</button>
         {{ form_end(login_form) }}
     </div>
 </div>

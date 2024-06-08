@@ -2,12 +2,12 @@
 
 namespace App\Tests\Command;
 
-use App\Entity\User;
 use App\Manager\UserManager;
+use App\Manager\AuthManager;
 use PHPUnit\Framework\TestCase;
 use App\Command\UserRegisterCommand;
-use App\Manager\AuthManager;
 use Symfony\Component\Console\Application;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -20,6 +20,31 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class UserRegisterCommandTest extends TestCase
 {
+    /** @var AuthManager|MockObject */
+    private AuthManager $authManager;
+
+    /** @var UserManager|MockObject */
+    private UserManager $userManager;
+
+    private Application $application;
+    private UserRegisterCommand $command;
+
+    protected function setUp(): void
+    {
+        // mock AuthManager
+        $this->authManager = $this->createMock(AuthManager::class);
+
+        // mock UserManager
+        $this->userManager = $this->createMock(UserManager::class);
+
+        // create the command with the mocked UserManager.
+        $this->command = new UserRegisterCommand($this->authManager, $this->userManager);
+
+        // create application and add command
+        $this->application = new Application();
+        $this->application->add($this->command);
+    }
+
     /**
      * Test case for empty username argument.
      *
@@ -27,25 +52,12 @@ class UserRegisterCommandTest extends TestCase
      */
     public function testEmptyUsername(): void
     {
-        // mock AuthManager
-        $authManager = $this->createMock(AuthManager::class);
-
-        // mock UserManager
-        $userManager = $this->createMock(UserManager::class);
-
-        // create the command with the mocked UserManager.
-        $command = new UserRegisterCommand($authManager, $userManager);
-
-        // create application and add command
-        $application = new Application();
-        $application->add($command);
-
         // create CommandTester
-        $commandTester = new CommandTester($command);
+        $commandTester = new CommandTester($this->command);
 
         // simulate command execution with empty username
         $commandTester->execute([
-            'command' => $command->getName(),
+            'command' => $this->command->getName(),
             'username' => '',
         ]);
 
@@ -54,6 +66,7 @@ class UserRegisterCommandTest extends TestCase
 
         // assert error message
         $this->assertStringContainsString('Username cannot be empty.', $output);
+        $this->assertSame(Command::FAILURE, $commandTester->getStatusCode());
     }
 
     /**
@@ -63,24 +76,11 @@ class UserRegisterCommandTest extends TestCase
      */
     public function testUsernameAlreadyExists(): void
     {
-        // create a mock user
-        $existingUser = new User();
-        $existingUser->setUsername('testuser');
+        // configure the UserManager mock to return true for existing user
+        $this->userManager->method('checkIfUserExist')->willReturn(true);
 
-        // mock AuthManager
-        $authManager = $this->createMock(AuthManager::class);
-
-        // mock UserManager
-        $userManager = $this->createMock(UserManager::class);
-
-        // configure the UserManager mock to return the existing user
-        $userManager->method('checkIfUserExist')->willReturn(true);
-
-        // create the command and the command tester
-        $command = new UserRegisterCommand($authManager, $userManager);
-        $application = new Application();
-        $application->add($command);
-        $commandTester = new CommandTester($application->find('app:user:register'));
+        // create CommandTester
+        $commandTester = new CommandTester($this->application->find('app:user:register'));
 
         // execute the command with an existing username
         $commandTester->execute(['username' => 'testuser']);
@@ -88,7 +88,6 @@ class UserRegisterCommandTest extends TestCase
         // assert the output contains the error message
         $output = $commandTester->getDisplay();
 
-        // Assert the output contains the error message
         $this->assertStringContainsString('Error username: testuser is already used!', $output);
         $this->assertSame(Command::FAILURE, $commandTester->getStatusCode());
     }
@@ -100,29 +99,16 @@ class UserRegisterCommandTest extends TestCase
      */
     public function testRegisterUserSuccess(): void
     {
-        // mock AuthManager
-        $authManager = $this->createMock(AuthManager::class);
-
-        // mock UserManager
-        $userManager = $this->createMock(UserManager::class);
-
-        $authManager->expects($this->once())
+        $this->authManager->expects($this->once())
             ->method('registerUser')
             ->with('newuser');
 
-        // create the command with the mocked UserManager.
-        $command = new UserRegisterCommand($authManager, $userManager);
-
-        // create application and add command
-        $application = new Application();
-        $application->add($command);
-
         // create CommandTester
-        $commandTester = new CommandTester($command);
+        $commandTester = new CommandTester($this->command);
 
         // simulate command execution with arguments
         $commandTester->execute([
-            'command' => $command->getName(),
+            'command' => $this->command->getName(),
             'username' => 'newuser',
         ]);
 
@@ -131,5 +117,6 @@ class UserRegisterCommandTest extends TestCase
 
         // assert output
         $this->assertStringContainsString('New user registered username: newuser', $output);
+        $this->assertSame(Command::SUCCESS, $commandTester->getStatusCode());
     }
 }
