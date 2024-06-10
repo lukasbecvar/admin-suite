@@ -75,21 +75,27 @@ class SessionUtil
     }
 
     /**
-     * Get the decrypted value of a session.
+     * Get a value from the session.
      *
-     * @param string $sessionName The name of the session.
+     * @param string $sessionName The session key
+     * @param mixed $default The default value to return if the key does not exist
      *
-     * @return mixed The decrypted session value.
+     * @return mixed The session value or default if key does not exist
      */
-    public function getSessionValue(string $sessionName): mixed
+    public function getSessionValue(string $sessionName, mixed $default = null): mixed
     {
         $this->startSession();
+
+        // check if session exist
+        if (!isset($_SESSION[$sessionName])) {
+            return $default;
+        }
 
         // decrypt session value
         $value = $this->securityUtil->decryptAes($_SESSION[$sessionName]);
 
         // check if session data is decrypted
-        if ($value == null) {
+        if ($value === null) {
             $this->destroySession();
             $this->errorManager->handleError('error to decrypt session data', 500);
         }

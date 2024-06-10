@@ -32,7 +32,7 @@ class DashboardController extends AbstractController
      * @return Response The dashboard view
      */
     #[Route('/dashboard', methods:['GET'], name: 'app_dashboard')]
-    public function index(): Response
+    public function dashboard(): Response
     {
         // get current user id
         $userId = $this->authManager->getLoggedUserId();

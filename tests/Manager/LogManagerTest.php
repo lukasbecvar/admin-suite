@@ -3,6 +3,7 @@
 namespace App\Tests\Manager;
 
 use App\Util\AppUtil;
+use App\Util\SessionUtil;
 use App\Manager\LogManager;
 use App\Util\VisitorInfoUtil;
 use App\Manager\ErrorManager;
@@ -22,6 +23,9 @@ class LogManagerTest extends TestCase
     /** @var AppUtil|MockObject */
     private AppUtil|MockObject $appUtilMock;
 
+    /** @var SessionUtil|MockObject */
+    private SessionUtil|MockObject $sessionUtilMock;
+
     /** @var ErrorManager|MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
@@ -37,12 +41,14 @@ class LogManagerTest extends TestCase
     protected function setUp(): void
     {
         $this->appUtilMock = $this->createMock(AppUtil::class);
+        $this->sessionUtilMock = $this->createMock(SessionUtil::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->visitorInfoUtilMock = $this->createMock(VisitorInfoUtil::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
         $this->logManager = new LogManager(
             $this->appUtilMock,
+            $this->sessionUtilMock,
             $this->errorManagerMock,
             $this->visitorInfoUtilMock,
             $this->entityManagerMock
@@ -59,6 +65,9 @@ class LogManagerTest extends TestCase
         // mock the app util
         $this->appUtilMock->method('isDatabaseLoggingEnabled')->willReturn(true);
         $this->appUtilMock->method('getLogLevel')->willReturn(3);
+
+        // mock the session util
+        $this->sessionUtilMock->method('getSessionValue')->willReturn(0);
 
         // mock the visitor info util
         $this->visitorInfoUtilMock->method('getUserAgent')->willReturn('Test User Agent');

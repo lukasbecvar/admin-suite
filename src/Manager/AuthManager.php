@@ -188,6 +188,9 @@ class AuthManager
                 // set user token session
                 $this->sessionUtil->setSession('user-token', $token);
 
+                // save user identifier in session
+                $this->sessionUtil->setSession('user-identifier', (string) $repo->getId());
+
                 // set user token cookie
                 if ($remember) {
                     $this->cookieUtil->set('user-token', $token, time() + (60 * 60 * 24 * 7 * 365));
