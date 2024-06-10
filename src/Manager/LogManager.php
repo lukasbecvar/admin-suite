@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use App\Entity\Log;
 use App\Util\AppUtil;
+use App\Util\SessionUtil;
 use App\Util\VisitorInfoUtil;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -17,13 +18,15 @@ use Doctrine\ORM\EntityManagerInterface;
 class LogManager
 {
     private AppUtil $appUtil;
+    private SessionUtil $sessionUtil;
     private ErrorManager $errorManager;
     private VisitorInfoUtil $visitorInfoUtil;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(AppUtil $appUtil, ErrorManager $errorManager, VisitorInfoUtil $visitorInfoUtil, EntityManagerInterface $entityManager)
+    public function __construct(AppUtil $appUtil, SessionUtil $sessionUtil, ErrorManager $errorManager, VisitorInfoUtil $visitorInfoUtil, EntityManagerInterface $entityManager)
     {
         $this->appUtil = $appUtil;
+        $this->sessionUtil = $sessionUtil;
         $this->errorManager = $errorManager;
         $this->entityManager = $entityManager;
         $this->visitorInfoUtil = $visitorInfoUtil;
@@ -71,6 +74,14 @@ class LogManager
             ->setUserAgent($userAgent)
             ->setIpAdderss($ipAddress)
             ->setTime(new \DateTime());
+
+            // set user id if user logged in
+            $userId = $this->sessionUtil->getSessionValue('user-identifier', 0);
+        if (is_numeric($userId)) {
+            $log->setUserId((int) $userId);
+        } else {
+            $log->setUserId(0);
+        }
 
         try {
             $this->entityManager->persist($log);

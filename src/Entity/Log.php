@@ -37,6 +37,9 @@ class Log
     #[ORM\Column(length: 255)]
     private ?string $ip_adderss = null;
 
+    #[ORM\Column]
+    private ?int $user_id = null;
+
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
@@ -106,6 +109,18 @@ class Log
     public function setIpAdderss(string $ip_adderss): static
     {
         $this->ip_adderss = $ip_adderss;
+
+        return $this;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(int $user_id): static
+    {
+        $this->user_id = $user_id;
 
         return $this;
     }

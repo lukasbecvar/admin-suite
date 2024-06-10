@@ -156,18 +156,21 @@ class AuthManagerTest extends TestCase
      */
     public function testLogin(): void
     {
-        // mock the user manager
-        $user = new User();
-        $user->setToken('test_token');
+        // mock the user
+        $user = $this->createMock(User::class);
+        $user->method('getToken')->willReturn('test_token');
+        $user->method('getId')->willReturn(123); // mock getId to return a valid ID
 
-        // mock the security util
+        // mock the user manager
         $this->userManagerMock->method('getUserRepo')->willReturn($user);
 
-        // mock the security util
-        $this->sessionUtilMock->expects($this->once())->method('setSession');
+        // mock the session util
+        $this->sessionUtilMock->expects($this->exactly(2))->method('setSession');
 
-        // mock the visitor info util
-        $this->cookieUtilMock->expects($this->once())->method('set');
+        // mock the cookie util
+        $this->cookieUtilMock->expects($this->once())
+            ->method('set')
+            ->with('user-token', 'test_token', $this->anything());
 
         // mock the entity manager
         $this->entityManagerMock->expects($this->once())->method('flush');
