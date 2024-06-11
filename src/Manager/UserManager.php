@@ -40,6 +40,16 @@ class UserManager
     }
 
     /**
+     * Retrieve all users from the repository.
+     *
+     * @return array<mixed> The user object if found, null otherwise
+     */
+    public function getAllUsersRepository(): ?array
+    {
+        return $this->entityManager->getRepository(User::class)->findAll();
+    }
+
+    /**
      * Check if a user exists.
      *
      * @param string $username The username to check

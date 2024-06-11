@@ -37,8 +37,11 @@ class AutoLoginMiddleware
      */
     public function onKernelRequest(): void
     {
+        // get logged in status
+        $loginStatus = $this->authManager->isUserLogedin();
+
         // check if user not logged
-        if (!$this->authManager->isUserLogedin()) {
+        if (!$loginStatus) {
             // check if cookie set
             if (isset($_COOKIE['user-token'])) {
                 // init user entity
@@ -64,6 +67,12 @@ class AutoLoginMiddleware
                     $this->sessionUtil->destroySession();
                 }
             }
+        }
+
+        // check if user logged in
+        if ($loginStatus) {
+            // cache user online status
+            $this->authManager->cacheOnlineUser($this->authManager->getLoggedUserId());
         }
     }
 }
