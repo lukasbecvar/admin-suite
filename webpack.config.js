@@ -11,6 +11,7 @@ Encore
     // register css entries
     .addEntry('main-css', './assets/css/main.css')
     .addEntry('scrollbar-css', './assets/css/scrollbar.css')
+    .addEntry('fontawesome-css', './node_modules/@fortawesome/fontawesome-free/css/all.css')
 
     // copy static assets
     .copyFiles(
