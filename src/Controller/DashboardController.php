@@ -41,6 +41,7 @@ class DashboardController extends AbstractController
         $userRepo = $this->userManager->getUserRepo(['id' => $userId]);
 
         return $this->render('dashboard.html.twig', [
+            'is_admin' => $this->userManager->isUserAdmin($userId),
             'user_data' => $userRepo
         ]);
     }

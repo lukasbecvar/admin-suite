@@ -13,7 +13,7 @@
 
 body::before {
     content: '';
-    position: absolute;
+    position: fixed; /* Změněno z absolute na fixed */
     top: 0;
     left: 0;
     right: 0;
@@ -23,6 +23,20 @@ body::before {
     background-repeat: no-repeat;
     background-position: center center;
     z-index: -1;
+}
+
+main {
+	margin-top: 2.6rem; 
+}
+
+#main-content {
+	position: relative;
+	margin-left: 0; 
+	transition: margin-left 0.3s ease; 
+}
+
+#main-content.active {
+	margin-left: 180px; 
 }
 
 .background-dark {
@@ -90,9 +104,51 @@ body::before {
 	height: 20px;
 }
 
-/* mobile devices style */
+.nav-bar {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 1000;
+	background-color: #161616;
+	opacity: 0.8;
+}
+
+#sidebar {
+	position: fixed;
+	top: 2.5rem; 
+	height: calc(100vh - 2.5rem); 
+	overflow-y: auto; 
+	background-color: #161616;
+	opacity: 0.8;
+	z-index: 999; 
+	width: 180px;
+	transition: transform 0.3s ease;
+	transform: translateX(-100%);
+}
+
+#sidebar .profile-image {
+	max-width: 80px;
+}
+
+#sidebar.active {
+	transform: translateX(0); 
+}
+
+#sidebar .role {
+	margin-top: -6px;
+}
+
 @media screen and (max-width: 800px) { 
 	.m-w-95 {
 		max-width: 95%;
+	}
+}
+
+@media screen and (max-width: 400px) { 
+	#sidebar {
+		width: 100%;
+	}
+	#main-content.active {
+		display: none;
 	}
 }

@@ -1,0 +1,26 @@
+{% extends 'common/base.html.twig' %}
+
+{# MAIN ADMIN COMPONENT LAYOUT #}
+{% block body %}
+    {# NAVBAR #}
+    {% include 'components/navigation.html.twig' %}
+
+    {# SIDEBAR #}
+    {% include "components/side-menu.html.twig" %}
+    
+    {# MAIN COMPONENT INIT #}
+    <main id="main-content" class="md:active">
+        {% block component %}{% endblock %}
+    </main>
+
+    {# SIDEBAR TOGGLE SCRIPT #}
+    <script>
+        document.getElementById('menuToggle').addEventListener('click', function () {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            sidebar.classList.toggle('active');
+            mainContent.classList.toggle('active');
+        });
+    </script>
+{% endblock %}
+ 
