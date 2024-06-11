@@ -89,7 +89,7 @@
                 
             </li>
                     <li>
-                <a href="namespaces/app-manager.html" class="-active">Manager</a>
+                <a href="namespaces/app-manager.html" class="">Manager</a>
                 
             </li>
                     <li>
@@ -186,44 +186,284 @@
                                 <section>
                                         <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/app.html">App</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-command.html">Command</a></li>
     </ul>
 
-    <article class="phpdocumentor-element -namespace">
-        <h2 class="phpdocumentor-content__title">Manager</h2>
+    <article class="phpdocumentor-element -class">
+        <h2 class="phpdocumentor-content__title">
+    RegenerateAuthTokensCommand
 
-        
+        <span class="phpdocumentor-element__extends">
+        extends <abbr title="\Symfony\Component\Console\Command\Command">Command</abbr>
+    </span>
+    
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App.html">App</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Command.html">Command</a></li>
+                            </ul>
+        </div>
+    
+    
+    </h2>
+
+<div class="phpdocumentor-label-line">
+
+
+</div>
+
+        <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Command/RegenerateAuthTokensCommand.php"><a href="files/src-command-regenerateauthtokenscommand.html"><abbr title="src/Command/RegenerateAuthTokensCommand.php">RegenerateAuthTokensCommand.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">19</span>
+
+    </aside>
+
+            <p class="phpdocumentor-summary">Class RegenerateAuthTokensCommand</p>
+
+    <section class="phpdocumentor-description"><p>Command to regenerate all users' authentication tokens in the database.</p>
+</section>
+
+
+
+
+    <section class="phpdocumentor-attributes">
+        <h5 class="phpdocumentor-elements__header" id="attributes">
+            Attributes <a href="classes/App-Command-RegenerateAuthTokensCommand.html#attributes" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h5>
+                    <dl class="phpdocumentor-argument-list">
+    <dt class="phpdocumentor-argument-list__entry">
+        #[<abbr title="\Symfony\Component\Console\Attribute\AsCommand">AsCommand</abbr>]
+    </dt>
+        <dd class="phpdocumentor-argument-list__entry">
+        $name: &#039;app:user:tokens:regenerate&#039;
+    </dd>
+        <dd class="phpdocumentor-argument-list__entry">
+        $description: &#039;Regenerate all users tokens in database&#039;
+    </dd>
+    </dl>
+            </section>
+
+
+
 <h3 id="toc">
     Table of Contents
-    <a href="namespaces/app-manager.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Command-RegenerateAuthTokensCommand.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h3>
 
 
 
 
-    <h4 id="toc-classes">
-        Classes
-        <a href="namespaces/app-manager.html#toc-classes" class="headerlink"><i class="fas fa-link"></i></a>
+
+
+
+
+
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/App-Command-RegenerateAuthTokensCommand.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/App-Command-RegenerateAuthTokensCommand.html#property_authManager">$authManager</a>
+    <span>
+                        &nbsp;: <a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a>            </span>
+</dt>
+
+    </dl>
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/App-Command-RegenerateAuthTokensCommand.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Command-RegenerateAuthTokensCommand.html#method___construct">__construct()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/App-Command-RegenerateAuthTokensCommand.html#method_execute">execute()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Executes the command to regenerate all users&#039; authentication tokens.</dd>
+
+    </dl>
+
+
+
+        
+
+        
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/App-Command-RegenerateAuthTokensCommand.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_authManager">
+        $authManager
+        <a href="classes/App-Command-RegenerateAuthTokensCommand.html#property_authManager" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Command/RegenerateAuthTokensCommand.php"><a href="files/src-command-regenerateauthtokenscommand.html"><abbr title="src/Command/RegenerateAuthTokensCommand.php">RegenerateAuthTokensCommand.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">22</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$authManager</span>
+    </code>
+
+    
+    
+    
+
+    
+
+</article>
+            </section>
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/App-Command-RegenerateAuthTokensCommand.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/App-Command-RegenerateAuthTokensCommand.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
-    <dl class="phpdocumentor-table-of-contents">
-                    <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a></dt><dd>Class AuthManager</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/App-Manager-CacheManager.html"><abbr title="\App\Manager\CacheManager">CacheManager</abbr></a></dt><dd>Class CacheManager</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/App-Manager-EmailManager.html"><abbr title="\App\Manager\EmailManager">EmailManager</abbr></a></dt><dd>Class EmailManager</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a></dt><dd>Class ErrorManager</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/App-Manager-LogManager.html"><abbr title="\App\Manager\LogManager">LogManager</abbr></a></dt><dd>Class LogManager</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/App-Manager-UserManager.html"><abbr title="\App\Manager\UserManager">UserManager</abbr></a></dt><dd>Class UserManager</dd>    </dl>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Command/RegenerateAuthTokensCommand.php"><a href="files/src-command-regenerateauthtokenscommand.html"><abbr title="src/Command/RegenerateAuthTokensCommand.php">RegenerateAuthTokensCommand.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">24</span>
 
+    </aside>
 
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$authManager</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$authManager</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
 
+    
 
+    
 
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_execute">
+        execute()
+        <a href="classes/App-Command-RegenerateAuthTokensCommand.html#method_execute" class="headerlink"><i class="fas fa-link"></i></a>
 
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Command/RegenerateAuthTokensCommand.php"><a href="files/src-command-regenerateauthtokenscommand.html"><abbr title="src/Command/RegenerateAuthTokensCommand.php">RegenerateAuthTokensCommand.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">38</span>
 
-        
+    </aside>
 
-        
+        <p class="phpdocumentor-summary">Executes the command to regenerate all users&#039; authentication tokens.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">execute</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$input</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\Console\Output\OutputInterface">OutputInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$output</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$input</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The input interface.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$output</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\Console\Output\OutputInterface">OutputInterface</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The output interface.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">int</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The exit code of the command.</p>
+</section>
+
+            </section>
+
+</article>
+            </section>
+
         <div class="phpdocumentor-modal" id="source-view">
     <div class="phpdocumentor-modal-bg" data-exit-button></div>
     <div class="phpdocumentor-modal-container">
         <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="" class="language-php line-numbers linkable-line-numbers"></pre>
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Command/RegenerateAuthTokensCommand.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
         </div>
         <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
     </div>
@@ -314,7 +554,7 @@
     </article>
                                 </section>
                 <section class="phpdocumentor-on-this-page__sidebar">
-                            
+                                
     <section class="phpdocumentor-on-this-page__content">
         <strong class="phpdocumentor-on-this-page__title">On this page</strong>
 
@@ -322,11 +562,25 @@
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                                                                    <li><a href="namespaces/app-manager.html#toc-classes">Classes</a></li>
-                                                                                                                    </ul>
+                                                            <li><a href="classes/App-Command-RegenerateAuthTokensCommand.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/App-Command-RegenerateAuthTokensCommand.html#toc-methods">Methods</a></li>
+                                    </ul>
             </li>
-
             
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li><a href="classes/App-Command-RegenerateAuthTokensCommand.html#property_authManager">$authManager<a href="classes/App-Command-RegenerateAuthTokensCommand.html"></li>
+                                            </ul>
+                </li>
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li><a href="classes/App-Command-RegenerateAuthTokensCommand.html#method___construct">__construct()</a></li>
+                                            <li><a href="classes/App-Command-RegenerateAuthTokensCommand.html#method_execute">execute()</a></li>
+                                    </ul>
+            </li>
                     </ul>
     </section>
 
@@ -344,7 +598,7 @@
     </section>
 </section>
         </div>
-        <a href="namespaces/app-manager.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/App-Command-RegenerateAuthTokensCommand.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 
