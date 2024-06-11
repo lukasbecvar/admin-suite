@@ -3,9 +3,13 @@
     <div class="flex flex-col items-center mb-2">
         {# PROFILE IMAGE #}
         <div class="profile-image mt-2">
-            <img class="rounded-md" src={{ asset('/build/images/default-profile.jpg') }} alt="profile picture">
+            {% if user_data.getProfilePic == 'default_pic' %}
+                <img class="rounded-md" src={{ asset('/build/images/default-profile.jpg') }} alt="profile picture">
+            {% else %}
+                <img class="rounded-md" src="data:image/jpeg;base64,{{ user_data.getProfilePic }}" alt="profile picture">
+            {% endif %}
         </div>
-        {# USERNAME #}
+        {# USERNAME #} 
         <div class="username font-bold text-xl">{{ user_data.username }}</div>
 
         {# USER ROLE #}

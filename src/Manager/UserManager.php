@@ -33,7 +33,7 @@ class UserManager
      *
      * @return User|null The user object if found, null otherwise
      */
-    public function getUserRepo(array $search): ?User
+    public function getUserRepository(array $search): ?User
     {
         // get user repo
         return $this->entityManager->getRepository(User::class)->findOneBy($search);
@@ -58,7 +58,7 @@ class UserManager
      */
     public function checkIfUserExist(string $username): bool
     {
-        return $this->getUserRepo(['username' => $username]) != null;
+        return $this->getUserRepository(['username' => $username]) != null;
     }
 
     /**
@@ -70,7 +70,7 @@ class UserManager
      */
     public function getUsernameById(int $id): ?string
     {
-        $repo = $this->getUserRepo(['id' => $id]);
+        $repo = $this->getUserRepository(['id' => $id]);
 
         // check if user exist
         if ($repo != null) {
@@ -89,7 +89,7 @@ class UserManager
      */
     public function getUserRoleById(int $id): ?string
     {
-        $repo = $this->getUserRepo(['id' => $id]);
+        $repo = $this->getUserRepository(['id' => $id]);
 
         // check if user exist
         if ($repo != null) {
@@ -131,7 +131,7 @@ class UserManager
     public function updateUserRole(int $id, string $role): void
     {
         // get user repo
-        $repo = $this->getUserRepo(['id' => $id]);
+        $repo = $this->getUserRepository(['id' => $id]);
 
         // check if user exist
         if ($repo != null) {

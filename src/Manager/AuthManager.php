@@ -87,7 +87,7 @@ class AuthManager
         }
 
         // check if user exist
-        if ($this->userManager->getUserRepo(['username' => $username]) == null) {
+        if ($this->userManager->getUserRepository(['username' => $username]) == null) {
             try {
                 // init user entity
                 $user = new User();
@@ -115,6 +115,45 @@ class AuthManager
     }
 
     /**
+     * Get current user logged user.
+     *
+     * @return User|null The user object if found, null otherwise
+     */
+    public function getLoggedUserRepository(): ?User
+    {
+        // check if user logged in
+        if (!$this->isUserLogedin()) {
+            return null;
+        }
+
+        // return logged user
+        return $this->userManager->getUserRepository(['token' => $this->sessionUtil->getSessionValue('user-token')]);
+    }
+
+    public function isLoggedInUserAdmin(): bool
+    {
+        // check if user logged in
+        if (!$this->isUserLogedin()) {
+            return false;
+        }
+
+        // get logged user
+        $user = $this->getLoggedUserRepository();
+
+        // check if user exist
+        if ($user == null) {
+            return false;
+        }
+
+        // check if user is admin
+        if ($this->userManager->isUserAdmin((int) $user->getId())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Checks if a user is logged in.
      *
      * @return bool
@@ -130,7 +169,7 @@ class AuthManager
         $loginToken = $this->sessionUtil->getSessionValue('user-token');
 
         // check if token exist in database
-        if ($this->userManager->getUserRepo(['token' => $loginToken]) != null) {
+        if ($this->userManager->getUserRepository(['token' => $loginToken]) != null) {
             return true;
         }
 
@@ -148,7 +187,7 @@ class AuthManager
     public function canLogin(string $username, string $password): bool
     {
         // get user repo
-        $repo = $this->userManager->getUserRepo(['username' => $username]);
+        $repo = $this->userManager->getUserRepository(['username' => $username]);
 
         // check if user exist
         if ($repo != null) {
@@ -175,7 +214,7 @@ class AuthManager
     public function login(string $username, bool $remember): void
     {
         // get user repository
-        $repo = $this->userManager->getUserRepo(['username' => $username]);
+        $repo = $this->userManager->getUserRepository(['username' => $username]);
 
         // check if user exist
         if ($repo != null) {
@@ -217,7 +256,7 @@ class AuthManager
     public function updateDataOnLogin(string $token): void
     {
         // get user repository
-        $repo = $this->userManager->getUserRepo(['token' => $token]);
+        $repo = $this->userManager->getUserRepository(['token' => $token]);
 
         // check if repo found
         if ($repo == null) {
@@ -251,7 +290,7 @@ class AuthManager
             $token = $this->getLoggedUserToken();
 
             // get user repository
-            $user = $this->userManager->getUserRepo(['token' => $token]);
+            $user = $this->userManager->getUserRepository(['token' => $token]);
 
             // check if user exist
             if ($user != null) {
@@ -278,7 +317,7 @@ class AuthManager
         $loginToken = $this->sessionUtil->getSessionValue('user-token');
 
         // check if token exist in database
-        if ($this->userManager->getUserRepo(['token' => $loginToken]) != null) {
+        if ($this->userManager->getUserRepository(['token' => $loginToken]) != null) {
             return $loginToken;
         }
 
@@ -295,7 +334,7 @@ class AuthManager
         // check if user logged in
         if ($this->isUserLogedin()) {
             // init user
-            $user = $this->userManager->getUserRepo(['token' => $this->getLoggedUserToken()]);
+            $user = $this->userManager->getUserRepository(['token' => $this->getLoggedUserToken()]);
 
             // check if repo found
             if ($user == null) {

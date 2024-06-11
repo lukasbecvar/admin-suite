@@ -51,9 +51,9 @@ class AutoLoginMiddleware
                 $userToken = $this->cookieUtil->get('user-token');
 
                 // check if token exist in database
-                if ($this->userManager->getUserRepo(['token' => $userToken]) != null) {
+                if ($this->userManager->getUserRepository(['token' => $userToken]) != null) {
                     // get user data
-                    $user = $this->userManager->getUserRepo(['token' => $userToken]);
+                    $user = $this->userManager->getUserRepository(['token' => $userToken]);
 
                     // get username to login
                     $username = $user->getUsername();
