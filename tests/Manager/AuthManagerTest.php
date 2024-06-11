@@ -13,6 +13,7 @@ use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -276,5 +277,50 @@ class AuthManagerTest extends TestCase
 
         // call logout the user
         $this->authManager->logout();
+    }
+
+    /**
+     * Test regenerate users tokens
+     *
+     * @return void
+     */
+    public function testRegenerateUsersTokens(): void
+    {
+        // create a list of users
+        $users = [new User(), new User()];
+
+        // mock the repository to return the list of users
+        $userRepoMock = $this->createMock(UserRepository::class);
+        $userRepoMock->method('findAll')->willReturn($users);
+        $this->entityManagerMock->method('getRepository')->willReturn($userRepoMock);
+
+        // expect the flush method to be called twice (once for each user)
+        $this->entityManagerMock->expects($this->exactly(count($users)))->method('flush');
+
+        // call the method
+        $result = $this->authManager->regenerateUsersTokens();
+
+        // check if the result status is true
+        $this->assertTrue($result['status']);
+    }
+
+    /**
+     * Test generate user token
+     *
+     * @return void
+     */
+    public function testGenerateUserToken(): void
+    {
+        // mock the repository to return null (token not found)
+        $userRepoMock = $this->createMock(UserRepository::class);
+        $userRepoMock->method('findOneBy')->willReturn(null);
+        $this->entityManagerMock->method('getRepository')->willReturn($userRepoMock);
+
+        // call the method
+        $token = $this->authManager->generateUserToken();
+
+        // check if the token is a non-empty string
+        $this->assertIsString($token);
+        $this->assertNotEmpty($token);
     }
 }
