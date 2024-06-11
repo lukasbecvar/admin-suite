@@ -1,6 +1,26 @@
 Search.appendIndex(
     [
                 {
+            "fqsen": "\\App\\Command\\RegenerateAuthTokensCommand",
+            "name": "RegenerateAuthTokensCommand",
+            "summary": "Class\u0020RegenerateAuthTokensCommand",
+            "url": "classes/App-Command-RegenerateAuthTokensCommand.html"
+        },                {
+            "fqsen": "\\App\\Command\\RegenerateAuthTokensCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Command-RegenerateAuthTokensCommand.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Command\\RegenerateAuthTokensCommand\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "Executes\u0020the\u0020command\u0020to\u0020regenerate\u0020all\u0020users\u0027\u0020authentication\u0020tokens.",
+            "url": "classes/App-Command-RegenerateAuthTokensCommand.html#method_execute"
+        },                {
+            "fqsen": "\\App\\Command\\RegenerateAuthTokensCommand\u003A\u003A\u0024authManager",
+            "name": "authManager",
+            "summary": "",
+            "url": "classes/App-Command-RegenerateAuthTokensCommand.html#property_authManager"
+        },                {
             "fqsen": "\\App\\Command\\UserRegisterCommand",
             "name": "UserRegisterCommand",
             "summary": "Class\u0020UserRegisterCommand",
@@ -141,10 +161,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Controller-DashboardController.html#method___construct"
         },                {
-            "fqsen": "\\App\\Controller\\DashboardController\u003A\u003Aindex\u0028\u0029",
-            "name": "index",
+            "fqsen": "\\App\\Controller\\DashboardController\u003A\u003Adashboard\u0028\u0029",
+            "name": "dashboard",
             "summary": "Handle\u0020the\u0020dashboard\u0020page.",
-            "url": "classes/App-Controller-DashboardController.html#method_index"
+            "url": "classes/App-Controller-DashboardController.html#method_dashboard"
         },                {
             "fqsen": "\\App\\Controller\\DashboardController\u003A\u003A\u0024authManager",
             "name": "authManager",
@@ -296,6 +316,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Entity-Log.html#method_setIpAdderss"
         },                {
+            "fqsen": "\\App\\Entity\\Log\u003A\u003AgetUserId\u0028\u0029",
+            "name": "getUserId",
+            "summary": "",
+            "url": "classes/App-Entity-Log.html#method_getUserId"
+        },                {
+            "fqsen": "\\App\\Entity\\Log\u003A\u003AsetUserId\u0028\u0029",
+            "name": "setUserId",
+            "summary": "",
+            "url": "classes/App-Entity-Log.html#method_setUserId"
+        },                {
             "fqsen": "\\App\\Entity\\Log\u003A\u003AgetStatus\u0028\u0029",
             "name": "getStatus",
             "summary": "",
@@ -335,6 +365,11 @@ Search.appendIndex(
             "name": "ip_adderss",
             "summary": "",
             "url": "classes/App-Entity-Log.html#property_ip_adderss"
+        },                {
+            "fqsen": "\\App\\Entity\\Log\u003A\u003A\u0024user_id",
+            "name": "user_id",
+            "summary": "",
+            "url": "classes/App-Entity-Log.html#property_user_id"
         },                {
             "fqsen": "\\App\\Entity\\Log\u003A\u003A\u0024status",
             "name": "status",
@@ -621,6 +656,16 @@ Search.appendIndex(
             "summary": "User\u0020logout\u0020action.",
             "url": "classes/App-Manager-AuthManager.html#method_logout"
         },                {
+            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AregenerateUsersTokens\u0028\u0029",
+            "name": "regenerateUsersTokens",
+            "summary": "Regenerate\u0020tokens\u0020for\u0020all\u0020users\u0020in\u0020the\u0020database.",
+            "url": "classes/App-Manager-AuthManager.html#method_regenerateUsersTokens"
+        },                {
+            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AgenerateUserToken\u0028\u0029",
+            "name": "generateUserToken",
+            "summary": "Generate\u0020a\u0020unique\u0020token\u0020for\u0020a\u0020user.",
+            "url": "classes/App-Manager-AuthManager.html#method_generateUserToken"
+        },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024logManager",
             "name": "logManager",
             "summary": "",
@@ -660,6 +705,46 @@ Search.appendIndex(
             "name": "entityManager",
             "summary": "",
             "url": "classes/App-Manager-AuthManager.html#property_entityManager"
+        },                {
+            "fqsen": "\\App\\Manager\\CacheManager",
+            "name": "CacheManager",
+            "summary": "Class\u0020CacheManager",
+            "url": "classes/App-Manager-CacheManager.html"
+        },                {
+            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Manager-CacheManager.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003AisCatched\u0028\u0029",
+            "name": "isCatched",
+            "summary": "Checks\u0020if\u0020a\u0020key\u0020exists\u0020in\u0020the\u0020cache.",
+            "url": "classes/App-Manager-CacheManager.html#method_isCatched"
+        },                {
+            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003AgetValue\u0028\u0029",
+            "name": "getValue",
+            "summary": "Retrieves\u0020the\u0020value\u0020associated\u0020with\u0020a\u0020given\u0020key\u0020from\u0020the\u0020cache.",
+            "url": "classes/App-Manager-CacheManager.html#method_getValue"
+        },                {
+            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003AsetValue\u0028\u0029",
+            "name": "setValue",
+            "summary": "Sets\u0020a\u0020value\u0020in\u0020the\u0020cache\u0020with\u0020the\u0020specified\u0020key\u0020and\u0020expiration\u0020time.",
+            "url": "classes/App-Manager-CacheManager.html#method_setValue"
+        },                {
+            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003AdeleteValue\u0028\u0029",
+            "name": "deleteValue",
+            "summary": "Deletes\u0020a\u0020value\u0020from\u0020the\u0020cache\u0020using\u0020the\u0020specified\u0020key.",
+            "url": "classes/App-Manager-CacheManager.html#method_deleteValue"
+        },                {
+            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Manager-CacheManager.html#property_errorManager"
+        },                {
+            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003A\u0024cacheItemPoolInterface",
+            "name": "cacheItemPoolInterface",
+            "summary": "",
+            "url": "classes/App-Manager-CacheManager.html#property_cacheItemPoolInterface"
         },                {
             "fqsen": "\\App\\Manager\\EmailManager",
             "name": "EmailManager",
@@ -740,6 +825,11 @@ Search.appendIndex(
             "name": "appUtil",
             "summary": "",
             "url": "classes/App-Manager-LogManager.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003A\u0024sessionUtil",
+            "name": "sessionUtil",
+            "summary": "",
+            "url": "classes/App-Manager-LogManager.html#property_sessionUtil"
         },                {
             "fqsen": "\\App\\Manager\\LogManager\u003A\u003A\u0024errorManager",
             "name": "errorManager",
@@ -1183,7 +1273,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Util\\SessionUtil\u003A\u003AgetSessionValue\u0028\u0029",
             "name": "getSessionValue",
-            "summary": "Get\u0020the\u0020decrypted\u0020value\u0020of\u0020a\u0020session.",
+            "summary": "Get\u0020a\u0020value\u0020from\u0020the\u0020session.",
             "url": "classes/App-Util-SessionUtil.html#method_getSessionValue"
         },                {
             "fqsen": "\\App\\Util\\SessionUtil\u003A\u003A\u0024securityUtil",

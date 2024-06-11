@@ -186,19 +186,19 @@
                                 <section>
                                         <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/app.html">App</a></li>
-            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-util.html">Util</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-manager.html">Manager</a></li>
     </ul>
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    SessionUtil
+    CacheManager
 
     
             <div class="phpdocumentor-element__package">
             in package
             <ul class="phpdocumentor-breadcrumbs">
                                     <li class="phpdocumentor-breadcrumb"><a href="packages/App.html">App</a></li>
-                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Util.html">Util</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Manager.html">Manager</a></li>
                             </ul>
         </div>
     
@@ -211,15 +211,15 @@
 </div>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/CacheManager.php"><a href="files/src-manager-cachemanager.html"><abbr title="src/Manager/CacheManager.php">CacheManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">14</span>
+    <span class="phpdocumentor-element-found-in__line">15</span>
 
     </aside>
 
-            <p class="phpdocumentor-summary">Class SessionUtil</p>
+            <p class="phpdocumentor-summary">Class CacheManager</p>
 
-    <section class="phpdocumentor-description"><p>SessionUtil provides session management functions.</p>
+    <section class="phpdocumentor-description"><p>Manages caching operations using a cache item pool.</p>
 </section>
 
 
@@ -230,7 +230,7 @@
 
 <h3 id="toc">
     Table of Contents
-    <a href="classes/App-Util-SessionUtil.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Manager-CacheManager.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h3>
 
@@ -244,70 +244,63 @@
 
 <h4 id="toc-properties">
     Properties
-    <a href="classes/App-Util-SessionUtil.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Manager-CacheManager.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/App-Util-SessionUtil.html#property_errorManager">$errorManager</a>
+    <a href="classes/App-Manager-CacheManager.html#property_cacheItemPoolInterface">$cacheItemPoolInterface</a>
     <span>
-                        &nbsp;: <a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>            </span>
+                        &nbsp;: <abbr title="\Psr\Cache\CacheItemPoolInterface">CacheItemPoolInterface</abbr>            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/App-Util-SessionUtil.html#property_securityUtil">$securityUtil</a>
+    <a href="classes/App-Manager-CacheManager.html#property_errorManager">$errorManager</a>
     <span>
-                        &nbsp;: <a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a>            </span>
+                        &nbsp;: <a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>            </span>
 </dt>
 
     </dl>
 
 <h4 id="toc-methods">
     Methods
-    <a href="classes/App-Util-SessionUtil.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Manager-CacheManager.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Util-SessionUtil.html#method___construct">__construct()</a>
+    <a href="classes/App-Manager-CacheManager.html#method___construct">__construct()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Util-SessionUtil.html#method_checkSession">checkSession()</a>
+    <a href="classes/App-Manager-CacheManager.html#method_deleteValue">deleteValue()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Deletes a value from the cache using the specified key.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Manager-CacheManager.html#method_getValue">getValue()</a>
+    <span>
+                                &nbsp;: mixed|null    </span>
+</dt>
+<dd>Retrieves the value associated with a given key from the cache.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Manager-CacheManager.html#method_isCatched">isCatched()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
-<dd>Check if a session with the specified name exists.</dd>
+<dd>Checks if a key exists in the cache.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Util-SessionUtil.html#method_destroySession">destroySession()</a>
+    <a href="classes/App-Manager-CacheManager.html#method_setValue">setValue()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Destroy the current session.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Util-SessionUtil.html#method_getSessionValue">getSessionValue()</a>
-    <span>
-                                &nbsp;: mixed    </span>
-</dt>
-<dd>Get a value from the session.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Util-SessionUtil.html#method_setSession">setSession()</a>
-    <span>
-                                &nbsp;: void    </span>
-</dt>
-<dd>Set a session value.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Util-SessionUtil.html#method_startSession">startSession()</a>
-    <span>
-                                &nbsp;: void    </span>
-</dt>
-<dd>Start a new session if not already started.</dd>
+<dd>Sets a value in the cache with the specified key and expiration time.</dd>
 
     </dl>
 
@@ -319,7 +312,7 @@
     <section class="phpdocumentor-properties">
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
-            <a href="classes/App-Util-SessionUtil.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/App-Manager-CacheManager.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article
@@ -329,15 +322,50 @@
             -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_errorManager">
-        $errorManager
-        <a href="classes/App-Util-SessionUtil.html#property_errorManager" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_cacheItemPoolInterface">
+        $cacheItemPoolInterface
+        <a href="classes/App-Manager-CacheManager.html#property_cacheItemPoolInterface" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/CacheManager.php"><a href="files/src-manager-cachemanager.html"><abbr title="src/Manager/CacheManager.php">CacheManager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">18</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Cache\CacheItemPoolInterface">CacheItemPoolInterface</abbr></span>
+    <span class="phpdocumentor-signature__name">$cacheItemPoolInterface</span>
+    </code>
+
+    
+    
+    
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_errorManager">
+        $errorManager
+        <a href="classes/App-Manager-CacheManager.html#property_errorManager" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/CacheManager.php"><a href="files/src-manager-cachemanager.html"><abbr title="src/Manager/CacheManager.php">CacheManager.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">17</span>
 
@@ -357,47 +385,12 @@
     
 
 </article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_securityUtil">
-        $securityUtil
-        <a href="classes/App-Util-SessionUtil.html#property_securityUtil" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">16</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a></span>
-    <span class="phpdocumentor-signature__name">$securityUtil</span>
-    </code>
-
-    
-    
-    
-
-    
-
-</article>
             </section>
 
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/App-Util-SessionUtil.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/App-Manager-CacheManager.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article
@@ -408,20 +401,20 @@
 >
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
-        <a href="classes/App-Util-SessionUtil.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/App-Manager-CacheManager.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/CacheManager.php"><a href="files/src-manager-cachemanager.html"><abbr title="src/Manager/CacheManager.php">CacheManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">19</span>
+    <span class="phpdocumentor-element-found-in__line">20</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$securityUtil</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$errorManager</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$errorManager</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Cache\CacheItemPoolInterface">CacheItemPoolInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$cacheItemPoolInterface</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -429,15 +422,15 @@
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$securityUtil</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-SecurityUtil.html"><abbr title="\App\Util\SecurityUtil">SecurityUtil</abbr></a></span>
+                <span class="phpdocumentor-signature__argument__name">$errorManager</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$errorManager</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a></span>
+                <span class="phpdocumentor-signature__argument__name">$cacheItemPoolInterface</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Cache\CacheItemPoolInterface">CacheItemPoolInterface</abbr></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -456,23 +449,23 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_checkSession">
-        checkSession()
-        <a href="classes/App-Util-SessionUtil.html#method_checkSession" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_deleteValue">
+        deleteValue()
+        <a href="classes/App-Manager-CacheManager.html#method_deleteValue" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/CacheManager.php"><a href="files/src-manager-cachemanager.html"><abbr title="src/Manager/CacheManager.php">CacheManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">57</span>
+    <span class="phpdocumentor-element-found-in__line">91</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Check if a session with the specified name exists.</p>
+        <p class="phpdocumentor-summary">Deletes a value from the cache using the specified key.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">checkSession</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sessionName</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">deleteValue</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -480,11 +473,111 @@
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$sessionName</span>
+                <span class="phpdocumentor-signature__argument__name">$key</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The name of the session to check.</p>
+                    <section class="phpdocumentor-description"><p>The key of the value to delete from the cache.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getValue">
+        getValue()
+        <a href="classes/App-Manager-CacheManager.html#method_getValue" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/CacheManager.php"><a href="files/src-manager-cachemanager.html"><abbr title="src/Manager/CacheManager.php">CacheManager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">50</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Retrieves the value associated with a given key from the cache.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getValue</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed|null</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$key</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The key for which to retrieve the value.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed|null</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The cached value associated with the key, or null if not found.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_isCatched">
+        isCatched()
+        <a href="classes/App-Manager-CacheManager.html#method_isCatched" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/CacheManager.php"><a href="files/src-manager-cachemanager.html"><abbr title="src/Manager/CacheManager.php">CacheManager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">33</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Checks if a key exists in the cache.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">isCatched</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$key</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The key to check in the cache.</p>
 </section>
 
             </dd>
@@ -498,7 +591,7 @@
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">bool</span>
                     &mdash;
-                <section class="phpdocumentor-description"><p>Whether the session exists.</p>
+                <section class="phpdocumentor-description"><p>True if the key exists in the cache, otherwise false.</p>
 </section>
 
             </section>
@@ -510,57 +603,23 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_destroySession">
-        destroySession()
-        <a href="classes/App-Util-SessionUtil.html#method_destroySession" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_setValue">
+        setValue()
+        <a href="classes/App-Manager-CacheManager.html#method_setValue" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/CacheManager.php"><a href="files/src-manager-cachemanager.html"><abbr title="src/Manager/CacheManager.php">CacheManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">42</span>
+    <span class="phpdocumentor-element-found-in__line">69</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Destroy the current session.</p>
+        <p class="phpdocumentor-summary">Sets a value in the cache with the specified key and expiration time.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">destroySession</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
-
-    <div class="phpdocumentor-label-line">
-        </div>
-    
-    
-    
-
-    
-
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_getSessionValue">
-        getSessionValue()
-        <a href="classes/App-Util-SessionUtil.html#method_getSessionValue" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">85</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Get a value from the session.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getSessionValue</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sessionName</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$default</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">setValue</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$expiration</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -568,122 +627,34 @@
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$sessionName</span>
+                <span class="phpdocumentor-signature__argument__name">$key</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The session key</p>
+                    <section class="phpdocumentor-description"><p>The key under which to store the value in the cache.</p>
 </section>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$default</span>
+                <span class="phpdocumentor-signature__argument__name">$value</span>
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+                            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The default value to return if the key does not exist</p>
+                    <section class="phpdocumentor-description"><p>The value to store in the cache.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$expiration</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The expiration time in seconds for the cached value.</p>
 </section>
 
             </dd>
             </dl>
 
-    
-
-    
-
-            <section>
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">mixed</span>
-                    &mdash;
-                <section class="phpdocumentor-description"><p>The session value or default if key does not exist</p>
-</section>
-
-            </section>
-
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_setSession">
-        setSession()
-        <a href="classes/App-Util-SessionUtil.html#method_setSession" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">71</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Set a session value.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setSession</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sessionName</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sessionValue</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
-
-    <div class="phpdocumentor-label-line">
-        </div>
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$sessionName</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The name of the session.</p>
-</section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$sessionValue</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The value to set for the session.</p>
-</section>
-
-            </dd>
-            </dl>
-
-    
-
-    
-
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_startSession">
-        startSession()
-        <a href="classes/App-Util-SessionUtil.html#method_startSession" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Util/SessionUtil.php"><a href="files/src-util-sessionutil.html"><abbr title="src/Util/SessionUtil.php">SessionUtil.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">30</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Start a new session if not already started.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">startSession</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
-
-    <div class="phpdocumentor-label-line">
-        </div>
-    
-    
     
 
     
@@ -696,7 +667,7 @@
     <div class="phpdocumentor-modal-bg" data-exit-button></div>
     <div class="phpdocumentor-modal-container">
         <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Util/SessionUtil.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Manager/CacheManager.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
         </div>
         <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
     </div>
@@ -795,28 +766,27 @@
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                            <li><a href="classes/App-Util-SessionUtil.html#toc-properties">Properties</a></li>
-                                                            <li><a href="classes/App-Util-SessionUtil.html#toc-methods">Methods</a></li>
+                                                            <li><a href="classes/App-Manager-CacheManager.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/App-Manager-CacheManager.html#toc-methods">Methods</a></li>
                                     </ul>
             </li>
             
                             <li class="phpdocumentor-on-this-page-section__title">Properties</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
-                                                    <li><a href="classes/App-Util-SessionUtil.html#property_errorManager">$errorManager<a href="classes/App-Util-SessionUtil.html"></li>
-                                                    <li><a href="classes/App-Util-SessionUtil.html#property_securityUtil">$securityUtil<a href="classes/App-Util-SessionUtil.html"></li>
+                                                    <li><a href="classes/App-Manager-CacheManager.html#property_cacheItemPoolInterface">$cacheItemPoolInterface<a href="classes/App-Manager-CacheManager.html"></li>
+                                                    <li><a href="classes/App-Manager-CacheManager.html#property_errorManager">$errorManager<a href="classes/App-Manager-CacheManager.html"></li>
                                             </ul>
                 </li>
             
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                            <li><a href="classes/App-Util-SessionUtil.html#method___construct">__construct()</a></li>
-                                            <li><a href="classes/App-Util-SessionUtil.html#method_checkSession">checkSession()</a></li>
-                                            <li><a href="classes/App-Util-SessionUtil.html#method_destroySession">destroySession()</a></li>
-                                            <li><a href="classes/App-Util-SessionUtil.html#method_getSessionValue">getSessionValue()</a></li>
-                                            <li><a href="classes/App-Util-SessionUtil.html#method_setSession">setSession()</a></li>
-                                            <li><a href="classes/App-Util-SessionUtil.html#method_startSession">startSession()</a></li>
+                                            <li><a href="classes/App-Manager-CacheManager.html#method___construct">__construct()</a></li>
+                                            <li><a href="classes/App-Manager-CacheManager.html#method_deleteValue">deleteValue()</a></li>
+                                            <li><a href="classes/App-Manager-CacheManager.html#method_getValue">getValue()</a></li>
+                                            <li><a href="classes/App-Manager-CacheManager.html#method_isCatched">isCatched()</a></li>
+                                            <li><a href="classes/App-Manager-CacheManager.html#method_setValue">setValue()</a></li>
                                     </ul>
             </li>
                     </ul>
@@ -836,7 +806,7 @@
     </section>
 </section>
         </div>
-        <a href="classes/App-Util-SessionUtil.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/App-Manager-CacheManager.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 
