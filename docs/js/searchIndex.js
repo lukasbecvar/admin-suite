@@ -171,11 +171,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Controller-DashboardController.html#property_authManager"
         },                {
-            "fqsen": "\\App\\Controller\\DashboardController\u003A\u003A\u0024userManager",
-            "name": "userManager",
-            "summary": "",
-            "url": "classes/App-Controller-DashboardController.html#property_userManager"
-        },                {
             "fqsen": "\\App\\Controller\\ErrorController",
             "name": "ErrorController",
             "summary": "Class\u0020ErrorController",
@@ -621,6 +616,16 @@ Search.appendIndex(
             "summary": "Register\u0020a\u0020new\u0020user.",
             "url": "classes/App-Manager-AuthManager.html#method_registerUser"
         },                {
+            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AgetLoggedUserRepository\u0028\u0029",
+            "name": "getLoggedUserRepository",
+            "summary": "Get\u0020current\u0020user\u0020logged\u0020user.",
+            "url": "classes/App-Manager-AuthManager.html#method_getLoggedUserRepository"
+        },                {
+            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AisLoggedInUserAdmin\u0028\u0029",
+            "name": "isLoggedInUserAdmin",
+            "summary": "",
+            "url": "classes/App-Manager-AuthManager.html#method_isLoggedInUserAdmin"
+        },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AisUserLogedin\u0028\u0029",
             "name": "isUserLogedin",
             "summary": "Checks\u0020if\u0020a\u0020user\u0020is\u0020logged\u0020in.",
@@ -876,10 +881,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Manager-UserManager.html#method___construct"
         },                {
-            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AgetUserRepo\u0028\u0029",
-            "name": "getUserRepo",
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AgetUserRepository\u0028\u0029",
+            "name": "getUserRepository",
             "summary": "Retrieve\u0020a\u0020user\u0020from\u0020the\u0020repository\u0020based\u0020on\u0020search\u0020criteria.",
-            "url": "classes/App-Manager-UserManager.html#method_getUserRepo"
+            "url": "classes/App-Manager-UserManager.html#method_getUserRepository"
         },                {
             "fqsen": "\\App\\Manager\\UserManager\u003A\u003AgetAllUsersRepository\u0028\u0029",
             "name": "getAllUsersRepository",
