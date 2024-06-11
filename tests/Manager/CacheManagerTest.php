@@ -1,0 +1,236 @@
+<?php
+
+namespace App\Tests\Manager;
+
+use App\Manager\CacheManager;
+use App\Manager\ErrorManager;
+use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+/**
+ * Class CacheManagerTest
+ *
+ * Test the cache manager
+ *
+ * @package App\Tests\Manager
+ */
+class CacheManagerTest extends TestCase
+{
+    /** @var CacheManager */
+    private CacheManager $cacheManager;
+
+    /** @var CacheItemPoolInterface|MockObject */
+    private CacheItemPoolInterface|MockObject $cacheItemPoolMock;
+
+    /** @var ErrorManager|MockObject */
+    private ErrorManager|MockObject $errorManagerMock;
+
+    protected function setUp(): void
+    {
+        $this->errorManagerMock = $this->createMock(ErrorManager::class);
+        $this->cacheItemPoolMock = $this->createMock(CacheItemPoolInterface::class);
+        $this->cacheManager = new CacheManager($this->errorManagerMock, $this->cacheItemPoolMock);
+    }
+
+    /**
+     * Test the isCatched method
+     *
+     * @return void
+     */
+    public function testIsCatched(): void
+    {
+        $key = 'test_key';
+        $cacheItemMock = $this->createMock(CacheItemInterface::class);
+
+        $this->cacheItemPoolMock->expects($this->once())
+            ->method('getItem')
+            ->with($key)
+            ->willReturn($cacheItemMock);
+
+        $cacheItemMock->expects($this->once())
+            ->method('isHit')
+            ->willReturn(true);
+
+        // assert that the method returns true
+        $this->assertTrue($this->cacheManager->isCatched($key));
+    }
+
+    /**
+     * Test the getValue method
+     *
+     * @return void
+     */
+    public function testGetValue(): void
+    {
+        // testing item key
+        $key = 'test_key';
+
+        // set cache item mock expectations
+        $cacheItemMock = $this->createMock(CacheItemInterface::class);
+        $this->cacheItemPoolMock->expects($this->once())
+            ->method('getItem')
+            ->with($key)
+            ->willReturn($cacheItemMock);
+
+        // assert that the method returns the cache item
+        $this->assertSame($cacheItemMock, $this->cacheManager->getValue($key));
+    }
+
+    /**
+     * Test the setValue method
+     *
+     * @return void
+     */
+    public function testSetValue(): void
+    {
+        // testing cache item
+        $key = 'test_key';
+        $value = 'test_value';
+        $expiration = 3600;
+        $cacheItemMock = $this->createMock(CacheItemInterface::class);
+
+        // set cache item mock expectations
+        $this->cacheItemPoolMock->expects($this->once())
+            ->method('getItem')
+            ->with($key)
+            ->willReturn($cacheItemMock);
+        $this->cacheItemPoolMock->expects($this->once())
+            ->method('save')
+            ->with($cacheItemMock);
+
+        // set cache item mock expectations
+        $cacheItemMock->expects($this->once())
+            ->method('set')
+            ->with($value);
+        $cacheItemMock->expects($this->once())
+            ->method('expiresAfter')
+            ->with($expiration);
+
+        // call the method
+        $this->cacheManager->setValue($key, $value, $expiration);
+    }
+
+    /**
+     * Test the deleteValue method
+     *
+     * @return void
+     */
+    public function testDeleteValue(): void
+    {
+        // testing cache item key
+        $key = 'test_key';
+
+        // set cache item mock expectations
+        $this->cacheItemPoolMock->expects($this->once())
+            ->method('deleteItem')
+            ->with($key);
+
+        // call the method
+        $this->cacheManager->deleteValue($key);
+    }
+
+    /**
+     * Test the isCatched exception
+     *
+     * @return void
+     */
+    public function testIsCatchedException(): void
+    {
+        // testing cache item key
+        $key = 'test_key';
+
+        // set cache item mock expectations
+        $this->cacheItemPoolMock->expects($this->once())
+            ->method('getItem')
+            ->with($key)
+            ->willThrowException(new \Exception('Test exception'));
+
+        // set error manager mock expectations
+        $this->errorManagerMock->expects($this->once())
+            ->method('handleError')
+            ->with('error to get cache value: Test exception', JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+
+        // assert that the method returns false
+        $this->assertFalse($this->cacheManager->isCatched($key));
+    }
+
+    /**
+     * Test the getValue exception
+     *
+     * @return void
+     */
+    public function testGetValueException(): void
+    {
+        // testing cache item key
+        $key = 'test_key';
+
+        // set cache item mock expectations
+        $this->cacheItemPoolMock->expects($this->once())
+            ->method('getItem')
+            ->with($key)
+            ->willThrowException(new \Exception('Test exception'));
+
+        // set error manager mock expectations
+        $this->errorManagerMock->expects($this->once())
+            ->method('handleError')
+            ->with('error to get cache value: Test exception', JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+
+        // assert that the method returns null
+        $this->assertNull($this->cacheManager->getValue($key));
+    }
+
+    /**
+     * Test the setValue exception
+     *
+     * @return void
+     */
+    public function testSetValueException(): void
+    {
+        // testing cache item data
+        $key = 'test_key';
+        $value = 'test_value';
+        $expiration = 3600;
+
+        // set cache item mock expectations
+        $this->cacheItemPoolMock->expects($this->once())
+            ->method('getItem')
+            ->with($key)
+            ->willThrowException(new \Exception('Test exception'));
+
+        // set error manager mock expectations
+        $this->errorManagerMock->expects($this->once())
+            ->method('handleError')
+            ->with('error to store cache value: Test exception', JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+
+        // call the method
+        $this->cacheManager->setValue($key, $value, $expiration);
+    }
+
+    /**
+     * Test the deleteValue exception
+     *
+     * @return void
+     */
+    public function testDeleteValueException(): void
+    {
+        // testing cache item key
+        $key = 'test_key';
+
+        // set cache item mock expectations
+        $this->cacheItemPoolMock->expects($this->once())
+            ->method('deleteItem')
+            ->with($key)
+            ->willThrowException(new \Exception('Test exception'));
+
+        // set error manager mock expectations
+        $this->errorManagerMock->expects($this->once())
+            ->method('handleError')
+            ->with('error to delete cache value: Test exception', JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+
+        // call the method
+        $this->cacheManager->deleteValue($key);
+    }
+}
