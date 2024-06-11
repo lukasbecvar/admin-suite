@@ -7,6 +7,7 @@ use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Util\SecurityUtil;
 use App\Util\VisitorInfoUtil;
+use Psr\Cache\CacheItemInterface;
 use Symfony\Component\String\ByteString;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,17 +25,19 @@ class AuthManager
     private CookieUtil $cookieUtil;
     private SessionUtil $sessionUtil;
     private UserManager $userManager;
+    private CacheManager $cacheManager;
     private ErrorManager $errorManager;
     private SecurityUtil $securityUtil;
     private VisitorInfoUtil $visitorInfoUtil;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(LogManager $logManager, CookieUtil $cookieUtil, SessionUtil $sessionUtil, UserManager $userManager, ErrorManager $errorManager, SecurityUtil $securityUtil, VisitorInfoUtil $visitorInfoUtil, EntityManagerInterface $entityManager)
+    public function __construct(LogManager $logManager, CookieUtil $cookieUtil, SessionUtil $sessionUtil, UserManager $userManager, CacheManager $cacheManager, ErrorManager $errorManager, SecurityUtil $securityUtil, VisitorInfoUtil $visitorInfoUtil, EntityManagerInterface $entityManager)
     {
         $this->logManager = $logManager;
         $this->cookieUtil = $cookieUtil;
         $this->sessionUtil = $sessionUtil;
         $this->userManager = $userManager;
+        $this->cacheManager = $cacheManager;
         $this->errorManager = $errorManager;
         $this->securityUtil = $securityUtil;
         $this->entityManager = $entityManager;
@@ -94,7 +97,7 @@ class AuthManager
                     ->setRole('USER')
                     ->setIpAddress($ip_address)
                     ->setUserAgent($user_agent)
-                    ->setToken(md5(random_bytes(32)))
+                    ->setToken($token)
                     ->setProfilePic('default_pic')
                     ->setRegisterTime($time)
                     ->setLastLoginTime($time);
@@ -371,5 +374,82 @@ class AuthManager
         }
 
         return $token;
+    }
+
+    /**
+     * Store online user id in cache
+     *
+     * @param int $userId The id of the user to store.
+     *
+     * @return void
+     */
+    public function cacheOnlineUser(int $userId): void
+    {
+        // cache online visitor
+        $this->cacheManager->setValue('online_user_' . $userId, 'online', 300);
+    }
+
+    /**
+     * Get online users list.
+     *
+     * @return array<mixed> The list of online users.
+     */
+    public function getOnlineUsersList(): array
+    {
+        $onlineVisitors = [];
+
+        // get all users list
+        $users = $this->userManager->getAllUsersRepository();
+
+        // Check if $users is iterable
+        if (!is_iterable($users)) {
+            // Handle the case where $users is not iterable, maybe log an error
+            // or return an empty array if it's acceptable.
+            return $onlineVisitors;
+        }
+
+        // check all users status
+        foreach ($users as $user) {
+            // Check if $user is an object with getId() method
+            if (is_object($user) && method_exists($user, 'getId')) {
+                // get visitor status
+                $status = $this->getUserStatus($user->getId());
+
+                // check visitor status
+                if ($status == 'online') {
+                    array_push($onlineVisitors, $user);
+                }
+            }
+        }
+
+        return $onlineVisitors;
+    }
+
+    /**
+     * Get user status.
+     *
+     * @param int $userId The id of the user.
+     *
+     * @return string The status of the user.
+     */
+    public function getUserStatus(int $userId): string
+    {
+        $userCacheKey = 'online_user_' . $userId;
+
+        // get the cache item
+        $cacheItem = $this->cacheManager->getValue($userCacheKey);
+
+        // check if cache item exists and is not expired
+        if ($cacheItem instanceof CacheItemInterface) {
+            // retrieve the value from the cache item
+            $status = $cacheItem->get();
+
+            // check if status found
+            if (is_string($status) && $status !== null && $status !== '') {
+                return $status;
+            }
+        }
+
+        return 'offline';
     }
 }

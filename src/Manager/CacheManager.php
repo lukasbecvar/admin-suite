@@ -45,9 +45,9 @@ class CacheManager
      *
      * @param string $key The key for which to retrieve the value.
      *
-     * @return mixed|null The cached value associated with the key, or null if not found.
+     * @return object|null The cached value associated with the key, or null if not found.
      */
-    public function getValue(string $key): mixed
+    public function getValue(string $key): ?object
     {
         try {
             return $this->cacheItemPoolInterface->getItem($key);

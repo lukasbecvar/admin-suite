@@ -65,6 +65,24 @@ class UserManagerTest extends TestCase
     }
 
     /**
+     * Test get all users repos
+     *
+     * @return void
+     */
+    public function testGetAllUserRepos(): void
+    {
+        // mock user repository
+        $user = new User();
+        $this->userRepositoryMock->method('findOneBy')->willReturn($user);
+
+        // call the method
+        $result = $this->userManager->getAllUsersRepository();
+
+        // assert the result
+        $this->assertIsArray($result);
+    }
+
+    /**
      * Test check if user exist
      *
      * @return void

@@ -666,6 +666,21 @@ Search.appendIndex(
             "summary": "Generate\u0020a\u0020unique\u0020token\u0020for\u0020a\u0020user.",
             "url": "classes/App-Manager-AuthManager.html#method_generateUserToken"
         },                {
+            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AcacheOnlineUser\u0028\u0029",
+            "name": "cacheOnlineUser",
+            "summary": "Store\u0020online\u0020user\u0020id\u0020in\u0020cache",
+            "url": "classes/App-Manager-AuthManager.html#method_cacheOnlineUser"
+        },                {
+            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AgetOnlineUsersList\u0028\u0029",
+            "name": "getOnlineUsersList",
+            "summary": "Get\u0020online\u0020users\u0020list.",
+            "url": "classes/App-Manager-AuthManager.html#method_getOnlineUsersList"
+        },                {
+            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AgetUserStatus\u0028\u0029",
+            "name": "getUserStatus",
+            "summary": "Get\u0020user\u0020status.",
+            "url": "classes/App-Manager-AuthManager.html#method_getUserStatus"
+        },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024logManager",
             "name": "logManager",
             "summary": "",
@@ -685,6 +700,11 @@ Search.appendIndex(
             "name": "userManager",
             "summary": "",
             "url": "classes/App-Manager-AuthManager.html#property_userManager"
+        },                {
+            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024cacheManager",
+            "name": "cacheManager",
+            "summary": "",
+            "url": "classes/App-Manager-AuthManager.html#property_cacheManager"
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024errorManager",
             "name": "errorManager",
@@ -860,6 +880,11 @@ Search.appendIndex(
             "name": "getUserRepo",
             "summary": "Retrieve\u0020a\u0020user\u0020from\u0020the\u0020repository\u0020based\u0020on\u0020search\u0020criteria.",
             "url": "classes/App-Manager-UserManager.html#method_getUserRepo"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AgetAllUsersRepository\u0028\u0029",
+            "name": "getAllUsersRepository",
+            "summary": "Retrieve\u0020all\u0020users\u0020from\u0020the\u0020repository.",
+            "url": "classes/App-Manager-UserManager.html#method_getAllUsersRepository"
         },                {
             "fqsen": "\\App\\Manager\\UserManager\u003A\u003AcheckIfUserExist\u0028\u0029",
             "name": "checkIfUserExist",

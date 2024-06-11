@@ -47,7 +47,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 
 ## 0.3
 - [X] Link logs to users
-- [ ] Online users list & online count
+- [X] Online users list & online count
 - [ ] Main dashboard
     - [ ] Main nav panel
     - [ ] Sidebar

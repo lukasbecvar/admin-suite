@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package App\Command
  */
-#[AsCommand(name: 'app:user:tokens:regenerate', description: 'Regenerate all users tokens in database')]
+#[AsCommand(name: 'app:auth:tokens:regenerate', description: 'Regenerate all users tokens in database')]
 class RegenerateAuthTokensCommand extends Command
 {
     private AuthManager $authManager;

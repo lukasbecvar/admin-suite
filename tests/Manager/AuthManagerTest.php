@@ -10,10 +10,12 @@ use App\Util\SecurityUtil;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
+use App\Manager\CacheManager;
 use App\Util\VisitorInfoUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\UserRepository;
+use Symfony\Component\Cache\CacheItem;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -38,6 +40,9 @@ class AuthManagerTest extends TestCase
     /** @var UserManager|MockObject */
     private UserManager|MockObject $userManagerMock;
 
+    /** @var CacheManager|MockObject */
+    private CacheManager|MockObject $cacheManagerMock;
+
     /** @var ErrorManager */
     private ErrorManager $errorManagerMock;
 
@@ -59,6 +64,7 @@ class AuthManagerTest extends TestCase
         $this->cookieUtilMock = $this->createMock(CookieUtil::class);
         $this->sessionUtilMock = $this->createMock(SessionUtil::class);
         $this->userManagerMock = $this->createMock(UserManager::class);
+        $this->cacheManagerMock = $this->createMock(CacheManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->securityUtilMock = $this->createMock(SecurityUtil::class);
         $this->visitorInfoUtilMock = $this->createMock(VisitorInfoUtil::class);
@@ -69,6 +75,7 @@ class AuthManagerTest extends TestCase
             $this->cookieUtilMock,
             $this->sessionUtilMock,
             $this->userManagerMock,
+            $this->cacheManagerMock,
             $this->errorManagerMock,
             $this->securityUtilMock,
             $this->visitorInfoUtilMock,
@@ -322,5 +329,42 @@ class AuthManagerTest extends TestCase
         // check if the token is a non-empty string
         $this->assertIsString($token);
         $this->assertNotEmpty($token);
+    }
+
+    /**
+     * Test cacheOnlineUser method
+     *
+     * @return void
+     */
+    public function testCacheOnlineUser(): void
+    {
+        $userId = 1;
+
+        // Expect the cache manager's setValue method to be called once
+        $this->cacheManagerMock->expects($this->once())
+            ->method('setValue')
+            ->with('online_user_' . $userId, 'online', 300);
+
+        // Call the method
+        $this->authManager->cacheOnlineUser($userId);
+    }
+
+    /**
+     * Test getUserStatus method
+     *
+     * @return void
+     */
+    public function testGetUserStatus(): void
+    {
+        // mock the cache manager to return null status
+        $this->cacheManagerMock->method('getValue')
+            ->with('online_user_1')
+            ->willReturn(new CacheItem());
+
+        // call the method again
+        $status = $this->authManager->getUserStatus(1);
+
+        // assert the status is string
+        $this->assertIsString($status);
     }
 }
