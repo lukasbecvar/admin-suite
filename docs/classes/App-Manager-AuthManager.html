@@ -345,6 +345,13 @@
 <dd>Get the id of the logged in user.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Manager-AuthManager.html#method_getLoggedUserRepository">getLoggedUserRepository()</a>
+    <span>
+                                &nbsp;: <a href="classes/App-Entity-User.html"><abbr title="\App\Entity\User">User</abbr></a>|null    </span>
+</dt>
+<dd>Get current user logged user.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/App-Manager-AuthManager.html#method_getLoggedUserToken">getLoggedUserToken()</a>
     <span>
                                 &nbsp;: mixed    </span>
@@ -364,6 +371,12 @@
                                 &nbsp;: string    </span>
 </dt>
 <dd>Get user status.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/App-Manager-AuthManager.html#method_isLoggedInUserAdmin">isLoggedInUserAdmin()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/App-Manager-AuthManager.html#method_isUserLogedin">isUserLogedin()</a>
@@ -856,7 +869,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">386</span>
+    <span class="phpdocumentor-element-found-in__line">425</span>
 
     </aside>
 
@@ -902,7 +915,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">148</span>
+    <span class="phpdocumentor-element-found-in__line">187</span>
 
     </aside>
 
@@ -965,7 +978,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">363</span>
+    <span class="phpdocumentor-element-found-in__line">402</span>
 
     </aside>
 
@@ -1007,7 +1020,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">246</span>
+    <span class="phpdocumentor-element-found-in__line">285</span>
 
     </aside>
 
@@ -1041,6 +1054,48 @@
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_getLoggedUserRepository">
+        getLoggedUserRepository()
+        <a href="classes/App-Manager-AuthManager.html#method_getLoggedUserRepository" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">122</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Get current user logged user.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getLoggedUserRepository</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/App-Entity-User.html"><abbr title="\App\Entity\User">User</abbr></a>|null</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="classes/App-Entity-User.html"><abbr title="\App\Entity\User">User</abbr></a>|null</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The user object if found, null otherwise</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_getLoggedUserToken">
         getLoggedUserToken()
         <a href="classes/App-Manager-AuthManager.html#method_getLoggedUserToken" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1049,7 +1104,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">270</span>
+    <span class="phpdocumentor-element-found-in__line">309</span>
 
     </aside>
 
@@ -1091,7 +1146,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">397</span>
+    <span class="phpdocumentor-element-found-in__line">436</span>
 
     </aside>
 
@@ -1133,7 +1188,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">435</span>
+    <span class="phpdocumentor-element-found-in__line">474</span>
 
     </aside>
 
@@ -1179,6 +1234,43 @@
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_isLoggedInUserAdmin">
+        isLoggedInUserAdmin()
+        <a href="classes/App-Manager-AuthManager.html#method_isLoggedInUserAdmin" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">133</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">isLoggedInUserAdmin</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_isUserLogedin">
         isUserLogedin()
         <a href="classes/App-Manager-AuthManager.html#method_isUserLogedin" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1187,7 +1279,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">122</span>
+    <span class="phpdocumentor-element-found-in__line">161</span>
 
     </aside>
 
@@ -1225,7 +1317,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">175</span>
+    <span class="phpdocumentor-element-found-in__line">214</span>
 
     </aside>
 
@@ -1280,7 +1372,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">293</span>
+    <span class="phpdocumentor-element-found-in__line">332</span>
 
     </aside>
 
@@ -1314,7 +1406,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">326</span>
+    <span class="phpdocumentor-element-found-in__line">365</span>
 
     </aside>
 
@@ -1434,7 +1526,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/AuthManager.php"><a href="files/src-manager-authmanager.html"><abbr title="src/Manager/AuthManager.php">AuthManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">217</span>
+    <span class="phpdocumentor-element-found-in__line">256</span>
 
     </aside>
 
@@ -1616,9 +1708,11 @@
                                             <li><a href="classes/App-Manager-AuthManager.html#method_canLogin">canLogin()</a></li>
                                             <li><a href="classes/App-Manager-AuthManager.html#method_generateUserToken">generateUserToken()</a></li>
                                             <li><a href="classes/App-Manager-AuthManager.html#method_getLoggedUserId">getLoggedUserId()</a></li>
+                                            <li><a href="classes/App-Manager-AuthManager.html#method_getLoggedUserRepository">getLoggedUserRepository()</a></li>
                                             <li><a href="classes/App-Manager-AuthManager.html#method_getLoggedUserToken">getLoggedUserToken()</a></li>
                                             <li><a href="classes/App-Manager-AuthManager.html#method_getOnlineUsersList">getOnlineUsersList()</a></li>
                                             <li><a href="classes/App-Manager-AuthManager.html#method_getUserStatus">getUserStatus()</a></li>
+                                            <li><a href="classes/App-Manager-AuthManager.html#method_isLoggedInUserAdmin">isLoggedInUserAdmin()</a></li>
                                             <li><a href="classes/App-Manager-AuthManager.html#method_isUserLogedin">isUserLogedin()</a></li>
                                             <li><a href="classes/App-Manager-AuthManager.html#method_login">login()</a></li>
                                             <li><a href="classes/App-Manager-AuthManager.html#method_logout">logout()</a></li>
