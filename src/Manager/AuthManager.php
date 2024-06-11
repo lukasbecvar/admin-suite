@@ -59,12 +59,7 @@ class AuthManager
         }
 
         // generate entity token
-        $token = ByteString::fromRandom(32)->toString();
-
-        // check if token not exist
-        if ($this->userManager->getUserRepo(['token' => $token]) != null) {
-            $this->registerUser($username, $password);
-        }
+        $token = $this->generateUserToken();
 
         // hash password
         $password = $this->securityUtil->generateHash($password);
@@ -314,5 +309,67 @@ class AuthManager
             // unset login session
             $this->sessionUtil->destroySession();
         }
+    }
+
+    /**
+     * Regenerate tokens for all users in the database.
+     *
+     * This method regenerates tokens for all users in the database, ensuring uniqueness for each token.
+     *
+     * @return array<bool|null|string> An array containing the status of the operation and any relevant message.
+     * - The 'status' key indicates whether the operation was successful (true) or not (false).
+     * - The 'message' key contains any relevant error message if the operation failed, otherwise it is null.
+     */
+    public function regenerateUsersTokens(): array
+    {
+        $state = [
+            'status' => true,
+            'message' => null
+        ];
+
+        // get all users in database
+        $userRepo = $this->entityManager->getRepository(User::class)->findAll();
+
+        // regenerate all users tokens
+        foreach ($userRepo as $user) {
+            // regenerate new token
+            $newToken = $this->generateUserToken();
+
+            // set new token
+            $user->setToken($newToken);
+
+            // flush data
+            try {
+                $this->entityManager->flush();
+            } catch (\Exception $e) {
+                $state = [
+                    'status' => false,
+                    'message' => $e->getMessage()
+                ];
+            }
+        }
+
+        return $state;
+    }
+
+    /**
+     * Generate a unique token for a user.
+     *
+     * @return string The generated user token.
+     */
+    public function generateUserToken(): string
+    {
+        // generate user token
+        $token = ByteString::fromRandom(32)->toString();
+
+        // get users repository
+        $userRepo = $this->entityManager->getRepository(User::class);
+
+        // check if user token is not already used
+        if ($userRepo->findOneBy(['token' => $token]) != null) {
+            $this->generateUserToken();
+        }
+
+        return $token;
     }
 }
