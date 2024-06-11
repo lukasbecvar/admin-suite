@@ -121,7 +121,7 @@ class AutoLoginMiddlewareTest extends TestCase
 
         // mock the user manager
         $this->userManagerMock->expects($this->exactly(2))
-            ->method('getUserRepo')
+            ->method('getUserRepository')
             ->with(['token' => $userToken])
             ->willReturn($user);
 
@@ -160,7 +160,7 @@ class AutoLoginMiddlewareTest extends TestCase
 
         // mock the user manager
         $this->userManagerMock->expects($this->once())
-            ->method('getUserRepo')
+            ->method('getUserRepository')
             ->with(['token' => $userToken])
             ->willReturn(null);
 

@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Manager\AuthManager;
-use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,12 +17,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class DashboardController extends AbstractController
 {
     private AuthManager $authManager;
-    private UserManager $userManager;
 
-    public function __construct(AuthManager $authManager, UserManager $userManager)
+    public function __construct(AuthManager $authManager)
     {
         $this->authManager = $authManager;
-        $this->userManager = $userManager;
     }
 
     /**
@@ -34,15 +31,10 @@ class DashboardController extends AbstractController
     #[Route('/dashboard', methods:['GET'], name: 'app_dashboard')]
     public function dashboard(): Response
     {
-        // get current user id
-        $userId = $this->authManager->getLoggedUserId();
-
-        // get user repository
-        $userRepo = $this->userManager->getUserRepo(['id' => $userId]);
-
+        // return dashboard view
         return $this->render('dashboard.html.twig', [
-            'is_admin' => $this->userManager->isUserAdmin($userId),
-            'user_data' => $userRepo
+            'is_admin' => $this->authManager->isLoggedInUserAdmin(),
+            'user_data' => $this->authManager->getLoggedUserRepository()
         ]);
     }
 }

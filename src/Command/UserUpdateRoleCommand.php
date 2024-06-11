@@ -76,7 +76,7 @@ class UserUpdateRoleCommand extends Command
         }
 
         // get user repo
-        $repo = $this->userManager->getUserRepo(['username' => $username]);
+        $repo = $this->userManager->getUserRepository(['username' => $username]);
 
         // check if username is used
         if ($repo == null) {

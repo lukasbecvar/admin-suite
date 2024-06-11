@@ -47,18 +47,18 @@ class UserManagerTest extends TestCase
     }
 
     /**
-     * Test get user repo
+     * Test get user repository
      *
      * @return void
      */
-    public function testGetUserRepo(): void
+    public function testGetUserRepository(): void
     {
         // mock user repository
         $user = new User();
         $this->userRepositoryMock->method('findOneBy')->willReturn($user);
 
         // call the method
-        $result = $this->userManager->getUserRepo(['username' => 'test']);
+        $result = $this->userManager->getUserRepository(['username' => 'test']);
 
         // assert the result
         $this->assertInstanceOf(User::class, $result);

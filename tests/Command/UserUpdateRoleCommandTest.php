@@ -109,7 +109,7 @@ class UserUpdateRoleCommandTest extends TestCase
     public function testExecuteWithNonExistingUsername(): void
     {
         // mock repo
-        $this->userManager->method('getUserRepo')->willReturn(null);
+        $this->userManager->method('getUserRepository')->willReturn(null);
 
         // execute command
         $this->commandTester->execute(['username' => 'testuser', 'role' => 'ADMIN']);
@@ -134,7 +134,7 @@ class UserUpdateRoleCommandTest extends TestCase
         $user->method('getId')->willReturn(1);
 
         // mock methods
-        $this->userManager->method('getUserRepo')->willReturn($user);
+        $this->userManager->method('getUserRepository')->willReturn($user);
         $this->userManager->method('getUserRoleById')->willReturn('ADMIN');
 
         // execute command
@@ -160,7 +160,7 @@ class UserUpdateRoleCommandTest extends TestCase
         $user->method('getId')->willReturn(1);
 
         // mock methods
-        $this->userManager->method('getUserRepo')->willReturn($user);
+        $this->userManager->method('getUserRepository')->willReturn($user);
         $this->userManager->method('getUserRoleById')->willReturn('USER');
         $this->userManager->method('updateUserRole')->will($this->throwException(new \Exception('Some error')));
 
@@ -187,7 +187,7 @@ class UserUpdateRoleCommandTest extends TestCase
         $user->method('getId')->willReturn(1);
 
         // mock methods
-        $this->userManager->method('getUserRepo')->willReturn($user);
+        $this->userManager->method('getUserRepository')->willReturn($user);
         $this->userManager->method('getUserRoleById')->willReturn('USER');
 
         // execute command
