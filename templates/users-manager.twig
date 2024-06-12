@@ -7,21 +7,44 @@
         <table class="min-w-full divide-y divide-white">
             <thead>
                 <tr class="hover:bg-neutral-800 border-b border-neutral-600">
-                    {% set headers = ['#', 'Username', 'Role', 'IP Address', 'Browser', 'Register Time', 'Last Login Time'] %}
-                    {% for header in headers %}
-                        <th class="text-left text-white p-2">{{ header }}</th>
-                    {% endfor %}
+                    <th class="text-left text-white p-2">#</th>
+                    <th class="text-left text-white p-2">Username</th>
+                    <th class="text-left text-white p-2">Role</th>
+                    <th class="text-left text-white p-2">IP Address</th>
+                    <th class="text-left text-white p-2">Browser</th>
+                    <th class="text-left text-white p-2">Register Time</th>
+                    <th class="text-left text-white p-2">Last Login</th>
+                    <th class="text-left text-white p-2">Status</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-white">
                 {% for row in users %}
-                    <tr class="hover:bg-neutral-800 border-b border-neutral-600">
-                        {% set values = [row.id, row.username, row.role, row.ipAddress, row.userAgent|slice(0, 50) ~ (row.userAgent|length > 50 ? '...' : ''), row.registerTime|date('Y-m-d H:i:s'), row.lastLoginTime|date('Y-m-d H:i:s')] %}
-                        {% for value in values %}
-                            <td class="text-white p-2 border-b border-neutral-600">{{ value }}</td>
+                <tr class="hover:bg-neutral-800 border-b border-neutral-600">
+                    {# USER DATA FROM DATABASE REPOSITORY #}
+                    <td class="text-white p-2 border-b border-neutral-600">{{ row.id }}</td>
+                    <td class="text-white p-2 border-b border-neutral-600">{{ row.username }}</td>
+                    <td class="text-white p-2 border-b border-neutral-600">{{ row.role }}</td>
+                    <td class="text-white p-2 border-b border-neutral-600">{{ row.ipAddress }}</td>
+                    <td class="text-white p-2 border-b border-neutral-600">{{ row.userAgent|slice(0, 50) ~ (row.userAgent|length > 50 ? '...' : '') }}</td>
+                    <td class="text-white p-2 border-b border-neutral-600">{{ row.registerTime|date('Y-m-d H:i:s') }}</td>
+                    <td class="text-white p-2 border-b border-neutral-600">{{ row.lastLoginTime|date('Y-m-d H:i:s') }}</td>
+                    
+                    {# USER ONLINE STATUS #}
+                    <td class="text-white p-2 border-b border-neutral-600">
+                        {% set isOnline = false %}
+                        {% for onlineUser in online_list %}
+                            {% if row.id == onlineUser.id %}
+                                {% set isOnline = true %}
+                            {% endif %}
                         {% endfor %}
-                    </tr>
-                {% endfor %}
+                        {% if isOnline %}
+                            online
+                        {% else %}
+                            offline
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>

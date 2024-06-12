@@ -50,12 +50,16 @@ class UsersManagerController extends AbstractController
         // get users data from database
         $usersData = $this->userManager->getUsersByPage($page);
 
+        // get online users list from auth manager
+        $onlineList = $this->authManager->getOnlineUsersList();
+
         return $this->render('users-manager.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
             'user_data' => $this->authManager->getLoggedUserRepository(),
 
             // users manager data
             'users' => $usersData,
+            'online_list' => $onlineList,
             'total_users_count' => $usersCount,
             'current_page' => $page,
             'limit_per_page' => $pageLimit

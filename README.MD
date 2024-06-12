@@ -57,7 +57,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Default sidebar toggle in dashboard (only pc)
 - [ ] User managment system (only for admin users)
     - [X] View users list table
-    - [ ] Show online/offline status in table
+    - [X] Show online/offline status in table
     - [ ] user agent shortify
     - [ ] Add new users
     - [ ] Delete users
