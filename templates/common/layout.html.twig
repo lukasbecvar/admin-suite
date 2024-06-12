@@ -22,5 +22,16 @@
             mainContent.classList.toggle('active');
         });
     </script>
+
+    {% if app.request.attributes.get('_route') == 'app_dashboard' %}
+        <script>
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            if (window.innerWidth > 400) {
+                sidebar.classList.add('active');
+                mainContent.classList.add('active');
+            }
+        </script>
+    {% endif %}
 {% endblock %}
  
