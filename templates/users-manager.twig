@@ -17,6 +17,7 @@
                     <th class="text-left text-white p-2">Role</th>
                     <th class="text-left text-white p-2">IP Address</th>
                     <th class="text-left text-white p-2">Browser</th>
+                    <th class="text-left text-white p-2">OS</th>
                     <th class="text-left text-white p-2">Register Time</th>
                     <th class="text-left text-white p-2">Last Login</th>
                     <th class="text-left text-white p-2">Status</th>
@@ -30,7 +31,12 @@
                     <td class="text-white p-2 border-b border-neutral-600">{{ row.username }}</td>
                     <td class="text-white p-2 border-b border-neutral-600">{{ row.role }}</td>
                     <td class="text-white p-2 border-b border-neutral-600">{{ row.ipAddress }}</td>
-                    <td class="text-white p-2 border-b border-neutral-600">{{ row.userAgent|slice(0, 50) ~ (row.userAgent|length > 50 ? '...' : '') }}</td>
+
+                    {# USER BROWSER INFO #}
+                    <td class="text-white p-2 border-b border-neutral-600">{{ visitor_info_util.getBrowserShortify(row.userAgent) }}</td>
+                    <td class="text-white p-2 border-b border-neutral-600">{{ visitor_info_util.getOs(row.userAgent) }}</td>
+
+                    {# USER REGISTER TIME & LAST LOGIN TIME #}
                     <td class="text-white p-2 border-b border-neutral-600">{{ row.registerTime|date('Y-m-d H:i:s') }}</td>
                     <td class="text-white p-2 border-b border-neutral-600">{{ row.lastLoginTime|date('Y-m-d H:i:s') }}</td>
                     
