@@ -56,7 +56,7 @@ class UserFixtures extends Fixture
         $roles = ['USER', 'ADMIN', 'DEVELOPER', 'OWNER'];
 
         // create 100 random users
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             // get current time
             $time = new \DateTime();
 

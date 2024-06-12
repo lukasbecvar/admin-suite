@@ -3,6 +3,7 @@
 namespace App\Tests\Manager;
 
 use App\Entity\User;
+use App\Util\AppUtil;
 use App\Manager\LogManager;
 use App\Manager\UserManager;
 use App\Manager\ErrorManager;
@@ -20,30 +21,34 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class UserManagerTest extends TestCase
 {
-    /** @var EntityManagerInterface|MockObject */
-    private EntityManagerInterface|MockObject $entityManagerMock;
-
-    /** @var LogManager|MockObject */
-    private LogManager|MockObject $logManagerMock;
-
-    /** @var ErrorManager */
-    private ErrorManager $errorManagerMock;
+    /** @var AppUtil|MockObject */
+    private AppUtil|MockObject $appUtilMock;
 
     /** @var UserManager */
     private UserManager $userManager;
 
+    /** @var ErrorManager */
+    private ErrorManager $errorManagerMock;
+
+    /** @var LogManager|MockObject */
+    private LogManager|MockObject $logManagerMock;
+
     /** @var UserRepository|MockObject */
     private UserRepository|MockObject $userRepositoryMock;
 
+    /** @var EntityManagerInterface|MockObject */
+    private EntityManagerInterface|MockObject $entityManagerMock;
+
     protected function setUp(): void
     {
-        $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
+        $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->userRepositoryMock = $this->createMock(UserRepository::class);
+        $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $this->entityManagerMock->method('getRepository')->willReturn($this->userRepositoryMock);
 
-        $this->userManager = new UserManager($this->logManagerMock, $this->errorManagerMock, $this->entityManagerMock);
+        $this->userManager = new UserManager($this->appUtilMock, $this->logManagerMock, $this->errorManagerMock, $this->entityManagerMock);
     }
 
     /**
@@ -80,6 +85,38 @@ class UserManagerTest extends TestCase
 
         // assert the result
         $this->assertIsArray($result);
+    }
+
+    /**
+     * Test get user by page
+     *
+     * @return void
+     */
+    public function testGetUsersByPage(): void
+    {
+        // mock user repository
+        $user = new User();
+        $this->userRepositoryMock->method('findBy')->willReturn([$user]);
+
+        // call the method
+        $result = $this->userManager->getUsersByPage(1);
+
+        // assert the result
+        $this->assertIsArray($result);
+    }
+
+    /**
+     * Test get user by id
+     *
+     * @return void
+     */
+    public function testGetUsersCount(): void
+    {
+        // call the method
+        $result = $this->userManager->getUsersCount();
+
+        // assert the result
+        $this->assertSame(0, $result);
     }
 
     /**

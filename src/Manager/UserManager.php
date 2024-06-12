@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\User;
+use App\Util\AppUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,12 +16,14 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UserManager
 {
+    private AppUtil $appUtil;
     private LogManager $logManager;
     private ErrorManager $errorManager;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(LogManager $logManager, ErrorManager $errorManager, EntityManagerInterface $entityManager)
+    public function __construct(AppUtil $appUtil, LogManager $logManager, ErrorManager $errorManager, EntityManagerInterface $entityManager)
     {
+        $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->errorManager = $errorManager;
         $this->entityManager = $entityManager;
@@ -47,6 +50,33 @@ class UserManager
     public function getAllUsersRepository(): ?array
     {
         return $this->entityManager->getRepository(User::class)->findAll();
+    }
+
+    /**
+     * Retrieve all users count from the repository.
+     *
+     * @return int|null The user object if found, null otherwise
+     */
+    public function getUsersCount(): ?int
+    {
+        return $this->entityManager->getRepository(User::class)->count([]);
+    }
+
+    /**
+     * Retrieve all users from the repository by page.
+     *
+     * @return array<mixed> The user object if found, null otherwise
+     */
+    public function getUsersByPage(int $page = 1): ?array
+    {
+        // get page limitter
+        $perPage = $this->appUtil->getPageLimitter();
+
+        // calculate offset
+        $offset = ($page - 1) * $perPage;
+
+        // get user repo
+        return $this->entityManager->getRepository(User::class)->findBy([], null, $perPage, $offset);
     }
 
     /**
