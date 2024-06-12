@@ -32,7 +32,7 @@ class DashboardController extends AbstractController
     public function dashboard(): Response
     {
         // return dashboard view
-        return $this->render('dashboard.html.twig', [
+        return $this->render('dashboard.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
             'user_data' => $this->authManager->getLoggedUserRepository()
         ]);
