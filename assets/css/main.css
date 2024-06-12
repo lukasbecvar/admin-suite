@@ -53,13 +53,21 @@ main {
 }
 
 .sub-navigation {
-	display: flex !important; 
-	justify-content: space-between !important;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.sub-navigation > * {
+    margin-right: 0px;
+}
+
+.sub-navigation span {
+    margin-left: auto;
 }
 
 .sub-navigation a:hover {
-	color: rgb(247, 247, 71);
-	border: 1px solid rgb(247, 247, 71);
+    color: rgb(247, 247, 71);
+    border: 1px solid rgb(247, 247, 71);
 }
 
 @media screen and (max-width: 400px) { 

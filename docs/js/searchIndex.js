@@ -251,6 +251,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Controller-UsersManagerController.html#property_authManager"
         },                {
+            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024visitorInfoUtil",
+            "name": "visitorInfoUtil",
+            "summary": "",
+            "url": "classes/App-Controller-UsersManagerController.html#property_visitorInfoUtil"
+        },                {
             "fqsen": "\\App\\DataFixtures\\LogFixtures",
             "name": "LogFixtures",
             "summary": "Class\u0020LogFixtures",
@@ -1380,6 +1385,16 @@ Search.appendIndex(
             "name": "getUserAgent",
             "summary": "Get\u0020the\u0020user\u0020agent.",
             "url": "classes/App-Util-VisitorInfoUtil.html#method_getUserAgent"
+        },                {
+            "fqsen": "\\App\\Util\\VisitorInfoUtil\u003A\u003AgetBrowserShortify\u0028\u0029",
+            "name": "getBrowserShortify",
+            "summary": "Get\u0020a\u0020short\u0020version\u0020of\u0020the\u0020browser\u0020name.",
+            "url": "classes/App-Util-VisitorInfoUtil.html#method_getBrowserShortify"
+        },                {
+            "fqsen": "\\App\\Util\\VisitorInfoUtil\u003A\u003AgetOs\u0028\u0029",
+            "name": "getOs",
+            "summary": "Get\u0020the\u0020operating\u0020system.",
+            "url": "classes/App-Util-VisitorInfoUtil.html#method_getOs"
         },                {
             "fqsen": "\\",
             "name": "\\",
