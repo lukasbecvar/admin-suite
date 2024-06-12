@@ -221,6 +221,36 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Controller-IndexController.html#property_authManager"
         },                {
+            "fqsen": "\\App\\Controller\\UsersManagerController",
+            "name": "UsersManagerController",
+            "summary": "Class\u0020UsersManagerController",
+            "url": "classes/App-Controller-UsersManagerController.html"
+        },                {
+            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Controller-UsersManagerController.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003AusersManager\u0028\u0029",
+            "name": "usersManager",
+            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020component.",
+            "url": "classes/App-Controller-UsersManagerController.html#method_usersManager"
+        },                {
+            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Controller-UsersManagerController.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024userManager",
+            "name": "userManager",
+            "summary": "",
+            "url": "classes/App-Controller-UsersManagerController.html#property_userManager"
+        },                {
+            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024authManager",
+            "name": "authManager",
+            "summary": "",
+            "url": "classes/App-Controller-UsersManagerController.html#property_authManager"
+        },                {
             "fqsen": "\\App\\DataFixtures\\LogFixtures",
             "name": "LogFixtures",
             "summary": "Class\u0020LogFixtures",
@@ -891,6 +921,16 @@ Search.appendIndex(
             "summary": "Retrieve\u0020all\u0020users\u0020from\u0020the\u0020repository.",
             "url": "classes/App-Manager-UserManager.html#method_getAllUsersRepository"
         },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AgetUsersCount\u0028\u0029",
+            "name": "getUsersCount",
+            "summary": "Retrieve\u0020all\u0020users\u0020count\u0020from\u0020the\u0020repository.",
+            "url": "classes/App-Manager-UserManager.html#method_getUsersCount"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AgetUsersByPage\u0028\u0029",
+            "name": "getUsersByPage",
+            "summary": "Retrieve\u0020all\u0020users\u0020from\u0020the\u0020repository\u0020by\u0020page.",
+            "url": "classes/App-Manager-UserManager.html#method_getUsersByPage"
+        },                {
             "fqsen": "\\App\\Manager\\UserManager\u003A\u003AcheckIfUserExist\u0028\u0029",
             "name": "checkIfUserExist",
             "summary": "Check\u0020if\u0020a\u0020user\u0020exists.",
@@ -920,6 +960,11 @@ Search.appendIndex(
             "name": "isUsersEmpty",
             "summary": "Checks\u0020if\u0020the\u0020user\u0020repository\u0020is\u0020empty.",
             "url": "classes/App-Manager-UserManager.html#method_isUsersEmpty"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Manager-UserManager.html#property_appUtil"
         },                {
             "fqsen": "\\App\\Manager\\UserManager\u003A\u003A\u0024logManager",
             "name": "logManager",
@@ -1195,6 +1240,11 @@ Search.appendIndex(
             "name": "getLogLevel",
             "summary": "Get\u0020the\u0020log\u0020level",
             "url": "classes/App-Util-AppUtil.html#method_getLogLevel"
+        },                {
+            "fqsen": "\\App\\Util\\AppUtil\u003A\u003AgetPageLimitter\u0028\u0029",
+            "name": "getPageLimitter",
+            "summary": "Get\u0020the\u0020page\u0020limitter",
+            "url": "classes/App-Util-AppUtil.html#method_getPageLimitter"
         },                {
             "fqsen": "\\App\\Util\\AppUtil\u003A\u003AgetHasherConfig\u0028\u0029",
             "name": "getHasherConfig",
