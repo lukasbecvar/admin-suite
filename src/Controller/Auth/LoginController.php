@@ -77,7 +77,7 @@ class LoginController extends AbstractController
         }
 
         // render the registration component view
-        return $this->render('auth/login.html.twig', [
+        return $this->render('auth/login.twig', [
             'is_users_empty' => $this->userManager->isUsersEmpty(),
             'login_form' => $form->createView()
         ]);

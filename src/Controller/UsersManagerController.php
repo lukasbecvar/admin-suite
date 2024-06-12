@@ -8,13 +8,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * Class DashboardController
+ * Class UsersManagerController
  *
- * Controller to handle the accounts page.
+ * Handle users-manager component page
  *
  * @package App\Controller
  */
-class AccountsController extends AbstractController
+class UsersManagerController extends AbstractController
 {
     private AuthManager $authManager;
 
@@ -24,15 +24,15 @@ class AccountsController extends AbstractController
     }
 
     /**
-     * Handle the accounts page.
+     * Handle the users-manager component.
      *
-     * @return Response The accounts view
+     * @return Response The users-manager view
      */
-    #[Route('/accounts', methods:['GET'], name: 'app_accounts')]
-    public function accounts(): Response
+    #[Route('/manager/users', methods:['GET'], name: 'app_manager_users')]
+    public function usersManager(): Response
     {
-        // return accounts view
-        return $this->render('accounts.html.twig', [
+        // return user-manager view
+        return $this->render('users-manager.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
             'user_data' => $this->authManager->getLoggedUserRepository()
         ]);

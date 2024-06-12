@@ -68,7 +68,7 @@ class EmailManager
             ->from($_ENV['MAILER_USERNAME'])
             ->to($recipient)
             ->subject($subject)
-            ->htmlTemplate('email/' . $template . '.html.twig')
+            ->htmlTemplate('email/' . $template . '.twig')
             ->context($context);
 
         try {

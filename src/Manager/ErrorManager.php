@@ -46,9 +46,9 @@ class ErrorManager
     public function getErrorView(string|int $code): string
     {
         try {
-            return $this->twig->render('error/error-' . $code . '.html.twig');
+            return $this->twig->render('error/error-' . $code . '.twig');
         } catch (\Exception) {
-            return $this->twig->render('error/error-unknown.html.twig');
+            return $this->twig->render('error/error-unknown.twig');
         }
     }
 }
