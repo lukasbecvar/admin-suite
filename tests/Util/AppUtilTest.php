@@ -123,4 +123,18 @@ class AppUtilTest extends TestCase
         $_ENV['LOG_LEVEL'] = '2';
         $this->assertSame(2, $this->appUtil->getLogLevel());
     }
+
+    /**
+     * Test get hasher config
+     *
+     * @return void
+     */
+    public function testPageLimitter(): void
+    {
+        // get page limitter
+        $limit = $this->appUtil->getPageLimitter();
+
+        // check if limit is valid
+        $this->assertSame($limit, (int) $_ENV['LIMIT_PER_PAGE']);
+    }
 }

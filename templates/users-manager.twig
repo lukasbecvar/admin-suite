@@ -1,6 +1,62 @@
 {% extends 'common/layout.twig' %}
 
-{# admin dashboard (main app component) #}
+{#  ADMIN ACCOUNTS MANAGER COMPONENT #}
 {% block component %} 
-    <h1 class="text-green-500">accounts</h1>
+    {# ACCOUNT LIST TABLE #}
+    <div class="bg-neutral-900 border-b border-neutral-700">
+        <table class="min-w-full divide-y divide-white">
+            <thead>
+                <tr class="hover:bg-neutral-800 border-b border-neutral-600">
+                    {% set headers = ['#', 'Username', 'Role', 'IP Address', 'Browser', 'Register Time', 'Last Login Time'] %}
+                    {% for header in headers %}
+                        <th class="text-left text-white p-2">{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-white">
+                {% for row in users %}
+                    <tr class="hover:bg-neutral-800 border-b border-neutral-600">
+                        {% set values = [row.id, row.username, row.role, row.ipAddress, row.userAgent|slice(0, 50) ~ (row.userAgent|length > 50 ? '...' : ''), row.registerTime|date('Y-m-d H:i:s'), row.lastLoginTime|date('Y-m-d H:i:s')] %}
+                        {% for value in values %}
+                            <td class="text-white p-2 border-b border-neutral-600">{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {# PAGINATION BOX #}
+    {% if total_users_count > limit_per_page %}
+        <div class="mt-2 flex justify-center mb-2">
+            <div class="border border-neutral-600 rounded-lg overflow-hidden">
+                <ul class="flex">
+                    {% set total_pages = (total_users_count / limit_per_page)|round(0, 'ceil') %}
+                    {% set previous_page = current_page > 1 ? current_page - 1 : 1 %}
+                    {% set next_page = current_page < total_pages ? current_page + 1 : total_pages %}
+                    
+                    {# CALCULATE FIRST & LAST PAGE #}
+                    {% set start_page = max(current_page - 2, 1) %}
+                    {% set end_page = min(current_page + 2, total_pages) %}
+                    
+                    {# PREVIOUS PAGE LINK #}
+                    <li>
+                        <a href="{{ path('app_manager_users', {'page': previous_page}) }}" class="block px-4 py-2 text-white hover:bg-neutral-800 {% if current_page == 1 %}cursor-not-allowed opacity-50{% endif %}" {% if current_page == 1 %}disabled{% endif %}>Previous</a>
+                    </li>
+                    
+                    {# PAGES LIST #}
+                    {% for page in start_page..end_page %}
+                        <li>
+                            <a href="{{ path('app_manager_users', {'page': page}) }}" class="block px-4 py-2 text-white {% if page == current_page %}bg-neutral-800{% else %}hover:bg-neutral-800{% endif %}">{{ page }}</a>
+                        </li>
+                    {% endfor %}
+                    
+                    {# NEXT PAGE LINK #}
+                    <li>
+                        <a href="{{ path('app_manager_users', {'page': next_page}) }}" class="block px-4 py-2 text-white hover:bg-neutral-800 {% if current_page == total_pages %}cursor-not-allowed opacity-50{% endif %}" {% if current_page == total_pages %}disabled{% endif %}>Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

@@ -87,6 +87,16 @@ class AppUtil
     }
 
     /**
+     * Get the page limitter
+     *
+     * @return int The page limitter
+     */
+    public function getPageLimitter(): int
+    {
+        return (int) $_ENV['LIMIT_PER_PAGE'];
+    }
+
+    /**
      * Get the hasher configuration
      *
      * @return array<int> The hasher configuration
