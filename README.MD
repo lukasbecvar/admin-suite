@@ -57,48 +57,98 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Default sidebar toggle in dashboard (only pc)
 - [ ] User managment system (only for admin users)
     - [ ] View user list table
+    - [ ] user agent shortify
     - [ ] Add new users
+    - [ ] Delete users
     - [ ] Update role
     - [ ] Ban system
 
 ## 0.4
 - [ ] Server info
+    - [ ] OS info
+    - [ ] CPU usage
+    - [ ] Ram usage
+    - [ ] SSD space
+    - [ ] Uptime info
 - [ ] Server diagnostics component
-- [ ] Dashboard warning box
-- [ ] Check requirements warning
+    - [ ] Detect requirements (os & php extensions)
+    - [ ] Detect linux
+    - [ ] Detect SSH low space
+    - [ ] CPU overload detect
+    - [ ] Ram overload detect
+    - [ ] Check web server permissions
+- [ ] Web app diagnostics
+    - [ ] Check https (if https only)
+    - [ ] Check if devmode is enabled
+- [ ] Dashboard warning box (react to diagnostic data component)
 
 ## 0.5
 - [ ] Service manager component
+    - [ ] Systemctl status
+    - [ ] Systemctl stop, start, restart
+    - [ ] Docker service status
+    - [ ] Docker service stop, start, restart
 - [ ] Service monitoring component
+    - [ ] Monitoring loop command (check if all services is online)
+    - [ ] Log offline status
+    - [ ] Send offline alert in email
+    - [ ] Send back online notification
 
 ## 0.6
 - [ ] Terminal component
 
 ## 0.7
 - [ ] File browser & editor
+    - [ ] List files in filesystem
+    - [ ] Rename files
+    - [ ] Remove files
+    - [ ] Move files
+    - [ ] Open files in txt editor
 
 ## 0.8
 - [ ] Database browser
+    - [ ] All databases list
+    - [ ] Browse tables
+    - [ ] Add row
+    - [ ] Edit values
+    - [ ] Delete rows
+    - [ ] Delete all rows
+    - [ ] Dump SQL structure
+    - [ ] Backup database (download SQL file)
 
 ## 0.9
 - [ ] Log manager
-- [ ] Server diagnostic
+    - [ ] View unreaded logs
+    - [ ] View all logs 
+    - [ ] Set all readed
+    - [ ] View unformated logs (redirect to database browser)
+    - [ ] View exception log from monolog
+    - [ ] View logs by user (redirect from user managment)
 - [ ] CLI log reader command
+    - [ ] Return unreaded
+    - [ ] Return all (with -all argument)
 
 ## 1.0
 - [ ] Todo manager
+    - [ ] Add todo
+    - [ ] Move todo in list (up or down)
+    - [ ] Edit todo
+    - [ ] Close todo
+    - [ ] View closed todo list
 - [ ] Internal chat component
 - [ ] Account settings component
+    - [ ] Change profile picture
+    - [ ] Change username
+    - [ ] Change password
 
 ## 1.1
-- [ ] Connecting other services (line contact inbox, visitor systems, etc)
-
-## 1.2
 - [ ] About component (developer, github, version, info, etc..)
-- [ ] Refactor
-- [ ] Mini readme doc
 - [ ] User manual with config & setup doc
 - [ ] Setup script (for non docker env)
+- [ ] Readme doc
+
+## 1.2
+- [ ] Connecting other services (like contact inbox, visitor systems, etc)
 
 ## License
 The framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
