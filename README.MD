@@ -55,12 +55,13 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Component box
     - [X] User info
     - [X] Default sidebar toggle in dashboard (only pc)
-- [ ] User managment system (only for admin users)
+- [ ] User managment system
     - [X] View users list table
     - [X] Show online/offline status in table
     - [X] user agent shortify
     - [X] Add user os value
     - [ ] Add new users
+    - [ ] User manager only for admin users
     - [ ] Delete users
     - [ ] Update role
     - [ ] Ban system
