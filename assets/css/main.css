@@ -11,9 +11,17 @@
     box-sizing: border-box;
 }
 
-body::before {
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: #161616;
+}
+
+.auth-component::before {
     content: '';
-    position: fixed; /* Změněno z absolute na fixed */
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -26,7 +34,7 @@ body::before {
 }
 
 main {
-	margin-top: 2.6rem; 
+	margin-top: 30px; 
 }
 
 #main-content {
@@ -110,16 +118,15 @@ main {
 	width: 100%;
 	z-index: 1000;
 	background-color: #161616;
-	opacity: 0.8;
+	height: 30px;
 }
 
 #sidebar {
 	position: fixed;
-	top: 2.5rem; 
-	height: calc(100vh - 2.5rem); 
+	top: 30px; 
+	height: calc(100% - 30px); 
 	overflow-y: auto; 
 	background-color: #161616;
-	opacity: 0.8;
 	z-index: 999; 
 	width: 180px;
 	transition: transform 0.3s ease;
@@ -127,7 +134,8 @@ main {
 }
 
 #sidebar .profile-image {
-	max-width: 80px;
+	width: 60px;
+	height: 60px;
 }
 
 #sidebar.active {
@@ -136,6 +144,11 @@ main {
 
 #sidebar .role {
 	margin-top: -6px;
+}
+
+#sidebar .menu-link:hover {
+	color: #79d5ec;
+	background: #292e33;
 }
 
 @media screen and (max-width: 800px) { 

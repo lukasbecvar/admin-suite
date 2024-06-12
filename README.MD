@@ -48,13 +48,13 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 ## 0.3
 - [X] Link logs to users
 - [X] Online users list & online count
-- [ ] Main dashboard
+- [X] Main dashboard
     - [X] Admin site layout
     - [X] Main nav panel
     - [X] Sidebar
     - [X] Component box
     - [X] User info
-    - [ ] Default sidebar toggle in dashboard (only pc)
+    - [X] Default sidebar toggle in dashboard (only pc)
 - [ ] User managment system (only for admin users)
     - [ ] View user list table
     - [ ] Add new users
