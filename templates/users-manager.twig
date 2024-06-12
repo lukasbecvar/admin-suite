@@ -3,6 +3,7 @@
 {#  ADMIN ACCOUNTS MANAGER COMPONENT #}
 {% block component %} 
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
+        <a href="#" class="border border-neutral-500 font-bold px-1">+</a>
         <a href="#" class="border border-neutral-500 font-bold px-1">RAW</a>
         <span class="mr-1">Online {{ online_count }}/{{ total_users_count }}</span>
     </div>
@@ -18,7 +19,6 @@
                     <th class="text-left text-white p-2">IP Address</th>
                     <th class="text-left text-white p-2">Browser</th>
                     <th class="text-left text-white p-2">OS</th>
-                    <th class="text-left text-white p-2">Register Time</th>
                     <th class="text-left text-white p-2">Last Login</th>
                     <th class="text-left text-white p-2">Status</th>
                 </tr>
@@ -36,8 +36,7 @@
                     <td class="text-white p-2 border-b border-neutral-600">{{ visitor_info_util.getBrowserShortify(row.userAgent) }}</td>
                     <td class="text-white p-2 border-b border-neutral-600">{{ visitor_info_util.getOs(row.userAgent) }}</td>
 
-                    {# USER REGISTER TIME & LAST LOGIN TIME #}
-                    <td class="text-white p-2 border-b border-neutral-600">{{ row.registerTime|date('Y-m-d H:i:s') }}</td>
+                    {# USER LAST LOGIN TIME #}
                     <td class="text-white p-2 border-b border-neutral-600">{{ row.lastLoginTime|date('Y-m-d H:i:s') }}</td>
                     
                     {# USER ONLINE STATUS #}

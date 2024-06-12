@@ -70,8 +70,8 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
         - [ ] Banned status
         - [ ] Unknown browser
         - [ ] Role
-- [ ] Users manager test
 - [ ] View data output escape
+- [ ] Users manager test
 
 ## 0.4
 - [ ] Server info
