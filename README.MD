@@ -58,7 +58,8 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [ ] User managment system (only for admin users)
     - [X] View users list table
     - [X] Show online/offline status in table
-    - [ ] user agent shortify
+    - [X] user agent shortify
+    - [X] Add user os value
     - [ ] Add new users
     - [ ] Delete users
     - [ ] Update role

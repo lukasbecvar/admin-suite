@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Util\AppUtil;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
+use App\Util\VisitorInfoUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -22,12 +23,14 @@ class UsersManagerController extends AbstractController
     private AppUtil $appUtil;
     private UserManager $userManager;
     private AuthManager $authManager;
+    private VisitorInfoUtil $visitorInfoUtil;
 
-    public function __construct(AppUtil $appUtil, UserManager $userManager, AuthManager $authManager)
+    public function __construct(AppUtil $appUtil, UserManager $userManager, AuthManager $authManager, VisitorInfoUtil $visitorInfoUtil)
     {
         $this->appUtil = $appUtil;
         $this->userManager = $userManager;
         $this->authManager = $authManager;
+        $this->visitorInfoUtil = $visitorInfoUtil;
     }
 
     /**
@@ -53,6 +56,7 @@ class UsersManagerController extends AbstractController
         // get online users list from auth manager
         $onlineList = $this->authManager->getOnlineUsersList();
 
+        // render users-manager view
         return $this->render('users-manager.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
             'user_data' => $this->authManager->getLoggedUserRepository(),
@@ -63,7 +67,8 @@ class UsersManagerController extends AbstractController
             'online_count' => count($onlineList),
             'total_users_count' => $usersCount,
             'current_page' => $page,
-            'limit_per_page' => $pageLimit
+            'limit_per_page' => $pageLimit,
+            'visitor_info_util' => $this->visitorInfoUtil
         ]);
     }
 }

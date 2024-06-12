@@ -114,4 +114,30 @@ class VisitorInfoUtilTest extends TestCase
         // assert user agent is 'Unknown' when the server variable is not set
         $this->assertEquals('Unknown', $this->visitorInfoUtil->getUserAgent());
     }
+
+    /**
+     * Test getBrowserShortify method for getting the visitor's browser.
+     *
+     * @return void
+     */
+    public function testGetBrowserShortify(): void
+    {
+        // test with known user agent
+        $this->assertEquals('Chrome', $this->visitorInfoUtil->getBrowserShortify('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.9999.999 Safari/537.36'));
+
+        // test with unknown user agent
+        $this->assertEquals('Unknown', $this->visitorInfoUtil->getBrowserShortify('Unknown User Agent'));
+    }
+
+    /**
+     * Test getOS method for getting the visitor's operating system.
+     *
+     * @return void
+     */
+    public function testGetOS(): void
+    {
+        // test with known user agent
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.9999.999 Safari/537.36';
+        $this->assertEquals('Windows', $this->visitorInfoUtil->getOS());
+    }
 }
