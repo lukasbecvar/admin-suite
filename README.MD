@@ -63,7 +63,14 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Delete users
     - [ ] Update role
     - [ ] Ban system
+    - [ ] Value color
+        - [ ] Same ip like client
+        - [ ] Online status
+        - [ ] Banned status
+        - [ ] Unknown browser
+        - [ ] Role
 - [ ] Users manager test
+- [ ] View data output escape
 
 ## 0.4
 - [ ] Server info
