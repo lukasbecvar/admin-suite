@@ -2,6 +2,11 @@
 
 {#  ADMIN ACCOUNTS MANAGER COMPONENT #}
 {% block component %} 
+    <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
+        <a href="#" class="border border-neutral-500 font-bold px-1">RAW</a>
+        <span class="mr-1">Online {{ online_count }}/{{ total_users_count }}</span>
+    </div>
+
     {# ACCOUNT LIST TABLE #}
     <div class="bg-neutral-900 border-b border-neutral-700">
         <table class="min-w-full divide-y divide-white">

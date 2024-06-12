@@ -52,6 +52,16 @@ main {
 	background: #292e33;
 }
 
+.sub-navigation {
+	display: flex !important; 
+	justify-content: space-between !important;
+}
+
+.sub-navigation a:hover {
+	color: rgb(247, 247, 71);
+	border: 1px solid rgb(247, 247, 71);
+}
+
 @media screen and (max-width: 400px) { 
 	#sidebar {
 		width: 100%;

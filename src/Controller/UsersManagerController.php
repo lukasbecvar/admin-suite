@@ -60,6 +60,7 @@ class UsersManagerController extends AbstractController
             // users manager data
             'users' => $usersData,
             'online_list' => $onlineList,
+            'online_count' => count($onlineList),
             'total_users_count' => $usersCount,
             'current_page' => $page,
             'limit_per_page' => $pageLimit
