@@ -9,9 +9,7 @@ Encore
     .setPublicPath('/build')
 
     // register css entries
-    .addEntry('main-css', './assets/css/main.css')
-    .addEntry('scrollbar-css', './assets/css/scrollbar.css')
-    .addEntry('fontawesome-css', './node_modules/@fortawesome/fontawesome-free/css/all.css')
+    .addEntry('index-css', './assets/css/index.css')
 
     // copy static assets
     .copyFiles(

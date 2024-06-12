@@ -23,6 +23,7 @@
         });
     </script>
 
+    {# DEFAUTL TOGGLE SIDEBAR ON NON MOBILE DEVICES #}
     {% if app.request.attributes.get('_route') == 'app_dashboard' %}
         <script>
             const sidebar = document.getElementById('sidebar');
