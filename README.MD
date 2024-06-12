@@ -60,9 +60,10 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Show online/offline status in table
     - [X] user agent shortify
     - [X] Add user os value
-    - [ ] Add new users
-    - [ ] User manager only for admin users
-    - [ ] Delete users
+    - [X] Add new users
+    - [X] User manager only for admin users
+    - [ ] Filter only online users list
+    - [ ] Delete users (with index reset)
     - [ ] Update role
     - [ ] Ban system
     - [ ] Value color

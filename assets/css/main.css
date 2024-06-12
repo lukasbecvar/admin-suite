@@ -71,6 +71,11 @@ main {
     border: 1px solid rgb(247, 247, 71);
 }
 
+.top-center {
+	position: relative;
+	left: 50%;
+}
+
 @media screen and (max-width: 400px) { 
 	#sidebar {
 		width: 100%;

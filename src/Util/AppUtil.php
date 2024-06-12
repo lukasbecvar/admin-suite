@@ -109,4 +109,26 @@ class AppUtil
             'threads' => (int) $_ENV['THREADS']
         ];
     }
+
+    /**
+     * Calculate the maximum number of pages
+     *
+     * @param ?int $totalItems The total number of items
+     * @param ?int $itemsPerPage The number of items per page
+     *
+     * @return int|float The maximum number of pages
+     */
+    public function calculateMaxPages(?int $totalItems, ?int $itemsPerPage): int|float
+    {
+        // validate the inputs to make sure they are positive integers
+        if ($totalItems <= 0 || $itemsPerPage <= 0) {
+            return 0;
+        }
+
+        // calculate the maximum number of pages
+        $maxPages = ceil($totalItems / $itemsPerPage);
+
+        // return the maximum number of pages
+        return $maxPages;
+    }
 }

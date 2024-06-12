@@ -236,6 +236,11 @@ Search.appendIndex(
             "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020component.",
             "url": "classes/App-Controller-UsersManagerController.html#method_usersManager"
         },                {
+            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003AuserRegister\u0028\u0029",
+            "name": "userRegister",
+            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020register\u0020component.",
+            "url": "classes/App-Controller-UsersManagerController.html#method_userRegister"
+        },                {
             "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024appUtil",
             "name": "appUtil",
             "summary": "",
@@ -250,6 +255,11 @@ Search.appendIndex(
             "name": "authManager",
             "summary": "",
             "url": "classes/App-Controller-UsersManagerController.html#property_authManager"
+        },                {
+            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Controller-UsersManagerController.html#property_errorManager"
         },                {
             "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024visitorInfoUtil",
             "name": "visitorInfoUtil",
@@ -1255,6 +1265,11 @@ Search.appendIndex(
             "name": "getHasherConfig",
             "summary": "Get\u0020the\u0020hasher\u0020configuration",
             "url": "classes/App-Util-AppUtil.html#method_getHasherConfig"
+        },                {
+            "fqsen": "\\App\\Util\\AppUtil\u003A\u003AcalculateMaxPages\u0028\u0029",
+            "name": "calculateMaxPages",
+            "summary": "Calculate\u0020the\u0020maximum\u0020number\u0020of\u0020pages",
+            "url": "classes/App-Util-AppUtil.html#method_calculateMaxPages"
         },                {
             "fqsen": "\\App\\Util\\CookieUtil",
             "name": "CookieUtil",
