@@ -65,25 +65,25 @@ class RegisterController extends AbstractController
             // check if the username is already taken
             if ($this->userManager->checkIfUserExist($username)) {
                 $this->addFlash('error', 'Username is already taken.');
-            }
+            } else {
+                // register the new user
+                try {
+                    $this->authManager->registerUser($username, $password);
 
-            // register the new user
-            try {
-                $this->authManager->registerUser($username, $password);
+                    // auto login
+                    $this->authManager->login($username, false);
 
-                // auto login
-                $this->authManager->login($username, false);
-
-                // redirect to the login page
-                return $this->redirectToRoute('app_auth_login');
-            } catch (\Exception) {
-                $this->addFlash('error', 'An error occurred while registering the new user.');
+                    // redirect to the login page
+                    return $this->redirectToRoute('app_auth_login');
+                } catch (\Exception) {
+                    $this->addFlash('error', 'An error occurred while registering the new user.');
+                }
             }
         }
 
         // render the registration component view
         return $this->render('auth/register.twig', [
-            'registration_form' => $form->createView(),
+            'registration_form' => $form->createView()
         ]);
     }
 }

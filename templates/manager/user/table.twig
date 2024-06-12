@@ -9,58 +9,62 @@
     </div>
 
     {# ACCOUNT LIST TABLE #}
-    <div class="bg-neutral-900 border-b border-neutral-700">
-        <table class="min-w-full divide-y divide-white">
-            <thead>
-                <tr class="hover:bg-neutral-800 border-b border-neutral-600">
-                    <th class="text-left text-white p-2">#</th>
-                    <th class="text-left text-white p-2">Username</th>
-                    <th class="text-left text-white p-2">Role</th>
-                    <th class="text-left text-white p-2">IP Address</th>
-                    <th class="text-left text-white p-2">Browser</th>
-                    <th class="text-left text-white p-2">OS</th>
-                    <th class="text-left text-white p-2">Last Login</th>
-                    <th class="text-left text-white p-2">Status</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-white">
-                {% for row in users %}
-                <tr class="hover:bg-neutral-800 border-b border-neutral-600">
-                    {# USER DATA FROM DATABASE REPOSITORY #}
-                    <td class="text-white p-2 border-b border-neutral-600">{{ row.id }}</td>
-                    <td class="text-white p-2 border-b border-neutral-600">{{ row.username }}</td>
-                    <td class="text-white p-2 border-b border-neutral-600">{{ row.role }}</td>
-                    <td class="text-white p-2 border-b border-neutral-600">{{ row.ipAddress }}</td>
+    {% if users|length == 0 %}
+        <p class="flex items-center justify-center mt-20 mb-20 text-2xl">This user list page is empty</p>
+    {% else %}
+        <div class="bg-neutral-900 border-b border-neutral-700">
+            <table class="min-w-full divide-y divide-white">
+                <thead>
+                    <tr class="hover:bg-neutral-800 border-b border-neutral-600">
+                        <th class="text-left text-white p-2">#</th>
+                        <th class="text-left text-white p-2">Username</th>
+                        <th class="text-left text-white p-2">Role</th>
+                        <th class="text-left text-white p-2">IP Address</th>
+                        <th class="text-left text-white p-2">Browser</th>
+                        <th class="text-left text-white p-2">OS</th>
+                        <th class="text-left text-white p-2">Last Login</th>
+                        <th class="text-left text-white p-2">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white">
+                    {% for row in users %}
+                    <tr class="hover:bg-neutral-800 border-b border-neutral-600">
+                        {# USER DATA FROM DATABASE REPOSITORY #}
+                        <td class="text-white p-2 border-b border-neutral-600">{{ row.id }}</td>
+                        <td class="text-white p-2 border-b border-neutral-600">{{ row.username }}</td>
+                        <td class="text-white p-2 border-b border-neutral-600">{{ row.role }}</td>
+                        <td class="text-white p-2 border-b border-neutral-600">{{ row.ipAddress }}</td>
 
-                    {# USER BROWSER INFO #}
-                    <td class="text-white p-2 border-b border-neutral-600">{{ visitor_info_util.getBrowserShortify(row.userAgent) }}</td>
-                    <td class="text-white p-2 border-b border-neutral-600">{{ visitor_info_util.getOs(row.userAgent) }}</td>
+                        {# USER BROWSER INFO #}
+                        <td class="text-white p-2 border-b border-neutral-600">{{ visitor_info_util.getBrowserShortify(row.userAgent) }}</td>
+                        <td class="text-white p-2 border-b border-neutral-600">{{ visitor_info_util.getOs(row.userAgent) }}</td>
 
-                    {# USER LAST LOGIN TIME #}
-                    <td class="text-white p-2 border-b border-neutral-600">{{ row.lastLoginTime|date('Y-m-d H:i:s') }}</td>
-                    
-                    {# USER ONLINE STATUS #}
-                    <td class="text-white p-2 border-b border-neutral-600">
-                        {% set isOnline = false %}
-                        {% for onlineUser in online_list %}
-                            {% if row.id == onlineUser.id %}
-                                {% set isOnline = true %}
+                        {# USER LAST LOGIN TIME #}
+                        <td class="text-white p-2 border-b border-neutral-600">{{ row.lastLoginTime|date('Y-m-d H:i:s') }}</td>
+                        
+                        {# USER ONLINE STATUS #}
+                        <td class="text-white p-2 border-b border-neutral-600">
+                            {% set isOnline = false %}
+                            {% for onlineUser in online_list %}
+                                {% if row.id == onlineUser.id %}
+                                    {% set isOnline = true %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if isOnline %}
+                                online
+                            {% else %}
+                                offline
                             {% endif %}
-                        {% endfor %}
-                        {% if isOnline %}
-                            online
-                        {% else %}
-                            offline
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 
     {# PAGINATION BOX #}
-    {% if total_users_count > limit_per_page %}
+    {% if (total_users_count > limit_per_page) and (users|length != 0) %}
         <div class="mt-2 flex justify-center mb-2">
             <div class="border border-neutral-600 rounded-lg overflow-hidden">
                 <ul class="flex">

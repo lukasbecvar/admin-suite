@@ -137,4 +137,18 @@ class AppUtilTest extends TestCase
         // check if limit is valid
         $this->assertSame($limit, (int) $_ENV['LIMIT_PER_PAGE']);
     }
+
+    /**
+     * Test calculateMaxPages method
+     *
+     * @return void
+     */
+    public function testCalculateMaxPages(): void
+    {
+        // calculate max pages
+        $maxPages = (int) $this->appUtil->calculateMaxPages(100, 10);
+
+        // check if max pages is valid
+        $this->assertSame($maxPages, 10);
+    }
 }

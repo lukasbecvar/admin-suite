@@ -134,7 +134,7 @@ class VisitorInfoUtilTest extends TestCase
      *
      * @return void
      */
-    public function testGetOS(): void
+    public function testGetOs(): void
     {
         // test with known user agent
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.9999.999 Safari/537.36';
