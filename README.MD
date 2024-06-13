@@ -63,7 +63,6 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Delete users (with index reset)
     - [X] Filter only online users list
     - [X] Update role
-    - [ ] Ban system
     - [ ] Value color
         - [ ] Same ip like client
         - [ ] Online status
@@ -74,6 +73,9 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [ ] Users manager test
 
 ## 0.4
+- [ ] Ban system
+
+## 0.5
 - [ ] Server info
     - [ ] OS info
     - [ ] CPU usage
@@ -92,7 +94,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Check if devmode is enabled
 - [ ] Dashboard warning box (react to diagnostic data component)
 
-## 0.5
+## 0.6
 - [ ] Service manager component
     - [ ] Systemctl status
     - [ ] Systemctl stop, start, restart
@@ -104,10 +106,10 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Send offline alert in email
     - [ ] Send back online notification
 
-## 0.6
+## 0.7
 - [ ] Terminal component
 
-## 0.7
+## 0.8
 - [ ] File browser & editor
     - [ ] List files in filesystem
     - [ ] Rename files
@@ -115,7 +117,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Move files
     - [ ] Open files in txt editor
 
-## 0.8
+## 0.9
 - [ ] Database browser
     - [ ] All databases list
     - [ ] Browse tables
@@ -126,7 +128,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Dump SQL structure
     - [ ] Backup database (download SQL file)
 
-## 0.9
+## 1.0
 - [ ] Log manager
     - [ ] View unreaded logs
     - [ ] View all logs 
@@ -138,7 +140,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Return unreaded
     - [ ] Return all (with -all argument)
 
-## 1.0
+## 1.1
 - [ ] Todo manager
     - [ ] Add todo
     - [ ] Move todo in list (up or down)
@@ -151,13 +153,13 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Change username
     - [ ] Change password
 
-## 1.1
+## 1.2
 - [ ] About component (developer, github, version, info, etc..)
 - [ ] User manual with config & setup doc
 - [ ] Setup script (for non docker env)
 - [ ] Readme doc
 
-## 1.2
+## 1.3
 - [ ] Connecting other services (like contact inbox, visitor systems, etc)
 
 ## License
