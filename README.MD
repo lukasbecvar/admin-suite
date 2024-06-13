@@ -63,7 +63,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Add new users
     - [X] User manager only for admin users
     - [X] Delete users (with index reset)
-    - [ ] Filter only online users list
+    - [X] Filter only online users list
     - [ ] Update role
     - [ ] Ban system
     - [ ] Value color

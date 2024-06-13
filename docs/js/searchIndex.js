@@ -241,6 +241,11 @@ Search.appendIndex(
             "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020register\u0020component.",
             "url": "classes/App-Controller-UsersManagerController.html#method_userRegister"
         },                {
+            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003AuserDelete\u0028\u0029",
+            "name": "userDelete",
+            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020delete\u0020component.",
+            "url": "classes/App-Controller-UsersManagerController.html#method_userDelete"
+        },                {
             "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024appUtil",
             "name": "appUtil",
             "summary": "",
@@ -975,6 +980,11 @@ Search.appendIndex(
             "name": "isUsersEmpty",
             "summary": "Checks\u0020if\u0020the\u0020user\u0020repository\u0020is\u0020empty.",
             "url": "classes/App-Manager-UserManager.html#method_isUsersEmpty"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AdeleteUser\u0028\u0029",
+            "name": "deleteUser",
+            "summary": "Delete\u0020a\u0020user.",
+            "url": "classes/App-Manager-UserManager.html#method_deleteUser"
         },                {
             "fqsen": "\\App\\Manager\\UserManager\u003A\u003A\u0024appUtil",
             "name": "appUtil",
