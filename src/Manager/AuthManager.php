@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\User;
+use App\Util\AppUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Util\SecurityUtil;
@@ -21,22 +22,26 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AuthManager
 {
+    private AppUtil $appUtil;
     private LogManager $logManager;
     private CookieUtil $cookieUtil;
     private SessionUtil $sessionUtil;
     private UserManager $userManager;
+    private EmailManager $emailManager;
     private CacheManager $cacheManager;
     private ErrorManager $errorManager;
     private SecurityUtil $securityUtil;
     private VisitorInfoUtil $visitorInfoUtil;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(LogManager $logManager, CookieUtil $cookieUtil, SessionUtil $sessionUtil, UserManager $userManager, CacheManager $cacheManager, ErrorManager $errorManager, SecurityUtil $securityUtil, VisitorInfoUtil $visitorInfoUtil, EntityManagerInterface $entityManager)
+    public function __construct(AppUtil $appUtil, LogManager $logManager, CookieUtil $cookieUtil, SessionUtil $sessionUtil, UserManager $userManager, EmailManager $emailManager, CacheManager $cacheManager, ErrorManager $errorManager, SecurityUtil $securityUtil, VisitorInfoUtil $visitorInfoUtil, EntityManagerInterface $entityManager)
     {
+        $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->cookieUtil = $cookieUtil;
         $this->sessionUtil = $sessionUtil;
         $this->userManager = $userManager;
+        $this->emailManager = $emailManager;
         $this->cacheManager = $cacheManager;
         $this->errorManager = $errorManager;
         $this->securityUtil = $securityUtil;
@@ -235,6 +240,11 @@ class AuthManager
 
                 // update user data
                 $this->updateDataOnLogin($token);
+
+                // send email alert
+                if (!$this->logManager->isAntiLogEnabled()) {
+                    $this->emailManager->sendDefaultEmail($this->appUtil->getAdminContactEmail(), 'LOGIN ALERT', 'User ' . $username . ' has logged to admin-suite dashboard, login log has been saved in database.');
+                }
 
                 // log action
                 $this->logManager->log('authenticator', 'login user: ' . $username);

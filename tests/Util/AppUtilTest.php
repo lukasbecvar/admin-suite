@@ -151,4 +151,64 @@ class AppUtilTest extends TestCase
         // check if max pages is valid
         $this->assertSame($maxPages, 10);
     }
+
+    /**
+     * Test getAdminContactEmail
+     *
+     * @return void
+     */
+    public function testGetAdminContactEmail(): void
+    {
+        $_ENV['ADMIN_CONTACT'] = 'admin@example.com';
+        $this->assertSame('admin@example.com', $this->appUtil->getAdminContactEmail());
+
+        $_ENV['ADMIN_CONTACT'] = 'support@example.com';
+        $this->assertSame('support@example.com', $this->appUtil->getAdminContactEmail());
+    }
+
+    /**
+     * Test getAntiLogToken
+     *
+     * @return void
+     */
+    public function testGetAntiLogToken(): void
+    {
+        $_ENV['ANTI_LOG_TOKEN'] = 'secret-token';
+        $this->assertSame('secret-token', $this->appUtil->getAntiLogToken());
+
+        $_ENV['ANTI_LOG_TOKEN'] = 'another-token';
+        $this->assertSame('another-token', $this->appUtil->getAntiLogToken());
+    }
+
+    /**
+     * Test getHasherConfig
+     *
+     * @return void
+     */
+    public function testGetHasherConfig(): void
+    {
+        $_ENV['MEMORY_COST'] = '1024';
+        $_ENV['TIME_COST'] = '2';
+        $_ENV['THREADS'] = '1';
+
+        $expectedConfig = [
+            'memory_cost' => 1024,
+            'time_cost' => 2,
+            'threads' => 1,
+        ];
+
+        $this->assertSame($expectedConfig, $this->appUtil->getHasherConfig());
+
+        $_ENV['MEMORY_COST'] = '2048';
+        $_ENV['TIME_COST'] = '4';
+        $_ENV['THREADS'] = '2';
+
+        $expectedConfig = [
+            'memory_cost' => 2048,
+            'time_cost' => 4,
+            'threads' => 2,
+        ];
+
+        $this->assertSame($expectedConfig, $this->appUtil->getHasherConfig());
+    }
 }

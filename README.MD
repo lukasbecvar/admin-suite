@@ -72,11 +72,11 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 
 ## 0.4
 - [X] Anti log
+- [X] New login email alert
 - [ ] Ban system
 - [ ] Ban system test
 - [ ] Users manager test
 - [ ] Banned alert send to email
-- [ ] New login email alert
 - [ ] Refactor & design fix
 
 ## 0.5

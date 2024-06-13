@@ -771,6 +771,11 @@ Search.appendIndex(
             "summary": "Get\u0020user\u0020status.",
             "url": "classes/App-Manager-AuthManager.html#method_getUserStatus"
         },                {
+            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Manager-AuthManager.html#property_appUtil"
+        },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024logManager",
             "name": "logManager",
             "summary": "",
@@ -790,6 +795,11 @@ Search.appendIndex(
             "name": "userManager",
             "summary": "",
             "url": "classes/App-Manager-AuthManager.html#property_userManager"
+        },                {
+            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024emailManager",
+            "name": "emailManager",
+            "summary": "",
+            "url": "classes/App-Manager-AuthManager.html#property_emailManager"
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024cacheManager",
             "name": "cacheManager",
@@ -1300,6 +1310,11 @@ Search.appendIndex(
             "name": "isAssetsExist",
             "summary": "Check\u0020if\u0020the\u0020assets\u0020exist",
             "url": "classes/App-Util-AppUtil.html#method_isAssetsExist"
+        },                {
+            "fqsen": "\\App\\Util\\AppUtil\u003A\u003AgetAdminContactEmail\u0028\u0029",
+            "name": "getAdminContactEmail",
+            "summary": "Get\u0020admin\u0020contact\u0020email\u0020address",
+            "url": "classes/App-Util-AppUtil.html#method_getAdminContactEmail"
         },                {
             "fqsen": "\\App\\Util\\AppUtil\u003A\u003AisDevMode\u0028\u0029",
             "name": "isDevMode",
