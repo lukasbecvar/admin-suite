@@ -92,6 +92,18 @@ class UserManager
     }
 
     /**
+     * Check if a user exists by ID.
+     *
+     * @param int $userId The id of the user to check
+     *
+     * @return bool True if the user exists, otherwise false
+     */
+    public function checkIfUserExistById(int $userId): bool
+    {
+        return $this->getUserRepository(['id' => $userId]) != null;
+    }
+
+    /**
      * Get the username of a user.
      *
      * @param int $id The id of the user to get the username
@@ -162,6 +174,9 @@ class UserManager
     {
         // get user repo
         $repo = $this->getUserRepository(['id' => $id]);
+
+        // convert new user role to uppercase
+        $role = strtoupper($role);
 
         // check if user exist
         if ($repo != null) {

@@ -51,10 +51,10 @@ class UsersManagerController extends AbstractController
         }
 
         // get user status filter
-        $statusFilter = $request->query->getString('filter', 'all');
+        $statusFilter = (string) $request->query->get('filter', 'all');
 
         // get current page from request query params
-        $page = $request->query->getInt('page', 1);
+        $page = (int) $request->query->get('page', '1');
 
         // get page limit from config
         $pageLimit = $this->appUtil->getPageLimitter();
@@ -149,13 +149,67 @@ class UsersManagerController extends AbstractController
     }
 
     /**
+     * Handle the users-manager update role component.
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The users-manager table redirect
+     */
+    #[Route('/manager/users/role/update', methods:['POST'], name: 'app_manager_users_role_update')]
+    public function userRoleUpdate(Request $request): Response
+    {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            $this->errorManager->handleError('You do not have permission to access this page.', 403);
+        }
+
+        // get user id to delete
+        $userId = (int) $request->query->get('id');
+
+        // get new user role to update
+        $newRole = (string) $request->query->get('role');
+
+        // check if user id is valid
+        if ($userId == null) {
+            $this->errorManager->handleError('invalid request user "id" parameter not found in query', 400);
+        }
+
+        // check if new user role is valid
+        if ($newRole == null) {
+            $this->errorManager->handleError('invalid request user "role" parameter not found in query', 400);
+        }
+
+        // check if user id is valid
+        if (!$this->userManager->checkIfUserExistById($userId)) {
+            $this->errorManager->handleError('invalid request user "id" parameter not found in database', 400);
+        }
+
+        // convert new user role to uppercase
+        $newRole = strtoupper($newRole);
+
+        // get user role from database
+        $currentRole = $this->userManager->getUserRoleById($userId);
+
+        // check if user role is the same
+        if ($currentRole == $newRole) {
+            $this->errorManager->handleError('invalid user "role" parameter is same with current user role', 400);
+        }
+
+        // update the user role
+        $this->userManager->updateUserRole($userId, $newRole);
+
+        // redirect to the users table page
+        return $this->redirectToRoute('app_manager_users');
+    }
+
+    /**
      * Handle the users-manager delete component.
      *
      * @param Request $request The request object
      *
-     * @return Response The users-manager delete view
+     * @return Response The users-manager redirect
      */
-    #[Route('/manager/users/delete', methods:['GET', 'POST'], name: 'app_manager_users_delete')]
+    #[Route('/manager/users/delete', methods:['GET'], name: 'app_manager_users_delete')]
     public function userDelete(Request $request): Response
     {
         // check if user have admin permissions
@@ -164,11 +218,16 @@ class UsersManagerController extends AbstractController
         }
 
         // get user id to delete
-        $userId = $request->query->get('id');
+        $userId = (int) $request->query->get('id');
 
         // check if user id is valid
         if ($userId == null) {
             $this->errorManager->handleError('invalid request user "id" parameter not found in query', 400);
+        }
+
+        // check if user id is valid
+        if (!$this->userManager->checkIfUserExistById($userId)) {
+            $this->errorManager->handleError('invalid request user "id" parameter not found in database', 400);
         }
 
         // delete the user

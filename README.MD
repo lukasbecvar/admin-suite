@@ -23,7 +23,6 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Log level config
     - [X] Basic templates layout
     - [X] Base unit tests
-    - [X] Base refactor
 
 ## 0.2
 - [X] User system
@@ -43,7 +42,6 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Auth components style
     - [X] End-to-end auth tests
 - [X] Get user info in admin dashboard
-- [X] Base refactor & recode
 
 ## 0.3
 - [X] Link logs to users
@@ -64,7 +62,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] User manager only for admin users
     - [X] Delete users (with index reset)
     - [X] Filter only online users list
-    - [ ] Update role
+    - [X] Update role
     - [ ] Ban system
     - [ ] Value color
         - [ ] Same ip like client
@@ -74,7 +72,6 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
         - [ ] Role
 - [ ] View data output escape
 - [ ] Users manager test
-- [ ] Refactor
 
 ## 0.4
 - [ ] Server info
