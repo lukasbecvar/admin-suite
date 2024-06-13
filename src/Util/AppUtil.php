@@ -33,6 +33,16 @@ class AppUtil
     }
 
     /**
+     * Get admin contact email address
+     *
+     * @return string The admin contact email address
+     */
+    public function getAdminContactEmail(): string
+    {
+        return $_ENV['ADMIN_CONTACT'];
+    }
+
+    /**
      * Check if the application is in development mode
      *
      * @return bool True if the application is in development mode, false otherwise

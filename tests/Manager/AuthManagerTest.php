@@ -4,6 +4,7 @@ namespace App\Tests\Manager;
 
 use ReflectionClass;
 use App\Entity\User;
+use App\Util\AppUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Util\SecurityUtil;
@@ -11,6 +12,7 @@ use App\Manager\LogManager;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use App\Manager\CacheManager;
+use App\Manager\EmailManager;
 use App\Util\VisitorInfoUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
@@ -28,6 +30,12 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class AuthManagerTest extends TestCase
 {
+    /** @var AppUtil|MockObject */
+    private AppUtil|MockObject $appUtilMock;
+
+    /** @var EmailManager|MockObject */
+    private EmailManager|MockObject $emailManagerMock;
+
     /** @var LogManager|MockObject */
     private LogManager|MockObject $logManagerMock;
 
@@ -60,10 +68,12 @@ class AuthManagerTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->cookieUtilMock = $this->createMock(CookieUtil::class);
         $this->sessionUtilMock = $this->createMock(SessionUtil::class);
         $this->userManagerMock = $this->createMock(UserManager::class);
+        $this->emailManagerMock = $this->createMock(EmailManager::class);
         $this->cacheManagerMock = $this->createMock(CacheManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->securityUtilMock = $this->createMock(SecurityUtil::class);
@@ -71,10 +81,12 @@ class AuthManagerTest extends TestCase
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
         $this->authManager = new AuthManager(
+            $this->appUtilMock,
             $this->logManagerMock,
             $this->cookieUtilMock,
             $this->sessionUtilMock,
             $this->userManagerMock,
+            $this->emailManagerMock,
             $this->cacheManagerMock,
             $this->errorManagerMock,
             $this->securityUtilMock,
