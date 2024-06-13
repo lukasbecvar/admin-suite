@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Component;
 
 use App\Manager\AuthManager;
 use Symfony\Component\HttpFoundation\Response;

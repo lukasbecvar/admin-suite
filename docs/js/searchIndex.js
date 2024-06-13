@@ -76,6 +76,36 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Command-UserUpdateRoleCommand.html#property_userManager"
         },                {
+            "fqsen": "\\App\\Controller\\AntiLogController",
+            "name": "AntiLogController",
+            "summary": "Class\u0020AntiLogController",
+            "url": "classes/App-Controller-AntiLogController.html"
+        },                {
+            "fqsen": "\\App\\Controller\\AntiLogController\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Controller-AntiLogController.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Controller\\AntiLogController\u003A\u003AenableAntiLog\u0028\u0029",
+            "name": "enableAntiLog",
+            "summary": "Handle\u0020the\u0020anti\u002Dlog\u0020component.",
+            "url": "classes/App-Controller-AntiLogController.html#method_enableAntiLog"
+        },                {
+            "fqsen": "\\App\\Controller\\AntiLogController\u003A\u003A\u0024logManager",
+            "name": "logManager",
+            "summary": "",
+            "url": "classes/App-Controller-AntiLogController.html#property_logManager"
+        },                {
+            "fqsen": "\\App\\Controller\\AntiLogController\u003A\u003A\u0024authManager",
+            "name": "authManager",
+            "summary": "",
+            "url": "classes/App-Controller-AntiLogController.html#property_authManager"
+        },                {
+            "fqsen": "\\App\\Controller\\AntiLogController\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Controller-AntiLogController.html#property_errorManager"
+        },                {
             "fqsen": "\\App\\Controller\\Auth\\LoginController",
             "name": "LoginController",
             "summary": "Class\u0020LoginController",
@@ -151,25 +181,80 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Controller-Auth-RegisterController.html#property_userManager"
         },                {
-            "fqsen": "\\App\\Controller\\DashboardController",
+            "fqsen": "\\App\\Controller\\Component\\DashboardController",
             "name": "DashboardController",
             "summary": "Class\u0020DashboardController",
-            "url": "classes/App-Controller-DashboardController.html"
+            "url": "classes/App-Controller-Component-DashboardController.html"
         },                {
-            "fqsen": "\\App\\Controller\\DashboardController\u003A\u003A__construct\u0028\u0029",
+            "fqsen": "\\App\\Controller\\Component\\DashboardController\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
             "summary": "",
-            "url": "classes/App-Controller-DashboardController.html#method___construct"
+            "url": "classes/App-Controller-Component-DashboardController.html#method___construct"
         },                {
-            "fqsen": "\\App\\Controller\\DashboardController\u003A\u003Adashboard\u0028\u0029",
+            "fqsen": "\\App\\Controller\\Component\\DashboardController\u003A\u003Adashboard\u0028\u0029",
             "name": "dashboard",
             "summary": "Handle\u0020the\u0020dashboard\u0020page.",
-            "url": "classes/App-Controller-DashboardController.html#method_dashboard"
+            "url": "classes/App-Controller-Component-DashboardController.html#method_dashboard"
         },                {
-            "fqsen": "\\App\\Controller\\DashboardController\u003A\u003A\u0024authManager",
+            "fqsen": "\\App\\Controller\\Component\\DashboardController\u003A\u003A\u0024authManager",
             "name": "authManager",
             "summary": "",
-            "url": "classes/App-Controller-DashboardController.html#property_authManager"
+            "url": "classes/App-Controller-Component-DashboardController.html#property_authManager"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController",
+            "name": "UsersManagerController",
+            "summary": "Class\u0020UsersManagerController",
+            "url": "classes/App-Controller-Component-UsersManagerController.html"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AusersManager\u0028\u0029",
+            "name": "usersManager",
+            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020component.",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#method_usersManager"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AuserRegister\u0028\u0029",
+            "name": "userRegister",
+            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020register\u0020component.",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#method_userRegister"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AuserRoleUpdate\u0028\u0029",
+            "name": "userRoleUpdate",
+            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020update\u0020role\u0020component.",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#method_userRoleUpdate"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AuserDelete\u0028\u0029",
+            "name": "userDelete",
+            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020delete\u0020component.",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#method_userDelete"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003A\u0024userManager",
+            "name": "userManager",
+            "summary": "",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#property_userManager"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003A\u0024authManager",
+            "name": "authManager",
+            "summary": "",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#property_authManager"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#property_errorManager"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003A\u0024visitorInfoUtil",
+            "name": "visitorInfoUtil",
+            "summary": "",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#property_visitorInfoUtil"
         },                {
             "fqsen": "\\App\\Controller\\ErrorController",
             "name": "ErrorController",
@@ -220,61 +305,6 @@ Search.appendIndex(
             "name": "authManager",
             "summary": "",
             "url": "classes/App-Controller-IndexController.html#property_authManager"
-        },                {
-            "fqsen": "\\App\\Controller\\UsersManagerController",
-            "name": "UsersManagerController",
-            "summary": "Class\u0020UsersManagerController",
-            "url": "classes/App-Controller-UsersManagerController.html"
-        },                {
-            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "",
-            "url": "classes/App-Controller-UsersManagerController.html#method___construct"
-        },                {
-            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003AusersManager\u0028\u0029",
-            "name": "usersManager",
-            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020component.",
-            "url": "classes/App-Controller-UsersManagerController.html#method_usersManager"
-        },                {
-            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003AuserRegister\u0028\u0029",
-            "name": "userRegister",
-            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020register\u0020component.",
-            "url": "classes/App-Controller-UsersManagerController.html#method_userRegister"
-        },                {
-            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003AuserRoleUpdate\u0028\u0029",
-            "name": "userRoleUpdate",
-            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020update\u0020role\u0020component.",
-            "url": "classes/App-Controller-UsersManagerController.html#method_userRoleUpdate"
-        },                {
-            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003AuserDelete\u0028\u0029",
-            "name": "userDelete",
-            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020delete\u0020component.",
-            "url": "classes/App-Controller-UsersManagerController.html#method_userDelete"
-        },                {
-            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024appUtil",
-            "name": "appUtil",
-            "summary": "",
-            "url": "classes/App-Controller-UsersManagerController.html#property_appUtil"
-        },                {
-            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024userManager",
-            "name": "userManager",
-            "summary": "",
-            "url": "classes/App-Controller-UsersManagerController.html#property_userManager"
-        },                {
-            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024authManager",
-            "name": "authManager",
-            "summary": "",
-            "url": "classes/App-Controller-UsersManagerController.html#property_authManager"
-        },                {
-            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024errorManager",
-            "name": "errorManager",
-            "summary": "",
-            "url": "classes/App-Controller-UsersManagerController.html#property_errorManager"
-        },                {
-            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003A\u0024visitorInfoUtil",
-            "name": "visitorInfoUtil",
-            "summary": "",
-            "url": "classes/App-Controller-UsersManagerController.html#property_visitorInfoUtil"
         },                {
             "fqsen": "\\App\\DataFixtures\\LogFixtures",
             "name": "LogFixtures",
@@ -901,10 +931,30 @@ Search.appendIndex(
             "summary": "Log\u0020a\u0020message\u0020to\u0020the\u0020database",
             "url": "classes/App-Manager-LogManager.html#method_log"
         },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003AsetAntiLog\u0028\u0029",
+            "name": "setAntiLog",
+            "summary": "Set\u0020the\u0020anti\u002Dlog\u0020cookie",
+            "url": "classes/App-Manager-LogManager.html#method_setAntiLog"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003AunSetAntiLog\u0028\u0029",
+            "name": "unSetAntiLog",
+            "summary": "Unset\u0020the\u0020anti\u002Dlog\u0020cookie",
+            "url": "classes/App-Manager-LogManager.html#method_unSetAntiLog"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003AisAntiLogEnabled\u0028\u0029",
+            "name": "isAntiLogEnabled",
+            "summary": "Check\u0020if\u0020anti\u002Dlog\u0020is\u0020enabled",
+            "url": "classes/App-Manager-LogManager.html#method_isAntiLogEnabled"
+        },                {
             "fqsen": "\\App\\Manager\\LogManager\u003A\u003A\u0024appUtil",
             "name": "appUtil",
             "summary": "",
             "url": "classes/App-Manager-LogManager.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003A\u0024cookieUtil",
+            "name": "cookieUtil",
+            "summary": "",
+            "url": "classes/App-Manager-LogManager.html#property_cookieUtil"
         },                {
             "fqsen": "\\App\\Manager\\LogManager\u003A\u003A\u0024sessionUtil",
             "name": "sessionUtil",
@@ -1281,6 +1331,11 @@ Search.appendIndex(
             "summary": "Get\u0020the\u0020page\u0020limitter",
             "url": "classes/App-Util-AppUtil.html#method_getPageLimitter"
         },                {
+            "fqsen": "\\App\\Util\\AppUtil\u003A\u003AgetAntiLogToken\u0028\u0029",
+            "name": "getAntiLogToken",
+            "summary": "Get\u0020the\u0020anti\u002Dlog\u0020token",
+            "url": "classes/App-Util-AppUtil.html#method_getAntiLogToken"
+        },                {
             "fqsen": "\\App\\Util\\AppUtil\u003A\u003AgetHasherConfig\u0028\u0029",
             "name": "getHasherConfig",
             "summary": "Get\u0020the\u0020hasher\u0020configuration",
@@ -1305,6 +1360,11 @@ Search.appendIndex(
             "name": "set",
             "summary": "Set\u0020a\u0020cookie\u0020with\u0020the\u0020specified\u0020name,\u0020value,\u0020and\u0020expiration.",
             "url": "classes/App-Util-CookieUtil.html#method_set"
+        },                {
+            "fqsen": "\\App\\Util\\CookieUtil\u003A\u003AisCookieSet\u0028\u0029",
+            "name": "isCookieSet",
+            "summary": "Check\u0020if\u0020the\u0020specified\u0020cookie\u0020is\u0020set.",
+            "url": "classes/App-Util-CookieUtil.html#method_isCookieSet"
         },                {
             "fqsen": "\\App\\Util\\CookieUtil\u003A\u003Aget\u0028\u0029",
             "name": "get",
@@ -1441,15 +1501,20 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/app-command.html"
         },                {
+            "fqsen": "\\App\\Controller",
+            "name": "Controller",
+            "summary": "",
+            "url": "namespaces/app-controller.html"
+        },                {
             "fqsen": "\\App\\Controller\\Auth",
             "name": "Auth",
             "summary": "",
             "url": "namespaces/app-controller-auth.html"
         },                {
-            "fqsen": "\\App\\Controller",
-            "name": "Controller",
+            "fqsen": "\\App\\Controller\\Component",
+            "name": "Component",
             "summary": "",
-            "url": "namespaces/app-controller.html"
+            "url": "namespaces/app-controller-component.html"
         },                {
             "fqsen": "\\App\\DataFixtures",
             "name": "DataFixtures",

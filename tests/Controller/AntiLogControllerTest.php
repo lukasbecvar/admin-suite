@@ -7,13 +7,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 /**
- * Class IndexControllerTest
+ * Class AntiLogControllerTest
  *
- * Test the index controller
+ * Test the anti-log controller
  *
  * @package App\Tests\Controller
  */
-class IndexControllerTest extends CustomTestCase
+class AntiLogControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;
 
@@ -23,13 +23,13 @@ class IndexControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the index page redirect.
+     * Test if the anti-log page is accessible.
      *
      * @return void
      */
-    public function testIndexLoad(): void
+    public function testAntiLogNotLoggedIn(): void
     {
-        $this->client->request('GET', '/');
+        $this->client->request('GET', '/13378/antilog');
 
         // assert response
         $this->assertResponseRedirects('/login');
@@ -37,15 +37,16 @@ class IndexControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the index page redirect when logged in.
+     * Test if the anti-log page is accessible.
      *
      * @return void
      */
-    public function testIndexLoadLoggedIn(): void
+    public function testAnitLogEnable(): void
     {
         $this->simulateLogin($this->client);
 
-        $this->client->request('GET', '/');
+        // create request
+        $this->client->request('GET', '/13378/antilog');
 
         // assert response
         $this->assertResponseRedirects('/dashboard');

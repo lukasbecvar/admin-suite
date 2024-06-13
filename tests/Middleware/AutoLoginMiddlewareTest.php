@@ -105,13 +105,15 @@ class AutoLoginMiddlewareTest extends TestCase
         $user = new User();
         $user->setUsername('testuser');
 
+        // mock the cookie util
+        $this->cookieUtilMock->method('isCookieSet')
+            ->with('user-token')
+            ->willReturn(true);
+
         // mock the auth manager
         $this->authManagerMock->expects($this->once())
             ->method('isUserLogedin')
             ->willReturn(false);
-
-        // set the cookie token
-        $_COOKIE['user-token'] = $userToken;
 
         // mock the cookie util
         $this->cookieUtilMock->expects($this->once())
@@ -144,13 +146,15 @@ class AutoLoginMiddlewareTest extends TestCase
         // mock the user entity
         $userToken = 'invalid_token';
 
+        // mock the cookie util
+        $this->cookieUtilMock->method('isCookieSet')
+            ->with('user-token')
+            ->willReturn(true);
+
         // mock the auth manager
         $this->authManagerMock->expects($this->once())
             ->method('isUserLogedin')
             ->willReturn(false);
-
-        // set the cookie token
-        $_COOKIE['user-token'] = $userToken;
 
         // mock the cookie util
         $this->cookieUtilMock->expects($this->once())

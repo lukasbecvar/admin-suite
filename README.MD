@@ -71,10 +71,11 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [X] View data output escape
 
 ## 0.4
+- [X] Anti log
 - [ ] Ban system
-- [ ] Users manager test
 - [ ] Ban system test
-- [ ] Anti log
+- [ ] Users manager test
+- [ ] Banned alert send to email
 - [ ] New login email alert
 - [ ] Refactor & design fix
 

@@ -43,6 +43,9 @@ class CustomTestCase extends WebTestCase
         // configure the mock to return true for isUserLogedin
         $authManager->method('isUserLogedin')->willReturn(true);
 
+        // configure the mock to return true for isUserLogedin
+        $authManager->method('isLoggedInUserAdmin')->willReturn(true);
+
         // configure the mock to return the mock user for getLoggedUserRepository
         $authManager->method('getLoggedUserRepository')->willReturn($mockUser);
 

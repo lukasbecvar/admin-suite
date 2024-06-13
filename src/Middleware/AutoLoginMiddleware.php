@@ -43,7 +43,7 @@ class AutoLoginMiddleware
         // check if user not logged
         if (!$loginStatus) {
             // check if cookie set
-            if (isset($_COOKIE['user-token'])) {
+            if ($this->cookieUtil->isCookieSet('user-token')) {
                 // init user entity
                 $user = new User();
 

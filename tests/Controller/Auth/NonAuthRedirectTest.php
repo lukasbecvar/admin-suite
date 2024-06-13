@@ -32,8 +32,17 @@ class NonAuthRedirectTest extends WebTestCase
     public function provideAdminUrls(): array
     {
         return [
+            // admin dashboard routes
             ['/admin'],
-            ['/dashboard']
+            ['/dashboard'],
+
+            // anti-log route
+            ['/13378/antilog'],
+
+            // users manager system routes
+            ['/manager/users'],
+            ['/manager/users/delete'],
+            ['/manager/users/register']
         ];
     }
 
