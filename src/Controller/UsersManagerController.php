@@ -66,7 +66,7 @@ class UsersManagerController extends AbstractController
         $onlineList = $this->authManager->getOnlineUsersList();
 
         // render users-manager view
-        return $this->render('manager/user/table.twig', [
+        return $this->render('components/manager/user/table.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
             'user_data' => $this->authManager->getLoggedUserRepository(),
 
@@ -135,7 +135,7 @@ class UsersManagerController extends AbstractController
         }
 
         // render users-manager register view
-        return $this->render('manager/user/register.twig', [
+        return $this->render('components/manager/user/register.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
             'user_data' => $this->authManager->getLoggedUserRepository(),
 

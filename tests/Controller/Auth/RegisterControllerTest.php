@@ -92,6 +92,37 @@ class RegisterControllerTest extends WebTestCase
     }
 
     /**
+     * Test submit form with not match passwords.
+     *
+     * @return void
+     */
+    public function testSubmitWithNotMatchPasswords(): void
+    {
+        // set mock user manager
+        $this->setMockUserManager();
+
+        // request register page
+        $this->client->request('GET', '/register');
+
+        // submit form
+        $this->client->submitForm('Register', [
+            'registration_form[username]' => 'valid-testing-username',
+            'registration_form[password][first]' => 'passwordookokok',
+            'registration_form[password][second]' => 'passwordookokok1'
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('h2', 'Register');
+        $this->assertSelectorExists('form[name="registration_form"]');
+        $this->assertSelectorExists('input[name="registration_form[username]"]');
+        $this->assertSelectorExists('input[name="registration_form[password][first]"]');
+        $this->assertSelectorExists('input[name="registration_form[password][second]"]');
+        $this->assertSelectorTextContains('button', 'Register');
+        $this->assertSelectorTextContains('li:contains("The values do not match.")', 'The values do not match.');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
      * Test submit form with empty credentials.
      *
      * @return void
