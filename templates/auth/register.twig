@@ -8,12 +8,12 @@
 
         {# register success message box #}
         {% for message in app.flashes('success') %}
-            <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message }}</div>
+            <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
         {% endfor %}
 
         {# register error message box #}
         {% for message in app.flashes('error') %}
-            <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message }}</div>
+            <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
         {% endfor %}
 
         {# register form #}

@@ -68,11 +68,13 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
         - [X] Online status
         - [X] Unknown browser
         - [X] Role
-- [ ] View data output escape
-- [ ] Users manager test
+- [X] View data output escape
 
 ## 0.4
 - [ ] Ban system
+- [ ] Users manager test
+- [ ] Ban system test
+- [ ] Refactor & design fix
 
 ## 0.5
 - [ ] Server info
