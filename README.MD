@@ -63,12 +63,11 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Delete users (with index reset)
     - [X] Filter only online users list
     - [X] Update role
-    - [ ] Value color
-        - [ ] Same ip like client
-        - [ ] Online status
-        - [ ] Banned status
-        - [ ] Unknown browser
-        - [ ] Role
+    - [X] Value color
+        - [X] Same ip like client
+        - [X] Online status
+        - [X] Unknown browser
+        - [X] Role
 - [ ] View data output escape
 - [ ] Users manager test
 
