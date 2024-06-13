@@ -86,9 +86,13 @@
                                 <td class="text-white p-2 border-b border-neutral-600">{{ row.lastLoginTime|date('Y-m-d H:i:s')|e }}</td>
                                 
                                 {% if currentStatus == 'online' %}
-                                    <td class="text-green-400 p-2 border-b border-neutral-600">{{currentStatus|e}}</td>
+                                    <td class="text-green-400 p-2 border-b border-neutral-600">
+                                        <a href="{{ path('app_manager_users', {'filter': 'online'}) }}">{{currentStatus|e}}</a>
+                                    </td>
                                 {% else %}
-                                    <td class="text-red-400 p-2 border-b border-neutral-600">{{currentStatus|e}}</td>
+                                    <td class="text-red-400 p-2 border-b border-neutral-600">
+                                        <a href="{{ path('app_manager_users', {'filter': 'offline'}) }}">{{currentStatus|e}}</a>
+                                    </td>
                                 {% endif %}
                                 <td class="text-white p-2 border-b border-neutral-600"><a href="/manager/users/delete?id={{ row.id|e }}" class="delete-button">X</a></td>
                             </tr>
@@ -99,7 +103,7 @@
         </div>
     {% endif %}
 
-    {% if (total_users_count > limit_per_page) and (users|length != 0) %}
+    {% if (total_users_count > limit_per_page) and (users|length != 0) and (status_filter == 'all') %}
         <div class="mt-2 flex justify-center mb-2">
             <div class="border border-neutral-600 rounded-lg overflow-hidden">
                 <ul class="flex">
