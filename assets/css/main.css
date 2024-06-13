@@ -3,6 +3,11 @@ main {
 	margin-top: 30px; 
 }
 
+.highlighter {
+	color: rgb(255, 255, 7) !important;
+	font-weight: 600;
+}
+
 #main-content {
 	position: relative;
 	margin-left: 0; 

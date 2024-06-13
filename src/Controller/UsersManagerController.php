@@ -74,6 +74,7 @@ class UsersManagerController extends AbstractController
             'user_data' => $this->authManager->getLoggedUserRepository(),
 
             // users manager data
+            'userManager' => $this->userManager,
             'users' => $usersData,
             'online_list' => $onlineList,
             'online_count' => count($onlineList),
@@ -82,6 +83,7 @@ class UsersManagerController extends AbstractController
             'limit_per_page' => $pageLimit,
             'visitor_info_util' => $this->visitorInfoUtil,
             'status_filter' => $statusFilter,
+            'current_ip' => $this->visitorInfoUtil->getIp()
         ]);
     }
 
