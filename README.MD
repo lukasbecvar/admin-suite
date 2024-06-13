@@ -74,7 +74,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [X] Anti log
 - [X] New login email alert
 - [ ] Ban system
-    - [ ] Banned entity (reason, time, expiration, banned user id)
+    - [ ] Banned entity (reason, time, status, banned user id)
     - [ ] Ban/Unban user controller
     - [ ] Ban status in users table
     - [ ] Ban/unban user popup overlay confirmation (after click on ban status)
