@@ -1,6 +1,5 @@
 {% extends 'common/layout.twig' %}
 
-{#  ADMIN ACCOUNTS MANAGER COMPONENT #}
 {% block component %} 
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
         <a href="/manager/users/register" class="border border-neutral-500 font-bold px-1">+</a>
@@ -8,7 +7,6 @@
         <span class="mr-1">Online {{ online_count }}/{{ total_users_count }}</span>
     </div>
 
-    {# ACCOUNT LIST TABLE #}
     {% if users|length == 0 %}
         <p class="flex items-center justify-center mt-20 mb-20 text-2xl">This user list page is empty</p>
     {% else %}
@@ -24,25 +22,19 @@
                         <th class="text-left text-white p-2">OS</th>
                         <th class="text-left text-white p-2">Last Login</th>
                         <th class="text-left text-white p-2">Status</th>
+                        <th class="text-left text-white p-2">X</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-white">
                     {% for row in users %}
                     <tr class="hover:bg-neutral-800 border-b border-neutral-600">
-                        {# USER DATA FROM DATABASE REPOSITORY #}
                         <td class="text-white p-2 border-b border-neutral-600">{{ row.id }}</td>
                         <td class="text-white p-2 border-b border-neutral-600">{{ row.username }}</td>
                         <td class="text-white p-2 border-b border-neutral-600">{{ row.role }}</td>
                         <td class="text-white p-2 border-b border-neutral-600">{{ row.ipAddress }}</td>
-
-                        {# USER BROWSER INFO #}
                         <td class="text-white p-2 border-b border-neutral-600">{{ visitor_info_util.getBrowserShortify(row.userAgent) }}</td>
                         <td class="text-white p-2 border-b border-neutral-600">{{ visitor_info_util.getOs(row.userAgent) }}</td>
-
-                        {# USER LAST LOGIN TIME #}
                         <td class="text-white p-2 border-b border-neutral-600">{{ row.lastLoginTime|date('Y-m-d H:i:s') }}</td>
-                        
-                        {# USER ONLINE STATUS #}
                         <td class="text-white p-2 border-b border-neutral-600">
                             {% set isOnline = false %}
                             {% for onlineUser in online_list %}
@@ -56,14 +48,14 @@
                                 offline
                             {% endif %}
                         </td>
+                        <td class="text-white p-2 border-b border-neutral-600"><a href="/manager/users/delete?id={{ row.id }}" class="delete-button">X</a></td>
                     </tr>
-                {% endfor %}
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
     {% endif %}
 
-    {# PAGINATION BOX #}
     {% if (total_users_count > limit_per_page) and (users|length != 0) %}
         <div class="mt-2 flex justify-center mb-2">
             <div class="border border-neutral-600 rounded-lg overflow-hidden">
@@ -71,24 +63,16 @@
                     {% set total_pages = (total_users_count / limit_per_page)|round(0, 'ceil') %}
                     {% set previous_page = current_page > 1 ? current_page - 1 : 1 %}
                     {% set next_page = current_page < total_pages ? current_page + 1 : total_pages %}
-                    
-                    {# CALCULATE FIRST & LAST PAGE #}
                     {% set start_page = max(current_page - 2, 1) %}
                     {% set end_page = min(current_page + 2, total_pages) %}
-                    
-                    {# PREVIOUS PAGE LINK #}
                     <li>
                         <a href="{{ path('app_manager_users', {'page': previous_page}) }}" class="block px-4 py-2 text-white hover:bg-neutral-800 {% if current_page == 1 %}cursor-not-allowed opacity-50{% endif %}" {% if current_page == 1 %}disabled{% endif %}>Previous</a>
                     </li>
-                    
-                    {# PAGES LIST #}
                     {% for page in start_page..end_page %}
                         <li>
                             <a href="{{ path('app_manager_users', {'page': page}) }}" class="block px-4 py-2 text-white {% if page == current_page %}bg-neutral-800{% else %}hover:bg-neutral-800{% endif %}">{{ page }}</a>
                         </li>
                     {% endfor %}
-                    
-                    {# NEXT PAGE LINK #}
                     <li>
                         <a href="{{ path('app_manager_users', {'page': next_page}) }}" class="block px-4 py-2 text-white hover:bg-neutral-800 {% if current_page == total_pages %}cursor-not-allowed opacity-50{% endif %}" {% if current_page == total_pages %}disabled{% endif %}>Next</a>
                     </li>
@@ -96,4 +80,41 @@
             </div>
         </div>
     {% endif %}
+
+    {# USER DELETE POPUL OVERLAY #}
+    <div id="popup-overlay" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center hidden z-50">
+        <div class="bg-neutral-900 rounded-lg p-6 border border-neutral-700">
+            <p class="mb-4">Are you sure you want to delete this user?</p>
+            <div class="flex justify-end">
+                <button id="cancel-button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600">No</button>
+                <button id="confirm-button" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Yes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var deleteButtons = document.querySelectorAll('.delete-button');
+            var popupOverlay = document.getElementById('popup-overlay');
+            var confirmButton = document.getElementById('confirm-button');
+            var cancelButton = document.getElementById('cancel-button');
+            var deleteUrl = '';
+
+            deleteButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    deleteUrl = this.href;
+                    popupOverlay.classList.remove('hidden');
+                });
+            });
+
+            confirmButton.addEventListener('click', function() {
+                window.location.href = deleteUrl;
+            });
+
+            cancelButton.addEventListener('click', function() {
+                popupOverlay.classList.add('hidden');
+            });
+        });
+    </script>
 {% endblock %}

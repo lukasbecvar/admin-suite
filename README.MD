@@ -62,8 +62,8 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Add user os value
     - [X] Add new users
     - [X] User manager only for admin users
+    - [X] Delete users (with index reset)
     - [ ] Filter only online users list
-    - [ ] Delete users (with index reset)
     - [ ] Update role
     - [ ] Ban system
     - [ ] Value color
@@ -74,6 +74,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
         - [ ] Role
 - [ ] View data output escape
 - [ ] Users manager test
+- [ ] Refactor
 
 ## 0.4
 - [ ] Server info

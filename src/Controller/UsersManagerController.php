@@ -143,4 +143,34 @@ class UsersManagerController extends AbstractController
             'registration_form' => $form->createView()
         ]);
     }
+
+    /**
+     * Handle the users-manager delete component.
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The users-manager delete view
+     */
+    #[Route('/manager/users/delete', methods:['GET', 'POST'], name: 'app_manager_users_delete')]
+    public function userDelete(Request $request): Response
+    {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            $this->errorManager->handleError('You do not have permission to access this page.', 403);
+        }
+
+        // get user id to delete
+        $userId = $request->query->get('id');
+
+        // check if user id is valid
+        if ($userId == null) {
+            $this->errorManager->handleError('invalid request user "id" parameter not found in query', 400);
+        }
+
+        // delete the user
+        $this->userManager->deleteUser((int) $userId);
+
+        // redirect to the users table page
+        return $this->redirectToRoute('app_manager_users');
+    }
 }
