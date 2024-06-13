@@ -74,6 +74,8 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [ ] Ban system
 - [ ] Users manager test
 - [ ] Ban system test
+- [ ] Anti log
+- [ ] New login email alert
 - [ ] Refactor & design fix
 
 ## 0.5
