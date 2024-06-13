@@ -6,18 +6,18 @@
             {% if user_data.getProfilePic == 'default_pic' %}
                 <img class="rounded-md" src={{ asset('/build/images/default-profile.jpg') }} alt="profile picture">
             {% else %}
-                <img class="rounded-md" src="data:image/jpeg;base64,{{ user_data.getProfilePic }}" alt="profile picture">
+                <img class="rounded-md" src="data:image/jpeg;base64,{{ user_data.getProfilePic|e }}" alt="profile picture">
             {% endif %}
         </div>
         {# USERNAME #} 
-        <div class="username font-bold text-xl">{{ user_data.username }}</div>
+        <div class="username font-bold text-xl">{{ user_data.username|e }}</div>
 
         {# USER ROLE #}
         <div class="role text-base">
             {% if is_admin %}
-                <span class="text-red-400">{{ user_data.role|lower }}</span>
+                <span class="text-red-400">{{ user_data.role|lower|e }}</span>
             {% else %}
-                <span class="text-green-500">{{ user_data.role|lower }}</span>
+                <span class="text-green-500">{{ user_data.role|lower|e }}</span>
             {% endif %}
         </div>
     </div>
