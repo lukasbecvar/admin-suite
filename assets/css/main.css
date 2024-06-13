@@ -76,6 +76,16 @@ main {
 	left: 50%;
 }
 
+.delete-button {
+	font-weight: bold;
+	color: rgb(255, 70, 70);
+	font-size: 18px;
+}
+
+.delete-button:hover {
+	color: rgb(247, 247, 71);
+}
+
 @media screen and (max-width: 400px) { 
 	#sidebar {
 		width: 100%;

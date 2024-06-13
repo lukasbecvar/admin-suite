@@ -230,4 +230,22 @@ class UserManagerTest extends TestCase
         // assert the result
         $this->assertIsBool($result);
     }
+
+    /**
+     * Test delete user
+     *
+     * @return void
+     */
+    public function testDeleteUser(): void
+    {
+        $user = new User();
+        $user->setUsername('testUser');
+        $this->userRepositoryMock->method('findOneBy')->willReturn($user);
+
+        $this->entityManagerMock->expects($this->once())->method('remove')->with($user);
+        $this->entityManagerMock->expects($this->once())->method('flush');
+        $this->logManagerMock->expects($this->once())->method('log')->with('user-delete', 'delete user: testUser');
+
+        $this->userManager->deleteUser(1);
+    }
 }

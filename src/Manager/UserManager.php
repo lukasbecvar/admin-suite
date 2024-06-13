@@ -199,4 +199,33 @@ class UserManager
 
         return false;
     }
+
+    /**
+     * Delete a user.
+     *
+     * @param int $id The id of the user to delete
+     *
+     * @throws \Exception If there is an error while deleting the user.
+     *
+     * @return void
+     */
+    public function deleteUser(int $id): void
+    {
+        // get user repo
+        $repo = $this->getUserRepository(['id' => $id]);
+
+        // check if user exist
+        if ($repo != null) {
+            try {
+                // delete user
+                $this->entityManager->remove($repo);
+                $this->entityManager->flush();
+
+                // log action
+                $this->logManager->log('user-delete', 'delete user: ' . $repo->getUsername());
+            } catch (\Exception $e) {
+                $this->errorManager->handleError('error to delete user: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
 }
