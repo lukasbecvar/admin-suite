@@ -186,19 +186,23 @@
                                 <section>
                                         <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/app.html">App</a></li>
-            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-manager.html">Manager</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-controller.html">Controller</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-controller-component.html">Component</a></li>
     </ul>
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    LogManager
+    UsersManagerController
 
+        <span class="phpdocumentor-element__extends">
+        extends <abbr title="\Symfony\Bundle\FrameworkBundle\Controller\AbstractController">AbstractController</abbr>
+    </span>
     
             <div class="phpdocumentor-element__package">
             in package
             <ul class="phpdocumentor-breadcrumbs">
                                     <li class="phpdocumentor-breadcrumb"><a href="packages/App.html">App</a></li>
-                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Manager.html">Manager</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/App-Controller.html">Controller</a></li>
                             </ul>
         </div>
     
@@ -211,15 +215,15 @@
 </div>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Component/UsersManagerController.php"><a href="files/src-controller-component-usersmanagercontroller.html"><abbr title="src/Controller/Component/UsersManagerController.php">UsersManagerController.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">19</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 
     </aside>
 
-            <p class="phpdocumentor-summary">Class LogManager</p>
+            <p class="phpdocumentor-summary">Class UsersManagerController</p>
 
-    <section class="phpdocumentor-description"><p>The manager for logging</p>
+    <section class="phpdocumentor-description"><p>Handle users-manager component page</p>
 </section>
 
 
@@ -230,7 +234,7 @@
 
 <h3 id="toc">
     Table of Contents
-    <a href="classes/App-Manager-LogManager.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h3>
 
@@ -244,42 +248,36 @@
 
 <h4 id="toc-properties">
     Properties
-    <a href="classes/App-Manager-LogManager.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/App-Manager-LogManager.html#property_appUtil">$appUtil</a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#property_appUtil">$appUtil</a>
     <span>
                         &nbsp;: <a href="classes/App-Util-AppUtil.html"><abbr title="\App\Util\AppUtil">AppUtil</abbr></a>            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/App-Manager-LogManager.html#property_cookieUtil">$cookieUtil</a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#property_authManager">$authManager</a>
     <span>
-                        &nbsp;: <a href="classes/App-Util-CookieUtil.html"><abbr title="\App\Util\CookieUtil">CookieUtil</abbr></a>            </span>
+                        &nbsp;: <a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a>            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/App-Manager-LogManager.html#property_entityManager">$entityManager</a>
-    <span>
-                        &nbsp;: <abbr title="\Doctrine\ORM\EntityManagerInterface">EntityManagerInterface</abbr>            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/App-Manager-LogManager.html#property_errorManager">$errorManager</a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#property_errorManager">$errorManager</a>
     <span>
                         &nbsp;: <a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/App-Manager-LogManager.html#property_sessionUtil">$sessionUtil</a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#property_userManager">$userManager</a>
     <span>
-                        &nbsp;: <a href="classes/App-Util-SessionUtil.html"><abbr title="\App\Util\SessionUtil">SessionUtil</abbr></a>            </span>
+                        &nbsp;: <a href="classes/App-Manager-UserManager.html"><abbr title="\App\Manager\UserManager">UserManager</abbr></a>            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/App-Manager-LogManager.html#property_visitorInfoUtil">$visitorInfoUtil</a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#property_visitorInfoUtil">$visitorInfoUtil</a>
     <span>
                         &nbsp;: <a href="classes/App-Util-VisitorInfoUtil.html"><abbr title="\App\Util\VisitorInfoUtil">VisitorInfoUtil</abbr></a>            </span>
 </dt>
@@ -288,43 +286,43 @@
 
 <h4 id="toc-methods">
     Methods
-    <a href="classes/App-Manager-LogManager.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Manager-LogManager.html#method___construct">__construct()</a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#method___construct">__construct()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Manager-LogManager.html#method_isAntiLogEnabled">isAntiLogEnabled()</a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#method_userDelete">userDelete()</a>
     <span>
-                                &nbsp;: bool    </span>
+                                &nbsp;: <abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr>    </span>
 </dt>
-<dd>Check if anti-log is enabled</dd>
+<dd>Handle the users-manager delete component.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Manager-LogManager.html#method_log">log()</a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#method_userRegister">userRegister()</a>
     <span>
-                                &nbsp;: void    </span>
+                                &nbsp;: <abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr>    </span>
 </dt>
-<dd>Log a message to the database</dd>
+<dd>Handle the users-manager register component.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Manager-LogManager.html#method_setAntiLog">setAntiLog()</a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#method_userRoleUpdate">userRoleUpdate()</a>
     <span>
-                                &nbsp;: void    </span>
+                                &nbsp;: <abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr>    </span>
 </dt>
-<dd>Set the anti-log cookie</dd>
+<dd>Handle the users-manager update role component.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/App-Manager-LogManager.html#method_unSetAntiLog">unSetAntiLog()</a>
+    <a href="classes/App-Controller-Component-UsersManagerController.html#method_usersManager">usersManager()</a>
     <span>
-                                &nbsp;: void    </span>
+                                &nbsp;: <abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr>    </span>
 </dt>
-<dd>Unset the anti-log cookie</dd>
+<dd>Handle the users-manager component.</dd>
 
     </dl>
 
@@ -336,7 +334,7 @@
     <section class="phpdocumentor-properties">
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
-            <a href="classes/App-Manager-LogManager.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/App-Controller-Component-UsersManagerController.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article
@@ -348,15 +346,15 @@
 >
     <h4 class="phpdocumentor-element__name" id="property_appUtil">
         $appUtil
-        <a href="classes/App-Manager-LogManager.html#property_appUtil" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/App-Controller-Component-UsersManagerController.html#property_appUtil" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Component/UsersManagerController.php"><a href="files/src-controller-component-usersmanagercontroller.html"><abbr title="src/Controller/Component/UsersManagerController.php">UsersManagerController.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">21</span>
+    <span class="phpdocumentor-element-found-in__line">25</span>
 
     </aside>
 
@@ -381,60 +379,25 @@
             -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_cookieUtil">
-        $cookieUtil
-        <a href="classes/App-Manager-LogManager.html#property_cookieUtil" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_authManager">
+        $authManager
+        <a href="classes/App-Controller-Component-UsersManagerController.html#property_authManager" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Component/UsersManagerController.php"><a href="files/src-controller-component-usersmanagercontroller.html"><abbr title="src/Controller/Component/UsersManagerController.php">UsersManagerController.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">27</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/App-Util-CookieUtil.html"><abbr title="\App\Util\CookieUtil">CookieUtil</abbr></a></span>
-    <span class="phpdocumentor-signature__name">$cookieUtil</span>
-    </code>
-
-    
-    
-    
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_entityManager">
-        $entityManager
-        <a href="classes/App-Manager-LogManager.html#property_entityManager" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">26</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\Doctrine\ORM\EntityManagerInterface">EntityManagerInterface</abbr></span>
-    <span class="phpdocumentor-signature__name">$entityManager</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$authManager</span>
     </code>
 
     
@@ -453,15 +416,15 @@
 >
     <h4 class="phpdocumentor-element__name" id="property_errorManager">
         $errorManager
-        <a href="classes/App-Manager-LogManager.html#property_errorManager" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/App-Controller-Component-UsersManagerController.html#property_errorManager" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Component/UsersManagerController.php"><a href="files/src-controller-component-usersmanagercontroller.html"><abbr title="src/Controller/Component/UsersManagerController.php">UsersManagerController.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">24</span>
+    <span class="phpdocumentor-element-found-in__line">28</span>
 
     </aside>
 
@@ -486,25 +449,25 @@
             -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_sessionUtil">
-        $sessionUtil
-        <a href="classes/App-Manager-LogManager.html#property_sessionUtil" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_userManager">
+        $userManager
+        <a href="classes/App-Controller-Component-UsersManagerController.html#property_userManager" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Component/UsersManagerController.php"><a href="files/src-controller-component-usersmanagercontroller.html"><abbr title="src/Controller/Component/UsersManagerController.php">UsersManagerController.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">26</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/App-Util-SessionUtil.html"><abbr title="\App\Util\SessionUtil">SessionUtil</abbr></a></span>
-    <span class="phpdocumentor-signature__name">$sessionUtil</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/App-Manager-UserManager.html"><abbr title="\App\Manager\UserManager">UserManager</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$userManager</span>
     </code>
 
     
@@ -523,15 +486,15 @@
 >
     <h4 class="phpdocumentor-element__name" id="property_visitorInfoUtil">
         $visitorInfoUtil
-        <a href="classes/App-Manager-LogManager.html#property_visitorInfoUtil" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/App-Controller-Component-UsersManagerController.html#property_visitorInfoUtil" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Component/UsersManagerController.php"><a href="files/src-controller-component-usersmanagercontroller.html"><abbr title="src/Controller/Component/UsersManagerController.php">UsersManagerController.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">25</span>
+    <span class="phpdocumentor-element-found-in__line">29</span>
 
     </aside>
 
@@ -554,7 +517,7 @@
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/App-Manager-LogManager.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/App-Controller-Component-UsersManagerController.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article
@@ -565,20 +528,20 @@
 >
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
-        <a href="classes/App-Manager-LogManager.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/App-Controller-Component-UsersManagerController.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Component/UsersManagerController.php"><a href="files/src-controller-component-usersmanagercontroller.html"><abbr title="src/Controller/Component/UsersManagerController.php">UsersManagerController.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">28</span>
+    <span class="phpdocumentor-element-found-in__line">31</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-AppUtil.html"><abbr title="\App\Util\AppUtil">AppUtil</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$appUtil</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-CookieUtil.html"><abbr title="\App\Util\CookieUtil">CookieUtil</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$cookieUtil</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-SessionUtil.html"><abbr title="\App\Util\SessionUtil">SessionUtil</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sessionUtil</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$errorManager</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-VisitorInfoUtil.html"><abbr title="\App\Util\VisitorInfoUtil">VisitorInfoUtil</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$visitorInfoUtil</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Doctrine\ORM\EntityManagerInterface">EntityManagerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$entityManager</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-AppUtil.html"><abbr title="\App\Util\AppUtil">AppUtil</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$appUtil</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-UserManager.html"><abbr title="\App\Manager\UserManager">UserManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$userManager</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$authManager</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-ErrorManager.html"><abbr title="\App\Manager\ErrorManager">ErrorManager</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$errorManager</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-VisitorInfoUtil.html"><abbr title="\App\Util\VisitorInfoUtil">VisitorInfoUtil</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$visitorInfoUtil</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -593,15 +556,15 @@
                 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$cookieUtil</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-CookieUtil.html"><abbr title="\App\Util\CookieUtil">CookieUtil</abbr></a></span>
+                <span class="phpdocumentor-signature__argument__name">$userManager</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-UserManager.html"><abbr title="\App\Manager\UserManager">UserManager</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$sessionUtil</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Util-SessionUtil.html"><abbr title="\App\Util\SessionUtil">SessionUtil</abbr></a></span>
+                <span class="phpdocumentor-signature__argument__name">$authManager</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/App-Manager-AuthManager.html"><abbr title="\App\Manager\AuthManager">AuthManager</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -620,9 +583,268 @@
             <dd class="phpdocumentor-argument-list__definition">
                 
             </dd>
+            </dl>
+
+    
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_userDelete">
+        userDelete()
+        <a href="classes/App-Controller-Component-UsersManagerController.html#method_userDelete" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Component/UsersManagerController.php"><a href="files/src-controller-component-usersmanagercontroller.html"><abbr title="src/Controller/Component/UsersManagerController.php">UsersManagerController.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">214</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Handle the users-manager delete component.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">userDelete</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpFoundation\Request">Request</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$request</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$entityManager</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Doctrine\ORM\EntityManagerInterface">EntityManagerInterface</abbr></span>
+                <span class="phpdocumentor-signature__argument__name">$request</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpFoundation\Request">Request</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The request object</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+    <section class="phpdocumentor-attributes">
+        <h5 class="phpdocumentor-elements__header" id="attributes">
+            Attributes <a href="classes/App-Controller-Component-UsersManagerController.html#method_userDelete#attributes" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h5>
+                    <dl class="phpdocumentor-argument-list">
+    <dt class="phpdocumentor-argument-list__entry">
+        #[<abbr title="\Symfony\Component\Routing\Attribute\Route">Route</abbr>]
+    </dt>
+        <dd class="phpdocumentor-argument-list__entry">
+        &#039;/manager/users/delete&#039;
+    </dd>
+        <dd class="phpdocumentor-argument-list__entry">
+        $methods: [&#039;GET&#039;]
+    </dd>
+        <dd class="phpdocumentor-argument-list__entry">
+        $name: &#039;app_manager_users_delete&#039;
+    </dd>
+    </dl>
+            </section>
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The users-manager redirect</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_userRegister">
+        userRegister()
+        <a href="classes/App-Controller-Component-UsersManagerController.html#method_userRegister" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Component/UsersManagerController.php"><a href="files/src-controller-component-usersmanagercontroller.html"><abbr title="src/Controller/Component/UsersManagerController.php">UsersManagerController.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">97</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Handle the users-manager register component.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">userRegister</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpFoundation\Request">Request</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$request</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$request</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpFoundation\Request">Request</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The request object</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+    <section class="phpdocumentor-attributes">
+        <h5 class="phpdocumentor-elements__header" id="attributes">
+            Attributes <a href="classes/App-Controller-Component-UsersManagerController.html#method_userRegister#attributes" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h5>
+                    <dl class="phpdocumentor-argument-list">
+    <dt class="phpdocumentor-argument-list__entry">
+        #[<abbr title="\Symfony\Component\Routing\Attribute\Route">Route</abbr>]
+    </dt>
+        <dd class="phpdocumentor-argument-list__entry">
+        &#039;/manager/users/register&#039;
+    </dd>
+        <dd class="phpdocumentor-argument-list__entry">
+        $methods: [&#039;GET&#039;, &#039;POST&#039;]
+    </dd>
+        <dd class="phpdocumentor-argument-list__entry">
+        $name: &#039;app_manager_users_register&#039;
+    </dd>
+    </dl>
+            </section>
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The users-manager register view</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_userRoleUpdate">
+        userRoleUpdate()
+        <a href="classes/App-Controller-Component-UsersManagerController.html#method_userRoleUpdate" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Component/UsersManagerController.php"><a href="files/src-controller-component-usersmanagercontroller.html"><abbr title="src/Controller/Component/UsersManagerController.php">UsersManagerController.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">160</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Handle the users-manager update role component.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">userRoleUpdate</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpFoundation\Request">Request</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$request</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$request</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpFoundation\Request">Request</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The request object</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+    <section class="phpdocumentor-attributes">
+        <h5 class="phpdocumentor-elements__header" id="attributes">
+            Attributes <a href="classes/App-Controller-Component-UsersManagerController.html#method_userRoleUpdate#attributes" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h5>
+                    <dl class="phpdocumentor-argument-list">
+    <dt class="phpdocumentor-argument-list__entry">
+        #[<abbr title="\Symfony\Component\Routing\Attribute\Route">Route</abbr>]
+    </dt>
+        <dd class="phpdocumentor-argument-list__entry">
+        &#039;/manager/users/role/update&#039;
+    </dd>
+        <dd class="phpdocumentor-argument-list__entry">
+        $methods: [&#039;POST&#039;]
+    </dd>
+        <dd class="phpdocumentor-argument-list__entry">
+        $name: &#039;app_manager_users_role_update&#039;
+    </dd>
+    </dl>
+            </section>
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The users-manager table redirect</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_usersManager">
+        usersManager()
+        <a href="classes/App-Controller-Component-UsersManagerController.html#method_usersManager" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Controller/Component/UsersManagerController.php"><a href="files/src-controller-component-usersmanagercontroller.html"><abbr title="src/Controller/Component/UsersManagerController.php">UsersManagerController.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">45</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Handle the users-manager component.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">usersManager</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpFoundation\Request">Request</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$request</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$request</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Symfony\Component\HttpFoundation\Request">Request</abbr></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -632,199 +854,36 @@
     
 
     
+    <section class="phpdocumentor-attributes">
+        <h5 class="phpdocumentor-elements__header" id="attributes">
+            Attributes <a href="classes/App-Controller-Component-UsersManagerController.html#method_usersManager#attributes" class="headerlink"><i class="fas fa-link"></i></a>
 
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_isAntiLogEnabled">
-        isAntiLogEnabled()
-        <a href="classes/App-Manager-LogManager.html#method_isAntiLogEnabled" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">135</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Check if anti-log is enabled</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">isAntiLogEnabled</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
-
-    <div class="phpdocumentor-label-line">
-        </div>
-    
-    
-    
-
-    
+        </h5>
+                    <dl class="phpdocumentor-argument-list">
+    <dt class="phpdocumentor-argument-list__entry">
+        #[<abbr title="\Symfony\Component\Routing\Attribute\Route">Route</abbr>]
+    </dt>
+        <dd class="phpdocumentor-argument-list__entry">
+        &#039;/manager/users&#039;
+    </dd>
+        <dd class="phpdocumentor-argument-list__entry">
+        $methods: [&#039;GET&#039;]
+    </dd>
+        <dd class="phpdocumentor-argument-list__entry">
+        $name: &#039;app_manager_users&#039;
+    </dd>
+    </dl>
+            </section>
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">bool</span>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span>
                     &mdash;
-                <section class="phpdocumentor-description"><p>True if anti-log is enabled, false otherwise</p>
+                <section class="phpdocumentor-description"><p>The users-manager view</p>
 </section>
 
             </section>
 
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_log">
-        log()
-        <a href="classes/App-Manager-LogManager.html#method_log" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">49</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Log a message to the database</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">log</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$level</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">3</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
-
-    <div class="phpdocumentor-label-line">
-        </div>
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The log name</p>
-</section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$message</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The log message</p>
-</section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$level</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">3</span>            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The log level</p>
-</section>
-
-            </dd>
-            </dl>
-
-    
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
-        Tags
-        <a href="classes/App-Manager-LogManager.html#method_log#tags" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h5>
-    <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">throws</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
-                                                            
-                                                 <section class="phpdocumentor-description"><p>If the log entity cannot be persisted</p>
-</section>
-
-                                    </dd>
-                                            </dl>
-
-    
-
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_setAntiLog">
-        setAntiLog()
-        <a href="classes/App-Manager-LogManager.html#method_setAntiLog" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">107</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Set the anti-log cookie</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setAntiLog</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
-
-    <div class="phpdocumentor-label-line">
-        </div>
-    
-    
-    
-
-    
-
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_unSetAntiLog">
-        unSetAntiLog()
-        <a href="classes/App-Manager-LogManager.html#method_unSetAntiLog" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">121</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Unset the anti-log cookie</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">unSetAntiLog</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
-
-    <div class="phpdocumentor-label-line">
-        </div>
-    
-    
-    
-
-    
-
-    
 </article>
             </section>
 
@@ -832,7 +891,7 @@
     <div class="phpdocumentor-modal-bg" data-exit-button></div>
     <div class="phpdocumentor-modal-container">
         <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Manager/LogManager.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Controller/Component/UsersManagerController.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
         </div>
         <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
     </div>
@@ -931,31 +990,30 @@
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                            <li><a href="classes/App-Manager-LogManager.html#toc-properties">Properties</a></li>
-                                                            <li><a href="classes/App-Manager-LogManager.html#toc-methods">Methods</a></li>
+                                                            <li><a href="classes/App-Controller-Component-UsersManagerController.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/App-Controller-Component-UsersManagerController.html#toc-methods">Methods</a></li>
                                     </ul>
             </li>
             
                             <li class="phpdocumentor-on-this-page-section__title">Properties</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
-                                                    <li><a href="classes/App-Manager-LogManager.html#property_appUtil">$appUtil<a href="classes/App-Manager-LogManager.html"></li>
-                                                    <li><a href="classes/App-Manager-LogManager.html#property_cookieUtil">$cookieUtil<a href="classes/App-Manager-LogManager.html"></li>
-                                                    <li><a href="classes/App-Manager-LogManager.html#property_entityManager">$entityManager<a href="classes/App-Manager-LogManager.html"></li>
-                                                    <li><a href="classes/App-Manager-LogManager.html#property_errorManager">$errorManager<a href="classes/App-Manager-LogManager.html"></li>
-                                                    <li><a href="classes/App-Manager-LogManager.html#property_sessionUtil">$sessionUtil<a href="classes/App-Manager-LogManager.html"></li>
-                                                    <li><a href="classes/App-Manager-LogManager.html#property_visitorInfoUtil">$visitorInfoUtil<a href="classes/App-Manager-LogManager.html"></li>
+                                                    <li><a href="classes/App-Controller-Component-UsersManagerController.html#property_appUtil">$appUtil<a href="classes/App-Controller-Component-UsersManagerController.html"></li>
+                                                    <li><a href="classes/App-Controller-Component-UsersManagerController.html#property_authManager">$authManager<a href="classes/App-Controller-Component-UsersManagerController.html"></li>
+                                                    <li><a href="classes/App-Controller-Component-UsersManagerController.html#property_errorManager">$errorManager<a href="classes/App-Controller-Component-UsersManagerController.html"></li>
+                                                    <li><a href="classes/App-Controller-Component-UsersManagerController.html#property_userManager">$userManager<a href="classes/App-Controller-Component-UsersManagerController.html"></li>
+                                                    <li><a href="classes/App-Controller-Component-UsersManagerController.html#property_visitorInfoUtil">$visitorInfoUtil<a href="classes/App-Controller-Component-UsersManagerController.html"></li>
                                             </ul>
                 </li>
             
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                            <li><a href="classes/App-Manager-LogManager.html#method___construct">__construct()</a></li>
-                                            <li><a href="classes/App-Manager-LogManager.html#method_isAntiLogEnabled">isAntiLogEnabled()</a></li>
-                                            <li><a href="classes/App-Manager-LogManager.html#method_log">log()</a></li>
-                                            <li><a href="classes/App-Manager-LogManager.html#method_setAntiLog">setAntiLog()</a></li>
-                                            <li><a href="classes/App-Manager-LogManager.html#method_unSetAntiLog">unSetAntiLog()</a></li>
+                                            <li><a href="classes/App-Controller-Component-UsersManagerController.html#method___construct">__construct()</a></li>
+                                            <li><a href="classes/App-Controller-Component-UsersManagerController.html#method_userDelete">userDelete()</a></li>
+                                            <li><a href="classes/App-Controller-Component-UsersManagerController.html#method_userRegister">userRegister()</a></li>
+                                            <li><a href="classes/App-Controller-Component-UsersManagerController.html#method_userRoleUpdate">userRoleUpdate()</a></li>
+                                            <li><a href="classes/App-Controller-Component-UsersManagerController.html#method_usersManager">usersManager()</a></li>
                                     </ul>
             </li>
                     </ul>
@@ -975,7 +1033,7 @@
     </section>
 </section>
         </div>
-        <a href="classes/App-Manager-LogManager.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/App-Controller-Component-UsersManagerController.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 

@@ -3,6 +3,7 @@
 namespace App\Tests\Manager;
 
 use App\Util\AppUtil;
+use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Manager\LogManager;
 use App\Util\VisitorInfoUtil;
@@ -23,6 +24,9 @@ class LogManagerTest extends TestCase
     /** @var AppUtil|MockObject */
     private AppUtil|MockObject $appUtilMock;
 
+    /** @var CookieUtil|MockObject */
+    private CookieUtil|MockObject $cookieUtilMock;
+
     /** @var SessionUtil|MockObject */
     private SessionUtil|MockObject $sessionUtilMock;
 
@@ -41,6 +45,7 @@ class LogManagerTest extends TestCase
     protected function setUp(): void
     {
         $this->appUtilMock = $this->createMock(AppUtil::class);
+        $this->cookieUtilMock = $this->createMock(CookieUtil::class);
         $this->sessionUtilMock = $this->createMock(SessionUtil::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->visitorInfoUtilMock = $this->createMock(VisitorInfoUtil::class);
@@ -48,6 +53,7 @@ class LogManagerTest extends TestCase
 
         $this->logManager = new LogManager(
             $this->appUtilMock,
+            $this->cookieUtilMock,
             $this->sessionUtilMock,
             $this->errorManagerMock,
             $this->visitorInfoUtilMock,
@@ -56,7 +62,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test log
+     * Test main log method
      *
      * @return void
      */
@@ -79,5 +85,80 @@ class LogManagerTest extends TestCase
 
         // call the log method
         $this->logManager->log('test name', 'test message');
+    }
+
+    /**
+     * Test setAntiLog method
+     *
+     * @return void
+     */
+    public function testSetAntiLog(): void
+    {
+        $this->appUtilMock->method('getAntiLogToken')->willReturn('test-token');
+
+        // expect set method to be called
+        $this->cookieUtilMock->expects($this->once())->method('set')
+            ->with('anti-log', 'test-token', $this->greaterThan(time()));
+
+        // call the setAntiLog method
+        $this->logManager->setAntiLog();
+    }
+
+    /**
+     * Test unSetAntiLog method
+     *
+     * @return void
+     */
+    public function testUnSetAntiLog(): void
+    {
+        // expect unset method to be called
+        $this->cookieUtilMock->expects($this->once())->method('unset')
+            ->with('anti-log');
+
+        // call the unSetAntiLog method
+        $this->logManager->unSetAntiLog();
+    }
+
+    /**
+     * Test isAntiLogEnabled method
+     *
+     * @return void
+     */
+    public function testIsAntiLogEnabled(): void
+    {
+        $this->cookieUtilMock->method('isCookieSet')->willReturn(true);
+        $this->cookieUtilMock->method('get')->willReturn('test-token');
+        $this->appUtilMock->method('getAntiLogToken')->willReturn('test-token');
+
+        // call the isAntiLogEnabled method and assert true
+        $this->assertTrue($this->logManager->isAntiLogEnabled());
+    }
+
+    /**
+     * Test isAntiLogEnabled when cookie is not set
+     *
+     * @return void
+     */
+    public function testIsAntiLogEnabledWhenCookieNotSet(): void
+    {
+        $this->cookieUtilMock->method('isCookieSet')->willReturn(false);
+
+        // call the isAntiLogEnabled method and assert false
+        $this->assertFalse($this->logManager->isAntiLogEnabled());
+    }
+
+    /**
+     * Test isAntiLogEnabled when token is invalid
+     *
+     * @return void
+     */
+    public function testIsAntiLogEnabledWhenTokenInvalid(): void
+    {
+        $this->cookieUtilMock->method('isCookieSet')->willReturn(true);
+        $this->cookieUtilMock->method('get')->willReturn('invalid-token');
+        $this->appUtilMock->method('getAntiLogToken')->willReturn('test-token');
+
+        // call the isAntiLogEnabled method and assert false
+        $this->assertFalse($this->logManager->isAntiLogEnabled());
     }
 }

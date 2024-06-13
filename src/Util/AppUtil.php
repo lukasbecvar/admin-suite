@@ -97,6 +97,16 @@ class AppUtil
     }
 
     /**
+     * Get the anti-log token
+     *
+     * @return string The anti-log token
+     */
+    public function getAntiLogToken(): string
+    {
+        return $_ENV['ANTI_LOG_TOKEN'];
+    }
+
+    /**
      * Get the hasher configuration
      *
      * @return array<int> The hasher configuration
