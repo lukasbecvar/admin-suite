@@ -241,6 +241,11 @@ Search.appendIndex(
             "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020register\u0020component.",
             "url": "classes/App-Controller-UsersManagerController.html#method_userRegister"
         },                {
+            "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003AuserRoleUpdate\u0028\u0029",
+            "name": "userRoleUpdate",
+            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020update\u0020role\u0020component.",
+            "url": "classes/App-Controller-UsersManagerController.html#method_userRoleUpdate"
+        },                {
             "fqsen": "\\App\\Controller\\UsersManagerController\u003A\u003AuserDelete\u0028\u0029",
             "name": "userDelete",
             "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020delete\u0020component.",
@@ -955,6 +960,11 @@ Search.appendIndex(
             "name": "checkIfUserExist",
             "summary": "Check\u0020if\u0020a\u0020user\u0020exists.",
             "url": "classes/App-Manager-UserManager.html#method_checkIfUserExist"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AcheckIfUserExistById\u0028\u0029",
+            "name": "checkIfUserExistById",
+            "summary": "Check\u0020if\u0020a\u0020user\u0020exists\u0020by\u0020ID.",
+            "url": "classes/App-Manager-UserManager.html#method_checkIfUserExistById"
         },                {
             "fqsen": "\\App\\Manager\\UserManager\u003A\u003AgetUsernameById\u0028\u0029",
             "name": "getUsernameById",
