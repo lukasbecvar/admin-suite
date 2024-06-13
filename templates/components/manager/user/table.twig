@@ -49,11 +49,12 @@
                         {% endif %}
 
                         {% if status_filter == 'all' or (status_filter != 'all' and status_filter == currentStatus) %}
-                            
                             <tr class="hover:bg-neutral-800 border-b border-neutral-600">
                                 <td class="text-white p-2 border-b border-neutral-600">{{ row.id }}</td>
                                 <td class="text-white p-2 border-b border-neutral-600">{{ row.username }}</td>
-                                <td class="text-white p-2 border-b border-neutral-600">{{ row.role }}</td>
+                                <td class="text-white p-2 border-b border-neutral-600">
+                                    <a href="#" class="role-update-button" data-username="{{ row.username }}" data-role="{{ row.role }}" data-id="{{ row.id }}">{{ row.role }}</a>
+                                </td>
                                 <td class="text-white p-2 border-b border-neutral-600">{{ row.ipAddress }}</td>
                                 <td class="text-white p-2 border-b border-neutral-600">{{ visitor_info_util.getBrowserShortify(row.userAgent) }}</td>
                                 <td class="text-white p-2 border-b border-neutral-600">{{ visitor_info_util.getOs(row.userAgent) }}</td>
@@ -95,7 +96,7 @@
         </div>
     {% endif %}
 
-    {# USER DELETE POPUL OVERLAY #}
+    {# USER DELETE POPUP OVERLAY #}
     <div id="popup-overlay" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center hidden z-50">
         <div class="bg-neutral-900 rounded-lg p-6 border border-neutral-700">
             <p class="mb-4">Are you sure you want to delete this user?</p>
@@ -106,28 +107,96 @@
         </div>
     </div>
 
+    {# USER ROLE UPDATE POPUP OVERLAY #}
+    <div id="role-update-popup-overlay" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center hidden z-50">
+        <div class="bg-neutral-900 rounded-lg p-6 border border-neutral-700">
+            <p id="role-update-title" class="mb-4">Update User Role: <span id="role-update-username"></span></p>
+            <form id="role-update-form" method="POST" action="{{ path('app_manager_users_role_update') }}">
+                <input type="hidden" name="id" id="role-update-user-id">
+                <input type="hidden" name="current-role" id="current-role">
+                <div class="mb-4">
+                    <label for="new-role" class="block text-white mb-2">New Role:</label>
+                    <input type="text" name="role" id="new-role" class="w-full px-4 py-2 border border-neutral-700 rounded bg-neutral-800 text-white">
+                </div>
+                <div id="role-error-message" class="text-red-500 mb-4 hidden">The new role must be different from the current role.</div>
+                <div class="flex justify-end">
+                    <button type="button" id="role-update-cancel-button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600">Close</button>
+                    <button type="submit" id="role-update-submit-button" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled>Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var deleteButtons = document.querySelectorAll('.delete-button');
-            var popupOverlay = document.getElementById('popup-overlay');
-            var confirmButton = document.getElementById('confirm-button');
+            var roleUpdateButtons = document.querySelectorAll('.role-update-button');
+            var deletePopupOverlay = document.getElementById('popup-overlay');
+            var roleUpdatePopupOverlay = document.getElementById('role-update-popup-overlay');
+            var confirmDeleteButton = document.getElementById('confirm-button');
             var cancelButton = document.getElementById('cancel-button');
-            var deleteUrl = '';
+            var roleUpdateCancelButton = document.getElementById('role-update-cancel-button');
+            var roleUpdateSubmitButton = document.getElementById('role-update-submit-button');
+            var roleUpdateForm = document.getElementById('role-update-form');
 
+            // Function to show role update popup
+            function showRoleUpdatePopup(username, currentRole, userId) {
+                document.getElementById('role-update-username').textContent = username;
+                document.getElementById('current-role').value = currentRole;
+                document.getElementById('role-update-user-id').value = userId;
+                document.getElementById('new-role').value = ''; // Clear input field
+                document.getElementById('role-error-message').classList.add('hidden');
+                roleUpdatePopupOverlay.classList.remove('hidden');
+            }
+
+            // Event listeners for delete buttons
             deleteButtons.forEach(function(button) {
                 button.addEventListener('click', function(event) {
                     event.preventDefault();
-                    deleteUrl = this.href;
-                    popupOverlay.classList.remove('hidden');
+                    deletePopupOverlay.classList.remove('hidden');
                 });
             });
 
-            confirmButton.addEventListener('click', function() {
-                window.location.href = deleteUrl;
+            // Event listener for cancel delete button
+            cancelButton.addEventListener('click', function() {
+                deletePopupOverlay.classList.add('hidden');
             });
 
-            cancelButton.addEventListener('click', function() {
-                popupOverlay.classList.add('hidden');
+            // Event listeners for role update buttons
+            roleUpdateButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    var username = button.getAttribute('data-username');
+                    var currentRole = button.getAttribute('data-role');
+                    var userId = button.getAttribute('data-id');
+                    showRoleUpdatePopup(username, currentRole, userId);
+                });
+            });
+
+            // Event listener for role update cancel button
+            roleUpdateCancelButton.addEventListener('click', function() {
+                roleUpdatePopupOverlay.classList.add('hidden');
+            });
+
+            // Event listener for new role input change
+            document.getElementById('new-role').addEventListener('input', function() {
+                var currentRole = document.getElementById('current-role').value;
+                var newRole = this.value.trim();
+                if (newRole.toUpperCase() !== currentRole) {
+                    roleUpdateSubmitButton.removeAttribute('disabled');
+                } else {
+                    roleUpdateSubmitButton.setAttribute('disabled', 'disabled');
+                }
+            });
+
+            // Form submit event listener for role update
+            roleUpdateForm.addEventListener('submit', function(event) {
+                var currentRole = document.getElementById('current-role').value;
+                var newRole = document.getElementById('new-role').value.trim();
+                if (newRole === currentRole) {
+                    event.preventDefault(); // Prevent form submission
+                    document.getElementById('role-error-message').classList.remove('hidden');
+                }
             });
         });
     </script>
