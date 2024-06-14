@@ -82,6 +82,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Banned check in auto login middleware
     - [ ] Banned check if login method
     - [ ] Banned alert send to email
+    - [ ] Delete banned user automatic delete ban
     - [ ] Testing banned users fixtures
     - [ ] Ban system unit tests
 - [ ] Users table filter system
