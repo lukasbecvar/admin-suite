@@ -848,7 +848,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AisLoggedInUserAdmin\u0028\u0029",
             "name": "isLoggedInUserAdmin",
-            "summary": "",
+            "summary": "Checks\u0020if\u0020current\u0020user\u0020is\u0020admin.",
             "url": "classes/App-Manager-AuthManager.html#method_isLoggedInUserAdmin"
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AisUserLogedin\u0028\u0029",
@@ -910,6 +910,11 @@ Search.appendIndex(
             "name": "getUserStatus",
             "summary": "Get\u0020user\u0020status.",
             "url": "classes/App-Manager-AuthManager.html#method_getUserStatus"
+        },                {
+            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AgetOnlineUsers\u0028\u0029",
+            "name": "getOnlineUsers",
+            "summary": "Get\u0020online\u0020users\u0020list.",
+            "url": "classes/App-Manager-AuthManager.html#method_getOnlineUsers"
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024appUtil",
             "name": "appUtil",
@@ -996,10 +1001,20 @@ Search.appendIndex(
             "summary": "Unban\u0020a\u0020user.",
             "url": "classes/App-Manager-BanManager.html#method_unBanUser"
         },                {
+            "fqsen": "\\App\\Manager\\BanManager\u003A\u003AgetBannedUsers\u0028\u0029",
+            "name": "getBannedUsers",
+            "summary": "Get\u0020banned\u0020users\u0020list.",
+            "url": "classes/App-Manager-BanManager.html#method_getBannedUsers"
+        },                {
             "fqsen": "\\App\\Manager\\BanManager\u003A\u003A\u0024logManager",
             "name": "logManager",
             "summary": "",
             "url": "classes/App-Manager-BanManager.html#property_logManager"
+        },                {
+            "fqsen": "\\App\\Manager\\BanManager\u003A\u003A\u0024userManager",
+            "name": "userManager",
+            "summary": "",
+            "url": "classes/App-Manager-BanManager.html#property_userManager"
         },                {
             "fqsen": "\\App\\Manager\\BanManager\u003A\u003A\u0024authManager",
             "name": "authManager",

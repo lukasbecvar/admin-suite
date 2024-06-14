@@ -15,13 +15,15 @@ use Doctrine\ORM\EntityManagerInterface;
 class BanManager
 {
     private LogManager $logManager;
+    private UserManager $userManager;
     private AuthManager $authManager;
     private ErrorManager $errorManager;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(LogManager $logManager, AuthManager $authManager, ErrorManager $errorManager, EntityManagerInterface $entityManager)
+    public function __construct(LogManager $logManager, UserManager $userManager, AuthManager $authManager, ErrorManager $errorManager, EntityManagerInterface $entityManager)
     {
         $this->logManager = $logManager;
+        $this->userManager = $userManager;
         $this->authManager = $authManager;
         $this->errorManager = $errorManager;
         $this->entityManager = $entityManager;
@@ -120,5 +122,30 @@ class BanManager
             // log action
             $this->logManager->log('unbanned', 'unbanned user: ' . $userId);
         }
+    }
+
+    /**
+     * Get banned users list.
+     *
+     * @return array<mixed> The list of banned users.
+     */
+    public function getBannedUsers(): array
+    {
+        $banned = [];
+
+        /** @var \App\Entity\User $users all users list */
+        $users = $this->userManager->getAllUsersRepository();
+
+        // check if $users is iterable
+        if (is_iterable($users)) {
+            foreach ($users as $user) {
+                // check if user is banned
+                if ($this->isUserBanned($user->getId())) {
+                    $banned[] = $user;
+                }
+            }
+        }
+
+        return $banned;
     }
 }

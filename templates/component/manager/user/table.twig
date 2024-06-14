@@ -9,6 +9,18 @@
         <span class="mr-1">
             <span>Online</span>{{ online_count|e }}/{{ total_users_count|e }}
         </span>
+
+
+
+        <div class="ml-4">
+            <form method="get" action="{{ path('app_manager_users') }}">
+                <select name="filter" onchange="this.form.submit()" class="bg-neutral-800 text-white border border-neutral-500 rounded">
+                    <option value="">All Users</option>
+                    <option value="online" {% if filter == 'online' %}selected{% endif %}>Online</option>
+                    <option value="banned" {% if filter == 'banned' %}selected{% endif %}>Banned</option>
+                </select>
+            </form>
+        </div>
     </div>
 
     {% if users|length == 0 %}
@@ -116,7 +128,7 @@
         </div>
     {% endif %}
 
-    {% if (total_users_count > limit_per_page) %}
+    {% if (total_users_count > limit_per_page) and (filter == '') %}
         <div class="mt-2 flex justify-center mb-2">
             <div class="border border-neutral-600 rounded-lg overflow-hidden">
                 <ul class="flex">

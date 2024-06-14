@@ -83,7 +83,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Ban/unban command
     - [X] Delete banned user automatic delete ban
     - [X] Testing banned users fixtures
-- [ ] Users table filter system
+- [X] Users table filter system
 - [ ] Users manager test
 - [ ] Refactor & design fixs
 

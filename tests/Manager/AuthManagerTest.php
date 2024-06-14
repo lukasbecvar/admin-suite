@@ -379,4 +379,17 @@ class AuthManagerTest extends TestCase
         // assert the status is string
         $this->assertIsString($status);
     }
+
+    /**
+     * Test getting online users
+     *
+     * @return void
+     */
+    public function testGetOnlineUsers(): void
+    {
+        // get online list
+        $result = $this->authManager->getOnlineUsers();
+
+        $this->assertIsArray($result);
+    }
 }

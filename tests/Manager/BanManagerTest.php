@@ -8,6 +8,7 @@ use App\Manager\BanManager;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
+use App\Manager\UserManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\BannedRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,6 +21,9 @@ class BanManagerTest extends TestCase
 
     /** @var LogManager|MockObject */
     private LogManager|MockObject $logManagerMock;
+
+    /** @var UserManager|MockObject */
+    private UserManager|MockObject $userManagerMock;
 
     /** @var AuthManager|MockObject */
     private AuthManager|MockObject $authManagerMock;
@@ -36,6 +40,7 @@ class BanManagerTest extends TestCase
     protected function setUp(): void
     {
         $this->logManagerMock = $this->createMock(LogManager::class);
+        $this->userManagerMock = $this->createMock(UserManager::class);
         $this->authManagerMock = $this->createMock(AuthManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->repositoryMock = $this->createMock(BannedRepository::class);
@@ -49,6 +54,7 @@ class BanManagerTest extends TestCase
         // create the ban manager instance
         $this->banManager = new BanManager(
             $this->logManagerMock,
+            $this->userManagerMock,
             $this->authManagerMock,
             $this->errorManagerMock,
             $this->entityManagerMock
@@ -204,5 +210,49 @@ class BanManagerTest extends TestCase
 
         // assert status
         $this->assertEquals('inactive', $banned->getStatus());
+    }
+
+    /**
+     * Test get banned users method.
+     *
+     * @return void
+     */
+    public function testGetBannedUsers(): void
+    {
+        // Create test users
+        $user1 = $this->createMock(User::class);
+        $user2 = $this->createMock(User::class);
+        $user3 = $this->createMock(User::class);
+
+        // Set user IDs
+        $user1->method('getId')->willReturn(1);
+        $user2->method('getId')->willReturn(2);
+        $user3->method('getId')->willReturn(3);
+
+        // Mock UserManager to return the list of users
+        $this->userManagerMock
+            ->method('getAllUsersRepository')
+            ->willReturn([$user1, $user2, $user3]);
+
+        // Mock BannedRepository to return banned users based on user IDs
+        $this->repositoryMock
+            ->method('findOneBy')
+            ->willReturnCallback(function ($criteria) {
+                if ($criteria['banned_user_id'] == 1 && $criteria['status'] == 'active') {
+                    return new Banned();
+                }
+                if ($criteria['banned_user_id'] == 3 && $criteria['status'] == 'active') {
+                    return new Banned();
+                }
+                return null;
+            });
+
+        // Call the method
+        $bannedUsers = $this->banManager->getBannedUsers();
+
+        // Assert the banned users list
+        $this->assertCount(2, $bannedUsers);
+        $this->assertContains($user1, $bannedUsers);
+        $this->assertContains($user3, $bannedUsers);
     }
 }

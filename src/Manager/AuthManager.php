@@ -135,6 +135,11 @@ class AuthManager
         return $this->userManager->getUserRepository(['token' => $this->sessionUtil->getSessionValue('user-token')]);
     }
 
+    /**
+     * Checks if current user is admin.
+     *
+     * @return bool
+     */
     public function isLoggedInUserAdmin(): bool
     {
         // check if user logged in
@@ -500,5 +505,41 @@ class AuthManager
         }
 
         return 'offline';
+    }
+
+    /**
+     * Get online users list.
+     *
+     * @return array<mixed> The list of online users.
+     */
+    public function getOnlineUsers(): array
+    {
+        $onlineVisitors = [];
+
+        // get all users list
+        $users = $this->userManager->getAllUsersRepository();
+
+        // Check if $users is iterable
+        if (!is_iterable($users)) {
+            // Handle the case where $users is not iterable, maybe log an error
+            // or return an empty array if it's acceptable.
+            return $onlineVisitors;
+        }
+
+        // check all users status
+        foreach ($users as $user) {
+            // Check if $user is an object with getId() method
+            if (is_object($user) && method_exists($user, 'getId')) {
+                // get visitor status
+                $status = $this->getUserStatus($user->getId());
+
+                // check visitor status
+                if ($status == 'online') {
+                    array_push($onlineVisitors, $user);
+                }
+            }
+        }
+
+        return $onlineVisitors;
     }
 }
