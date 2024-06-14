@@ -79,8 +79,8 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Ban/Unban user controller
     - [X] Ban status in users table
     - [X] Ban/unban actions in users table
-    - [ ] Banned check in auto login middleware
-    - [ ] Banned check if login method
+    - [X] Banned check in auto login middleware
+    - [ ] Ban/unban command
     - [ ] Banned alert send to email
     - [ ] Delete banned user automatic delete ban
     - [ ] Testing banned users fixtures

@@ -60,3 +60,8 @@ services:
     App\Middleware\AuthentificatedCheckMiddleware:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 1 }
+
+    # user banned check middleware
+    App\Middleware\BannedCheckMiddleware:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 1 }

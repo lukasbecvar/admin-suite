@@ -1311,6 +1311,41 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Middleware-AutoLoginMiddleware.html#property_userManager"
         },                {
+            "fqsen": "\\App\\Middleware\\BannedCheckMiddleware",
+            "name": "BannedCheckMiddleware",
+            "summary": "Class\u0020BannedCheckMiddleware",
+            "url": "classes/App-Middleware-BannedCheckMiddleware.html"
+        },                {
+            "fqsen": "\\App\\Middleware\\BannedCheckMiddleware\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Middleware-BannedCheckMiddleware.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Middleware\\BannedCheckMiddleware\u003A\u003AonKernelRequest\u0028\u0029",
+            "name": "onKernelRequest",
+            "summary": "Check\u0020if\u0020user\u0020is\u0020banned.",
+            "url": "classes/App-Middleware-BannedCheckMiddleware.html#method_onKernelRequest"
+        },                {
+            "fqsen": "\\App\\Middleware\\BannedCheckMiddleware\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Middleware-BannedCheckMiddleware.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Middleware\\BannedCheckMiddleware\u003A\u003A\u0024twig",
+            "name": "twig",
+            "summary": "",
+            "url": "classes/App-Middleware-BannedCheckMiddleware.html#property_twig"
+        },                {
+            "fqsen": "\\App\\Middleware\\BannedCheckMiddleware\u003A\u003A\u0024banManager",
+            "name": "banManager",
+            "summary": "",
+            "url": "classes/App-Middleware-BannedCheckMiddleware.html#property_banManager"
+        },                {
+            "fqsen": "\\App\\Middleware\\BannedCheckMiddleware\u003A\u003A\u0024authManager",
+            "name": "authManager",
+            "summary": "",
+            "url": "classes/App-Middleware-BannedCheckMiddleware.html#property_authManager"
+        },                {
             "fqsen": "\\App\\Middleware\\DatabaseOnlineMiddleware",
             "name": "DatabaseOnlineMiddleware",
             "summary": "Class\u0020DatabaseOnlineMiddleware",

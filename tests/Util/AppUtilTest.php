@@ -16,7 +16,7 @@ class AppUtilTest extends TestCase
 {
     private AppUtil $appUtil;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->appUtil = new AppUtil();
     }
