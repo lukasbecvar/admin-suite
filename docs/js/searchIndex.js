@@ -346,6 +346,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Controller-IndexController.html#property_authManager"
         },                {
+            "fqsen": "\\App\\DataFixtures\\BannedFixtures",
+            "name": "BannedFixtures",
+            "summary": "Banned\u0020fixtures\u0020class",
+            "url": "classes/App-DataFixtures-BannedFixtures.html"
+        },                {
+            "fqsen": "\\App\\DataFixtures\\BannedFixtures\u003A\u003Aload\u0028\u0029",
+            "name": "load",
+            "summary": "Load\u0020the\u0020banned\u0020fixtures",
+            "url": "classes/App-DataFixtures-BannedFixtures.html#method_load"
+        },                {
             "fqsen": "\\App\\DataFixtures\\LogFixtures",
             "name": "LogFixtures",
             "summary": "Class\u0020LogFixtures",

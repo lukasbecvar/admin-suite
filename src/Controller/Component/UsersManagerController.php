@@ -239,7 +239,7 @@ class UsersManagerController extends AbstractController
         if ($this->banManager->isUserBanned((int) $userId)) {
             $this->banManager->unbanUser((int) $userId);
         }
-        
+
         // redirect to the users table page
         return $this->redirectToRoute('app_manager_users');
     }
