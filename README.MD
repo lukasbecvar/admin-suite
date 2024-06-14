@@ -85,7 +85,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Testing banned users fixtures
 - [X] Users table filter system
 - [ ] Users manager test
-- [ ] Refactor & design fixs
+- [ ] Refactor & design fix
 
 ## 0.5
 - [ ] Server info
