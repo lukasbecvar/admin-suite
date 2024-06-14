@@ -77,7 +77,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Banned entity (reason, time, status, banned by id, banned user id)
     - [X] Ban manager
     - [X] Ban/Unban user controller
-    - [ ] Ban status in users table
+    - [X] Ban status in users table
     - [ ] Filter only banned users
     - [ ] Ban/unban user popup overlay confirmation (after click on ban status)
     - [ ] Banned check in auto login middleware
