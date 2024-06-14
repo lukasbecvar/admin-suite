@@ -2,17 +2,12 @@
 
 {% block component %} 
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
-        {% if status_filter == 'online' or status_filter == 'offline' %}
-            <a href="{{ path('app_manager_users', {'filter': 'all'}) }}" class="border border-neutral-500 font-bold px-1"><i class="fa fa-arrow-left" aria-hidden="true"></i>
-            </a>
-        {% endif %}
         <a href="{{ path('app_manager_users_register') }}" class="border border-neutral-500 font-bold px-1"><i class="fa fa-plus" aria-hidden="true"></i>
         </a>
         <a href="#" class="border border-neutral-500 font-bold px-1">RAW</a>
 
         <span class="mr-1">
-            <a href="{{ path('app_manager_users', {'filter': 'online'}) }}">Online</a> 
-            {{ online_count|e }}/{{ total_users_count|e }}
+            <span>Online</span>{{ online_count|e }}/{{ total_users_count|e }}
         </span>
     </div>
 
@@ -49,7 +44,6 @@
                             {% set currentStatus = 'offline' %}
                         {% endif %}
 
-                        {% if status_filter == 'all' or (status_filter != 'all' and status_filter == currentStatus) %}
                             <tr class="hover:bg-neutral-800 border-b border-neutral-600">
                                 <td class="text-white p-2 border-b border-neutral-600">{{ row.id|e }}</td>
                                 <td class="text-white p-2 border-b border-neutral-600">{{ row.username |e}}</td>
@@ -88,34 +82,33 @@
                                 
                                 {% if currentStatus == 'online' %}
                                     <td class="text-green-400 p-2 border-b border-neutral-600">
-                                        <a href="{{ path('app_manager_users', {'filter': 'online'}) }}">{{currentStatus|e}}</a>
+                                        <p>{{currentStatus|e}}</p>
                                     </td>
                                 {% else %}
                                     <td class="text-red-400 p-2 border-b border-neutral-600">
-                                        <a href="{{ path('app_manager_users', {'filter': 'offline'}) }}">{{currentStatus|e}}</a>
+                                        <p>{{currentStatus|e}}</p>
                                     </td>
                                 {% endif %}
 
                                 {% if banManager.isUserBanned(row.id) %}
                                     <td class="text-green-400 p-2 border-b border-neutral-600">
-                                        <a href="{{ path('app_manager_users', {'filter': 'online'}) }}">Yes</a>
+                                        <p>Yes</p>
                                     </td>
                                 {% else %}
                                     <td class="text-red-400 p-2 border-b border-neutral-600">
-                                        <a href="{{ path('app_manager_users', {'filter': 'offline'}) }}">No</a>
+                                        <p>No</p>
                                     </td>
                                 {% endif %}
 
                                 <td class="text-white p-2 border-b border-neutral-600"><a href="/manager/users/delete?id={{ row.id|e }}" class="delete-button">X</a></td>
                             </tr>
-                        {% endif %}
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     {% endif %}
 
-    {% if (total_users_count > limit_per_page) and (users|length != 0) and (status_filter == 'all') %}
+    {% if (total_users_count > limit_per_page) %}
         <div class="mt-2 flex justify-center mb-2">
             <div class="border border-neutral-600 rounded-lg overflow-hidden">
                 <ul class="flex">
