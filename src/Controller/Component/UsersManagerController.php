@@ -59,6 +59,10 @@ class UsersManagerController extends AbstractController
         // get page limit from config
         $pageLimit = $this->appUtil->getPageLimitter();
 
+        // get filter from request query params
+        $filter = $request->query->get('filter', '');
+
+
         // get total users count from database
         $usersCount = $this->userManager->getUsersCount();
 
@@ -67,6 +71,19 @@ class UsersManagerController extends AbstractController
 
         // get online users list from auth manager
         $onlineList = $this->authManager->getOnlineUsersList();
+
+        // get users data from database based on filter
+        switch ($filter) {
+            case 'online':
+                $usersData = $this->authManager->getOnlineUsers();
+                break;
+            case 'banned':
+                $usersData = $this->banManager->getBannedUsers();
+                break;
+            default:
+                $usersData = $this->userManager->getUsersByPage($page);
+                break;
+        }
 
         // render users-manager view
         return $this->render('component/manager/user/table.twig', [
@@ -83,7 +100,8 @@ class UsersManagerController extends AbstractController
             'current_page' => $page,
             'limit_per_page' => $pageLimit,
             'visitor_info_util' => $this->visitorInfoUtil,
-            'current_ip' => $this->visitorInfoUtil->getIp()
+            'current_ip' => $this->visitorInfoUtil->getIp(),
+            'filter' => $filter
         ]);
     }
 
