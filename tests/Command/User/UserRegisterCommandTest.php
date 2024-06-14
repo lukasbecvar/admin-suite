@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Tests\Command;
+namespace App\Tests\Command\User;
 
 use App\Manager\UserManager;
 use App\Manager\AuthManager;
 use PHPUnit\Framework\TestCase;
-use App\Command\UserRegisterCommand;
+use App\Command\User\UserRegisterCommand;
 use Symfony\Component\Console\Application;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Command\Command;
