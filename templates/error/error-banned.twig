@@ -1,0 +1,19 @@
+{% extends 'common/base.twig' %}
+
+{% block body %} 
+<div class="flex justify-center items-center h-screen">
+    <p class="text-center text-3xl font-bold ml-4 mr-4 text-gray-200">
+        Banned
+        <br><br>
+        {% if reason == 'no-reason' %}
+            Your account is banned
+        {% else %}
+            Your account is banned for: {{ reason|e }}
+        {% endif %}
+
+        <br><br>
+
+        Requests for unban should be directed to <span class="text-yellow-300">{{ admin_contact|e }}</span>
+    </p>
+</div>
+{% endblock %}

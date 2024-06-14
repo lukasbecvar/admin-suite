@@ -41,8 +41,10 @@ class NonAuthRedirectTest extends WebTestCase
 
             // users manager system routes
             ['/manager/users'],
+            ['/manager/users/ban'],
             ['/manager/users/delete'],
-            ['/manager/users/register']
+            ['/manager/users/register'],
+            ['/manager/users/role/update']
         ];
     }
 
