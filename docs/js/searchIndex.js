@@ -231,10 +231,20 @@ Search.appendIndex(
             "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020delete\u0020component.",
             "url": "classes/App-Controller-Component-UsersManagerController.html#method_userDelete"
         },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AbanUser\u0028\u0029",
+            "name": "banUser",
+            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020ban\u0020component.",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#method_banUser"
+        },                {
             "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003A\u0024appUtil",
             "name": "appUtil",
             "summary": "",
             "url": "classes/App-Controller-Component-UsersManagerController.html#property_appUtil"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003A\u0024banManager",
+            "name": "banManager",
+            "summary": "",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#property_banManager"
         },                {
             "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003A\u0024userManager",
             "name": "userManager",
@@ -336,9 +346,99 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-DataFixtures-UserFixtures.html#property_securityUtil"
         },                {
+            "fqsen": "\\App\\Entity\\Banned",
+            "name": "Banned",
+            "summary": "Banned\u0020entity\u0020class",
+            "url": "classes/App-Entity-Banned.html"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003AgetId\u0028\u0029",
+            "name": "getId",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#method_getId"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003AgetReason\u0028\u0029",
+            "name": "getReason",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#method_getReason"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003AsetReason\u0028\u0029",
+            "name": "setReason",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#method_setReason"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003AgetStatus\u0028\u0029",
+            "name": "getStatus",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#method_getStatus"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003AsetStatus\u0028\u0029",
+            "name": "setStatus",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#method_setStatus"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003AgetTime\u0028\u0029",
+            "name": "getTime",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#method_getTime"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003AsetTime\u0028\u0029",
+            "name": "setTime",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#method_setTime"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003AgetBannedById\u0028\u0029",
+            "name": "getBannedById",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#method_getBannedById"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003AsetBannedById\u0028\u0029",
+            "name": "setBannedById",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#method_setBannedById"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003AgetBannedUserId\u0028\u0029",
+            "name": "getBannedUserId",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#method_getBannedUserId"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003AsetBannedUserId\u0028\u0029",
+            "name": "setBannedUserId",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#method_setBannedUserId"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003A\u0024id",
+            "name": "id",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#property_id"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003A\u0024reason",
+            "name": "reason",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#property_reason"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003A\u0024status",
+            "name": "status",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#property_status"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003A\u0024time",
+            "name": "time",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#property_time"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003A\u0024banned_by_id",
+            "name": "banned_by_id",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#property_banned_by_id"
+        },                {
+            "fqsen": "\\App\\Entity\\Banned\u003A\u003A\u0024banned_user_id",
+            "name": "banned_user_id",
+            "summary": "",
+            "url": "classes/App-Entity-Banned.html#property_banned_user_id"
+        },                {
             "fqsen": "\\App\\Entity\\Log",
             "name": "Log",
-            "summary": "The\u0020Log\u0020database\u0020entity",
+            "summary": "Log\u0020entity\u0020class",
             "url": "classes/App-Entity-Log.html"
         },                {
             "fqsen": "\\App\\Entity\\Log\u003A\u003AgetId\u0028\u0029",
@@ -826,6 +926,56 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Manager-AuthManager.html#property_entityManager"
         },                {
+            "fqsen": "\\App\\Manager\\BanManager",
+            "name": "BanManager",
+            "summary": "Class\u0020BanManager",
+            "url": "classes/App-Manager-BanManager.html"
+        },                {
+            "fqsen": "\\App\\Manager\\BanManager\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Manager-BanManager.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Manager\\BanManager\u003A\u003AbanUser\u0028\u0029",
+            "name": "banUser",
+            "summary": "Ban\u0020a\u0020user.",
+            "url": "classes/App-Manager-BanManager.html#method_banUser"
+        },                {
+            "fqsen": "\\App\\Manager\\BanManager\u003A\u003AisUserBanned\u0028\u0029",
+            "name": "isUserBanned",
+            "summary": "Check\u0020if\u0020user\u0020is\u0020banned.",
+            "url": "classes/App-Manager-BanManager.html#method_isUserBanned"
+        },                {
+            "fqsen": "\\App\\Manager\\BanManager\u003A\u003AgetBanReason\u0028\u0029",
+            "name": "getBanReason",
+            "summary": "Get\u0020ban\u0020reason.",
+            "url": "classes/App-Manager-BanManager.html#method_getBanReason"
+        },                {
+            "fqsen": "\\App\\Manager\\BanManager\u003A\u003AunBanUser\u0028\u0029",
+            "name": "unBanUser",
+            "summary": "Unban\u0020a\u0020user.",
+            "url": "classes/App-Manager-BanManager.html#method_unBanUser"
+        },                {
+            "fqsen": "\\App\\Manager\\BanManager\u003A\u003A\u0024logManager",
+            "name": "logManager",
+            "summary": "",
+            "url": "classes/App-Manager-BanManager.html#property_logManager"
+        },                {
+            "fqsen": "\\App\\Manager\\BanManager\u003A\u003A\u0024authManager",
+            "name": "authManager",
+            "summary": "",
+            "url": "classes/App-Manager-BanManager.html#property_authManager"
+        },                {
+            "fqsen": "\\App\\Manager\\BanManager\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Manager-BanManager.html#property_errorManager"
+        },                {
+            "fqsen": "\\App\\Manager\\BanManager\u003A\u003A\u0024entityManager",
+            "name": "entityManager",
+            "summary": "",
+            "url": "classes/App-Manager-BanManager.html#property_entityManager"
+        },                {
             "fqsen": "\\App\\Manager\\CacheManager",
             "name": "CacheManager",
             "summary": "Class\u0020CacheManager",
@@ -1275,6 +1425,16 @@ Search.appendIndex(
             "name": "errorManager",
             "summary": "",
             "url": "classes/App-Middleware-SecurityCheckMiddleware.html#property_errorManager"
+        },                {
+            "fqsen": "\\App\\Repository\\BannedRepository",
+            "name": "BannedRepository",
+            "summary": "Class\u0020BannedRepository",
+            "url": "classes/App-Repository-BannedRepository.html"
+        },                {
+            "fqsen": "\\App\\Repository\\BannedRepository\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Repository-BannedRepository.html#method___construct"
         },                {
             "fqsen": "\\App\\Repository\\LogRepository",
             "name": "LogRepository",

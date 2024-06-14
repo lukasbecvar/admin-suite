@@ -3,6 +3,7 @@
 namespace App\Controller\Component;
 
 use App\Util\AppUtil;
+use App\Manager\BanManager;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
@@ -23,14 +24,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class UsersManagerController extends AbstractController
 {
     private AppUtil $appUtil;
+    private BanManager $banManager;
     private UserManager $userManager;
     private AuthManager $authManager;
     private ErrorManager $errorManager;
     private VisitorInfoUtil $visitorInfoUtil;
 
-    public function __construct(AppUtil $appUtil, UserManager $userManager, AuthManager $authManager, ErrorManager $errorManager, VisitorInfoUtil $visitorInfoUtil)
+    public function __construct(AppUtil $appUtil, BanManager $banManager, UserManager $userManager, AuthManager $authManager, ErrorManager $errorManager, VisitorInfoUtil $visitorInfoUtil)
     {
         $this->appUtil = $appUtil;
+        $this->banManager = $banManager;
         $this->userManager = $userManager;
         $this->authManager = $authManager;
         $this->errorManager = $errorManager;
@@ -234,6 +237,64 @@ class UsersManagerController extends AbstractController
 
         // delete the user
         $this->userManager->deleteUser((int) $userId);
+
+        // redirect to the users table page
+        return $this->redirectToRoute('app_manager_users');
+    }
+
+    /**
+     * Handle the users-manager ban component.
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The users-manager redirect
+     */
+    #[Route('/manager/users/ban', methods:['GET'], name: 'app_manager_users_ban')]
+    public function banUser(Request $request): Response
+    {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            $this->errorManager->handleError('You do not have permission to access this page.', 403);
+        }
+
+        // get request data
+        $userId = (int) $request->query->get('id');
+        $status = (string) $request->query->get('status');
+        $reason = (string) $request->query->get('reason');
+
+        // validate user id & status
+        if ($userId == 0 || $status == null) {
+            $this->errorManager->handleError('invalid request user "id" or "status" parameter not found in query', 400);
+        }
+
+        // check if status is valid
+        if ($status != 'active' && $status !== 'inactive') {
+            $this->errorManager->handleError('invalid request user "status" parameter accept only active or inactive', 400);
+        }
+
+        // check if reason is set
+        if ($status == 'active' && $reason == null) {
+            $reason = 'no-reason';
+        }
+
+        // check if user not exist in database
+        if (!$this->userManager->checkIfUserExistById($userId)) {
+            $this->errorManager->handleError('invalid request user "id" not found in database', 400);
+        }
+
+        // check if banned is active
+        if ($status == 'active') {
+            // check if user already banned
+            if ($this->banManager->isUserBanned($userId)) {
+                $this->errorManager->handleError('invalid request user "id" is already banned', 400);
+            }
+
+            // ban user
+            $this->banManager->banUser($userId, $reason);
+        } else {
+            // unban user
+            $this->banManager->unbanUser($userId);
+        }
 
         // redirect to the users table page
         return $this->redirectToRoute('app_manager_users');
