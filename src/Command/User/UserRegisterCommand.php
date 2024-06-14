@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\User;
 
 use App\Manager\AuthManager;
 use App\Manager\UserManager;

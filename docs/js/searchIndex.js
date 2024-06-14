@@ -21,60 +21,90 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Command-RegenerateAuthTokensCommand.html#property_authManager"
         },                {
-            "fqsen": "\\App\\Command\\UserRegisterCommand",
-            "name": "UserRegisterCommand",
-            "summary": "Class\u0020UserRegisterCommand",
-            "url": "classes/App-Command-UserRegisterCommand.html"
+            "fqsen": "\\App\\Command\\User\\UserBanCommand",
+            "name": "UserBanCommand",
+            "summary": "Class\u0020UserBanCommand",
+            "url": "classes/App-Command-User-UserBanCommand.html"
         },                {
-            "fqsen": "\\App\\Command\\UserRegisterCommand\u003A\u003A__construct\u0028\u0029",
+            "fqsen": "\\App\\Command\\User\\UserBanCommand\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
             "summary": "",
-            "url": "classes/App-Command-UserRegisterCommand.html#method___construct"
+            "url": "classes/App-Command-User-UserBanCommand.html#method___construct"
         },                {
-            "fqsen": "\\App\\Command\\UserRegisterCommand\u003A\u003Aconfigure\u0028\u0029",
+            "fqsen": "\\App\\Command\\User\\UserBanCommand\u003A\u003Aconfigure\u0028\u0029",
             "name": "configure",
             "summary": "Configures\u0020the\u0020current\u0020command.",
-            "url": "classes/App-Command-UserRegisterCommand.html#method_configure"
+            "url": "classes/App-Command-User-UserBanCommand.html#method_configure"
         },                {
-            "fqsen": "\\App\\Command\\UserRegisterCommand\u003A\u003Aexecute\u0028\u0029",
+            "fqsen": "\\App\\Command\\User\\UserBanCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
-            "summary": "Executes\u0020the\u0020command\u0020to\u0020register\u0020a\u0020new\u0020user.",
-            "url": "classes/App-Command-UserRegisterCommand.html#method_execute"
+            "summary": "Executes\u0020the\u0020command\u0020to\u0020ban\u0020user\u0020by\u0020username.",
+            "url": "classes/App-Command-User-UserBanCommand.html#method_execute"
         },                {
-            "fqsen": "\\App\\Command\\UserRegisterCommand\u003A\u003A\u0024authManager",
-            "name": "authManager",
+            "fqsen": "\\App\\Command\\User\\UserBanCommand\u003A\u003A\u0024banManager",
+            "name": "banManager",
             "summary": "",
-            "url": "classes/App-Command-UserRegisterCommand.html#property_authManager"
+            "url": "classes/App-Command-User-UserBanCommand.html#property_banManager"
         },                {
-            "fqsen": "\\App\\Command\\UserRegisterCommand\u003A\u003A\u0024userManager",
+            "fqsen": "\\App\\Command\\User\\UserBanCommand\u003A\u003A\u0024userManager",
             "name": "userManager",
             "summary": "",
-            "url": "classes/App-Command-UserRegisterCommand.html#property_userManager"
+            "url": "classes/App-Command-User-UserBanCommand.html#property_userManager"
         },                {
-            "fqsen": "\\App\\Command\\UserUpdateRoleCommand",
-            "name": "UserUpdateRoleCommand",
-            "summary": "Class\u0020UserUpdateRoleCommand",
-            "url": "classes/App-Command-UserUpdateRoleCommand.html"
+            "fqsen": "\\App\\Command\\User\\UserRegisterCommand",
+            "name": "UserRegisterCommand",
+            "summary": "Class\u0020UserRegisterCommand",
+            "url": "classes/App-Command-User-UserRegisterCommand.html"
         },                {
-            "fqsen": "\\App\\Command\\UserUpdateRoleCommand\u003A\u003A__construct\u0028\u0029",
+            "fqsen": "\\App\\Command\\User\\UserRegisterCommand\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
             "summary": "",
-            "url": "classes/App-Command-UserUpdateRoleCommand.html#method___construct"
+            "url": "classes/App-Command-User-UserRegisterCommand.html#method___construct"
         },                {
-            "fqsen": "\\App\\Command\\UserUpdateRoleCommand\u003A\u003Aconfigure\u0028\u0029",
+            "fqsen": "\\App\\Command\\User\\UserRegisterCommand\u003A\u003Aconfigure\u0028\u0029",
             "name": "configure",
-            "summary": "Configure\u0020the\u0020command.",
-            "url": "classes/App-Command-UserUpdateRoleCommand.html#method_configure"
+            "summary": "Configures\u0020the\u0020current\u0020command.",
+            "url": "classes/App-Command-User-UserRegisterCommand.html#method_configure"
         },                {
-            "fqsen": "\\App\\Command\\UserUpdateRoleCommand\u003A\u003Aexecute\u0028\u0029",
+            "fqsen": "\\App\\Command\\User\\UserRegisterCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
-            "summary": "Execute\u0020the\u0020command\u0020to\u0020update\u0020user\u0020role.",
-            "url": "classes/App-Command-UserUpdateRoleCommand.html#method_execute"
+            "summary": "Executes\u0020the\u0020command\u0020to\u0020register\u0020a\u0020new\u0020user.",
+            "url": "classes/App-Command-User-UserRegisterCommand.html#method_execute"
         },                {
-            "fqsen": "\\App\\Command\\UserUpdateRoleCommand\u003A\u003A\u0024userManager",
+            "fqsen": "\\App\\Command\\User\\UserRegisterCommand\u003A\u003A\u0024authManager",
+            "name": "authManager",
+            "summary": "",
+            "url": "classes/App-Command-User-UserRegisterCommand.html#property_authManager"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserRegisterCommand\u003A\u003A\u0024userManager",
             "name": "userManager",
             "summary": "",
-            "url": "classes/App-Command-UserUpdateRoleCommand.html#property_userManager"
+            "url": "classes/App-Command-User-UserRegisterCommand.html#property_userManager"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserUpdateRoleCommand",
+            "name": "UserUpdateRoleCommand",
+            "summary": "Class\u0020UserUpdateRoleCommand",
+            "url": "classes/App-Command-User-UserUpdateRoleCommand.html"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserUpdateRoleCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Command-User-UserUpdateRoleCommand.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserUpdateRoleCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configure\u0020the\u0020command.",
+            "url": "classes/App-Command-User-UserUpdateRoleCommand.html#method_configure"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserUpdateRoleCommand\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "Execute\u0020the\u0020command\u0020to\u0020update\u0020user\u0020role.",
+            "url": "classes/App-Command-User-UserUpdateRoleCommand.html#method_execute"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserUpdateRoleCommand\u003A\u003A\u0024userManager",
+            "name": "userManager",
+            "summary": "",
+            "url": "classes/App-Command-User-UserUpdateRoleCommand.html#property_userManager"
         },                {
             "fqsen": "\\App\\Controller\\AntiLogController",
             "name": "AntiLogController",
@@ -1710,6 +1740,11 @@ Search.appendIndex(
             "name": "Command",
             "summary": "",
             "url": "namespaces/app-command.html"
+        },                {
+            "fqsen": "\\App\\Command\\User",
+            "name": "User",
+            "summary": "",
+            "url": "namespaces/app-command-user.html"
         },                {
             "fqsen": "\\App\\Controller",
             "name": "Controller",
