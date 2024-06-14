@@ -81,9 +81,8 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Ban/unban actions in users table
     - [X] Banned check in auto login middleware
     - [X] Ban/unban command
-    - [ ] Delete banned user automatic delete ban
+    - [X] Delete banned user automatic delete ban
     - [ ] Testing banned users fixtures
-    - [ ] Ban system unit tests
 - [ ] Users table filter system
 - [ ] Users manager test
 - [ ] Refactor & design fixs
