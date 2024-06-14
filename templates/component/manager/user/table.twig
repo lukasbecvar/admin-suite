@@ -31,6 +31,7 @@
                         <th class="text-left text-white p-2">OS</th>
                         <th class="text-left text-white p-2">Last Login</th>
                         <th class="text-left text-white p-2">Status</th>
+                        <th class="text-left text-white p-2">Banned</th>
                         <th class="text-left text-white p-2">X</th>
                     </tr>
                 </thead>
@@ -94,6 +95,17 @@
                                         <a href="{{ path('app_manager_users', {'filter': 'offline'}) }}">{{currentStatus|e}}</a>
                                     </td>
                                 {% endif %}
+
+                                {% if banManager.isUserBanned(row.id) %}
+                                    <td class="text-green-400 p-2 border-b border-neutral-600">
+                                        <a href="{{ path('app_manager_users', {'filter': 'online'}) }}">Yes</a>
+                                    </td>
+                                {% else %}
+                                    <td class="text-red-400 p-2 border-b border-neutral-600">
+                                        <a href="{{ path('app_manager_users', {'filter': 'offline'}) }}">No</a>
+                                    </td>
+                                {% endif %}
+
                                 <td class="text-white p-2 border-b border-neutral-600"><a href="/manager/users/delete?id={{ row.id|e }}" class="delete-button">X</a></td>
                             </tr>
                         {% endif %}

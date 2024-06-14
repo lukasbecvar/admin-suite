@@ -77,6 +77,7 @@ class UsersManagerController extends AbstractController
             'user_data' => $this->authManager->getLoggedUserRepository(),
 
             // users manager data
+            'banManager' => $this->banManager,
             'userManager' => $this->userManager,
             'users' => $usersData,
             'online_list' => $onlineList,
