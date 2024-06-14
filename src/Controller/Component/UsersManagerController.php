@@ -53,9 +53,6 @@ class UsersManagerController extends AbstractController
             $this->errorManager->handleError('You do not have permission to access this page.', 403);
         }
 
-        // get user status filter
-        $statusFilter = (string) $request->query->get('filter', 'all');
-
         // get current page from request query params
         $page = (int) $request->query->get('page', '1');
 
@@ -86,7 +83,6 @@ class UsersManagerController extends AbstractController
             'current_page' => $page,
             'limit_per_page' => $pageLimit,
             'visitor_info_util' => $this->visitorInfoUtil,
-            'status_filter' => $statusFilter,
             'current_ip' => $this->visitorInfoUtil->getIp()
         ]);
     }

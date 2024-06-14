@@ -78,13 +78,13 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Ban manager
     - [X] Ban/Unban user controller
     - [X] Ban status in users table
-    - [ ] Filter only banned users
     - [ ] Ban/unban user popup overlay confirmation (after click on ban status)
     - [ ] Banned check in auto login middleware
     - [ ] Banned check if login method
     - [ ] Banned alert send to email
-    - [ ] Ban system unit tests
     - [ ] Testing banned users fixtures
+    - [ ] Ban system unit tests
+- [ ] Users table filter system
 - [ ] Users manager test
 - [ ] Refactor & design fixs
 
