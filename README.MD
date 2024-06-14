@@ -53,7 +53,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Component box
     - [X] User info
     - [X] Default sidebar toggle in dashboard (only pc)
-- [ ] User managment system
+- [X] User managment system
     - [X] View users list table
     - [X] Show online/offline status in table
     - [X] user agent shortify
