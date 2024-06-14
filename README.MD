@@ -78,7 +78,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Ban manager
     - [X] Ban/Unban user controller
     - [X] Ban status in users table
-    - [ ] Ban/unban user popup overlay confirmation (after click on ban status)
+    - [X] Ban/unban actions in users table
     - [ ] Banned check in auto login middleware
     - [ ] Banned check if login method
     - [ ] Banned alert send to email

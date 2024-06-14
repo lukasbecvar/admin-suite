@@ -88,7 +88,17 @@ main {
 }
 
 .delete-button:hover {
-	color: rgb(247, 247, 71);
+	color: rgb(71, 247, 71);
+}
+
+.ban-button {
+	font-weight: bold;
+	color: rgb(255, 255, 31);
+	font-size: 18px;
+}
+
+.ban-button:hover {
+	color: rgb(255, 70, 70);
 }
 
 @media screen and (max-width: 400px) { 
