@@ -235,6 +235,11 @@ class UsersManagerController extends AbstractController
         // delete the user
         $this->userManager->deleteUser((int) $userId);
 
+        // unban the user if user is banned
+        if ($this->banManager->isUserBanned((int) $userId)) {
+            $this->banManager->unbanUser((int) $userId);
+        }
+        
         // redirect to the users table page
         return $this->redirectToRoute('app_manager_users');
     }
