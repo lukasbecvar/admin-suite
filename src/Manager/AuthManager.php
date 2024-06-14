@@ -519,16 +519,14 @@ class AuthManager
         // get all users list
         $users = $this->userManager->getAllUsersRepository();
 
-        // Check if $users is iterable
+        // check if $users is iterable
         if (!is_iterable($users)) {
-            // Handle the case where $users is not iterable, maybe log an error
-            // or return an empty array if it's acceptable.
             return $onlineVisitors;
         }
 
         // check all users status
         foreach ($users as $user) {
-            // Check if $user is an object with getId() method
+            // check if $user is an object with getId() method
             if (is_object($user) && method_exists($user, 'getId')) {
                 // get visitor status
                 $status = $this->getUserStatus($user->getId());

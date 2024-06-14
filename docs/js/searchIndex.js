@@ -51,6 +51,31 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Command-User-UserBanCommand.html#property_userManager"
         },                {
+            "fqsen": "\\App\\Command\\User\\UserListCommand",
+            "name": "UserListCommand",
+            "summary": "Class\u0020UserListCommand",
+            "url": "classes/App-Command-User-UserListCommand.html"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserListCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Command-User-UserListCommand.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserListCommand\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "Executes\u0020the\u0020command\u0020to\u0020list\u0020all\u0020users\u0020in\u0020database.",
+            "url": "classes/App-Command-User-UserListCommand.html#method_execute"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserListCommand\u003A\u003A\u0024userManager",
+            "name": "userManager",
+            "summary": "",
+            "url": "classes/App-Command-User-UserListCommand.html#property_userManager"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserListCommand\u003A\u003A\u0024visitorInfoUtil",
+            "name": "visitorInfoUtil",
+            "summary": "",
+            "url": "classes/App-Command-User-UserListCommand.html#property_visitorInfoUtil"
+        },                {
             "fqsen": "\\App\\Command\\User\\UserRegisterCommand",
             "name": "UserRegisterCommand",
             "summary": "Class\u0020UserRegisterCommand",
