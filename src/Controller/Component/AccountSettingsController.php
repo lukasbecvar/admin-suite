@@ -2,17 +2,17 @@
 
 namespace App\Controller\Component;
 
-use App\Form\PasswordChangeForm;
-use App\Form\ProfilePicChangeFormType;
-use App\Form\UsernameChangeFormType;
 use App\Manager\AuthManager;
-use App\Manager\ErrorManager;
 use App\Manager\UserManager;
+use App\Manager\ErrorManager;
+use App\Form\PasswordChangeForm;
+use App\Form\UsernameChangeFormType;
+use App\Form\ProfilePicChangeFormType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class AccountSettingsController
