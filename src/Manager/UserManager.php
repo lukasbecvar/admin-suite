@@ -243,4 +243,39 @@ class UserManager
             }
         }
     }
+
+    /**
+     * Update the username of a user.
+     *
+     * @param int $id The id of the user to update the username
+     * @param string $newUsername The new username
+     *
+     * @throws \Exception If there is an error while updating the username.
+     *
+     * @return void
+     */
+    public function updateUsername(int $id, string $newUsername): void
+    {
+        // get user repo
+        $repo = $this->getUserRepository(['id' => $id]);
+
+        // check if user exist
+        if ($repo != null) {
+            try {
+                // get old username
+                $oldUsername = $repo->getUsername();
+
+                // update username
+                $repo->setUsername($newUsername);
+
+                // flush updated user data
+                $this->entityManager->flush();
+
+                // log action
+                $this->logManager->log('account-settings', 'update username (' . $newUsername . ') for user: ' . $oldUsername);
+            } catch (\Exception $e) {
+                $this->errorManager->handleError('error to update username: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
 }
