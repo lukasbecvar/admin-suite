@@ -11,6 +11,8 @@ Encore
     // register css entries
     .addEntry('index-css', './assets/css/index.css')
 
+    .addEntry('user-manager-js', './assets/js/user-manager.js')
+
     // copy static assets
     .copyFiles(
         {

@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class AuthManager
  *
- * Contains methods to manage user authentication.
+ * Contains methods to manage user authentication
  *
  * @package App\Manager
  */
@@ -34,8 +34,19 @@ class AuthManager
     private VisitorInfoUtil $visitorInfoUtil;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(AppUtil $appUtil, LogManager $logManager, CookieUtil $cookieUtil, SessionUtil $sessionUtil, UserManager $userManager, EmailManager $emailManager, CacheManager $cacheManager, ErrorManager $errorManager, SecurityUtil $securityUtil, VisitorInfoUtil $visitorInfoUtil, EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        LogManager $logManager,
+        CookieUtil $cookieUtil,
+        SessionUtil $sessionUtil,
+        UserManager $userManager,
+        EmailManager $emailManager,
+        CacheManager $cacheManager,
+        ErrorManager $errorManager,
+        SecurityUtil $securityUtil,
+        VisitorInfoUtil $visitorInfoUtil,
+        EntityManagerInterface $entityManager
+    ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->cookieUtil = $cookieUtil;
@@ -50,7 +61,7 @@ class AuthManager
     }
 
     /**
-     * Register a new user.
+     * Register a new user
      *
      * @param string $username The username of the new user
      * @param string $password The password of the new user
@@ -120,7 +131,7 @@ class AuthManager
     }
 
     /**
-     * Get current user logged user.
+     * Get current user logged user
      *
      * @return User|null The user object if found, null otherwise
      */
@@ -136,7 +147,7 @@ class AuthManager
     }
 
     /**
-     * Checks if current user is admin.
+     * Checks if current user is admin
      *
      * @return bool
      */
@@ -164,7 +175,7 @@ class AuthManager
     }
 
     /**
-     * Checks if a user is logged in.
+     * Checks if a user is logged in
      *
      * @return bool
      */
@@ -187,7 +198,7 @@ class AuthManager
     }
 
     /**
-     * Check if a user can login.
+     * Check if a user can login
      *
      * @param string $username The username of the user
      * @param string $password The password of the user
@@ -214,7 +225,7 @@ class AuthManager
     }
 
     /**
-     * Login a user.
+     * Login a user
      *
      * @param string $username The username of the user
      * @param bool $remember Whether to remember the user
@@ -260,7 +271,7 @@ class AuthManager
     }
 
     /**
-     * Update user data on login.
+     * Update user data on login
      *
      * @param string $token The token of the user
      *
@@ -293,7 +304,7 @@ class AuthManager
     }
 
     /**
-     * Get the id of the logged in user.
+     * Get the id of the logged in user
      *
      * @return int The id of the logged in user
      */
@@ -317,7 +328,7 @@ class AuthManager
     }
 
     /**
-     * Retrieves the login token for the current user session.
+     * Retrieves the login token for the current user session
      *
      * @return mixed The login token or null if not found or invalid.
      */
@@ -340,7 +351,7 @@ class AuthManager
     }
 
     /**
-     * User logout action.
+     * User logout action
      *
      * @return void
      */
@@ -369,13 +380,13 @@ class AuthManager
     }
 
     /**
-     * Regenerate tokens for all users in the database.
+     * Regenerate tokens for all users in the database
      *
-     * This method regenerates tokens for all users in the database, ensuring uniqueness for each token.
+     * This method regenerates tokens for all users in the database, ensuring uniqueness for each token
      *
-     * @return array<bool|null|string> An array containing the status of the operation and any relevant message.
-     * - The 'status' key indicates whether the operation was successful (true) or not (false).
-     * - The 'message' key contains any relevant error message if the operation failed, otherwise it is null.
+     * @return array<bool|null|string> An array containing the status of the operation and any relevant message
+     * - The 'status' key indicates whether the operation was successful (true) or not (false)
+     * - The 'message' key contains any relevant error message if the operation failed, otherwise it is null
      */
     public function regenerateUsersTokens(): array
     {
@@ -410,9 +421,9 @@ class AuthManager
     }
 
     /**
-     * Generate a unique token for a user.
+     * Generate a unique token for a user
      *
-     * @return string The generated user token.
+     * @return string The generated user token
      */
     public function generateUserToken(): string
     {
@@ -433,7 +444,7 @@ class AuthManager
     /**
      * Store online user id in cache
      *
-     * @param int $userId The id of the user to store.
+     * @param int $userId The id of the user to store
      *
      * @return void
      */
@@ -444,9 +455,9 @@ class AuthManager
     }
 
     /**
-     * Get online users list.
+     * Get online users list
      *
-     * @return array<mixed> The list of online users.
+     * @return array<mixed> The list of online users
      */
     public function getOnlineUsersList(): array
     {
@@ -480,11 +491,11 @@ class AuthManager
     }
 
     /**
-     * Get user status.
+     * Get user status
      *
-     * @param int $userId The id of the user.
+     * @param int $userId The id of the user
      *
-     * @return string The status of the user.
+     * @return string The status of the user
      */
     public function getUserStatus(int $userId): string
     {
@@ -508,9 +519,9 @@ class AuthManager
     }
 
     /**
-     * Get online users list.
+     * Get online users list
      *
-     * @return array<mixed> The list of online users.
+     * @return array<mixed> The list of online users
      */
     public function getOnlineUsers(): array
     {

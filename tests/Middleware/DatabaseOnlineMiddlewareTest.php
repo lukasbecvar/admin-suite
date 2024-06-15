@@ -40,13 +40,11 @@ class DatabaseOnlineMiddlewareTest extends TestCase
         $event = $this->createMock(RequestEvent::class);
 
         // expect no errors to be handled
-        $errorManagerMock
-            ->expects($this->never())
+        $errorManagerMock->expects($this->never())
             ->method('handleError');
 
         // expect no response to be set
-        $event
-            ->expects($this->never())
+        $event->expects($this->never())
             ->method('setResponse');
 
         // execute the middleware

@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class RegisterController
  *
- * Controller to handle the registration of a new user.
+ * Controller to handle the registration of a new user
  *
  * @package App\Controller\Auth
  */
@@ -29,7 +29,7 @@ class RegisterController extends AbstractController
     }
 
     /**
-     * Handle the registration of a new user.
+     * Handle the registration of a new user
      *
      * @param Request $request The request object
      *
@@ -83,7 +83,7 @@ class RegisterController extends AbstractController
 
         // render the registration component view
         return $this->render('auth/register.twig', [
-            'registration_form' => $form->createView()
+            'registrationForm' => $form->createView()
         ]);
     }
 }

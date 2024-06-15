@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class BannedCheckMiddleware
  *
- * Middleware to check if the user is banned.
+ * Middleware to check if the user is banned
  *
  * @package App\Service\Middleware
  */
@@ -32,9 +32,9 @@ class BannedCheckMiddleware
     }
 
     /**
-     * Check if user is banned.
+     * Check if user is banned
      *
-     * @param RequestEvent $event The request event.
+     * @param RequestEvent $event The request event
      *
      * @return void
      */

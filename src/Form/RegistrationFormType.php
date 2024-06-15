@@ -15,14 +15,14 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 /**
  * Class RegistrationFormType
  *
- * The user registration form.
+ * The new user registration form
  *
  * @package App\Form
  */
 class RegistrationFormType extends AbstractType
 {
     /**
-     * Builds the registration form.
+     * Builds the registration form
      *
      * @param FormBuilderInterface $builder
      * @param array<string> $options
@@ -63,7 +63,7 @@ class RegistrationFormType extends AbstractType
     }
 
     /**
-     * Configures the options for the registration form.
+     * Configures the options for the registration form
      *
      * @param OptionsResolver $resolver
      *

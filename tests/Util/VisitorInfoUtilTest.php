@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class VisitorInfoUtilTest
  *
- * Unit tests for the VisitorInfoUtil class.
+ * Unit tests for the VisitorInfoUtil class
  *
  * @package App\Tests\Util
  */
@@ -22,7 +22,7 @@ class VisitorInfoUtilTest extends TestCase
     }
 
     /**
-     * Tests the getIP method when the HTTP_CLIENT_IP server variable is set.
+     * Tests the getIP method when the HTTP_CLIENT_IP server variable is set
      *
      * @return void
      */
@@ -43,7 +43,7 @@ class VisitorInfoUtilTest extends TestCase
     }
 
     /**
-     * Tests the getIP method when the HTTP_X_FORWARDED_FOR server variable is set.
+     * Tests the getIP method when the HTTP_X_FORWARDED_FOR server variable is set
      *
      * @return void
      */
@@ -64,7 +64,7 @@ class VisitorInfoUtilTest extends TestCase
     }
 
     /**
-     * Tests the getIP method when only the REMOTE_ADDR server variable is set.
+     * Tests the getIP method when only the REMOTE_ADDR server variable is set
      *
      * @return void
      */
@@ -85,7 +85,7 @@ class VisitorInfoUtilTest extends TestCase
     }
 
     /**
-     * Tests the GetUserAgent method when the HTTP_USER_AGENT server variable is set.
+     * Tests the GetUserAgent method when the HTTP_USER_AGENT server variable is set
      *
      * @return void
      */
@@ -102,7 +102,7 @@ class VisitorInfoUtilTest extends TestCase
     }
 
     /**
-     * Tests the GetUserAgent method when the HTTP_USER_AGENT server variable is not set.
+     * Tests the GetUserAgent method when the HTTP_USER_AGENT server variable is not set
      *
      * @return void
      */
@@ -116,7 +116,7 @@ class VisitorInfoUtilTest extends TestCase
     }
 
     /**
-     * Test getBrowserShortify method for getting the visitor's browser.
+     * Test getBrowserShortify method for getting the visitor's browser
      *
      * @return void
      */
@@ -130,7 +130,7 @@ class VisitorInfoUtilTest extends TestCase
     }
 
     /**
-     * Test getOS method for getting the visitor's operating system.
+     * Test getOS method for getting the visitor's operating system
      *
      * @return void
      */

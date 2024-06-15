@@ -31,11 +31,11 @@ class SecurityUtil
     }
 
     /**
-     * Generate hash for a given password.
+     * Generate hash for a given password
      *
-     * @param string $password The password to hash.
+     * @param string $password The password to hash
      *
-     * @return string The hashed password.
+     * @return string The hashed password
      */
     public function generateHash(string $password): string
     {
@@ -52,12 +52,12 @@ class SecurityUtil
     }
 
     /**
-     * Verify a password against a given Argon2 hash.
+     * Verify a password against a given Argon2 hash
      *
-     * @param string $password The password to verify.
-     * @param string $hash The hash to verify against.
+     * @param string $password The password to verify
+     * @param string $hash The hash to verify against
      *
-     * @return bool True if the password is valid, false otherwise.
+     * @return bool True if the password is valid, false otherwise
      */
     public function verifyPassword(string $password, string $hash): bool
     {
@@ -65,12 +65,12 @@ class SecurityUtil
     }
 
     /**
-     * Encrypt a string using AES encryption.
+     * Encrypt a string using AES encryption
      *
-     * @param string $plainText The plain text to encrypt.
-     * @param string $method The encryption method (default: AES-128-CBC).
+     * @param string $plainText The plain text to encrypt
+     * @param string $method The encryption method (default: AES-128-CBC)
      *
-     * @return string The base64-encoded encrypted string.
+     * @return string The base64-encoded encrypted string
      */
     public function encryptAes(string $plainText, string $method = 'AES-128-CBC'): string
     {
@@ -92,12 +92,12 @@ class SecurityUtil
     }
 
     /**
-     * Decrypt an AES-encrypted string.
+     * Decrypt an AES-encrypted string
      *
-     * @param string $encryptedData The base64-encoded encrypted string.
-     * @param string $method The encryption method (default: AES-128-CBC).
+     * @param string $encryptedData The base64-encoded encrypted string
+     * @param string $method The encryption method (default: AES-128-CBC)
      *
-     * @return string|null The decrypted string or null on error.
+     * @return string|null The decrypted string or null on error
      */
     public function decryptAes(string $encryptedData, string $method = 'AES-128-CBC'): ?string
     {

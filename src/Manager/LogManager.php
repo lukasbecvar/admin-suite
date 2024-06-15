@@ -25,8 +25,14 @@ class LogManager
     private VisitorInfoUtil $visitorInfoUtil;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(AppUtil $appUtil, CookieUtil $cookieUtil, SessionUtil $sessionUtil, ErrorManager $errorManager, VisitorInfoUtil $visitorInfoUtil, EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        CookieUtil $cookieUtil,
+        SessionUtil $sessionUtil,
+        ErrorManager $errorManager,
+        VisitorInfoUtil $visitorInfoUtil,
+        EntityManagerInterface $entityManager
+    ) {
         $this->appUtil = $appUtil;
         $this->cookieUtil = $cookieUtil;
         $this->sessionUtil = $sessionUtil;

@@ -12,25 +12,25 @@
         <div class="text-white max-w-md w-full bg-dark shadow-md px-4 py-4 mb-1 border border-gray-600 m-w-95">
             <h2 class="text-2xl mb-4 text-center text-white">Change username</h2>
     
-            {# USERNAME CHANGE success message box #}
+            {# SUCCESS MESSAGE RETURN BOX #}
             {% for message in app.flashes('success') %}
                 <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
             {% endfor %}
     
-            {# USERNAME CHANGE error message box #}
+            {# ERROR MESSAGE RETURN BOX #}
             {% for message in app.flashes('error') %}
                 <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
             {% endfor %}
     
-            {# USERNAME CHANGE form #}
-            {{ form_start(username_change_form) }}
+            {# USERNAME CHANGE FORM #}
+            {{ form_start(usernameChangeForm) }}
     
-                {# USERNAME CHANGE form fields #}
-                {{ form_row(username_change_form.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
+                {# FORM FIELDS #}
+                {{ form_row(usernameChangeForm.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
     
-                {# USERNAME CHANGE form submit button #}
+                {# FORM SUBMIT BUTTON #}
                 <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Change</button>
-            {{ form_end(username_change_form) }}
+            {{ form_end(usernameChangeForm) }}
         </div>
     </div>
 {% endblock %}

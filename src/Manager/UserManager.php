@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class UserManager
  *
- * Contains methods to manage user data.
+ * Contains methods to manage user data
  *
  * @package App\Manager
  */
@@ -23,8 +23,13 @@ class UserManager
     private ErrorManager $errorManager;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(AppUtil $appUtil, LogManager $logManager, SecurityUtil $securityUtil, ErrorManager $errorManager, EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        LogManager $logManager,
+        SecurityUtil $securityUtil,
+        ErrorManager $errorManager,
+        EntityManagerInterface $entityManager
+    ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->errorManager = $errorManager;
@@ -33,7 +38,7 @@ class UserManager
     }
 
     /**
-     * Retrieve a user from the repository based on search criteria.
+     * Retrieve a user from the repository based on search criteria
      *
      * @param array<mixed> $search The search criteria
      *
@@ -46,7 +51,7 @@ class UserManager
     }
 
     /**
-     * Retrieve all users from the repository.
+     * Retrieve all users from the repository
      *
      * @return array<mixed> The user object if found, null otherwise
      */
@@ -56,7 +61,7 @@ class UserManager
     }
 
     /**
-     * Retrieve all users count from the repository.
+     * Retrieve all users count from the repository
      *
      * @return int|null The user object if found, null otherwise
      */
@@ -66,7 +71,7 @@ class UserManager
     }
 
     /**
-     * Retrieve all users from the repository by page.
+     * Retrieve all users from the repository by page
      *
      * @return array<mixed> The user object if found, null otherwise
      */
@@ -83,7 +88,7 @@ class UserManager
     }
 
     /**
-     * Check if a user exists.
+     * Check if a user exists
      *
      * @param string $username The username to check
      *
@@ -95,7 +100,7 @@ class UserManager
     }
 
     /**
-     * Check if a user exists by ID.
+     * Check if a user exists by ID
      *
      * @param int $userId The id of the user to check
      *
@@ -107,7 +112,7 @@ class UserManager
     }
 
     /**
-     * Get the username of a user.
+     * Get the username of a user
      *
      * @param int $id The id of the user to get the username
      *
@@ -126,7 +131,7 @@ class UserManager
     }
 
     /**
-     * Get the role of a user.
+     * Get the role of a user
      *
      * @param int $id The id of the user to get the role
      *
@@ -145,7 +150,7 @@ class UserManager
     }
 
     /**
-     * Checks if the specified user has the admin role.
+     * Checks if the specified user has the admin role
      *
      * @param int $id The id of the user to check the admin role
      *
@@ -164,7 +169,7 @@ class UserManager
     }
 
     /**
-     * Update the role of a user.
+     * Update the role of a user
      *
      * @param int $id The id of the user to add the admin role
      * @param string $role The role to add
@@ -199,9 +204,9 @@ class UserManager
     }
 
     /**
-     * Checks if the user repository is empty.
+     * Checks if the user repository is empty
      *
-     * @return bool True if the user repository is empty, false otherwise.
+     * @return bool True if the user repository is empty, false otherwise
      */
     public function isUsersEmpty(): bool
     {
@@ -219,11 +224,11 @@ class UserManager
     }
 
     /**
-     * Delete a user.
+     * Delete a user
      *
      * @param int $id The id of the user to delete
      *
-     * @throws \Exception If there is an error while deleting the user.
+     * @throws \Exception If there is an error while deleting the user
      *
      * @return void
      */
@@ -248,7 +253,7 @@ class UserManager
     }
 
     /**
-     * Update the user username.
+     * Update the user username
      *
      * @param int $id The id of the user to update the username
      * @param string $newUsername The new username
@@ -283,7 +288,7 @@ class UserManager
     }
 
     /**
-     * Update the user password.
+     * Update the user password
      *
      * @param int $id The id of the user to update the password
      * @param string $newPassword The new password
@@ -318,7 +323,7 @@ class UserManager
     }
 
     /**
-     * Update the user profile picture.
+     * Update the user profile picture
      *
      * @param int $id The id of the user to update the profile picture
      * @param string $newProfilePicture The new profile picture

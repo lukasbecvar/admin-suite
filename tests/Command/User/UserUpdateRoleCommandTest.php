@@ -14,7 +14,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class UserUpdateRoleCommandTest
  *
- * Test the user update role command.
+ * Test the user update role command
  *
  * @package App\Tests\Command
  */
@@ -33,7 +33,7 @@ class UserUpdateRoleCommandTest extends TestCase
     }
 
     /**
-     * Create command tester.
+     * Create command tester
      *
      * @return CommandTester
      */
@@ -48,7 +48,7 @@ class UserUpdateRoleCommandTest extends TestCase
     }
 
     /**
-     * Test execute method with empty username.
+     * Test execute method with empty username
      *
      * @return void
      */
@@ -66,7 +66,7 @@ class UserUpdateRoleCommandTest extends TestCase
     }
 
     /**
-     * Test execute method with empty role.
+     * Test execute method with empty role
      *
      * @return void
      */
@@ -84,7 +84,7 @@ class UserUpdateRoleCommandTest extends TestCase
     }
 
     /**
-     * Test execute method with invalid role.
+     * Test execute method with invalid role
      *
      * @return void
      */
@@ -102,7 +102,7 @@ class UserUpdateRoleCommandTest extends TestCase
     }
 
     /**
-     * Test execute method with non existing username.
+     * Test execute method with non existing username
      *
      * @return void
      */
@@ -123,7 +123,7 @@ class UserUpdateRoleCommandTest extends TestCase
     }
 
     /**
-     * Test execute method with same role.
+     * Test execute method with same role
      *
      * @return void
      */
@@ -149,7 +149,7 @@ class UserUpdateRoleCommandTest extends TestCase
     }
 
     /**
-     * Test execute method with exception during role update.
+     * Test execute method with exception during role update
      *
      * @return void
      */
@@ -176,7 +176,7 @@ class UserUpdateRoleCommandTest extends TestCase
     }
 
     /**
-     * Test execute with successful role update.
+     * Test execute with successful role update
      *
      * @return void
      */

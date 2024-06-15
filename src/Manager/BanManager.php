@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Class BanManager
  *
- * The BanManager is responsible for managing bans in the application.
+ * The BanManager is responsible for managing bans in the application
  *
  * @package App\Manager
  */
@@ -20,8 +20,13 @@ class BanManager
     private ErrorManager $errorManager;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(LogManager $logManager, UserManager $userManager, AuthManager $authManager, ErrorManager $errorManager, EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        LogManager $logManager,
+        UserManager $userManager,
+        AuthManager $authManager,
+        ErrorManager $errorManager,
+        EntityManagerInterface $entityManager
+    ) {
         $this->logManager = $logManager;
         $this->userManager = $userManager;
         $this->authManager = $authManager;
@@ -30,27 +35,27 @@ class BanManager
     }
 
     /**
-     * Ban a user.
+     * Ban a user
      *
-     * @param int $userId The id of the user to ban.
-     * @param string $reason The reason for banning the user.
+     * @param int $userId The id of the user to ban
+     * @param string $reason The reason for banning the user
      *
      * @return void
      */
     public function banUser(int $userId, string $reason = 'no-reason'): void
     {
+        // check if user is already banned
         if ($this->isUserBanned($userId)) {
             return;
         }
 
-        $banned = new Banned();
-
         // set banned data
-        $banned->setReason($reason);
-        $banned->setStatus('active');
-        $banned->setTime(new \DateTime());
-        $banned->setBannedById($this->authManager->getLoggedUserId());
-        $banned->setBannedUserId($userId);
+        $banned = new Banned();
+        $banned->setReason($reason)
+            ->setStatus('active')
+            ->setTime(new \DateTime())
+            ->setBannedById($this->authManager->getLoggedUserId())
+            ->setBannedUserId($userId);
 
         // ban user
         try {
@@ -65,11 +70,11 @@ class BanManager
     }
 
     /**
-     * Check if user is banned.
+     * Check if user is banned
      *
-     * @param int $userId The id of the user.
+     * @param int $userId The id of the user
      *
-     * @return bool The banned status of the user.
+     * @return bool The banned status of the user
      */
     public function isUserBanned(int $userId): bool
     {
@@ -78,9 +83,9 @@ class BanManager
     }
 
     /**
-     * Get ban reason.
+     * Get ban reason
      *
-     * @param int $userId The id of the user.
+     * @param int $userId The id of the user
      *
      * @return string|null The reason for banning the user, or null if the user
      */
@@ -89,6 +94,7 @@ class BanManager
         // check if user is banned
         $banned = $this->entityManager->getRepository(Banned::class)->findOneBy(['banned_user_id' => $userId,'status' => 'active']);
 
+        // check if banned repository exists
         if ($banned) {
             return $banned->getReason();
         }
@@ -97,9 +103,9 @@ class BanManager
     }
 
     /**
-     * Unban a user.
+     * Unban a user
      *
-     * @param int $userId The id of the user to unban.
+     * @param int $userId The id of the user to unban
      *
      * @return void
      */
@@ -108,6 +114,7 @@ class BanManager
         // check if user is banned
         $banned = $this->entityManager->getRepository(Banned::class)->findOneBy(['banned_user_id' => $userId,'status' => 'active']);
 
+        // check if banned repository exists
         if ($banned) {
             // unban user
             try {
@@ -125,9 +132,9 @@ class BanManager
     }
 
     /**
-     * Get banned users list.
+     * Get banned users list
      *
-     * @return array<mixed> The list of banned users.
+     * @return array<mixed> The list of banned users
      */
     public function getBannedUsers(): array
     {

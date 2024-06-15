@@ -1,33 +1,32 @@
 {% extends 'common/base.twig' %}
 
-{# user register form component #}
+{# USER REGISTER COMPONENT (ONLY FIRST ACCOUNT) #}
 {% block body %}
 <div class="auth-component flex justify-center items-center h-screen">
     <div class="text-white max-w-md w-full bg-dark shadow-md px-4 py-4 mb-1 border border-gray-600 background-dark opacity-90 m-w-95">
         <h2 class="text-2xl mb-4 text-center text-white">Register</h2>
 
-        {# register success message box #}
+        {# SUCCESS MESSAGE RETURN BOX #}
         {% for message in app.flashes('success') %}
             <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
         {% endfor %}
 
-        {# register error message box #}
+        {# ERROR MESSAGE RETURN BOX #}
         {% for message in app.flashes('error') %}
             <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
         {% endfor %}
 
-        {# register form #}
-        {{ form_start(registration_form) }}
+        {# REGISTER FORM #}
+        {{ form_start(registrationForm) }}
 
-            {# register form fields #}
-            {{ form_row(registration_form.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
-            {{ form_row(registration_form.password.first, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
-            {{ form_row(registration_form.password.second, {'attr': {'class': 'auth-form-input', 'placeholder': 'Confirm Password'}}) }}
+            {# FORM FIELDS #}
+            {{ form_row(registrationForm.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
+            {{ form_row(registrationForm.password.first, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
+            {{ form_row(registrationForm.password.second, {'attr': {'class': 'auth-form-input', 'placeholder': 'Confirm Password'}}) }}
 
-            {# register form submit button #}
+            {# FORM SUBMIT BUTTON #}
             <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Register</button>
-        
-        {{ form_end(registration_form) }}
+        {{ form_end(registrationForm) }}
         <p class="text-white">You can login <a class="text-blue-400 font-bold hover:text-blue-500" href="/login">here</a></p>
     </div>
 </div>

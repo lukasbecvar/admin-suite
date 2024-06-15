@@ -15,9 +15,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class UserRegisterCommand
  *
- * Command to register a new user.
+ * Command to register a new user
  *
- * @package App\Command
+ * @package App\Command\User
  */
 #[AsCommand(name: 'app:user:register', description: 'Register new user')]
 class UserRegisterCommand extends Command
@@ -33,7 +33,7 @@ class UserRegisterCommand extends Command
     }
 
     /**
-     * Configures the current command.
+     * Configures the current command
      *
      * @return void
      */
@@ -43,7 +43,7 @@ class UserRegisterCommand extends Command
     }
 
     /**
-     * Executes the command to register a new user.
+     * Executes the command to register a new user
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
@@ -96,7 +96,7 @@ class UserRegisterCommand extends Command
             $io->success('New user registered username: ' . $username . ' with password: ' . $password);
             return Command::SUCCESS;
         } catch (\Exception $e) {
-            $io->success('error to register user: ' . $e->getMessage());
+            $io->error('error to register user: ' . $e->getMessage());
             return Command::FAILURE;
         }
     }

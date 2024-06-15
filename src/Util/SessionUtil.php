@@ -7,7 +7,7 @@ use App\Manager\ErrorManager;
 /**
  * Class SessionUtil
  *
- * SessionUtil provides session management functions.
+ * SessionUtil provides session management functions
  *
  * @package App\Util
  */
@@ -23,7 +23,7 @@ class SessionUtil
     }
 
     /**
-     * Start a new session if not already started.
+     * Start a new session if not already started
      *
      * @return void
      */
@@ -35,7 +35,7 @@ class SessionUtil
     }
 
     /**
-     * Destroy the current session.
+     * Destroy the current session
      *
      * @return void
      */
@@ -48,11 +48,11 @@ class SessionUtil
     }
 
     /**
-     * Check if a session with the specified name exists.
+     * Check if a session with the specified name exists
      *
-     * @param string $sessionName The name of the session to check.
+     * @param string $sessionName The name of the session to check
      *
-     * @return bool Whether the session exists.
+     * @return bool Whether the session exists
      */
     public function checkSession(string $sessionName): bool
     {
@@ -61,10 +61,10 @@ class SessionUtil
     }
 
     /**
-     * Set a session value.
+     * Set a session value
      *
-     * @param string $sessionName The name of the session.
-     * @param string $sessionValue The value to set for the session.
+     * @param string $sessionName The name of the session
+     * @param string $sessionValue The value to set for the session
      *
      * @return void
      */
@@ -75,7 +75,7 @@ class SessionUtil
     }
 
     /**
-     * Get a value from the session.
+     * Get a value from the session
      *
      * @param string $sessionName The session key
      * @param mixed $default The default value to return if the key does not exist

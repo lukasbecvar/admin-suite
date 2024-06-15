@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class RegisterControllerTest
  *
- * Test the register controller.
+ * Test the register controller
  *
  * @package App\Tests\Controller\Auth
  */
@@ -25,7 +25,7 @@ class RegisterControllerTest extends WebTestCase
     }
 
     /**
-     * Set mock user manager.
+     * Set mock user manager
      *
      * @return void
      */
@@ -37,7 +37,7 @@ class RegisterControllerTest extends WebTestCase
     }
 
     /**
-     * Test register page rendering.
+     * Test register page rendering
      *
      * @return void
      */
@@ -60,7 +60,7 @@ class RegisterControllerTest extends WebTestCase
     }
 
     /**
-     * Test submit form with invalid length.
+     * Test submit form with invalid length
      *
      * @return void
      */
@@ -92,7 +92,7 @@ class RegisterControllerTest extends WebTestCase
     }
 
     /**
-     * Test submit form with not match passwords.
+     * Test submit form with not match passwords
      *
      * @return void
      */
@@ -123,7 +123,7 @@ class RegisterControllerTest extends WebTestCase
     }
 
     /**
-     * Test submit form with empty credentials.
+     * Test submit form with empty credentials
      *
      * @return void
      */
@@ -155,7 +155,7 @@ class RegisterControllerTest extends WebTestCase
     }
 
     /**
-     * Test submit form with valid credentials.
+     * Test submit form with valid credentials
      *
      * @return void
      */

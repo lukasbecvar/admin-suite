@@ -29,7 +29,7 @@ class LoginController extends AbstractController
     }
 
     /**
-     * Handle the user login component.
+     * Handle the user login component
      *
      * @param Request $request The request object
      *
@@ -78,8 +78,8 @@ class LoginController extends AbstractController
 
         // render the registration component view
         return $this->render('auth/login.twig', [
-            'is_users_empty' => $this->userManager->isUsersEmpty(),
-            'login_form' => $form->createView()
+            'isUsersEmpty' => $this->userManager->isUsersEmpty(),
+            'loginForm' => $form->createView()
         ]);
     }
 }

@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class DashboardControllerTest
  *
- * Test the dashboard page.
+ * Test the dashboard page
  *
  * @package App\Tests\Controller\Component
  */
@@ -27,7 +27,7 @@ class DashboardControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the dashboard page.
+     * Test the dashboard page
      *
      * @return void
      */

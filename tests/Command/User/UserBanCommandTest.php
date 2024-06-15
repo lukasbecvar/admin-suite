@@ -14,7 +14,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class UserBanCommandTest
  *
- * Test the user ban command.
+ * Test the user ban command
  *
  * @package App\Tests\Command\User
  */
@@ -38,11 +38,14 @@ class UserBanCommandTest extends TestCase
         $command = new UserBanCommand($this->banManager, $this->userManager);
         $application->add($command);
 
+        // create command tester
         $this->commandTester = new CommandTester($application->find('app:user:ban'));
     }
 
     /**
      * Test execute non exist user
+     *
+     * @return void
      */
     public function testExecuteUserNotExist(): void
     {

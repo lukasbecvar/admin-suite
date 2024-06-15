@@ -14,7 +14,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class UserRegisterCommandTest
  *
- * Test cases for the UserRegisterCommand class.
+ * Test cases for the UserRegisterCommand class
  *
  * @package App\Tests\Command
  */
@@ -46,7 +46,7 @@ class UserRegisterCommandTest extends TestCase
     }
 
     /**
-     * Test case for empty username argument.
+     * Test case for empty username argument
      *
      * @return void
      */
@@ -70,7 +70,7 @@ class UserRegisterCommandTest extends TestCase
     }
 
     /**
-     * Test case for username already exists.
+     * Test case for username already exists
      *
      * @return void
      */
@@ -93,7 +93,7 @@ class UserRegisterCommandTest extends TestCase
     }
 
     /**
-     * Test case for registering a new user successfully.
+     * Test case for registering a new user successfully
      *
      * @return void
      */

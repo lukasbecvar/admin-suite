@@ -1,11 +1,24 @@
 /* admin-suite: main app styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: #161616;
+}
+
 main {
 	margin-top: 30px; 
 }
 
-.highlighter {
-	color: rgb(255, 255, 7) !important;
-	font-weight: 600;
+.background-dark {
+    background: rgb(20,20,20) !important;
 }
 
 #main-content {
@@ -18,6 +31,7 @@ main {
 	margin-left: 180px; 
 }
 
+/* main navigation */
 .nav-bar {
 	position: fixed;
 	top: 0;
@@ -27,6 +41,7 @@ main {
 	height: 30px;
 }
 
+/* sidebar element */
 #sidebar {
 	position: fixed;
 	top: 30px; 
@@ -39,7 +54,7 @@ main {
 	transform: translateX(-100%);
 }
 
-.profile-image {
+#sidebar .profile-image {
 	width: 60px;
 	height: 60px;
 }
@@ -57,6 +72,7 @@ main {
 	background: #292e33;
 }
 
+/* sub non global navigation */
 .sub-navigation {
     display: flex;
     justify-content: flex-start;
@@ -76,40 +92,49 @@ main {
     border: 1px solid rgb(247, 247, 71);
 }
 
-.top-center {
-	position: relative;
-	left: 50%;
-}
-
-.delete-button {
+/* users manager component */
+.users-manager .delete-button {
 	font-weight: bold;
 	color: rgb(255, 70, 70);
 	font-size: 18px;
 }
 
-.delete-button:hover {
+.users-manager .delete-button:hover {
 	color: rgb(71, 247, 71);
 }
 
-.ban-button {
+.users-manager .ban-button, .unban-button {
 	font-weight: bold;
 	color: rgb(255, 255, 31);
 	font-size: 18px;
 }
 
-.ban-button:hover {
+.users-manager .ban-button:hover, .unban-button:hover {
 	color: rgb(255, 70, 70);
 }
 
-.image-preview {
+.users-manager .highlighter {
+	color: rgb(255, 255, 7) !important;
+	font-weight: 600;
+}
+
+/* account settings component */
+.account-settings .profile-image {
+	width: 60px;
+	height: 60px;
+}
+
+.account-settings .image-preview {
 	display: none;
 	justify-content: center;
 }
-.image-preview img {
+
+.account-settings .image-preview img {
 	max-width: 100%;
 	max-height: 200px;
 }
 
+/* mobile style */
 @media screen and (max-width: 400px) { 
 	#sidebar {
 		width: 100%;

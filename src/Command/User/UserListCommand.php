@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class UserListCommand
  *
- * Command to list all users in database.
+ * Command to list all users in database
  *
  * @package App\Command\User
  */
@@ -31,12 +31,12 @@ class UserListCommand extends Command
     }
 
     /**
-     * Executes the command to list all users in database.
+     * Executes the command to list all users in database
      *
-     * @param InputInterface $input The input interface.
-     * @param OutputInterface $output The output interface.
+     * @param InputInterface $input The input interface
+     * @param OutputInterface $output The output interface
      *
-     * @return int The exit code of the command.
+     * @return int The exit code of the command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -45,24 +45,34 @@ class UserListCommand extends Command
         /** @var \App\Entity\User $users */
         $users = $this->userManager->getAllUsersRepository();
 
-        // Prepare the data for the table
-        $data = [];
-        if (is_iterable($users)) {
-            foreach ($users as $user) {
-                $data[] = [
-                    $user->getId(),
-                    $user->getUsername(),
-                    $user->getRole(),
-                    $user->getIpAddress(),
-                    $this->visitorInfoUtil->getBrowserShortify($user->getUserAgent()),
-                    $this->visitorInfoUtil->getOs($user->getUserAgent()),
-                    $user->getRegisterTime()->format('Y-m-d H:i:s'),
-                    $user->getLastLoginTime()->format('Y-m-d H:i:s')
-                ];
-            }
+        // check if $users is empty
+        if ($this->userManager->isUsersEmpty()) {
+            $io->success('User list is empty.');
+            return Command::SUCCESS;
         }
 
-        // Render the table with SymfonyStyle
+        // check if $users is iterable
+        if (!is_iterable($users)) {
+            $io->error('Failed to retrieve users.');
+            return Command::FAILURE;
+        }
+
+        // prepare the data for the table
+        $data = [];
+        foreach ($users as $user) {
+            $data[] = [
+                $user->getId(),
+                $user->getUsername(),
+                $user->getRole(),
+                $user->getIpAddress(),
+                $this->visitorInfoUtil->getBrowserShortify($user->getUserAgent()),
+                $this->visitorInfoUtil->getOs($user->getUserAgent()),
+                $user->getRegisterTime()->format('Y-m-d H:i:s'),
+                $user->getLastLoginTime()->format('Y-m-d H:i:s')
+            ];
+        }
+
+        // render the table with
         $io->table(
             ['#', 'Username', 'Role', 'Ip address', 'Browser', 'OS', 'Register time', 'Last login'],
             $data

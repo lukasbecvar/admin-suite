@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 /**
- * Class AccountSettingsControllerTest.
+ * Class AccountSettingsControllerTest
  *
- * Test the account-settings controller.
+ * Test the account-settings controller
  *
  * @package App\Tests\Controller\Component
  */
@@ -28,7 +28,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the account-settings load.
+     * Test the account-settings load
      *
      * @return void
      */
@@ -47,7 +47,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the username change form load.
+     * Test the username change form load
      *
      * @return void
      */
@@ -64,7 +64,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the username change with empty username.
+     * Test the username change with empty username
      *
      * @return void
      */
@@ -88,7 +88,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the username change with low length username.
+     * Test the username change with low length username
      *
      * @return void
      */
@@ -112,7 +112,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the username change with higher length username.
+     * Test the username change with higher length username
      *
      * @return void
      */
@@ -136,7 +136,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the username change with valid username.
+     * Test the username change with valid username
      *
      * @return void
      */
@@ -154,7 +154,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change form load.
+     * Test the password change form load
      *
      * @return void
      */
@@ -171,7 +171,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the profile picture change with empty image.
+     * Test the profile picture change with empty image
      *
      * @return void
      */
@@ -194,7 +194,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change form load.
+     * Test the password change form load
      *
      * @return void
      */
@@ -212,7 +212,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change with empty inputs.
+     * Test the password change with empty inputs
      *
      * @return void
      */
@@ -239,7 +239,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change with low length inputs.
+     * Test the password change with low length inputs
      *
      * @return void
      */
@@ -266,7 +266,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change with higher length inputs.
+     * Test the password change with higher length inputs
      *
      * @return void
      */
@@ -293,7 +293,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change with not matched passwords.
+     * Test the password change with not matched passwords
      *
      * @return void
      */
@@ -320,7 +320,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change with valid inputs.
+     * Test the password change with valid inputs
      *
      * @return void
      */
