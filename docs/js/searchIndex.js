@@ -253,7 +253,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Controller\\Component\\AccountSettingsController\u003A\u003AaccountSettingsChangeUsername\u0028\u0029",
             "name": "accountSettingsChangeUsername",
-            "summary": "",
+            "summary": "Render\u0020the\u0020change\u0020username\u0020form.",
             "url": "classes/App-Controller-Component-AccountSettingsController.html#method_accountSettingsChangeUsername"
         },                {
             "fqsen": "\\App\\Controller\\Component\\AccountSettingsController\u003A\u003AaccountSettingsChangePicture\u0028\u0029",
@@ -263,7 +263,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Controller\\Component\\AccountSettingsController\u003A\u003AaccountSettingsChangePassword\u0028\u0029",
             "name": "accountSettingsChangePassword",
-            "summary": "",
+            "summary": "Render\u0020the\u0020change\u0020password\u0020form.",
             "url": "classes/App-Controller-Component-AccountSettingsController.html#method_accountSettingsChangePassword"
         },                {
             "fqsen": "\\App\\Controller\\Component\\AccountSettingsController\u003A\u003A\u0024userManager",
@@ -876,6 +876,21 @@ Search.appendIndex(
             "summary": "Configure\u0020the\u0020options",
             "url": "classes/App-Form-LoginFormType.html#method_configureOptions"
         },                {
+            "fqsen": "\\App\\Form\\PasswordChangeForm",
+            "name": "PasswordChangeForm",
+            "summary": "Class\u0020PasswordChangeForm",
+            "url": "classes/App-Form-PasswordChangeForm.html"
+        },                {
+            "fqsen": "\\App\\Form\\PasswordChangeForm\u003A\u003AbuildForm\u0028\u0029",
+            "name": "buildForm",
+            "summary": "Builds\u0020the\u0020password\u0020update\u0020form.",
+            "url": "classes/App-Form-PasswordChangeForm.html#method_buildForm"
+        },                {
+            "fqsen": "\\App\\Form\\PasswordChangeForm\u003A\u003AconfigureOptions\u0028\u0029",
+            "name": "configureOptions",
+            "summary": "Configures\u0020the\u0020options\u0020for\u0020the\u0020registration\u0020form.",
+            "url": "classes/App-Form-PasswordChangeForm.html#method_configureOptions"
+        },                {
             "fqsen": "\\App\\Form\\RegistrationFormType",
             "name": "RegistrationFormType",
             "summary": "Class\u0020RegistrationFormType",
@@ -1348,8 +1363,13 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Manager\\UserManager\u003A\u003AupdateUsername\u0028\u0029",
             "name": "updateUsername",
-            "summary": "Update\u0020the\u0020username\u0020of\u0020a\u0020user.",
+            "summary": "Update\u0020the\u0020user\u0020username.",
             "url": "classes/App-Manager-UserManager.html#method_updateUsername"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AupdatePassword\u0028\u0029",
+            "name": "updatePassword",
+            "summary": "Update\u0020the\u0020user\u0020password.",
+            "url": "classes/App-Manager-UserManager.html#method_updatePassword"
         },                {
             "fqsen": "\\App\\Manager\\UserManager\u003A\u003A\u0024appUtil",
             "name": "appUtil",
@@ -1360,6 +1380,11 @@ Search.appendIndex(
             "name": "logManager",
             "summary": "",
             "url": "classes/App-Manager-UserManager.html#property_logManager"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003A\u0024securityUtil",
+            "name": "securityUtil",
+            "summary": "",
+            "url": "classes/App-Manager-UserManager.html#property_securityUtil"
         },                {
             "fqsen": "\\App\\Manager\\UserManager\u003A\u003A\u0024errorManager",
             "name": "errorManager",

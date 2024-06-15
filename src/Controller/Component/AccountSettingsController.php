@@ -2,6 +2,7 @@
 
 namespace App\Controller\Component;
 
+use App\Form\PasswordChangeForm;
 use App\Form\UsernameChangeFormType;
 use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
@@ -46,6 +47,13 @@ class AccountSettingsController extends AbstractController
         ]);
     }
 
+    /**
+     * Render the change username form.
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The response view
+     */
     #[Route('/account/settings/change/username', methods:['GET', 'POST'], name: 'app_account_settings_change_username')]
     public function accountSettingsChangeUsername(Request $request): Response
     {
@@ -90,21 +98,58 @@ class AccountSettingsController extends AbstractController
         ]);
     }
 
-    #[Route('/account/settings/change/picture', methods:['GET'], name: 'app_account_settings_change_picture')]
+    #[Route('/account/settings/change/picture', methods:['GET', 'POST'], name: 'app_account_settings_change_picture')]
     public function accountSettingsChangePicture(): Response
     {
-        return $this->render('component/account-settings/chnage-picture.twig', [
+        return $this->render('component/account-settings/change-picture.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
             'user_data' => $this->authManager->getLoggedUserRepository()
         ]);
     }
 
-    #[Route('/account/settings/change/password', methods:['GET'], name: 'app_account_settings_change_password')]
-    public function accountSettingsChangePassword(): Response
+    /**
+     * Render the change password form.
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The response view
+     */
+    #[Route('/account/settings/change/password', methods:['GET', 'POST'], name: 'app_account_settings_change_password')]
+    public function accountSettingsChangePassword(Request $request): Response
     {
-        return $this->render('component/account-settings/chnage-password.twig', [
+        // create the registration form
+        $form = $this->createForm(PasswordChangeForm::class);
+        $form->handleRequest($request);
+
+        // check if the form is submitted and valid
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var \App\Entity\User $data */
+            $data = $form->getData();
+
+            // get new password
+            $password = $data->getPassword();
+
+            // check if the new password is empty
+            if ($password == null) {
+                $this->errorManager->handleError('error to get password from request data', 400);
+            } else {
+                // change the password
+                try {
+                    $this->userManager->updatePassword($this->authManager->getLoggedUserId(), $password);
+
+                    // redirect to the account settings page
+                    return $this->redirectToRoute('app_account_settings_table');
+                } catch (\Exception) {
+                    $this->addFlash('error', 'An error occurred while changing the password.');
+                }
+            }
+        }
+
+        return $this->render('component/account-settings/change-password.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
-            'user_data' => $this->authManager->getLoggedUserRepository()
+            'user_data' => $this->authManager->getLoggedUserRepository(),
+
+            'password_change_form' => $form->createView()
         ]);
     }
 }

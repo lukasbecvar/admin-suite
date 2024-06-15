@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use App\Entity\User;
 use App\Util\AppUtil;
+use App\Util\SecurityUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,14 +19,16 @@ class UserManager
 {
     private AppUtil $appUtil;
     private LogManager $logManager;
+    private SecurityUtil $securityUtil;
     private ErrorManager $errorManager;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(AppUtil $appUtil, LogManager $logManager, ErrorManager $errorManager, EntityManagerInterface $entityManager)
+    public function __construct(AppUtil $appUtil, LogManager $logManager, SecurityUtil $securityUtil, ErrorManager $errorManager, EntityManagerInterface $entityManager)
     {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->errorManager = $errorManager;
+        $this->securityUtil = $securityUtil;
         $this->entityManager = $entityManager;
     }
 
@@ -245,7 +248,7 @@ class UserManager
     }
 
     /**
-     * Update the username of a user.
+     * Update the user username.
      *
      * @param int $id The id of the user to update the username
      * @param string $newUsername The new username
@@ -275,6 +278,41 @@ class UserManager
                 $this->logManager->log('account-settings', 'update username (' . $newUsername . ') for user: ' . $oldUsername);
             } catch (\Exception $e) {
                 $this->errorManager->handleError('error to update username: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    /**
+     * Update the user password.
+     *
+     * @param int $id The id of the user to update the password
+     * @param string $newPassword The new password
+     *
+     * @throws \Exception If there is an error while updating the password.
+     *
+     * @return void
+     */
+    public function updatePassword(int $id, string $newPassword): void
+    {
+        // get user repo
+        $repo = $this->getUserRepository(['id' => $id]);
+
+        // check if user exist
+        if ($repo != null) {
+            try {
+                // hash new password
+                $passwordHash = $this->securityUtil->generateHash($newPassword);
+
+                // update password
+                $repo->setPassword($passwordHash);
+
+                // flush updated user data
+                $this->entityManager->flush();
+
+                // log action
+                $this->logManager->log('account-settings', 'update password for user: ' . $repo->getUsername());
+            } catch (\Exception $e) {
+                $this->errorManager->handleError('error to update password: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
     }
