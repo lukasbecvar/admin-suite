@@ -337,4 +337,41 @@ class UserManagerTest extends TestCase
         // call the method under test
         $this->userManager->updatePassword($userId, $newPassword);
     }
+
+    /**
+     * Test update profile picture.
+     *
+     * @return void
+     */
+    public function testUpdateProfilePicture(): void
+    {
+        // prepare test data
+        $userId = 1;
+        $newProfilePicture = 'base64-encoded-profile-picture-data';
+
+        // mock user instance
+        $user = new User();
+        $user->setUsername('testUser');
+
+        // configure userRepositoryMock
+        $this->userRepositoryMock
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(['id' => $userId])
+            ->willReturn($user);
+
+        // configure logManagerMock
+        $this->logManagerMock
+            ->expects($this->once())
+            ->method('log')
+            ->with('account-settings', 'update profile picture for user: ' . $user->getUsername());
+
+        // configure entityManagerMock
+        $this->entityManagerMock
+            ->expects($this->once())
+            ->method('flush');
+
+        // call the method under test
+        $this->userManager->updateProfilePicture($userId, $newProfilePicture);
+    }
 }

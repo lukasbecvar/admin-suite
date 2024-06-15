@@ -101,6 +101,15 @@ main {
 	color: rgb(255, 70, 70);
 }
 
+.image-preview {
+	display: none;
+	justify-content: center;
+}
+.image-preview img {
+	max-width: 100%;
+	max-height: 200px;
+}
+
 @media screen and (max-width: 400px) { 
 	#sidebar {
 		width: 100%;

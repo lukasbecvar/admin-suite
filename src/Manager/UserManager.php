@@ -316,4 +316,36 @@ class UserManager
             }
         }
     }
+
+    /**
+     * Update the user profile picture.
+     *
+     * @param int $id The id of the user to update the profile picture
+     * @param string $newProfilePicture The new profile picture
+     *
+     * @throws \Exception If there is an error while updating the profile picture.
+     *
+     * @return void
+     */
+    public function updateProfilePicture(int $id, string $newProfilePicture): void
+    {
+        // get user repo
+        $repo = $this->getUserRepository(['id' => $id]);
+
+        // check if user exist
+        if ($repo != null) {
+            try {
+                // update profile picture
+                $repo->setProfilePic($newProfilePicture);
+
+                // flush updated user data
+                $this->entityManager->flush();
+
+                // log action
+                $this->logManager->log('account-settings', 'update profile picture for user: ' . $repo->getUsername());
+            } catch (\Exception $e) {
+                $this->errorManager->handleError('error to update profile picture: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
 }
