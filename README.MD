@@ -85,6 +85,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Testing banned users fixtures
 - [X] Users table filter system
 - [ ] Account settings component
+    - [X] Account settings home table
     - [ ] Change profile picture
     - [ ] Change username
     - [ ] Change password

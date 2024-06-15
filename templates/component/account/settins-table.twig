@@ -1,6 +1,50 @@
 {% extends 'common/layout.twig' %}
 
-{# ACCOUNT SETTING CONFIG TABLE VIEW #}
+{# ACCOUNT SETTING TABLE VIEW #}
 {% block component %}
-    <p>ff</p>
+<div class="w-full">
+    <div class="bg-neutral-800 shadow-md p-6 account-setting-table">
+        <h2 class="text-2xl font-semibold mb-6 text-white">Account Settings</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-600">
+                <thead class="bg-neutral-900">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Field</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Value</th>
+                        <th class="px-6 py-3"></th>
+                    </tr>
+                </thead>
+                <tbody class="bg-neutral-900 divide-y divide-gray-600">
+                    <tr>
+                        <td class="px-6 py-4 md:py-2 whitespace-nowrap text-sm font-medium text-gray-200">Username</td>
+                        <td class="px-6 py-4 md:py-2 whitespace-nowrap text-sm text-gray-400">{{ user_data.username|e }}</td>
+                        <td class="px-6 py-4 md:py-2 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="#" class="text-indigo-400 hover:text-indigo-300">Change</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 md:py-2 whitespace-nowrap text-sm font-medium text-gray-200">Profile Image</td>
+                        <td class="px-6 py-4 md:py-2 whitespace-nowrap text-sm text-gray-400">
+                            {% if user_data.getProfilePic == 'default_pic' %}
+                                <img class="rounded-md profile-image h-10 w-10 rounded-full object-cover" src={{ asset('/build/images/default-profile.jpg') }} alt="profile picture">
+                            {% else %}
+                                <img class="rounded-md profile-image h-10 w-10 rounded-full object-cover" src="data:image/jpeg;base64,{{ user_data.getProfilePic|e }}" alt="profile picture">
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 md:py-2 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="#" class="text-indigo-400 hover:text-indigo-300">Change</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 md:py-2 whitespace-nowrap text-sm font-medium text-gray-200">Password</td>
+                        <td class="px-6 py-4 md:py-2 whitespace-nowrap text-sm text-gray-400">******</td>
+                        <td class="px-6 py-4 md:py-2 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="#" class="text-indigo-400 hover:text-indigo-300">Change</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

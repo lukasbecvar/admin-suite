@@ -39,7 +39,7 @@ main {
 	transform: translateX(-100%);
 }
 
-#sidebar .profile-image {
+.profile-image {
 	width: 60px;
 	height: 60px;
 }

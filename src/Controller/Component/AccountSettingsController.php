@@ -9,9 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class AccountSettingsController
- * 
+ *
  * Controller for the account settings page.
- * 
+ *
  * @package App\Controller\Component
  */
 class AccountSettingsController extends AbstractController
