@@ -84,7 +84,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Delete banned user automatic delete ban
     - [X] Testing banned users fixtures
 - [X] Users table filter system
-- [ ] Account settings component
+- [X] Account settings component
     - [X] Account settings home table
     - [X] Change username
     - [X] Change password
