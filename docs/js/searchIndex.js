@@ -236,6 +236,51 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Controller-Auth-RegisterController.html#property_userManager"
         },                {
+            "fqsen": "\\App\\Controller\\Component\\AccountSettingsController",
+            "name": "AccountSettingsController",
+            "summary": "Class\u0020AccountSettingsController",
+            "url": "classes/App-Controller-Component-AccountSettingsController.html"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\AccountSettingsController\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Controller-Component-AccountSettingsController.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\AccountSettingsController\u003A\u003AaccountSettingsTable\u0028\u0029",
+            "name": "accountSettingsTable",
+            "summary": "Render\u0020the\u0020account\u0020settings\u0020table.",
+            "url": "classes/App-Controller-Component-AccountSettingsController.html#method_accountSettingsTable"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\AccountSettingsController\u003A\u003AaccountSettingsChangeUsername\u0028\u0029",
+            "name": "accountSettingsChangeUsername",
+            "summary": "",
+            "url": "classes/App-Controller-Component-AccountSettingsController.html#method_accountSettingsChangeUsername"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\AccountSettingsController\u003A\u003AaccountSettingsChangePicture\u0028\u0029",
+            "name": "accountSettingsChangePicture",
+            "summary": "",
+            "url": "classes/App-Controller-Component-AccountSettingsController.html#method_accountSettingsChangePicture"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\AccountSettingsController\u003A\u003AaccountSettingsChangePassword\u0028\u0029",
+            "name": "accountSettingsChangePassword",
+            "summary": "",
+            "url": "classes/App-Controller-Component-AccountSettingsController.html#method_accountSettingsChangePassword"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\AccountSettingsController\u003A\u003A\u0024userManager",
+            "name": "userManager",
+            "summary": "",
+            "url": "classes/App-Controller-Component-AccountSettingsController.html#property_userManager"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\AccountSettingsController\u003A\u003A\u0024authManager",
+            "name": "authManager",
+            "summary": "",
+            "url": "classes/App-Controller-Component-AccountSettingsController.html#property_authManager"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\AccountSettingsController\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Controller-Component-AccountSettingsController.html#property_errorManager"
+        },                {
             "fqsen": "\\App\\Controller\\Component\\DashboardController",
             "name": "DashboardController",
             "summary": "Class\u0020DashboardController",
@@ -846,6 +891,21 @@ Search.appendIndex(
             "summary": "Configures\u0020the\u0020options\u0020for\u0020the\u0020registration\u0020form.",
             "url": "classes/App-Form-RegistrationFormType.html#method_configureOptions"
         },                {
+            "fqsen": "\\App\\Form\\UsernameChangeFormType",
+            "name": "UsernameChangeFormType",
+            "summary": "Class\u0020UsernameChangeFormType",
+            "url": "classes/App-Form-UsernameChangeFormType.html"
+        },                {
+            "fqsen": "\\App\\Form\\UsernameChangeFormType\u003A\u003AbuildForm\u0028\u0029",
+            "name": "buildForm",
+            "summary": "Build\u0020the\u0020form",
+            "url": "classes/App-Form-UsernameChangeFormType.html#method_buildForm"
+        },                {
+            "fqsen": "\\App\\Form\\UsernameChangeFormType\u003A\u003AconfigureOptions\u0028\u0029",
+            "name": "configureOptions",
+            "summary": "Configure\u0020the\u0020options",
+            "url": "classes/App-Form-UsernameChangeFormType.html#method_configureOptions"
+        },                {
             "fqsen": "\\App\\Kernel",
             "name": "Kernel",
             "summary": "Class\u0020Kernel",
@@ -1285,6 +1345,11 @@ Search.appendIndex(
             "name": "deleteUser",
             "summary": "Delete\u0020a\u0020user.",
             "url": "classes/App-Manager-UserManager.html#method_deleteUser"
+        },                {
+            "fqsen": "\\App\\Manager\\UserManager\u003A\u003AupdateUsername\u0028\u0029",
+            "name": "updateUsername",
+            "summary": "Update\u0020the\u0020username\u0020of\u0020a\u0020user.",
+            "url": "classes/App-Manager-UserManager.html#method_updateUsername"
         },                {
             "fqsen": "\\App\\Manager\\UserManager\u003A\u003A\u0024appUtil",
             "name": "appUtil",
