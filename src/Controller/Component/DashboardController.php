@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class DashboardController
  *
- * Controller to handle the dashboard page.
+ * Controller to handle the dashboard page
  *
  * @package App\Controller
  */
@@ -24,7 +24,7 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * Handle the dashboard page.
+     * Handle the dashboard page
      *
      * @return Response The dashboard view
      */
@@ -33,8 +33,8 @@ class DashboardController extends AbstractController
     {
         // return dashboard view
         return $this->render('dashboard.twig', [
-            'is_admin' => $this->authManager->isLoggedInUserAdmin(),
-            'user_data' => $this->authManager->getLoggedUserRepository()
+            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+            'userData' => $this->authManager->getLoggedUserRepository()
         ]);
     }
 }

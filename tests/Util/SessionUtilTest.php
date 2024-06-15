@@ -145,7 +145,7 @@ class SessionUtilTest extends TestCase
     }
 
     /**
-     * Test the session decryption failure.
+     * Test the session decryption failure
      *
      * @return void
      */

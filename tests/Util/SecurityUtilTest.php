@@ -24,7 +24,7 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Test XSS escaping.
+     * Test XSS escaping
      *
      * @return void
      */
@@ -37,7 +37,7 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Test security escaping without XSS.
+     * Test security escaping without XSS
      *
      * @return void
      */
@@ -50,7 +50,7 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Tests generating an Argon2 hash for a password.
+     * Tests generating an Argon2 hash for a password
      *
      * @return void
      */
@@ -69,7 +69,7 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Tests verifying a password using an Argon2 hash.
+     * Tests verifying a password using an Argon2 hash
      *
      * @return void
      */
@@ -83,7 +83,7 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Tests verifying an invalid password using an Argon2 hash.
+     * Tests verifying an invalid password using an Argon2 hash
      *
      * @return void
      */
@@ -97,7 +97,7 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Test encryptAes method.
+     * Test encryptAes method
      *
      * @return void
      */

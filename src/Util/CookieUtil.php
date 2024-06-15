@@ -7,7 +7,7 @@ use App\Util\SecurityUtil;
 /**
  * Class CookieUtil
  *
- * CookieUtil provides cookie management functionalities.
+ * CookieUtil provides cookie management functionalities
  *
  * @package App\Util
  */
@@ -21,13 +21,13 @@ class CookieUtil
     }
 
     /**
-     * Set a cookie with the specified name, value, and expiration.
+     * Set a cookie with the specified name, value, and expiration
      *
-     * @param string $name The name of the cookie.
-     * @param string $value The value to store in the cookie.
-     * @param int $expiration The expiration time for the cookie.
+     * @param string $name The name of the cookie
+     * @param string $value The value to store in the cookie
+     * @param int $expiration The expiration time for the cookie
      *
-     * @throws \Exception If headers have already been sent.
+     * @throws \Exception If headers have already been sent
      *
      * @return void
      */
@@ -41,9 +41,9 @@ class CookieUtil
     }
 
     /**
-     * Check if the specified cookie is set.
+     * Check if the specified cookie is set
      *
-     * @param string $name The name of the cookie.
+     * @param string $name The name of the cookie
      */
     public function isCookieSet(string $name): bool
     {
@@ -51,11 +51,11 @@ class CookieUtil
     }
 
     /**
-     * Get the value of the specified cookie.
+     * Get the value of the specified cookie
      *
-     * @param string $name The name of the cookie.
+     * @param string $name The name of the cookie
      *
-     * @return string|null The decrypted value of the cookie.
+     * @return string|null The decrypted value of the cookie
      */
     public function get(string $name): ?string
     {
@@ -64,11 +64,11 @@ class CookieUtil
     }
 
     /**
-     * Unset (delete) the specified cookie.
+     * Unset (delete) the specified cookie
      *
-     * @param string $name The name of the cookie.
+     * @param string $name The name of the cookie
      *
-     * @throws \Exception If the URI is invalid.
+     * @throws \Exception If the URI is invalid
      *
      * @return void
      */

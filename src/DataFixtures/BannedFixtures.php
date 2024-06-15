@@ -9,7 +9,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 /**
  * Banned fixtures class
  *
- * The Banned fixtures class is used to populate the banned table in the database
+ * The Banned fixtures is used to fill testing data
  *
  * @package App\DataFixtures
  */

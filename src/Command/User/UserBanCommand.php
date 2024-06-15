@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class UserBanCommand
  *
- * Command to ban a user by username.
+ * Command to ban or unban a user by username
  *
  * @package App\Command
  */
@@ -32,7 +32,7 @@ class UserBanCommand extends Command
     }
 
     /**
-     * Configures the current command.
+     * Configures the current command
      *
      * @return void
      */
@@ -42,7 +42,7 @@ class UserBanCommand extends Command
     }
 
     /**
-     * Executes the command to ban user by username.
+     * Executes the command to ban user by username
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
@@ -84,31 +84,19 @@ class UserBanCommand extends Command
         // get user id
         $userId = (int) $userRepository->getId();
 
-        // check if user is banned
-        if ($this->banManager->isUserBanned($userId)) {
-            try {
-                // unban user
+        try {
+            // check if user is banned
+            if ($this->banManager->isUserBanned($userId)) {
                 $this->banManager->unbanUser($userId);
-
-                // return success message
-                $io->success('User: ' . $username . ' unbanned');
-                return Command::SUCCESS;
-            } catch (\Exception $e) {
-                $io->error('error to unban user: ' . $e->getMessage());
-                return Command::FAILURE;
-            }
-        } else {
-            try {
-                // ban user
+                $io->success('User: ' . $username . ' unbanned.');
+            } else {
                 $this->banManager->banUser($userId);
-
-                // return success message
-                $io->success('User: ' . $username . ' banned');
-                return Command::SUCCESS;
-            } catch (\Exception $e) {
-                $io->error('error to ban user: ' . $e->getMessage());
-                return Command::FAILURE;
+                $io->success('User: ' . $username . ' banned.');
             }
+            return Command::SUCCESS;
+        } catch (\Exception $e) {
+            $io->error('Process error: ' . $e->getMessage());
+            return Command::FAILURE;
         }
     }
 }

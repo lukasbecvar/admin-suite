@@ -8,14 +8,14 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class LogoutControllerTest
  *
- * Test the logout controller.
+ * Test the logout controller
  *
  * @package App\Tests\Controller\Auth
  */
 class LogoutControllerTest extends WebTestCase
 {
     /**
-     * Test logout.
+     * Test user logout
      *
      * @return void
      */

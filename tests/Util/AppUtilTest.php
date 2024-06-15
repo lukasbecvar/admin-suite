@@ -135,7 +135,7 @@ class AppUtilTest extends TestCase
         $limit = $this->appUtil->getPageLimitter();
 
         // check if limit is valid
-        $this->assertSame($limit, (int) $_ENV['LIMIT_PER_PAGE']);
+        $this->assertSame($limit, (int) $_ENV['limitPerPage']);
     }
 
     /**

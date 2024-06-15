@@ -12,14 +12,14 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class EscapeRequestDataMiddlewareTest
  *
- * Test cases for EscapeRequestDataMiddleware class.
+ * Test cases for EscapeRequestDataMiddleware class
  *
  * @package App\Tests\Middleware
  */
 class EscapeRequestDataMiddlewareTest extends TestCase
 {
     /**
-     * Test the security escaping of request data.
+     * Test the security escaping of request data
      *
      * @return void
      */

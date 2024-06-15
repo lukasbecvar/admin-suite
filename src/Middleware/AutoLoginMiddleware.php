@@ -11,7 +11,7 @@ use App\Manager\UserManager;
 /**
  * Class AutoLoginMiddleware
  *
- * This middleware checks if the required auto-login function should be triggered.
+ * This middleware checks if the required auto-login function should be triggered
  *
  * @package App\Middleware
  */
@@ -22,8 +22,12 @@ class AutoLoginMiddleware
     private AuthManager $authManager;
     private UserManager $userManager;
 
-    public function __construct(CookieUtil $cookieUtil, SessionUtil $sessionUtil, AuthManager $authManager, UserManager $userManager)
-    {
+    public function __construct(
+        CookieUtil $cookieUtil,
+        SessionUtil $sessionUtil,
+        AuthManager $authManager,
+        UserManager $userManager
+    ) {
         $this->cookieUtil = $cookieUtil;
         $this->sessionUtil = $sessionUtil;
         $this->authManager = $authManager;
@@ -31,7 +35,7 @@ class AutoLoginMiddleware
     }
 
     /**
-     * Handle auto-login process for remember me feature.
+     * Handle auto-login process for remember me feature
      *
      * @return void
      */

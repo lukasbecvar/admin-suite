@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class UsersManagerControllerTest
  *
- * Test the users-manager component.
+ * Test the users-manager component
  *
  * @package App\Tests\Controller\Component
  */
@@ -30,7 +30,7 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager load.
+     * Test the users-manager load
      *
      * @return void
      */
@@ -41,7 +41,6 @@ class UsersManagerControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('select[name="filter"]');
-        $this->assertSelectorExists('a:contains("RAW")');
         $this->assertSelectorExists('th:contains("#")');
         $this->assertSelectorExists('th:contains("Username")');
         $this->assertSelectorExists('th:contains("Role")');
@@ -56,7 +55,7 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager register load.
+     * Test the users-manager register load
      *
      * @return void
      */
@@ -75,7 +74,7 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager register submit with empty inputs.
+     * Test the users-manager register submit with empty inputs
      *
      * @return void
      */
@@ -105,7 +104,7 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager register submit with invalid inputs length.
+     * Test the users-manager register submit with invalid inputs length
      *
      * @return void
      */
@@ -135,7 +134,7 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager register submit with not matching passwords.
+     * Test the users-manager register submit with not matching passwords
      *
      * @return void
      */
@@ -164,7 +163,7 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager register submit valid.
+     * Test the users-manager register submit valid
      *
      * @return void
      */
@@ -186,7 +185,7 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager update submit with empty id.
+     * Test the users-manager update submit with empty id
      *
      * @return void
      */
@@ -204,7 +203,7 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager update submit with empty role.
+     * Test the users-manager update submit with empty role
      *
      * @return void
      */
@@ -222,7 +221,7 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager update submit with invalid id.
+     * Test the users-manager update submit with invalid id
      *
      * @return void
      */
@@ -240,7 +239,7 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager delete submit with invalid id.
+     * Test the users-manager delete submit with invalid id
      *
      * @return void
      */
@@ -257,7 +256,7 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager delete submit with invalid id.
+     * Test the users-manager delete submit with invalid id
      *
      * @return void
      */

@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class AntiLogController
  *
- * The controller for the anti-log component.
+ * The controller for the anti-log component
  *
  * @package App\Controller
  */
@@ -31,7 +31,7 @@ class AntiLogController extends AbstractController
     }
 
     /**
-     * Handle the anti-log component.
+     * Handle the anti-log component
      *
      * @param Request $request The request object
      *
@@ -53,14 +53,16 @@ class AntiLogController extends AbstractController
         // get anti log state
         $state = $request->query->get('state', 'enable');
 
+        // check if anti log is enabled
         if ($state == 'disable') {
+            // disable anti log
             $this->logManager->unSetAntiLog();
         } else {
             // enable anti log
             $this->logManager->setAntiLog();
         }
 
-        // redirect to dashboard
+        // redirect back to dashboard
         return $this->redirectToRoute('app_dashboard');
     }
 }

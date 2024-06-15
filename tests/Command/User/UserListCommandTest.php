@@ -13,14 +13,14 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class UserListCommandTest
  *
- * Test for UserListCommand.
+ * Test for UserListCommand
  *
  * @package App\Tests\Command\User
  */
 class UserListCommandTest extends TestCase
 {
     /**
-     * Test the execution of the UserListCommand.
+     * Test the execution of the UserListCommand
      *
      * @return void
      */

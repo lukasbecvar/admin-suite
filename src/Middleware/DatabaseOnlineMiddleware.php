@@ -23,8 +23,12 @@ class DatabaseOnlineMiddleware
     private LoggerInterface $logger;
     private ErrorManager $errorManager;
 
-    public function __construct(AppUtil $appUtil, Connection $connection, LoggerInterface $logger, ErrorManager $errorManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        Connection $connection,
+        LoggerInterface $logger,
+        ErrorManager $errorManager
+    ) {
         $this->logger = $logger;
         $this->appUtil = $appUtil;
         $this->connection = $connection;

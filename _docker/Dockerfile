@@ -1,4 +1,6 @@
-# admin-suite testing docker file (only-dev env)
+# admin-suite dev env
+
+# use basic php with apache image
 FROM php:8.3-apache
 
 # set default apache working directory

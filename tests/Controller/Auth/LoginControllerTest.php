@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class LoginControllerTest
  *
- * Test the login controller.
+ * Test the login controller
  *
  * @package App\Tests\Controller\Auth
 */
@@ -23,7 +23,7 @@ class LoginControllerTest extends WebTestCase
     }
 
     /**
-     * Test login page rendering.
+     * Test login page rendering
      *
      * @return void
      */
@@ -42,7 +42,7 @@ class LoginControllerTest extends WebTestCase
     }
 
     /**
-     * Test login with valid credentials.
+     * Test login with valid credentials
      *
      * @return void
      */
@@ -69,7 +69,7 @@ class LoginControllerTest extends WebTestCase
     }
 
     /**
-     * Test invalid login.
+     * Test invalid login
      *
      * @return void
      */
@@ -99,7 +99,7 @@ class LoginControllerTest extends WebTestCase
     }
 
     /**
-     * Test valid login.
+     * Test valid login
      *
      * @return void
      */

@@ -23,7 +23,7 @@ class IndexControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the index page redirect.
+     * Test the index page redirect
      *
      * @return void
      */
@@ -37,7 +37,7 @@ class IndexControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the index page redirect when logged in.
+     * Test the index page redirect when logged in
      *
      * @return void
      */

@@ -13,9 +13,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class UserUpdateRoleCommand
  *
- * Command to update user role.
+ * Command to update user role
  *
- * @package App\Command
+ * @package App\Command\User
  */
 #[AsCommand(name: 'app:user:update:role', description: 'Update user role')]
 class UserUpdateRoleCommand extends Command
@@ -29,7 +29,7 @@ class UserUpdateRoleCommand extends Command
     }
 
     /**
-     * Configure the command.
+     * Configure the command
      *
      * @return void
      */
@@ -40,7 +40,7 @@ class UserUpdateRoleCommand extends Command
     }
 
     /**
-     * Execute the command to update user role.
+     * Execute the command to update user role
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
@@ -76,22 +76,22 @@ class UserUpdateRoleCommand extends Command
         }
 
         // get user repo
-        $repo = $this->userManager->getUserRepository(['username' => $username]);
+        $userRepository = $this->userManager->getUserRepository(['username' => $username]);
 
         // check if username is used
-        if ($repo == null) {
+        if ($userRepository == null) {
             $io->error('Error username: ' . $username . ' does not exist.');
             return Command::FAILURE;
         }
 
         // check is id is valid
-        if ($repo->getId() == null) {
+        if ($userRepository->getId() == null) {
             $io->error('Error user id not found.');
             return Command::FAILURE;
         }
 
         // get current role
-        $currentRole = $this->userManager->getUserRoleById($repo->getId());
+        $currentRole = $this->userManager->getUserRoleById($userRepository->getId());
 
         // convert role to uppercase
         $role = strtoupper($role);
@@ -105,7 +105,7 @@ class UserUpdateRoleCommand extends Command
         // update role
         try {
             // update role
-            $this->userManager->updateUserRole($repo->getId(), $role);
+            $this->userManager->updateUserRole($userRepository->getId(), $role);
 
             // success message
             $io->success('Role updated successfully.');

@@ -4,12 +4,12 @@ namespace App\Tests\Manager;
 
 use App\Entity\User;
 use App\Util\AppUtil;
+use App\Util\SecurityUtil;
 use App\Manager\LogManager;
 use App\Manager\UserManager;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\UserRepository;
-use App\Util\SecurityUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 

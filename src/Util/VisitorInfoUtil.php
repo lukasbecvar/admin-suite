@@ -5,16 +5,16 @@ namespace App\Util;
 /**
  * Class VisitorInfoUtil
  *
- * VisitorInfoUtil provides methods to get information about visitors.
+ * VisitorInfoUtil provides methods to get information about visitors
  *
  * @package App\Util
  */
 class VisitorInfoUtil
 {
     /**
-     * Get the client's IP address.
+     * Get the client's IP address
      *
-     * @return string|null The client's IP address.
+     * @return string|null The client's IP address
      */
     public function getIP(): ?string
     {
@@ -33,9 +33,9 @@ class VisitorInfoUtil
     }
 
     /**
-     * Get the user agent.
+     * Get the user agent
      *
-     * @return string|null The user agent.
+     * @return string|null The user agent
      */
     public function getUserAgent(): ?string
     {
@@ -47,11 +47,11 @@ class VisitorInfoUtil
     }
 
     /**
-     * Get a short version of the browser name.
+     * Get a short version of the browser name
      *
-     * @param string $userAgent The user agent string.
+     * @param string $userAgent The user agent string
      *
-     * @return string|null The short browser name.
+     * @return string|null The short browser name
      */
     public function getBrowserShortify(string $userAgent): ?string
     {
@@ -110,11 +110,11 @@ class VisitorInfoUtil
     }
 
     /**
-     * Get the operating system.
+     * Get the operating system
      *
-     * @param string $userAgent The user agent string.
+     * @param string $userAgent The user agent string
      *
-     * @return string|null The operating system.
+     * @return string|null The operating system
      */
     public function getOs(string $userAgent = 'self'): ?string
     {

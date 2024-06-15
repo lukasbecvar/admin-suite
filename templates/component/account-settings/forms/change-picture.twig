@@ -12,44 +12,44 @@
         <div class="text-white max-w-md w-full bg-dark shadow-md px-4 py-4 mb-1 border border-gray-600 m-w-95">
             <h2 class="text-2xl mb-4 text-center text-white">Change picture</h2>
     
-            {# PICTURE CHANGE success message box #}
+            {# SUCCESS MESSAGE RETURN BOX #}
             {% for message in app.flashes('success') %}
                 <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
             {% endfor %}
     
-            {# PICTURE CHANGE error message box #}
+            {# ERROR MESSAGE RETURN BOX #}
             {% for message in app.flashes('error') %}
                 <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
             {% endfor %}
 
-            {# Image preview area #}
+            {# IMAGE PREVIEW BOX #}
             <div class="image-preview mb-4">
                 <img id="preview-image" src="#" alt="Image preview">
             </div>
     
-            {# PICTURE CHANGE form #}
-            {{ form_start(profile_pic_change_form) }}
+            {# PICTURE CHANGE FORM #}
+            {{ form_start(profilePicChangeForm) }}
     
-                {# PICTURE CHANGE form file input #}
+                {# FORM FIELDS #}
                 <div class="mb-4">
-                    {{ form_label(profile_pic_change_form['profile-pic'], 'Choose Picture', {'label_attr': {'class': 'block text-sm font-bold mb-2'}}) }}
-                    {{ form_row(profile_pic_change_form['profile-pic'], {'attr': {'class': 'block w-full px-3 py-2 mt-1 bg-neutral-900 text-white border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500', 'accept': 'image/*', 'onchange': 'previewImage(this)'}}) }}
+                    {{ form_label(profilePicChangeForm['profile-pic'], 'Choose Picture', {'label_attr': {'class': 'block text-sm font-bold mb-2'}}) }}
+                    {{ form_row(profilePicChangeForm['profile-pic'], {'attr': {'class': 'block w-full px-3 py-2 mt-1 bg-neutral-900 text-white border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500', 'accept': 'image/*', 'onchange': 'previewImage(this)'}}) }}
                 </div>
 
-                {# PICTURE CHANGE form submit button #}
+                {# FORM SUBMIT BUTTON #}
                 <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Change</button>
-            {{ form_end(profile_pic_change_form) }}
+            {{ form_end(profilePicChangeForm) }}
         </div>
     </div>
 
-    {# JavaScript for image preview #}
+    {# IMAGE PREVIEW SHOW FUNCTION #}
     <script>
         function previewImage(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('preview-image').setAttribute('src', e.target.result);
-                    document.querySelector('.image-preview').style.display = 'flex'; // Show the preview area
+                    document.querySelector('.image-preview').style.display = 'flex';
                 }
                 reader.readAsDataURL(input.files[0]);
             }

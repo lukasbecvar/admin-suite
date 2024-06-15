@@ -42,10 +42,9 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
     }
 
     /**
-     * Create request event.
+     * Create request event
      *
      * @param string $pathInfo
-     * @return RequestEvent
      *
      * @return RequestEvent
      */

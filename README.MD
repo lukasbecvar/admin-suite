@@ -91,8 +91,8 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Change profile picture
     - [X] End to end test
 - [X] Better permissions check system
-- [ ] Refactor & design fix
-- [ ] Deep user system test
+- [X] Refactor
+- [X] Deep user system test
 
 ## 0.5
 - [ ] Server info

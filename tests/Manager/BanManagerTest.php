@@ -62,7 +62,7 @@ class BanManagerTest extends TestCase
     }
 
     /**
-     * Test ban user method.
+     * Test ban user method
      *
      * @return void
      */
@@ -109,7 +109,7 @@ class BanManagerTest extends TestCase
     }
 
     /**
-     * Test is user banned.
+     * Test is user banned
      *
      * @return void
      */
@@ -134,7 +134,7 @@ class BanManagerTest extends TestCase
     }
 
     /**
-     * Test get ban reason.
+     * Test get ban reason
      *
      * @return void
      */
@@ -159,7 +159,7 @@ class BanManagerTest extends TestCase
     }
 
     /**
-     * Test unban user method.
+     * Test unban user method
      *
      * @return void
      */
@@ -213,7 +213,7 @@ class BanManagerTest extends TestCase
     }
 
     /**
-     * Test get banned users method.
+     * Test get banned users method
      *
      * @return void
      */

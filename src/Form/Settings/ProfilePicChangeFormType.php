@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Settings;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
@@ -14,15 +14,15 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
  *
  * The profile picture change form type
  *
- * @package App\Form
+ * @package App\Form\Settings
  */
 class ProfilePicChangeFormType extends AbstractType
 {
     /**
-     * Builds the profile picture change form.
+     * Builds the profile picture change form
      *
-     * @param FormBuilderInterface $builder The form builder.
-     * @param array<string> $options The options for building the form.
+     * @param FormBuilderInterface $builder The form builder
+     * @param array<string> $options The options for building the form
      *
      * @return void
      */
@@ -50,9 +50,9 @@ class ProfilePicChangeFormType extends AbstractType
     }
 
     /**
-     * Configures the options for this form.
+     * Configures the options for this form
      *
-     * @param OptionsResolver $resolver The resolver for the form options.
+     * @param OptionsResolver $resolver The resolver for the form options
      *
      * @return void
      */

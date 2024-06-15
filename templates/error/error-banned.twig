@@ -10,10 +10,8 @@
         {% else %}
             Your account is banned for: {{ reason|e }}
         {% endif %}
-
         <br><br>
-
-        Requests for unban should be directed to <span class="text-yellow-300">{{ admin_contact|e }}</span>
+        Requests for unban should be directed to <span class="text-yellow-300"><a href="mailto:{{ admin_contact|e }}">{{ admin_contact|e }}</a></span>
     </p>
 </div>
 {% endblock %}

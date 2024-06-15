@@ -23,7 +23,7 @@ class AntiLogControllerTest extends CustomTestCase
     }
 
     /**
-     * Test if the anti-log page is accessible.
+     * Test if the anti-log page is accessible
      *
      * @return void
      */
@@ -37,7 +37,7 @@ class AntiLogControllerTest extends CustomTestCase
     }
 
     /**
-     * Test if the anti-log page is accessible.
+     * Test if the anti-log page is accessible
      *
      * @return void
      */

@@ -27,12 +27,12 @@ class LogoutController extends AbstractController
     }
 
     /**
-     * Handle the user logout component.
+     * Handle the user logout component
      *
-     * @return Response|null The logout view
+     * @return Response The logout view
      */
     #[Route('/logout', methods:['GET'], name: 'app_auth_logout')]
-    public function logout(): ?Response
+    public function logout(): Response
     {
         // check if user loggedin
         if ($this->authManager->isUserLogedin()) {
@@ -45,7 +45,7 @@ class LogoutController extends AbstractController
         } else {
             // handle logpout error
             $this->errorManager->handleError('logout error: unknown error in logout function', Response::HTTP_INTERNAL_SERVER_ERROR);
-            return null;
+            return new Response('Logout error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

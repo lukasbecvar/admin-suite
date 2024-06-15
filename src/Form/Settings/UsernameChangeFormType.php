@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Settings;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  *
  * The username change form type
  *
- * @package App\Form
+ * @package App\Form\Settings
  */
 class UsernameChangeFormType extends AbstractType
 {

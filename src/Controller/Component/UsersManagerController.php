@@ -30,8 +30,14 @@ class UsersManagerController extends AbstractController
     private ErrorManager $errorManager;
     private VisitorInfoUtil $visitorInfoUtil;
 
-    public function __construct(AppUtil $appUtil, BanManager $banManager, UserManager $userManager, AuthManager $authManager, ErrorManager $errorManager, VisitorInfoUtil $visitorInfoUtil)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        BanManager $banManager,
+        UserManager $userManager,
+        AuthManager $authManager,
+        ErrorManager $errorManager,
+        VisitorInfoUtil $visitorInfoUtil
+    ) {
         $this->appUtil = $appUtil;
         $this->banManager = $banManager;
         $this->userManager = $userManager;
@@ -41,7 +47,9 @@ class UsersManagerController extends AbstractController
     }
 
     /**
-     * Handle the users-manager component.
+     * Handle the users-manager component
+     *
+     * @param Request $request The request object
      *
      * @return Response The users-manager view
      */
@@ -51,8 +59,8 @@ class UsersManagerController extends AbstractController
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
             return $this->render('component/no-permissions.twig', [
-                'is_admin' => $this->authManager->isLoggedInUserAdmin(),
-                'user_data' => $this->authManager->getLoggedUserRepository(),
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
             ]);
         }
 
@@ -64,7 +72,6 @@ class UsersManagerController extends AbstractController
 
         // get filter from request query params
         $filter = $request->query->get('filter', '');
-
 
         // get total users count from database
         $usersCount = $this->userManager->getUsersCount();
@@ -89,27 +96,32 @@ class UsersManagerController extends AbstractController
         }
 
         // render users-manager view
-        return $this->render('component/manager/user/table.twig', [
-            'is_admin' => $this->authManager->isLoggedInUserAdmin(),
-            'user_data' => $this->authManager->getLoggedUserRepository(),
+        return $this->render('component/user-manager/user-manager-table.twig', [
+            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+            'userData' => $this->authManager->getLoggedUserRepository(),
 
-            // users manager data
+            // instances for users-manager view
             'banManager' => $this->banManager,
             'userManager' => $this->userManager,
+            'visitorInfoUtil' => $this->visitorInfoUtil,
+
+            // users-manager data
             'users' => $usersData,
-            'online_list' => $onlineList,
-            'online_count' => count($onlineList),
-            'total_users_count' => $usersCount,
-            'current_page' => $page,
-            'limit_per_page' => $pageLimit,
-            'visitor_info_util' => $this->visitorInfoUtil,
-            'current_ip' => $this->visitorInfoUtil->getIp(),
-            'filter' => $filter
+            'onlineList' => $onlineList,
+
+            // filter helpers
+            'filter' => $filter,
+            'currentIp' => $this->visitorInfoUtil->getIp(),
+
+            // pagination data
+            'currentPage' => $page,
+            'limitPerPage' => $pageLimit,
+            'totalUsersCount' => $usersCount
         ]);
     }
 
     /**
-     * Handle the users-manager register component.
+     * Handle the users-manager register component
      *
      * @param Request $request The request object
      *
@@ -121,8 +133,8 @@ class UsersManagerController extends AbstractController
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
             return $this->render('component/no-permissions.twig', [
-                'is_admin' => $this->authManager->isLoggedInUserAdmin(),
-                'user_data' => $this->authManager->getLoggedUserRepository(),
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
             ]);
         }
 
@@ -154,7 +166,7 @@ class UsersManagerController extends AbstractController
                 try {
                     $this->authManager->registerUser($username, $password);
 
-                    // redirect to the users table page
+                    // redirect back to the users table page
                     return $this->redirectToRoute('app_manager_users', [
                         'page' => $this->appUtil->calculateMaxPages($usersCount, $pageLimit)
                     ]);
@@ -165,17 +177,17 @@ class UsersManagerController extends AbstractController
         }
 
         // render users-manager register view
-        return $this->render('component/manager/user/register.twig', [
-            'is_admin' => $this->authManager->isLoggedInUserAdmin(),
-            'user_data' => $this->authManager->getLoggedUserRepository(),
+        return $this->render('component/user-manager/forms/user-register.twig', [
+            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+            'userData' => $this->authManager->getLoggedUserRepository(),
 
             // registration form
-            'registration_form' => $form->createView()
+            'registrationForm' => $form->createView()
         ]);
     }
 
     /**
-     * Handle the users-manager update role component.
+     * Handle the users-manager update role component
      *
      * @param Request $request The request object
      *
@@ -187,8 +199,8 @@ class UsersManagerController extends AbstractController
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
             return $this->render('component/no-permissions.twig', [
-                'is_admin' => $this->authManager->isLoggedInUserAdmin(),
-                'user_data' => $this->authManager->getLoggedUserRepository(),
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
             ]);
         }
 
@@ -227,12 +239,12 @@ class UsersManagerController extends AbstractController
         // update the user role
         $this->userManager->updateUserRole($userId, $newRole);
 
-        // redirect to the users table page
+        // redirect back to the users table page
         return $this->redirectToRoute('app_manager_users');
     }
 
     /**
-     * Handle the users-manager delete component.
+     * Handle the users-manager delete component
      *
      * @param Request $request The request object
      *
@@ -244,8 +256,8 @@ class UsersManagerController extends AbstractController
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
             return $this->render('component/no-permissions.twig', [
-                'is_admin' => $this->authManager->isLoggedInUserAdmin(),
-                'user_data' => $this->authManager->getLoggedUserRepository(),
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
             ]);
         }
 
@@ -270,12 +282,12 @@ class UsersManagerController extends AbstractController
             $this->banManager->unbanUser((int) $userId);
         }
 
-        // redirect to the users table page
+        // redirect back to the users table page
         return $this->redirectToRoute('app_manager_users');
     }
 
     /**
-     * Handle the users-manager ban component.
+     * Handle the users-manager ban component
      *
      * @param Request $request The request object
      *
@@ -287,8 +299,8 @@ class UsersManagerController extends AbstractController
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
             return $this->render('component/no-permissions.twig', [
-                'is_admin' => $this->authManager->isLoggedInUserAdmin(),
-                'user_data' => $this->authManager->getLoggedUserRepository(),
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
             ]);
         }
 
@@ -331,7 +343,7 @@ class UsersManagerController extends AbstractController
             $this->banManager->unbanUser($userId);
         }
 
-        // redirect to the users table page
+        // redirect back to the users table page
         return $this->redirectToRoute('app_manager_users');
     }
 }

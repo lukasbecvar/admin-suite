@@ -14,14 +14,14 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 /**
  * Class LoginFormType
  *
- * The login form type
+ * The auth login form type
  *
  * @package App\Form
  */
 class LoginFormType extends AbstractType
 {
     /**
-     * Build the form
+     * Build the auth login form
      *
      * @param FormBuilderInterface $builder The form builder
      * @param array<string> $options The form options

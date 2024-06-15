@@ -103,7 +103,7 @@ class AppUtil
      */
     public function getPageLimitter(): int
     {
-        return (int) $_ENV['LIMIT_PER_PAGE'];
+        return (int) $_ENV['limitPerPage'];
     }
 
     /**

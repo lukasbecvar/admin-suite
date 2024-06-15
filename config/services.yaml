@@ -29,37 +29,37 @@ services:
     # resources build checker
     App\Middleware\AssetsCheckMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 7 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 8 }
 
     # escape request data
     App\Middleware\EscapeRequestDataMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 6 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 7 }
 
     # database online checker
     App\Middleware\DatabaseOnlineMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 5 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 6 }
 
     # security check service
     App\Middleware\SecurityCheckMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 4 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 5 }
 
     # maintenance mode checker
     App\Middleware\MaintenanceMiddleware:
         tags:
-            - { name: kernel.event_listener, event: kernel.request, priority: 3 }
+            - { name: kernel.event_listener, event: kernel.request, priority: 4 }
 
     # auto login middleware for remember me
     App\Middleware\AutoLoginMiddleware:
         tags:
-            - { name: kernel.event_listener, event: kernel.request, priority: 2 }
+            - { name: kernel.event_listener, event: kernel.request, priority: 3 }
 
     # authentificated check middleware
     App\Middleware\AuthentificatedCheckMiddleware:
         tags:
-            - { name: kernel.event_listener, event: kernel.request, priority: 1 }
+            - { name: kernel.event_listener, event: kernel.request, priority: 2 }
 
     # user banned check middleware
     App\Middleware\BannedCheckMiddleware:
