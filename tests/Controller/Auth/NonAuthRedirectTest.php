@@ -44,7 +44,13 @@ class NonAuthRedirectTest extends WebTestCase
             ['/manager/users/ban'],
             ['/manager/users/delete'],
             ['/manager/users/register'],
-            ['/manager/users/role/update']
+            ['/manager/users/role/update'],
+
+            // account settings routes
+            ['/account/settings'],
+            ['/account/settings/change/username'],
+            ['/account/settings/change/picture'],
+            ['/account/settings/change/password']
         ];
     }
 
