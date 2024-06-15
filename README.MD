@@ -90,7 +90,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Change password
     - [X] Change profile picture
     - [X] End to end test
-- [ ] Better no permissions check system
+- [X] Better permissions check system
 - [ ] Refactor & design fix
 - [ ] Deep user system test
 

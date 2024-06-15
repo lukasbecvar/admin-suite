@@ -50,7 +50,10 @@ class UsersManagerController extends AbstractController
     {
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
-            $this->errorManager->handleError('You do not have permission to access this page.', 403);
+            return $this->render('component/no-permissions.twig', [
+                'is_admin' => $this->authManager->isLoggedInUserAdmin(),
+                'user_data' => $this->authManager->getLoggedUserRepository(),
+            ]);
         }
 
         // get current page from request query params
@@ -117,7 +120,10 @@ class UsersManagerController extends AbstractController
     {
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
-            $this->errorManager->handleError('You do not have permission to access this page.', 403);
+            return $this->render('component/no-permissions.twig', [
+                'is_admin' => $this->authManager->isLoggedInUserAdmin(),
+                'user_data' => $this->authManager->getLoggedUserRepository(),
+            ]);
         }
 
         // get page limit from config
@@ -180,7 +186,10 @@ class UsersManagerController extends AbstractController
     {
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
-            $this->errorManager->handleError('You do not have permission to access this page.', 403);
+            return $this->render('component/no-permissions.twig', [
+                'is_admin' => $this->authManager->isLoggedInUserAdmin(),
+                'user_data' => $this->authManager->getLoggedUserRepository(),
+            ]);
         }
 
         // get user id to delete
@@ -234,7 +243,10 @@ class UsersManagerController extends AbstractController
     {
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
-            $this->errorManager->handleError('You do not have permission to access this page.', 403);
+            return $this->render('component/no-permissions.twig', [
+                'is_admin' => $this->authManager->isLoggedInUserAdmin(),
+                'user_data' => $this->authManager->getLoggedUserRepository(),
+            ]);
         }
 
         // get user id to delete
@@ -274,7 +286,10 @@ class UsersManagerController extends AbstractController
     {
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
-            $this->errorManager->handleError('You do not have permission to access this page.', 403);
+            return $this->render('component/no-permissions.twig', [
+                'is_admin' => $this->authManager->isLoggedInUserAdmin(),
+                'user_data' => $this->authManager->getLoggedUserRepository(),
+            ]);
         }
 
         // get request data
