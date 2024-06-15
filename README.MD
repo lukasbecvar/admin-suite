@@ -92,7 +92,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] End to end test
 - [X] Better permissions check system
 - [X] Refactor
-- [X] Deep user system test
+- [ ] Fix user table & account settings table responsivity
 
 ## 0.5
 - [ ] Server info
