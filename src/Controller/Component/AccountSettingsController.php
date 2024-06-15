@@ -3,6 +3,7 @@
 namespace App\Controller\Component;
 
 use App\Form\PasswordChangeForm;
+use App\Form\ProfilePicChangeFormType;
 use App\Form\UsernameChangeFormType;
 use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
@@ -10,6 +11,7 @@ use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -57,7 +59,7 @@ class AccountSettingsController extends AbstractController
     #[Route('/account/settings/change/username', methods:['GET', 'POST'], name: 'app_account_settings_change_username')]
     public function accountSettingsChangeUsername(Request $request): Response
     {
-        // create the registration form
+        // create the username change form
         $form = $this->createForm(UsernameChangeFormType::class);
         $form->handleRequest($request);
 
@@ -98,12 +100,59 @@ class AccountSettingsController extends AbstractController
         ]);
     }
 
+    /**
+     * Render the change profile picture form.
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The response view
+     */
     #[Route('/account/settings/change/picture', methods:['GET', 'POST'], name: 'app_account_settings_change_picture')]
-    public function accountSettingsChangePicture(): Response
+    public function accountSettingsChangePicture(Request $request): Response
     {
+        // create the profile picture change form
+        $form = $this->createForm(ProfilePicChangeFormType::class);
+        $form->handleRequest($request);
+
+        // check if the form is submitted and valid
+        if ($form->isSubmitted() && $form->isValid()) {
+            // get image data
+            $image = $form->get('profile-pic')->getData();
+
+            if (!($image instanceof UploadedFile)) {
+                $this->errorManager->handleError('error to get image data', 400);
+            } else {
+                // get image extension
+                $extension = $image->getClientOriginalExtension();
+
+                // check if file is image
+                if ($extension != 'jpg' && $extension != 'jpeg' && $extension != 'png') {
+                    $this->addFlash('error', 'Unsupported file type.');
+                } else {
+                    // get image content
+                    $fileContents = file_get_contents($image);
+
+                    // encode image
+                    $imageCode = base64_encode((string) $fileContents);
+
+                    // update profile picture
+                    try {
+                        $this->userManager->updateProfilePicture($this->authManager->getLoggedUserId(), $imageCode);
+
+                        // redirect to the account settings page
+                        return $this->redirectToRoute('app_account_settings_table');
+                    } catch (\Exception) {
+                        $this->addFlash('error', 'An error occurred while changing the profile picture.');
+                    }
+                }
+            }
+        }
+
         return $this->render('component/account-settings/change-picture.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
-            'user_data' => $this->authManager->getLoggedUserRepository()
+            'user_data' => $this->authManager->getLoggedUserRepository(),
+
+            'profile_pic_change_form' => $form->createView()
         ]);
     }
 
@@ -117,7 +166,7 @@ class AccountSettingsController extends AbstractController
     #[Route('/account/settings/change/password', methods:['GET', 'POST'], name: 'app_account_settings_change_password')]
     public function accountSettingsChangePassword(Request $request): Response
     {
-        // create the registration form
+        // create the password change form
         $form = $this->createForm(PasswordChangeForm::class);
         $form->handleRequest($request);
 
