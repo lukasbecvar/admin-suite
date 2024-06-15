@@ -2,10 +2,14 @@
 
 namespace App\Controller\Component;
 
+use App\Form\UsernameChangeFormType;
 use App\Manager\AuthManager;
+use App\Manager\ErrorManager;
+use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class AccountSettingsController
@@ -16,11 +20,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class AccountSettingsController extends AbstractController
 {
+    private UserManager $userManager;
     private AuthManager $authManager;
+    private ErrorManager $errorManager;
 
-    public function __construct(AuthManager $authManager)
+    public function __construct(UserManager $userManager, AuthManager $authManager, ErrorManager $errorManager)
     {
+        $this->userManager = $userManager;
         $this->authManager = $authManager;
+        $this->errorManager = $errorManager;
     }
 
     /**
@@ -32,25 +40,60 @@ class AccountSettingsController extends AbstractController
     public function accountSettingsTable(): Response
     {
         // return account settings table
-        return $this->render('component/account/settins-table.twig', [
+        return $this->render('component/account-settings/settins-table.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
             'user_data' => $this->authManager->getLoggedUserRepository()
         ]);
     }
 
-    #[Route('/account/settings/change/username', methods:['GET'], name: 'app_account_settings_change_username')]
-    public function accountSettingsChangeUsername(): Response
+    #[Route('/account/settings/change/username', methods:['GET', 'POST'], name: 'app_account_settings_change_username')]
+    public function accountSettingsChangeUsername(Request $request): Response
     {
-        return $this->render('component/account/chnage-username.twig', [
+        // create the registration form
+        $form = $this->createForm(UsernameChangeFormType::class);
+        $form->handleRequest($request);
+
+        // check if the form is submitted and valid
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var \App\Entity\User $data */
+            $data = $form->getData();
+
+            // get new username
+            $username = $data->getUsername();
+
+            // check if the new username is empty
+            if ($username == null) {
+                $this->errorManager->handleError('error to get username from request data', 400);
+            } else {
+                // check if the username is already taken
+                if ($this->userManager->checkIfUserExist($username)) {
+                    $this->addFlash('error', 'Username is already taken.');
+                } else {
+                    // change the username
+                    try {
+                        $this->userManager->updateUsername($this->authManager->getLoggedUserId(), $username);
+
+                        // redirect to the account settings page
+                        return $this->redirectToRoute('app_account_settings_table');
+                    } catch (\Exception) {
+                        $this->addFlash('error', 'An error occurred while changing the username.');
+                    }
+                }
+            }
+        }
+
+        return $this->render('component/account-settings/chnage-username.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
-            'user_data' => $this->authManager->getLoggedUserRepository()
+            'user_data' => $this->authManager->getLoggedUserRepository(),
+
+            'username_change_form' => $form->createView()
         ]);
     }
 
     #[Route('/account/settings/change/picture', methods:['GET'], name: 'app_account_settings_change_picture')]
     public function accountSettingsChangePicture(): Response
     {
-        return $this->render('component/account/chnage-picture.twig', [
+        return $this->render('component/account-settings/chnage-picture.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
             'user_data' => $this->authManager->getLoggedUserRepository()
         ]);
@@ -59,7 +102,7 @@ class AccountSettingsController extends AbstractController
     #[Route('/account/settings/change/password', methods:['GET'], name: 'app_account_settings_change_password')]
     public function accountSettingsChangePassword(): Response
     {
-        return $this->render('component/account/chnage-password.twig', [
+        return $this->render('component/account-settings/chnage-password.twig', [
             'is_admin' => $this->authManager->isLoggedInUserAdmin(),
             'user_data' => $this->authManager->getLoggedUserRepository()
         ]);

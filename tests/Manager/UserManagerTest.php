@@ -248,4 +248,44 @@ class UserManagerTest extends TestCase
 
         $this->userManager->deleteUser(1);
     }
+
+    /**
+     * Test update username.
+     *
+     * @return void
+     */
+    public function testUpdateUsername(): void
+    {
+        // prepare test data
+        $userId = 1;
+        $newUsername = 'newUsername';
+
+        // mock user instance
+        $user = new User();
+        $user->setUsername('oldUsername');
+
+        // configure userRepositoryMock
+        $this->userRepositoryMock
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(['id' => $userId])
+            ->willReturn($user);
+
+        // configure logManagerMock
+        $this->logManagerMock
+            ->expects($this->once())
+            ->method('log')
+            ->with('account-settings', 'update username (' . $newUsername . ') for user: ' . $user->getUsername());
+
+        // configure entityManagerMock
+        $this->entityManagerMock
+            ->expects($this->once())
+            ->method('flush');
+
+        // call the method under test
+        $this->userManager->updateUsername($userId, $newUsername);
+
+        // assert that the username was updated correctly
+        $this->assertEquals($newUsername, $user->getUsername());
+    }
 }

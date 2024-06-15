@@ -1,6 +1,9 @@
 # Admin suite
 Solution for Linux server with custom services administration and monitoring
 
+## Documentation
+The complete source documentation is [here](https://lordbecvold.github.io/admin-suite/)
+
 ## ROADMAP
 ## 0.1
 - [X] Setup symfony framework
@@ -70,7 +73,7 @@ Solution for Linux server with custom services administration and monitoring
 ## 0.4
 - [X] Anti log
 - [X] New login email alert
-- [ ] Ban system
+- [X] Ban system
     - [X] Banned entity (reason, time, status, banned by id, banned user id)
     - [X] Ban manager
     - [X] Ban/Unban user controller
@@ -83,9 +86,11 @@ Solution for Linux server with custom services administration and monitoring
 - [X] Users table filter system
 - [ ] Account settings component
     - [X] Account settings home table
-    - [ ] Change profile picture
-    - [ ] Change username
+    - [X] Change username
     - [ ] Change password
+    - [ ] Change profile picture
+    - [ ] End to end test
+- [ ] Better no permissions check system
 - [ ] Refactor & design fix
 - [ ] Deep user system test
 
