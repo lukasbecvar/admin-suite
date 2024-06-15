@@ -1,9 +1,6 @@
 # Admin suite
 Solution for Linux server with custom services administration and monitoring
 
-## Documentation
-The complete source documentation is [here](https://lordbecvold.github.io/admin-suite/)
-
 ## ROADMAP
 ## 0.1
 - [X] Setup symfony framework
