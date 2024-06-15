@@ -33,10 +33,7 @@
                 {# PICTURE CHANGE form file input #}
                 <div class="mb-4">
                     {{ form_label(profile_pic_change_form['profile-pic'], 'Choose Picture', {'label_attr': {'class': 'block text-sm font-bold mb-2'}}) }}
-                    {{ form_widget(profile_pic_change_form['profile-pic'], {'attr': {'class': 'block w-full px-3 py-2 mt-1 bg-neutral-900 text-white border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500', 'accept': 'image/*', 'onchange': 'previewImage(this)'}}) }}
-                    {% if form_errors(profile_pic_change_form['profile-pic']) %}
-                        <p class="text-red-500 text-xs italic mt-1">{{ form_errors(profile_pic_change_form['profile-pic'])|join(', ') }}</p>
-                    {% endif %}
+                    {{ form_row(profile_pic_change_form['profile-pic'], {'attr': {'class': 'block w-full px-3 py-2 mt-1 bg-neutral-900 text-white border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500', 'accept': 'image/*', 'onchange': 'previewImage(this)'}}) }}
                 </div>
 
                 {# PICTURE CHANGE form submit button #}
