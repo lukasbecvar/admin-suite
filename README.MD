@@ -87,7 +87,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [ ] Account settings component
     - [X] Account settings home table
     - [X] Change username
-    - [ ] Change password
+    - [X] Change password
     - [ ] Change profile picture
     - [ ] End to end test
 - [ ] Better no permissions check system

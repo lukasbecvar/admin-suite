@@ -9,6 +9,7 @@ use App\Manager\UserManager;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\UserRepository;
+use App\Util\SecurityUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -33,6 +34,9 @@ class UserManagerTest extends TestCase
     /** @var LogManager|MockObject */
     private LogManager|MockObject $logManagerMock;
 
+    /** @var SecurityUtil|MockObject */
+    private SecurityUtil|MockObject $securityUtilMock;
+
     /** @var UserRepository|MockObject */
     private UserRepository|MockObject $userRepositoryMock;
 
@@ -44,11 +48,12 @@ class UserManagerTest extends TestCase
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
+        $this->securityUtilMock = $this->createMock(SecurityUtil::class);
         $this->userRepositoryMock = $this->createMock(UserRepository::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $this->entityManagerMock->method('getRepository')->willReturn($this->userRepositoryMock);
 
-        $this->userManager = new UserManager($this->appUtilMock, $this->logManagerMock, $this->errorManagerMock, $this->entityManagerMock);
+        $this->userManager = new UserManager($this->appUtilMock, $this->logManagerMock, $this->securityUtilMock, $this->errorManagerMock, $this->entityManagerMock);
     }
 
     /**
@@ -287,5 +292,49 @@ class UserManagerTest extends TestCase
 
         // assert that the username was updated correctly
         $this->assertEquals($newUsername, $user->getUsername());
+    }
+
+    /**
+     * Test update password.
+     *
+     * @return void
+     */
+    public function testUpdatePassword(): void
+    {
+        // prepare test data
+        $userId = 1;
+        $newPassword = 'newPassword123';
+
+        // mock user instance
+        $user = new User();
+        $user->setUsername('testUser');
+
+        // configure userRepositoryMock
+        $this->userRepositoryMock
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(['id' => $userId])
+            ->willReturn($user);
+
+        // configure securityUtil mock
+        $this->securityUtilMock
+            ->expects($this->once())
+            ->method('generateHash')
+            ->with($newPassword)
+            ->willReturn('hashedPassword123');
+
+        // configure logManagerMock
+        $this->logManagerMock
+            ->expects($this->once())
+            ->method('log')
+            ->with('account-settings', 'update password for user: ' . $user->getUsername());
+
+        // configure entityManagerMock
+        $this->entityManagerMock
+            ->expects($this->once())
+            ->method('flush');
+
+        // call the method under test
+        $this->userManager->updatePassword($userId, $newPassword);
     }
 }
