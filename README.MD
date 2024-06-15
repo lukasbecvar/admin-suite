@@ -84,8 +84,12 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [X] Delete banned user automatic delete ban
     - [X] Testing banned users fixtures
 - [X] Users table filter system
-- [ ] Users manager test
+- [ ] Account settings component
+    - [ ] Change profile picture
+    - [ ] Change username
+    - [ ] Change password
 - [ ] Refactor & design fix
+- [ ] Deep user system test
 
 ## 0.5
 - [ ] Server info
@@ -159,11 +163,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Edit todo
     - [ ] Close todo
     - [ ] View closed todo list
-- [ ] Internal chat component
-- [ ] Account settings component
-    - [ ] Change profile picture
-    - [ ] Change username
-    - [ ] Change password
+- [ ] Internal chat componenta
 
 ## 1.2
 - [ ] About component (developer, github, version, info, etc..)

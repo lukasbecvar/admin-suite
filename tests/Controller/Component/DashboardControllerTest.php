@@ -6,6 +6,13 @@ use App\Tests\CustomTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
+/**
+ * Class DashboardControllerTest
+ *
+ * Test the dashboard page.
+ *
+ * @package App\Tests\Controller\Component
+ */
 class DashboardControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;
