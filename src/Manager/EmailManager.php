@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
@@ -78,7 +79,7 @@ class EmailManager
             // log email sending
             $this->logManager->log('email-send', 'email sent to ' . $recipient . ' with subject: ' . $subject, 3);
         } catch (TransportExceptionInterface $e) {
-            $this->errorManager->handleError('email sending failed: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('email sending failed: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

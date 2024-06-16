@@ -41,14 +41,14 @@ class SecurityCheckMiddleware
         if ($this->appUtil->isSSLOnly() && !$this->appUtil->isSsl()) {
             // handle debug mode exception
             if ($this->appUtil->isDevMode()) {
-                $this->errorManager->handleError('ssl is required to access this site.', 426);
+                $this->errorManager->handleError('ssl is required to access this site.', Response::HTTP_UPGRADE_REQUIRED);
             } else {
                 $this->logger->error('ssl is required to access this site.');
             }
 
             // render the maintenance template
-            $content = $this->errorManager->getErrorView(426);
-            $response = new Response($content, 426);
+            $content = $this->errorManager->getErrorView(Response::HTTP_UPGRADE_REQUIRED);
+            $response = new Response($content, Response::HTTP_UPGRADE_REQUIRED);
             $event->setResponse($response);
         }
     }

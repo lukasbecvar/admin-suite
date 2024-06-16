@@ -1,3 +1,4 @@
+// admin-suite: users manager table popups confirmation functionality
 document.addEventListener('DOMContentLoaded', function() {
     // elements related to delete functionality
     var deleteButtons = document.querySelectorAll('.delete-button');

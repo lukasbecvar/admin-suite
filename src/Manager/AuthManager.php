@@ -149,7 +149,7 @@ class AuthManager
     /**
      * Checks if current user is admin
      *
-     * @return bool
+     * @return bool The is user admin or not
      */
     public function isLoggedInUserAdmin(): bool
     {
@@ -177,7 +177,7 @@ class AuthManager
     /**
      * Checks if a user is logged in
      *
-     * @return bool
+     * @return bool The user is logged in or not
      */
     public function isUserLogedin(): bool
     {

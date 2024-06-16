@@ -2,35 +2,35 @@
 
 {# ACCOUNT SETTING CHANGE USERNAME #}
 {% block component %}
-    <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation text-white">
-        <a href="{{ path('app_account_settings_table') }}" class="border border-neutral-500 font-bold px-1"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-        <span class="mr-1">Username settings</span>
-    </div>
+<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation text-white">
+    <a href={{ path('app_account_settings_table') }} class="border border-neutral-500 font-bold px-1"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+    <span class="mr-1">Username settings</span>
+</div>
 
-    {# USERNAME CHANGE FORM #}
-    <div class="flex justify-center items-center mt-10 mb-10">
-        <div class="text-white max-w-md w-full bg-dark shadow-md px-4 py-4 mb-1 border border-gray-600 m-w-95">
-            <h2 class="text-2xl mb-4 text-center text-white">Change username</h2>
+{# USERNAME CHANGE FORM #}
+<div class="flex justify-center items-center mt-10 mb-10">
+    <div class="text-white max-w-md w-full bg-dark shadow-md px-4 py-4 mb-1 border border-gray-600 m-w-95">
+        <h2 class="text-2xl mb-4 text-center text-white">Change username</h2>
     
-            {# SUCCESS MESSAGE RETURN BOX #}
-            {% for message in app.flashes('success') %}
-                <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
-            {% endfor %}
+        {# SUCCESS MESSAGE RETURN BOX #}
+        {% for message in app.flashes('success') %}
+            <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
+        {% endfor %}
     
-            {# ERROR MESSAGE RETURN BOX #}
-            {% for message in app.flashes('error') %}
-                <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
-            {% endfor %}
+        {# ERROR MESSAGE RETURN BOX #}
+        {% for message in app.flashes('error') %}
+            <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
+        {% endfor %}
     
-            {# USERNAME CHANGE FORM #}
-            {{ form_start(usernameChangeForm) }}
+        {# USERNAME CHANGE FORM #}
+        {{ form_start(usernameChangeForm) }}
     
-                {# FORM FIELDS #}
-                {{ form_row(usernameChangeForm.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
-    
-                {# FORM SUBMIT BUTTON #}
-                <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Change</button>
-            {{ form_end(usernameChangeForm) }}
-        </div>
+            {# FORM FIELDS #}
+            {{ form_row(usernameChangeForm.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
+
+            {# FORM SUBMIT BUTTON #}
+            <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Change</button>
+        {{ form_end(usernameChangeForm) }}
     </div>
+</div>
 {% endblock %}

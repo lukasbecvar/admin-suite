@@ -1,4 +1,4 @@
-<aside id="sidebar" class="text-white md:active border-r border-gray-600">
+<aside id="sidebar" class="text-white md:active border-r border-l border-b border-gray-600">
     {# USER INFO #}
     <div class="flex flex-col items-center mb-2">
         {# PROFILE IMAGE #}
@@ -24,13 +24,13 @@
 
     {# MENU LINKS #}
     <ul class="py-0 text-base">
-        <li><a href="/dashboard" class="border-b border-gray-600 block px-1 menu-link">
+        <li><a href={{ path('app_dashboard') }} class="border-b border-gray-600 block px-1 menu-link">
             <i class="fas fa-desktop mr-1"></i>Dashboard
         </a></li>
-        <li><a href="/manager/users" class="border-b border-gray-600 block px-1 menu-link">
+        <li><a href={{ path('app_manager_users') }} class="border-b border-gray-600 block px-1 menu-link">
             <i class="fas fa-users mr-1"></i>Users manager
         </a></li>
-        <li><a href="/account/settings" class="border-b border-gray-600 block px-1 menu-link">
+        <li><a href={{ path('app_account_settings_table') }} class="border-b border-gray-600 block px-1 menu-link">
             <i class="fas fa-user-cog mr-1"></i>Account settings
         </a></li>
     </ul>

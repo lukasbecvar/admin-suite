@@ -57,6 +57,7 @@ main {
 #sidebar .profile-image {
 	width: 60px;
 	height: 60px;
+	margin-bottom: 10px !important;
 }
 
 #sidebar.active {

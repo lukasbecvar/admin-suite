@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use App\Entity\Banned;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class BanManager
@@ -62,7 +63,7 @@ class BanManager
             $this->entityManager->persist($banned);
             $this->entityManager->flush();
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to ban user: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to ban user: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // log action
@@ -123,7 +124,7 @@ class BanManager
 
                 $this->entityManager->flush();
             } catch (\Exception $e) {
-                $this->errorManager->handleError('error to unban user: ' . $e->getMessage(), 500);
+                $this->errorManager->handleError('error to unban user: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
             // log action
