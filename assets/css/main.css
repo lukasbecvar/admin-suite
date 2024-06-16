@@ -150,7 +150,4 @@ main {
         border-left: 1px solid rgb(75 85 99);
         border-bottom: 1px solid rgb(75 85 99);
 	}
-	#main-content.active {
-		display: none;
-	}
 }
