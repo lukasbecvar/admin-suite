@@ -95,6 +95,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 
 ## 0.5
 - [ ] Banned (with reason) & online status in profile info
+- [ ] Swipe sidebar activate/deactivate
 - [ ] Log manager
     - [ ] View unreaded logs
     - [ ] View all logs 
