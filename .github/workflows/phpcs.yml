@@ -13,17 +13,21 @@ jobs:
     name: PHP CodeSniffer
     runs-on: ubuntu-latest
 
+    # code checkout
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    # setup php
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.3'
 
+    # install composer dependencies
     - name: Install dependencies
       run: composer install --no-interaction --no-progress --no-suggest
 
+    # check code with code sniffer
     - name: Run PHP CodeSniffer
       run: vendor/bin/phpcs

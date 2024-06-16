@@ -212,17 +212,17 @@ class UsersManagerController extends AbstractController
 
         // check if user id is valid
         if ($userId == null) {
-            $this->errorManager->handleError('invalid request user "id" parameter not found in query', 400);
+            $this->errorManager->handleError('invalid request user "id" parameter not found in query', Response::HTTP_BAD_REQUEST);
         }
 
         // check if new user role is valid
         if ($newRole == null) {
-            $this->errorManager->handleError('invalid request user "role" parameter not found in query', 400);
+            $this->errorManager->handleError('invalid request user "role" parameter not found in query', Response::HTTP_BAD_REQUEST);
         }
 
         // check if user id is valid
         if (!$this->userManager->checkIfUserExistById($userId)) {
-            $this->errorManager->handleError('invalid request user "id" parameter not found in database', 400);
+            $this->errorManager->handleError('invalid request user "id" parameter not found in database', Response::HTTP_BAD_REQUEST);
         }
 
         // convert new user role to uppercase
@@ -233,7 +233,7 @@ class UsersManagerController extends AbstractController
 
         // check if user role is the same
         if ($currentRole == $newRole) {
-            $this->errorManager->handleError('invalid user "role" parameter is same with current user role', 400);
+            $this->errorManager->handleError('invalid user "role" parameter is same with current user role', Response::HTTP_BAD_REQUEST);
         }
 
         // update the user role
@@ -264,14 +264,17 @@ class UsersManagerController extends AbstractController
         // get user id to delete
         $userId = (int) $request->query->get('id');
 
+        // get referer page
+        $refererPage = $request->query->get('page', '1');
+
         // check if user id is valid
         if ($userId == null) {
-            $this->errorManager->handleError('invalid request user "id" parameter not found in query', 400);
+            $this->errorManager->handleError('invalid request user "id" parameter not found in query', Response::HTTP_BAD_REQUEST);
         }
 
         // check if user id is valid
         if (!$this->userManager->checkIfUserExistById($userId)) {
-            $this->errorManager->handleError('invalid request user "id" parameter not found in database', 400);
+            $this->errorManager->handleError('invalid request user "id" parameter not found in database', Response::HTTP_BAD_REQUEST);
         }
 
         // delete the user
@@ -283,7 +286,9 @@ class UsersManagerController extends AbstractController
         }
 
         // redirect back to the users table page
-        return $this->redirectToRoute('app_manager_users');
+        return $this->redirectToRoute('app_manager_users', [
+            'page' => $refererPage
+        ]);
     }
 
     /**
@@ -311,12 +316,12 @@ class UsersManagerController extends AbstractController
 
         // validate user id & status
         if ($userId == 0 || $status == null) {
-            $this->errorManager->handleError('invalid request user "id" or "status" parameter not found in query', 400);
+            $this->errorManager->handleError('invalid request user "id" or "status" parameter not found in query', Response::HTTP_BAD_REQUEST);
         }
 
         // check if status is valid
         if ($status != 'active' && $status !== 'inactive') {
-            $this->errorManager->handleError('invalid request user "status" parameter accept only active or inactive', 400);
+            $this->errorManager->handleError('invalid request user "status" parameter accept only active or inactive', Response::HTTP_BAD_REQUEST);
         }
 
         // check if reason is set
@@ -326,14 +331,14 @@ class UsersManagerController extends AbstractController
 
         // check if user not exist in database
         if (!$this->userManager->checkIfUserExistById($userId)) {
-            $this->errorManager->handleError('invalid request user "id" not found in database', 400);
+            $this->errorManager->handleError('invalid request user "id" not found in database', Response::HTTP_BAD_REQUEST);
         }
 
         // check if banned is active
         if ($status == 'active') {
             // check if user already banned
             if ($this->banManager->isUserBanned($userId)) {
-                $this->errorManager->handleError('invalid request user "id" is already banned', 400);
+                $this->errorManager->handleError('invalid request user "id" is already banned', Response::HTTP_BAD_REQUEST);
             }
 
             // ban user

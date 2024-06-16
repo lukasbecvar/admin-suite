@@ -47,7 +47,7 @@ class AntiLogController extends AbstractController
 
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
-            $this->errorManager->handleError('You do not have permission to access this page.', 403);
+            $this->errorManager->handleError('You do not have permission to access this page.', Response::HTTP_FORBIDDEN);
         }
 
         // get anti log state

@@ -1,7 +1,7 @@
 {% extends 'common/layout.twig' %}
 
+{# ACCOUNT SETTINGS TABLE COMPONENT #}
 {% block component %}
-
 <div class="w-full account-settings">
     <div class="p-6 account-setting-table">
         <h2 class="text-2xl font-semibold mb-6 text-white text-center">Account Settings</h2>
@@ -19,7 +19,7 @@
                     {% endif %}
                 </div>
                 <div class="w-1/3 text-right">
-                    <a href="/account/settings/change/picture" class="font-bold text-indigo-400 hover:text-indigo-300 flex items-center justify-end space-x-1">
+                    <a href={{ path('app_account_settings_change_picture') }} class="font-bold text-indigo-400 hover:text-indigo-300 flex items-center justify-end space-x-1">
                         <i class="fas fa-edit"></i>
                         <span class="hidden md:inline">Change</span>
                     </a>
@@ -35,7 +35,7 @@
                     {{ userData.username|e }}
                 </div>
                 <div class="w-1/3 text-right">
-                    <a href="/account/settings/change/username" class="font-bold text-indigo-400 hover:text-indigo-300 flex items-center justify-end space-x-1">
+                    <a href={{ path('app_account_settings_change_username') }} class="font-bold text-indigo-400 hover:text-indigo-300 flex items-center justify-end space-x-1">
                         <i class="fas fa-edit"></i>
                         <span class="hidden md:inline">Change</span>
                     </a>
@@ -51,7 +51,7 @@
                     *********
                 </div>
                 <div class="w-1/3 text-right">
-                    <a href="/account/settings/change/password" class="font-bold text-indigo-400 hover:text-indigo-300 flex items-center justify-end space-x-1">
+                    <a href={{ path('app_account_settings_change_password') }} class="font-bold text-indigo-400 hover:text-indigo-300 flex items-center justify-end space-x-1">
                         <i class="fas fa-edit"></i>
                         <span class="hidden md:inline">Change</span>
                     </a>
@@ -60,5 +60,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}

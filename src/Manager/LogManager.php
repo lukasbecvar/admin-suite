@@ -8,6 +8,7 @@ use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Util\VisitorInfoUtil;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class LogManager
@@ -101,7 +102,7 @@ class LogManager
             $this->entityManager->persist($log);
             $this->entityManager->flush();
         } catch (\Exception $e) {
-            $this->errorManager->handleError('log-error: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('log-error: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

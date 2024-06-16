@@ -27,7 +27,7 @@
             {# FORM SUBMIT BUTTON #}
             <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Register</button>
         {{ form_end(registrationForm) }}
-        <p class="text-white">You can login <a class="text-blue-400 font-bold hover:text-blue-500" href="/login">here</a></p>
+        <p class="text-white">You can login <a class="text-blue-400 font-bold hover:text-blue-500" href={{ path('app_auth_login') }}>here</a></p>
     </div>
 </div>
 {% endblock %}

@@ -69,7 +69,7 @@ class AccountSettingsController extends AbstractController
             $image = $form->get('profile-pic')->getData();
 
             if (!($image instanceof UploadedFile)) {
-                $this->errorManager->handleError('error to get image data', 400);
+                $this->errorManager->handleError('error to get image data', Response::HTTP_BAD_REQUEST);
             } else {
                 // get image extension
                 $extension = $image->getClientOriginalExtension();
@@ -131,7 +131,7 @@ class AccountSettingsController extends AbstractController
 
             // check if the new username is empty
             if ($username == null) {
-                $this->errorManager->handleError('error to get username from request data', 400);
+                $this->errorManager->handleError('error to get username from request data', Response::HTTP_BAD_REQUEST);
             } else {
                 // check if the username is already taken
                 if ($this->userManager->checkIfUserExist($username)) {
@@ -184,7 +184,7 @@ class AccountSettingsController extends AbstractController
 
             // check if the new password is empty
             if ($password == null) {
-                $this->errorManager->handleError('error to get password from request data', 400);
+                $this->errorManager->handleError('error to get password from request data', Response::HTTP_BAD_REQUEST);
             } else {
                 // change the password
                 try {

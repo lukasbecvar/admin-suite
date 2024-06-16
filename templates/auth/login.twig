@@ -9,7 +9,7 @@
         {# EMPTY USER LIST ALERT BOX (FIRST USER REGISTER) #}
         {% if isUsersEmpty %}
             <div class="bg-red-700 text-white p-3 mb-4 rounded text-center">
-                <p>Users table is empty Register now <a href="/register" class="text-blue-400 font-bold hover:text-blue-500">here</a></p>
+                <p>Users table is empty Register now <a href={{ path('app_auth_register') }} class="text-blue-400 font-bold hover:text-blue-500">here</a></p>
             </div>
         {% endif %}
 
