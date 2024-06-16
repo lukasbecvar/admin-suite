@@ -249,7 +249,7 @@ class UserManagerTest extends TestCase
 
         $this->entityManagerMock->expects($this->once())->method('remove')->with($user);
         $this->entityManagerMock->expects($this->once())->method('flush');
-        $this->logManagerMock->expects($this->once())->method('log')->with('user-delete', 'delete user: testUser');
+        $this->logManagerMock->expects($this->once())->method('log')->with('user-manager', 'user: testUser deleted');
 
         $this->userManager->deleteUser(1);
     }

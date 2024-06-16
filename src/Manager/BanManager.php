@@ -67,7 +67,7 @@ class BanManager
         }
 
         // log action
-        $this->logManager->log('banned', 'banned user: ' . $userId);
+        $this->logManager->log('user-manager', 'user: ' . $userId . ' has been banned');
     }
 
     /**
@@ -128,7 +128,7 @@ class BanManager
             }
 
             // log action
-            $this->logManager->log('unbanned', 'unbanned user: ' . $userId);
+            $this->logManager->log('user-manager', 'user: ' . $userId . ' is unbanned');
         }
     }
 

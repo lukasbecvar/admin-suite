@@ -196,7 +196,7 @@ class UserManager
                 $this->entityManager->flush();
 
                 // log action
-                $this->logManager->log('role-update', 'update role (' . $role . ') for user: ' . $repo->getUsername());
+                $this->logManager->log('user-manager', 'update role (' . $role . ') for user: ' . $repo->getUsername());
             } catch (\Exception $e) {
                 $this->errorManager->handleError('error to grant admin permissions: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -245,7 +245,7 @@ class UserManager
                 $this->entityManager->flush();
 
                 // log action
-                $this->logManager->log('user-delete', 'delete user: ' . $repo->getUsername());
+                $this->logManager->log('user-manager', 'user: ' . $repo->getUsername() . ' deleted');
             } catch (\Exception $e) {
                 $this->errorManager->handleError('error to delete user: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }

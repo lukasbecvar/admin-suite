@@ -100,8 +100,8 @@ class BanManagerTest extends TestCase
             ->expects($this->once())
             ->method('log')
             ->with(
-                'banned',
-                'banned user: ' . $userId
+                'user-manager',
+                'user: ' . $userId . ' has been banned'
             );
 
         // call the method
@@ -201,8 +201,8 @@ class BanManagerTest extends TestCase
             ->expects($this->once())
             ->method('log')
             ->with(
-                'unbanned',
-                'unbanned user: ' . $userId
+                'user-manager',
+                'user: ' . $userId . ' is unbanned'
             );
 
         // call the method
