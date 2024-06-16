@@ -4,6 +4,7 @@ namespace App\Tests;
 
 use App\Entity\User;
 use App\Manager\AuthManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -17,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class CustomTestCase extends WebTestCase
 {
     /**
-     * Simulate a user login.
+     * Simulate a user login
      *
      * @param KernelBrowser $client
      *
@@ -51,5 +52,31 @@ class CustomTestCase extends WebTestCase
 
         // replace the actual AuthManager service with the mock
         $client->getContainer()->set('App\Manager\AuthManager', $authManager);
+    }
+
+    /**
+     * The get random user id from database
+     *
+     * @param EntityManagerInterface $entityManager The entity manager
+     *
+     * @return int The user id
+     */
+    protected function getRandomUserId(EntityManagerInterface $entityManager): int
+    {
+        $userRepository = $entityManager->getRepository(User::class);
+
+        /** @var array<int, array{id: int}> $userIds */
+        $userIds = $userRepository->createQueryBuilder('u')
+            ->select('u.id')
+            ->getQuery()
+            ->getArrayResult();
+
+        if (count($userIds) === 0) {
+            throw new \Exception('No users found in the database.');
+        }
+
+        $randomUserId = $userIds[array_rand($userIds)]['id'];
+
+        return $randomUserId;
     }
 }

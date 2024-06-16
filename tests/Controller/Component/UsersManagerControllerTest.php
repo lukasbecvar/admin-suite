@@ -4,6 +4,7 @@ namespace App\Tests\Controller\Component;
 
 use App\Tests\CustomTestCase;
 use App\Exception\AppErrorException;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\String\ByteString;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -18,12 +19,16 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 class UsersManagerControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;
+    private EntityManagerInterface $entityManager;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->client = static::createClient();
+
+        // @phpstan-ignore-next-line
+        $this->entityManager = $this->client->getContainer()->get('doctrine')->getManager();
 
         // simulate login
         $this->simulateLogin($this->client);
@@ -51,6 +56,23 @@ class UsersManagerControllerTest extends CustomTestCase
         $this->assertSelectorExists('th:contains("Status")');
         $this->assertSelectorExists('th:contains("Banned")');
         $this->assertSelectorExists('th:contains("Ban")');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test the users-manager profile view load
+     *
+     * @return void
+     */
+    public function testProfileViewLoad(): void
+    {
+        $this->client->request('GET', '/manager/users/profile', [
+            'id' => $this->getRandomUserId($this->entityManager)
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('img[alt="User Profile Picture"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
