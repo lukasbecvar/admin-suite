@@ -4,11 +4,11 @@
 {% block component %} 
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
     <a href={{ path('app_manager_users') }} class="border border-neutral-500 font-bold px-1 text-white"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-    <span class="mr-1 text-white">User profile</span>
+    <span class="mr-1 text-white">User info</span>
 </div>
 
 {# PROFILE COMPONENT #}
-<div class="max-w-md mx-auto bg-white bg-neutral-800 shadow-lg overflow-hidden border border-neutral-700 md:mt-10">
+<div class="mx-auto bg-white bg-neutral-800 shadow-lg overflow-hidden border border-neutral-700 md:mt-10 md:max-w-md">
     <div class="bg-neutral-800 text-white text-center py-3 border-b border-neutral-700">
         {% if userRepository.getProfilePic() == 'default_pic' %}
             <img class="w-24 h-24 rounded-full mx-auto" src={{ asset('/build/images/default-profile.jpg') }} alt="User Profile Picture">
