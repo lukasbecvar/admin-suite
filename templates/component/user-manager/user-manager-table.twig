@@ -59,7 +59,7 @@
                         {# TABLE ROW #}
                         <tr class="hover:bg-neutral-800 border-b border-neutral-600">
                             <td class="text-white p-3 border-b border-neutral-600">{{ row.id|e }}</td>
-                            <td class="text-white p-3 border-b border-neutral-600">{{ row.username |e}}</td>
+                            <td class="text-white p-3 border-b border-neutral-600"><a href={{ path('app_manager_users_profile', {'id': row.id}) }} class="profile-link underline">{{ row.username |e}}</a></td>
                                     
                             {# ROLE VALUE #}
                             {% if userManager.isUserAdmin(row.id) %}

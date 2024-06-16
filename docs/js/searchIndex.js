@@ -341,6 +341,11 @@ Search.appendIndex(
             "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020component",
             "url": "classes/App-Controller-Component-UsersManagerController.html#method_usersManager"
         },                {
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AuserProfile\u0028\u0029",
+            "name": "userProfile",
+            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020profile\u0020viewer\u0020component",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#method_userProfile"
+        },                {
             "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AuserRegister\u0028\u0029",
             "name": "userRegister",
             "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020register\u0020component",

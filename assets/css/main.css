@@ -119,6 +119,14 @@ main {
 	font-weight: 600;
 }
 
+.users-manager .profile-link:hover {
+	color: rgb(255, 255, 7) !important;
+}
+
+.users-manager .role-update-button:hover {
+	color: rgb(255, 255, 7) !important;
+}
+
 /* account settings component */
 .account-settings .profile-image {
 	width: 60px;

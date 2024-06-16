@@ -121,6 +121,53 @@ class UsersManagerController extends AbstractController
     }
 
     /**
+     * Handle the users-manager profile viewer component
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The users-manager register view
+     */
+    #[Route('/manager/users/profile', methods:['GET'], name: 'app_manager_users_profile')]
+    public function userProfile(Request $request): Response
+    {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
+        }
+
+        // get user id
+        $userId = (int) $request->query->get('id', '0');
+
+        // check if user id is empty
+        if ($userId == 0) {
+            $this->errorManager->handleError('error "id" parameter is empty', Response::HTTP_BAD_REQUEST);
+        }
+
+        // get user data from database
+        $userRepository = $this->userManager->getUserRepository(['id' => $userId]);
+
+        // check if repo found
+        if ($userRepository == null) {
+            $this->errorManager->handleError('error to get user data: user not found', Response::HTTP_NOT_FOUND);
+        }
+
+        // render users-manager register view
+        return $this->render('component/user-manager/user-profile.twig', [
+            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+            'userData' => $this->authManager->getLoggedUserRepository(),
+
+            // visitor info util instance
+            'visitorInfoUtil' => $this->visitorInfoUtil,
+
+            // user data
+            'userRepository' => $userRepository
+        ]);
+    }
+
+    /**
      * Handle the users-manager register component
      *
      * @param Request $request The request object
