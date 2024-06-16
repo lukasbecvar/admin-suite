@@ -94,6 +94,20 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [X] Refactor
 
 ## 0.5
+- [ ] Banned (with reason) & online status in profile info
+- [ ] Log manager
+    - [ ] View unreaded logs
+    - [ ] View all logs 
+    - [ ] Set all readed
+    - [ ] View unformated logs (redirect to database browser)
+    - [ ] View exception log from monolog
+    - [ ] View logs by user (redirect from user managment)
+- [ ] CLI log reader command
+    - [ ] Return unreaded
+    - [ ] Return all (with -all argument)
+- [ ] About component (developer, github, version, info, etc..)
+
+## 0.6
 - [ ] Server info
     - [ ] OS info
     - [ ] CPU usage
@@ -112,7 +126,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Check if devmode is enabled
 - [ ] Dashboard warning box (react to diagnostic data component)
 
-## 0.6
+## 0.7
 - [ ] Service manager component
     - [ ] Systemctl status
     - [ ] Systemctl stop, start, restart
@@ -124,10 +138,10 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Send offline alert in email
     - [ ] Send back online notification
 
-## 0.7
+## 0.8
 - [ ] Terminal component
 
-## 0.8
+## 0.9
 - [ ] File browser & editor
     - [ ] List files in filesystem
     - [ ] Rename files
@@ -135,7 +149,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Move files
     - [ ] Open files in txt editor
 
-## 0.9
+## 1.0
 - [ ] Database browser
     - [ ] All databases list
     - [ ] Browse tables
@@ -145,18 +159,6 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Delete all rows
     - [ ] Dump SQL structure
     - [ ] Backup database (download SQL file)
-
-## 1.0
-- [ ] Log manager
-    - [ ] View unreaded logs
-    - [ ] View all logs 
-    - [ ] Set all readed
-    - [ ] View unformated logs (redirect to database browser)
-    - [ ] View exception log from monolog
-    - [ ] View logs by user (redirect from user managment)
-- [ ] CLI log reader command
-    - [ ] Return unreaded
-    - [ ] Return all (with -all argument)
 
 ## 1.1
 - [ ] Todo manager
@@ -168,7 +170,6 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 - [ ] Internal chat componenta
 
 ## 1.2
-- [ ] About component (developer, github, version, info, etc..)
 - [ ] User manual with config & setup doc
 - [ ] Setup script (for non docker env)
 - [ ] Readme doc
