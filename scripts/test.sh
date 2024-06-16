@@ -15,7 +15,7 @@ php bin/phpcs
 
 # analyze phpstan
 yellow_echo 'PHPSTAN: testing...'
-php bin/phpstan analyze
+php bin/phpstan analyze -vvv
 
 # PHPUnit tests
 yellow_echo 'PHPUnit: testing...'
