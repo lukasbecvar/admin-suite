@@ -1,11 +1,10 @@
 parameters:
     level: max
-    treatPhpDocTypesAsCertain: false
     paths:
         - config
         - src
         - tests
+    treatPhpDocTypesAsCertain: false
 includes:
     - vendor/phpstan/phpstan-symfony/extension.neon
     - vendor/phpstan/phpstan-phpunit/extension.neon
- 
