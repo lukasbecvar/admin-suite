@@ -39,9 +39,9 @@ class AccountSettingsControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('h2:contains("Account Settings")');
-        $this->assertSelectorExists('td:contains("Username")');
-        $this->assertSelectorExists('td:contains("Password")');
-        $this->assertSelectorExists('td:contains("Profile Image")');
+        $this->assertSelectorExists('div:contains("Username")');
+        $this->assertSelectorExists('div:contains("Password")');
+        $this->assertSelectorExists('div:contains("Profile Image")');
         $this->assertSelectorExists('a:contains("Change")');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
