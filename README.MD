@@ -106,6 +106,7 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Return unreaded
     - [ ] Return all (with -all argument)
 - [ ] About component (developer, github, version, info, etc..)
+- [ ] Design improvements
 
 ## 0.6
 - [ ] Server info
