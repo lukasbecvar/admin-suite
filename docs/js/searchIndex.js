@@ -51,6 +51,31 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Command-User-UserBanCommand.html#property_userManager"
         },                {
+            "fqsen": "\\App\\Command\\User\\UserDeleteCommand",
+            "name": "UserDeleteCommand",
+            "summary": "Class\u0020UserDeleteCommand",
+            "url": "classes/App-Command-User-UserDeleteCommand.html"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserDeleteCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Command-User-UserDeleteCommand.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserDeleteCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020the\u0020current\u0020command",
+            "url": "classes/App-Command-User-UserDeleteCommand.html#method_configure"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserDeleteCommand\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "Executes\u0020the\u0020command\u0020to\u0020delete\u0020user\u0020by\u0020username",
+            "url": "classes/App-Command-User-UserDeleteCommand.html#method_execute"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserDeleteCommand\u003A\u003A\u0024userManager",
+            "name": "userManager",
+            "summary": "",
+            "url": "classes/App-Command-User-UserDeleteCommand.html#property_userManager"
+        },                {
             "fqsen": "\\App\\Command\\User\\UserListCommand",
             "name": "UserListCommand",
             "summary": "Class\u0020UserListCommand",
