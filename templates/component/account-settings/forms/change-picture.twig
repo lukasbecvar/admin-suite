@@ -23,8 +23,10 @@
             {% endfor %}
 
             {# IMAGE PREVIEW BOX #}
-            <div class="image-preview mb-4">
-                <img id="preview-image" src="#" alt="Image preview">
+            <div class="image-preview mb-4 flex justify-center">
+                <div class="relative rounded-lg overflow-hidden border-2 border-gray-600 shadow-lg" style="display: none;" id="image-preview-container">
+                    <img id="preview-image" src="#" alt="Image preview" class="w-40 h-40 object-cover">
+                </div>
             </div>
     
             {# PICTURE CHANGE FORM #}
@@ -49,9 +51,11 @@
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('preview-image').setAttribute('src', e.target.result);
-                    document.querySelector('.image-preview').style.display = 'flex';
+                    document.getElementById('image-preview-container').style.display = 'block';
                 }
                 reader.readAsDataURL(input.files[0]);
+            } else {
+                document.getElementById('image-preview-container').style.display = 'none';
             }
         }
     </script>
