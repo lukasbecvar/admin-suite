@@ -123,7 +123,12 @@ class VisitorInfoUtilTest extends TestCase
     public function testGetBrowserShortify(): void
     {
         // test with known user agent
-        $this->assertEquals('Chrome', $this->visitorInfoUtil->getBrowserShortify('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.9999.999 Safari/537.36'));
+        $this->assertEquals(
+            'Chrome',
+            $this->visitorInfoUtil->getBrowserShortify(
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.9999.999 Safari/537.36'
+            )
+        );
 
         // test with unknown user agent
         $this->assertEquals('Unknown', $this->visitorInfoUtil->getBrowserShortify('Unknown User Agent'));

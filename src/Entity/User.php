@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 
 /**
- * The User database entity
+ * Class User
  *
- * The User entity is used to store user data in the database
+ * The User entity database table mapping class
  *
  * @package App\Entity
  */

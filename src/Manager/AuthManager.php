@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use App\Entity\User;
 use App\Util\AppUtil;
+use App\Util\CacheUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Util\SecurityUtil;
@@ -16,19 +17,19 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class AuthManager
  *
- * Contains methods to manage user authentication
+ * User authentication and authorization contains logic
  *
  * @package App\Manager
  */
 class AuthManager
 {
     private AppUtil $appUtil;
+    private CacheUtil $cacheUtil;
     private LogManager $logManager;
     private CookieUtil $cookieUtil;
     private SessionUtil $sessionUtil;
     private UserManager $userManager;
     private EmailManager $emailManager;
-    private CacheManager $cacheManager;
     private ErrorManager $errorManager;
     private SecurityUtil $securityUtil;
     private VisitorInfoUtil $visitorInfoUtil;
@@ -36,24 +37,24 @@ class AuthManager
 
     public function __construct(
         AppUtil $appUtil,
+        CacheUtil $cacheUtil,
         LogManager $logManager,
         CookieUtil $cookieUtil,
         SessionUtil $sessionUtil,
         UserManager $userManager,
         EmailManager $emailManager,
-        CacheManager $cacheManager,
         ErrorManager $errorManager,
         SecurityUtil $securityUtil,
         VisitorInfoUtil $visitorInfoUtil,
         EntityManagerInterface $entityManager
     ) {
         $this->appUtil = $appUtil;
+        $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
         $this->cookieUtil = $cookieUtil;
         $this->sessionUtil = $sessionUtil;
         $this->userManager = $userManager;
         $this->emailManager = $emailManager;
-        $this->cacheManager = $cacheManager;
         $this->errorManager = $errorManager;
         $this->securityUtil = $securityUtil;
         $this->entityManager = $entityManager;
@@ -61,7 +62,7 @@ class AuthManager
     }
 
     /**
-     * Register a new user
+     * Register a new user to database
      *
      * @param string $username The username of the new user
      * @param string $password The password of the new user
@@ -125,13 +126,16 @@ class AuthManager
                 // log action
                 $this->logManager->log('authenticator', 'new registration user: ' . $username);
             } catch (\Exception $e) {
-                $this->errorManager->handleError('error to register new user: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                $this->errorManager->handleError(
+                    'error to register new user: ' . $e->getMessage(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
             }
         }
     }
 
     /**
-     * Get current user logged user
+     * Get current user logged user repository
      *
      * @return User|null The user object if found, null otherwise
      */
@@ -143,11 +147,12 @@ class AuthManager
         }
 
         // return logged user
-        return $this->userManager->getUserRepository(['token' => $this->sessionUtil->getSessionValue('user-token')]);
+        return $this->userManager
+            ->getUserRepository(['token' => $this->sessionUtil->getSessionValue('user-token')]);
     }
 
     /**
-     * Checks if current user is admin
+     * Check if current logged user is admin
      *
      * @return bool The is user admin or not
      */
@@ -175,7 +180,7 @@ class AuthManager
     }
 
     /**
-     * Checks if a user is logged in
+     * Check if user is logged in
      *
      * @return bool The user is logged in or not
      */
@@ -225,7 +230,7 @@ class AuthManager
     }
 
     /**
-     * Login a user
+     * Login a user to the system
      *
      * @param string $username The username of the user
      * @param bool $remember Whether to remember the user
@@ -259,13 +264,20 @@ class AuthManager
 
                 // send email alert
                 if (!$this->logManager->isAntiLogEnabled()) {
-                    $this->emailManager->sendDefaultEmail($this->appUtil->getAdminContactEmail(), 'LOGIN ALERT', 'User ' . $username . ' has logged to admin-suite dashboard, login log has been saved in database.');
+                    $this->emailManager->sendDefaultEmail(
+                        $this->appUtil->getAdminContactEmail(),
+                        'LOGIN ALERT',
+                        'User ' . $username . ' has logged to admin-suite dashboard, login log has been saved in database.'
+                    );
                 }
 
                 // log action
                 $this->logManager->log('authenticator', 'login user: ' . $username);
             } catch (\Exception $e) {
-                $this->errorManager->handleError('error to login user: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                $this->errorManager->handleError(
+                    'error to login user: ' . $e->getMessage(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
             }
         }
     }
@@ -286,7 +298,10 @@ class AuthManager
 
         // check if repo found
         if ($repo == null) {
-            $this->errorManager->handleError('error to update user data: user not found', Response::HTTP_NOT_FOUND);
+            $this->errorManager->handleError(
+                'error to update user data: user not found',
+                Response::HTTP_NOT_FOUND
+            );
             return;
         }
 
@@ -299,12 +314,15 @@ class AuthManager
         try {
             $this->entityManager->flush();
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to update user data: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                'error to update user data: ' . $e->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
     /**
-     * Get the id of the logged in user
+     * Get the id of the logged user
      *
      * @return int The id of the logged in user
      */
@@ -328,7 +346,7 @@ class AuthManager
     }
 
     /**
-     * Retrieves the login token for the current user session
+     * Get the login token for the current user session
      *
      * @return mixed The login token or null if not found or invalid.
      */
@@ -364,7 +382,10 @@ class AuthManager
 
             // check if repo found
             if ($user == null) {
-                $this->errorManager->handleError('error to update user data: user not found', Response::HTTP_NOT_FOUND);
+                $this->errorManager->handleError(
+                    'error to update user data: user not found',
+                    Response::HTTP_NOT_FOUND
+                );
                 return;
             }
 
@@ -419,7 +440,6 @@ class AuthManager
 
         // log action
         $this->logManager->log('authenticator', 'regenerate all users tokens');
-        ;
 
         return $state;
     }
@@ -455,7 +475,7 @@ class AuthManager
     public function cacheOnlineUser(int $userId): void
     {
         // cache online visitor
-        $this->cacheManager->setValue('online_user_' . $userId, 'online', 300);
+        $this->cacheUtil->setValue('online_user_' . $userId, 'online', 300);
     }
 
     /**
@@ -506,7 +526,7 @@ class AuthManager
         $userCacheKey = 'online_user_' . $userId;
 
         // get the cache item
-        $cacheItem = $this->cacheManager->getValue($userCacheKey);
+        $cacheItem = $this->cacheUtil->getValue($userCacheKey);
 
         // check if cache item exists and is not expired
         if ($cacheItem instanceof CacheItemInterface) {

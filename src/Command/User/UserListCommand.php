@@ -45,7 +45,7 @@ class UserListCommand extends Command
         /** @var \App\Entity\User $users */
         $users = $this->userManager->getAllUsersRepository();
 
-        // check if $users is empty
+        // check if user list is empty
         if ($this->userManager->isUsersEmpty()) {
             $io->success('User list is empty.');
             return Command::SUCCESS;
@@ -57,7 +57,7 @@ class UserListCommand extends Command
             return Command::FAILURE;
         }
 
-        // prepare the data for the table
+        // build data for table
         $data = [];
         foreach ($users as $user) {
             $data[] = [
@@ -72,12 +72,13 @@ class UserListCommand extends Command
             ];
         }
 
-        // render the table with
+        // render the table
         $io->table(
             ['#', 'Username', 'Role', 'Ip address', 'Browser', 'OS', 'Register time', 'Last login'],
             $data
         );
 
+        // return success code
         return Command::SUCCESS;
     }
 }

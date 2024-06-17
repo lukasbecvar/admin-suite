@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Auth;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
  *
  * The new user registration form
  *
- * @package App\Form
+ * @package App\Form\Auth
  */
 class RegistrationFormType extends AbstractType
 {

@@ -34,7 +34,12 @@ class DatabaseOnlineMiddlewareTest extends TestCase
         $errorManagerMock = $this->createMock(ErrorManager::class);
 
         // create an instance of the class under test
-        $middleware = new DatabaseOnlineMiddleware($appUtilMock, $connectionMock, $loggerMock, $errorManagerMock);
+        $middleware = new DatabaseOnlineMiddleware(
+            $appUtilMock,
+            $connectionMock,
+            $loggerMock,
+            $errorManagerMock
+        );
 
         // create a RequestEvent with a dummy Request
         $event = $this->createMock(RequestEvent::class);
@@ -65,7 +70,12 @@ class DatabaseOnlineMiddlewareTest extends TestCase
         $errorManagerMock = $this->createMock(ErrorManager::class);
 
         // create an instance of the class under test
-        $middleware = new DatabaseOnlineMiddleware($appUtilMock, $connectionMock, $loggerMock, $errorManagerMock);
+        $middleware = new DatabaseOnlineMiddleware(
+            $appUtilMock,
+            $connectionMock,
+            $loggerMock,
+            $errorManagerMock
+        );
 
         // create a RequestEvent with a dummy Request
         $event = $this->createMock(RequestEvent::class);
@@ -78,13 +88,13 @@ class DatabaseOnlineMiddlewareTest extends TestCase
         // expect a response to be set
         $errorManagerMock->expects($this->once())
             ->method('getErrorView')
-            ->with(500)
+            ->with(Response::HTTP_INTERNAL_SERVER_ERROR)
             ->willReturn('Internal Server Error Content');
 
         // expect the error to be handled
         $event->expects($this->once())
             ->method('setResponse')
-            ->with(new Response('Internal Server Error Content', 500));
+            ->with(new Response('Internal Server Error Content', Response::HTTP_INTERNAL_SERVER_ERROR));
 
         // execute the middleware
         $middleware->onKernelRequest($event);

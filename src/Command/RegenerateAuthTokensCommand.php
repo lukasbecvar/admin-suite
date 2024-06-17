@@ -28,7 +28,7 @@ class RegenerateAuthTokensCommand extends Command
     }
 
     /**
-     * Executes the command to regenerate all users' authentication tokens
+     * Executes the command to regenerate all users authentication tokens
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface

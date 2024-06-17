@@ -1,20 +1,19 @@
 name: PHP-CodeSniffer
 
-# specify when the workflow should be triggered 
 on:
   push:
     branches:
       - main
       - dev
 
-# define the jobs to be executed in the workflow
 jobs:
   phpcs:
     name: PHP CodeSniffer
     runs-on: ubuntu-latest
 
-    # code checkout
+    # codesniffer check process
     steps:
+    # code checkout
     - name: Checkout code
       uses: actions/checkout@v2
 

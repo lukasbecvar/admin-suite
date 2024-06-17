@@ -5,19 +5,19 @@ namespace App\Controller\Component;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use App\Manager\ErrorManager;
-use App\Form\Settings\PasswordChangeForm;
-use App\Form\Settings\UsernameChangeFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Form\Settings\ProfilePicChangeFormType;
+use App\Form\AccountSettings\PasswordChangeForm;
+use App\Form\AccountSettings\UsernameChangeFormType;
+use App\Form\AccountSettings\ProfilePicChangeFormType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class AccountSettingsController
  *
- * Controller for the account settings page
+ * Controller for account settings component
  *
  * @package App\Controller\Component
  */
@@ -27,8 +27,11 @@ class AccountSettingsController extends AbstractController
     private AuthManager $authManager;
     private ErrorManager $errorManager;
 
-    public function __construct(UserManager $userManager, AuthManager $authManager, ErrorManager $errorManager)
-    {
+    public function __construct(
+        UserManager $userManager,
+        AuthManager $authManager,
+        ErrorManager $errorManager
+    ) {
         $this->userManager = $userManager;
         $this->authManager = $authManager;
         $this->errorManager = $errorManager;
@@ -68,11 +71,18 @@ class AccountSettingsController extends AbstractController
             // get image data
             $image = $form->get('profile-pic')->getData();
 
+            // check if image is uploaded file instance
             if (!($image instanceof UploadedFile)) {
-                $this->errorManager->handleError('error to get image data', Response::HTTP_BAD_REQUEST);
+                $this->errorManager->handleError(
+                    'error to get image data',
+                    Response::HTTP_BAD_REQUEST
+                );
             } else {
                 // get image extension
                 $extension = $image->getClientOriginalExtension();
+
+                // convert extension to lowercase
+                $extension = strtolower($extension);
 
                 // check if file is image
                 if ($extension != 'jpg' && $extension != 'jpeg' && $extension != 'png') {
@@ -131,7 +141,10 @@ class AccountSettingsController extends AbstractController
 
             // check if the new username is empty
             if ($username == null) {
-                $this->errorManager->handleError('error to get username from request data', Response::HTTP_BAD_REQUEST);
+                $this->errorManager->handleError(
+                    'error to get username from request data',
+                    Response::HTTP_BAD_REQUEST
+                );
             } else {
                 // check if the username is already taken
                 if ($this->userManager->checkIfUserExist($username)) {
@@ -184,7 +197,10 @@ class AccountSettingsController extends AbstractController
 
             // check if the new password is empty
             if ($password == null) {
-                $this->errorManager->handleError('error to get password from request data', Response::HTTP_BAD_REQUEST);
+                $this->errorManager->handleError(
+                    'error to get password from request data',
+                    Response::HTTP_BAD_REQUEST
+                );
             } else {
                 // change the password
                 try {

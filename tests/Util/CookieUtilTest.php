@@ -52,7 +52,11 @@ class CookieUtilTest extends TestCase
 
         // assert that the cookie was set
         $this->assertArrayHasKey($name, $_COOKIE, 'Cookie should be set');
-        $this->assertEquals(base64_encode($encryptedValue), $_COOKIE[$name], 'Cookie value should be encrypted and base64 encoded');
+        $this->assertEquals(
+            base64_encode($encryptedValue),
+            $_COOKIE[$name],
+            'Cookie value should be encrypted and base64 encoded'
+        );
     }
 
     /**

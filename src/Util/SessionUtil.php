@@ -98,7 +98,10 @@ class SessionUtil
         // check if session data is decrypted
         if ($value === null) {
             $this->destroySession();
-            $this->errorManager->handleError('error to decrypt session data', Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                'error to decrypt session data',
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         return $value;

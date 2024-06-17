@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form\Settings;
+namespace App\Form\AccountSettings;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
@@ -16,15 +16,15 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
  *
  * The password change form type
  *
- * @package App\Form\Settings
+ * @package App\Form\AccountSettings
  */
 class PasswordChangeForm extends AbstractType
 {
     /**
      * Builds the password update form
      *
-     * @param FormBuilderInterface $builder
-     * @param array<string> $options
+     * @param FormBuilderInterface $builder The form builder
+     * @param array<string> $options The form options
      *
      * @return void
      */
@@ -52,7 +52,7 @@ class PasswordChangeForm extends AbstractType
     /**
      * Configures the options for the registration form
      *
-     * @param OptionsResolver $resolver
+     * @param OptionsResolver $resolver The options resolver
      *
      * @return void
      */

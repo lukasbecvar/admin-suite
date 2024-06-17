@@ -33,6 +33,7 @@ class IndexController extends AbstractController
     {
         // check if user is logged in
         if (!$this->authManager->isUserLogedin()) {
+            // redirect to login component
             return $this->redirectToRoute('app_auth_login');
         }
 

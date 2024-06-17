@@ -4,7 +4,7 @@ namespace App\Controller\Auth;
 
 use App\Manager\UserManager;
 use App\Manager\AuthManager;
-use App\Form\RegistrationFormType;
+use App\Form\Auth\RegistrationFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class RegisterController
  *
- * Controller to handle the registration of a new user
+ * Controller to handle registration component
  *
  * @package App\Controller\Auth
  */
@@ -29,7 +29,7 @@ class RegisterController extends AbstractController
     }
 
     /**
-     * Handle the registration of a new user
+     * Handle the registration component
      *
      * @param Request $request The request object
      *
@@ -66,15 +66,15 @@ class RegisterController extends AbstractController
             if ($this->userManager->checkIfUserExist($username)) {
                 $this->addFlash('error', 'Username is already taken.');
             } else {
-                // register the new user
                 try {
+                    // register the new user
                     $this->authManager->registerUser($username, $password);
 
-                    // auto login
+                    // auto login after registration
                     $this->authManager->login($username, false);
 
                     // redirect to the login page
-                    return $this->redirectToRoute('app_auth_login');
+                    return $this->redirectToRoute('app_dashboard');
                 } catch (\Exception) {
                     $this->addFlash('error', 'An error occurred while registering the new user.');
                 }

@@ -196,9 +196,15 @@ class UserManager
                 $this->entityManager->flush();
 
                 // log action
-                $this->logManager->log('user-manager', 'update role (' . $role . ') for user: ' . $repo->getUsername());
+                $this->logManager->log(
+                    'user-manager',
+                    'update role (' . $role . ') for user: ' . $repo->getUsername()
+                );
             } catch (\Exception $e) {
-                $this->errorManager->handleError('error to grant admin permissions: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                $this->errorManager->handleError(
+                    'error to grant admin permissions: ' . $e->getMessage(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
             }
         }
     }
@@ -213,7 +219,11 @@ class UserManager
         $repository = $this->entityManager->getRepository(User::class);
 
         // get users count
-        $count = $repository->createQueryBuilder('p')->select('COUNT(p.id)')->getQuery()->getSingleScalarResult();
+        $count = $repository
+                    ->createQueryBuilder('p')
+                    ->select('COUNT(p.id)')
+                    ->getQuery()
+                    ->getSingleScalarResult();
 
         // check if count is zero
         if ($count == 0) {
@@ -247,7 +257,10 @@ class UserManager
                 // log action
                 $this->logManager->log('user-manager', 'user: ' . $repo->getUsername() . ' deleted');
             } catch (\Exception $e) {
-                $this->errorManager->handleError('error to delete user: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                $this->errorManager->handleError(
+                    'error to delete user: ' . $e->getMessage(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
             }
         }
     }
@@ -280,9 +293,15 @@ class UserManager
                 $this->entityManager->flush();
 
                 // log action
-                $this->logManager->log('account-settings', 'update username (' . $newUsername . ') for user: ' . $oldUsername);
+                $this->logManager->log(
+                    'account-settings',
+                    'update username (' . $newUsername . ') for user: ' . $oldUsername
+                );
             } catch (\Exception $e) {
-                $this->errorManager->handleError('error to update username: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                $this->errorManager->handleError(
+                    'error to update username: ' . $e->getMessage(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
             }
         }
     }
@@ -315,9 +334,15 @@ class UserManager
                 $this->entityManager->flush();
 
                 // log action
-                $this->logManager->log('account-settings', 'update password for user: ' . $repo->getUsername());
+                $this->logManager->log(
+                    'account-settings',
+                    'update password for user: ' . $repo->getUsername()
+                );
             } catch (\Exception $e) {
-                $this->errorManager->handleError('error to update password: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                $this->errorManager->handleError(
+                    'error to update password: ' . $e->getMessage(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
             }
         }
     }
@@ -347,9 +372,15 @@ class UserManager
                 $this->entityManager->flush();
 
                 // log action
-                $this->logManager->log('account-settings', 'update profile picture for user: ' . $repo->getUsername());
+                $this->logManager->log(
+                    'account-settings',
+                    'update profile picture for user: ' . $repo->getUsername()
+                );
             } catch (\Exception $e) {
-                $this->errorManager->handleError('error to update profile picture: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                $this->errorManager->handleError(
+                    'error to update profile picture: ' . $e->getMessage(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
             }
         }
     }

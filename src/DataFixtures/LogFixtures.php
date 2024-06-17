@@ -10,7 +10,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 /**
  * Class LogFixtures
  *
- * The fixture for the log entity
+ * The testing log data fixtures
  *
  * @package App\DataFixtures
  */

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class BanManager
  *
- * The BanManager is responsible for managing bans in the application
+ * The BanManager is responsible for managing user ban system
  *
  * @package App\Manager
  */
@@ -63,11 +63,26 @@ class BanManager
             $this->entityManager->persist($banned);
             $this->entityManager->flush();
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to ban user: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                'error to ban user: ' . $e->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         // log action
         $this->logManager->log('user-manager', 'user: ' . $userId . ' has been banned');
+    }
+
+    /**
+     * Get banned user repository
+     *
+     * @param array<mixed> $search An array of search parameters
+     *
+     * @return Banned|null The banned user repository, or null if ban does not exist
+     */
+    public function getBanRepository(array $search): ?Banned
+    {
+        return $this->entityManager->getRepository(Banned::class)->findOneBy($search);
     }
 
     /**
@@ -80,7 +95,7 @@ class BanManager
     public function isUserBanned(int $userId): bool
     {
         // check if user is banned
-        return $this->entityManager->getRepository(Banned::class)->findOneBy(['banned_user_id' => $userId,'status' => 'active']) != null;
+        return $this->getBanRepository(['banned_user_id' => $userId, 'status' => 'active']) != null;
     }
 
     /**
@@ -92,11 +107,11 @@ class BanManager
      */
     public function getBanReason(int $userId): ?string
     {
-        // check if user is banned
-        $banned = $this->entityManager->getRepository(Banned::class)->findOneBy(['banned_user_id' => $userId,'status' => 'active']);
+        // get banned repository
+        $banned = $this->getBanRepository(['banned_user_id' => $userId, 'status' => 'active']);
 
         // check if banned repository exists
-        if ($banned) {
+        if ($banned != null) {
             return $banned->getReason();
         }
 
@@ -112,11 +127,11 @@ class BanManager
      */
     public function unBanUser(int $userId): void
     {
-        // check if user is banned
-        $banned = $this->entityManager->getRepository(Banned::class)->findOneBy(['banned_user_id' => $userId,'status' => 'active']);
+        // get banned repository
+        $banned = $this->getBanRepository(['banned_user_id' => $userId, 'status' => 'active']);
 
         // check if banned repository exists
-        if ($banned) {
+        if ($banned != null) {
             // unban user
             try {
                 // set banned status to inactive
@@ -124,7 +139,10 @@ class BanManager
 
                 $this->entityManager->flush();
             } catch (\Exception $e) {
-                $this->errorManager->handleError('error to unban user: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                $this->errorManager->handleError(
+                    'error to unban user: ' . $e->getMessage(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
             }
 
             // log action

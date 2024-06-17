@@ -28,7 +28,8 @@ class RegenerateAuthTokensCommandTest extends TestCase
         $authManager = $this->createMock(AuthManager::class);
 
         // set up the expected method calls and their return values
-        $authManager->expects($this->once())->method('regenerateUsersTokens')->willReturn(['status' => true]);
+        $authManager->expects($this->once())
+            ->method('regenerateUsersTokens')->willReturn(['status' => true]);
 
         // create the command
         $command = new RegenerateAuthTokensCommand($authManager);

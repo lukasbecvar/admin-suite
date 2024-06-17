@@ -23,8 +23,12 @@ class BannedCheckMiddleware
     private BanManager $banManager;
     private AuthManager $authManager;
 
-    public function __construct(AppUtil $appUtil, Environment $twig, BanManager $banManager, AuthManager $authManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        Environment $twig,
+        BanManager $banManager,
+        AuthManager $authManager
+    ) {
         $this->twig = $twig;
         $this->appUtil = $appUtil;
         $this->banManager = $banManager;
@@ -53,7 +57,7 @@ class BannedCheckMiddleware
                     'admin_contact' => $this->appUtil->getAdminContactEmail()
                 ]);
 
-                $response = new Response($content, 403);
+                $response = new Response($content, Response::HTTP_FORBIDDEN);
                 $event->setResponse($response);
             }
         }

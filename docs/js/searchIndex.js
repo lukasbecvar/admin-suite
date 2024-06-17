@@ -13,7 +13,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Command\\RegenerateAuthTokensCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
-            "summary": "Executes\u0020the\u0020command\u0020to\u0020regenerate\u0020all\u0020users\u0027\u0020authentication\u0020tokens",
+            "summary": "Executes\u0020the\u0020command\u0020to\u0020regenerate\u0020all\u0020users\u0020authentication\u0020tokens",
             "url": "classes/App-Command-RegenerateAuthTokensCommand.html#method_execute"
         },                {
             "fqsen": "\\App\\Command\\RegenerateAuthTokensCommand\u003A\u003A\u0024authManager",
@@ -33,12 +33,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Command\\User\\UserBanCommand\u003A\u003Aconfigure\u0028\u0029",
             "name": "configure",
-            "summary": "Configures\u0020the\u0020current\u0020command",
+            "summary": "Configures\u0020the\u0020command\u0020arguments",
             "url": "classes/App-Command-User-UserBanCommand.html#method_configure"
         },                {
             "fqsen": "\\App\\Command\\User\\UserBanCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
-            "summary": "Executes\u0020the\u0020command\u0020to\u0020ban\u0020user\u0020by\u0020username",
+            "summary": "Executes\u0020the\u0020command\u0020to\u0020ban\/unban\u0020user\u0020by\u0020username",
             "url": "classes/App-Command-User-UserBanCommand.html#method_execute"
         },                {
             "fqsen": "\\App\\Command\\User\\UserBanCommand\u003A\u003A\u0024banManager",
@@ -63,7 +63,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Command\\User\\UserDeleteCommand\u003A\u003Aconfigure\u0028\u0029",
             "name": "configure",
-            "summary": "Configures\u0020the\u0020current\u0020command",
+            "summary": "Configures\u0020the\u0020command\u0020arguments",
             "url": "classes/App-Command-User-UserDeleteCommand.html#method_configure"
         },                {
             "fqsen": "\\App\\Command\\User\\UserDeleteCommand\u003A\u003Aexecute\u0028\u0029",
@@ -113,7 +113,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Command\\User\\UserRegisterCommand\u003A\u003Aconfigure\u0028\u0029",
             "name": "configure",
-            "summary": "Configures\u0020the\u0020current\u0020command",
+            "summary": "Configures\u0020the\u0020command\u0020arguments",
             "url": "classes/App-Command-User-UserRegisterCommand.html#method_configure"
         },                {
             "fqsen": "\\App\\Command\\User\\UserRegisterCommand\u003A\u003Aexecute\u0028\u0029",
@@ -143,7 +143,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Command\\User\\UserUpdateRoleCommand\u003A\u003Aconfigure\u0028\u0029",
             "name": "configure",
-            "summary": "Configure\u0020the\u0020command",
+            "summary": "Configure\u0020the\u0020command\u0020arguments",
             "url": "classes/App-Command-User-UserUpdateRoleCommand.html#method_configure"
         },                {
             "fqsen": "\\App\\Command\\User\\UserUpdateRoleCommand\u003A\u003Aexecute\u0028\u0029",
@@ -168,7 +168,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Controller\\AntiLogController\u003A\u003AenableAntiLog\u0028\u0029",
             "name": "enableAntiLog",
-            "summary": "Handle\u0020the\u0020anti\u002Dlog\u0020component",
+            "summary": "Handle\u0020the\u0020anti\u0020log\u0020component",
             "url": "classes/App-Controller-AntiLogController.html#method_enableAntiLog"
         },                {
             "fqsen": "\\App\\Controller\\AntiLogController\u003A\u003A\u0024logManager",
@@ -180,11 +180,6 @@ Search.appendIndex(
             "name": "authManager",
             "summary": "",
             "url": "classes/App-Controller-AntiLogController.html#property_authManager"
-        },                {
-            "fqsen": "\\App\\Controller\\AntiLogController\u003A\u003A\u0024errorManager",
-            "name": "errorManager",
-            "summary": "",
-            "url": "classes/App-Controller-AntiLogController.html#property_errorManager"
         },                {
             "fqsen": "\\App\\Controller\\Auth\\LoginController",
             "name": "LoginController",
@@ -248,7 +243,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Controller\\Auth\\RegisterController\u003A\u003Aregister\u0028\u0029",
             "name": "register",
-            "summary": "Handle\u0020the\u0020registration\u0020of\u0020a\u0020new\u0020user",
+            "summary": "Handle\u0020the\u0020registration\u0020component",
             "url": "classes/App-Controller-Auth-RegisterController.html#method_register"
         },                {
             "fqsen": "\\App\\Controller\\Auth\\RegisterController\u003A\u003A\u0024authManager",
@@ -318,7 +313,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Controller\\Component\\DashboardController\u003A\u003Adashboard\u0028\u0029",
             "name": "dashboard",
-            "summary": "Handle\u0020the\u0020dashboard\u0020page",
+            "summary": "Handle\u0020the\u0020dashboard\u0020page\u0020view",
             "url": "classes/App-Controller-Component-DashboardController.html#method_dashboard"
         },                {
             "fqsen": "\\App\\Controller\\Component\\DashboardController\u003A\u003A\u0024authManager",
@@ -336,34 +331,34 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Controller-Component-UsersManagerController.html#method___construct"
         },                {
-            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AusersManager\u0028\u0029",
-            "name": "usersManager",
-            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020component",
-            "url": "classes/App-Controller-Component-UsersManagerController.html#method_usersManager"
+            "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AusersTable\u0028\u0029",
+            "name": "usersTable",
+            "summary": "Handle\u0020the\u0020users\u0020manager\u0020component",
+            "url": "classes/App-Controller-Component-UsersManagerController.html#method_usersTable"
         },                {
             "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AuserProfile\u0028\u0029",
             "name": "userProfile",
-            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020profile\u0020viewer\u0020component",
+            "summary": "Handle\u0020the\u0020users\u0020manager\u0020profile\u0020viewer\u0020component",
             "url": "classes/App-Controller-Component-UsersManagerController.html#method_userProfile"
         },                {
             "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AuserRegister\u0028\u0029",
             "name": "userRegister",
-            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020register\u0020component",
+            "summary": "Handle\u0020the\u0020users\u0020manager\u0020register\u0020component",
             "url": "classes/App-Controller-Component-UsersManagerController.html#method_userRegister"
         },                {
             "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AuserRoleUpdate\u0028\u0029",
             "name": "userRoleUpdate",
-            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020update\u0020role\u0020component",
+            "summary": "Handle\u0020the\u0020users\u0020manager\u0020update\u0020role\u0020component",
             "url": "classes/App-Controller-Component-UsersManagerController.html#method_userRoleUpdate"
         },                {
             "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AuserDelete\u0028\u0029",
             "name": "userDelete",
-            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020delete\u0020component",
+            "summary": "Handle\u0020the\u0020users\u0020manager\u0020delete\u0020component",
             "url": "classes/App-Controller-Component-UsersManagerController.html#method_userDelete"
         },                {
             "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003AbanUser\u0028\u0029",
             "name": "banUser",
-            "summary": "Handle\u0020the\u0020users\u002Dmanager\u0020ban\u0020component",
+            "summary": "Handle\u0020the\u0020users\u0020manager\u0020ban\u0020component",
             "url": "classes/App-Controller-Component-UsersManagerController.html#method_banUser"
         },                {
             "fqsen": "\\App\\Controller\\Component\\UsersManagerController\u003A\u003A\u0024appUtil",
@@ -413,7 +408,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Controller\\ErrorController\u003A\u003Ashow\u0028\u0029",
             "name": "show",
-            "summary": "Show\u0020the\u0020error\u0020page",
+            "summary": "Show\u0020the\u0020error\u0020page\u0020by\u0020exception",
             "url": "classes/App-Controller-ErrorController.html#method_show"
         },                {
             "fqsen": "\\App\\Controller\\ErrorController\u003A\u003A\u0024appUtil",
@@ -448,7 +443,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\DataFixtures\\BannedFixtures",
             "name": "BannedFixtures",
-            "summary": "Banned\u0020fixtures\u0020class",
+            "summary": "Class\u0020BannedFixtures",
             "url": "classes/App-DataFixtures-BannedFixtures.html"
         },                {
             "fqsen": "\\App\\DataFixtures\\BannedFixtures\u003A\u003Aload\u0028\u0029",
@@ -488,7 +483,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Entity\\Banned",
             "name": "Banned",
-            "summary": "Banned\u0020entity\u0020class",
+            "summary": "Class\u0020Banned",
             "url": "classes/App-Entity-Banned.html"
         },                {
             "fqsen": "\\App\\Entity\\Banned\u003A\u003AgetId\u0028\u0029",
@@ -578,7 +573,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Entity\\Log",
             "name": "Log",
-            "summary": "Log\u0020entity\u0020class",
+            "summary": "Class\u0020Log",
             "url": "classes/App-Entity-Log.html"
         },                {
             "fqsen": "\\App\\Entity\\Log\u003A\u003AgetId\u0028\u0029",
@@ -698,7 +693,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Entity\\User",
             "name": "User",
-            "summary": "The\u0020User\u0020database\u0020entity",
+            "summary": "Class\u0020User",
             "url": "classes/App-Entity-User.html"
         },                {
             "fqsen": "\\App\\Entity\\User\u003A\u003AgetId\u0028\u0029",
@@ -891,80 +886,80 @@ Search.appendIndex(
             "summary": "The\u0020AppErrorException\u0020constructor",
             "url": "classes/App-Exception-AppErrorException.html#method___construct"
         },                {
-            "fqsen": "\\App\\Form\\LoginFormType",
-            "name": "LoginFormType",
-            "summary": "Class\u0020LoginFormType",
-            "url": "classes/App-Form-LoginFormType.html"
-        },                {
-            "fqsen": "\\App\\Form\\LoginFormType\u003A\u003AbuildForm\u0028\u0029",
-            "name": "buildForm",
-            "summary": "Build\u0020the\u0020auth\u0020login\u0020form",
-            "url": "classes/App-Form-LoginFormType.html#method_buildForm"
-        },                {
-            "fqsen": "\\App\\Form\\LoginFormType\u003A\u003AconfigureOptions\u0028\u0029",
-            "name": "configureOptions",
-            "summary": "Configure\u0020the\u0020options",
-            "url": "classes/App-Form-LoginFormType.html#method_configureOptions"
-        },                {
-            "fqsen": "\\App\\Form\\RegistrationFormType",
-            "name": "RegistrationFormType",
-            "summary": "Class\u0020RegistrationFormType",
-            "url": "classes/App-Form-RegistrationFormType.html"
-        },                {
-            "fqsen": "\\App\\Form\\RegistrationFormType\u003A\u003AbuildForm\u0028\u0029",
-            "name": "buildForm",
-            "summary": "Builds\u0020the\u0020registration\u0020form",
-            "url": "classes/App-Form-RegistrationFormType.html#method_buildForm"
-        },                {
-            "fqsen": "\\App\\Form\\RegistrationFormType\u003A\u003AconfigureOptions\u0028\u0029",
-            "name": "configureOptions",
-            "summary": "Configures\u0020the\u0020options\u0020for\u0020the\u0020registration\u0020form",
-            "url": "classes/App-Form-RegistrationFormType.html#method_configureOptions"
-        },                {
-            "fqsen": "\\App\\Form\\Settings\\PasswordChangeForm",
+            "fqsen": "\\App\\Form\\AccountSettings\\PasswordChangeForm",
             "name": "PasswordChangeForm",
             "summary": "Class\u0020PasswordChangeForm",
-            "url": "classes/App-Form-Settings-PasswordChangeForm.html"
+            "url": "classes/App-Form-AccountSettings-PasswordChangeForm.html"
         },                {
-            "fqsen": "\\App\\Form\\Settings\\PasswordChangeForm\u003A\u003AbuildForm\u0028\u0029",
+            "fqsen": "\\App\\Form\\AccountSettings\\PasswordChangeForm\u003A\u003AbuildForm\u0028\u0029",
             "name": "buildForm",
             "summary": "Builds\u0020the\u0020password\u0020update\u0020form",
-            "url": "classes/App-Form-Settings-PasswordChangeForm.html#method_buildForm"
+            "url": "classes/App-Form-AccountSettings-PasswordChangeForm.html#method_buildForm"
         },                {
-            "fqsen": "\\App\\Form\\Settings\\PasswordChangeForm\u003A\u003AconfigureOptions\u0028\u0029",
+            "fqsen": "\\App\\Form\\AccountSettings\\PasswordChangeForm\u003A\u003AconfigureOptions\u0028\u0029",
             "name": "configureOptions",
             "summary": "Configures\u0020the\u0020options\u0020for\u0020the\u0020registration\u0020form",
-            "url": "classes/App-Form-Settings-PasswordChangeForm.html#method_configureOptions"
+            "url": "classes/App-Form-AccountSettings-PasswordChangeForm.html#method_configureOptions"
         },                {
-            "fqsen": "\\App\\Form\\Settings\\ProfilePicChangeFormType",
+            "fqsen": "\\App\\Form\\AccountSettings\\ProfilePicChangeFormType",
             "name": "ProfilePicChangeFormType",
             "summary": "Class\u0020ProfilePicChangeFormType",
-            "url": "classes/App-Form-Settings-ProfilePicChangeFormType.html"
+            "url": "classes/App-Form-AccountSettings-ProfilePicChangeFormType.html"
         },                {
-            "fqsen": "\\App\\Form\\Settings\\ProfilePicChangeFormType\u003A\u003AbuildForm\u0028\u0029",
+            "fqsen": "\\App\\Form\\AccountSettings\\ProfilePicChangeFormType\u003A\u003AbuildForm\u0028\u0029",
             "name": "buildForm",
             "summary": "Builds\u0020the\u0020profile\u0020picture\u0020change\u0020form",
-            "url": "classes/App-Form-Settings-ProfilePicChangeFormType.html#method_buildForm"
+            "url": "classes/App-Form-AccountSettings-ProfilePicChangeFormType.html#method_buildForm"
         },                {
-            "fqsen": "\\App\\Form\\Settings\\ProfilePicChangeFormType\u003A\u003AconfigureOptions\u0028\u0029",
+            "fqsen": "\\App\\Form\\AccountSettings\\ProfilePicChangeFormType\u003A\u003AconfigureOptions\u0028\u0029",
             "name": "configureOptions",
             "summary": "Configures\u0020the\u0020options\u0020for\u0020this\u0020form",
-            "url": "classes/App-Form-Settings-ProfilePicChangeFormType.html#method_configureOptions"
+            "url": "classes/App-Form-AccountSettings-ProfilePicChangeFormType.html#method_configureOptions"
         },                {
-            "fqsen": "\\App\\Form\\Settings\\UsernameChangeFormType",
+            "fqsen": "\\App\\Form\\AccountSettings\\UsernameChangeFormType",
             "name": "UsernameChangeFormType",
             "summary": "Class\u0020UsernameChangeFormType",
-            "url": "classes/App-Form-Settings-UsernameChangeFormType.html"
+            "url": "classes/App-Form-AccountSettings-UsernameChangeFormType.html"
         },                {
-            "fqsen": "\\App\\Form\\Settings\\UsernameChangeFormType\u003A\u003AbuildForm\u0028\u0029",
+            "fqsen": "\\App\\Form\\AccountSettings\\UsernameChangeFormType\u003A\u003AbuildForm\u0028\u0029",
             "name": "buildForm",
             "summary": "Build\u0020the\u0020form",
-            "url": "classes/App-Form-Settings-UsernameChangeFormType.html#method_buildForm"
+            "url": "classes/App-Form-AccountSettings-UsernameChangeFormType.html#method_buildForm"
         },                {
-            "fqsen": "\\App\\Form\\Settings\\UsernameChangeFormType\u003A\u003AconfigureOptions\u0028\u0029",
+            "fqsen": "\\App\\Form\\AccountSettings\\UsernameChangeFormType\u003A\u003AconfigureOptions\u0028\u0029",
             "name": "configureOptions",
             "summary": "Configure\u0020the\u0020options",
-            "url": "classes/App-Form-Settings-UsernameChangeFormType.html#method_configureOptions"
+            "url": "classes/App-Form-AccountSettings-UsernameChangeFormType.html#method_configureOptions"
+        },                {
+            "fqsen": "\\App\\Form\\Auth\\LoginFormType",
+            "name": "LoginFormType",
+            "summary": "Class\u0020LoginFormType",
+            "url": "classes/App-Form-Auth-LoginFormType.html"
+        },                {
+            "fqsen": "\\App\\Form\\Auth\\LoginFormType\u003A\u003AbuildForm\u0028\u0029",
+            "name": "buildForm",
+            "summary": "Build\u0020the\u0020auth\u0020login\u0020form",
+            "url": "classes/App-Form-Auth-LoginFormType.html#method_buildForm"
+        },                {
+            "fqsen": "\\App\\Form\\Auth\\LoginFormType\u003A\u003AconfigureOptions\u0028\u0029",
+            "name": "configureOptions",
+            "summary": "Configure\u0020the\u0020options",
+            "url": "classes/App-Form-Auth-LoginFormType.html#method_configureOptions"
+        },                {
+            "fqsen": "\\App\\Form\\Auth\\RegistrationFormType",
+            "name": "RegistrationFormType",
+            "summary": "Class\u0020RegistrationFormType",
+            "url": "classes/App-Form-Auth-RegistrationFormType.html"
+        },                {
+            "fqsen": "\\App\\Form\\Auth\\RegistrationFormType\u003A\u003AbuildForm\u0028\u0029",
+            "name": "buildForm",
+            "summary": "Builds\u0020the\u0020registration\u0020form",
+            "url": "classes/App-Form-Auth-RegistrationFormType.html#method_buildForm"
+        },                {
+            "fqsen": "\\App\\Form\\Auth\\RegistrationFormType\u003A\u003AconfigureOptions\u0028\u0029",
+            "name": "configureOptions",
+            "summary": "Configures\u0020the\u0020options\u0020for\u0020the\u0020registration\u0020form",
+            "url": "classes/App-Form-Auth-RegistrationFormType.html#method_configureOptions"
         },                {
             "fqsen": "\\App\\Kernel",
             "name": "Kernel",
@@ -983,22 +978,22 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AregisterUser\u0028\u0029",
             "name": "registerUser",
-            "summary": "Register\u0020a\u0020new\u0020user",
+            "summary": "Register\u0020a\u0020new\u0020user\u0020to\u0020database",
             "url": "classes/App-Manager-AuthManager.html#method_registerUser"
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AgetLoggedUserRepository\u0028\u0029",
             "name": "getLoggedUserRepository",
-            "summary": "Get\u0020current\u0020user\u0020logged\u0020user",
+            "summary": "Get\u0020current\u0020user\u0020logged\u0020user\u0020repository",
             "url": "classes/App-Manager-AuthManager.html#method_getLoggedUserRepository"
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AisLoggedInUserAdmin\u0028\u0029",
             "name": "isLoggedInUserAdmin",
-            "summary": "Checks\u0020if\u0020current\u0020user\u0020is\u0020admin",
+            "summary": "Check\u0020if\u0020current\u0020logged\u0020user\u0020is\u0020admin",
             "url": "classes/App-Manager-AuthManager.html#method_isLoggedInUserAdmin"
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AisUserLogedin\u0028\u0029",
             "name": "isUserLogedin",
-            "summary": "Checks\u0020if\u0020a\u0020user\u0020is\u0020logged\u0020in",
+            "summary": "Check\u0020if\u0020user\u0020is\u0020logged\u0020in",
             "url": "classes/App-Manager-AuthManager.html#method_isUserLogedin"
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AcanLogin\u0028\u0029",
@@ -1008,7 +1003,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003Alogin\u0028\u0029",
             "name": "login",
-            "summary": "Login\u0020a\u0020user",
+            "summary": "Login\u0020a\u0020user\u0020to\u0020the\u0020system",
             "url": "classes/App-Manager-AuthManager.html#method_login"
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AupdateDataOnLogin\u0028\u0029",
@@ -1018,12 +1013,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AgetLoggedUserId\u0028\u0029",
             "name": "getLoggedUserId",
-            "summary": "Get\u0020the\u0020id\u0020of\u0020the\u0020logged\u0020in\u0020user",
+            "summary": "Get\u0020the\u0020id\u0020of\u0020the\u0020logged\u0020user",
             "url": "classes/App-Manager-AuthManager.html#method_getLoggedUserId"
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003AgetLoggedUserToken\u0028\u0029",
             "name": "getLoggedUserToken",
-            "summary": "Retrieves\u0020the\u0020login\u0020token\u0020for\u0020the\u0020current\u0020user\u0020session",
+            "summary": "Get\u0020the\u0020login\u0020token\u0020for\u0020the\u0020current\u0020user\u0020session",
             "url": "classes/App-Manager-AuthManager.html#method_getLoggedUserToken"
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003Alogout\u0028\u0029",
@@ -1066,6 +1061,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Manager-AuthManager.html#property_appUtil"
         },                {
+            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024cacheUtil",
+            "name": "cacheUtil",
+            "summary": "",
+            "url": "classes/App-Manager-AuthManager.html#property_cacheUtil"
+        },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024logManager",
             "name": "logManager",
             "summary": "",
@@ -1090,11 +1090,6 @@ Search.appendIndex(
             "name": "emailManager",
             "summary": "",
             "url": "classes/App-Manager-AuthManager.html#property_emailManager"
-        },                {
-            "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024cacheManager",
-            "name": "cacheManager",
-            "summary": "",
-            "url": "classes/App-Manager-AuthManager.html#property_cacheManager"
         },                {
             "fqsen": "\\App\\Manager\\AuthManager\u003A\u003A\u0024errorManager",
             "name": "errorManager",
@@ -1130,6 +1125,11 @@ Search.appendIndex(
             "name": "banUser",
             "summary": "Ban\u0020a\u0020user",
             "url": "classes/App-Manager-BanManager.html#method_banUser"
+        },                {
+            "fqsen": "\\App\\Manager\\BanManager\u003A\u003AgetBanRepository\u0028\u0029",
+            "name": "getBanRepository",
+            "summary": "Get\u0020banned\u0020user\u0020repository",
+            "url": "classes/App-Manager-BanManager.html#method_getBanRepository"
         },                {
             "fqsen": "\\App\\Manager\\BanManager\u003A\u003AisUserBanned\u0028\u0029",
             "name": "isUserBanned",
@@ -1175,46 +1175,6 @@ Search.appendIndex(
             "name": "entityManager",
             "summary": "",
             "url": "classes/App-Manager-BanManager.html#property_entityManager"
-        },                {
-            "fqsen": "\\App\\Manager\\CacheManager",
-            "name": "CacheManager",
-            "summary": "Class\u0020CacheManager",
-            "url": "classes/App-Manager-CacheManager.html"
-        },                {
-            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "",
-            "url": "classes/App-Manager-CacheManager.html#method___construct"
-        },                {
-            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003AisCatched\u0028\u0029",
-            "name": "isCatched",
-            "summary": "Checks\u0020if\u0020a\u0020key\u0020exists\u0020in\u0020the\u0020cache",
-            "url": "classes/App-Manager-CacheManager.html#method_isCatched"
-        },                {
-            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003AgetValue\u0028\u0029",
-            "name": "getValue",
-            "summary": "Retrieves\u0020the\u0020value\u0020associated\u0020with\u0020a\u0020given\u0020key\u0020from\u0020the\u0020cache",
-            "url": "classes/App-Manager-CacheManager.html#method_getValue"
-        },                {
-            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003AsetValue\u0028\u0029",
-            "name": "setValue",
-            "summary": "Sets\u0020a\u0020value\u0020in\u0020the\u0020cache\u0020with\u0020the\u0020specified\u0020key\u0020and\u0020expiration\u0020time",
-            "url": "classes/App-Manager-CacheManager.html#method_setValue"
-        },                {
-            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003AdeleteValue\u0028\u0029",
-            "name": "deleteValue",
-            "summary": "Deletes\u0020a\u0020value\u0020from\u0020the\u0020cache\u0020using\u0020the\u0020specified\u0020key",
-            "url": "classes/App-Manager-CacheManager.html#method_deleteValue"
-        },                {
-            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003A\u0024errorManager",
-            "name": "errorManager",
-            "summary": "",
-            "url": "classes/App-Manager-CacheManager.html#property_errorManager"
-        },                {
-            "fqsen": "\\App\\Manager\\CacheManager\u003A\u003A\u0024cacheItemPoolInterface",
-            "name": "cacheItemPoolInterface",
-            "summary": "",
-            "url": "classes/App-Manager-CacheManager.html#property_cacheItemPoolInterface"
         },                {
             "fqsen": "\\App\\Manager\\EmailManager",
             "name": "EmailManager",
@@ -1663,7 +1623,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Middleware\\SecurityCheckMiddleware\u003A\u003AonKernelRequest\u0028\u0029",
             "name": "onKernelRequest",
-            "summary": "Handle\u0020the\u0020security\u0020check",
+            "summary": "Handle\u0020the\u0020security\u0020check\u0020\u0028SSL\u0020only\u0020check\u0029",
             "url": "classes/App-Middleware-SecurityCheckMiddleware.html#method_onKernelRequest"
         },                {
             "fqsen": "\\App\\Middleware\\SecurityCheckMiddleware\u003A\u003A\u0024appUtil",
@@ -1775,6 +1735,46 @@ Search.appendIndex(
             "name": "calculateMaxPages",
             "summary": "Calculate\u0020the\u0020maximum\u0020number\u0020of\u0020pages",
             "url": "classes/App-Util-AppUtil.html#method_calculateMaxPages"
+        },                {
+            "fqsen": "\\App\\Util\\CacheUtil",
+            "name": "CacheUtil",
+            "summary": "Class\u0020CacheUtil",
+            "url": "classes/App-Util-CacheUtil.html"
+        },                {
+            "fqsen": "\\App\\Util\\CacheUtil\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Util-CacheUtil.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Util\\CacheUtil\u003A\u003AisCatched\u0028\u0029",
+            "name": "isCatched",
+            "summary": "Checks\u0020if\u0020a\u0020key\u0020exists\u0020in\u0020the\u0020cache",
+            "url": "classes/App-Util-CacheUtil.html#method_isCatched"
+        },                {
+            "fqsen": "\\App\\Util\\CacheUtil\u003A\u003AgetValue\u0028\u0029",
+            "name": "getValue",
+            "summary": "Get\u0020the\u0020value\u0020associated\u0020with\u0020a\u0020given\u0020key\u0020from\u0020the\u0020cache",
+            "url": "classes/App-Util-CacheUtil.html#method_getValue"
+        },                {
+            "fqsen": "\\App\\Util\\CacheUtil\u003A\u003AsetValue\u0028\u0029",
+            "name": "setValue",
+            "summary": "Sets\u0020a\u0020value\u0020in\u0020the\u0020cache\u0020with\u0020the\u0020specified\u0020key\u0020and\u0020expiration\u0020time",
+            "url": "classes/App-Util-CacheUtil.html#method_setValue"
+        },                {
+            "fqsen": "\\App\\Util\\CacheUtil\u003A\u003AdeleteValue\u0028\u0029",
+            "name": "deleteValue",
+            "summary": "Delete\u0020value\u0020from\u0020the\u0020cache\u0020using\u0020the\u0020specified\u0020key",
+            "url": "classes/App-Util-CacheUtil.html#method_deleteValue"
+        },                {
+            "fqsen": "\\App\\Util\\CacheUtil\u003A\u003A\u0024errorManager",
+            "name": "errorManager",
+            "summary": "",
+            "url": "classes/App-Util-CacheUtil.html#property_errorManager"
+        },                {
+            "fqsen": "\\App\\Util\\CacheUtil\u003A\u003A\u0024cacheItemPoolInterface",
+            "name": "cacheItemPoolInterface",
+            "summary": "",
+            "url": "classes/App-Util-CacheUtil.html#property_cacheItemPoolInterface"
         },                {
             "fqsen": "\\App\\Util\\CookieUtil",
             "name": "CookieUtil",
@@ -1976,15 +1976,20 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/app-exception.html"
         },                {
+            "fqsen": "\\App\\Form\\AccountSettings",
+            "name": "AccountSettings",
+            "summary": "",
+            "url": "namespaces/app-form-accountsettings.html"
+        },                {
             "fqsen": "\\App\\Form",
             "name": "Form",
             "summary": "",
             "url": "namespaces/app-form.html"
         },                {
-            "fqsen": "\\App\\Form\\Settings",
-            "name": "Settings",
+            "fqsen": "\\App\\Form\\Auth",
+            "name": "Auth",
             "summary": "",
-            "url": "namespaces/app-form-settings.html"
+            "url": "namespaces/app-form-auth.html"
         },                {
             "fqsen": "\\App",
             "name": "App",

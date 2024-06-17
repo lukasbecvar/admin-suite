@@ -100,7 +100,8 @@ class UserDeleteCommandTest extends TestCase
         $userManager = $this->createMock(UserManager::class);
         $userManager->method('checkIfUserExist')->with($username)->willReturn(true);
         $userManager->method('getUserRepository')->with(['username' => $username])->willReturn($user);
-        $userManager->method('deleteUser')->with($userId)->will($this->throwException(new \Exception('Some error occurred')));
+        $userManager->method('deleteUser')->with($userId)
+            ->will($this->throwException(new \Exception('Some error occurred')));
 
         // create the command with the mocked UserManager
         $command = new UserDeleteCommand($userManager);

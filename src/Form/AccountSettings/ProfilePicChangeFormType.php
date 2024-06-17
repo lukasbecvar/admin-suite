@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form\Settings;
+namespace App\Form\AccountSettings;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
  *
  * The profile picture change form type
  *
- * @package App\Form\Settings
+ * @package App\Form\AccountSettings
  */
 class ProfilePicChangeFormType extends AbstractType
 {

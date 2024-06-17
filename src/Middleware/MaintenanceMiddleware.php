@@ -21,8 +21,11 @@ class MaintenanceMiddleware
     private LoggerInterface $logger;
     private ErrorManager $errorManager;
 
-    public function __construct(AppUtil $appUtil, LoggerInterface $loggerInterface, ErrorManager $errorManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        LoggerInterface $loggerInterface,
+        ErrorManager $errorManager
+    ) {
         $this->appUtil = $appUtil;
         $this->logger = $loggerInterface;
         $this->errorManager = $errorManager;
@@ -41,14 +44,17 @@ class MaintenanceMiddleware
         if ($this->appUtil->isMaintenance()) {
             // handle debug mode exception
             if ($this->appUtil->isDevMode()) {
-                $this->errorManager->handleError('the application is under maintenance mode', Response::HTTP_SERVICE_UNAVAILABLE);
+                $this->errorManager->handleError(
+                    'the application is under maintenance mode',
+                    Response::HTTP_SERVICE_UNAVAILABLE
+                );
             } else {
                 $this->logger->error('the application is under maintenance mode');
             }
 
             // render the maintenance template
             $content = $this->errorManager->getErrorView('maintenance');
-            $response = new Response($content, 503);
+            $response = new Response($content, Response::HTTP_SERVICE_UNAVAILABLE);
             $event->setResponse($response);
         }
     }

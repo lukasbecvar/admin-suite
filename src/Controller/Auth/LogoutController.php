@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class LogoutController
  *
- * The controller for the logout page
+ * The controller for logout component
  *
  * @package App\Controller\Auth
  */
@@ -29,12 +29,12 @@ class LogoutController extends AbstractController
     /**
      * Handle the user logout component
      *
-     * @return Response The logout view
+     * @return Response The redirect response
      */
     #[Route('/logout', methods:['GET'], name: 'app_auth_logout')]
     public function logout(): Response
     {
-        // check if user loggedin
+        // check if user is logged in
         if ($this->authManager->isUserLogedin()) {
             $this->authManager->logout();
         }
@@ -43,9 +43,14 @@ class LogoutController extends AbstractController
         if (!$this->authManager->isUserLogedin()) {
             return $this->redirectToRoute('app_auth_login');
         } else {
-            // handle logpout error
-            $this->errorManager->handleError('logout error: unknown error in logout function', Response::HTTP_INTERNAL_SERVER_ERROR);
-            return new Response('Logout error', Response::HTTP_INTERNAL_SERVER_ERROR);
+            // handle logout error
+            $this->errorManager->handleError(
+                'logout error: unknown error in logout process',
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            // error return
+            return new Response('Internal server error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

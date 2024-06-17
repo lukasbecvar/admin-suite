@@ -1,19 +1,17 @@
 name: PHPUnit Tests
 
-# specify when the workflow should be triggered 
 on:
   push:
     branches:
       - main
       - dev
 
-# define the jobs to be executed in the workflow
 jobs:
   phpunit:
     name: Run PHPUnit
     runs-on: ubuntu-latest
 
-    # define services required for the job
+    # required services
     services:
       mysql:
         image: mysql:latest
@@ -23,7 +21,7 @@ jobs:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
-    # define the steps to be executed as part of the job
+    # phpunit tests process
     steps:
       # checkout code
       - name: Checkout code

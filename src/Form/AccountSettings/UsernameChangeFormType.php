@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\AccountSettings;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 /**
- * Class LoginFormType
+ * Class UsernameChangeFormType
  *
- * The auth login form type
+ * The username change form type
  *
- * @package App\Form
+ * @package App\Form\AccountSettings
  */
-class LoginFormType extends AbstractType
+class UsernameChangeFormType extends AbstractType
 {
     /**
-     * Build the auth login form
+     * Build the form
      *
      * @param FormBuilderInterface $builder The form builder
      * @param array<string> $options The form options
@@ -34,19 +33,14 @@ class LoginFormType extends AbstractType
             ->add('username', TextType::class, [
                 'label' => false,
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter a username'])
+                    new NotBlank(['message' => 'Please enter a username']),
+                    new Length([
+                        'min' => 3,
+                        'max' => 155,
+                        'minMessage' => 'Your username should be at least {{ limit }} characters',
+                        'maxMessage' => 'Your username cannot be longer than {{ limit }} characters'
+                    ])
                 ]
-            ])
-            ->add('password', PasswordType::class, [
-                'label' => false,
-                'constraints' => [
-                    new NotBlank(['message' => 'Please enter a password'])
-                ]
-            ])
-            ->add('remember', CheckboxType::class, [
-                'label' => false,
-                'mapped' => false,
-                'required' => false
             ]);
     }
 
