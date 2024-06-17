@@ -1,16 +1,16 @@
 /* admin-suite: css files index */
 
-/* import main app style */
-@import './main.css';
-
-/* import others styles */
-@import './auth.css';
-@import './scrollbar.css';
-
-/* import fontawesome */
+/* fontawesome */
 @import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 
-/* import tailwindcss */
+/* tailwindcss */
 @import '../../node_modules/tailwindcss/base.css';
 @import '../../node_modules/tailwindcss/utilities';
 @import '../../node_modules/tailwindcss//components';
+
+/* main app style */
+@import './main.css';
+
+/* others styles */
+@import './auth.css';
+@import './scrollbar.css';

@@ -29,7 +29,7 @@ class UserUpdateRoleCommand extends Command
     }
 
     /**
-     * Configure the command
+     * Configure the command arguments
      *
      * @return void
      */

@@ -183,7 +183,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('p', 'Internal Server Error');
-        $this->assertSelectorTextContains('p', 'The server encountered an unexpected condition that prevented it from fulfilling the request');
+        $this->assertSelectorTextContains('p', 'Unexpected server-side error');
         $this->assertResponseStatusCodeSame(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

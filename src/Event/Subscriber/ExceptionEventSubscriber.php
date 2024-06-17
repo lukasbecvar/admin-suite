@@ -58,13 +58,13 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // check if the event can be logged
+        // check if the event can be logged in database
         if ($this->canBeEventLogged($message)) {
             // log the exception
             $this->logManager->log('exception', $message, 1);
         }
 
-        // log the error message with monolog
+        // log the error message with monolog (file storage)
         $this->logger->error($message);
     }
 
@@ -86,11 +86,10 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
             'An exception occurred in the driver'
         ];
 
-        // loop through each blocked error pattern
+        // check patterns in the error message
         foreach ($blockedErrorPatterns as $pattern) {
-            // check if the current pattern exists in the error message
+            // check if error message contains a blocked pattern
             if (strpos($errorMessage, $pattern) !== false) {
-                // if a blocked pattern is found, return false
                 return false;
             }
         }

@@ -22,13 +22,13 @@ document.addEventListener('DOMContentLoaded', function() {
     var banReasonInput = document.getElementById('ban-reason');
     var banUrl = '';
 
-    // function to show the ban confirmation popup
+    // show the ban confirmation popup
     function showBanPopup(url) {
         banUrl = url;
         banPopupOverlay.classList.remove('hidden');
     }
 
-    // adding event listeners to each ban button
+    // event listeners to each ban button
     banButtons.forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.preventDefault();
@@ -57,13 +57,13 @@ document.addEventListener('DOMContentLoaded', function() {
     var unbanCancelButton = document.getElementById('unban-cancel-button');
     var unbanUrl = '';
 
-    // function to show the unban confirmation popup
+    // show the unban confirmation popup
     function showUnbanPopup(url) {
         unbanUrl = url;
         unbanPopupOverlay.classList.remove('hidden');
     }
 
-    // adding event listeners to each unban button
+    // event listeners to each unban button
     unbanButtons.forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.preventDefault();
@@ -77,12 +77,12 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = unbanUrl;
     });
 
-    // vent listener for cancelling unban action
+    // event listener for cancelling unban action
     unbanCancelButton.addEventListener('click', function() {
         unbanPopupOverlay.classList.add('hidden');
     });
 
-    // function to show the role update popup with user data
+    // show the role update popup with user data
     function showRoleUpdatePopup(username, currentRole, userId) {
         document.getElementById('role-update-username').textContent = username;
         document.getElementById('current-role').value = currentRole;
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
         roleUpdatePopupOverlay.classList.remove('hidden');
     }
 
-    // adding event listeners to each role update button
+    // event listeners to each role update button
     roleUpdateButtons.forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.preventDefault();
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // adding event listeners to each delete button
+    // event listeners to each delete button
     deleteButtons.forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.preventDefault();

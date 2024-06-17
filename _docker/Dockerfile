@@ -1,5 +1,3 @@
-# admin-suite dev env
-
 # use basic php with apache image
 FROM php:8.3-apache
 

@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class DashboardController
  *
- * Controller to handle the dashboard page
+ * Controller to handle the dashboard component
  *
  * @package App\Controller
  */
@@ -24,7 +24,7 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * Handle the dashboard page
+     * Handle the dashboard page view
      *
      * @return Response The dashboard view
      */

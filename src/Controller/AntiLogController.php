@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
-use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class AntiLogController
  *
- * The controller for the anti-log component
+ * The controller for the anti log component
  *
  * @package App\Controller
  */
@@ -21,17 +20,15 @@ class AntiLogController extends AbstractController
 {
     private LogManager $logManager;
     private AuthManager $authManager;
-    private ErrorManager $errorManager;
 
-    public function __construct(LogManager $logManager, AuthManager $authManager, ErrorManager $errorManager)
+    public function __construct(LogManager $logManager, AuthManager $authManager)
     {
         $this->logManager = $logManager;
         $this->authManager = $authManager;
-        $this->errorManager = $errorManager;
     }
 
     /**
-     * Handle the anti-log component
+     * Handle the anti log component
      *
      * @param Request $request The request object
      *
@@ -47,19 +44,26 @@ class AntiLogController extends AbstractController
 
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
-            $this->errorManager->handleError('You do not have permission to access this page.', Response::HTTP_FORBIDDEN);
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
         }
 
-        // get anti log state
+        // get anti log state parameter
         $state = $request->query->get('state', 'enable');
 
         // check if anti log is enabled
         if ($state == 'disable') {
-            // disable anti log
-            $this->logManager->unSetAntiLog();
+            if ($this->logManager->isAntiLogEnabled()) {
+                // disable anti log
+                $this->logManager->unSetAntiLog();
+            }
         } else {
-            // enable anti log
-            $this->logManager->setAntiLog();
+            if (!$this->logManager->isAntiLogEnabled()) {
+                // enable anti log
+                $this->logManager->setAntiLog();
+            }
         }
 
         // redirect back to dashboard

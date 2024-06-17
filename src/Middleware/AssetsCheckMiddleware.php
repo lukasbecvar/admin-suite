@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class AssetsCheckMiddleware
  *
- * The middleware for checking assets
+ * The middleware for checking assets storage
  *
  * @package App\Middleware
  */

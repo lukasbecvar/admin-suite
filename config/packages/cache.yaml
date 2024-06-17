@@ -1,4 +1,4 @@
-framework: # file system cache config
+framework:
     cache:
         app: cache.adapter.filesystem
         system: cache.adapter.system

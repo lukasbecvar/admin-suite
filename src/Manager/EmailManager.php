@@ -20,8 +20,11 @@ class EmailManager
     private MailerInterface $mailer;
     private ErrorManager $errorManager;
 
-    public function __construct(LogManager $logManager, MailerInterface $mailer, ErrorManager $errorManager)
-    {
+    public function __construct(
+        LogManager $logManager,
+        MailerInterface $mailer,
+        ErrorManager $errorManager
+    ) {
         $this->mailer = $mailer;
         $this->logManager = $logManager;
         $this->errorManager = $errorManager;
@@ -79,7 +82,10 @@ class EmailManager
             // log email sending
             $this->logManager->log('email-send', 'email sent to ' . $recipient . ' with subject: ' . $subject, 3);
         } catch (TransportExceptionInterface $e) {
-            $this->errorManager->handleError('email sending failed: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                'email sending failed: ' . $e->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

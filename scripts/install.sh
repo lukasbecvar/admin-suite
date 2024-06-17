@@ -2,7 +2,7 @@
 
 # install all application requirements
 
-# install composer
+# install composer dependencies
 if [ ! -d 'vendor/' ]
 then
     composer install

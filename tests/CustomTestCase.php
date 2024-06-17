@@ -71,12 +71,12 @@ class CustomTestCase extends WebTestCase
             ->getQuery()
             ->getArrayResult();
 
+        // check if no users found in the database
         if (count($userIds) === 0) {
             throw new \Exception('No users found in the database.');
         }
 
-        $randomUserId = $userIds[array_rand($userIds)]['id'];
-
-        return $randomUserId;
+        // return a random user id from the array of user ids
+        return $userIds[array_rand($userIds)]['id'];
     }
 }

@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BannedRepository;
 
 /**
- * Banned entity class
+ * Class Banned
  *
- * The Banned entity is used to store banned users in the database
+ * The Banned entity database table mapping class
  *
  * @package App\Entity
  */

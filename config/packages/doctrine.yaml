@@ -11,6 +11,7 @@ doctrine:
         # database server version
         server_version: '8.0.31'
         
+        charset: utf8mb4
         profiling_collect_backtrace: '%kernel.debug%'
     orm:
         auto_generate_proxy_classes: true

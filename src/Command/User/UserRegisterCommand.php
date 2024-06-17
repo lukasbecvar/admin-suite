@@ -33,7 +33,7 @@ class UserRegisterCommand extends Command
     }
 
     /**
-     * Configures the current command
+     * Configures the command arguments
      *
      * @return void
      */
@@ -67,7 +67,7 @@ class UserRegisterCommand extends Command
             return Command::FAILURE;
         }
 
-        // check if username are string
+        // check username type
         if (!is_string($username)) {
             $io->error('Invalid username provided.');
             return Command::FAILURE;
@@ -87,7 +87,7 @@ class UserRegisterCommand extends Command
 
         try {
             // generate user password
-            $password = ByteString::fromRandom(32)->toString();
+            $password = ByteString::fromRandom(16)->toString();
 
             // register user
             $this->authManager->registerUser(strval($username), $password);

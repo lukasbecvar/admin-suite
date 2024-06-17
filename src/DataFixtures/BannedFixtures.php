@@ -7,9 +7,9 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
 /**
- * Banned fixtures class
+ * Class BannedFixtures
  *
- * The Banned fixtures is used to fill testing data
+ * The testing banned data fixtures
  *
  * @package App\DataFixtures
  */
@@ -39,11 +39,11 @@ class BannedFixtures extends Fixture
         // create the banned users
         foreach ($bannedUserIds as $userId) {
             $banned = new Banned();
-            $banned->setBannedUserId($userId);
-            $banned->setReason($reasons[array_rand($reasons)]);
-            $banned->setStatus('active');
-            $banned->setTime(new \DateTime());
-            $banned->setBannedById(1);
+            $banned->setBannedUserId($userId)
+                ->setReason($reasons[array_rand($reasons)])
+                ->setStatus('active')
+                ->setTime(new \DateTime())
+                ->setBannedById(1);
 
             // persist the banned user
             $manager->persist($banned);

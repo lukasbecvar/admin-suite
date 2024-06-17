@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package App\Command
  */
-#[AsCommand(name: 'app:user:ban', description: 'Ban user')]
+#[AsCommand(name: 'app:user:ban', description: 'Ban or unban the user')]
 class UserBanCommand extends Command
 {
     private BanManager $banManager;
@@ -32,7 +32,7 @@ class UserBanCommand extends Command
     }
 
     /**
-     * Configures the current command
+     * Configures the command arguments
      *
      * @return void
      */
@@ -42,7 +42,7 @@ class UserBanCommand extends Command
     }
 
     /**
-     * Executes the command to ban user by username
+     * Executes the command to ban/unban user by username
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
@@ -66,7 +66,7 @@ class UserBanCommand extends Command
             return Command::FAILURE;
         }
 
-        // check if username are string
+        // check username type
         if (!is_string($username)) {
             $io->error('Invalid username provided.');
             return Command::FAILURE;
@@ -87,9 +87,11 @@ class UserBanCommand extends Command
         try {
             // check if user is banned
             if ($this->banManager->isUserBanned($userId)) {
+                // unban user
                 $this->banManager->unbanUser($userId);
                 $io->success('User: ' . $username . ' unbanned.');
             } else {
+                // ban user
                 $this->banManager->banUser($userId);
                 $io->success('User: ' . $username . ' banned.');
             }

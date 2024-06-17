@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Manager;
+namespace App\Util;
 
+use App\Manager\ErrorManager;
 use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class CacheManager
+ * Class CacheUtil
  *
  * Manages caching operations using a cache item pool
  *
- * @package App\Manager
+ * @package App\Util
  */
-class CacheManager
+class CacheUtil
 {
     private ErrorManager $errorManager;
     private CacheItemPoolInterface $cacheItemPoolInterface;
@@ -35,13 +36,16 @@ class CacheManager
         try {
             return $this->cacheItemPoolInterface->getItem($key)->isHit();
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get cache value: ' . $e->getMessage(), JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                'error to get cache value: ' . $e->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
             return false;
         }
     }
 
     /**
-     * Retrieves the value associated with a given key from the cache
+     * Get the value associated with a given key from the cache
      *
      * @param string $key The key for which to retrieve the value
      *
@@ -52,7 +56,10 @@ class CacheManager
         try {
             return $this->cacheItemPoolInterface->getItem($key);
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get cache value: ' . $e->getMessage(), JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                'error to get cache value: ' . $e->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
             return null;
         }
     }
@@ -77,12 +84,15 @@ class CacheManager
             // save value
             $this->cacheItemPoolInterface->save($cache_item);
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to store cache value: ' . $e->getMessage(), JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                'error to store cache value: ' . $e->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
     /**
-     * Deletes a value from the cache using the specified key
+     * Delete value from the cache using the specified key
      *
      * @param string $key The key of the value to delete from the cache
      *
@@ -93,7 +103,10 @@ class CacheManager
         try {
             $this->cacheItemPoolInterface->deleteItem($key);
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to delete cache value: ' . $e->getMessage(), JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                'error to delete cache value: ' . $e->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

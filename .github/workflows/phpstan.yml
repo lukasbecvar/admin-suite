@@ -1,19 +1,17 @@
 name: PHPStan
 
-# specify when the workflow should be triggered 
 on:
   push:
     branches:
       - main
       - dev
 
-# define the jobs to be executed in the workflow
 jobs:
   phpstan:
     name: PHPStan analyse
     runs-on: ubuntu-latest
 
-    # define the steps to be executed as part of the job
+    # phpstan test process
     steps:
     # checkout code
     - name: Checkout code

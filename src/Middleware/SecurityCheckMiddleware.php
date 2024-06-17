@@ -21,15 +21,18 @@ class SecurityCheckMiddleware
     private LoggerInterface $logger;
     private ErrorManager $errorManager;
 
-    public function __construct(AppUtil $appUtil, LoggerInterface $logger, ErrorManager $errorManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        LoggerInterface $logger,
+        ErrorManager $errorManager
+    ) {
         $this->appUtil = $appUtil;
         $this->logger = $logger;
         $this->errorManager = $errorManager;
     }
 
     /**
-     * Handle the security check
+     * Handle the security check (SSL only check)
      *
      * @param RequestEvent $event The request event
      *
@@ -41,7 +44,10 @@ class SecurityCheckMiddleware
         if ($this->appUtil->isSSLOnly() && !$this->appUtil->isSsl()) {
             // handle debug mode exception
             if ($this->appUtil->isDevMode()) {
-                $this->errorManager->handleError('ssl is required to access this site.', Response::HTTP_UPGRADE_REQUIRED);
+                $this->errorManager->handleError(
+                    'ssl is required to access this site.',
+                    Response::HTTP_UPGRADE_REQUIRED
+                );
             } else {
                 $this->logger->error('ssl is required to access this site.');
             }

@@ -8,7 +8,7 @@ use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
 use App\Manager\ErrorManager;
-use App\Form\RegistrationFormType;
+use App\Form\Auth\RegistrationFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class UsersManagerController
  *
- * Handle users-manager component page
+ * The controller handle users-manager component
  *
  * @package App\Controller
  */
@@ -47,14 +47,14 @@ class UsersManagerController extends AbstractController
     }
 
     /**
-     * Handle the users-manager component
+     * Handle the users manager component
      *
      * @param Request $request The request object
      *
-     * @return Response The users-manager view
+     * @return Response The users manager table view
      */
     #[Route('/manager/users', methods:['GET'], name: 'app_manager_users')]
-    public function usersManager(Request $request): Response
+    public function usersTable(Request $request): Response
     {
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
@@ -79,7 +79,7 @@ class UsersManagerController extends AbstractController
         // get users data from database
         $usersData = $this->userManager->getUsersByPage($page);
 
-        // get online users list from auth manager
+        // get online users list
         $onlineList = $this->authManager->getOnlineUsersList();
 
         // get users data from database based on filter
@@ -95,17 +95,17 @@ class UsersManagerController extends AbstractController
                 break;
         }
 
-        // render users-manager view
+        // render users manager table view
         return $this->render('component/user-manager/user-manager-table.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
 
-            // instances for users-manager view
+            // instances for users manager view
             'banManager' => $this->banManager,
             'userManager' => $this->userManager,
             'visitorInfoUtil' => $this->visitorInfoUtil,
 
-            // users-manager data
+            // users manager data
             'users' => $usersData,
             'onlineList' => $onlineList,
 
@@ -121,11 +121,11 @@ class UsersManagerController extends AbstractController
     }
 
     /**
-     * Handle the users-manager profile viewer component
+     * Handle the users manager profile viewer component
      *
      * @param Request $request The request object
      *
-     * @return Response The users-manager register view
+     * @return Response The users manager profile view
      */
     #[Route('/manager/users/profile', methods:['GET'], name: 'app_manager_users_profile')]
     public function userProfile(Request $request): Response
@@ -143,18 +143,24 @@ class UsersManagerController extends AbstractController
 
         // check if user id is empty
         if ($userId == 0) {
-            $this->errorManager->handleError('error "id" parameter is empty', Response::HTTP_BAD_REQUEST);
+            $this->errorManager->handleError(
+                'error "id" parameter is empty',
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         // get user data from database
         $userRepository = $this->userManager->getUserRepository(['id' => $userId]);
 
-        // check if repo found
+        // check if user found
         if ($userRepository == null) {
-            $this->errorManager->handleError('error to get user data: user not found', Response::HTTP_NOT_FOUND);
+            $this->errorManager->handleError(
+                'error to get user data: user not found',
+                Response::HTTP_NOT_FOUND
+            );
         }
 
-        // render users-manager register view
+        // render profile view
         return $this->render('component/user-manager/user-profile.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
@@ -168,11 +174,11 @@ class UsersManagerController extends AbstractController
     }
 
     /**
-     * Handle the users-manager register component
+     * Handle the users manager register component
      *
      * @param Request $request The request object
      *
-     * @return Response The users-manager register view
+     * @return Response The users manager register view
      */
     #[Route('/manager/users/register', methods:['GET', 'POST'], name: 'app_manager_users_register')]
     public function userRegister(Request $request): Response
@@ -209,8 +215,8 @@ class UsersManagerController extends AbstractController
             if ($this->userManager->checkIfUserExist($username)) {
                 $this->addFlash('error', 'Username is already taken.');
             } else {
-                // register the new user
                 try {
+                    // register the user
                     $this->authManager->registerUser($username, $password);
 
                     // redirect back to the users table page
@@ -223,7 +229,7 @@ class UsersManagerController extends AbstractController
             }
         }
 
-        // render users-manager register view
+        // render users manager register form view
         return $this->render('component/user-manager/forms/user-register.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
@@ -234,11 +240,11 @@ class UsersManagerController extends AbstractController
     }
 
     /**
-     * Handle the users-manager update role component
+     * Handle the users manager update role component
      *
      * @param Request $request The request object
      *
-     * @return Response The users-manager table redirect
+     * @return Response The users manager table redirect
      */
     #[Route('/manager/users/role/update', methods:['POST'], name: 'app_manager_users_role_update')]
     public function userRoleUpdate(Request $request): Response
@@ -259,17 +265,26 @@ class UsersManagerController extends AbstractController
 
         // check if user id is valid
         if ($userId == null) {
-            $this->errorManager->handleError('invalid request user "id" parameter not found in query', Response::HTTP_BAD_REQUEST);
+            $this->errorManager->handleError(
+                'invalid request user "id" parameter not found in query',
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         // check if new user role is valid
         if ($newRole == null) {
-            $this->errorManager->handleError('invalid request user "role" parameter not found in query', Response::HTTP_BAD_REQUEST);
+            $this->errorManager->handleError(
+                'invalid request user "role" parameter not found in query',
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         // check if user id is valid
         if (!$this->userManager->checkIfUserExistById($userId)) {
-            $this->errorManager->handleError('invalid request user "id" parameter not found in database', Response::HTTP_BAD_REQUEST);
+            $this->errorManager->handleError(
+                'invalid request user "id" parameter not found in database',
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         // convert new user role to uppercase
@@ -280,7 +295,10 @@ class UsersManagerController extends AbstractController
 
         // check if user role is the same
         if ($currentRole == $newRole) {
-            $this->errorManager->handleError('invalid user "role" parameter is same with current user role', Response::HTTP_BAD_REQUEST);
+            $this->errorManager->handleError(
+                'invalid user "role" parameter is same with current user role',
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         // update the user role
@@ -291,11 +309,11 @@ class UsersManagerController extends AbstractController
     }
 
     /**
-     * Handle the users-manager delete component
+     * Handle the users manager delete component
      *
      * @param Request $request The request object
      *
-     * @return Response The users-manager redirect
+     * @return Response The users manager redirect
      */
     #[Route('/manager/users/delete', methods:['GET'], name: 'app_manager_users_delete')]
     public function userDelete(Request $request): Response
@@ -316,12 +334,18 @@ class UsersManagerController extends AbstractController
 
         // check if user id is valid
         if ($userId == null) {
-            $this->errorManager->handleError('invalid request user "id" parameter not found in query', Response::HTTP_BAD_REQUEST);
+            $this->errorManager->handleError(
+                'invalid request user "id" parameter not found in query',
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         // check if user id is valid
         if (!$this->userManager->checkIfUserExistById($userId)) {
-            $this->errorManager->handleError('invalid request user "id" parameter not found in database', Response::HTTP_BAD_REQUEST);
+            $this->errorManager->handleError(
+                'invalid request user "id" parameter not found in database',
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         // delete the user
@@ -339,11 +363,11 @@ class UsersManagerController extends AbstractController
     }
 
     /**
-     * Handle the users-manager ban component
+     * Handle the users manager ban component
      *
      * @param Request $request The request object
      *
-     * @return Response The users-manager redirect
+     * @return Response The users manager redirect
      */
     #[Route('/manager/users/ban', methods:['GET'], name: 'app_manager_users_ban')]
     public function banUser(Request $request): Response
@@ -363,12 +387,18 @@ class UsersManagerController extends AbstractController
 
         // validate user id & status
         if ($userId == 0 || $status == null) {
-            $this->errorManager->handleError('invalid request user "id" or "status" parameter not found in query', Response::HTTP_BAD_REQUEST);
+            $this->errorManager->handleError(
+                'invalid request user "id" or "status" parameter not found in query',
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         // check if status is valid
         if ($status != 'active' && $status !== 'inactive') {
-            $this->errorManager->handleError('invalid request user "status" parameter accept only active or inactive', Response::HTTP_BAD_REQUEST);
+            $this->errorManager->handleError(
+                'invalid request user "status" parameter accept only active or inactive',
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         // check if reason is set
@@ -378,14 +408,20 @@ class UsersManagerController extends AbstractController
 
         // check if user not exist in database
         if (!$this->userManager->checkIfUserExistById($userId)) {
-            $this->errorManager->handleError('invalid request user "id" not found in database', Response::HTTP_BAD_REQUEST);
+            $this->errorManager->handleError(
+                'invalid request user "id" not found in database',
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         // check if banned is active
         if ($status == 'active') {
             // check if user already banned
             if ($this->banManager->isUserBanned($userId)) {
-                $this->errorManager->handleError('invalid request user "id" is already banned', Response::HTTP_BAD_REQUEST);
+                $this->errorManager->handleError(
+                    'invalid request user "id" is already banned',
+                    Response::HTTP_BAD_REQUEST
+                );
             }
 
             // ban user

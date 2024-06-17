@@ -53,7 +53,13 @@ class UserManagerTest extends TestCase
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $this->entityManagerMock->method('getRepository')->willReturn($this->userRepositoryMock);
 
-        $this->userManager = new UserManager($this->appUtilMock, $this->logManagerMock, $this->securityUtilMock, $this->errorManagerMock, $this->entityManagerMock);
+        $this->userManager = new UserManager(
+            $this->appUtilMock,
+            $this->logManagerMock,
+            $this->securityUtilMock,
+            $this->errorManagerMock,
+            $this->entityManagerMock
+        );
     }
 
     /**
@@ -249,7 +255,8 @@ class UserManagerTest extends TestCase
 
         $this->entityManagerMock->expects($this->once())->method('remove')->with($user);
         $this->entityManagerMock->expects($this->once())->method('flush');
-        $this->logManagerMock->expects($this->once())->method('log')->with('user-manager', 'user: testUser deleted');
+        $this->logManagerMock->expects($this->once())
+            ->method('log')->with('user-manager', 'user: testUser deleted');
 
         $this->userManager->deleteUser(1);
     }
@@ -280,7 +287,10 @@ class UserManagerTest extends TestCase
         $this->logManagerMock
             ->expects($this->once())
             ->method('log')
-            ->with('account-settings', 'update username (' . $newUsername . ') for user: ' . $user->getUsername());
+            ->with(
+                'account-settings',
+                'update username (' . $newUsername . ') for user: ' . $user->getUsername()
+            );
 
         // configure entityManagerMock
         $this->entityManagerMock
@@ -327,7 +337,10 @@ class UserManagerTest extends TestCase
         $this->logManagerMock
             ->expects($this->once())
             ->method('log')
-            ->with('account-settings', 'update password for user: ' . $user->getUsername());
+            ->with(
+                'account-settings',
+                'update password for user: ' . $user->getUsername()
+            );
 
         // configure entityManagerMock
         $this->entityManagerMock
@@ -364,7 +377,10 @@ class UserManagerTest extends TestCase
         $this->logManagerMock
             ->expects($this->once())
             ->method('log')
-            ->with('account-settings', 'update profile picture for user: ' . $user->getUsername());
+            ->with(
+                'account-settings',
+                'update profile picture for user: ' . $user->getUsername()
+            );
 
         // configure entityManagerMock
         $this->entityManagerMock

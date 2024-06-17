@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\LogRepository;
 
 /**
- * Log entity class
+ * Class Log
  *
- * The Log entity is used to store log messages in the database
+ * The Log entity database table mapping class
  *
  * @package App\Entity
  */

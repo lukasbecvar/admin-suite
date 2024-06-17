@@ -11,7 +11,7 @@ use App\Manager\UserManager;
 /**
  * Class AutoLoginMiddleware
  *
- * This middleware checks if the required auto-login function should be triggered
+ * This middleware for automatic login for remember me functionality
  *
  * @package App\Middleware
  */

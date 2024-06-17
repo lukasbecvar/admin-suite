@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Tests\Manager;
+namespace App\Tests\Util;
 
-use App\Manager\CacheManager;
+use App\Util\CacheUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class CacheManagerTest
+ * Class CacheUtilTest
  *
- * Test the cache manager
+ * Test the cache util
  *
- * @package App\Tests\Manager
+ * @package App\Tests\Util
  */
-class CacheManagerTest extends TestCase
+class CacheUtilTest extends TestCase
 {
-    /** @var CacheManager */
-    private CacheManager $cacheManager;
+    /** @var CacheUtil */
+    private CacheUtil $cacheUtil;
 
     /** @var CacheItemPoolInterface|MockObject */
     private CacheItemPoolInterface|MockObject $cacheItemPoolMock;
@@ -32,7 +32,7 @@ class CacheManagerTest extends TestCase
     {
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->cacheItemPoolMock = $this->createMock(CacheItemPoolInterface::class);
-        $this->cacheManager = new CacheManager($this->errorManagerMock, $this->cacheItemPoolMock);
+        $this->cacheUtil = new CacheUtil($this->errorManagerMock, $this->cacheItemPoolMock);
     }
 
     /**
@@ -55,7 +55,7 @@ class CacheManagerTest extends TestCase
             ->willReturn(true);
 
         // assert that the method returns true
-        $this->assertTrue($this->cacheManager->isCatched($key));
+        $this->assertTrue($this->cacheUtil->isCatched($key));
     }
 
     /**
@@ -76,7 +76,7 @@ class CacheManagerTest extends TestCase
             ->willReturn($cacheItemMock);
 
         // assert that the method returns the cache item
-        $this->assertSame($cacheItemMock, $this->cacheManager->getValue($key));
+        $this->assertSame($cacheItemMock, $this->cacheUtil->getValue($key));
     }
 
     /**
@@ -110,7 +110,7 @@ class CacheManagerTest extends TestCase
             ->with($expiration);
 
         // call the method
-        $this->cacheManager->setValue($key, $value, $expiration);
+        $this->cacheUtil->setValue($key, $value, $expiration);
     }
 
     /**
@@ -129,7 +129,7 @@ class CacheManagerTest extends TestCase
             ->with($key);
 
         // call the method
-        $this->cacheManager->deleteValue($key);
+        $this->cacheUtil->deleteValue($key);
     }
 
     /**
@@ -151,10 +151,10 @@ class CacheManagerTest extends TestCase
         // set error manager mock expectations
         $this->errorManagerMock->expects($this->once())
             ->method('handleError')
-            ->with('error to get cache value: Test exception', JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            ->with('error to get cache value: Test exception', Response::HTTP_INTERNAL_SERVER_ERROR);
 
         // assert that the method returns false
-        $this->assertFalse($this->cacheManager->isCatched($key));
+        $this->assertFalse($this->cacheUtil->isCatched($key));
     }
 
     /**
@@ -176,10 +176,10 @@ class CacheManagerTest extends TestCase
         // set error manager mock expectations
         $this->errorManagerMock->expects($this->once())
             ->method('handleError')
-            ->with('error to get cache value: Test exception', JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            ->with('error to get cache value: Test exception', Response::HTTP_INTERNAL_SERVER_ERROR);
 
         // assert that the method returns null
-        $this->assertNull($this->cacheManager->getValue($key));
+        $this->assertNull($this->cacheUtil->getValue($key));
     }
 
     /**
@@ -203,10 +203,10 @@ class CacheManagerTest extends TestCase
         // set error manager mock expectations
         $this->errorManagerMock->expects($this->once())
             ->method('handleError')
-            ->with('error to store cache value: Test exception', JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            ->with('error to store cache value: Test exception', Response::HTTP_INTERNAL_SERVER_ERROR);
 
         // call the method
-        $this->cacheManager->setValue($key, $value, $expiration);
+        $this->cacheUtil->setValue($key, $value, $expiration);
     }
 
     /**
@@ -228,9 +228,9 @@ class CacheManagerTest extends TestCase
         // set error manager mock expectations
         $this->errorManagerMock->expects($this->once())
             ->method('handleError')
-            ->with('error to delete cache value: Test exception', JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            ->with('error to delete cache value: Test exception', Response::HTTP_INTERNAL_SERVER_ERROR);
 
         // call the method
-        $this->cacheManager->deleteValue($key);
+        $this->cacheUtil->deleteValue($key);
     }
 }

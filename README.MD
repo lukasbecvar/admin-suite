@@ -1,8 +1,5 @@
 # Admin suite
-Solution for Linux server with custom services administration and monitoring
-
-## Documentation
-The complete source documentation is [here](https://lordbecvold.github.io/admin-suite/)
+Solution for administration and monitoring linux private servers
 
 ## ROADMAP
 ## 0.1
@@ -95,7 +92,6 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
 
 ## 0.5
 - [ ] Banned (with reason) & online status in profile info
-- [ ] Swipe sidebar activate/deactivate
 - [ ] Log manager
     - [ ] View unreaded logs
     - [ ] View all logs 
@@ -108,6 +104,8 @@ The complete source documentation is [here](https://lordbecvold.github.io/admin-
     - [ ] Return all (with -all argument)
 - [ ] About component (developer, github, version, info, etc..)
 - [ ] Design improvements
+    - [ ] Swipe sidebar activate/deactivate
+    - [ ] Better background colors
 
 ## 0.6
 - [ ] Server info

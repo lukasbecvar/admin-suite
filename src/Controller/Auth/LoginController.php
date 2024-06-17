@@ -2,9 +2,9 @@
 
 namespace App\Controller\Auth;
 
-use App\Form\LoginFormType;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
+use App\Form\Auth\LoginFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class LoginController
  *
- * The controller for the login page
+ * The controller for login page component
  *
  * @package App\Controller\Auth
  */
@@ -76,7 +76,7 @@ class LoginController extends AbstractController
             }
         }
 
-        // render the registration component view
+        // render the login component view
         return $this->render('auth/login.twig', [
             'isUsersEmpty' => $this->userManager->isUsersEmpty(),
             'loginForm' => $form->createView()

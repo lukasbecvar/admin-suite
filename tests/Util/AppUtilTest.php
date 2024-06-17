@@ -191,24 +191,28 @@ class AppUtilTest extends TestCase
         $_ENV['TIME_COST'] = '2';
         $_ENV['THREADS'] = '1';
 
+        // expected config
         $expectedConfig = [
             'memory_cost' => 1024,
             'time_cost' => 2,
             'threads' => 1,
         ];
 
+        // assert that the config is correct
         $this->assertSame($expectedConfig, $this->appUtil->getHasherConfig());
 
         $_ENV['MEMORY_COST'] = '2048';
         $_ENV['TIME_COST'] = '4';
         $_ENV['THREADS'] = '2';
 
+        // expected config
         $expectedConfig = [
             'memory_cost' => 2048,
             'time_cost' => 4,
             'threads' => 2,
         ];
 
+        // assert that the config is correct
         $this->assertSame($expectedConfig, $this->appUtil->getHasherConfig());
     }
 }

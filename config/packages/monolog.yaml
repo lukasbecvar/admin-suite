@@ -1,13 +1,11 @@
 monolog:
     handlers:
-        # exception log
         exception:
             type: stream
             path: '%kernel.logs_dir%/exception.log'
             level: error
             channels: ['!event']
 
-# dev env log
 when@dev:
     monolog:
         handlers:

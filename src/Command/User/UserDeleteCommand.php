@@ -13,11 +13,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class UserDeleteCommand
  *
- * The command to delete a user
+ * Command to delete a user by username
  *
  * @package App\Command\User
  */
-#[AsCommand(name: 'app:user:delete', description: 'Delete user')]
+#[AsCommand(name: 'app:user:delete', description: 'Delete user from database')]
 class UserDeleteCommand extends Command
 {
     private UserManager $userManager;
@@ -29,7 +29,7 @@ class UserDeleteCommand extends Command
     }
 
     /**
-     * Configures the current command
+     * Configures the command arguments
      *
      * @return void
      */
@@ -46,7 +46,7 @@ class UserDeleteCommand extends Command
      *
      * @throws \Exception If an error occurs while executing the command
      *
-     * @return int
+     * @return int The status code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -65,7 +65,7 @@ class UserDeleteCommand extends Command
             return Command::FAILURE;
         }
 
-        // check if username are string
+        // check username type
         if (!is_string($username)) {
             $io->error('Invalid username provided.');
             return Command::FAILURE;
@@ -83,8 +83,8 @@ class UserDeleteCommand extends Command
         // get user id
         $userId = (int) $userRepository->getId();
 
+        // delete user process
         try {
-            // delete user
             $this->userManager->deleteUser($userId);
             $io->success('User: ' . $username . ' has been deleted!');
             return Command::SUCCESS;

@@ -52,14 +52,17 @@ class DatabaseOnlineMiddleware
         } catch (\Exception $e) {
             // handle debug mode exception
             if ($this->appUtil->isDevMode()) {
-                $this->errorManager->handleError('database connection error: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                $this->errorManager->handleError(
+                    'database connection error: ' . $e->getMessage(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
             } else {
                 $this->logger->error('database connection error: ' . $e->getMessage());
             }
 
             // render the internal error template
-            $content = $this->errorManager->getErrorView(500);
-            $response = new Response($content, 500);
+            $content = $this->errorManager->getErrorView(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response = new Response($content, Response::HTTP_INTERNAL_SERVER_ERROR);
             $event->setResponse($response);
         }
     }

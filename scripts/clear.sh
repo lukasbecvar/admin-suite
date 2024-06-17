@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# clean app & cache
+# clean app cache
 php bin/console cache:clear
 
-# delete old migrations
+# delete migrations
 rm -rf migrations/
 
 # delete composer files

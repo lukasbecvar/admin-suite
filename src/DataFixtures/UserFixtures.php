@@ -10,7 +10,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 /**
  * Class UserFixtures
  *
- * Fixtures for the User entity
+ * The testing user data fixtures
  *
  * @package App\DataFixtures
  */
