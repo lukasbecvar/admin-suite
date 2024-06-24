@@ -101,6 +101,7 @@ Solution for administration and monitoring linux private servers
     - [ ] View unformated logs (redirect to database browser)
     - [ ] View exception log from monolog
     - [ ] View logs by user (redirect from user managment)
+    - [ ] Syslog table
 - [ ] CLI log reader command
     - [ ] Return unreaded
     - [ ] Return all (with -all argument)
