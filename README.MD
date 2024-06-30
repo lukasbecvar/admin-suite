@@ -91,9 +91,9 @@ Solution for administration and monitoring linux private servers
 - [X] Refactor
 
 ## 0.5
-- [ ] External log handler
 - [ ] Password reset command
 - [ ] Banned (with reason) & online status in profile info
+- [ ] External log handler
 - [ ] Log manager
     - [ ] View unreaded logs
     - [ ] View all logs 
