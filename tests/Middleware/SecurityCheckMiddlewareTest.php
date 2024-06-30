@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Middleware\SecurityCheckMiddleware;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -19,6 +20,35 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class SecurityCheckMiddlewareTest extends TestCase
 {
+    /** @var AppUtil|MockObject */
+    private AppUtil|MockObject $appUtilMock;
+
+    /** @var LoggerInterface|MockObject */
+    private LoggerInterface|MockObject $loggerMock;
+
+    /** @var ErrorManager|MockObject */
+    private ErrorManager|MockObject $errorManagerMock;
+
+    /** @var SecurityCheckMiddleware */
+    private SecurityCheckMiddleware $middleware;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // initialize mocks
+        $this->appUtilMock = $this->createMock(AppUtil::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->errorManagerMock = $this->createMock(ErrorManager::class);
+
+        // create an instance of the class under test
+        $this->middleware = new SecurityCheckMiddleware(
+            $this->appUtilMock,
+            $this->loggerMock,
+            $this->errorManagerMock
+        );
+    }
+
     /**
      * Test if ssl is enabled and ssl is not detected
      *
@@ -26,29 +56,19 @@ class SecurityCheckMiddlewareTest extends TestCase
      */
     public function testRequestWhenSslEnabledAndSslNotDetected(): void
     {
-        // create the AppUtil mock
-        $appUtilMock = $this->createMock(AppUtil::class);
-        $appUtilMock->expects($this->once())
+        // configure mock expectations for this specific test
+        $this->appUtilMock->expects($this->once())
             ->method('isSSLOnly')
             ->willReturn(true);
-        $appUtilMock->expects($this->once())
+        $this->appUtilMock->expects($this->once())
             ->method('isSsl')
             ->willReturn(false);
-
-        // create the logger mock
-        $loggerMock = $this->createMock(LoggerInterface::class);
-
-        // create the error manager mock
-        $errorManagerMock = $this->createMock(ErrorManager::class);
-
-        // create an instance of the class under test
-        $middleware = new SecurityCheckMiddleware($appUtilMock, $loggerMock, $errorManagerMock);
 
         // create a RequestEvent with a dummy Request
         $event = $this->createMock(RequestEvent::class);
 
         // expect a response to be set
-        $errorManagerMock->expects($this->once())
+        $this->errorManagerMock->expects($this->once())
             ->method('getErrorView')
             ->with(426)
             ->willReturn('SSL Required Content');
@@ -59,49 +79,37 @@ class SecurityCheckMiddlewareTest extends TestCase
             ->with(new Response('SSL Required Content', 426));
 
         // execute the middleware
-        $middleware->onKernelRequest($event);
+        $this->middleware->onKernelRequest($event);
     }
 
     /**
-     * Test if ssl is enabled and detected
+     * Test if ssl is enabled and ssl is detected
      *
      * @return void
      */
     public function testRequestWhenSslEnabledAndSslDetected(): void
     {
-        // create the AppUtil mock
-        $appUtilMock = $this->createMock(AppUtil::class);
-        $appUtilMock->expects($this->once())
+        // configure mock expectations for this specific test
+        $this->appUtilMock->expects($this->once())
             ->method('isSSLOnly')
             ->willReturn(true);
-        $appUtilMock->expects($this->once())
+        $this->appUtilMock->expects($this->once())
             ->method('isSsl')
             ->willReturn(true);
-
-        // create the logger mock
-        $loggerMock = $this->createMock(LoggerInterface::class);
-
-        // create the error manager mock
-        $errorManagerMock = $this->createMock(ErrorManager::class);
-
-        // create an instance of the class under test
-        $middleware = new SecurityCheckMiddleware($appUtilMock, $loggerMock, $errorManagerMock);
 
         // create a RequestEvent with a dummy Request
         $event = $this->createMock(RequestEvent::class);
 
         // expect no errors to be handled
-        $errorManagerMock
-            ->expects($this->never())
+        $this->errorManagerMock->expects($this->never())
             ->method('handleError');
 
         // expect no response to be set
-        $event
-            ->expects($this->never())
+        $event->expects($this->never())
             ->method('setResponse');
 
         // execute the middleware
-        $middleware->onKernelRequest($event);
+        $this->middleware->onKernelRequest($event);
     }
 
     /**
@@ -111,36 +119,23 @@ class SecurityCheckMiddlewareTest extends TestCase
      */
     public function testRequestWhenSslNotEnabled(): void
     {
-        // create the AppUtil mock
-        $appUtilMock = $this->createMock(AppUtil::class);
-        $appUtilMock
-            ->expects($this->once())
+        // configure mock expectations for this specific test
+        $this->appUtilMock->expects($this->once())
             ->method('isSSLOnly')
             ->willReturn(false);
-
-        // create the logger mock
-        $loggerMock = $this->createMock(LoggerInterface::class);
-
-        // create the error manager mock
-        $errorManagerMock = $this->createMock(ErrorManager::class);
-
-        // create an instance of the class under test
-        $middleware = new SecurityCheckMiddleware($appUtilMock, $loggerMock, $errorManagerMock);
 
         // create a RequestEvent with a dummy Request
         $event = $this->createMock(RequestEvent::class);
 
         // expect no errors to be handled
-        $errorManagerMock
-            ->expects($this->never())
+        $this->errorManagerMock->expects($this->never())
             ->method('handleError');
 
         // expect no response to be set
-        $event
-            ->expects($this->never())
+        $event->expects($this->never())
             ->method('setResponse');
 
         // execute the middleware
-        $middleware->onKernelRequest($event);
+        $this->middleware->onKernelRequest($event);
     }
 }

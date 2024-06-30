@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Middleware\MaintenanceMiddleware;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -19,6 +20,27 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class MaintenanceMiddlewareTest extends TestCase
 {
+    /** @var AppUtil|MockObject */
+    private AppUtil|MockObject $appUtilMock;
+
+    /** @var LoggerInterface|MockObject */
+    private LoggerInterface|MockObject $loggerMock;
+
+    /** @var ErrorManager|MockObject */
+    private ErrorManager|MockObject $errorManagerMock;
+
+    /**
+     * Sets up the mock objects before each test
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->appUtilMock = $this->createMock(AppUtil::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->errorManagerMock = $this->createMock(ErrorManager::class);
+    }
+
     /**
      * Test if the maintenance mode is enabled
      *
@@ -26,36 +48,25 @@ class MaintenanceMiddlewareTest extends TestCase
      */
     public function testRequestWhenMaintenanceModeEnabled(): void
     {
-        // create the app util mock
-        $appUtilMock = $this->createMock(AppUtil::class);
-        $appUtilMock->expects($this->once())
+        $this->appUtilMock->expects($this->once())
             ->method('isMaintenance')
             ->willReturn(true);
 
-        // create the logger mock
-        $loggerMock = $this->createMock(LoggerInterface::class);
+        $middleware = new MaintenanceMiddleware($this->appUtilMock, $this->loggerMock, $this->errorManagerMock);
 
-        // create the error manager mock
-        $errorManagerMock = $this->createMock(ErrorManager::class);
-
-        // create an instance of the class under test
-        $middleware = new MaintenanceMiddleware($appUtilMock, $loggerMock, $errorManagerMock);
-
-        // create a RequestEvent with a dummy Request
         $event = $this->createMock(RequestEvent::class);
 
-        // expect a response to be set
-        $errorManagerMock->expects($this->once())
+        $this->errorManagerMock->expects($this->once())
             ->method('getErrorView')
             ->with('maintenance')
             ->willReturn('Maintenance Mode Content');
 
-        // expect the response to be set
         $event->expects($this->once())
             ->method('setResponse')
-            ->with(new Response('Maintenance Mode Content', 503));
+            ->with($this->callback(function ($response) {
+                return $response instanceof Response && $response->getStatusCode() === 503 && $response->getContent() === 'Maintenance Mode Content';
+            }));
 
-        // execute the middleware
         $middleware->onKernelRequest($event);
     }
 
@@ -66,33 +77,20 @@ class MaintenanceMiddlewareTest extends TestCase
      */
     public function testRequestWhenMaintenanceModeDisabled(): void
     {
-        // create the app util mock
-        $appUtilMock = $this->createMock(AppUtil::class);
-        $appUtilMock->expects($this->once())
+        $this->appUtilMock->expects($this->once())
             ->method('isMaintenance')
             ->willReturn(false);
 
-        // create the logger mock
-        $loggerMock = $this->createMock(LoggerInterface::class);
+        $middleware = new MaintenanceMiddleware($this->appUtilMock, $this->loggerMock, $this->errorManagerMock);
 
-        // create the error manager mock
-        $errorManagerMock = $this->createMock(ErrorManager::class);
-
-        // create an instance of the class under test
-        $middleware = new MaintenanceMiddleware($appUtilMock, $loggerMock, $errorManagerMock);
-
-        // create a RequestEvent with a dummy Request
         $event = $this->createMock(RequestEvent::class);
 
-        // Expect no errors to be handled
-        $errorManagerMock->expects($this->never())
+        $this->errorManagerMock->expects($this->never())
             ->method('handleError');
 
-        // expect no response to be set
         $event->expects($this->never())
             ->method('setResponse');
 
-        // execute the middleware
         $middleware->onKernelRequest($event);
     }
 }
