@@ -149,6 +149,9 @@ class UsersManagerController extends AbstractController
             );
         }
 
+        // get online users list
+        $onlineList = $this->authManager->getOnlineUsersList();
+
         // get user data from database
         $userRepository = $this->userManager->getUserRepository(['id' => $userId]);
 
@@ -166,7 +169,11 @@ class UsersManagerController extends AbstractController
             'userData' => $this->authManager->getLoggedUserRepository(),
 
             // visitor info util instance
+            'banManager' => $this->banManager,
             'visitorInfoUtil' => $this->visitorInfoUtil,
+
+            // users manager data
+            'onlineList' => $onlineList,
 
             // user data
             'userRepository' => $userRepository
