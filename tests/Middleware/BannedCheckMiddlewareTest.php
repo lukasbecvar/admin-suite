@@ -8,6 +8,7 @@ use App\Manager\BanManager;
 use App\Manager\AuthManager;
 use PHPUnit\Framework\TestCase;
 use App\Middleware\BannedCheckMiddleware;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -21,6 +22,31 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class BannedCheckMiddlewareTest extends TestCase
 {
+    /** @var AppUtil|MockObject */
+    private AppUtil|MockObject $appUtil;
+
+    /** @var Environment|MockObject */
+    private Environment|MockObject $twig;
+
+    /** @var BanManager|MockObject */
+    private BanManager|MockObject $banManager;
+
+    /** @var AuthManager|MockObject */
+    private AuthManager|MockObject $authManager;
+
+    /**
+     * Sets up the mock objects before each test
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->appUtil = $this->createMock(AppUtil::class);
+        $this->twig = $this->createMock(Environment::class);
+        $this->banManager = $this->createMock(BanManager::class);
+        $this->authManager = $this->createMock(AuthManager::class);
+    }
+
     /**
      * Test request user banned
      *
@@ -28,41 +54,29 @@ class BannedCheckMiddlewareTest extends TestCase
      */
     public function testRequestUserBanned(): void
     {
-        // mock dependency
-        $appUtil = $this->createMock(AppUtil::class);
-        $twig = $this->createMock(Environment::class);
-        $banManager = $this->createMock(BanManager::class);
-        $authManager = $this->createMock(AuthManager::class);
+        $this->appUtil->method('getAdminContactEmail')->willReturn('admin@example.com');
+        $this->authManager->method('isUserLogedin')->willReturn(true);
+        $this->authManager->method('getLoggedUserId')->willReturn(1);
+        $this->banManager->method('isUserBanned')->with(1)->willReturn(true);
+        $this->banManager->method('getBanReason')->with(1)->willReturn('Violation of terms');
 
-        // mock methods
-        $appUtil->method('getAdminContactEmail')->willReturn('admin@example.com');
-        $authManager->method('isUserLogedin')->willReturn(true);
-        $authManager->method('getLoggedUserId')->willReturn(1);
-        $banManager->method('isUserBanned')->with(1)->willReturn(true);
-        $banManager->method('getBanReason')->with(1)->willReturn('Violation of terms');
-
-        // mock twig
-        $twig->method('render')->with('error/error-banned.twig', [
+        $this->twig->method('render')->with('error/error-banned.twig', [
             'reason' => 'Violation of terms',
             'admin_contact' => 'admin@example.com'
         ])->willReturn('Rendered Template');
 
-        // create the middleware
-        $middleware = new BannedCheckMiddleware($appUtil, $twig, $banManager, $authManager);
+        $middleware = new BannedCheckMiddleware($this->appUtil, $this->twig, $this->banManager, $this->authManager);
 
-        // mock the request
         $request = new Request();
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
 
-        // expect a response to be set
         $event->expects($this->once())
             ->method('setResponse')
             ->with($this->callback(function ($response) {
                 return $response instanceof Response && $response->getStatusCode() === 403 && $response->getContent() === 'Rendered Template';
             }));
 
-        // call the middleware method
         $middleware->onKernelRequest($event);
     }
 
@@ -73,29 +87,18 @@ class BannedCheckMiddlewareTest extends TestCase
      */
     public function testRequestUserNotBanned(): void
     {
-        // mock dependency
-        $appUtil = $this->createMock(AppUtil::class);
-        $twig = $this->createMock(Environment::class);
-        $banManager = $this->createMock(BanManager::class);
-        $authManager = $this->createMock(AuthManager::class);
+        $this->authManager->method('isUserLogedin')->willReturn(true);
+        $this->authManager->method('getLoggedUserId')->willReturn(1);
+        $this->banManager->method('isUserBanned')->with(1)->willReturn(false);
 
-        // mock methods
-        $authManager->method('isUserLogedin')->willReturn(true);
-        $authManager->method('getLoggedUserId')->willReturn(1);
-        $banManager->method('isUserBanned')->with(1)->willReturn(false);
+        $middleware = new BannedCheckMiddleware($this->appUtil, $this->twig, $this->banManager, $this->authManager);
 
-        // create the middleware
-        $middleware = new BannedCheckMiddleware($appUtil, $twig, $banManager, $authManager);
-
-        // mock the request
         $request = new Request();
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
 
-        // expect no response to be set
         $event->expects($this->never())->method('setResponse');
 
-        // call the middleware method
         $middleware->onKernelRequest($event);
     }
 }

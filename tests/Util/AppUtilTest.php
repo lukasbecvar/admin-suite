@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AppUtilTest extends TestCase
 {
+    /** @var AppUtil */
     private AppUtil $appUtil;
 
     protected function setUp(): void

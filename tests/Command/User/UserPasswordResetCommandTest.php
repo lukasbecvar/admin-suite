@@ -35,7 +35,7 @@ class UserPasswordResetCommandTest extends TestCase
     private EntityManagerInterface|MockObject $entityManagerMock;
 
     /**
-     * Sets up the mock objects before each test.
+     * Sets up the mock objects before each test
      *
      * @return void
      */
@@ -48,7 +48,7 @@ class UserPasswordResetCommandTest extends TestCase
     }
 
     /**
-     * Tests a successful password reset.
+     * Tests a successful password reset
      *
      * @return void
      */
@@ -97,7 +97,7 @@ class UserPasswordResetCommandTest extends TestCase
     }
 
     /**
-     * Tests the case where the username does not exist.
+     * Tests the case where the username does not exist
      *
      * @return void
      */
@@ -123,7 +123,7 @@ class UserPasswordResetCommandTest extends TestCase
     }
 
     /**
-     * Tests the case where the provided username is invalid (empty in this case).
+     * Tests the case where the provided username is invalid (empty in this case)
      *
      * @return void
      */

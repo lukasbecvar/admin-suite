@@ -6,6 +6,7 @@ use App\Manager\LogManager;
 use App\Manager\EmailManager;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Mailer\MailerInterface;
 
 /**
@@ -17,6 +18,27 @@ use Symfony\Component\Mailer\MailerInterface;
  */
 class EmailManagerTest extends TestCase
 {
+    /** @var LogManager|MockObject */
+    private LogManager|MockObject $logManagerMock;
+
+    /** @var MailerInterface|MockObject */
+    private MailerInterface|MockObject $mailerMock;
+
+    /** @var ErrorManager|MockObject */
+    private ErrorManager|MockObject $errorManagerMock;
+
+    /**
+     * Sets up the mock objects before each test
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->logManagerMock = $this->createMock(LogManager::class);
+        $this->mailerMock = $this->createMock(MailerInterface::class);
+        $this->errorManagerMock = $this->createMock(ErrorManager::class);
+    }
+
     /**
      * Test send email with disabled mailer
      *
@@ -24,7 +46,6 @@ class EmailManagerTest extends TestCase
      */
     public function testSendEmailWithDisabledMailer(): void
     {
-        // set the email parameters
         $recipient = 'recipient@example.com';
         $subject = 'Test Subject';
         $context = [
@@ -33,26 +54,14 @@ class EmailManagerTest extends TestCase
             'time' => date('Y-m-d H:i:s')
         ];
 
-        // create the log manager mock
-        $logManagerMock = $this->createMock(LogManager::class);
-        $logManagerMock->expects($this->never())
-            ->method('log');
+        $this->logManagerMock->expects($this->never())->method('log');
+        $this->mailerMock->expects($this->never())->method('send');
 
-        // create the mailer mock
-        $mailerMock = $this->createMock(MailerInterface::class);
-        $mailerMock->expects($this->never())
-            ->method('send');
-
-        // create the error manager mock
-        $errorManagerMock = $this->createMock(ErrorManager::class);
-
-        // set MAILER_ENABLED to false
         $_ENV['MAILER_ENABLED'] = 'false';
 
-        // create the email manager
-        $emailManager = new EmailManager($logManagerMock, $mailerMock, $errorManagerMock);
+        $emailManager = new EmailManager($this->logManagerMock, $this->mailerMock, $this->errorManagerMock);
 
-        // call send the email
+        // call send email method
         $emailManager->sendEmail($recipient, $subject, $context);
     }
 
@@ -63,7 +72,6 @@ class EmailManagerTest extends TestCase
      */
     public function testSendEmailWithTransportException(): void
     {
-        // set the email parameters
         $recipient = 'recipient@example.com';
         $subject = 'Test Subject';
         $context = [
@@ -72,29 +80,15 @@ class EmailManagerTest extends TestCase
             'time' => date('Y-m-d H:i:s')
         ];
 
-        // create the log manager mock
-        $logManagerMock = $this->createMock(LogManager::class);
-        $logManagerMock->expects($this->never())
-            ->method('log');
+        $this->logManagerMock->expects($this->never())->method('log');
+        $this->mailerMock->expects($this->once())->method('send')->willThrowException(new \Symfony\Component\Mailer\Exception\TransportException());
+        $this->errorManagerMock->expects($this->once())->method('handleError');
 
-        // create the mailer mock
-        $mailerMock = $this->createMock(MailerInterface::class);
-        $mailerMock->expects($this->once())
-            ->method('send')
-            ->willThrowException(new \Symfony\Component\Mailer\Exception\TransportException());
-
-        // create the error manager mock
-        $errorManagerMock = $this->createMock(ErrorManager::class);
-        $errorManagerMock->expects($this->once())
-            ->method('handleError');
-
-        // set MAILER_ENABLED to true
         $_ENV['MAILER_ENABLED'] = 'true';
 
-        // create the email manager
-        $emailManager = new EmailManager($logManagerMock, $mailerMock, $errorManagerMock);
+        $emailManager = new EmailManager($this->logManagerMock, $this->mailerMock, $this->errorManagerMock);
 
-        // call send the email
+        // call send email method
         $emailManager->sendEmail($recipient, $subject, $context);
     }
 }
