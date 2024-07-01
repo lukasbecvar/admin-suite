@@ -5,6 +5,7 @@ namespace App\Tests\Middleware;
 use App\Util\AppUtil;
 use Twig\Environment;
 use App\Manager\BanManager;
+use App\Manager\LogManager;
 use App\Manager\AuthManager;
 use PHPUnit\Framework\TestCase;
 use App\Middleware\BannedCheckMiddleware;
@@ -28,6 +29,9 @@ class BannedCheckMiddlewareTest extends TestCase
     /** @var Environment|MockObject */
     private Environment|MockObject $twig;
 
+    /** @var LogManager|MockObject */
+    private LogManager|MockObject $logManager;
+
     /** @var BanManager|MockObject */
     private BanManager|MockObject $banManager;
 
@@ -43,6 +47,7 @@ class BannedCheckMiddlewareTest extends TestCase
     {
         $this->appUtil = $this->createMock(AppUtil::class);
         $this->twig = $this->createMock(Environment::class);
+        $this->logManager = $this->createMock(LogManager::class);
         $this->banManager = $this->createMock(BanManager::class);
         $this->authManager = $this->createMock(AuthManager::class);
     }
@@ -65,7 +70,7 @@ class BannedCheckMiddlewareTest extends TestCase
             'admin_contact' => 'admin@example.com'
         ])->willReturn('Rendered Template');
 
-        $middleware = new BannedCheckMiddleware($this->appUtil, $this->twig, $this->banManager, $this->authManager);
+        $middleware = new BannedCheckMiddleware($this->appUtil, $this->twig, $this->logManager, $this->banManager, $this->authManager);
 
         $request = new Request();
         $event = $this->createMock(RequestEvent::class);
@@ -91,7 +96,7 @@ class BannedCheckMiddlewareTest extends TestCase
         $this->authManager->method('getLoggedUserId')->willReturn(1);
         $this->banManager->method('isUserBanned')->with(1)->willReturn(false);
 
-        $middleware = new BannedCheckMiddleware($this->appUtil, $this->twig, $this->banManager, $this->authManager);
+        $middleware = new BannedCheckMiddleware($this->appUtil, $this->twig, $this->logManager, $this->banManager, $this->authManager);
 
         $request = new Request();
         $event = $this->createMock(RequestEvent::class);

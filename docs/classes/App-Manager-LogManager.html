@@ -303,14 +303,14 @@
     <span>
                                 &nbsp;: int    </span>
 </dt>
-<dd>Get the count of logs based on their status.</dd>
+<dd>Get the count of logs based on their status</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/App-Manager-LogManager.html#method_getLogsWhereStatus">getLogsWhereStatus()</a>
     <span>
                                 &nbsp;: array&lt;string|int, mixed&gt;|null    </span>
 </dt>
-<dd>Fetch logs based on their status.</dd>
+<dd>Fetch logs based on their status</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/App-Manager-LogManager.html#method_isAntiLogEnabled">isAntiLogEnabled()</a>
@@ -331,7 +331,7 @@
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Set all logs with status &#039;UNREADED&#039; to &#039;READED&#039;.</dd>
+<dd>Set all logs with status &#039;UNREADED&#039; to &#039;READED&#039;</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/App-Manager-LogManager.html#method_setAntiLog">setAntiLog()</a>
@@ -352,7 +352,7 @@
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Update the status of a log entry by its ID.</dd>
+<dd>Update the status of a log entry by its ID</dd>
 
     </dl>
 
@@ -677,19 +677,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">174</span>
+    <span class="phpdocumentor-element-found-in__line">175</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Get the count of logs based on their status.</p>
+        <p class="phpdocumentor-summary">Get the count of logs based on their status</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getLogsCountWhereStatus</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$status</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;all&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+                    <span class="phpdocumentor-signature__name">getLogsCountWhereStatus</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$status</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;all&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$userId</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
-        <section class="phpdocumentor-description"><p>This method retrieves the count of logs from the repository based on the specified status.
+        <section class="phpdocumentor-description"><p>This method retrieves the count of logs from the repository based on the specified status
 If the status is 'all', it counts all logs. Otherwise, it counts logs
 matching the given status.</p>
 </section>
@@ -701,7 +701,16 @@ matching the given status.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&#039;all&#039;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The status of the logs to count. Defaults to 'all'.</p>
+                    <section class="phpdocumentor-description"><p>The status of the logs to count. Defaults to 'all'</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$userId</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">0</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The user id for get all count logs</p>
 </section>
 
             </dd>
@@ -715,7 +724,7 @@ matching the given status.</p>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">int</span>
                     &mdash;
-                <section class="phpdocumentor-description"><p>The count of logs.</p>
+                <section class="phpdocumentor-description"><p>The count of logs</p>
 </section>
 
             </section>
@@ -735,19 +744,19 @@ matching the given status.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">199</span>
+    <span class="phpdocumentor-element-found-in__line">205</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Fetch logs based on their status.</p>
+        <p class="phpdocumentor-summary">Fetch logs based on their status</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getLogsWhereStatus</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$status</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;all&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|null</span></code>
+                    <span class="phpdocumentor-signature__name">getLogsWhereStatus</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$status</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;all&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$userId</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|null</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
-        <section class="phpdocumentor-description"><p>This method retrieves logs from the repository based on the specified status.
+        <section class="phpdocumentor-description"><p>This method retrieves logs from the repository based on the specified status
 If the status is 'all', it retrieves all logs. Otherwise, it fetches logs
 matching the given status. It also logs this action.</p>
 </section>
@@ -759,7 +768,16 @@ matching the given status. It also logs this action.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&#039;all&#039;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The status of the logs to retrieve. Defaults to 'all'.</p>
+                    <section class="phpdocumentor-description"><p>The status of the logs to retrieve. Defaults to 'all'</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$userId</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">0</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The user id for get all logs</p>
 </section>
 
             </dd>
@@ -773,7 +791,7 @@ matching the given status. It also logs this action.</p>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|null</span>
                     &mdash;
-                <section class="phpdocumentor-description"><p>An array of logs if found, or null if no logs are found.</p>
+                <section class="phpdocumentor-description"><p>An array of logs if found, or null if no logs are found</p>
 </section>
 
             </section>
@@ -916,11 +934,11 @@ matching the given status. It also logs this action.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">264</span>
+    <span class="phpdocumentor-element-found-in__line">275</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Set all logs with status &#039;UNREADED&#039; to &#039;READED&#039;.</p>
+        <p class="phpdocumentor-summary">Set all logs with status &#039;UNREADED&#039; to &#039;READED&#039;</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -928,8 +946,8 @@ matching the given status. It also logs this action.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
-        <section class="phpdocumentor-description"><p>This method fetches logs with status 'UNREADED' using getLogsWhereStatus(),
-updates their status to 'READED', and flushes the changes to the database.</p>
+        <section class="phpdocumentor-description"><p>This method fetches logs with status 'UNREADED' using getLogsWhereStatus()
+updates their status to 'READED', and flushes the changes to the database</p>
 </section>
 
     
@@ -946,7 +964,7 @@ updates their status to 'READED', and flushes the changes to the database.</p>
                 <dd class="phpdocumentor-tag-list__definition">
                                                                 <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
                                                             
-                                                 <section class="phpdocumentor-description"><p>If there is an error while updating the log statuses.</p>
+                                                 <section class="phpdocumentor-description"><p>If there is an error while updating the log statuses</p>
 </section>
 
                                     </dd>
@@ -1038,11 +1056,11 @@ updates their status to 'READED', and flushes the changes to the database.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Manager/LogManager.php"><a href="files/src-manager-logmanager.html"><abbr title="src/Manager/LogManager.php">LogManager.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">230</span>
+    <span class="phpdocumentor-element-found-in__line">241</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Update the status of a log entry by its ID.</p>
+        <p class="phpdocumentor-summary">Update the status of a log entry by its ID</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -1050,8 +1068,8 @@ updates their status to 'READED', and flushes the changes to the database.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
-        <section class="phpdocumentor-description"><p>This method retrieves a log entry by its ID, updates its status to the specified new status,
-and persists the change to the database. If the log entry is not found, it handles the error.</p>
+        <section class="phpdocumentor-description"><p>This method retrieves a log entry by its ID, updates its status to the specified new status
+and persists the change to the database. If the log entry is not found, it handles the error</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1061,7 +1079,7 @@ and persists the change to the database. If the log entry is not found, it handl
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The ID of the log entry to update.</p>
+                    <section class="phpdocumentor-description"><p>The ID of the log entry to update</p>
 </section>
 
             </dd>
@@ -1070,7 +1088,7 @@ and persists the change to the database. If the log entry is not found, it handl
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The new status to set for the log entry.</p>
+                    <section class="phpdocumentor-description"><p>The new status to set for the log entry</p>
 </section>
 
             </dd>
@@ -1089,7 +1107,7 @@ and persists the change to the database. If the log entry is not found, it handl
                 <dd class="phpdocumentor-tag-list__definition">
                                                                 <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
                                                             
-                                                 <section class="phpdocumentor-description"><p>If there is an error during the update process.</p>
+                                                 <section class="phpdocumentor-description"><p>If there is an error during the update process</p>
 </section>
 
                                     </dd>
