@@ -201,11 +201,11 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test setLogsToReaded method
+     * Test setAllLogsToReaded method
      *
      * @return void
      */
-    public function testSetLogsToReaded(): void
+    public function testSetAllLogsToReaded(): void
     {
         // mock repository to return logs with 'UNREADED' status
         $mockLog1 = new Log();
@@ -230,6 +230,75 @@ class LogManagerTest extends TestCase
             ->method('flush');
 
         // call the method under test
-        $this->logManager->setLogsToReaded();
+        $this->logManager->setAllLogsToReaded();
+    }
+
+    /**
+     * Test updateLogStatusById when log is found and status is updated.
+     *
+     * @return void
+     */
+    public function testUpdateLogStatusByIdSuccess(): void
+    {
+        $logId = 1;
+        $newStatus = 'READED';
+
+        $logMock = $this->createMock(Log::class);
+        $logMock->expects($this->once())
+            ->method('setStatus')
+            ->with($newStatus);
+
+        $repositoryMock = $this->createMock(LogRepository::class);
+        $repositoryMock->expects($this->once())
+            ->method('find')
+            ->with($logId)
+            ->willReturn($logMock);
+
+        $this->entityManagerMock->expects($this->once())
+            ->method('getRepository')
+            ->with(Log::class)
+            ->willReturn($repositoryMock);
+
+        $this->entityManagerMock->expects($this->once())
+            ->method('flush');
+
+        $this->logManager->updateLogStatusById($logId, $newStatus);
+    }
+
+    /**
+     * Test updateLogStatusById when an exception is thrown during flush.
+     *
+     * @return void
+     */
+    public function testUpdateLogStatusByIdFlushException(): void
+    {
+        $logId = 1;
+        $newStatus = 'READED';
+
+        $logMock = $this->createMock(Log::class);
+        $logMock->expects($this->once())
+            ->method('setStatus')
+            ->with($newStatus);
+
+        $repositoryMock = $this->createMock(LogRepository::class);
+        $repositoryMock->expects($this->once())
+            ->method('find')
+            ->with($logId)
+            ->willReturn($logMock);
+
+        $this->entityManagerMock->expects($this->once())
+            ->method('getRepository')
+            ->with(Log::class)
+            ->willReturn($repositoryMock);
+
+        $this->entityManagerMock->expects($this->once())
+            ->method('flush')
+            ->willThrowException(new \Exception('Test Exception'));
+
+        $this->errorManagerMock->expects($this->once())
+            ->method('handleError')
+            ->with('error to update log status: Test Exception', 500);
+
+        $this->logManager->updateLogStatusById($logId, $newStatus);
     }
 }
