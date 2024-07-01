@@ -105,6 +105,7 @@ Solution for administration and monitoring linux private servers
 - [ ] CLI log reader command
     - [ ] Return unreaded
     - [ ] Return all (with -all argument)
+- [ ] IP info (show after click on ip in user table / profile view)
 - [ ] Design improvements
     - [ ] Swipe sidebar activate/deactivate
     - [ ] Better background colors
