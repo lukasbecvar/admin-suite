@@ -71,6 +71,9 @@ class LogsManagerController extends AbstractController
             'logsCount' => $this->logManager->getLogsCountWhereStatus($filter),
             'logs' => $this->logManager->getLogsWhereStatus($filter),
 
+            // anti log data
+            'antiLogEnabled' => $this->logManager->isAntiLogEnabled(),
+
             // filter helpers
             'filter' => $filter
         ]);

@@ -100,7 +100,7 @@ Solution for administration and monitoring linux private servers
     - [X] Set all readed
     - [X] Set log readed by id
     - [X] User in log table link to user profile
-    - [ ] Anti log config
+    - [X] Anti log config
     - [ ] View logs by user ip (redirect from user manager table)
     - [ ] Log table pagination (like users manager)
     - [ ] View exception log from monolog

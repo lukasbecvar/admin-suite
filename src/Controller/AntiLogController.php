@@ -67,6 +67,6 @@ class AntiLogController extends AbstractController
         }
 
         // redirect back to dashboard
-        return $this->redirectToRoute('app_dashboard');
+        return $this->redirectToRoute('app_manager_logs');
     }
 }
