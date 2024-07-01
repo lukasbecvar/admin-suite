@@ -4,6 +4,11 @@
 {% block component %} 
 <div class="users-manager">
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
+        {# GO TO RAW USERS DATABASE #}
+        <a href="#" class="border border-neutral-500 font-bold px-1 text-white">
+            <i class="fa fa-database" aria-hidden="true"></i>
+        </a>
+
         {# LINK TO USER REGISTER FORM #}
         <a href={{ path('app_manager_users_register') }} class="border border-neutral-500 font-bold px-1 text-white">
             <i class="fa fa-plus" aria-hidden="true"></i>
@@ -58,7 +63,7 @@
                             {% set currentStatus = 'offline' %}
                         {% endif %}
     
-                        {# TABLE ROW #}
+                        {# USER ROW #}
                         <tr class="hover:bg-neutral-800 border-b border-neutral-600">
                             <td class="text-white p-3 border-b border-neutral-600">{{ row.id|e }}</td>
                             <td class="text-white p-3 border-b border-neutral-600">

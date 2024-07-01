@@ -2,7 +2,10 @@
 
 namespace App\Controller\Component;
 
+use App\Manager\LogManager;
 use App\Manager\AuthManager;
+use App\Manager\UserManager;
+use App\Util\VisitorInfoUtil;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,11 +19,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class LogsManagerController extends AbstractController
 {
+    private LogManager $logManager;
+    private UserManager $userManager;
     private AuthManager $authManager;
+    private VisitorInfoUtil $visitorInfoUtil;
 
-    public function __construct(AuthManager $authManager)
-    {
+    public function __construct(
+        LogManager $logManager,
+        UserManager $userManager,
+        AuthManager $authManager,
+        VisitorInfoUtil $visitorInfoUtil
+    ) {
+        $this->logManager = $logManager;
+        $this->userManager = $userManager;
         $this->authManager = $authManager;
+        $this->visitorInfoUtil = $visitorInfoUtil;
     }
 
     /**
@@ -34,7 +47,14 @@ class LogsManagerController extends AbstractController
         // return logs table view
         return $this->render('component/logs-manager/logs-table.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository()
+            'userData' => $this->authManager->getLoggedUserRepository(),
+
+            // instances for logs manager view
+            'userManager' => $this->userManager,
+            'visitorInfoUtil' => $this->visitorInfoUtil,
+
+            'logsCount' => $this->logManager->getLogsCountWhereStatus('UNREADED'),
+            'logs' => $this->logManager->getLogsWhereStatus('UNREADED')
         ]);
     }
 }

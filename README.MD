@@ -95,17 +95,23 @@ Solution for administration and monitoring linux private servers
 - [X] Banned (with reason) & online status in profile info
 - [X] About component (developer, github, version, info, etc..)
 - [ ] Log manager
-    - [ ] View unreaded logs
+    - [X] View unreaded logs
     - [ ] View all logs 
     - [ ] Set all readed
-    - [ ] View unformated logs (redirect to database browser)
+    - [ ] Delete all logs
     - [ ] View exception log from monolog
     - [ ] View logs by user (redirect from user managment)
+    - [ ] User in log table link to user profile
+    - [ ] Delete single log
+    - [ ] Set single log to readed status
+    - [ ] View logs by user ip (redirect from user manager table)
+    - [ ] Log table pagination (like users manager)
     - [ ] Syslog table
+    - [ ] Log manager tests
 - [ ] CLI log reader command
     - [ ] Return unreaded
     - [ ] Return all (with -all argument)
-- [ ] Log reader tests
+    - [ ] log readed tests
 - [ ] Performance improvements
 - [ ] Design improvements
     - [ ] Swipe sidebar activate/deactivate

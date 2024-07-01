@@ -198,7 +198,8 @@ class UserManager
                 // log action
                 $this->logManager->log(
                     'user-manager',
-                    'update role (' . $role . ') for user: ' . $repo->getUsername()
+                    'update role (' . $role . ') for user: ' . $repo->getUsername(),
+                    level: 3
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
@@ -255,7 +256,7 @@ class UserManager
                 $this->entityManager->flush();
 
                 // log action
-                $this->logManager->log('user-manager', 'user: ' . $repo->getUsername() . ' deleted');
+                $this->logManager->log('user-manager', 'user: ' . $repo->getUsername() . ' deleted', 1);
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
                     'error to delete user: ' . $e->getMessage(),
@@ -295,7 +296,8 @@ class UserManager
                 // log action
                 $this->logManager->log(
                     'account-settings',
-                    'update username (' . $newUsername . ') for user: ' . $oldUsername
+                    'update username (' . $newUsername . ') for user: ' . $oldUsername,
+                    level: 3
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
@@ -336,7 +338,8 @@ class UserManager
                 // log action
                 $this->logManager->log(
                     'account-settings',
-                    'update password for user: ' . $repo->getUsername()
+                    'update password for user: ' . $repo->getUsername(),
+                    level: 3
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
@@ -374,7 +377,8 @@ class UserManager
                 // log action
                 $this->logManager->log(
                     'account-settings',
-                    'update profile picture for user: ' . $repo->getUsername()
+                    'update profile picture for user: ' . $repo->getUsername(),
+                    level: 3
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
