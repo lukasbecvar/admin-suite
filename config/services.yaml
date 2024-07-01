@@ -1,4 +1,5 @@
 parameters:
+    appVersion: '%env(APP_VERSION)%'
 
 services:
     # default configuration for services in *this* file

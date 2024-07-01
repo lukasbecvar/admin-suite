@@ -93,7 +93,7 @@ Solution for administration and monitoring linux private servers
 ## 0.5
 - [X] Password reset command
 - [X] Banned (with reason) & online status in profile info
-- [ ] External log handler
+- [X] About component (developer, github, version, info, etc..)
 - [ ] Log manager
     - [ ] View unreaded logs
     - [ ] View all logs 
@@ -105,7 +105,6 @@ Solution for administration and monitoring linux private servers
 - [ ] CLI log reader command
     - [ ] Return unreaded
     - [ ] Return all (with -all argument)
-- [ ] About component (developer, github, version, info, etc..)
 - [ ] Design improvements
     - [ ] Swipe sidebar activate/deactivate
     - [ ] Better background colors
@@ -179,6 +178,7 @@ Solution for administration and monitoring linux private servers
 
 ## 1.3
 - [ ] Connecting other services (like contact inbox, visitor systems, etc)
+    - [ ] External log handler (for connected services)
 
 ## License
 The framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

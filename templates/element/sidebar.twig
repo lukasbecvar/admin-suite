@@ -1,40 +1,52 @@
-<aside id="sidebar" class="text-white md:active border-r border-gray-600">
-    {# USER INFO #}
-    <div class="flex flex-col items-center mb-2">
-        {# PROFILE IMAGE #}
-        <div class="profile-image mt-2">
-            {% if userData.getProfilePic == 'default_pic' %}
-                <img class="rounded-md" src={{ asset('/build/images/default-profile.jpg') }} alt="profile picture">
-            {% else %}
-                <img class="rounded-md" src="data:image/jpeg;base64,{{ userData.getProfilePic|e }}" alt="profile picture">
-            {% endif %}
-        </div>
-        {# USERNAME #} 
-        <div class="username font-bold text-xl">{{ userData.username|e }}</div>
+<aside id="sidebar" class="text-white md:active border-r border-gray-600 flex flex-col justify-between h-full">
+    <div>
+        {# USER INFO #}
+        <div class="flex flex-col items-center mb-2">
+            {# PROFILE IMAGE #}
+            <div class="profile-image mt-2">
+                {% if userData.getProfilePic == 'default_pic' %}
+                    <img class="rounded-md" src={{ asset('/build/images/default-profile.jpg') }} alt="profile picture">
+                {% else %}
+                    <img class="rounded-md" src="data:image/jpeg;base64,{{ userData.getProfilePic|e }}" alt="profile picture">
+                {% endif %}
+            </div>
+            {# USERNAME #} 
+            <div class="username font-bold text-xl">{{ userData.username|e }}</div>
 
-        {# USER ROLE #}
-        <div class="role text-base">
-            {% if isAdmin %}
-                <span class="text-red-400">{{ userData.role|lower|e }}</span>
-            {% else %}
-                <span class="text-green-500">{{ userData.role|lower|e }}</span>
-            {% endif %}
+            {# USER ROLE #}
+            <div class="role text-base">
+                {% if isAdmin %}
+                    <span class="text-red-400">{{ userData.role|lower|e }}</span>
+                {% else %}
+                    <span class="text-green-500">{{ userData.role|lower|e }}</span>
+                {% endif %}
+            </div>
         </div>
+
+        {# MENU LINKS #}
+        <ul class="py-0 text-base">
+            {# DASHBOARD LINK #}
+            <a href={{ path('app_dashboard') }} class="border-b border-gray-600 block px-1 menu-link">
+                <i class="fas fa-desktop mr-0.5"></i>
+                <span>Dashboard</span>
+            </a>
+            
+            {# USERS-MANAGER LINK #}
+            <a href={{ path('app_manager_users') }} class="border-b border-gray-600 block px-1 menu-link">
+                <i class="fas fa-users"></i>
+                <span>Users manager</span>
+            </a>
+
+            {# ACCOUNT-SETTINGS LINK #}
+            <a href={{ path('app_account_settings_table') }} class="border-b border-gray-600 block px-1 menu-link">
+                <i class="fas fa-user-cog"></i>
+                <span>Account settings</span>
+            </a>
+        </ul>
     </div>
 
-    {# MENU LINKS #}
-    <ul class="py-0 text-base">
-        <a href={{ path('app_dashboard') }} class="border-b border-gray-600 block px-1 menu-link">
-            <i class="fas fa-desktop mr-0.5"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href={{ path('app_manager_users') }} class="border-b border-gray-600 block px-1 menu-link">
-            <i class="fas fa-users"></i>
-            <span>Users manager</span>
-        </a>
-        <a href={{ path('app_account_settings_table') }} class="border-b border-gray-600 block px-1 menu-link">
-            <i class="fas fa-user-cog"></i>
-            <span>Account settings</span>
-        </a>
-    </ul>
+    {# VERSION INFO / ABOUT LINK #}
+    <div class="border-t border-gray-600">
+        <span class="text-sm ml-1">version: {{ appVersion }}| <a href={{ path('app_about') }} class="about-link">about</a></span>
+    </div>
 </aside>
