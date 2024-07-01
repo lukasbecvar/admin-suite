@@ -67,4 +67,18 @@ class LogsManagerController extends AbstractController
             'filter' => $filter
         ]);
     }
+
+    /**
+     * Sets all logs to 'READED'.
+     *
+     * @return Response Redirects to the dashboard page after setting logs to 'READED'.
+     */
+    #[Route('/manager/logs/set/readed', methods:['GET'], name: 'app_manager_logs_set_readed')]
+    public function setAllLogsToReaded(): Response
+    {
+        // set all logs to readed
+        $this->logManager->setLogsToReaded();
+
+        return $this->redirectToRoute('app_dashboard');
+    }
 }
