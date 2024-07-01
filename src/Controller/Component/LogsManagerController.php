@@ -47,6 +47,14 @@ class LogsManagerController extends AbstractController
     #[Route('/manager/logs', methods:['GET'], name: 'app_manager_logs')]
     public function logsTable(Request $request): Response
     {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
+        }
+
         // get filter from request query params
         $filter = $request->query->get('filter', 'UNREADED');
 
@@ -78,6 +86,14 @@ class LogsManagerController extends AbstractController
     #[Route('/manager/logs/set/readed', methods:['GET'], name: 'app_manager_logs_set_readed')]
     public function setAllLogsToReaded(Request $request): Response
     {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
+        }
+
         $id = $request->get('id', 0);
 
         // validate and cast id to int
