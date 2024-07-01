@@ -44,6 +44,7 @@
                         <th class="text-left text-white p-1">Message</th>
                         <th class="text-left text-white p-1">Time</th>
                         <th class="text-left text-white p-1">Browser</th>
+                        <th class="text-left text-white p-3">OS</th>
                         <th class="text-left text-white p-1">IP Address</th>
                         <th class="text-left text-white p-1">User</th>
                         {% if filter == 'UNREADED' %}
@@ -61,8 +62,11 @@
                             <td class="text-white p-1 border-b border-neutral-600">{{ row.message|e }}</td>
                             <td class="text-white p-1 border-b border-neutral-600">{{ row.time|date('Y-m-d H:i:s')|e }}</td>
                             <td class="text-white p-1 border-b border-neutral-600">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
+                            <td class="text-white p-1 border-b border-neutral-600">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
                             <td class="text-white p-1 border-b border-neutral-600">{{ row.ipAdderss|e }}</td>
-                            <td class="text-white p-1 border-b border-neutral-600">{{ userManager.getUsernameById(row.userId)|e }}</td>
+                            <td class="text-white p-1 border-b border-neutral-600">
+                                <a href={{ path('app_manager_users_profile', {'id': row.userId}) }} class="underline">{{ userManager.getUsernameById(row.userId)|e }}</a>
+                            </td>
 
                             {# SET LOG READED LINK #}
                             {% if filter == 'UNREADED' %}
