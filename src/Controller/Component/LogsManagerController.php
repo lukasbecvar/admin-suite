@@ -8,13 +8,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * Class LogManagerController
+ * Class LogsManagerController
  *
  * Controller to manage or display of logs
- * 
+ *
  * @package App\Controller\Component
  */
-class LogManagerController extends AbstractController
+class LogsManagerController extends AbstractController
 {
     private AuthManager $authManager;
 
@@ -32,7 +32,7 @@ class LogManagerController extends AbstractController
     public function logsTable(): Response
     {
         // return logs table view
-        return $this->render('component/log-manager/log-table.twig', [
+        return $this->render('component/logs-manager/logs-table.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository()
         ]);
