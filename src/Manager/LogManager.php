@@ -213,6 +213,44 @@ class LogManager
         return array_reverse($logs);
     }
 
+
+    /**
+     * Update the status of a log entry by its ID.
+     *
+     * This method retrieves a log entry by its ID, updates its status to the specified new status,
+     * and persists the change to the database. If the log entry is not found, it handles the error.
+     *
+     * @param int $id The ID of the log entry to update.
+     * @param string $newStatus The new status to set for the log entry.
+     *
+     * @return void
+     *
+     * @throws \Exception If there is an error during the update process.
+     */
+    public function updateLogStatusById(int $id, string $newStatus): void
+    {
+        $repository = $this->entityManager->getRepository(Log::class);
+
+        /** @var \App\Entity\Log $log */
+        $log = $repository->find($id);
+
+        // check if log found
+        if (!$log) {
+            $this->errorManager->handleError('log status update error: log id: ' . $id . ' not found', 500);
+        }
+
+        // update status
+        try {
+            // update status
+            $log->setStatus($newStatus);
+
+            // flush data to database
+            $this->entityManager->flush();
+        } catch (\Exception $e) {
+            $this->errorManager->handleError('error to update log status: ' . $e->getMessage(), 500);
+        }
+    }
+
     /**
      * Set all logs with status 'UNREADED' to 'READED'.
      *
@@ -223,7 +261,7 @@ class LogManager
      *
      * @return void
      */
-    public function setLogsToReaded(): void
+    public function setAllLogsToReaded(): void
     {
         /** @var \App\Entity\Log $logs */
         $logs = $this->getLogsWhereStatus('UNREADED');

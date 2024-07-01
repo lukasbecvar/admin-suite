@@ -1,5 +1,6 @@
 {% extends 'common/layout.twig' %}
 
+{# LOG MANAGER TABLE #}
 {% block component %} 
 <div class="users-manager">
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
@@ -11,11 +12,6 @@
         {# SET ALL LOGS READED #}
         <a href={{ path('app_manager_logs_set_readed') }} class="border border-neutral-500 font-bold px-1 text-white">
             <i class="fa fa-check" aria-hidden="true"></i>
-        </a>
-
-        {# DELETE ALL LOGS #}
-        <a href="#" class="border border-neutral-500 font-bold px-1 text-white">
-            <i class="fa fa-trash" aria-hidden="true"></i>
         </a>
 
         {# PAGE SUBTITLE #}
@@ -50,8 +46,10 @@
                         <th class="text-left text-white p-1">Browser</th>
                         <th class="text-left text-white p-1">IP Address</th>
                         <th class="text-left text-white p-1">User</th>
-                        <th class="text-left text-white p-1"><i class="fa fa-trash" aria-hidden="true"></th>
-                    </tr>
+                        {% if filter == 'UNREADED' %}
+                            <th class="text-left text-white p-1"><i class="fa fa-check" aria-hidden="true"></th>
+                        {% endif %}
+                        </tr>
                 </thead>
                 <tbody class="divide-y divide-white font-medium">
                     {# LOG ROW #}
@@ -66,10 +64,12 @@
                             <td class="text-white p-1 border-b border-neutral-600">{{ row.ipAdderss|e }}</td>
                             <td class="text-white p-1 border-b border-neutral-600">{{ userManager.getUsernameById(row.userId)|e }}</td>
 
-                            {# LOG DELETE LINK #}
-                            <td class="text-white p-1 border-b border-neutral-600">
-                                <a href="#" class="delete-button">X</a>
-                            </td>
+                            {# SET LOG READED LINK #}
+                            {% if filter == 'UNREADED' %}
+                                <td class="text-white p-1 border-b border-neutral-600">
+                                    <a href={{ path('app_manager_logs_set_readed', {'id': row.id }) }} class="delete-button"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 </tbody>

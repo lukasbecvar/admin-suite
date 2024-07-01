@@ -98,7 +98,7 @@ Solution for administration and monitoring linux private servers
     - [X] View unreaded logs
     - [X] Logs table filter
     - [X] Set all readed
-    - [ ] Delete logs
+    - [X] Set log readed by id
     - [ ] User in log table link to user profile
     - [ ] View logs by user ip (redirect from user manager table)
     - [ ] Log table pagination (like users manager)
