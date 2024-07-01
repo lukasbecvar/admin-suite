@@ -161,23 +161,28 @@ class LogManager
     }
 
     /**
-     * Get the count of logs based on their status.
+     * Get the count of logs based on their status
      *
-     * This method retrieves the count of logs from the repository based on the specified status.
+     * This method retrieves the count of logs from the repository based on the specified status
      * If the status is 'all', it counts all logs. Otherwise, it counts logs
      * matching the given status.
      *
-     * @param string $status The status of the logs to count. Defaults to 'all'.
+     * @param string $status The status of the logs to count. Defaults to 'all'
+     * @param int $userId The user id for get all count logs
      *
-     * @return int The count of logs.
+     * @return int The count of logs
      */
-    public function getLogsCountWhereStatus(string $status = 'all'): int
+    public function getLogsCountWhereStatus(string $status = 'all', int $userId = 0): int
     {
         $repository = $this->entityManager->getRepository(Log::class);
 
         // get all logs or by status
         if ($status == 'all') {
-            $count = $repository->count();
+            if ($userId != 0) {
+                $count = $repository->count(['user_id' => $userId]);
+            } else {
+                $count = $repository->count();
+            }
         } else {
             $count = $repository->count(['status' => $status]);
         }
@@ -186,23 +191,28 @@ class LogManager
     }
 
     /**
-     * Fetch logs based on their status.
+     * Fetch logs based on their status
      *
-     * This method retrieves logs from the repository based on the specified status.
+     * This method retrieves logs from the repository based on the specified status
      * If the status is 'all', it retrieves all logs. Otherwise, it fetches logs
      * matching the given status. It also logs this action.
      *
-     * @param string $status The status of the logs to retrieve. Defaults to 'all'.
+     * @param string $status The status of the logs to retrieve. Defaults to 'all'
+     * @param int $userId The user id for get all logs
      *
-     * @return array<mixed>|null An array of logs if found, or null if no logs are found.
+     * @return array<mixed>|null An array of logs if found, or null if no logs are found
      */
-    public function getLogsWhereStatus(string $status = 'all'): ?array
+    public function getLogsWhereStatus(string $status = 'all', int $userId = 0): ?array
     {
         $repository = $this->entityManager->getRepository(Log::class);
 
         // get all logs or by status
         if ($status == 'all') {
-            $logs = $repository->findAll();
+            if ($userId != 0) {
+                $logs = $repository->findBy(['user_id' => $userId]);
+            } else {
+                $logs = $repository->findAll();
+            }
         } else {
             $logs = $repository->findBy(['status' => $status]);
         }
@@ -210,22 +220,23 @@ class LogManager
         // log action
         $this->log('log-manager', $status . ' logs viewed', level: 3);
 
+        // return logs array reversed
         return array_reverse($logs);
     }
 
 
     /**
-     * Update the status of a log entry by its ID.
+     * Update the status of a log entry by its ID
      *
-     * This method retrieves a log entry by its ID, updates its status to the specified new status,
-     * and persists the change to the database. If the log entry is not found, it handles the error.
+     * This method retrieves a log entry by its ID, updates its status to the specified new status
+     * and persists the change to the database. If the log entry is not found, it handles the error
      *
-     * @param int $id The ID of the log entry to update.
-     * @param string $newStatus The new status to set for the log entry.
+     * @param int $id The ID of the log entry to update
+     * @param string $newStatus The new status to set for the log entry
      *
      * @return void
      *
-     * @throws \Exception If there is an error during the update process.
+     * @throws \Exception If there is an error during the update process
      */
     public function updateLogStatusById(int $id, string $newStatus): void
     {
@@ -252,12 +263,12 @@ class LogManager
     }
 
     /**
-     * Set all logs with status 'UNREADED' to 'READED'.
+     * Set all logs with status 'UNREADED' to 'READED'
      *
-     * This method fetches logs with status 'UNREADED' using getLogsWhereStatus(),
-     * updates their status to 'READED', and flushes the changes to the database.
+     * This method fetches logs with status 'UNREADED' using getLogsWhereStatus()
+     * updates their status to 'READED', and flushes the changes to the database
      *
-     * @throws \Exception If there is an error while updating the log statuses.
+     * @throws \Exception If there is an error while updating the log statuses
      *
      * @return void
      */
