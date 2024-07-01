@@ -103,10 +103,10 @@ Solution for administration and monitoring linux private servers
     - [X] Anti log config
     - [X] View logs by user
     - [ ] Log table pagination (like users manager)
+    - [ ] Colored data in log table
     - [ ] View exception log from monolog
     - [ ] Syslog table
     - [ ] Log manager tests
-    - [ ] Colored data in log table
 - [ ] CLI log reader command
     - [ ] Return unreaded
     - [ ] Return all (with -all argument)
