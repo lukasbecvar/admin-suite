@@ -199,4 +199,37 @@ class LogManagerTest extends TestCase
         // assert method response
         $this->assertIsArray($logs);
     }
+
+    /**
+     * Test setLogsToReaded method
+     *
+     * @return void
+     */
+    public function testSetLogsToReaded(): void
+    {
+        // mock repository to return logs with 'UNREADED' status
+        $mockLog1 = new Log();
+        $mockLog1->setStatus('UNREADED');
+
+        $mockLog2 = new Log();
+        $mockLog2->setStatus('UNREADED');
+
+        $logs = [$mockLog1, $mockLog2];
+
+        $this->entityManagerMock->expects($this->once())
+            ->method('getRepository')
+            ->willReturn($this->repositoryMock);
+
+        $this->repositoryMock->expects($this->once())
+            ->method('findBy')
+            ->with(['status' => 'UNREADED'])
+            ->willReturn($logs);
+
+        // expect flush to be called once
+        $this->entityManagerMock->expects($this->once())
+            ->method('flush');
+
+        // call the method under test
+        $this->logManager->setLogsToReaded();
+    }
 }

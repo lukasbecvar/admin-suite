@@ -210,6 +210,36 @@ class LogManager
         // log action
         $this->log('log-manager', $status . ' logs viewed', level: 3);
 
-        return $logs;
+        return array_reverse($logs);
+    }
+
+    /**
+     * Set all logs with status 'UNREADED' to 'READED'.
+     *
+     * This method fetches logs with status 'UNREADED' using getLogsWhereStatus(),
+     * updates their status to 'READED', and flushes the changes to the database.
+     *
+     * @throws \Exception If there is an error while updating the log statuses.
+     *
+     * @return void
+     */
+    public function setLogsToReaded(): void
+    {
+        /** @var \App\Entity\Log $logs */
+        $logs = $this->getLogsWhereStatus('UNREADED');
+
+        if (is_iterable($logs)) {
+            // set all logs to readed status
+            foreach ($logs as $log) {
+                $log->setStatus('READED');
+            }
+        }
+
+        try {
+            // flush changes to the database
+            $this->entityManager->flush();
+        } catch (\Exception $e) {
+            $this->errorManager->handleError('error to set all logs status to "READED": ' . $e, 500);
+        }
     }
 }

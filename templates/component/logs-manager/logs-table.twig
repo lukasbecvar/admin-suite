@@ -9,7 +9,7 @@
         </a>
 
         {# SET ALL LOGS READED #}
-        <a href="#" class="border border-neutral-500 font-bold px-1 text-white">
+        <a href={{ path('app_manager_logs_set_readed') }} class="border border-neutral-500 font-bold px-1 text-white">
             <i class="fa fa-check" aria-hidden="true"></i>
         </a>
 
@@ -50,7 +50,6 @@
                         <th class="text-left text-white p-1">Browser</th>
                         <th class="text-left text-white p-1">IP Address</th>
                         <th class="text-left text-white p-1">User</th>
-                        <th class="text-left text-white p-1"><i class="fa fa-check" aria-hidden="true"></th>
                         <th class="text-left text-white p-1"><i class="fa fa-trash" aria-hidden="true"></th>
                     </tr>
                 </thead>
@@ -66,11 +65,6 @@
                             <td class="text-white p-1 border-b border-neutral-600">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
                             <td class="text-white p-1 border-b border-neutral-600">{{ row.ipAdderss|e }}</td>
                             <td class="text-white p-1 border-b border-neutral-600">{{ userManager.getUsernameById(row.userId)|e }}</td>
-
-                            {# SET LOG READED STATUS LINK #}
-                            <td class="text-white p-1 border-b border-neutral-600">
-                                <a href="#" class="ban-button"><i class="fa fa-check" aria-hidden="true"></i></a>
-                            </td>
 
                             {# LOG DELETE LINK #}
                             <td class="text-white p-1 border-b border-neutral-600">
