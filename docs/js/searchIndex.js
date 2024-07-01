@@ -101,6 +101,46 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Command-User-UserListCommand.html#property_visitorInfoUtil"
         },                {
+            "fqsen": "\\App\\Command\\User\\UserPasswordResetCommand",
+            "name": "UserPasswordResetCommand",
+            "summary": "Class\u0020UserPasswordResetCommand",
+            "url": "classes/App-Command-User-UserPasswordResetCommand.html"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserPasswordResetCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Command-User-UserPasswordResetCommand.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserPasswordResetCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020the\u0020command\u0020and\u0020arguments",
+            "url": "classes/App-Command-User-UserPasswordResetCommand.html#method_configure"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserPasswordResetCommand\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "Executes\u0020the\u0020user\u0020password\u0020reset\u0020command",
+            "url": "classes/App-Command-User-UserPasswordResetCommand.html#method_execute"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserPasswordResetCommand\u003A\u003A\u0024logManager",
+            "name": "logManager",
+            "summary": "",
+            "url": "classes/App-Command-User-UserPasswordResetCommand.html#property_logManager"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserPasswordResetCommand\u003A\u003A\u0024userManager",
+            "name": "userManager",
+            "summary": "",
+            "url": "classes/App-Command-User-UserPasswordResetCommand.html#property_userManager"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserPasswordResetCommand\u003A\u003A\u0024securityUtil",
+            "name": "securityUtil",
+            "summary": "",
+            "url": "classes/App-Command-User-UserPasswordResetCommand.html#property_securityUtil"
+        },                {
+            "fqsen": "\\App\\Command\\User\\UserPasswordResetCommand\u003A\u003A\u0024entityManagerInterface",
+            "name": "entityManagerInterface",
+            "summary": "",
+            "url": "classes/App-Command-User-UserPasswordResetCommand.html#property_entityManagerInterface"
+        },                {
             "fqsen": "\\App\\Command\\User\\UserRegisterCommand",
             "name": "UserRegisterCommand",
             "summary": "Class\u0020UserRegisterCommand",
@@ -256,6 +296,26 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Controller-Auth-RegisterController.html#property_userManager"
         },                {
+            "fqsen": "\\App\\Controller\\Component\\AboutController",
+            "name": "AboutController",
+            "summary": "Class\u0020AboutController",
+            "url": "classes/App-Controller-Component-AboutController.html"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\AboutController\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Controller-Component-AboutController.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\AboutController\u003A\u003Aabout\u0028\u0029",
+            "name": "about",
+            "summary": "Renders\u0020the\u0020about\u0020page",
+            "url": "classes/App-Controller-Component-AboutController.html#method_about"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\AboutController\u003A\u003A\u0024authManager",
+            "name": "authManager",
+            "summary": "",
+            "url": "classes/App-Controller-Component-AboutController.html#property_authManager"
+        },                {
             "fqsen": "\\App\\Controller\\Component\\AccountSettingsController",
             "name": "AccountSettingsController",
             "summary": "Class\u0020AccountSettingsController",
@@ -320,6 +380,46 @@ Search.appendIndex(
             "name": "authManager",
             "summary": "",
             "url": "classes/App-Controller-Component-DashboardController.html#property_authManager"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\LogsManagerController",
+            "name": "LogsManagerController",
+            "summary": "Class\u0020LogsManagerController",
+            "url": "classes/App-Controller-Component-LogsManagerController.html"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\LogsManagerController\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/App-Controller-Component-LogsManagerController.html#method___construct"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\LogsManagerController\u003A\u003AlogsTable\u0028\u0029",
+            "name": "logsTable",
+            "summary": "Display\u0020the\u0020logs\u0020table\u0020view.",
+            "url": "classes/App-Controller-Component-LogsManagerController.html#method_logsTable"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\LogsManagerController\u003A\u003AsetAllLogsToReaded\u0028\u0029",
+            "name": "setAllLogsToReaded",
+            "summary": "Sets\u0020logs\u0020to\u0020\u0027READED\u0027.",
+            "url": "classes/App-Controller-Component-LogsManagerController.html#method_setAllLogsToReaded"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\LogsManagerController\u003A\u003A\u0024logManager",
+            "name": "logManager",
+            "summary": "",
+            "url": "classes/App-Controller-Component-LogsManagerController.html#property_logManager"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\LogsManagerController\u003A\u003A\u0024userManager",
+            "name": "userManager",
+            "summary": "",
+            "url": "classes/App-Controller-Component-LogsManagerController.html#property_userManager"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\LogsManagerController\u003A\u003A\u0024authManager",
+            "name": "authManager",
+            "summary": "",
+            "url": "classes/App-Controller-Component-LogsManagerController.html#property_authManager"
+        },                {
+            "fqsen": "\\App\\Controller\\Component\\LogsManagerController\u003A\u003A\u0024visitorInfoUtil",
+            "name": "visitorInfoUtil",
+            "summary": "",
+            "url": "classes/App-Controller-Component-LogsManagerController.html#property_visitorInfoUtil"
         },                {
             "fqsen": "\\App\\Controller\\Component\\UsersManagerController",
             "name": "UsersManagerController",
@@ -1265,6 +1365,26 @@ Search.appendIndex(
             "name": "isAntiLogEnabled",
             "summary": "Check\u0020if\u0020anti\u002Dlog\u0020is\u0020enabled",
             "url": "classes/App-Manager-LogManager.html#method_isAntiLogEnabled"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003AgetLogsCountWhereStatus\u0028\u0029",
+            "name": "getLogsCountWhereStatus",
+            "summary": "Get\u0020the\u0020count\u0020of\u0020logs\u0020based\u0020on\u0020their\u0020status.",
+            "url": "classes/App-Manager-LogManager.html#method_getLogsCountWhereStatus"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003AgetLogsWhereStatus\u0028\u0029",
+            "name": "getLogsWhereStatus",
+            "summary": "Fetch\u0020logs\u0020based\u0020on\u0020their\u0020status.",
+            "url": "classes/App-Manager-LogManager.html#method_getLogsWhereStatus"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003AupdateLogStatusById\u0028\u0029",
+            "name": "updateLogStatusById",
+            "summary": "Update\u0020the\u0020status\u0020of\u0020a\u0020log\u0020entry\u0020by\u0020its\u0020ID.",
+            "url": "classes/App-Manager-LogManager.html#method_updateLogStatusById"
+        },                {
+            "fqsen": "\\App\\Manager\\LogManager\u003A\u003AsetAllLogsToReaded\u0028\u0029",
+            "name": "setAllLogsToReaded",
+            "summary": "Set\u0020all\u0020logs\u0020with\u0020status\u0020\u0027UNREADED\u0027\u0020to\u0020\u0027READED\u0027.",
+            "url": "classes/App-Manager-LogManager.html#method_setAllLogsToReaded"
         },                {
             "fqsen": "\\App\\Manager\\LogManager\u003A\u003A\u0024appUtil",
             "name": "appUtil",
