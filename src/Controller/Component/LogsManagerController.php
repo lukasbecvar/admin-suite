@@ -58,6 +58,9 @@ class LogsManagerController extends AbstractController
         // get filter from request query params
         $filter = $request->query->get('filter', 'UNREADED');
 
+        // get user id from query param
+        $userId = $request->query->get('user_id', '0');
+
         // return logs table view
         return $this->render('component/logs-manager/logs-table.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
@@ -68,8 +71,8 @@ class LogsManagerController extends AbstractController
             'visitorInfoUtil' => $this->visitorInfoUtil,
 
             // logs data
-            'logsCount' => $this->logManager->getLogsCountWhereStatus($filter),
-            'logs' => $this->logManager->getLogsWhereStatus($filter),
+            'logsCount' => $this->logManager->getLogsCountWhereStatus($filter, (int) $userId),
+            'logs' => $this->logManager->getLogsWhereStatus($filter, (int) $userId),
 
             // anti log data
             'antiLogEnabled' => $this->logManager->isAntiLogEnabled(),

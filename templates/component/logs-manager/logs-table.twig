@@ -75,7 +75,7 @@
                             <td class="text-white p-1 border-b border-neutral-600">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
                             <td class="text-white p-1 border-b border-neutral-600">{{ row.ipAdderss|e }}</td>
                             <td class="text-white p-1 border-b border-neutral-600">
-                                <a href={{ path('app_manager_users_profile', {'id': row.userId}) }} class="underline">{{ userManager.getUsernameById(row.userId)|e }}</a>
+                                <a href={{ path('app_manager_users_profile', {'id': row.userId}) }} class="underline">{{ userManager.getUsernameById(row.userId) ?? 'null' }}</a>
                             </td>
 
                             {# SET LOG READED LINK #}

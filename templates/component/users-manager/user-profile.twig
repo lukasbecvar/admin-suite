@@ -17,7 +17,10 @@
         {% else %}
             <img class="w-24 h-24 rounded-full mx-auto" src="data:image/jpeg;base64,{{ userRepository.getProfilePic()|e }}" alt="User Profile Picture">
         {% endif %}
-        <h1 class="text-xl font-semibold mt-2">{{ userRepository.getUsername()|e }}</h1>
+        <h1 class="text-xl font-semibold mt-2">
+            {{ userRepository.getUsername()|e }} 
+            (<a href={{ path('app_manager_logs', {'user_id': userRepository.getId, 'filter': 'all'}) }} class="underline">logs</a>)
+        </h1>
         <p class="text-sm text-gray-400 dark:text-gray-300">{{ userRepository.getRole()|e }}</p>
 
         {# USER ONLINE STATUS LINE #}
