@@ -49,7 +49,7 @@ class AntiLogControllerTest extends CustomTestCase
         $this->client->request('GET', '/13378/antilog');
 
         // assert response
-        $this->assertResponseRedirects('/dashboard');
+        $this->assertResponseRedirects('/manager/logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 }

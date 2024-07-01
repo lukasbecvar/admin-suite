@@ -14,6 +14,16 @@
             <i class="fa fa-check" aria-hidden="true"></i>
         </a>
 
+        {% if antiLogEnabled %}
+            <a href={{ path('app_anti_log_enable', {'state': 'disable'}) }} class="border border-neutral-500 font-bold px-1 text-white">
+                <i class="fa fa-toggle-on" aria-hidden="true"></i>
+            </a>
+        {% else %}
+            <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="border border-neutral-500 font-bold px-1 text-white">
+                <i class="fa fa-toggle-off" aria-hidden="true"></i>
+            </a>
+        {% endif %}
+
         {# PAGE SUBTITLE #}
         <span class="mr-1 text-white phone-none">Logs: ({{ logsCount|e }})</span>
 
