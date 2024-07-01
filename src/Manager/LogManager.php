@@ -208,7 +208,7 @@ class LogManager
         }
 
         // log action
-        $this->log('log-manager', 'all logs viewed', level: 3);
+        $this->log('log-manager', $status . ' logs viewed', level: 3);
 
         return $logs;
     }

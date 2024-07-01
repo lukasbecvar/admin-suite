@@ -158,9 +158,19 @@ main {
 
 /* mobile devices style */
 @media screen and (max-width: 400px) { 
+	.phone-none {
+		display: none;
+	}
 	#sidebar {
 		width: 100%;
         border-left: 1px solid rgb(75 85 99);
         border-bottom: 1px solid rgb(75 85 99);
+	}
+}
+
+/* only non phone devices style */
+@media screen and (min-width: 400px) { 
+	.phone-only {
+		display: none;
 	}
 }

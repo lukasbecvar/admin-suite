@@ -9,6 +9,7 @@ use App\Util\VisitorInfoUtil;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class LogsManagerController
@@ -39,11 +40,16 @@ class LogsManagerController extends AbstractController
     /**
      * Display the logs table view.
      *
+     * @param Request $request The request object
+     *
      * @return Response The response object containing the rendered view.
      */
     #[Route('/manager/logs', methods:['GET'], name: 'app_manager_logs')]
-    public function logsTable(): Response
+    public function logsTable(Request $request): Response
     {
+        // get filter from request query params
+        $filter = $request->query->get('filter', 'UNREADED');
+
         // return logs table view
         return $this->render('component/logs-manager/logs-table.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
@@ -53,8 +59,12 @@ class LogsManagerController extends AbstractController
             'userManager' => $this->userManager,
             'visitorInfoUtil' => $this->visitorInfoUtil,
 
-            'logsCount' => $this->logManager->getLogsCountWhereStatus('UNREADED'),
-            'logs' => $this->logManager->getLogsWhereStatus('UNREADED')
+            // logs data
+            'logsCount' => $this->logManager->getLogsCountWhereStatus($filter),
+            'logs' => $this->logManager->getLogsWhereStatus($filter),
+
+            // filter helpers
+            'filter' => $filter
         ]);
     }
 }
