@@ -53,7 +53,7 @@ class LogManager
      *
      * @return void
      */
-    public function log(string $name, string $message, int $level = 3): void
+    public function log(string $name, string $message, int $level = 1): void
     {
         // check if log blocking is enabled
         if ($this->isAntiLogEnabled()) {
@@ -158,5 +158,58 @@ class LogManager
         }
 
         return false;
+    }
+
+    /**
+     * Get the count of logs based on their status.
+     *
+     * This method retrieves the count of logs from the repository based on the specified status.
+     * If the status is 'all', it counts all logs. Otherwise, it counts logs
+     * matching the given status.
+     *
+     * @param string $status The status of the logs to count. Defaults to 'all'.
+     *
+     * @return int The count of logs.
+     */
+    public function getLogsCountWhereStatus(string $status = 'all'): int
+    {
+        $repository = $this->entityManager->getRepository(Log::class);
+
+        // get all logs or by status
+        if ($status == 'all') {
+            $count = $repository->count();
+        } else {
+            $count = $repository->count(['status' => $status]);
+        }
+
+        return $count;
+    }
+
+    /**
+     * Fetch logs based on their status.
+     *
+     * This method retrieves logs from the repository based on the specified status.
+     * If the status is 'all', it retrieves all logs. Otherwise, it fetches logs
+     * matching the given status. It also logs this action.
+     *
+     * @param string $status The status of the logs to retrieve. Defaults to 'all'.
+     *
+     * @return array<mixed>|null An array of logs if found, or null if no logs are found.
+     */
+    public function getLogsWhereStatus(string $status = 'all'): ?array
+    {
+        $repository = $this->entityManager->getRepository(Log::class);
+
+        // get all logs or by status
+        if ($status == 'all') {
+            $logs = $repository->findAll();
+        } else {
+            $logs = $repository->findBy(['status' => $status]);
+        }
+
+        // log action
+        $this->log('log-manager', 'all logs viewed', level: 3);
+
+        return $logs;
     }
 }

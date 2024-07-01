@@ -124,7 +124,7 @@ class AuthManager
                 $this->entityManager->flush();
 
                 // log action
-                $this->logManager->log('authenticator', 'new registration user: ' . $username);
+                $this->logManager->log('authenticator', 'new registration user: ' . $username, 1);
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
                     'error to register new user: ' . $e->getMessage(),
@@ -272,7 +272,7 @@ class AuthManager
                 }
 
                 // log action
-                $this->logManager->log('authenticator', 'login user: ' . $username);
+                $this->logManager->log('authenticator', 'login user: ' . $username, 1);
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
                     'error to login user: ' . $e->getMessage(),
@@ -390,7 +390,7 @@ class AuthManager
             }
 
             // log logout event
-            $this->logManager->log('authenticator', 'logout user: ' . $user->getUsername());
+            $this->logManager->log('authenticator', 'logout user: ' . $user->getUsername(), 1);
 
             // unset login cookie
             $this->cookieUtil->unset('user-token');
@@ -439,7 +439,7 @@ class AuthManager
         }
 
         // log action
-        $this->logManager->log('authenticator', 'regenerate all users tokens');
+        $this->logManager->log('authenticator', 'regenerate all users tokens', 3);
 
         return $state;
     }

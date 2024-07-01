@@ -106,7 +106,7 @@ class UserPasswordResetCommand extends Command
             $this->entityManagerInterface->flush();
 
             // log password reset
-            $this->logManager->log('authenticator', 'user: ' . $username . ' password reset with cli command is success');
+            $this->logManager->log('authenticator', 'user: ' . $username . ' password reset with cli command is success', 1);
 
             $io->success('User: ' . $username . ' new password is ' . $newPassword);
             return Command::SUCCESS;

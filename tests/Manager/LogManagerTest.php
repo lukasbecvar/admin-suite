@@ -2,6 +2,7 @@
 
 namespace App\Tests\Manager;
 
+use App\Entity\Log;
 use App\Util\AppUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
@@ -9,6 +10,7 @@ use App\Manager\LogManager;
 use App\Util\VisitorInfoUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
+use App\Repository\LogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -30,6 +32,9 @@ class LogManagerTest extends TestCase
     /** @var SessionUtil|MockObject */
     private SessionUtil|MockObject $sessionUtilMock;
 
+    /** @var LogRepository|MockObject */
+    private LogRepository|MockObject $repositoryMock;
+
     /** @var ErrorManager|MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
@@ -47,6 +52,7 @@ class LogManagerTest extends TestCase
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->cookieUtilMock = $this->createMock(CookieUtil::class);
         $this->sessionUtilMock = $this->createMock(SessionUtil::class);
+        $this->repositoryMock = $this->createMock(LogRepository::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->visitorInfoUtilMock = $this->createMock(VisitorInfoUtil::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
@@ -160,5 +166,37 @@ class LogManagerTest extends TestCase
 
         // call the isAntiLogEnabled method and assert false
         $this->assertFalse($this->logManager->isAntiLogEnabled());
+    }
+
+    /**
+     * Test getLogsCountWhereStatus method
+     *
+     * @return void
+     */
+    public function testGetLogsCount(): void
+    {
+        $count = $this->logManager->getLogsCountWhereStatus();
+
+        $this->assertIsInt($count);
+    }
+
+    /**
+     * Test getLogsWhereStatus method
+     *
+     * @return void
+     */
+    public function testGetLogs(): void
+    {
+        $log1 = new Log();
+
+        $this->repositoryMock->method('findBy')
+            ->with(['status' => 'unread'])
+            ->willReturn([$log1]);
+
+        // call get logs method
+        $logs = $this->logManager->getLogsWhereStatus();
+
+        // assert method response
+        $this->assertIsArray($logs);
     }
 }
