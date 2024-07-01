@@ -106,6 +106,7 @@ Solution for administration and monitoring linux private servers
     - [ ] View exception log from monolog
     - [ ] Syslog table
     - [ ] Log manager tests
+    - [ ] Colored data in log table
 - [ ] CLI log reader command
     - [ ] Return unreaded
     - [ ] Return all (with -all argument)
