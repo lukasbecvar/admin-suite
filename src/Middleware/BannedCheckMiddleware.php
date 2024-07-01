@@ -4,6 +4,7 @@ namespace App\Middleware;
 
 use Twig\Environment;
 use App\Util\AppUtil;
+use App\Manager\LogManager;
 use App\Manager\BanManager;
 use App\Manager\AuthManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,17 +21,20 @@ class BannedCheckMiddleware
 {
     private AppUtil $appUtil;
     private Environment $twig;
+    private LogManager $logManager;
     private BanManager $banManager;
     private AuthManager $authManager;
 
     public function __construct(
         AppUtil $appUtil,
         Environment $twig,
+        LogManager $logManager,
         BanManager $banManager,
         AuthManager $authManager
     ) {
         $this->twig = $twig;
         $this->appUtil = $appUtil;
+        $this->logManager = $logManager;
         $this->banManager = $banManager;
         $this->authManager = $authManager;
     }
@@ -56,6 +60,9 @@ class BannedCheckMiddleware
                     'reason' => $this->banManager->getBanReason($userId),
                     'admin_contact' => $this->appUtil->getAdminContactEmail()
                 ]);
+
+                // log banned access
+                $this->logManager->log('ban-manager', 'banned user trying to access page', 3);
 
                 $response = new Response($content, Response::HTTP_FORBIDDEN);
                 $event->setResponse($response);

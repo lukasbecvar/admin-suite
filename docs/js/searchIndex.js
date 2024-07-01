@@ -1368,22 +1368,22 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Manager\\LogManager\u003A\u003AgetLogsCountWhereStatus\u0028\u0029",
             "name": "getLogsCountWhereStatus",
-            "summary": "Get\u0020the\u0020count\u0020of\u0020logs\u0020based\u0020on\u0020their\u0020status.",
+            "summary": "Get\u0020the\u0020count\u0020of\u0020logs\u0020based\u0020on\u0020their\u0020status",
             "url": "classes/App-Manager-LogManager.html#method_getLogsCountWhereStatus"
         },                {
             "fqsen": "\\App\\Manager\\LogManager\u003A\u003AgetLogsWhereStatus\u0028\u0029",
             "name": "getLogsWhereStatus",
-            "summary": "Fetch\u0020logs\u0020based\u0020on\u0020their\u0020status.",
+            "summary": "Fetch\u0020logs\u0020based\u0020on\u0020their\u0020status",
             "url": "classes/App-Manager-LogManager.html#method_getLogsWhereStatus"
         },                {
             "fqsen": "\\App\\Manager\\LogManager\u003A\u003AupdateLogStatusById\u0028\u0029",
             "name": "updateLogStatusById",
-            "summary": "Update\u0020the\u0020status\u0020of\u0020a\u0020log\u0020entry\u0020by\u0020its\u0020ID.",
+            "summary": "Update\u0020the\u0020status\u0020of\u0020a\u0020log\u0020entry\u0020by\u0020its\u0020ID",
             "url": "classes/App-Manager-LogManager.html#method_updateLogStatusById"
         },                {
             "fqsen": "\\App\\Manager\\LogManager\u003A\u003AsetAllLogsToReaded\u0028\u0029",
             "name": "setAllLogsToReaded",
-            "summary": "Set\u0020all\u0020logs\u0020with\u0020status\u0020\u0027UNREADED\u0027\u0020to\u0020\u0027READED\u0027.",
+            "summary": "Set\u0020all\u0020logs\u0020with\u0020status\u0020\u0027UNREADED\u0027\u0020to\u0020\u0027READED\u0027",
             "url": "classes/App-Manager-LogManager.html#method_setAllLogsToReaded"
         },                {
             "fqsen": "\\App\\Manager\\LogManager\u003A\u003A\u0024appUtil",
@@ -1635,6 +1635,11 @@ Search.appendIndex(
             "name": "twig",
             "summary": "",
             "url": "classes/App-Middleware-BannedCheckMiddleware.html#property_twig"
+        },                {
+            "fqsen": "\\App\\Middleware\\BannedCheckMiddleware\u003A\u003A\u0024logManager",
+            "name": "logManager",
+            "summary": "",
+            "url": "classes/App-Middleware-BannedCheckMiddleware.html#property_logManager"
         },                {
             "fqsen": "\\App\\Middleware\\BannedCheckMiddleware\u003A\u003A\u0024banManager",
             "name": "banManager",
