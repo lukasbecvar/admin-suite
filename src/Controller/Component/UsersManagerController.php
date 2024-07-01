@@ -96,7 +96,7 @@ class UsersManagerController extends AbstractController
         }
 
         // render users manager table view
-        return $this->render('component/user-manager/user-manager-table.twig', [
+        return $this->render('component/users-manager/users-table.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
 
@@ -164,7 +164,7 @@ class UsersManagerController extends AbstractController
         }
 
         // render profile view
-        return $this->render('component/user-manager/user-profile.twig', [
+        return $this->render('component/users-manager/user-profile.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
 
@@ -237,7 +237,7 @@ class UsersManagerController extends AbstractController
         }
 
         // render users manager register form view
-        return $this->render('component/user-manager/forms/user-register.twig', [
+        return $this->render('component/users-manager/forms/user-register.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
 
