@@ -102,7 +102,7 @@ Solution for administration and monitoring linux private servers
     - [X] User in log table link to user profile
     - [X] Anti log config
     - [X] View logs by user
-    - [ ] Log table pagination (like users manager)
+    - [X] Log table pagination (like users manager)
     - [ ] Colored data in log table
     - [ ] View exception log from monolog
     - [ ] Syslog table

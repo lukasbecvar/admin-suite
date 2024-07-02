@@ -73,6 +73,8 @@ class UserManager
     /**
      * Retrieve all users from the repository by page
      *
+     * @param int $page The users list page number
+     *
      * @return array<mixed> The user object if found, null otherwise
      */
     public function getUsersByPage(int $page = 1): ?array
