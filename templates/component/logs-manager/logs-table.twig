@@ -14,6 +14,11 @@
             <i class="fa fa-check" aria-hidden="true"></i>
         </a>
 
+        {# SYSTEM LOG READER #}
+        <a href={{ path('app_manager_logs_system') }} class="border border-neutral-500 font-bold px-1 text-white">
+            <i class="fas fa-server"></i>
+        </a>
+
         {% if antiLogEnabled %}
             <a href={{ path('app_anti_log_enable', {'state': 'disable'}) }} class="border border-neutral-500 font-bold px-1 text-white">
                 <i class="fa fa-toggle-on" aria-hidden="true"></i>

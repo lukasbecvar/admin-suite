@@ -51,7 +51,12 @@ class NonAuthRedirectTest extends WebTestCase
             ['/manager/users/profile'],
             ['/account/settings/change/picture'],
             ['/account/settings/change/username'],
-            ['/account/settings/change/password']
+            ['/account/settings/change/password'],
+
+            // logs manager
+            ['/manager/logs'],
+            ['/manager/logs/system'],
+            ['/manager/logs/set/readed']
         ];
     }
 

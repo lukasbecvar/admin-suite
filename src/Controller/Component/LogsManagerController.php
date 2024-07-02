@@ -5,12 +5,14 @@ namespace App\Controller\Component;
 use App\Util\AppUtil;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
+use App\Manager\ErrorManager;
 use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class LogsManagerController
@@ -25,6 +27,7 @@ class LogsManagerController extends AbstractController
     private LogManager $logManager;
     private UserManager $userManager;
     private AuthManager $authManager;
+    private ErrorManager $errorManager;
     private VisitorInfoUtil $visitorInfoUtil;
 
     public function __construct(
@@ -32,12 +35,14 @@ class LogsManagerController extends AbstractController
         LogManager $logManager,
         UserManager $userManager,
         AuthManager $authManager,
+        ErrorManager $errorManager,
         VisitorInfoUtil $visitorInfoUtil
     ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->userManager = $userManager;
         $this->authManager = $authManager;
+        $this->errorManager = $errorManager;
         $this->visitorInfoUtil = $visitorInfoUtil;
     }
 
@@ -89,6 +94,74 @@ class LogsManagerController extends AbstractController
             'currentPage' => (int) $page,
             'limitPerPage' => $this->appUtil->getPageLimitter(),
             'filter' => $filter,
+        ]);
+    }
+
+    /**
+     * Renders the system logs table
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The response containing the rendered template
+     */
+    #[Route('/manager/logs/system', methods:['GET'], name: 'app_manager_logs_system')]
+    public function systemLogsTable(Request $request): Response
+    {
+        // check if user has admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
+        }
+
+        // get selected log file from query parameter
+        $logFile = $request->get('file', 'none');
+
+        // directory to scan for log files
+        $logDirectory = '/var/log';
+
+        // initialize Finder
+        $finder = new Finder();
+        $finder->files()->in($logDirectory);
+
+        // array to store log files
+        $logFiles = [];
+
+        // iterate over found files
+        foreach ($finder as $file) {
+            // check if log is not archived
+            if (!str_ends_with($file->getRelativePathname(), '.xz')) {
+                $logFiles[] = $file->getRelativePathname();
+            }
+        }
+
+        $logContent = 'non-selected';
+
+        // check if a log file is selected to display its content
+        if ($logFile != 'none') {
+            // check if file exists
+            $filePath = $logDirectory . '/' . $logFile;
+            if (!file_exists($filePath)) {
+                $this->errorManager->handleError('error to get log file: ' . $filePath . ' not found', 404);
+            }
+
+            // get log file content
+            $logContent = file_get_contents($filePath);
+        }
+
+        return $this->render('component/logs-manager/system-logs.twig', [
+            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+            'userData' => $this->authManager->getLoggedUserRepository(),
+
+            // log files list
+            'logFiles' => $logFiles,
+
+            // current log file name
+            'logFile' => $logFile,
+
+            // log file content
+            'logContent' => $logContent
         ]);
     }
 
