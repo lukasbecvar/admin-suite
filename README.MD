@@ -116,6 +116,7 @@ Solution for administration and monitoring linux private servers
     - [ ] Swipe sidebar activate/deactivate
     - [ ] Better background colors
     - [ ] Flex bottom overflow X table 
+- [ ] Complete refactor
 
 ## 0.6
 - [ ] Server info

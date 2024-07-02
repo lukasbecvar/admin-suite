@@ -401,6 +401,11 @@ Search.appendIndex(
             "summary": "Sets\u0020logs\u0020to\u0020\u0027READED\u0027.",
             "url": "classes/App-Controller-Component-LogsManagerController.html#method_setAllLogsToReaded"
         },                {
+            "fqsen": "\\App\\Controller\\Component\\LogsManagerController\u003A\u003A\u0024appUtil",
+            "name": "appUtil",
+            "summary": "",
+            "url": "classes/App-Controller-Component-LogsManagerController.html#property_appUtil"
+        },                {
             "fqsen": "\\App\\Controller\\Component\\LogsManagerController\u003A\u003A\u0024logManager",
             "name": "logManager",
             "summary": "",
