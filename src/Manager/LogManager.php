@@ -199,31 +199,36 @@ class LogManager
      *
      * @param string $status The status of the logs to retrieve. Defaults to 'all'
      * @param int $userId The user id for get all logs
+     * @param int $page The logs list page number
      *
      * @return array<mixed>|null An array of logs if found, or null if no logs are found
      */
-    public function getLogsWhereStatus(string $status = 'all', int $userId = 0): ?array
+    public function getLogsWhereStatus(string $status = 'all', int $userId = 0, int $page = 1): ?array
     {
+        // get page limitter
+        $perPage = $this->appUtil->getPageLimitter();
+
         $repository = $this->entityManager->getRepository(Log::class);
+
+        // calculate offset
+        $offset = ($page - 1) * $perPage;
 
         // get all logs or by status
         if ($status == 'all') {
             if ($userId != 0) {
-                $logs = $repository->findBy(['user_id' => $userId]);
+                $logs = $repository->findBy(['user_id' => $userId], null, $perPage, $offset);
             } else {
-                $logs = $repository->findAll();
+                $logs = $repository->findBy([], null, $perPage, $offset);
             }
         } else {
-            $logs = $repository->findBy(['status' => $status]);
+            $logs = $repository->findBy(['status' => $status], ['id' => 'DESC'], $perPage, $offset);
         }
 
         // log action
-        $this->log('log-manager', $status . ' logs viewed', level: 3);
+        $this->log('log-manager', strtolower($status) . ' logs viewed', level: 3);
 
-        // return logs array reversed
-        return array_reverse($logs);
+        return $logs;
     }
-
 
     /**
      * Update the status of a log entry by its ID
@@ -274,8 +279,10 @@ class LogManager
      */
     public function setAllLogsToReaded(): void
     {
+        $repository = $this->entityManager->getRepository(Log::class);
+
         /** @var \App\Entity\Log $logs */
-        $logs = $this->getLogsWhereStatus('UNREADED');
+        $logs = $repository->findBy(['status' => 'UNREADED']);
 
         if (is_iterable($logs)) {
             // set all logs to readed status
