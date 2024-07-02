@@ -8,6 +8,7 @@ use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Util\VisitorInfoUtil;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -206,7 +207,7 @@ class LogManager
     public function getLogsWhereStatus(string $status = 'all', int $userId = 0, int $page = 1): ?array
     {
         // get page limitter
-        $perPage = $this->appUtil->getPageLimitter();
+        $perPage = $this->appUtil->getPageLimiter();
 
         $repository = $this->entityManager->getRepository(Log::class);
 
@@ -297,5 +298,49 @@ class LogManager
         } catch (\Exception $e) {
             $this->errorManager->handleError('error to set all logs status to "READED": ' . $e, 500);
         }
+    }
+
+    /**
+     * Retrieves a list of system log files
+     *
+     * @return array<string> An array of relative pathnames of log files found in the /var/log directory
+     */
+    public function getSystemLogs(): array
+    {
+        // initialize Finder
+        $finder = new Finder();
+        $finder->files()->in($this->appUtil->getSystemLogsDirectory());
+
+        // array to store log files
+        $logFiles = [];
+
+        // iterate over found files
+        foreach ($finder as $file) {
+            // check if log is not archived
+            if (!str_ends_with($file->getRelativePathname(), '.xz')) {
+                $logFiles[] = $file->getRelativePathname();
+            }
+        }
+
+        return $logFiles;
+    }
+
+    /**
+     * Retrieves the content of a specific system log file
+     *
+     * @param string $logFile The relative pathname of the log file to retrieve
+     *
+     * @return mixed The content of the log file, or null if the file does not exist
+     */
+    public function getSystemLogContent(string $logFile): mixed
+    {
+        // check if file exists
+        $filePath = $this->appUtil->getSystemLogsDirectory() . '/' . $logFile;
+        if (!file_exists($filePath)) {
+            $this->errorManager->handleError('error to get log file: ' . $filePath . ' not found', 404);
+        }
+
+        // get log file content
+        return file_get_contents($filePath);
     }
 }

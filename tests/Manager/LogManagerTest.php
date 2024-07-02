@@ -11,8 +11,11 @@ use App\Util\VisitorInfoUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\LogRepository;
+use ArrayIterator;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use SplFileInfo;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class LogManagerTest
