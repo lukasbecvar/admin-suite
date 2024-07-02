@@ -21,19 +21,19 @@
             <ul class="space-y-2">
                 {% for logFile in logFiles %}
                     <li>
-                        <a href={{ path('app_manager_logs_system', { file: logFile }) }} class="block p-3 bg-neutral-800 rounded-md hover:bg-blue-600 transition">{{ logFile }}</a>
+                        <a href={{ path('app_manager_logs_system', { file: logFile }) }} class="block p-3 bg-neutral-800 hover:bg-blue-600">{{ logFile }}</a>
                     </li>
                 {% endfor %}
             </ul>
         </div>
     {% else %}
         {# LOG OUTPUT BOX #}
-        <div class="bg-neutral-900 text-white p-6">
+        <div class="bg-neutral-900 text-white">
             <div>
                 {% if logContent == null %}
-                    <p class="text-white">Log file is empty</p>
+                    <h1 class="text-center mt-5 text-xl">Log file is empty</h1>
                 {% else %}
-                    <pre class="whitespace-pre-wrap bg-neutral-800 p-4 rounded-md">{{ logContent|e }}</pre>
+                    <pre class="whitespace-pre-wrap break-words p-2">{{ logContent|e }}</pre>
                 {% endif %}
             </div>
         </div>
