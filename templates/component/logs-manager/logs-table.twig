@@ -70,22 +70,35 @@
                 <tbody class="divide-y divide-white font-medium">
                     {# LOG ROW #}
                     {% for row in logs %}
-                        <tr class="hover:bg-neutral-800 border-b border-neutral-600">
+
+                        {#  #}
+                        {% if row.name == 'exception' or row.name == 'authenticator' or row.name == 'ban-manager' %}
+                            {% set color = 'red-400' %}
+                        {% elseif row.name == 'log-manager' %}
+                            {% set color = 'blue-400' %}
+                        {% elseif row.name == 'anti-log' %}
+                            {% set color = 'yellow-400' %}
+                        {% elseif row.name == 'user-manager' %}
+                            {% set color = 'green-400' %}
+                        {% else %}
+                            {% set color = 'white' %}
+                        {% endif %}
+                        <tr class="hover:bg-neutral-800 border-b border-neutral-600 text-{{ color }}">
                             {# LOG DATA #}
-                            <td class="text-white p-1 border-b border-neutral-600">{{ row.id|e }}</td>
-                            <td class="text-white p-1 border-b border-neutral-600">{{ row.name|e }}</td>
-                            <td class="text-white p-1 border-b border-neutral-600">{{ row.message|e }}</td>
-                            <td class="text-white p-1 border-b border-neutral-600">{{ row.time|date('Y-m-d H:i:s')|e }}</td>
-                            <td class="text-white p-1 border-b border-neutral-600">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
-                            <td class="text-white p-1 border-b border-neutral-600">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
-                            <td class="text-white p-1 border-b border-neutral-600">{{ row.ipAdderss|e }}</td>
-                            <td class="text-white p-1 border-b border-neutral-600">
+                            <td class="p-1 border-b border-neutral-600">{{ row.id|e }}</td>
+                            <td class="p-1 border-b border-neutral-600">{{ row.name|e }}</td>
+                            <td class="p-1 border-b border-neutral-600">{{ row.message|e }}</td>
+                            <td class="p-1 border-b border-neutral-600">{{ row.time|date('Y-m-d H:i:s')|e }}</td>
+                            <td class="p-1 border-b border-neutral-600">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
+                            <td class="p-1 border-b border-neutral-600">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
+                            <td class="p-1 border-b border-neutral-600">{{ row.ipAdderss|e }}</td>
+                            <td class="p-1 border-b border-neutral-600">
                                 <a href={{ path('app_manager_users_profile', {'id': row.userId}) }} class="underline">{{ userManager.getUsernameById(row.userId) ?? 'null' }}</a>
                             </td>
 
                             {# SET LOG READED LINK #}
                             {% if filter == 'UNREADED' %}
-                                <td class="text-white p-1 border-b border-neutral-600">
+                                <td class="p-1 border-b border-neutral-600">
                                     <a href={{ path('app_manager_logs_set_readed', {'id': row.id, 'page': currentPage, 'filter': filter, 'user_id': userId }) }} class="delete-button"><i class="fa fa-check" aria-hidden="true"></i></a>
                                 </td>
                             {% endif %}
