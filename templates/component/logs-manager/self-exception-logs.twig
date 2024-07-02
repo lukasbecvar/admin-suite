@@ -1,0 +1,25 @@
+{% extends 'common/layout.twig' %}
+
+{# SELF EXCEPTION LOG #}
+{% block component %}
+<div class="bg-neutral-900">
+    {# SUB NAVIGATION #}
+    <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
+        <a href={{ path('app_manager_logs') }} class="border border-neutral-500 font-bold px-1 text-white">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+        <span class="mr-1 text-white">Exception logs</span>
+    </div>
+
+    {# LOG OUTPUT BOX #}
+    <div class="bg-neutral-900 text-white">
+        <div>
+            {% if logContent == null %}
+                <h1 class="text-center mt-5 text-xl">Log file is empty</h1>
+            {% else %}
+                <pre class="whitespace-pre-wrap break-words p-2">{{ logContent|e }}</pre>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

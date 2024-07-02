@@ -166,6 +166,26 @@ class LogsManagerController extends AbstractController
     }
 
     /**
+     * Fetches and displays the contents of the exception log
+     *
+     * @param Request $request The current HTTP request
+     *
+     * @return Response The rendered template containing the log contents
+     */
+    #[Route('/manager/logs/exception/self', methods:['GET'], name: 'app_manager_logs_exception')]
+    public function selfExceptionLog(Request $request): Response
+    {
+        $log = file_get_contents(__DIR__ . '/../../../var/log/exception.log');
+
+        return $this->render('component/logs-manager/self-exception-logs.twig', [
+            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+            'userData' => $this->authManager->getLoggedUserRepository(),
+
+            'logContent' => $log,
+        ]);
+    }
+
+    /**
      * Sets logs to 'READED'.
      *
      * @param Request $request The request object

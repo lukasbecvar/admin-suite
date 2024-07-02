@@ -104,8 +104,8 @@ Solution for administration and monitoring linux private servers
     - [X] Log table pagination (like users manager)
     - [X] Syslog table
     - [X] Syslog table style
-    - [ ] Colored data in log table
-    - [ ] View exception log from monolog
+    - [X] Colored data in log table
+    - [X] View exception log from monolog
     - [ ] Log manager tests
 - [ ] CLI log reader command
     - [ ] Return unreaded
