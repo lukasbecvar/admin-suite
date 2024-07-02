@@ -26,9 +26,6 @@
 # php codesniffer cache
 /.phpcs-cache
 
-# php documentor files
-/.phpdoc
-
 # npm files
 /public/build/
 /node_modules/

@@ -8,7 +8,6 @@ Solution for administration and monitoring linux private servers
     - [X] Install webpack
     - [X] Install phpunit
     - [X] Install phpstan
-    - [X] Install phpdocumentor
 - [X] Dev docker env
 - [X] Github actions
 - [X] APP base
