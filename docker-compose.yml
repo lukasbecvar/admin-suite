@@ -37,7 +37,7 @@ services:
             - DATABASE_HOST=mysql
         volumes:
             - ./_docker/configs/apache-site.conf:/etc/apache2/sites-available/000-default.conf
-            - ./_docker/configs/php.ini:/usr/local/etc/php/php.ini:ro
+            - ./_docker/configs/php.ini:/usr/local/etc/php/php.ini
             - ./_docker/services/log:/var/log
             - ./:/var/www
         mem_limit: 2g

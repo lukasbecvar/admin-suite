@@ -40,6 +40,13 @@ Encore
                         extend: {},
                     },
                     plugins: [],
+                    safelist: [
+                        'text-white',
+                        'text-red-400',
+                        'text-blue-400',
+                        'text-green-400',
+                        'text-yellow-400'
+                    ],
                 },
                 autoprefixer: {},
             }
