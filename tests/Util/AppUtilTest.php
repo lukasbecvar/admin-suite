@@ -130,13 +130,13 @@ class AppUtilTest extends TestCase
      *
      * @return void
      */
-    public function testPageLimitter(): void
+    public function testPageLimiter(): void
     {
         // get page limitter
-        $limit = $this->appUtil->getPageLimitter();
+        $limit = $this->appUtil->getPageLimiter();
 
         // check if limit is valid
-        $this->assertSame($limit, (int) $_ENV['limitPerPage']);
+        $this->assertSame($limit, (int) $_ENV['LIMIT_CONTENT_PER_PAGE']);
     }
 
     /**
@@ -165,6 +165,16 @@ class AppUtilTest extends TestCase
 
         $_ENV['ADMIN_CONTACT'] = 'support@example.com';
         $this->assertSame('support@example.com', $this->appUtil->getAdminContactEmail());
+    }
+
+    /**
+     * Test getSystemLogsDirectory
+     *
+     * @return void
+     */
+    public function getGetSystemLogsDirectory(): void
+    {
+        $this->assertSame('/var/log', $this->appUtil->getSystemLogsDirectory());
     }
 
     /**

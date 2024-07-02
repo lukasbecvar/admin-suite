@@ -68,7 +68,7 @@ class UsersManagerController extends AbstractController
         $page = (int) $request->query->get('page', '1');
 
         // get page limit from config
-        $pageLimit = $this->appUtil->getPageLimitter();
+        $pageLimit = $this->appUtil->getPageLimiter();
 
         // get filter from request query params
         $filter = $request->query->get('filter', '');
@@ -199,7 +199,7 @@ class UsersManagerController extends AbstractController
         }
 
         // get page limit from config
-        $pageLimit = $this->appUtil->getPageLimitter();
+        $pageLimit = $this->appUtil->getPageLimiter();
 
         // get total users count from database
         $usersCount = $this->userManager->getUsersCount();

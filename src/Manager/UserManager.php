@@ -80,7 +80,7 @@ class UserManager
     public function getUsersByPage(int $page = 1): ?array
     {
         // get page limitter
-        $perPage = $this->appUtil->getPageLimitter();
+        $perPage = $this->appUtil->getPageLimiter();
 
         // calculate offset
         $offset = ($page - 1) * $perPage;

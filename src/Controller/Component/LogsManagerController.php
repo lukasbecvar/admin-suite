@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Finder\Finder;
 
 /**
  * Class LogsManagerController
@@ -27,7 +26,6 @@ class LogsManagerController extends AbstractController
     private LogManager $logManager;
     private UserManager $userManager;
     private AuthManager $authManager;
-    private ErrorManager $errorManager;
     private VisitorInfoUtil $visitorInfoUtil;
 
     public function __construct(
@@ -35,23 +33,21 @@ class LogsManagerController extends AbstractController
         LogManager $logManager,
         UserManager $userManager,
         AuthManager $authManager,
-        ErrorManager $errorManager,
         VisitorInfoUtil $visitorInfoUtil
     ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->userManager = $userManager;
         $this->authManager = $authManager;
-        $this->errorManager = $errorManager;
         $this->visitorInfoUtil = $visitorInfoUtil;
     }
 
     /**
-     * Display the logs table view.
+     * Display the logs table view
      *
      * @param Request $request The request object
      *
-     * @return Response The response object containing the rendered view.
+     * @return Response The response object containing the rendered view
      */
     #[Route('/manager/logs', methods:['GET'], name: 'app_manager_logs')]
     public function logsTable(Request $request): Response
@@ -92,7 +88,7 @@ class LogsManagerController extends AbstractController
             // filter helpers
             'userId' => $userId,
             'currentPage' => (int) $page,
-            'limitPerPage' => $this->appUtil->getPageLimitter(),
+            'limitPerPage' => $this->appUtil->getPageLimiter(),
             'filter' => $filter,
         ]);
     }
@@ -116,38 +112,17 @@ class LogsManagerController extends AbstractController
         }
 
         // get selected log file from query parameter
-        $logFile = $request->get('file', 'none');
+        $logFile = $request->query->get('file', 'none');
 
-        // directory to scan for log files
-        $logDirectory = '/var/log';
+        // get log files from host system
+        $logFiles = $this->logManager->getSystemLogs();
 
-        // initialize Finder
-        $finder = new Finder();
-        $finder->files()->in($logDirectory);
-
-        // array to store log files
-        $logFiles = [];
-
-        // iterate over found files
-        foreach ($finder as $file) {
-            // check if log is not archived
-            if (!str_ends_with($file->getRelativePathname(), '.xz')) {
-                $logFiles[] = $file->getRelativePathname();
-            }
-        }
-
+        // deflaut log content value
         $logContent = 'non-selected';
 
         // check if a log file is selected to display its content
         if ($logFile != 'none') {
-            // check if file exists
-            $filePath = $logDirectory . '/' . $logFile;
-            if (!file_exists($filePath)) {
-                $this->errorManager->handleError('error to get log file: ' . $filePath . ' not found', 404);
-            }
-
-            // get log file content
-            $logContent = file_get_contents($filePath);
+            $logContent = $this->logManager->getSystemLogContent($logFile);
         }
 
         return $this->render('component/logs-manager/system-logs.twig', [
@@ -168,12 +143,10 @@ class LogsManagerController extends AbstractController
     /**
      * Fetches and displays the contents of the exception log
      *
-     * @param Request $request The current HTTP request
-     *
      * @return Response The rendered template containing the log contents
      */
     #[Route('/manager/logs/exception/self', methods:['GET'], name: 'app_manager_logs_exception')]
-    public function selfExceptionLog(Request $request): Response
+    public function selfExceptionLog(): Response
     {
         $log = file_get_contents(__DIR__ . '/../../../var/log/exception.log');
 
@@ -186,11 +159,11 @@ class LogsManagerController extends AbstractController
     }
 
     /**
-     * Sets logs to 'READED'.
+     * Sets logs to 'READED'
      *
      * @param Request $request The request object
      *
-     * @return Response Redirects to the dashboard page after setting logs to 'READED'.
+     * @return Response Redirects to the dashboard page after setting logs to 'READED'
      */
     #[Route('/manager/logs/set/readed', methods:['GET'], name: 'app_manager_logs_set_readed')]
     public function setAllLogsToReaded(Request $request): Response

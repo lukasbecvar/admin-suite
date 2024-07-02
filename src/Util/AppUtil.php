@@ -43,6 +43,16 @@ class AppUtil
     }
 
     /**
+     * Get system log directory path
+     *
+     * @return string The system log directory
+     */
+    public function getSystemLogsDirectory(): string
+    {
+        return $_ENV['SYSTEM_LOGS_DIR'];
+    }
+
+    /**
      * Check if the application is in development mode
      *
      * @return bool True if the application is in development mode, false otherwise
@@ -101,9 +111,9 @@ class AppUtil
      *
      * @return int The page limitter
      */
-    public function getPageLimitter(): int
+    public function getPageLimiter(): int
     {
-        return (int) $_ENV['limitPerPage'];
+        return (int) $_ENV['LIMIT_CONTENT_PER_PAGE'];
     }
 
     /**
