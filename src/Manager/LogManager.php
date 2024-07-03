@@ -303,23 +303,29 @@ class LogManager
     /**
      * Retrieves a list of system log files
      *
+     * * @throws \Exception If there is an error during file retrieval (e.g., file not found or permission issue)
+     *
      * @return array<string> An array of relative pathnames of log files found in the /var/log directory
      */
     public function getSystemLogs(): array
     {
         // initialize Finder
         $finder = new Finder();
-        $finder->files()->in($this->appUtil->getSystemLogsDirectory());
 
         // array to store log files
         $logFiles = [];
 
-        // iterate over found files
-        foreach ($finder as $file) {
-            // check if log is not archived
-            if (!str_ends_with($file->getRelativePathname(), '.xz')) {
-                $logFiles[] = $file->getRelativePathname();
+        try {
+            $finder->files()->in($this->appUtil->getSystemLogsDirectory());
+            // iterate over found files
+            foreach ($finder as $file) {
+                // check if log is not archived
+                if (!str_ends_with($file->getRelativePathname(), '.xz')) {
+                    $logFiles[] = $file->getRelativePathname();
+                }
             }
+        } catch (\Exception $e) {
+            $this->errorManager->handleError('error to get system logs: ' . $e->getMessage(), 500);
         }
 
         return $logFiles;
@@ -329,18 +335,27 @@ class LogManager
      * Retrieves the content of a specific system log file
      *
      * @param string $logFile The relative pathname of the log file to retrieve
+     * @throws \Exception If there is an error during file retrieval (e.g., file not found or permission issue)
      *
      * @return mixed The content of the log file, or null if the file does not exist
      */
     public function getSystemLogContent(string $logFile): mixed
     {
+        $log = null;
+
         // check if file exists
         $filePath = $this->appUtil->getSystemLogsDirectory() . '/' . $logFile;
         if (!file_exists($filePath)) {
             $this->errorManager->handleError('error to get log file: ' . $filePath . ' not found', 404);
         }
 
-        // get log file content
-        return file_get_contents($filePath);
+        try {
+            // get log file content
+            $log = file_get_contents($filePath);
+        } catch (\Exception $e) {
+            $this->errorManager->handleError('error to get log file: ' . $logFile . ', ' . $e->getMessage(), 500);
+        }
+
+        return $log;
     }
 }

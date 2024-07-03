@@ -106,8 +106,7 @@ Solution for administration and monitoring linux private servers
     - [X] Syslog table style
     - [X] Colored data in log table
     - [X] View exception log from monolog
-    - [ ] Mock test getSystemLogs & getSystemLogContent
-    - [ ] Log manager tests
+    - [X] Log manager tests
 - [ ] CLI log reader command
     - [ ] Return unreaded
     - [ ] Return all (with -all argument)

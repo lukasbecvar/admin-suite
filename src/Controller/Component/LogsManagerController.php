@@ -5,7 +5,6 @@ namespace App\Controller\Component;
 use App\Util\AppUtil;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
-use App\Manager\ErrorManager;
 use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
 use Symfony\Component\HttpFoundation\Request;
@@ -148,12 +147,22 @@ class LogsManagerController extends AbstractController
     #[Route('/manager/logs/exception/self', methods:['GET'], name: 'app_manager_logs_exception')]
     public function selfExceptionLog(): Response
     {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
+        }
+
+        // self exception log content
         $log = file_get_contents(__DIR__ . '/../../../var/log/exception.log');
 
         return $this->render('component/logs-manager/self-exception-logs.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
 
+            // log data
             'logContent' => $log,
         ]);
     }

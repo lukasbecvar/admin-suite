@@ -79,7 +79,6 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('h2:contains("Change username")');
         $this->assertSelectorExists('input[name="username_change_form[username]"]');
         $this->assertSelectorExists('button:contains("Change")');
@@ -102,7 +101,6 @@ class AccountSettingsControllerTest extends CustomTestCase
         ]);
 
         // assert response
-        $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('h2:contains("Change username")');
         $this->assertSelectorExists('input[name="username_change_form[username]"]');
