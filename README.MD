@@ -107,10 +107,7 @@ Solution for administration and monitoring linux private servers
     - [X] Colored data in log table
     - [X] View exception log from monolog
     - [X] Log manager tests
-- [ ] CLI log reader command
-    - [ ] Return unreaded
-    - [ ] Return all (with -all argument)
-    - [ ] log readed tests
+- [X] CLI log reader command
 - [ ] Performance improvements
 - [ ] Design improvements
     - [ ] Swipe sidebar activate/deactivate
