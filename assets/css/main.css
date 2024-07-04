@@ -59,9 +59,10 @@ main {
 }
 
 #sidebar .profile-image {
-	width: 60px;
-	height: 60px;
-	margin-bottom: 10px !important;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 3px !important;
+    overflow: hidden;
 }
 
 #sidebar.active {
@@ -78,7 +79,7 @@ main {
 }
 
 #sidebar .about-link {
-	color: yellow;
+	color: rgb(51, 116, 255);
 	font-weight: bold;
 }
 
@@ -102,8 +103,8 @@ main {
 }
 
 .sub-navigation a:hover {
-    color: rgb(247, 247, 71);
-    border: 1px solid rgb(247, 247, 71);
+    color: #24d3ff;
+    border: 1px solid #24d3ff;
 }
 
 /* users manager component */
