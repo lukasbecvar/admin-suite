@@ -35,17 +35,17 @@
             <table class="min-w-full divide-y divide-white whitespace-nowrap">
                 <thead>
                     <tr class="hover:bg-neutral-800 border-b border-neutral-600">
-                        <th class="text-left text-white p-3">#</th>
-                        <th class="text-left text-white p-3">Username</th>
-                        <th class="text-left text-white p-3">Role</th>
-                        <th class="text-left text-white p-3">Browser</th>
-                        <th class="text-left text-white p-3">OS</th>
-                        <th class="text-left text-white p-3">Last Login</th>
-                        <th class="text-left text-white p-3">IP Address</th>
-                        <th class="text-left text-white p-3">Status</th>
-                        <th class="text-left text-white p-3">Banned</th>
-                        <th class="text-left text-white p-3 text-center"><i class="fa fa-ban" aria-hidden="true"></th>
-                        <th class="text-left text-white p-3"><i class="fa fa-trash" aria-hidden="true"></th>
+                        <th class="text-left text-white p-2">#</th>
+                        <th class="text-left text-white p-2">Username</th>
+                        <th class="text-left text-white p-2">Role</th>
+                        <th class="text-left text-white p-2">Browser</th>
+                        <th class="text-left text-white p-2">OS</th>
+                        <th class="text-left text-white p-2">Last Login</th>
+                        <th class="text-left text-white p-2">IP Address</th>
+                        <th class="text-left text-white p-2">Status</th>
+                        <th class="text-left text-white p-2">Banned</th>
+                        <th class="text-left text-white p-2 text-center"><i class="fa fa-ban" aria-hidden="true"></th>
+                        <th class="text-left text-white p-2"><i class="fa fa-trash" aria-hidden="true"></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-white font-bold">
@@ -65,76 +65,76 @@
     
                         {# USER ROW #}
                         <tr class="hover:bg-neutral-800 border-b border-neutral-600">
-                            <td class="text-white p-3 border-b border-neutral-600">{{ row.id|e }}</td>
-                            <td class="text-white p-3 border-b border-neutral-600">
+                            <td class="text-white p-1 border-b border-neutral-600">{{ row.id|e }}</td>
+                            <td class="text-white p-1 border-b border-neutral-600">
                                 <a href={{ path('app_manager_users_profile', {'id': row.id}) }} class="profile-link underline">{{ row.username |e}}</a>
                             </td>
                                     
                             {# ROLE VALUE #}
                             {% if userManager.isUserAdmin(row.id) %}
-                                <td class="text-red-400 p-3 border-b border-neutral-600">
+                                <td class="text-red-400 p-1 border-b border-neutral-600">
                                     <a href="#" class="role-update-button underline" data-username="{{ row.username|e }}" data-role="{{ row.role|e }}" data-id="{{ row.id|e }}">{{ row.role|e }}</a>
                                 </td>
                             {% else %}
-                                <td class="text-green-400 p-3 border-b border-neutral-600">
+                                <td class="text-green-400 p-1 border-b border-neutral-600">
                                     <a href="#" class="role-update-button underline" data-username="{{ row.username|e }}" data-role="{{ row.role|e }}" data-id="{{ row.id|e }}">{{ row.role|e }}</a>
                                 </td>
                             {% endif %}
     
                             {# BROWSER VALUE #}
                             {% if row.userAgent == 'Unknown' or row.userAgent == 'DataFixtures-CLI' %}
-                                <td class="text-red-400 p-3 border-b border-neutral-600">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
+                                <td class="text-red-400 p-1 border-b border-neutral-600">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
                             {% else %}
-                                <td class="text-white p-3 border-b border-neutral-600">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
+                                <td class="text-white p-1 border-b border-neutral-600">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
                             {% endif %}
                                     
                             {# OS NAME VALUE #}
                             {% if visitorInfoUtil.getOs(row.userAgent) == 'Unknown OS' %}
-                                <td class="text-red-400 p-3 border-b border-neutral-600">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
+                                <td class="text-red-400 p-1 border-b border-neutral-600">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
                             {% else %}
-                                <td class="text-white p-3 border-b border-neutral-600">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
+                                <td class="text-white p-1 border-b border-neutral-600">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
                             {% endif %}
                                     
                             {# LAST LOGIN TIME #}
-                            <td class="text-white p-3 border-b border-neutral-600">{{ row.lastLoginTime|date('Y-m-d H:i:s')|e }}</td>
+                            <td class="text-white p-1 border-b border-neutral-600">{{ row.lastLoginTime|date('Y-m-d H:i:s')|e }}</td>
                                     
                             {# IP ADDRESS VALUE #}
                             {% if currentIp == row.ipAddress %}
-                                <td class="text-white p-3 border-b border-neutral-600 highlighter">{{ row.ipAddress|e }}</td>
+                                <td class="text-white p-1 border-b border-neutral-600 highlighter">{{ row.ipAddress|e }}</td>
                             {% else %}
-                                <td class="text-white p-3 border-b border-neutral-600">{{ row.ipAddress|e }}</td>
+                                <td class="text-white p-1 border-b border-neutral-600">{{ row.ipAddress|e }}</td>
                             {% endif %}
 
                             {# ONLINE STATUS #}
                             {% if currentStatus == 'online' %}
-                                <td class="text-green-400 p-3 border-b border-neutral-600">
+                                <td class="text-green-400 p-1 border-b border-neutral-600">
                                     <p>{{currentStatus|e}}</p>
                                 </td>
                             {% else %}
-                                <td class="text-red-400 p-3 border-b border-neutral-600">
+                                <td class="text-red-400 p-1 border-b border-neutral-600">
                                     <p>{{currentStatus|e}}</p>
                                 </td>
                             {% endif %}
     
                             {# BANNED STATUS #}
                             {% if banManager.isUserBanned(row.id) %}
-                                <td class="text-green-400 p-3 border-b border-neutral-600">
+                                <td class="text-green-400 p-1 border-b border-neutral-600">
                                     <p>Yes</p>
                                 </td>
-                                <td class="text-white p-3 border-b border-neutral-600 text-center">
+                                <td class="text-white p-1 border-b border-neutral-600 text-center">
                                     <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'inactive'}) }} class="unban-button">UNBAN</a>
                                 </td>
                             {% else %}
-                                <td class="text-red-400 p-3 border-b border-neutral-600">
+                                <td class="text-red-400 p-1 border-b border-neutral-600">
                                     <p>No</p>
                                 </td>
-                                <td class="text-white p-3 border-b border-neutral-600 text-center">
+                                <td class="text-white p-1 border-b border-neutral-600 text-center">
                                     <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'active'}) }} class="ban-button">BAN</a>
                                 </td>
                             {% endif %}
     
                             {# USER DELETE LINK #}
-                            <td class="text-white p-3 border-b border-neutral-600">
+                            <td class="text-white p-1 border-b border-neutral-600">
                                 <a href={{ path('app_manager_users_delete', {'id': row.id, 'page': currentPage}) }} class="delete-button">X</a>
                             </td>
                         </tr>

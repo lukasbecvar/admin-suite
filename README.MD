@@ -93,7 +93,7 @@ Solution for administration and monitoring linux private servers
 - [X] Password reset command
 - [X] Banned (with reason) & online status in profile info
 - [X] About component (developer, github, version, info, etc..)
-- [ ] Log manager
+- [X] Log manager
     - [X] View unreaded logs
     - [X] Logs table filter
     - [X] Set all readed
@@ -108,12 +108,6 @@ Solution for administration and monitoring linux private servers
     - [X] View exception log from monolog
     - [X] Log manager tests
 - [X] CLI log reader command
-- [ ] Performance improvements
-- [ ] Design improvements
-    - [ ] Swipe sidebar activate/deactivate
-    - [ ] Better background colors
-    - [ ] Flex bottom overflow X table 
-- [ ] Complete refactor
 
 ## 0.6
 - [ ] Server info
