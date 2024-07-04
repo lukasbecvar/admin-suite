@@ -107,7 +107,6 @@ Solution for administration and monitoring linux private servers
     - [X] Colored data in log table
     - [X] View exception log from monolog
     - [X] Log manager tests
-	- [ ] Better user logs connection
 - [ ] CLI log reader command
     - [ ] Return unreaded
     - [ ] Return all (with -all argument)
@@ -182,13 +181,15 @@ Solution for administration and monitoring linux private servers
 - [ ] Internal chat componenta
 
 ## 1.2
-- [ ] User manual with config & setup doc
-- [ ] Setup script (for non docker env)
-- [ ] Readme doc
-
-## 1.3
 - [ ] Connecting other services (like contact inbox, visitor systems, etc)
     - [ ] External log handler (for connected services)
+
+## 1.3
+- [ ] Readme doc
+
+## 1.4
+- [ ] Presentation doc & download page
+- [ ] Setup script (for non docker env)
 
 ## License
 The framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
