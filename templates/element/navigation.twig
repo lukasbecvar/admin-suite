@@ -3,8 +3,12 @@
     <button id="menu-toggle" class="text-white text-2xl ml-1 hover:text-cyan-300">
         <i class="fas fa-bars"></i>
     </button>
-    {# LOGOUT BUTTON #}
     <div class="flex items-center">
+        <a href={{ path('app_about') }} class="about-link text-white mr-1 hover:text-cyan-300">
+            <i class="fas fa-question"></i>
+        </a>
+
+        {# LOGOUT BUTTON #}
         <a href={{ path('app_auth_logout') }} class="text-white mr-1 text-2xl hover:text-cyan-300">
             <i class="fas fa-sign-out-alt"></i>
         </a>

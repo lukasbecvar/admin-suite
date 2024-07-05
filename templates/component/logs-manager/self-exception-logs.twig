@@ -12,12 +12,12 @@
     </div>
 
     {# LOG OUTPUT BOX #}
-    <div class="bg-neutral-900 text-white p-1">
+    <div class="bg-neutral-900 text-white p-2">
         <div>
             {% if logContent == null %}
                 <h1 class="text-center mt-5 text-xl">Log file is empty</h1>
             {% else %}
-                <pre class="whitespace-pre-wrap break-words p-2">{{ logContent|e }}</pre>
+                <pre class="whitespace-pre-wrap break-words p-2 bg-neutral-800 rounded">{{ logContent|e }}</pre>
             {% endif %}
         </div>
     </div>

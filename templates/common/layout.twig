@@ -15,7 +15,7 @@
 
     {# SIDEBAR TOGGLE SCRIPT #}
     <script>
-        document.getElementById('menu-toggle').addEventListener('click', function () {
+        document.getElementById('menu-toggle').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
             sidebar.classList.toggle('active');
@@ -26,6 +26,7 @@
     {# DEFAUTL TOGGLE SIDEBAR ON NON MOBILE DEVICES #}
     {% if app.request.attributes.get('_route') == 'app_dashboard' %}
         <script>
+            const counter = document.getElementById('counter');
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
             if (window.innerWidth > 400) {

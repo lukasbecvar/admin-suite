@@ -32,7 +32,7 @@ main {
 }
 
 #main-content.active {
-	margin-left: 180px; 
+	margin-left: 200px; 
 }
 
 /* main navigation */
@@ -45,6 +45,21 @@ main {
 	height: 30px;
 }
 
+.nav-bar .about-link {
+	font-size: 12px !important;
+	border: 1px solid white;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	border-radius: 50px;
+	color: rgb(29, 29, 29);
+	background-color: white;
+}
+.nav-bar  .about-link:hover {
+	background-color: cyan;
+}
+
 /* sidebar element */
 #sidebar {
 	position: fixed;
@@ -53,7 +68,7 @@ main {
 	overflow-y: auto; 
 	background-color: #161616;
 	z-index: 999; 
-	width: 180px;
+	width: 200px;
 	transition: transform 0.3s ease;
 	transform: translateX(-100%);
 }
@@ -78,17 +93,9 @@ main {
 	background: #292e33;
 }
 
-#sidebar .about-link {
-	color: rgb(51, 116, 255);
-	font-weight: bold;
-}
-
-#sidebar .about-link:hover {
-	color: #24d3ff;
-}
-
 /* sub navigation */
 .sub-navigation {
+	padding: 5px;
     display: flex;
     justify-content: flex-start;
 }
@@ -109,7 +116,7 @@ main {
 
 /* users manager component */
 .users-manager .delete-button {
-	font-weight: bold;
+	font-weight: 400;
 	color: rgb(255, 70, 70);
 	font-size: 18px;
 }
@@ -119,26 +126,27 @@ main {
 }
 
 .users-manager .ban-button, .unban-button {
-	font-weight: bold;
+	font-weight: 400;
 	color: rgb(255, 255, 31);
 	font-size: 18px;
 }
 
 .users-manager .ban-button:hover, .unban-button:hover {
-	color: rgb(255, 70, 70);
+	color: rgb(71, 247, 71);
 }
 
 .users-manager .highlighter {
 	color: rgb(255, 255, 7) !important;
-	font-weight: 600;
 }
 
 .users-manager .profile-link:hover {
 	color: rgb(255, 255, 7) !important;
+	text-decoration: underline;
 }
 
 .users-manager .role-update-button:hover {
 	color: rgb(255, 255, 7) !important;
+	text-decoration: underline;
 }
 
 /* account settings component */

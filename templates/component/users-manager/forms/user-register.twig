@@ -11,29 +11,31 @@
 
 {# REGISTER FORM #}
 <div class="flex justify-center items-center mt-10 mb-10">
-    <div class="text-white max-w-md w-full bg-dark shadow-md px-4 py-4 mb-1 border border-gray-600 m-w-95">
-        <h2 class="text-2xl mb-4 text-center text-white">Register</h2>
+    <div class="text-white max-w-md w-full bg-neutral-800 shadow-md px-4 py-4 mb-1 border border-gray-600 m-w-95">
+        <h2 class="text-2xl mb-6 text-center text-white font-semibold">Register</h2>
     
         {# SUCCESS MESSAGE RETURN BOX #}
         {% for message in app.flashes('success') %}
-            <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
+            <div class="bg-green-700 text-white p-3 mb-4 rounded text-center">{{ message|e }}</div>
         {% endfor %}
     
         {# ERROR MESSAGE RETURN BOX #}
         {% for message in app.flashes('error') %}
-            <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
+            <div class="bg-red-700 text-white p-3 mb-4 rounded text-center">{{ message|e }}</div>
         {% endfor %}
     
         {# REGISTER FORM #}
         {{ form_start(registrationForm) }}
     
             {# FORM FIELDS #}
-            {{ form_row(registrationForm.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
-            {{ form_row(registrationForm.password.first, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
-            {{ form_row(registrationForm.password.second, {'attr': {'class': 'auth-form-input', 'placeholder': 'Confirm Password'}}) }}
+            <div class="space-y-4">
+                {{ form_row(registrationForm.username, {'attr': {'class': 'auth-form-input w-full p-2 rounded bg-neutral-700 border border-neutral-600 text-white placeholder-gray-400', 'placeholder': 'Username'}}) }}
+                {{ form_row(registrationForm.password.first, {'attr': {'class': 'auth-form-input w-full p-2 rounded bg-neutral-700 border border-neutral-600 text-white placeholder-gray-400', 'placeholder': 'Password'}}) }}
+                {{ form_row(registrationForm.password.second, {'attr': {'class': 'auth-form-input w-full p-2 rounded bg-neutral-700 border border-neutral-600 text-white placeholder-gray-400', 'placeholder': 'Confirm Password'}}) }}
+            </div>
     
             {# FORM SUBMIT BUTTON #}
-            <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Register</button>
+            <button type="submit" class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline transition duration-200">Register</button>
         {{ form_end(registrationForm) }}
     </div>
 </div>

@@ -10,7 +10,7 @@
 </div>
 
 {# PROFILE COMPONENT #}
-<div class="mx-auto bg-white bg-neutral-800 shadow-lg overflow-hidden border border-neutral-700 md:mt-10 md:max-w-md">
+<div class="mx-auto bg-white bg-neutral-800 shadow-lg overflow-hidden border border-neutral-700 md:mt-10 md:max-w-md users-manager">
     <div class="bg-neutral-800 text-white text-center py-3 border-b border-neutral-700">
         {% if userRepository.getProfilePic() == 'default_pic' %}
             <img class="w-24 h-24 rounded-full mx-auto" src={{ asset('/build/images/default-profile.jpg') }} alt="User Profile Picture">
@@ -19,7 +19,7 @@
         {% endif %}
         <h1 class="text-xl font-semibold mt-2">
             {{ userRepository.getUsername()|e }} 
-            (<a href={{ path('app_manager_logs', {'user_id': userRepository.getId, 'filter': 'all'}) }} class="underline">logs</a>)
+            (<a href={{ path('app_manager_logs', {'user_id': userRepository.getId, 'filter': 'all'}) }} class="profile-link">logs</a>)
         </h1>
         <p class="text-sm text-gray-400 dark:text-gray-300">{{ userRepository.getRole()|e }}</p>
 
@@ -39,6 +39,12 @@
         </p>
     </div>
     <div class="p-6 bg-neutral-800">
+        <div class="flex items-center mt-4">
+            <div class="text-gray-600 dark:text-gray-200">
+                <i class="fas fa-list mr-2"></i>
+                <span>logs <a href={{ path('app_manager_logs', {'user_id': userRepository.getId, 'filter': 'all'}) }} class="profile-link text-blue-400">here</a></span>
+            </div>
+        </div>
         <div class="flex items-center mt-4">
             <div class="text-gray-600 dark:text-gray-200">
                 <i class="fas fa-address-book mr-2"></i>
