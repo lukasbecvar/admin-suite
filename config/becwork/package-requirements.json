@@ -1,0 +1,17 @@
+[
+    "apache",
+    "rpm",
+    "pdo_mysql",
+    "mysqli",
+    "pdo",
+    "intl",
+    "apcu",
+    "Zend OPcache",
+    "openssl",
+    "sudo",
+    "systemd",
+    "dom",
+    "npm",
+    "curl",
+    "ufw"
+]

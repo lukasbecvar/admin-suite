@@ -3,6 +3,7 @@
 namespace Tests\Unit\Util;
 
 use App\Util\ServerUtil;
+use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,13 +15,17 @@ use PHPUnit\Framework\TestCase;
  */
 class ServerUtilTest extends TestCase
 {
-    protected ServerUtil $serverUtil;
+    private ServerUtil $serverUtil;
+    private ErrorManager $errorManager;
 
     protected function setUp(): void
     {
+        // create mock error manager
+        $this->errorManager = $this->createMock(ErrorManager::class);
+
+        // create instance of ServerUtil
+        $this->serverUtil = new ServerUtil($this->errorManager);
         parent::setUp();
-        // create instance of DashboardUtil
-        $this->serverUtil = new ServerUtil();
     }
 
     /**

@@ -120,6 +120,7 @@ Solution for administration and monitoring linux private servers
     - [X] CPU overload detect
     - [X] Ram overload detect
     - [X] Check web server permissions
+    - [X] Detect requirements (os & php extensions)
 - [ ] Dashboard warning box (react to diagnostic data component)
 - [ ] Server info
     - [ ] OS info
@@ -139,7 +140,6 @@ Solution for administration and monitoring linux private servers
     - [ ] Log offline status
     - [ ] Send offline alert in email
     - [ ] Send back online notification
-- [ ] Detect requirements (os & php extensions) (diagnostic component & warning box)
 
 ## 0.8
 - [ ] Terminal component
