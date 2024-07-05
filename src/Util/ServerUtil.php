@@ -252,7 +252,7 @@ class ServerUtil
 
         // get list of required apps
         try {
-            $appList = file_get_contents(__DIR__ . '/../../config/becwork/package-requirements.json');
+            $appList = file_get_contents(__DIR__ . '/../../config/suite/package-requirements.json');
             if ($appList) {
                 $appList = json_decode($appList, true);
             }
