@@ -35,6 +35,10 @@ main {
 	margin-left: 200px; 
 }
 
+.card-color {
+	background-color: #202020;
+}
+
 /* main navigation */
 .nav-bar {
 	position: fixed;
