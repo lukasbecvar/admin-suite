@@ -2,14 +2,14 @@
 
 {# ACCOUNT SETTINGS TABLE COMPONENT #}
 {% block component %}
-<div class="w-full account-settings">
-    <div class="p-6 account-setting-table">
+<div class="w-full flex justify-center">
+    <div class="w-full max-w-3xl bg-neutral-800 shadow-lg p-6 md:mt-10 border border-gray-600 account-settings">
         <h2 class="text-2xl font-semibold mb-6 text-white text-center">Account Settings</h2>
         <div class="space-y-6">
             {# PROFILE PICTURE SETTINGS COMPONENT #}
-            <div class="bg-neutral-900 p-4 rounded-md flex items-center justify-between border border-gray-700 hover:shadow-lg transition-shadow duration-300">
+            <div class="bg-neutral-800 p-4 rounded-md flex items-center justify-between border border-gray-700 hover:shadow-lg transition-shadow duration-300 transform">
                 <div class="flex items-center space-x-4 w-1/3">
-                    <div class="text-sm font-medium text-gray-200">Profile Image</div>
+                    <div class="text-sm font-medium text-gray-100">Profile Image</div>
                 </div>
                 <div class="flex items-center justify-center flex-1">
                     {% if userData.getProfilePic == 'default_pic' %}
@@ -27,11 +27,11 @@
             </div>
 
             {# USERNAME SETTINGS COMPONENT #}
-            <div class="bg-neutral-900 p-4 rounded-md flex items-center justify-between border border-gray-700 hover:shadow-lg transition-shadow duration-300">
+            <div class="bg-neutral-800 p-4 rounded-md flex items-center justify-between border border-gray-700 hover:shadow-lg transition-shadow duration-300 transform">
                 <div class="flex items-center space-x-4 w-1/3">
-                    <div class="text-sm font-medium text-gray-200">Username</div>
+                    <div class="text-sm font-medium text-gray-100">Username</div>
                 </div>
-                <div class="flex items-center justify-center flex-1 text-sm text-gray-400">
+                <div class="flex items-center justify-center flex-1 text-sm text-gray-200">
                     {{ userData.username|e }}
                 </div>
                 <div class="w-1/3 text-right">
@@ -43,11 +43,11 @@
             </div>
 
             {# PASSWORD SETTINGS COMPONENT #}
-            <div class="bg-neutral-900 p-4 rounded-md flex items-center justify-between border border-gray-700 hover:shadow-lg transition-shadow duration-300">
+            <div class="bg-neutral-800 p-4 rounded-md flex items-center justify-between border border-gray-700 hover:shadow-lg transition-shadow duration-300 transform">
                 <div class="flex items-center space-x-4 w-1/3">
-                    <div class="text-sm font-medium text-gray-200">Password</div>
+                    <div class="text-sm font-medium text-gray-100">Password</div>
                 </div>
-                <div class="flex items-center justify-center flex-1 text-sm text-gray-400">
+                <div class="flex items-center justify-center flex-1 text-sm text-gray-200">
                     *********
                 </div>
                 <div class="w-1/3 text-right">

@@ -26,33 +26,36 @@
         {# MENU LINKS #}
         <ul class="py-0 text-base">
             {# DASHBOARD LINK #}
-            <a href={{ path('app_dashboard') }} class="border-b border-gray-600 block px-1 menu-link">
-                <i class="fas fa-desktop mr-0.5"></i>
-                <span>Dashboard</span>
-            </a>
+            <li>
+                <a href={{ path('app_dashboard') }} class="border-b border-gray-600 block px-3 py-1 hover:bg-gray-800">
+                    <i class="fas fa-desktop mr-2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
             
             {# LOGS-MANAGER LINK #}
-            <a href={{ path('app_manager_logs') }} class="border-b border-gray-600 block px-1 menu-link">
-                <i class="fas fa-list ml-0.5 mr-1"></i>
-                <span>Logs manager</span>
-            </a>
+            <li>
+                <a href={{ path('app_manager_logs') }} class="border-b border-gray-600 block px-3 py-1 hover:bg-gray-800">
+                    <i class="fas fa-list ml-0.5 mr-2"></i>
+                    <span>Logs manager</span>
+                </a>
+            </li>
 
             {# USERS-MANAGER LINK #}
-            <a href={{ path('app_manager_users') }} class="border-b border-gray-600 block px-1 menu-link">
-                <i class="fas fa-users"></i>
-                <span>Users manager</span>
-            </a>
+            <li>
+                <a href={{ path('app_manager_users') }} class="border-b border-gray-600 block px-3 py-1 hover:bg-gray-800">
+                    <i class="fas fa-users mr-2"></i>
+                    <span>Users manager</span>
+                </a>
+            </li>
 
             {# ACCOUNT-SETTINGS LINK #}
-            <a href={{ path('app_account_settings_table') }} class="border-b border-gray-600 block px-1 menu-link">
-                <i class="fas fa-user-cog mr-1px"></i>
-                <span>Account settings</span>
-            </a>
+            <li>
+                <a href={{ path('app_account_settings_table') }} class="border-b border-gray-600 block px-3 py-1 hover:bg-gray-800">
+                    <i class="fas fa-user-cog mr-2"></i>
+                    <span>Account settings</span>
+                </a>
+            </li>
         </ul>
-    </div>
-
-    {# VERSION INFO / ABOUT LINK #}
-    <div class="border-t border-gray-600">
-        <span class="text-sm ml-1">version: {{ appVersion }}| <a href={{ path('app_about') }} class="about-link">about</a></span>
     </div>
 </aside>

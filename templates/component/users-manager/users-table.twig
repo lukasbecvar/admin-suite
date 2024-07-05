@@ -5,12 +5,12 @@
 <div class="users-manager">
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
         {# GO TO RAW USERS DATABASE #}
-        <a href="#" class="border border-neutral-500 font-bold px-1 text-white">
+        <a href="#" class="border border-neutral-500 px-1 text-white">
             <i class="fa fa-database" aria-hidden="true"></i>
         </a>
 
         {# LINK TO USER REGISTER FORM #}
-        <a href={{ path('app_manager_users_register') }} class="border border-neutral-500 font-bold px-1 text-white">
+        <a href={{ path('app_manager_users_register') }} class="border border-neutral-500 px-1 text-white ml-1">
             <i class="fa fa-plus" aria-hidden="true"></i>
         </a>
 
@@ -45,10 +45,10 @@
                         <th class="text-left text-white p-2">Status</th>
                         <th class="text-left text-white p-2">Banned</th>
                         <th class="text-left text-white p-2 text-center"><i class="fa fa-ban" aria-hidden="true"></th>
-                        <th class="text-left text-white p-2"><i class="fa fa-trash" aria-hidden="true"></th>
+                        <th class="text-left text-white p-2 text-center"><i class="fa fa-trash" aria-hidden="true"></th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-white font-bold">
+                <tbody class="divide-y divide-white">
                     {% for row in users %}
                         {# GET ONLINE STATUS #}
                         {% set isOnline = false %}
@@ -67,17 +67,17 @@
                         <tr class="hover:bg-neutral-800 border-b border-neutral-600">
                             <td class="text-white p-1 border-b border-neutral-600">{{ row.id|e }}</td>
                             <td class="text-white p-1 border-b border-neutral-600">
-                                <a href={{ path('app_manager_users_profile', {'id': row.id}) }} class="profile-link underline">{{ row.username |e}}</a>
+                                <a href={{ path('app_manager_users_profile', {'id': row.id}) }} class="profile-link">{{ row.username |e}}</a>
                             </td>
                                     
                             {# ROLE VALUE #}
                             {% if userManager.isUserAdmin(row.id) %}
                                 <td class="text-red-400 p-1 border-b border-neutral-600">
-                                    <a href="#" class="role-update-button underline" data-username="{{ row.username|e }}" data-role="{{ row.role|e }}" data-id="{{ row.id|e }}">{{ row.role|e }}</a>
+                                    <a href="#" class="role-update-button" data-username="{{ row.username|e }}" data-role="{{ row.role|e }}" data-id="{{ row.id|e }}">{{ row.role|e }}</a>
                                 </td>
                             {% else %}
                                 <td class="text-green-400 p-1 border-b border-neutral-600">
-                                    <a href="#" class="role-update-button underline" data-username="{{ row.username|e }}" data-role="{{ row.role|e }}" data-id="{{ row.id|e }}">{{ row.role|e }}</a>
+                                    <a href="#" class="role-update-button" data-username="{{ row.username|e }}" data-role="{{ row.role|e }}" data-id="{{ row.id|e }}">{{ row.role|e }}</a>
                                 </td>
                             {% endif %}
     
@@ -122,20 +122,20 @@
                                     <p>Yes</p>
                                 </td>
                                 <td class="text-white p-1 border-b border-neutral-600 text-center">
-                                    <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'inactive'}) }} class="unban-button">UNBAN</a>
+                                    <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'inactive', 'page': currentPage}) }} class="unban-button"><i class="fa fa-check" aria-hidden="true"></i></a>
                                 </td>
                             {% else %}
                                 <td class="text-red-400 p-1 border-b border-neutral-600">
                                     <p>No</p>
                                 </td>
                                 <td class="text-white p-1 border-b border-neutral-600 text-center">
-                                    <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'active'}) }} class="ban-button">BAN</a>
+                                    <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'active', 'page': currentPage}) }} class="ban-button"><i class="fa fa-ban" aria-hidden="true"></i></a>
                                 </td>
                             {% endif %}
     
                             {# USER DELETE LINK #}
-                            <td class="text-white p-1 border-b border-neutral-600">
-                                <a href={{ path('app_manager_users_delete', {'id': row.id, 'page': currentPage}) }} class="delete-button">X</a>
+                            <td class="text-white p-1 border-b border-neutral-600 text-center">
+                                <a href={{ path('app_manager_users_delete', {'id': row.id, 'page': currentPage}) }} class="delete-button"><i class="fa fa-trash" aria-hidden="true"></i></a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -185,7 +185,7 @@
     <div id="role-update-popup-overlay" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center hidden z-50">
         <div class="bg-neutral-900 rounded-lg p-6 border border-neutral-700">
             <p id="role-update-title" class="mb-4 text-white">Update role: <span id="role-update-username"></span></p>
-            <form id="role-update-form" method="POST" action="{{ path('app_manager_users_role_update') }}">
+            <form id="role-update-form" method="POST" action={{ path('app_manager_users_role_update', {'page': currentPage}) }}>
                 <input type="hidden" name="id" id="role-update-user-id">
                 <input type="hidden" name="current-role" id="current-role">
                 <div class="mb-4">

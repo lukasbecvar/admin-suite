@@ -267,6 +267,9 @@ class UsersManagerController extends AbstractController
         // get user id to delete
         $userId = (int) $request->query->get('id');
 
+        // get current page from request query params
+        $page = (int) $request->query->get('page', '1');
+
         // get new user role to update
         $newRole = (string) $request->query->get('role');
 
@@ -312,7 +315,9 @@ class UsersManagerController extends AbstractController
         $this->userManager->updateUserRole($userId, $newRole);
 
         // redirect back to the users table page
-        return $this->redirectToRoute('app_manager_users');
+        return $this->redirectToRoute('app_manager_users', [
+            'page' => $page
+        ]);
     }
 
     /**
@@ -389,6 +394,7 @@ class UsersManagerController extends AbstractController
 
         // get request data
         $userId = (int) $request->query->get('id');
+        $page = (int) $request->query->get('page', '1');
         $status = (string) $request->query->get('status');
         $reason = (string) $request->query->get('reason');
 
@@ -439,6 +445,8 @@ class UsersManagerController extends AbstractController
         }
 
         // redirect back to the users table page
-        return $this->redirectToRoute('app_manager_users');
+        return $this->redirectToRoute('app_manager_users', [
+            'page' => $page
+        ]);
     }
 }
