@@ -2,6 +2,8 @@
 
 namespace App\Util;
 
+use App\Manager\ErrorManager;
+
 /**
  * Class ServerUtil
  *
@@ -11,6 +13,13 @@ namespace App\Util;
  */
 class ServerUtil
 {
+    private ErrorManager $errorManager;
+
+    public function __construct(ErrorManager $errorManager)
+    {
+        $this->errorManager = $errorManager;
+    }
+
     /**
      * Get the host uptime.
      *
@@ -107,7 +116,8 @@ class ServerUtil
     {
         try {
             return (string) exec("df -Ph / | awk 'NR == 2{print $5}' | tr -d '%'");
-        } catch (\Exception) {
+        } catch (\Exception $e) {
+            $this->errorManager->handleError('error to get drive usage percentage ' . $e->getMessage(), 500);
             return null;
         }
     }
@@ -121,7 +131,8 @@ class ServerUtil
     {
         try {
             return (string) exec('whoami');
-        } catch (\Exception) {
+        } catch (\Exception $e) {
+            $this->errorManager->handleError('error to get web username ' . $e->getMessage(), 500);
             return null;
         }
     }
@@ -199,5 +210,66 @@ class ServerUtil
             'packages'  => $software,
             'distro'    => $distro
         );
+    }
+
+    /**
+     * Checks if a service is or is php extension installed.
+     *
+     * @param string $serviceName The name of the service.
+     *
+     * @return bool The service is installed, false otherwise.
+     */
+    public function isServiceInstalled(string $serviceName): bool
+    {
+        // check dpkg package
+        exec('dpkg -l | grep ' . escapeshellarg($serviceName), $output, $returnCode);
+
+        if ($returnCode === 0) {
+            return true;
+        }
+
+        // check php extension
+        if (extension_loaded($serviceName)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get a list of required applications that are not installed.
+     *
+     * This method reads a JSON file containing a list of required applications
+     * and checks if each application is installed. It returns an array of applications
+     * that are not found on the system.
+     *
+     * @return array<string> List of applications that are not installed.
+     */
+    public function getNotInstalledRequirements(): array
+    {
+        $appList = [];
+        $notFoundApps = [];
+
+        // get list of required apps
+        try {
+            $appList = file_get_contents(__DIR__ . '/../../config/becwork/package-requirements.json');
+            if ($appList) {
+                $appList = json_decode($appList, true);
+            }
+        } catch (\Exception $e) {
+            $this->errorManager->handleError('error to get not installed requirements ' . $e->getMessage(), 500);
+        }
+
+        if (is_iterable($appList)) {
+            // check if app is installed
+            foreach ($appList as $app) {
+                if (!$this->isServiceInstalled($app)) {
+                    array_push($notFoundApps, $app);
+                }
+            }
+        }
+
+        // return not found requirements
+        return $notFoundApps;
     }
 }

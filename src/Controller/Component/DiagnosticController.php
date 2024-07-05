@@ -40,11 +40,12 @@ class DiagnosticController extends AbstractController
         // get diagnostic data
         $isSSL = $this->appUtil->isSsl();
         $isDevMode = $this->appUtil->isDevMode();
-        $driveSpace = $this->serverUtil->getDriveUsagePercentage();
         $cpuUsage = $this->serverUtil->getCpuUsage();
-        $ramUsage = $this->serverUtil->getRamUsage()['used'];
-        $isWebUserSudo = $this->serverUtil->isWebUserSudo();
         $webUsername = $this->serverUtil->getWebUsername();
+        $isWebUserSudo = $this->serverUtil->isWebUserSudo();
+        $ramUsage = $this->serverUtil->getRamUsage()['used'];
+        $driveSpace = $this->serverUtil->getDriveUsagePercentage();
+        $notInstalledRequirements = $this->serverUtil->getNotInstalledRequirements();
 
         // return diagnostic view
         return $this->render('component/diagnostic/diagnostics-page.twig', [
@@ -53,12 +54,13 @@ class DiagnosticController extends AbstractController
 
             // diagnostic data
             'isSSL' => $isSSL,
-            'isDevMode' => $isDevMode,
-            'driveSpace' => $driveSpace,
             'cpuUsage' => $cpuUsage,
             'ramUsage' => $ramUsage,
+            'isDevMode' => $isDevMode,
+            'driveSpace' => $driveSpace,
+            'webUsername' => $webUsername,
             'isWebUserSudo' => $isWebUserSudo,
-            'webUsername' => $webUsername
+            'notInstalledRequirements' => $notInstalledRequirements
         ]);
     }
 }

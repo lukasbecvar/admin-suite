@@ -16,7 +16,30 @@
     <div class="bg-neutral-800 shadow-lg text-white mb-3 border border-neutral-500">
         <div class="px-4 py-3 bg-neutral-800 border-b border-neutral-500">System diagnostics</div>
 
-        {# SSL-RUNNING CHECK #}
+        {# NOT-INSTALLED-REQUIREMENTS CHECK #}
+        <div class="px-4 py-2">
+            {% if notInstalledRequirements|length == 0 %}
+                <span>
+                    <span class="text-green-500">
+                        <i class="fa fa-check"></i>
+                    </span>
+                    <span class="text-yellow-400">
+                        All requirements is installed
+                    </span>
+                </span>
+            {% else %}
+                <span>
+                    <span class="text-red-400">
+                        <i class="fa fa-exclamation-triangle"></i>
+                    </span>
+                    <span class="text-red-400">
+                        Not found requirements: {{ notInstalledRequirements|join(', ') }}
+                    </span>
+                </span>
+            {% endif %}
+        </div>
+
+        {# DISK-SPACE CHECK #}
         <div class="px-4 py-2">
             {% if driveSpace < 90 %}
                 <span>
@@ -38,7 +61,6 @@
                 </span>
             {% endif %}
         </div>
-
  
         {# CPU-OVERLOAD CHECK #}
         <div class="px-4 py-2">
