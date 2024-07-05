@@ -12,80 +12,6 @@
 {# DIAGNOSTICS CARDS #}
 <div class="flex-center mx-2 mt-2">
 
-    {# SELF WEB DIAGNOSTICS CARD #}
-    <div class="bg-neutral-800 shadow-lg text-white mb-3 border border-neutral-500">
-        <div class="px-4 py-3 bg-neutral-800 border-b border-neutral-500">Website diagnostics</div>
-
-        {# SSL-RUNNING CHECK #}
-        <div class="px-4 py-2">
-            {% if isSSL %}
-                <span>
-                    <span class="text-green-500">
-                        <i class="fa fa-check"></i>
-                    </span>
-                    <span class="text-yellow-400">
-                        page is secured with https
-                    </span>
-                </span>
-            {% else %}
-                <span>
-                    <span class="text-red-400">
-                        <i class="fa fa-exclamation-triangle"></i>
-                    </span>
-                    <span class="text-red-400">
-                        session is running on http [non secure connction] please contact web admin for fix it
-                    </span>
-                </span>
-            {% endif %}
-        </div>
-
-        {# DEV-MODE CHECK #}
-        <div class="px-4 py-2">
-            {% if isDevMode %}
-                <span>
-                    <span class="text-red-400">
-                        <i class="fa fa-exclamation-triangle"></i>
-                    </span>
-                    <span class="text-red-400">
-                        developer mode is enabled, please set APP_ENV=prod in .env config file
-                    </span>
-                </span>
-            {% else %}
-                <span>
-                    <span class="text-green-500">
-                        <i class="fa fa-check"></i>
-                    </span>
-                    <span class="text-yellow-400">
-                        developer mode policy are OK
-                    </span>
-                </span>
-            {% endif %}
-        </div>
-
-        {# WEBSERVER USER PERMISSIONS CHECK #}
-        <div class="px-4 py-2">
-            {% if isWebUserSudo %}
-                <span>
-                    <span class="text-green-400">
-                        <i class="fa fa-check"></i>
-                    </span>
-                    <span class="text-yellow-400">
-                        site permissions is root
-                    </span>
-                </span>
-            {% else %}
-                <span>
-                    <span class="text-red-400">
-                        <i class="fa fa-exclamation-triangle"></i>
-                    </span>
-                    <span class="text-red-400">
-                        Permissions error: please add "{{ webUsername }} ALL=NOPASSWD: ALL" to /etc/sudoers
-                    </span>
-                </span>
-            {% endif %}
-        </div>
-    </div>
-
     {# HOST SYSTEM DIAGNOSTICS CARD #}
     <div class="bg-neutral-800 shadow-lg text-white mb-3 border border-neutral-500">
         <div class="px-4 py-3 bg-neutral-800 border-b border-neutral-500">System diagnostics</div>
@@ -155,6 +81,80 @@
                     </span>
                     <span class="text-yellow-400">
                         RAM Memory is available
+                    </span>
+                </span>
+            {% endif %}
+        </div>
+    </div>
+
+    {# SELF WEB DIAGNOSTICS CARD #}
+    <div class="bg-neutral-800 shadow-lg text-white mb-3 border border-neutral-500">
+        <div class="px-4 py-3 bg-neutral-800 border-b border-neutral-500">Website diagnostics</div>
+
+        {# SSL-RUNNING CHECK #}
+        <div class="px-4 py-2">
+            {% if isSSL %}
+                <span>
+                    <span class="text-green-500">
+                        <i class="fa fa-check"></i>
+                    </span>
+                    <span class="text-yellow-400">
+                        page is secured with https
+                    </span>
+                </span>
+            {% else %}
+                <span>
+                    <span class="text-red-400">
+                        <i class="fa fa-exclamation-triangle"></i>
+                    </span>
+                    <span class="text-red-400">
+                        session is running on http [non secure connction] please contact web admin for fix it
+                    </span>
+                </span>
+            {% endif %}
+        </div>
+
+        {# DEV-MODE CHECK #}
+        <div class="px-4 py-2">
+            {% if isDevMode %}
+                <span>
+                    <span class="text-red-400">
+                        <i class="fa fa-exclamation-triangle"></i>
+                    </span>
+                    <span class="text-red-400">
+                        developer mode is enabled, please set APP_ENV=prod in .env config file
+                    </span>
+                </span>
+            {% else %}
+                <span>
+                    <span class="text-green-500">
+                        <i class="fa fa-check"></i>
+                    </span>
+                    <span class="text-yellow-400">
+                        developer mode policy are OK
+                    </span>
+                </span>
+            {% endif %}
+        </div>
+
+        {# WEBSERVER USER PERMISSIONS CHECK #}
+        <div class="px-4 py-2">
+            {% if isWebUserSudo %}
+                <span>
+                    <span class="text-green-400">
+                        <i class="fa fa-check"></i>
+                    </span>
+                    <span class="text-yellow-400">
+                        site permissions is root
+                    </span>
+                </span>
+            {% else %}
+                <span>
+                    <span class="text-red-400">
+                        <i class="fa fa-exclamation-triangle"></i>
+                    </span>
+                    <span class="text-red-400">
+                        Permissions error: please add "{{ webUsername }} ALL=NOPASSWD: ALL" to /etc/sudoers
                     </span>
                 </span>
             {% endif %}

@@ -111,16 +111,15 @@ Solution for administration and monitoring linux private servers
 
 ## 0.6
 - [X] Server util + tests
-- [ ] Linux check middleware
+- [X] Linux check middleware
 - [X] Web app diagnostics
     - [X] Check https (if https only)
     - [X] Check if devmode is enabled
-- [ ] Server diagnostics component
+- [X] Server diagnostics component
     - [X] Detect SSD low space
     - [X] CPU overload detect
     - [X] Ram overload detect
     - [X] Check web server permissions
-    - [ ] Detect requirements (os & php extensions)
 - [ ] Dashboard warning box (react to diagnostic data component)
 - [ ] Server info
     - [ ] OS info
@@ -140,6 +139,7 @@ Solution for administration and monitoring linux private servers
     - [ ] Log offline status
     - [ ] Send offline alert in email
     - [ ] Send back online notification
+- [ ] Detect requirements (os & php extensions) (diagnostic component & warning box)
 
 ## 0.8
 - [ ] Terminal component

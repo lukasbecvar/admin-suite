@@ -30,7 +30,12 @@ services:
     # resources build checker
     App\Middleware\AssetsCheckMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 8 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 9 }
+
+    # check if system is linux
+    App\Middleware\LinuxCheckMiddleware:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 8 }
 
     # escape request data
     App\Middleware\EscapeRequestDataMiddleware:
