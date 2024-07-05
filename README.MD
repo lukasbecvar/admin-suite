@@ -110,12 +110,7 @@ Solution for administration and monitoring linux private servers
 - [X] CLI log reader command
 
 ## 0.6
-- [ ] Server info
-    - [ ] OS info
-    - [ ] CPU usage
-    - [ ] Ram usage
-    - [ ] SSD space
-    - [ ] Uptime info
+- [X] Server util + tests
 - [ ] Server diagnostics component
     - [ ] Detect requirements (os & php extensions)
     - [ ] Detect linux
@@ -127,6 +122,12 @@ Solution for administration and monitoring linux private servers
     - [ ] Check https (if https only)
     - [ ] Check if devmode is enabled
 - [ ] Dashboard warning box (react to diagnostic data component)
+- [ ] Server info
+    - [ ] OS info
+    - [ ] CPU usage
+    - [ ] Ram usage
+    - [ ] SSD space
+    - [ ] Uptime info
 
 ## 0.7
 - [ ] Service manager component
