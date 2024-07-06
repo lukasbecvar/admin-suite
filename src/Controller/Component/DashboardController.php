@@ -7,6 +7,7 @@ use App\Util\ServerUtil;
 use App\Manager\BanManager;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
+use App\Manager\ServiceManager;
 use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -50,7 +51,7 @@ class DashboardController extends AbstractController
      * @return Response The dashboard view
      */
     #[Route('/dashboard', methods:['GET'], name: 'app_dashboard')]
-    public function dashboard(): Response
+    public function dashboard(ServiceManager $serviceManager): Response
     {
         // get warning data
         $diagnosticData = $this->appUtil->getDiagnosticData();
