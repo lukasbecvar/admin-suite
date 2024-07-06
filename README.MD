@@ -122,12 +122,12 @@ Solution for administration and monitoring linux private servers
     - [X] Check web server permissions
     - [X] Detect requirements (os & php extensions)
 - [X] Dashboard warning box (react to diagnostic data component)
-- [ ] Server info
-    - [ ] OS info
-    - [ ] CPU usage
-    - [ ] Ram usage
-    - [ ] SSD space
-    - [ ] Uptime info
+- [X] Server info
+    - [X] OS info
+    - [X] Uptime info
+    - [X] CPU usage
+    - [X] Ram usage
+    - [X] SSD space
 
 ## 0.7
 - [ ] Service manager component

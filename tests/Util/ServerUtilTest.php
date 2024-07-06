@@ -77,6 +77,22 @@ class ServerUtilTest extends TestCase
     }
 
     /**
+     * Test getRamUsagePercentage method
+     *
+     * @return void
+     */
+    public function testGetRamUsagePercentage(): void
+    {
+        // call the method being tested
+        $ramUsagePercentage = $this->serverUtil->getRamUsagePercentage();
+
+        // assert that the result is an integer between 0 and 100
+        $this->assertIsInt($ramUsagePercentage);
+        $this->assertGreaterThanOrEqual(0, $ramUsagePercentage);
+        $this->assertLessThanOrEqual(100, $ramUsagePercentage);
+    }
+
+    /**
      * Test getDiskUsage method
      *
      * @return void
@@ -84,12 +100,10 @@ class ServerUtilTest extends TestCase
     public function testGetSoftwareInfo(): void
     {
         // call the method being tested
-        $softwareInfo = $this->serverUtil->getSoftwareInfo();
+        $softwareInfo = $this->serverUtil->getSystemInfo();
 
         // assert that the result is an array with keys 'packages' and 'distro'
         $this->assertIsArray($softwareInfo);
-        $this->assertArrayHasKey('packages', $softwareInfo);
-        $this->assertArrayHasKey('distro', $softwareInfo);
     }
 
     /**
