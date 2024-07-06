@@ -1,0 +1,17 @@
+{
+    "sshd": {
+        "service_name": "sshd",
+        "display_name": "SSHD",
+        "enable": true 
+    },
+    "apache2": {
+        "service_name": "apache2",
+        "display_name": "Apache2",
+        "enable": true 
+    },
+    "mysql": {
+        "service_name": "mysql",
+        "display_name": "Mysql",
+        "enable": true 
+    }
+}

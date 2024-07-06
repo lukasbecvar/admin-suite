@@ -134,6 +134,7 @@ Solution for administration and monitoring linux private servers
 - [X] User info dashboard card
 - [X] Error pages redesign
 - [X] Process list dashboard card
+- [X] Service manager class
 - [ ] Service manager component
     - [ ] Systemctl status
     - [ ] Systemctl stop, start, restart
