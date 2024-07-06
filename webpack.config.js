@@ -10,6 +10,7 @@ Encore
     .addEntry('index-css', './assets/css/index.css')
 
     .addEntry('user-manager-js', './assets/js/user-manager.js')
+    .addEntry('loading-component-js', './assets/js/loading-component.js')
 
     // copy static assets
     .copyFiles(
