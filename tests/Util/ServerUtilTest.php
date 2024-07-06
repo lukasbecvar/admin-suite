@@ -161,4 +161,18 @@ class ServerUtilTest extends TestCase
         // assert that the result is a boolean value
         $this->assertIsBool($isLinux);
     }
+
+    /**
+     * Test getProcessList method
+     *
+     * @return void
+     */
+    public function testGetProcessList(): void
+    {
+        // call the method being tested
+        $processList = $this->serverUtil->getProcessList();
+
+        // assert that the result is an array
+        $this->assertIsArray($processList);
+    }
 }

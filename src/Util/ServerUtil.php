@@ -279,4 +279,52 @@ class ServerUtil
         // return not found requirements
         return $notFoundApps;
     }
+
+    /**
+     * Get a list of running processes.
+     *
+     * @return array<array<string>> List of running processes.
+     */
+    public function getProcessList(): ?array
+    {
+        $output = [];
+
+        try {
+            exec('ps aux', $output);
+        } catch (\Exception $exception) {
+            $this->errorManager->handleError('error to get process list ' . $exception->getMessage(), 500);
+            return null;
+        }
+
+        // remove the first line (header) from the output
+        if (count($output) > 0) {
+            unset($output[0]);
+        }
+
+        $processes = [];
+
+        foreach ($output as $line) {
+            // split the line into parts based on whitespace
+            $parts = preg_split('/\s+/', $line);
+
+            // check if the line contains parts
+            if ($parts) {
+                // extract PID, User, and Process
+                $pid = $parts[1];
+                $user = $parts[0];
+
+                // combine the remaining parts into the process name
+                $process = implode(' ', array_slice($parts, 10));
+
+                // create an array with PID, User, and Process
+                $processes[] = [
+                    'pid' => $pid,
+                    'user' => $user,
+                    'process' => $process,
+                ];
+            }
+        }
+
+        return $processes;
+    }
 }

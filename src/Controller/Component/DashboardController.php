@@ -62,7 +62,10 @@ class DashboardController extends AbstractController
         $hostUptime = $this->serverUtil->getHostUptime();
         $hostSystemInfo = $this->serverUtil->getSystemInfo();
 
-        // get auth logs count
+        // get process list
+        $processList = $this->serverUtil->getProcessList();
+
+        // get logs count
         $authLogsCount = $this->logManager->getAuthLogsCount();
         $allLogsCount = $this->logManager->getLogsCountWhereStatus();
         $readedLogsCount = $this->logManager->getLogsCountWhereStatus('READED');
@@ -87,6 +90,9 @@ class DashboardController extends AbstractController
             'diskUsage' => $diskUsage,
             'hostUptime' => $hostUptime,
             'hostSystemInfo' => $hostSystemInfo,
+
+            // process list
+            'processList' => $processList,
 
             // logs count
             'allLogsCount' => $allLogsCount,

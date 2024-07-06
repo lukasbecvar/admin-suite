@@ -48,6 +48,8 @@ class DashboardControllerTest extends CustomTestCase
         $this->assertSelectorExists('main[id="main-content"]');
         $this->assertSelectorExists('a[href="/about"]');
         $this->assertSelectorTextContains('body', 'Warnings');
+        $this->assertSelectorTextContains('body', 'Process list');
+        $this->assertSelectorTextContains('body', 'Services');
         $this->assertSelectorTextContains('body', 'System Information');
         $this->assertSelectorTextContains('body', 'System resources');
         $this->assertSelectorTextContains('body', 'Logs');

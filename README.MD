@@ -133,12 +133,10 @@ Solution for administration and monitoring linux private servers
 - [X] Logs info dashboard card
 - [X] User info dashboard card
 - [X] Error pages redesign
+- [X] Process list dashboard card
 - [ ] Service manager component
     - [ ] Systemctl status
     - [ ] Systemctl stop, start, restart
-    - [ ] Docker service status
-    - [ ] Docker service stop, start, restart
-    - [ ] Move requirements check method to service manager
 - [ ] Service monitoring component
     - [ ] Monitoring loop command (check if all services is online)
     - [ ] Log offline status
@@ -185,6 +183,7 @@ Solution for administration and monitoring linux private servers
 
 ## 1.4
 - [ ] Presentation doc & download page
+- [ ] Docker services support
 - [ ] Setup script (for non docker env)
 
 ## License
