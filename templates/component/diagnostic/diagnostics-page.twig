@@ -10,14 +10,14 @@
 </div>
 
 {# DIAGNOSTICS CARDS #}
-<div class="flex-center mx-2 mt-2">
+<div class="flex-center mx-1 mt-2">
 
     {# HOST SYSTEM DIAGNOSTICS CARD #}
     <div class="shadow-lg text-white mb-3 border border-neutral-500 card-color">
-        <div class="px-4 py-3 border-b border-neutral-500">System diagnostics</div>
+        <div class="px-4 py-3 mb-2 border-b border-neutral-500">System diagnostics</div>
         
         {# NOT-INSTALLED-REQUIREMENTS CHECK #}
-        <div class="px-4 py-2">
+        <div class="px-4 py-1">
             {% if diagnosticData.notInstalledRequirements is empty %}
                 <span>
                     <span class="text-green-500">
@@ -40,7 +40,7 @@
         </div>
 
         {# DISK-SPACE CHECK #}
-        <div class="px-4 py-2">
+        <div class="px-4 py-1">
             {% if diagnosticData.driveSpace < 90 %}
                 <span>
                     <span class="text-green-500">
@@ -63,7 +63,7 @@
         </div>
  
         {# CPU-OVERLOAD CHECK #}
-        <div class="px-4 py-2">
+        <div class="px-4 py-1">
             {% if diagnosticData.cpuUsage > 98.00 %}
                 <span>
                     <span class="text-red-400">
@@ -86,7 +86,7 @@
         </div>
 
         {# RAM-OVERLOAD CHECK #}
-        <div class="px-4 py-2">
+        <div class="px-4 py-1">
             {% if diagnosticData.ramUsage > 98.00 %}
                 <span>
                     <span class="text-red-400">

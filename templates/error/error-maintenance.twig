@@ -1,11 +1,10 @@
 {% extends 'common/base.twig' %}
 
-{% block body %} 
-<div class="flex justify-center items-center h-screen">
-    <p class="text-center text-3xl font-bold ml-4 mr-4 text-gray-200">
-        Page is unavailable
-        <br><br>
-        The service is temporarily unavailable due to maintenance
-    </p>
+{% block body %}
+<div class="flex flex-col justify-center items-center h-screen text-gray-200">
+    <div class="text-center">
+        <h2 class="text-3xl font-bold mb-2">Page is unavailable</h2>
+        <p class="text-lg mb-6">The service is temporarily unavailable due to maintenance.</p>
+    </div>
 </div>
 {% endblock %}
