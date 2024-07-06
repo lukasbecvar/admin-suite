@@ -1,20 +1,22 @@
 {% extends 'common/base.twig' %}
 
-{% block body %} 
-<div class="flex justify-center items-center h-screen">
-    <p class="text-center text-3xl font-bold ml-4 mr-4 text-gray-200">
-        Banned
-        <br><br>
-        {% if reason == 'no-reason' %}
-            Your account is banned
-        {% else %}
-            Your account is banned for: {{ reason|e }}
-        {% endif %}
-        <br><br>
-        Requests for unban should be directed to 
-        <span class="text-yellow-300">
-            <a href="mailto:{{ admin_contact|e }}">{{ admin_contact|e }}</a>
-        </span>
-    </p>
+{% block body %}
+<div class="flex flex-col justify-center items-center h-screen text-gray-200">
+    <div class="text-center max-w-lg">
+        <h1 class="text-5xl font-extrabold mb-4">Banned</h1>
+        <p class="text-xl mb-4">
+            {% if reason == 'no-reason' %}
+                You are banned.
+            {% else %}
+                You are banned, reason: <span class="text-red-500 font-semibold">{{ reason|e }}</span>
+            {% endif %}
+        </p>
+        <p class="text-lg mb-6">
+            Requests for unban should be directed to 
+            <span class="text-yellow-300">
+                <a href="mailto:{{ admin_contact|e }}" class="underline hover:text-yellow-400 transition duration-300">{{ admin_contact|e }}</a>
+            </span>
+        </p>
+    </div>
 </div>
 {% endblock %}

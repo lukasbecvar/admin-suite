@@ -132,6 +132,7 @@ Solution for administration and monitoring linux private servers
 ## 0.7
 - [X] Logs info dashboard card
 - [X] User info dashboard card
+- [X] Error pages redesign
 - [ ] Service manager component
     - [ ] Systemctl status
     - [ ] Systemctl stop, start, restart
