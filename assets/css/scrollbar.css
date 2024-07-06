@@ -8,6 +8,10 @@
 	background: rgb(37, 37, 37);
 }
  
+.card-component ::-webkit-scrollbar-track {
+	background: rgb(20, 20, 20);
+}
+
 ::-webkit-scrollbar-thumb {
 	background: #40444b;
 	-webkit-transition: all 0.2s ease;
