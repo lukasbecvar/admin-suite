@@ -3,6 +3,7 @@
 namespace App\Util;
 
 use App\Manager\ErrorManager;
+use PhpParser\Node\Expr\Cast\Double;
 
 /**
  * Class ServerUtil
@@ -108,6 +109,18 @@ class ServerUtil
     }
 
     /**
+     * Get the RAM usage percentage.
+     *
+     * @return int The RAM usage percentage.
+     */
+    public function getRamUsagePercentage(): int
+    {
+        $ramUsageData = $this->getRamUsage();
+
+        return (int) (((float) $ramUsageData['used'] / (float) $ramUsageData['total']) * 100);
+    }
+
+    /**
      * Get the drive usage percentage.
      *
      * @return string|null The drive usage percentage or null on error.
@@ -178,38 +191,17 @@ class ServerUtil
      *
      * @return array<mixed> An array containing information about installed software packages and the Linux distribution. *
      */
-    public function getSoftwareInfo(): array
+    public function getSystemInfo(): array
     {
-        $softwares = array();
-        $software = array();
-        $softwareKey = '';
         $distro = array();
         exec('rpm -qai | grep "Name        :\|Version     :\|Release     :\|Install Date:\|Group       :\|Size        :"', $softwareRaw);
-        for ($i = 0; $i < count($softwareRaw); $i++) {
-            preg_match_all('/(?P<name1>.+): (?P<val1>.+) (?P<name2>.+): (?P<val2>.+)/', $softwareRaw[$i], $matches);
-            if (empty($matches['name1'])) {
-                continue;
-            }
-            if (trim($matches['name1'][0]) == 'Name') {
-                $softwareKey = strtolower(trim(str_replace(array('-', 'Build', 'Source'), array('_', '', ''), $matches['val1'][0])));
-            }
-            $softwares[$softwareKey][strtolower(str_replace(' ', '_', trim($matches['name1'][0])))] = trim(str_replace(array('Build', 'Source'), '', $matches['val1'][0]));
-            $softwares[$softwareKey][strtolower(str_replace(' ', '_', trim($matches['name2'][0])))] = trim(str_replace(array('Build', 'Source'), '', $matches['val2'][0]));
-        }
-        ksort($softwares);
-        foreach ($softwares as $s) {
-            $software[] = $s;
-        }
         exec('uname -mrs', $distroRaw);
         exec('cat /etc/*-release', $distroNameRaw);
         $distroParts = explode(' ', $distroRaw[0]);
         $distro['operating_system'] = $distroNameRaw[0];
-        $distro['kernal_version'] = $distroParts[0] . ' ' . $distroParts[1];
-        $distro['kernal_arch'] = $distroParts[2];
-        return array(
-            'packages'  => $software,
-            'distro'    => $distro
-        );
+        $distro['kernel_version'] = $distroParts[0] . ' ' . $distroParts[1];
+        $distro['kernel_arch'] = $distroParts[2];
+        return $distro;
     }
 
     /**

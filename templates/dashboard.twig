@@ -10,7 +10,7 @@
         {# WARNINGS BOX CARD #}
         <div class="bg-neutral-900 border border-neutral-500 shadow-md card-color w-full sm:col-span-2" id="wrarning-box">
             <div class="px-4 py-3 border-b border-neutral-500 font-extrabold">Warnings</div>
-            <div class="p-3 font-semibold" id="wraning-elements">
+            <div class="p-4 font-semibold" id="wraning-elements">
 
                 {# ANGLOG STATUS ALERT #}
                 {% if antiLogStatus == false %}
@@ -53,33 +53,60 @@
                 {% endif %}
 
                 {# RAM OVERLOAD ALERT #}
-                {% if diagnosticData.cpuUsage > 98.00 %}
+                {% if diagnosticData.ramUsage > 98.00 %}
                     <p class="text-red-500">RAM Memory is overloaded, please check usage.</p>
                 {% endif %}
             </div>
         </div>
 
-
-
-
-
-
-
-
-
-        <div class="bg-neutral-900 p-6 border border-neutral-500 shadow-md card-color w-full">
-            <h2 class="text-xl font-semibold mb-2">Card Title 1</h2>
-            <p class="text-white mb-2">This is a sample description for the first card. It can contain any text or information.</p>
+        {# HOST SYSTEM INFO #}
+        <div class="card-color border border-neutral-500 shadow-md overflow-hidden w-full">
+            <div class="px-4 py-3 border-b border-neutral-500 text-white font-bold">System Information</div>
+            <div class="p-4">
+                <div class="flex mb-2">
+                    <div class="w-1/2 pr-4">
+                        <p class="text-gray-300 mb-1">Uptime</p>
+                        <p class="text-white font-medium">{{ hostUptime }}</p>
+                    </div>
+                    <div class="w-1/2">
+                        <p class="text-gray-300 mb-1">System</p>
+                        <p class="text-white font-medium">{{ hostSystemInfo.operating_system|split('=')[1]|trim('"') }}</p>
+                    </div>
+                </div>
+                <div class="flex mb-2">
+                    <div class="w-1/2 pr-4">
+                        <p class="text-gray-300 mb-1">Kernel</p>
+                        <p class="text-white font-medium">{{ hostSystemInfo.kernel_version }}</p>
+                    </div>
+                    <div class="w-1/2">
+                        <p class="text-gray-300 mb-1">Architecture</p>
+                        <p class="text-white font-medium">{{ hostSystemInfo.kernel_arch }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="bg-neutral-900 p-6 border border-neutral-500 shadow-md card-color w-full">
-            <h2 class="text-xl font-semibold mb-2">Card Title 2</h2>
-            <p class="text-white mb-2">This is a sample description for the second card. It can contain any text or information.</p>
+        {# HOST SYSTEM RESOURCES #}
+        <div class="bg-neutral-900 border border-neutral-500 shadow-md card-color w-full">
+            <div class="px-4 py-3 border-b border-neutral-500 font-extrabold">System resources</div>
+            <div class="p-4">
+                <p class="text-white mb-1">CPU: {{ diagnosticData.cpuUsage }}%</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{ diagnosticData.cpuUsage }}%;"></div>
+                </div>
+                <p class="text-white mb-1">RAM: {{ diagnosticData.ramUsage }}%</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{ diagnosticData.ramUsage }}%;"></div>
+                </div>
+                <p class="text-white mb-1">DISK: {{ diagnosticData.driveSpace }}%</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{ diagnosticData.driveSpace }}%;"></div>
+                </div>
+            </div>
         </div>
-
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 p-0 p-2 mt-0">
+    {# <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 p-0 p-2 mt-0">
 
         <div class="bg-neutral-900 p-6 border border-neutral-500 shadow-md card-color w-full">
             <h2 class="text-xl font-semibold mb-2">Card Title 3</h2>
@@ -96,7 +123,8 @@
             <p class="text-white mb-2">This is a sample description for the fifth card. It can contain any text or information.</p>
         </div>
 
-    </div>
+    </div> #}
+    
 </div>
 
 <script>

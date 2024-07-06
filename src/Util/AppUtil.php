@@ -182,7 +182,7 @@ class AppUtil
         $cpuUsage = $this->serverUtil->getCpuUsage();
         $webUsername = $this->serverUtil->getWebUsername();
         $isWebUserSudo = $this->serverUtil->isWebUserSudo();
-        $ramUsage = $this->serverUtil->getRamUsage()['used'];
+        $ramUsage = $this->serverUtil->getRamUsagePercentage();
         $driveSpace = $this->serverUtil->getDriveUsagePercentage();
         $notInstalledRequirements = $this->serverUtil->getNotInstalledRequirements();
 

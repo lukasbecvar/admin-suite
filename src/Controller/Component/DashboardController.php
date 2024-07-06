@@ -3,6 +3,7 @@
 namespace App\Controller\Component;
 
 use App\Util\AppUtil;
+use App\Util\ServerUtil;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,12 +20,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class DashboardController extends AbstractController
 {
     private AppUtil $appUtil;
+    private ServerUtil $serverUtil;
     private LogManager $logManager;
     private AuthManager $authManager;
 
-    public function __construct(AppUtil $appUtil, LogManager $logManager, AuthManager $authManager)
+    public function __construct(AppUtil $appUtil, ServerUtil $serverUtil, LogManager $logManager, AuthManager $authManager)
     {
         $this->appUtil = $appUtil;
+        $this->serverUtil = $serverUtil;
         $this->logManager = $logManager;
         $this->authManager = $authManager;
     }
@@ -42,6 +45,10 @@ class DashboardController extends AbstractController
         $antiLogStatus = $this->logManager->isAntiLogEnabled();
         $logsCount = $this->logManager->getLogsCountWhereStatus('UNREADED');
 
+        // get host system info
+        $hostSystemInfo = $this->serverUtil->getSystemInfo();
+        $hostUptime = $this->serverUtil->getHostUptime();
+
         // return dashboard view
         return $this->render('dashboard.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
@@ -50,7 +57,11 @@ class DashboardController extends AbstractController
             // warning data
             'diagnosticData' => $diagnosticData,
             'antiLogStatus' => $antiLogStatus,
-            'logsCount' => $logsCount
+            'logsCount' => $logsCount,
+
+            // host system info
+            'hostSystemInfo' => $hostSystemInfo,
+            'hostUptime' => $hostUptime
         ]);
     }
 }
