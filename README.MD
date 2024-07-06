@@ -138,6 +138,7 @@ Solution for administration and monitoring linux private servers
     - [ ] Systemctl stop, start, restart
     - [ ] Docker service status
     - [ ] Docker service stop, start, restart
+    - [ ] Move requirements check method to service manager
 - [ ] Service monitoring component
     - [ ] Monitoring loop command (check if all services is online)
     - [ ] Log offline status
@@ -145,17 +146,6 @@ Solution for administration and monitoring linux private servers
     - [ ] Send back online notification
 
 ## 0.8
-- [ ] Terminal component
-
-## 0.9
-- [ ] File browser & editor
-    - [ ] List files in filesystem
-    - [ ] Rename files
-    - [ ] Remove files
-    - [ ] Move files
-    - [ ] Open files in txt editor
-
-## 1.0
 - [ ] Database browser
     - [ ] All databases list
     - [ ] Browse tables
@@ -166,7 +156,7 @@ Solution for administration and monitoring linux private servers
     - [ ] Dump SQL structure
     - [ ] Backup database (download SQL file)
 
-## 1.1
+## 0.9
 - [ ] Todo manager
     - [ ] Add todo
     - [ ] Move todo in list (up or down)
@@ -174,6 +164,17 @@ Solution for administration and monitoring linux private servers
     - [ ] Close todo
     - [ ] View closed todo list
 - [ ] Internal chat componenta
+
+## 1.0
+- [ ] Terminal component
+
+## 1.1
+- [ ] File browser & editor
+    - [ ] List files in filesystem
+    - [ ] Rename files
+    - [ ] Remove files
+    - [ ] Move files
+    - [ ] Open files in txt editor
 
 ## 1.2
 - [ ] Connecting other services (like contact inbox, visitor systems, etc)
