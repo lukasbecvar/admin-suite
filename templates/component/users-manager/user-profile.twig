@@ -10,18 +10,22 @@
 </div>
 
 {# PROFILE COMPONENT #}
-<div class="mx-auto bg-white card-color shadow-lg overflow-hidden border border-neutral-700 md:mt-10 md:max-w-md users-manager">
+<div class="mx-auto bg-white card-color shadow-lg overflow-hidden border border-neutral-700 md:mt-5 md:max-w-md users-manager phone-max-h">
     <div class="text-white text-center py-3 border-b border-neutral-700">
         {% if userRepository.getProfilePic() == 'default_pic' %}
             <img class="w-24 h-24 rounded-full mx-auto" src={{ asset('/build/images/default-profile.jpg') }} alt="User Profile Picture">
         {% else %}
             <img class="w-24 h-24 rounded-full mx-auto" src="data:image/jpeg;base64,{{ userRepository.getProfilePic()|e }}" alt="User Profile Picture">
         {% endif %}
-        <h1 class="text-xl font-semibold mt-2">
+        <h1 class="text-4xl font-semibold mt-2">
             {{ userRepository.getUsername()|e }} 
-            (<a href={{ path('app_manager_logs', {'user_id': userRepository.getId, 'filter': 'all'}) }} class="profile-link">logs</a>)
         </h1>
-        <p class="text-sm text-gray-400 dark:text-gray-300">{{ userRepository.getRole()|e }}</p>
+
+        {% if isAdmin %}
+            <p class="text-sm text-gray-400 dark:text-red-500 font-bold">{{ userRepository.getRole()|e }}</p>
+        {% else %}
+            <p class="text-sm text-gray-400 dark:text-gray-300 font-bold">{{ userRepository.getRole()|e }}</p>
+        {% endif %}
 
         {# USER ONLINE STATUS LINE #}
         <p class="text-xs font-semibold">
