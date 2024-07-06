@@ -328,6 +328,9 @@ class LogManager
             $this->errorManager->handleError('error to get system logs: ' . $e->getMessage(), 500);
         }
 
+        // log action
+        $this->log('log-manager', 'system logs viewed', level: 3);
+
         return $logFiles;
     }
 
@@ -355,6 +358,9 @@ class LogManager
         } catch (\Exception $e) {
             $this->errorManager->handleError('error to get log file: ' . $logFile . ', ' . $e->getMessage(), 500);
         }
+
+        // log action
+        $this->log('log-manager', 'system log: ' . $logFile . ' viewed', level: 3);
 
         return $log;
     }

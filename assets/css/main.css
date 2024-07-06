@@ -18,7 +18,7 @@ body {
 }
 
 main {
-	margin-top: 40px; 
+	margin-top: 30px; 
 }
 
 .mr-1px {
@@ -59,22 +59,21 @@ main {
 	width: 100%;
 	z-index: 1000;
 	background-color: #161616;
-	height: 40px;
+	height: 30px;
 }
 
 .nav-bar .about-link {
-	margin-top: 1px !important;
-	font-size: 14.5px !important;
+	font-size: 13px !important;
 	border: 1px solid white;
-	padding-left: 6px;
-	padding-right: 6px;
+	padding-left: 5px;
+	padding-right: 5px;
 	border-radius: 100px;
 	color: rgb(29, 29, 29);
 	background-color: white;
 }
 
 .nav-bar #menu-toggle {
-	font-size: 30px !important;
+	font-size: 27px !important;
 }
 
 .nav-bar .about-link:hover {
@@ -82,13 +81,13 @@ main {
 }
 
 .nav-bar .logout-link {
-	font-size: 30px !important;
+	font-size: 27px !important;
 }
 
 /* sidebar element */
 #sidebar {
 	position: fixed;
-	top: 40px; 
+	top: 30px; 
 	height: calc(100% - 30px); 
 	overflow-y: auto; 
 	background-color: #161616;
@@ -201,9 +200,13 @@ main {
 
 .dashbard-component .progress {
     height: 100%;
-    background-color: rgb(63, 223, 223);
+    background-color: rgb(18, 163, 163);
     width: 0%;
     transition: width 0.3s ease;
+}
+
+.dashbard-component .card-text {
+	font-size: 16px !important;
 }
 
 /* mobile devices style */
@@ -213,23 +216,6 @@ main {
 	}
 	main {
 		margin-top: 30px; 
-	}
-	.nav-bar {
-		height: 30px;
-	}
-	.nav-bar .about-link {
-		font-size: 12px !important;
-		padding-left: 5px;
-		padding-right: 5px;
-	}
-	.nav-bar #menu-toggle {
-		font-size: 25px !important;
-	}
-	.nav-bar .about-link:hover {
-		background-color: cyan;
-	}
-	.nav-bar .logout-link {
-		font-size: 25px !important;
 	}
 	#sidebar {
 		top: 30px;
