@@ -47,6 +47,7 @@ class DashboardControllerTest extends CustomTestCase
         $this->assertSelectorExists('a[href="/account/settings"]');
         $this->assertSelectorExists('main[id="main-content"]');
         $this->assertSelectorExists('a[href="/about"]');
+        $this->assertSelectorTextContains('body', 'Warnings');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

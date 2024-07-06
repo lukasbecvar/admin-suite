@@ -15,10 +15,10 @@
     {# HOST SYSTEM DIAGNOSTICS CARD #}
     <div class="shadow-lg text-white mb-3 border border-neutral-500 card-color">
         <div class="px-4 py-3 border-b border-neutral-500">System diagnostics</div>
-
+        
         {# NOT-INSTALLED-REQUIREMENTS CHECK #}
         <div class="px-4 py-2">
-            {% if notInstalledRequirements|length == 0 %}
+            {% if diagnosticData.notInstalledRequirements is empty %}
                 <span>
                     <span class="text-green-500">
                         <i class="fa fa-check"></i>
@@ -33,7 +33,7 @@
                         <i class="fa fa-exclamation-triangle"></i>
                     </span>
                     <span class="text-red-400">
-                        Not found requirements: {{ notInstalledRequirements|join(', ') }}
+                        Not found requirements: {{ diagnosticData.notInstalledRequirements|join(', ') }}
                     </span>
                 </span>
             {% endif %}
@@ -41,7 +41,7 @@
 
         {# DISK-SPACE CHECK #}
         <div class="px-4 py-2">
-            {% if driveSpace < 90 %}
+            {% if diagnosticData.driveSpace < 90 %}
                 <span>
                     <span class="text-green-500">
                         <i class="fa fa-check"></i>
@@ -64,7 +64,7 @@
  
         {# CPU-OVERLOAD CHECK #}
         <div class="px-4 py-2">
-            {% if cpuUsage > 98.00 %}
+            {% if diagnosticData.cpuUsage > 98.00 %}
                 <span>
                     <span class="text-red-400">
                         <i class="fa fa-exclamation-triangle"></i>
@@ -87,7 +87,7 @@
 
         {# RAM-OVERLOAD CHECK #}
         <div class="px-4 py-2">
-            {% if cpuUsage > 98.00 %}
+            {% if diagnosticData.cpuUsage > 98.00 %}
                 <span>
                     <span class="text-red-400">
                         <i class="fa fa-exclamation-triangle"></i>
@@ -115,7 +115,7 @@
 
         {# SSL-RUNNING CHECK #}
         <div class="px-4 py-2">
-            {% if isSSL %}
+            {% if diagnosticData.isSSL %}
                 <span>
                     <span class="text-green-500">
                         <i class="fa fa-check"></i>
@@ -138,7 +138,7 @@
 
         {# DEV-MODE CHECK #}
         <div class="px-4 py-2">
-            {% if isDevMode %}
+            {% if diagnosticData.isDevMode %}
                 <span>
                     <span class="text-red-400">
                         <i class="fa fa-exclamation-triangle"></i>
@@ -161,7 +161,7 @@
 
         {# WEBSERVER USER PERMISSIONS CHECK #}
         <div class="px-4 py-2">
-            {% if isWebUserSudo %}
+            {% if diagnosticData.isWebUserSudo %}
                 <span>
                     <span class="text-green-400">
                         <i class="fa fa-check"></i>
@@ -176,7 +176,7 @@
                         <i class="fa fa-exclamation-triangle"></i>
                     </span>
                     <span class="text-red-400">
-                        Permissions error: please add "{{ webUsername }} ALL=NOPASSWD: ALL" to /etc/sudoers
+                        Permissions error: please add "{{ diagnosticData.webUsername }} ALL=NOPASSWD: ALL" to /etc/sudoers
                     </span>
                 </span>
             {% endif %}

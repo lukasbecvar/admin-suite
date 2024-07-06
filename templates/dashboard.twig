@@ -3,13 +3,69 @@
 {# MAIN ADMIN-SUITE DASHBOARD #}
 {% block component %} 
 <div class="w-full dashbard-component">
-
+    
+    {# MAIN DASHBOARD CARDS #}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2">
+        
+        {# WARNINGS BOX CARD #}
+        <div class="bg-neutral-900 border border-neutral-500 shadow-md card-color w-full sm:col-span-2" id="wrarning-box">
+            <div class="px-4 py-3 border-b border-neutral-500 font-extrabold">Warnings</div>
+            <div class="p-3 font-semibold" id="wraning-elements">
 
-        <div class="bg-neutral-900 p-6 border border-neutral-500 shadow-md card-color w-full sm:col-span-2">
-            <h2 class="text-xl font-semibold mb-2">Card Title 0</h2>
-            <p class="text-white mb-2">This is a sample description for the first card. It can contain any text or information.</p>
+                {# ANGLOG STATUS ALERT #}
+                {% if antiLogStatus == false %}
+                    <p class="text-yellow-500">Logging for your browser is enabled you can disable <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="link">here</a></p>
+                {% endif %}
+
+                {# LOGS COUNT ALERT #}
+                {% if logsCount > 0 %}
+                    <p class="text-yellow-500">New logs found you can see it <a href={{ path('app_manager_logs') }} class="link">here</a></p>
+                {% endif %}
+
+                {# NOT INSTALLED REQUIREMENTS ALERT #}
+                {% if diagnosticData.notInstalledRequirements|length > 0 %}
+                    <p class="text-red-500">Not found requirements: {{ diagnosticData.notInstalledRequirements|join(', ') }}.</p>
+                {% endif %}
+
+                {# DEV MODE ALERT #}
+                {% if diagnosticData.isDevMode %}
+                    <p class="text-red-500">developer mode is enabled, please set APP_ENV=prod in .env config file.</p>
+                {% endif %}
+
+                {# SSL ALERT #}
+                {% if diagnosticData.isSSL == false %}
+                    <p class="text-red-500">session is running on http [non secure connction] please contact web admin for fix it.</p>
+                {% endif %}
+
+                {# WEB USER PERMISSIONS ALERT #}
+                {% if diagnosticData.isWebUserSudo == false %}
+                    <p class="text-red-500">Permissions error: please add "{{ diagnosticData.webUsername }} ALL=NOPASSWD: ALL" to /etc/sudoers.</p>
+                {% endif %}
+
+                {# DISK SPACE ALERT #}
+                {% if diagnosticData.driveSpace < 90 %}
+                    <p class="text-red-500"> main disk storage is full, please delete some unnecessary data or increase disk space.</p>
+                {% endif %}
+
+                {# CPU OVERLOAD ALERT #}
+                {% if diagnosticData.cpuUsage > 98.00 %}
+                    <p class="text-red-500">CPU is overloaded, please check cpu usage.</p>
+                {% endif %}
+
+                {# RAM OVERLOAD ALERT #}
+                {% if diagnosticData.cpuUsage > 98.00 %}
+                    <p class="text-red-500">RAM Memory is overloaded, please check usage.</p>
+                {% endif %}
+            </div>
         </div>
+
+
+
+
+
+
+
+
 
         <div class="bg-neutral-900 p-6 border border-neutral-500 shadow-md card-color w-full">
             <h2 class="text-xl font-semibold mb-2">Card Title 1</h2>
@@ -42,4 +98,16 @@
 
     </div>
 </div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const divElement = document.getElementById('wrarning-box');
+        const elements = document.getElementById('wraning-elements');
+        if (elements.innerHTML.trim() === '') {
+            divElement.style.display = 'none';
+        } else {
+            divElement.style.display = 'block';
+        }
+    });
+</script>
 {% endblock %}

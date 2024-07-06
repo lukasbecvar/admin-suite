@@ -11,6 +11,13 @@ namespace App\Util;
  */
 class AppUtil
 {
+    private ServerUtil $serverUtil;
+
+    public function __construct(ServerUtil $serverUtil)
+    {
+        $this->serverUtil = $serverUtil;
+    }
+
     /**
      * Check if the request is SSL
      *
@@ -160,5 +167,34 @@ class AppUtil
 
         // return the maximum number of pages
         return $maxPages;
+    }
+
+    /**
+     * Get diagnostic data
+     *
+     * @return array<string,mixed> The diagnostic data
+     */
+    public function getDiagnosticData(): array
+    {
+        // get diagnostic data
+        $isSSL = $this->isSsl();
+        $isDevMode = $this->isDevMode();
+        $cpuUsage = $this->serverUtil->getCpuUsage();
+        $webUsername = $this->serverUtil->getWebUsername();
+        $isWebUserSudo = $this->serverUtil->isWebUserSudo();
+        $ramUsage = $this->serverUtil->getRamUsage()['used'];
+        $driveSpace = $this->serverUtil->getDriveUsagePercentage();
+        $notInstalledRequirements = $this->serverUtil->getNotInstalledRequirements();
+
+        return [
+            'isSSL' => $isSSL,
+            'cpuUsage' => $cpuUsage,
+            'ramUsage' => $ramUsage,
+            'isDevMode' => $isDevMode,
+            'driveSpace' => $driveSpace,
+            'webUsername' => $webUsername,
+            'isWebUserSudo' => $isWebUserSudo,
+            'notInstalledRequirements' => $notInstalledRequirements
+        ];
     }
 }

@@ -2,8 +2,11 @@
 
 namespace App\Tests\Util;
 
+use Twig\Environment;
 use App\Util\AppUtil;
+use App\Util\ServerUtil;
 use App\Util\SecurityUtil;
+use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,12 +18,22 @@ use PHPUnit\Framework\TestCase;
  */
 class SecurityUtilTest extends TestCase
 {
+    /** @var ServerUtil */
+    private ServerUtil $serverUtil;
+
     /** @var SecurityUtil */
     private SecurityUtil $securityUtil;
 
+    /** @var ErrorManager */
+    private ErrorManager $errorManager;
+
     protected function setUp(): void
     {
-        $this->securityUtil = new SecurityUtil(new AppUtil());
+        $twigMock = $this->createMock(Environment::class);
+        $this->errorManager = new ErrorManager($twigMock);
+        $this->serverUtil = new ServerUtil($this->errorManager);
+
+        $this->securityUtil = new SecurityUtil(new AppUtil($this->serverUtil));
     }
 
     /**

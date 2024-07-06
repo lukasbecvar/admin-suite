@@ -121,7 +121,7 @@ Solution for administration and monitoring linux private servers
     - [X] Ram overload detect
     - [X] Check web server permissions
     - [X] Detect requirements (os & php extensions)
-- [ ] Dashboard warning box (react to diagnostic data component)
+- [X] Dashboard warning box (react to diagnostic data component)
 - [ ] Server info
     - [ ] OS info
     - [ ] CPU usage
