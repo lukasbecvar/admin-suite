@@ -8,6 +8,9 @@
 @import '../../node_modules/tailwindcss/utilities';
 @import '../../node_modules/tailwindcss//components';
 
+/* loading component */
+@import './loading-component.css';
+
 /* main app style */
 @import './main.css';
 
