@@ -2,7 +2,10 @@
 
 namespace App\Tests\Util;
 
+use Twig\Environment;
 use App\Util\AppUtil;
+use App\Util\ServerUtil;
+use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,9 +20,19 @@ class AppUtilTest extends TestCase
     /** @var AppUtil */
     private AppUtil $appUtil;
 
+    /** @var ServerUtil */
+    private ServerUtil $serverUtil;
+
+    /** @var ErrorManager */
+    private ErrorManager $errorManager;
+
     protected function setUp(): void
     {
-        $this->appUtil = new AppUtil();
+        $twigMock = $this->createMock(Environment::class);
+        $this->errorManager = new ErrorManager($twigMock);
+        $this->serverUtil = new ServerUtil($this->errorManager);
+
+        $this->appUtil = new AppUtil($this->serverUtil);
     }
 
     /**
@@ -225,5 +238,29 @@ class AppUtilTest extends TestCase
 
         // assert that the config is correct
         $this->assertSame($expectedConfig, $this->appUtil->getHasherConfig());
+    }
+
+    /**
+     * Test get diagnostic data
+     *
+     * @return void
+     */
+    public function testGetDiagnosticData(): void
+    {
+        // get diagnostic data
+        $diagnosticData = $this->appUtil->getDiagnosticData();
+
+        // assert that the result is an array
+        $this->assertIsArray($diagnosticData);
+
+        // assert that the result contains the expected keys
+        $this->assertArrayHasKey('isSSL', $diagnosticData);
+        $this->assertArrayHasKey('cpuUsage', $diagnosticData);
+        $this->assertArrayHasKey('ramUsage', $diagnosticData);
+        $this->assertArrayHasKey('isDevMode', $diagnosticData);
+        $this->assertArrayHasKey('driveSpace', $diagnosticData);
+        $this->assertArrayHasKey('webUsername', $diagnosticData);
+        $this->assertArrayHasKey('isWebUserSudo', $diagnosticData);
+        $this->assertArrayHasKey('notInstalledRequirements', $diagnosticData);
     }
 }

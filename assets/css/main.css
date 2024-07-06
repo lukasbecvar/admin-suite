@@ -25,6 +25,15 @@ main {
 	margin-right: 1px;
 }
 
+.link {
+	color: rgb(15, 91, 255);
+}
+
+.link:hover {
+	color: rgb(32, 136, 255);
+	text-decoration: underline;
+}
+
 .background-dark {
     background: rgb(20,20,20) !important;
 }
