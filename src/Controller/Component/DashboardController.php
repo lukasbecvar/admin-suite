@@ -48,6 +48,8 @@ class DashboardController extends AbstractController
         // get host system info
         $hostSystemInfo = $this->serverUtil->getSystemInfo();
         $hostUptime = $this->serverUtil->getHostUptime();
+        $ramUsage = $this->serverUtil->getRamUsage();
+        $diskUsage = $this->serverUtil->getDiskUsage();
 
         // return dashboard view
         return $this->render('dashboard.twig', [
@@ -61,7 +63,9 @@ class DashboardController extends AbstractController
 
             // host system info
             'hostSystemInfo' => $hostSystemInfo,
-            'hostUptime' => $hostUptime
+            'hostUptime' => $hostUptime,
+            'ramUsage' => $ramUsage,
+            'diskUsage' => $diskUsage
         ]);
     }
 }

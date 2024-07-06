@@ -121,6 +121,34 @@ class ServerUtilTest extends TestCase
     }
 
     /**
+     * Test getDriveUsagePercentage method
+     *
+     * @return void
+     */
+    public function testGetDriveUsagePercentage(): void
+    {
+        // call the method being tested
+        $driveUsagePercentage = $this->serverUtil->getDriveUsagePercentage();
+
+        // assert that the result is a string
+        $this->assertIsString($driveUsagePercentage);
+    }
+
+    /**
+     * Test getDiskUsage method
+     *
+     * @return void
+     */
+    public function testGetDiskUsage(): void
+    {
+        // call the method being tested
+        $diskUsage = $this->serverUtil->getDiskUsage();
+
+        // assert that the result is an integer
+        $this->assertIsInt($diskUsage);
+    }
+
+    /**
      * Test getDiskUsage method
      *
      * @return void

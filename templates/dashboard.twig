@@ -94,11 +94,11 @@
                 <div class="progress-bar">
                     <div class="progress" style="width: {{ diagnosticData.cpuUsage }}%;"></div>
                 </div>
-                <p class="text-white mb-1">RAM: {{ diagnosticData.ramUsage }}%</p>
+                <p class="text-white mb-1">RAM: ({{ ramUsage.used }}G / {{ diagnosticData.ramUsage }}%)</p>
                 <div class="progress-bar">
                     <div class="progress" style="width: {{ diagnosticData.ramUsage }}%;"></div>
                 </div>
-                <p class="text-white mb-1">DISK: {{ diagnosticData.driveSpace }}%</p>
+                <p class="text-white mb-1">DISK: ({{ diskUsage }}G / {{ diagnosticData.driveSpace }}%)</p>
                 <div class="progress-bar">
                     <div class="progress" style="width: {{ diagnosticData.driveSpace }}%;"></div>
                 </div>
@@ -124,7 +124,7 @@
         </div>
 
     </div> #}
-    
+
 </div>
 
 <script>

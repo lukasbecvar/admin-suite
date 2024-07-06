@@ -121,6 +121,21 @@ class ServerUtil
     }
 
     /**
+     * Get the disk usage.
+     *
+     * @return int|null The disk usage.
+     */
+    public function getDiskUsage(): ?int
+    {
+        try {
+            return (int) exec("df --output=used -BG / | awk 'NR==2 { print int($1) }'");
+        } catch (\Exception $e) {
+            $this->errorManager->handleError('error to get disk usage ' . $e->getMessage(), 500);
+            return null;
+        }
+    }
+
+    /**
      * Get the drive usage percentage.
      *
      * @return string|null The drive usage percentage or null on error.
