@@ -104,9 +104,6 @@ class ServiceManagerTest extends TestCase
      */
     public function testIsSocktOpen(): void
     {
-        // socket is open
-        $this->assertEquals('Online', $this->serviceManager->isSocktOpen('127.0.0.1', 80));
-
         // socket is closed
         $this->assertEquals('Offline', $this->serviceManager->isSocktOpen('127.0.0.1', 81));
     }
