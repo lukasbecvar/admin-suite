@@ -184,6 +184,18 @@ class LogManagerTest extends TestCase
     }
 
     /**
+     * Test getAuthLogsCount method
+     *
+     * @return void
+     */
+    public function testGetAuthLogsCount(): void
+    {
+        $count = $this->logManager->getAuthLogsCount();
+
+        $this->assertIsInt($count);
+    }
+
+    /**
      * Test getLogsWhereStatus method
      *
      * @return void

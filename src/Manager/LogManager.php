@@ -192,6 +192,18 @@ class LogManager
     }
 
     /**
+     * Get the count of auth logs
+     *
+     * @return int The count of auth logs
+     */
+    public function getAuthLogsCount(): int
+    {
+        $repository = $this->entityManager->getRepository(Log::class);
+
+        return $repository->count(['name' => 'authenticator']);
+    }
+
+    /**
      * Fetch logs based on their status
      *
      * This method retrieves logs from the repository based on the specified status
