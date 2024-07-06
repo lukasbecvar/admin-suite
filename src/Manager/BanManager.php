@@ -174,4 +174,16 @@ class BanManager
 
         return $banned;
     }
+
+    /**
+     * Get the count of banned users
+     *
+     * @return int The count of banned users
+     */
+    public function getBannedCount(): int
+    {
+        $repository = $this->entityManager->getRepository(Banned::class);
+
+        return $repository->count(['status' => 'active']);
+    }
 }

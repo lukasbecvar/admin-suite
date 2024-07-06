@@ -255,4 +255,17 @@ class BanManagerTest extends TestCase
         $this->assertContains($user1, $bannedUsers);
         $this->assertContains($user3, $bannedUsers);
     }
+
+    /**
+     * Test get banned count
+     *
+     * @return void
+     */
+    public function testGetBannedCount(): void
+    {
+        $output = $this->banManager->getBannedCount();
+
+        // assert output
+        $this->assertIsInt($output);
+    }
 }

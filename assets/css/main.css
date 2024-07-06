@@ -209,6 +209,15 @@ main {
 	font-size: 16px !important;
 }
 
+.dashbard-component .card-rederer {
+	color: rgb(15, 91, 255) !important;
+}
+
+.dashbard-component .card-rederer:hover {
+	color: rgb(52, 116, 255) !important;
+	text-decoration: underline;
+}
+
 /* mobile devices style */
 @media screen and (max-width: 400px) { 
 	.phone-none {

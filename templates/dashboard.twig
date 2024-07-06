@@ -9,7 +9,7 @@
         
         {# WARNINGS BOX CARD #}
         <div class="bg-neutral-900 border border-neutral-500 shadow-md card-color w-full sm:col-span-2" id="wrarning-box">
-            <div class="px-3 py-3 border-b border-neutral-500 font-extrabold">Warnings</div>
+            <div class="px-3 py-3 border-b border-neutral-500 font-extrabold text-white">Warnings [<a href={{ path('app_diagnostic') }} class="card-rederer">diagnostic</a>]</div>
             <div class="p-3 card-text" id="wraning-elements">
 
                 {# ANGLOG STATUS ALERT #}
@@ -18,7 +18,7 @@
                 {% endif %}
 
                 {# LOGS COUNT ALERT #}
-                {% if logsCount > 0 %}
+                {% if unreadedLogsCount > 0 %}
                     <p class="text-yellow-400">New logs found you can see it <a href={{ path('app_manager_logs') }} class="link">here</a></p>
                 {% endif %}
 
@@ -88,7 +88,7 @@
 
         {# HOST SYSTEM RESOURCES #}
         <div class="bg-neutral-900 border border-neutral-500 shadow-md card-color w-full">
-            <div class="px-3 py-3 border-b border-neutral-500 font-extrabold">System resources</div>
+            <div class="px-3 py-3 border-b border-neutral-500 font-extrabold text-white">System resources</div>
             <div class="p-3">
                 <p class="text-white mb-1">CPU: {{ diagnosticData.cpuUsage }}%</p>
                 <div class="progress-bar">
@@ -101,6 +101,49 @@
                 <p class="text-white mb-1">DISK: ({{ diskUsage }}G / {{ diagnosticData.driveSpace }}%)</p>
                 <div class="progress-bar">
                     <div class="progress" style="width: {{ diagnosticData.driveSpace }}%;"></div>
+                </div>
+            </div>
+        </div>
+
+        {# LOGS INFO CARD #}
+        <div class="bg-neutral-900 border border-neutral-500 shadow-md card-color w-full">
+            <div class="px-3 py-1 border-b border-neutral-500 font-extrabold text-white">Logs [<a href={{ path('app_manager_logs') }} class="card-rederer">log manager</a>]</div>
+            <div class="p-3">
+                <div class="flex mb-2">
+                    <div class="w-1/2 pr-4">
+                        <p class="text-gray-300 mb-1">Logs count: <span class="text-white">{{ allLogsCount }}</span></p>
+                    </div>
+                    <div class="w-1/2">
+                        <p class="text-gray-300 mb-1">Auth logs: <span class="text-white">{{ authLogsCount }}</span></p>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="w-1/2 pr-4">
+                        <p class="text-gray-300 mb-1">Readed: <span class="text-white">{{ readedLogsCount }}</span></p>
+                    </div>
+                    <div class="w-1/2">
+                        <p class="text-gray-300 mb-1">Unreaded: <span class="text-white">{{ unreadedLogsCount }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# USERS INFO CARD #}
+        <div class="bg-neutral-900 border border-neutral-500 shadow-md card-color w-full">
+            <div class="px-3 py-1 border-b border-neutral-500 font-extrabold text-white">Users [<a href={{ path('app_manager_users') }} class="card-rederer">user manager</a>]</div>
+            <div class="p-3">
+                <div class="flex mb-2">
+                    <div class="w-1/2 pr-4">
+                        <p class="text-gray-300 mb-1">Users count: <span class="text-white">{{ usersCount }}</span></p>
+                    </div>
+                    <div class="w-1/2">
+                        <p class="text-gray-300 mb-1">Online: <span class="text-white">{{ onlineUsersCount }} (<a href={{ path('app_manager_users', {'filter': 'online'}) }} class="link">list</a>)</span></p>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="w-1/2 pr-4">
+                        <p class="text-gray-300 mb-1">Banned: <span class="text-white">{{ bannedUsersCount }}  (<a href={{ path('app_manager_users', {'filter': 'banned'}) }} class="link">list</a>)</span></p>
+                    </div>
                 </div>
             </div>
         </div>

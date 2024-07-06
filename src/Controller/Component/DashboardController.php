@@ -4,8 +4,10 @@ namespace App\Controller\Component;
 
 use App\Util\AppUtil;
 use App\Util\ServerUtil;
+use App\Manager\BanManager;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
+use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,13 +24,23 @@ class DashboardController extends AbstractController
     private AppUtil $appUtil;
     private ServerUtil $serverUtil;
     private LogManager $logManager;
+    private BanManager $banManager;
+    private UserManager $userManager;
     private AuthManager $authManager;
 
-    public function __construct(AppUtil $appUtil, ServerUtil $serverUtil, LogManager $logManager, AuthManager $authManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        ServerUtil $serverUtil,
+        LogManager $logManager,
+        BanManager $banManager,
+        UserManager $userManager,
+        AuthManager $authManager
+    ) {
         $this->appUtil = $appUtil;
         $this->serverUtil = $serverUtil;
         $this->logManager = $logManager;
+        $this->banManager = $banManager;
+        $this->userManager = $userManager;
         $this->authManager = $authManager;
     }
 
@@ -43,13 +55,23 @@ class DashboardController extends AbstractController
         // get warning data
         $diagnosticData = $this->appUtil->getDiagnosticData();
         $antiLogStatus = $this->logManager->isAntiLogEnabled();
-        $logsCount = $this->logManager->getLogsCountWhereStatus('UNREADED');
 
         // get host system info
-        $hostSystemInfo = $this->serverUtil->getSystemInfo();
-        $hostUptime = $this->serverUtil->getHostUptime();
         $ramUsage = $this->serverUtil->getRamUsage();
         $diskUsage = $this->serverUtil->getDiskUsage();
+        $hostUptime = $this->serverUtil->getHostUptime();
+        $hostSystemInfo = $this->serverUtil->getSystemInfo();
+
+        // get auth logs count
+        $authLogsCount = $this->logManager->getAuthLogsCount();
+        $allLogsCount = $this->logManager->getLogsCountWhereStatus();
+        $readedLogsCount = $this->logManager->getLogsCountWhereStatus('READED');
+        $unreadedLogsCount = $this->logManager->getLogsCountWhereStatus('UNREADED');
+
+        // get users count
+        $onlineUsersCount = count($this->authManager->getOnlineUsersList());
+        $bannedUsersCount = $this->banManager->getBannedCount();
+        $usersCount = $this->userManager->getUsersCount();
 
         // return dashboard view
         return $this->render('dashboard.twig', [
@@ -57,15 +79,25 @@ class DashboardController extends AbstractController
             'userData' => $this->authManager->getLoggedUserRepository(),
 
             // warning data
-            'diagnosticData' => $diagnosticData,
             'antiLogStatus' => $antiLogStatus,
-            'logsCount' => $logsCount,
+            'diagnosticData' => $diagnosticData,
 
             // host system info
-            'hostSystemInfo' => $hostSystemInfo,
-            'hostUptime' => $hostUptime,
             'ramUsage' => $ramUsage,
-            'diskUsage' => $diskUsage
+            'diskUsage' => $diskUsage,
+            'hostUptime' => $hostUptime,
+            'hostSystemInfo' => $hostSystemInfo,
+
+            // logs count
+            'allLogsCount' => $allLogsCount,
+            'authLogsCount' => $authLogsCount,
+            'readedLogsCount' => $readedLogsCount,
+            'unreadedLogsCount' => $unreadedLogsCount,
+
+            // users count
+            'usersCount' => $usersCount,
+            'onlineUsersCount' => $onlineUsersCount,
+            'bannedUsersCount' => $bannedUsersCount
         ]);
     }
 }

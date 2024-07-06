@@ -130,8 +130,8 @@ Solution for administration and monitoring linux private servers
     - [X] SSD space
 
 ## 0.7
-- [ ] Logs info dashboard card
-- [ ] User info dashboard card
+- [X] Logs info dashboard card
+- [X] User info dashboard card
 - [ ] Service manager component
     - [ ] Systemctl status
     - [ ] Systemctl stop, start, restart
