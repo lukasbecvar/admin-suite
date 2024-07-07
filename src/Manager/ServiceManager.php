@@ -76,7 +76,7 @@ class ServiceManager
             $user = $this->authManager->getLoggedUserRepository();
 
             // log action
-            $this->logManager->log('action-runner', $user->getUsername() . ' ' . $action . $serviceName, 1);
+            $this->logManager->log('action-runner', $user->getUsername() . ' ' . $action . ' ' . $serviceName, 1);
 
             // executed final command
             $this->executeCommand($command);
