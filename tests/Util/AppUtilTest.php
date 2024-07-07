@@ -263,4 +263,14 @@ class AppUtilTest extends TestCase
         $this->assertArrayHasKey('isWebUserSudo', $diagnosticData);
         $this->assertArrayHasKey('notInstalledRequirements', $diagnosticData);
     }
+
+    /**
+     * Test get monitroing interval
+     *
+     * @return void
+     */
+    public function testGetMonitroingInterval(): void
+    {
+        $this->assertSame(5, $this->appUtil->getMonitroingInterval());
+    }
 }

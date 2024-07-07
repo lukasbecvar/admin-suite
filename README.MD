@@ -142,11 +142,14 @@ Solution for administration and monitoring linux private servers
 
 ## 0.8
 - [ ] Service monitoring component
-    - [ ] Monitoring loop command (check if all services is online)
+    - [X] Monitoring loop command (check if all services is online)
+    - [ ] Monitroing entity for log services state
+    - [ ] HTTP service type (check website response code & response time)
     - [ ] Monitor system resource usage
     - [ ] Log offline status
     - [ ] Send offline alert in email
     - [ ] Send back online notification
+    - [ ] Loop command unit test
 - [ ] Service monitoring dashboard
     - [ ] Offline status log
     - [ ] Service status card
