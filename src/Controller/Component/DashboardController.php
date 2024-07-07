@@ -6,9 +6,9 @@ use App\Util\AppUtil;
 use App\Util\ServerUtil;
 use App\Manager\BanManager;
 use App\Manager\LogManager;
+use App\Manager\UserManager;
 use App\Manager\AuthManager;
 use App\Manager\ServiceManager;
-use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,6 +28,7 @@ class DashboardController extends AbstractController
     private BanManager $banManager;
     private UserManager $userManager;
     private AuthManager $authManager;
+    private ServiceManager $serviceManager;
 
     public function __construct(
         AppUtil $appUtil,
@@ -35,7 +36,8 @@ class DashboardController extends AbstractController
         LogManager $logManager,
         BanManager $banManager,
         UserManager $userManager,
-        AuthManager $authManager
+        AuthManager $authManager,
+        ServiceManager $serviceManager
     ) {
         $this->appUtil = $appUtil;
         $this->serverUtil = $serverUtil;
@@ -43,6 +45,7 @@ class DashboardController extends AbstractController
         $this->banManager = $banManager;
         $this->userManager = $userManager;
         $this->authManager = $authManager;
+        $this->serviceManager = $serviceManager;
     }
 
     /**
@@ -51,7 +54,7 @@ class DashboardController extends AbstractController
      * @return Response The dashboard view
      */
     #[Route('/dashboard', methods:['GET'], name: 'app_dashboard')]
-    public function dashboard(ServiceManager $serviceManager): Response
+    public function dashboard(): Response
     {
         // get warning data
         $diagnosticData = $this->appUtil->getDiagnosticData();
@@ -65,6 +68,9 @@ class DashboardController extends AbstractController
 
         // get process list
         $processList = $this->serverUtil->getProcessList();
+
+        // service manager
+        $services = $this->serviceManager->getServicesList();
 
         // get logs count
         $authLogsCount = $this->logManager->getAuthLogsCount();
@@ -94,6 +100,10 @@ class DashboardController extends AbstractController
 
             // process list
             'processList' => $processList,
+
+            // service manager
+            'serviceManager' => $this->serviceManager,
+            'services' => $services,
 
             // logs count
             'allLogsCount' => $allLogsCount,

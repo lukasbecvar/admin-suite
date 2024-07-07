@@ -44,13 +44,14 @@ class ServiceManagerTest extends TestCase
     }
 
     /**
-     * Test getServices method
+     * Test getServicesList method
      *
      * @return void
      */
     public function testGetServices(): void
     {
-        $this->assertIsArray($this->serviceManager->getServices());
+        // assert the result
+        $this->assertIsArray($this->serviceManager->getServicesList());
     }
 
     /**
@@ -138,16 +139,5 @@ class ServiceManagerTest extends TestCase
     public function testIsServicesListExist(): void
     {
         $this->assertIsBool($this->serviceManager->isServicesListExist());
-    }
-
-    /**
-     * Test getServicesJson method
-     *
-     * @return void
-     */
-    public function testGetServicesJson(): void
-    {
-        // assert the result
-        $this->assertIsArray($this->serviceManager->getServicesJson());
     }
 }

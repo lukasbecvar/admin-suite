@@ -26,48 +26,28 @@ class ServiceManager
     }
 
     /**
-     * Gets the list of services
+     * Gets the services list from the services.json file
      *
-     * @return array<array<string>>
+     * @return array<mixed>>|null The services list, null
      */
-    public function getServices(): ?array
+    public function getServicesList(): ?array
     {
-        // get services list from services.json
-        $servicesList = $this->getServicesJson();
-        $services = [];
+        $servicesList = null;
 
-        // check if services list load valid
-        if ($servicesList != null) {
-            // execute separate service row
-            foreach ($servicesList as $value) {
-                // type value to array
-                $value = (array) $value;
+        try {
+            // get services list from services.json
+            $servicesFile = file_get_contents(__DIR__ . '/../../config/suite/services.json');
 
-                // check if service is enabled
-                if (isset($value['enabled']) && $value['enabled']) {
-                    // build service array
-                    $serviceArray = [
-                        'service_name' => $value['service_name'],
-                        'display_name' => $value['display_name'],
-                        'enabled' => $value['enabled']
-                    ];
-
-                    // get service status
-                    if ($this->isServiceRunning($value['service_name'])) {
-                        $serviceArray += ['status' => 'online'];
-                    } else {
-                        $serviceArray += ['status' => 'offline'];
-                    }
-
-                    // add serviceArray array to services
-                    array_push($services, $serviceArray);
-                }
+            if ($servicesFile) {
+                // decode json
+                $servicesList = (array) json_decode($servicesFile, true);
             }
-        } else {
-            $this->logManager->log('exception', 'error to get services-list.json file, try check app root if file exist', 1);
+        } catch (\Exception $e) {
+            $this->errorManager->handleError('error to get services-list.json file: ' . $e->getMessage(), 500);
+            ;
         }
 
-        return $services;
+        return $servicesList;
     }
 
     /**
@@ -222,7 +202,7 @@ class ServiceManager
     public function isServicesListExist(): bool
     {
         // check if services list exist
-        if ($this->getServicesJson() != null) {
+        if ($this->getServicesList() != null) {
             return true;
         }
 
@@ -243,30 +223,5 @@ class ServiceManager
         } catch (\Exception $e) {
             $this->errorManager->handleError('error to executed command: ' . $e->getMessage(), 500);
         }
-    }
-
-    /**
-     * Gets the services list from the services.json file
-     *
-     * @return array<mixed>>|null The services list, null
-     */
-    public function getServicesJson(): ?array
-    {
-        $servicesList = null;
-
-        try {
-            // get services list from services.json
-            $servicesFile = file_get_contents(__DIR__ . '/../../config/suite/services.json');
-
-            if ($servicesFile) {
-                // decode json
-                $servicesList = (array) json_decode($servicesFile, true);
-            }
-        } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get services-list.json file: ' . $e->getMessage(), 500);
-            ;
-        }
-
-        return $servicesList;
     }
 }

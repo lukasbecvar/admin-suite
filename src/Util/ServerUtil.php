@@ -3,7 +3,6 @@
 namespace App\Util;
 
 use App\Manager\ErrorManager;
-use PhpParser\Node\Expr\Cast\Double;
 
 /**
  * Class ServerUtil
@@ -326,5 +325,21 @@ class ServerUtil
         }
 
         return $processes;
+    }
+
+    /**
+     * Executes a command
+     *
+     * @param string $command The command to execute
+     *
+     * @return void
+     */
+    public function executeCommand($command): void
+    {
+        try {
+            exec($command);
+        } catch (\Exception $e) {
+            $this->errorManager->handleError('error to executed command: ' . $e->getMessage(), 500);
+        }
     }
 }
