@@ -147,6 +147,9 @@ Solution for administration and monitoring linux private servers
     - [ ] Log offline status
     - [ ] Send offline alert in email
     - [ ] Send back online notification
+- [ ] Service monitoring dashboard
+    - [ ] Offline status log
+    - [ ] Service status card
 
 ## 0.9
 - [ ] Todo manager
