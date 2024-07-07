@@ -25,6 +25,14 @@ main {
 	margin-right: 1px;
 }
 
+.ml-05 {
+	margin-left: 1.8px !important;
+}
+
+.mrc-2 {
+	margin-right: 6.8px !important;
+}
+
 .link {
 	color: rgb(15, 91, 255);
 }
