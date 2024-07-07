@@ -13,5 +13,10 @@
         "service_name": "mysql",
         "display_name": "Mysql",
         "enable": true 
+    },
+    "docker": {
+        "service_name": "docker",
+        "display_name": "Docker",
+        "enable": true 
     }
 }
