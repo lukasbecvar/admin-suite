@@ -136,9 +136,9 @@ Solution for administration and monitoring linux private servers
 - [X] Process list dashboard card
 - [X] Service manager class
 - [X] Service status dashboard card
-- [ ] Service manager action runner
-    - [ ] Systemctl status
-    - [ ] Systemctl stop, start, restart
+- [X] Service manager action runner
+    - [X] Systemctl status
+    - [X] Systemctl stop, start, restart
 
 ## 0.8
 - [ ] Service monitoring component
@@ -157,10 +157,9 @@ Solution for administration and monitoring linux private servers
     - [ ] View closed todo list
 
 ## 1.0
-- [ ] Connecting other services (like contact inbox, visitor systems, etc)
-    - [ ] External log handler (for connected services)
-- [ ] Readme doc
 - [ ] Refactor
+- [ ] Readme doc
+- [ ] Manual testing
 
 ## 1.1
 - [ ] Database browser
