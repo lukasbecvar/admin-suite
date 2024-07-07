@@ -78,7 +78,7 @@ class ServiceManagerTest extends TestCase
 
         $this->logManager->expects($this->once())
             ->method('log')
-            ->with('action-runner', 'testUser started example_service', 1);
+            ->with('action-runner', 'testUser start example_service', 1);
 
         $this->serviceManager = $this->getMockBuilder(ServiceManager::class)
             ->setConstructorArgs([$this->logManager, $this->authManager, $this->errorManager])
