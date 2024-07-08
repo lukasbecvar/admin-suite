@@ -42,36 +42,69 @@ class MonitroingProcessCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        // get monitored services
-        $services = $this->serviceManager->getServicesList();
-
         // set up signal handling to allow termination via SIGINT (Ctrl+C)
         pcntl_signal(SIGINT, function () use ($io) {
-            $io->info('Monitoring process terminated.');
+            $io->info('monitoring process terminated.');
             exit(0);
         });
 
-        // monitoring loop
         /** @phpstan-ignore-next-line */
         while (true) {
+            // get monitored services
+            $services = $this->serviceManager->getServicesList();
+
             // check services status
             if (is_iterable($services)) {
                 foreach ($services as $service) {
+                    // force retype service array (to avoid phpstan error)
                     $service = (array) $service;
 
-                    // check if service is systemd
+                    // check if service is enabled
+                    if ($service['enable'] == false) {
+                        continue;
+                    }
+
+                    // check systemd service status
                     if ($service['type'] == 'systemd') {
-                        // check if service is running
+                        // check running state
                         if ($this->serviceManager->isServiceRunning($service['service_name'])) {
-                            $io->success($service['display_name'] . ' is running');
+                            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=green>' . $service['display_name'] . ' is running</fg=green>');
                         } else {
-                            $io->error($service['display_name'] . ' is not running');
+                            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>' . $service['display_name'] . ' is not running</fg=red>');
+                        }
+                    }
+
+                    // check http service status
+                    if ($service['type'] == 'http') {
+                        // get service status
+                        $serviceStatus = $this->serviceManager->checkWebsiteStatus($service['url']);
+
+                        // check if service is online
+                        if ($serviceStatus['isOnline']) {
+                            // check service response code
+                            if ($serviceStatus['responseCode'] != $service['accept_code']) {
+                                $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>' . $service['display_name'] . ' is not accepting code ' . $service['accept_code'] . '</fg=red>');
+
+                                // check service response time
+                            } elseif ($serviceStatus['responseTime'] > $service['max_response_time']) {
+                                $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>' . $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . '</fg=red>');
+
+                                // status ok
+                            } else {
+                                $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=green>' . $service['display_name'] . ' is online</fg=green>');
+                            }
+
+                            // service is not online
+                        } else {
+                            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>' . $service['display_name'] . ' is not online</fg=red>');
                         }
                     }
                 }
+            } else {
+                $io->error('error to iterate services list');
             }
 
-            // sleep for monitroing interval
+            // sleep monitoring interval
             sleep($this->appUtil->getMonitroingInterval() * 60);
         }
 
