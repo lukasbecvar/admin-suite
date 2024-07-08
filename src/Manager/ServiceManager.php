@@ -2,6 +2,8 @@
 
 namespace App\Manager;
 
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Class ServiceManager
  *
@@ -43,7 +45,7 @@ class ServiceManager
                 $servicesList = (array) json_decode($servicesFile, true);
             }
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get services-list.json file: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to get services-list.json file: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             ;
         }
 
@@ -81,7 +83,7 @@ class ServiceManager
             // executed final command
             $this->executeCommand($command);
         } else {
-            $this->errorManager->handleError('error action runner is only for authentificated users', 401);
+            $this->errorManager->handleError('error action runner is only for authentificated users', Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -97,7 +99,7 @@ class ServiceManager
         try {
             $output = shell_exec('systemctl is-active ' . $service);
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get service status: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to get service status: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             return false;
         }
 
@@ -131,7 +133,7 @@ class ServiceManager
         try {
             $service = @fsockopen($ip, $port, timeout: $timeout);
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to check socket: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to check socket: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // check if service is not null
@@ -157,7 +159,7 @@ class ServiceManager
         try {
             exec('pgrep ' . $process, $pids);
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to check process: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to check process: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             return false;
         }
 
@@ -188,7 +190,7 @@ class ServiceManager
                 }
             }
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get ufw status' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to get ufw status' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return false;
@@ -221,7 +223,7 @@ class ServiceManager
         try {
             exec($command);
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to executed command: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to executed command: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -238,7 +240,7 @@ class ServiceManager
         $ch = curl_init($url);
 
         if ($ch == false) {
-            $this->errorManager->handleError('error to check website status: ' . $url, 500);
+            $this->errorManager->handleError('error to check website status: ' . $url, Response::HTTP_INTERNAL_SERVER_ERROR);
             return ['isOnline' => false, 'responseTime' => 0, 'responseCode' => 0];
         }
 

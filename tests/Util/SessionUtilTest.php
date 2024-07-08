@@ -7,6 +7,7 @@ use App\Util\SecurityUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class SessionUtilTest
@@ -170,7 +171,7 @@ class SessionUtilTest extends TestCase
         // mock the error manager
         $this->errorManagerMock->expects($this->once())
             ->method('handleError')
-            ->with('error to decrypt session data', 500);
+            ->with('error to decrypt session data', Response::HTTP_INTERNAL_SERVER_ERROR);
 
         // get the session value
         $this->sessionUtil->getSessionValue($sessionName);
