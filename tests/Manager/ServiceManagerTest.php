@@ -55,11 +55,11 @@ class ServiceManagerTest extends TestCase
     }
 
     /**
-     * Test runAction method
+     * Test runSystemdAction method
      *
      * @return void
      */
-    public function testRunAction(): void
+    public function testrunSystemdAction(): void
     {
         $this->authManager->expects($this->once())
             ->method('isUserLogedin')
@@ -85,7 +85,7 @@ class ServiceManagerTest extends TestCase
             ->onlyMethods(['executeCommand'])
             ->getMock();
 
-        $this->serviceManager->runAction('example_service', 'start');
+        $this->serviceManager->runSystemdAction('example_service', 'start');
     }
 
     /**
@@ -139,5 +139,15 @@ class ServiceManagerTest extends TestCase
     public function testIsServicesListExist(): void
     {
         $this->assertIsBool($this->serviceManager->isServicesListExist());
+    }
+
+    /**
+     * Test checkWebsiteStatus method
+     *
+     * @return void
+     */
+    public function testCheckWebsiteStatus(): void
+    {
+        $this->assertIsArray($this->serviceManager->checkWebsiteStatus('https://becvar.xyz'));
     }
 }

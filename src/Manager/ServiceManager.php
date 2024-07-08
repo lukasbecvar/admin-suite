@@ -51,14 +51,14 @@ class ServiceManager
     }
 
     /**
-     * Runs an action on a specified service
+     * Runs systemd action on a specified service
      *
      * @param string $serviceName The name of the service
      * @param string $action The action to run on the service
      *
      * @return void
      */
-    public function runAction(string $serviceName, string $action): void
+    public function runSystemdAction(string $serviceName, string $action): void
     {
         // check if user logged in
         if ($this->authManager->isUserLogedin()) {
@@ -223,5 +223,54 @@ class ServiceManager
         } catch (\Exception $e) {
             $this->errorManager->handleError('error to executed command: ' . $e->getMessage(), 500);
         }
+    }
+
+    /**
+     * Checks if a website is online
+     *
+     * @param string $url The URL of the website
+     *
+     * @return array<mixed> The results of the check (keys: isOnline, responseTime, responseCode)
+     */
+    public function checkWebsiteStatus(string $url): array
+    {
+        // initialize cURL session
+        $ch = curl_init($url);
+
+        if ($ch == false) {
+            $this->errorManager->handleError('error to check website status: ' . $url, 500);
+            return ['isOnline' => false, 'responseTime' => 0, 'responseCode' => 0];
+        }
+
+        // Set options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+        // start timing
+        $start = microtime(true);
+
+        // execute cURL session
+        curl_exec($ch);
+
+        // get the response code
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        // end timing
+        $end = microtime(true);
+        $responseTime = round(($end - $start) * 1000);
+
+        // close cURL session
+        curl_close($ch);
+
+        // determine if the site is online
+        $isOnline = ($httpCode >= 200);
+
+        // return an array with the results
+        return [
+            'isOnline' => $isOnline,
+            'responseTime' => $responseTime,
+            'responseCode' => $httpCode
+        ];
     }
 }

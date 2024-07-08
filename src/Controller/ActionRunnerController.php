@@ -64,7 +64,7 @@ class ActionRunnerController extends AbstractController
         }
 
         // run service action
-        $this->serviceManager->runAction($service, $action);
+        $this->serviceManager->runSystemdAction($service, $action);
 
         // redirect back to referer
         return $this->redirectToRoute($referer);
