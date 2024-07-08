@@ -3,8 +3,7 @@
 namespace App\Command;
 
 use App\Util\AppUtil;
-use App\Util\ServerUtil;
-use App\Manager\ServiceManager;
+use App\Manager\MonitroingManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -22,14 +21,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 class MonitroingProcessCommand extends Command
 {
     private AppUtil $appUtil;
-    private ServerUtil $serverUtil;
-    private ServiceManager $serviceManager;
+    private MonitroingManager $monitroingManager;
 
-    public function __construct(AppUtil $appUtil, ServerUtil $serverUtil, ServiceManager $serviceManager)
+    public function __construct(AppUtil $appUtil, MonitroingManager $monitroingManager)
     {
         $this->appUtil = $appUtil;
-        $this->serverUtil = $serverUtil;
-        $this->serviceManager = $serviceManager;
+        $this->monitroingManager = $monitroingManager;
         parent::__construct();
     }
 
@@ -53,82 +50,8 @@ class MonitroingProcessCommand extends Command
 
         /** @phpstan-ignore-next-line */
         while (true) {
-            
-            // monitor cpu usage
-            if ($this->serverUtil->getCpuUsage() > 95) {
-                $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>cpu usage is too high</fg=red>');
-            } else {
-                $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=green>cpu usage is ok</fg=green>');
-            }
-
-            // monitor ram usage
-            if ($this->serverUtil->getRamUsagePercentage() > 95) {
-                $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>ram usage is too high</fg=red>');
-            } else {
-                $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=green>ram usage is ok</fg=green>');
-            }
-
-            // monitor disk usage
-            if ($this->serverUtil->getDriveUsagePercentage() > 95) {
-                $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>disk usage is too high</fg=red>');
-            } else {
-                $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=green>disk usage is ok</fg=green>');
-            }
-            
-            
-            // get monitored services
-            $services = $this->serviceManager->getServicesList();
-
-            // check services status
-            if (is_iterable($services)) {
-                foreach ($services as $service) {
-                    // force retype service array (to avoid phpstan error)
-                    $service = (array) $service;
-
-                    // check if service is enabled
-                    if ($service['enable'] == false) {
-                        continue;
-                    }
-
-                    // check systemd service status
-                    if ($service['type'] == 'systemd') {
-                        // check running state
-                        if ($this->serviceManager->isServiceRunning($service['service_name'])) {
-                            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=green>' . $service['display_name'] . ' is running</fg=green>');
-                        } else {
-                            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>' . $service['display_name'] . ' is not running</fg=red>');
-                        }
-                    }
-
-                    // check http service status
-                    if ($service['type'] == 'http') {
-                        // get service status
-                        $serviceStatus = $this->serviceManager->checkWebsiteStatus($service['url']);
-
-                        // check if service is online
-                        if ($serviceStatus['isOnline']) {
-                            // check service response code
-                            if ($serviceStatus['responseCode'] != $service['accept_code']) {
-                                $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>' . $service['display_name'] . ' is not accepting code ' . $service['accept_code'] . '</fg=red>');
-
-                                // check service response time
-                            } elseif ($serviceStatus['responseTime'] > $service['max_response_time']) {
-                                $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>' . $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . '</fg=red>');
-
-                                // status ok
-                            } else {
-                                $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=green>' . $service['display_name'] . ' is online</fg=green>');
-                            }
-
-                            // service is not online
-                        } else {
-                            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>' . $service['display_name'] . ' is not online</fg=red>');
-                        }
-                    }
-                }
-            } else {
-                $io->error('error to iterate services list');
-            }
+            // init monitroing process
+            $this->monitroingManager->monitorInit($io);
 
             // sleep monitoring interval
             sleep($this->appUtil->getMonitroingInterval() * 60);

@@ -145,10 +145,9 @@ Solution for administration and monitoring linux private servers
     - [X] Monitoring loop command (check if all services is online)
     - [X] HTTP service type (check website response code & response time)
     - [X] Monitor system resource usage
-    - [ ] Monitroing entity for log services state
-    - [ ] Log offline status
-    - [ ] Send offline alert in email
-    - [ ] Send back online notification
+    - [X] Monitroing entity for log services state
+    - [X] Log offline status
+    - [ ] Service status change email alert
     - [ ] Loop command unit test
 - [ ] Service monitoring dashboard
     - [ ] Offline status log

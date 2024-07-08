@@ -3,6 +3,7 @@
 namespace App\Util;
 
 use App\Manager\ErrorManager;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ServerUtil
@@ -129,7 +130,7 @@ class ServerUtil
         try {
             return (int) exec("df --output=used -BG / | awk 'NR==2 { print int($1) }'");
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get disk usage ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to get disk usage ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             return null;
         }
     }
@@ -144,7 +145,7 @@ class ServerUtil
         try {
             return (string) exec("df -Ph / | awk 'NR == 2{print $5}' | tr -d '%'");
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get drive usage percentage ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to get drive usage percentage ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             return null;
         }
     }
@@ -159,7 +160,7 @@ class ServerUtil
         try {
             return (string) exec('whoami');
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get web username ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to get web username ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             return null;
         }
     }
@@ -263,7 +264,7 @@ class ServerUtil
                 $appList = json_decode($appList, true);
             }
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get not installed requirements ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to get not installed requirements ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         if (is_iterable($appList)) {
@@ -291,7 +292,7 @@ class ServerUtil
         try {
             exec('ps aux', $output);
         } catch (\Exception $exception) {
-            $this->errorManager->handleError('error to get process list ' . $exception->getMessage(), 500);
+            $this->errorManager->handleError('error to get process list ' . $exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             return null;
         }
 
@@ -339,7 +340,7 @@ class ServerUtil
         try {
             exec($command);
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to executed command: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to executed command: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

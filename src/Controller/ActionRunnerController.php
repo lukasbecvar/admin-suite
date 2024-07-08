@@ -60,7 +60,7 @@ class ActionRunnerController extends AbstractController
 
         // check if request parameters are null
         if ($referer == null || $service == null || $action == null) {
-            $this->errorManager->handleError('parameters service, action and referer are required', 400);
+            $this->errorManager->handleError('parameters service, action and referer are required', Response::HTTP_BAD_REQUEST);
         }
 
         // run service action

@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class LogManagerTest
@@ -312,7 +313,7 @@ class LogManagerTest extends TestCase
 
         $this->errorManagerMock->expects($this->once())
             ->method('handleError')
-            ->with('error to update log status: Test Exception', 500);
+            ->with('error to update log status: Test Exception', Response::HTTP_INTERNAL_SERVER_ERROR);
 
         $this->logManager->updateLogStatusById($logId, $newStatus);
     }

@@ -265,7 +265,7 @@ class LogManager
 
         // check if log found
         if (!$log) {
-            $this->errorManager->handleError('log status update error: log id: ' . $id . ' not found', 500);
+            $this->errorManager->handleError('log status update error: log id: ' . $id . ' not found', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // update status
@@ -276,7 +276,7 @@ class LogManager
             // flush data to database
             $this->entityManager->flush();
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to update log status: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to update log status: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -308,7 +308,7 @@ class LogManager
             // flush changes to the database
             $this->entityManager->flush();
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to set all logs status to "READED": ' . $e, 500);
+            $this->errorManager->handleError('error to set all logs status to "READED": ' . $e, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -337,7 +337,7 @@ class LogManager
                 }
             }
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get system logs: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to get system logs: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // log action
@@ -361,14 +361,14 @@ class LogManager
         // check if file exists
         $filePath = $this->appUtil->getSystemLogsDirectory() . '/' . $logFile;
         if (!file_exists($filePath)) {
-            $this->errorManager->handleError('error to get log file: ' . $filePath . ' not found', 404);
+            $this->errorManager->handleError('error to get log file: ' . $filePath . ' not found', Response::HTTP_NOT_FOUND);
         }
 
         try {
             // get log file content
             $log = file_get_contents($filePath);
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get log file: ' . $logFile . ', ' . $e->getMessage(), 500);
+            $this->errorManager->handleError('error to get log file: ' . $logFile . ', ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // log action

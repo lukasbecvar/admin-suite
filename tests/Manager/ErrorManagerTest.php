@@ -5,6 +5,7 @@ namespace App\Tests\Manager;
 use Twig\Environment;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -23,10 +24,6 @@ class ErrorManagerTest extends TestCase
      */
     public function testHandleError(): void
     {
-        // set the error parameters
-        $code = 404;
-        $message = 'Page not found';
-
         // create the twig mock
         $twigMock = $this->createMock(Environment::class);
 
@@ -35,10 +32,10 @@ class ErrorManagerTest extends TestCase
 
         // expect the HttpException
         $this->expectException(HttpException::class);
-        $this->expectExceptionMessage($message);
-        $this->expectExceptionCode($code);
+        $this->expectExceptionMessage('Page not found');
+        $this->expectExceptionCode(Response::HTTP_NOT_FOUND);
 
         // call handle the error
-        $errorManager->handleError($message, $code);
+        $errorManager->handleError('Page not found', Response::HTTP_NOT_FOUND);
     }
 }
