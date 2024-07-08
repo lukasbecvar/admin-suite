@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use App\Util\AppUtil;
 use App\Util\ServerUtil;
 use App\Entity\ServiceMonitoring;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,14 +18,18 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class MonitroingManager
 {
+    private AppUtil $appUtil;
     private ServerUtil $serverUtil;
+    private EmailManager $emailManager;
     private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
     private EntityManagerInterface $entityManagerInterface;
 
-    public function __construct(ServerUtil $serverUtil, ErrorManager $errorManager, ServiceManager $serviceManager, EntityManagerInterface $entityManagerInterface)
+    public function __construct(AppUtil $appUtil, ServerUtil $serverUtil, EmailManager $emailManager, ErrorManager $errorManager, ServiceManager $serviceManager, EntityManagerInterface $entityManagerInterface)
     {
+        $this->appUtil = $appUtil;
         $this->serverUtil = $serverUtil;
+        $this->emailManager = $emailManager;
         $this->errorManager = $errorManager;
         $this->serviceManager = $serviceManager;
         $this->entityManagerInterface = $entityManagerInterface;
@@ -135,9 +140,13 @@ class MonitroingManager
         if ($lastStatus != $currentStatus) {
             // check if last status is pending
             if ($lastStatus == 'pending') {
+                // send monitoring status email
+                $this->emailManager->sendEmail($this->appUtil->getAdminContactEmail(), 'monitoring status', ['serviceName' => $serviceName, 'monitoringMesssage' => $message, 'monitoringStatus' => $currentStatus], 'monitoring-status');
+
+                // update monitoring status
                 $this->setMonitoringStatus($serviceName, $message, $currentStatus);
             } else {
-                // set monitoring status
+                // set pending status
                 $this->setMonitoringStatus($serviceName, $message, 'pending');
             }
         }
@@ -160,28 +169,28 @@ class MonitroingManager
         // monitor cpu usage
         if ($this->serverUtil->getCpuUsage() > 95) {
             $this->handleMonitoringStatus('system-cpu-usage', 'critical', 'cpu usage is too high');
-            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>cpu usage is too high</fg=red>');
+            $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>cpu usage is too high</fg=red>');
         } else {
             $this->handleMonitoringStatus('system-cpu-usage', 'ok', 'cpu usage is ok');
-            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=green>cpu usage is ok</fg=green>');
+            $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>cpu usage is ok</fg=green>');
         }
 
         // monitor ram usage
         if ($this->serverUtil->getRamUsagePercentage() > 95) {
             $this->handleMonitoringStatus('system-ram-usage', 'critical', 'ram usage is too high');
-            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>ram usage is too high</fg=red>');
+            $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>ram usage is too high</fg=red>');
         } else {
             $this->handleMonitoringStatus('system-ram-usage', 'ok', 'ram usage is ok');
-            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=green>ram usage is ok</fg=green>');
+            $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>ram usage is ok</fg=green>');
         }
 
         // monitor disk usage
         if ($this->serverUtil->getDriveUsagePercentage() > 95) {
             $this->handleMonitoringStatus('system-disk-usage', 'critical', 'disk space is too low');
-            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>disk space is too low/fg=red>');
+            $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>disk space is too low/fg=red>');
         } else {
             $this->handleMonitoringStatus('system-disk-usage', 'ok', 'disk space is ok');
-            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=green>disk space is ok</fg=green>');
+            $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>disk space is ok</fg=green>');
         }
 
         // get monitored services
@@ -203,10 +212,10 @@ class MonitroingManager
                     // check running state
                     if ($this->serviceManager->isServiceRunning($service['service_name'])) {
                         $this->handleMonitoringStatus($service['service_name'], 'running', $service['display_name'] . ' is running');
-                        $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=green>' . $service['display_name'] . ' is running</fg=green>');
+                        $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>' . $service['display_name'] . ' is running</fg=green>');
                     } else {
                         $this->handleMonitoringStatus($service['service_name'], 'not-running', $service['display_name'] . ' is not running');
-                        $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>' . $service['display_name'] . ' is not running</fg=red>');
+                        $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not running</fg=red>');
                     }
                 }
 
@@ -220,23 +229,23 @@ class MonitroingManager
                         // check service response code
                         if ($serviceStatus['responseCode'] != $service['accept_code']) {
                             $this->handleMonitoringStatus($service['service_name'], 'not-accepting-code', $service['display_name'] . ' is not accepting code ' . $service['accept_code']);
-                            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>' . $service['display_name'] . ' is not accepting code ' . $service['accept_code'] . '</fg=red>');
+                            $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not accepting code ' . $service['accept_code'] . '</fg=red>');
 
                         // check service response time
                         } elseif ($serviceStatus['responseTime'] > $service['max_response_time']) {
                             $this->handleMonitoringStatus($service['service_name'], 'not-responding', $service['display_name'] . ' is not responding in ' . $service['max_response_time']);
-                            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>' . $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . '</fg=red>');
+                            $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . '</fg=red>');
 
                         // status ok
                         } else {
                             $this->handleMonitoringStatus($service['service_name'], 'online', $service['display_name'] . ' is online');
-                            $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=green>' . $service['display_name'] . ' is online</fg=green>');
+                            $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>' . $service['display_name'] . ' is online</fg=green>');
                         }
 
                     // service is not online
                     } else {
                         $this->handleMonitoringStatus($service['service_name'], 'not-online', $service['display_name'] . ' is offline');
-                        $io->writeln('[' . date('Y-m-d H:i:s') . '] <fg=red>' . $service['display_name'] . ' is offline</fg=red>');
+                        $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is offline</fg=red>');
                     }
                 }
             }
