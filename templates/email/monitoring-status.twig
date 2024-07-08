@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin-suite monitoring</title>
+</head>
+<body style="background-color: #1b1b1b; color: #fff; font-family: Arial, sans-serif; margin: 0; padding: 0;">
+    <div style="width: 80%; margin: 20px auto; background-color: #2b2b2b; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);">
+        <div style="background: rgb(255, 25, 25); color: #fff; padding: 10px; border-radius: 8px 8px 0 0; text-align: center; margin-bottom: 20px;">
+            <h1 style="font-size: 28px; margin: 0; padding: 10px 0;">
+                Service status changed.
+            </h1>
+        </div>
+        <h2>This message is from service monitoring about a status change.</h2>
+        <span style="margin: 10px 0;">
+
+            <p style="text-decoration: underline;">Service Name: {{ serviceName|e }}</p>
+            <p>Status: {{ monitoringStatus|e }}</p>
+            <p>Message: {{ monitoringMesssage|e }}</p>
+        </span>
+    </div>
+</body>
+</html>
