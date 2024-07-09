@@ -9,6 +9,7 @@ use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Manager\ServiceManager;
 use App\Entity\ServiceMonitoring;
+use App\Manager\LogManager;
 use App\Manager\MonitoringManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,6 +26,9 @@ class MonitoringManagerTest extends TestCase
 {
     /** @var AppUtil|MockObject */
     private AppUtil|MockObject $appUtilMock;
+
+    /** @var LogManager|MockObject */
+    private LogManager|MockObject $logManager;
 
     /** @var MonitoringManager */
     private MonitoringManager $monitoringManager;
@@ -50,6 +54,7 @@ class MonitoringManagerTest extends TestCase
     protected function setUp(): void
     {
         $this->appUtilMock = $this->createMock(AppUtil::class);
+        $this->logManager = $this->createMock(LogManager::class);
         $this->serverUtilMock = $this->createMock(ServerUtil::class);
         $this->emailManagerMock = $this->createMock(EmailManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
@@ -61,6 +66,7 @@ class MonitoringManagerTest extends TestCase
 
         $this->monitoringManager = new MonitoringManager(
             $this->appUtilMock,
+            $this->logManager,
             $this->serverUtilMock,
             $this->emailManagerMock,
             $this->errorManagerMock,

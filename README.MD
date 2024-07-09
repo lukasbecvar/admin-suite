@@ -141,7 +141,7 @@ Solution for administration and monitoring linux private servers
     - [X] Systemctl stop, start, restart
 
 ## 0.8
-- [ ] Service monitoring component
+- [X] Service monitoring component
     - [X] Monitoring loop command (check if all services is online)
     - [X] HTTP service type (check website response code & response time)
     - [X] Monitor system resource usage
@@ -150,7 +150,6 @@ Solution for administration and monitoring linux private servers
     - [X] Service status change email alert
     - [X] Service monitoring entity datafixtures
     - [X] Monitoring manager unit test
-    - [ ] Loop command unit test
 - [ ] Service monitoring dashboard
     - [ ] Status log
     - [ ] View service tree (form services.json)

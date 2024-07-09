@@ -19,15 +19,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class MonitoringManager
 {
     private AppUtil $appUtil;
+    private LogManager $logManager;
     private ServerUtil $serverUtil;
     private EmailManager $emailManager;
     private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
     private EntityManagerInterface $entityManagerInterface;
 
-    public function __construct(AppUtil $appUtil, ServerUtil $serverUtil, EmailManager $emailManager, ErrorManager $errorManager, ServiceManager $serviceManager, EntityManagerInterface $entityManagerInterface)
+    public function __construct(AppUtil $appUtil, LogManager $logManager, ServerUtil $serverUtil, EmailManager $emailManager, ErrorManager $errorManager, ServiceManager $serviceManager, EntityManagerInterface $entityManagerInterface)
     {
         $this->appUtil = $appUtil;
+        $this->logManager = $logManager;
         $this->serverUtil = $serverUtil;
         $this->emailManager = $emailManager;
         $this->errorManager = $errorManager;
@@ -142,6 +144,9 @@ class MonitoringManager
             if ($lastStatus == 'pending') {
                 // send monitoring status email
                 $this->emailManager->sendEmail($this->appUtil->getAdminContactEmail(), 'monitoring status', ['serviceName' => $serviceName, 'monitoringMesssage' => $message, 'monitoringStatus' => $currentStatus], 'monitoring-status');
+
+                // log status chnage
+                $this->logManager->log('monitoring', 'Service: ' . $serviceName . ' status changed to: ' . $currentStatus . ' message: ' . $message, 2);
 
                 // update monitoring status
                 $this->setMonitoringStatus($serviceName, $message, $currentStatus);

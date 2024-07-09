@@ -80,9 +80,9 @@
                         {# SET LOG LINE COLOR #}
                         {% if row.name == 'exception' or row.name == 'authenticator' or row.name == 'ban-manager' %}
                             {% set color = 'red-400' %}
-                        {% elseif row.name == 'log-manager' %}
+                        {% elseif row.name == 'log-manager'%}
                             {% set color = 'blue-400' %}
-                        {% elseif row.name == 'anti-log' %}
+                        {% elseif row.name == 'anti-log' or row.name == 'monitoring'  %}
                             {% set color = 'yellow-400' %}
                         {% elseif row.name == 'user-manager' or row.name == 'account-settings' or row.name == 'action-runner' %}
                             {% set color = 'green-400' %}
