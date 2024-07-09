@@ -1,0 +1,44 @@
+{% extends 'common/layout.twig' %}
+
+{# USER MANAGER TABLE COMPONENT #}
+{% block component %} 
+<div class="users-manager">
+    <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
+        {# BACK BUTTON #}
+        <a href={{ path('app_manager_monitoring') }} class="border border-neutral-500 font-bold px-1 text-white">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+        <span class="mr-1 text-white">Services config</span>
+    </div>
+
+    {# SERVICES CONFIG #}
+    <div class="text-white p-2">
+        {% for service in services %}
+            {% if service.type == 'systemd' %}
+                <div class="mb-4 bg-gray-800 shadow-md border border-gray-500 card-color">
+                    <h2 class="px-2 py-2 border-b border-gray-500 text-white font-bold">{{ service.display_name }}</h2>
+                    <div class="grid grid-cols-2 gap-4 p-2">
+                        <p><span class="font-semibold">Service Name:</span> {{ service.service_name }}</p>
+                        <p><span class="font-semibold">Display Name:</span> {{ service.display_name }}</p>
+                        <p><span class="font-semibold">Type:</span> {{ service.type }}</p>
+                        <p><span class="font-semibold">Enable:</span> {{ service.enable ? 'Yes' : 'No' }}</p>
+                    </div>
+                </div>
+            {% elseif service.type == 'http' %}
+                <div class="mb-4 bg-gray-800 shadow-md border border-gray-500 card-color">
+                    <h2 class="px-2 py-2 border-b border-gray-500 text-white font-bold">{{ service.display_name }}</h2>
+                    <div class="grid grid-cols-2 gap-4 p-2">
+                        <p><span class="font-semibold">Service Name:</span> {{ service.service_name }}</p>
+                        <p><span class="font-semibold">Display Name:</span> {{ service.display_name }}</p>
+                        <p><span class="font-semibold">URL:</span> <a href="{{ service.url }}" class="text-blue-400 hover:underline">{{ service.url }}</a></p>
+                        <p><span class="font-semibold">Accept Code:</span> {{ service.accept_code }}</p>
+                        <p><span class="font-semibold">Max Response Time:</span> {{ service.max_response_time }}</p>
+                        <p><span class="font-semibold">Type:</span> {{ service.type }}</p>
+                        <p><span class="font-semibold">Enable:</span> {{ service.enable ? 'Yes' : 'No' }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

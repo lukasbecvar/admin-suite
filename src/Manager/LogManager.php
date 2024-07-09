@@ -244,6 +244,20 @@ class LogManager
     }
 
     /**
+     * Get monitoring logs
+     *
+     * @param int $limit The limit of logs to get
+     *
+     * @return array<mixed>|null The monitoring logs
+     */
+    public function getMonitoringLogs(int $limit): ?array
+    {
+        $repository = $this->entityManager->getRepository(Log::class);
+
+        return $repository->findBy(['name' => 'monitoring'], ['id' => 'DESC'], $limit);
+    }
+
+    /**
      * Update the status of a log entry by its ID
      *
      * This method retrieves a log entry by its ID, updates its status to the specified new status

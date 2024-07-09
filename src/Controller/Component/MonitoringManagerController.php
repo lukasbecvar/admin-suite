@@ -2,7 +2,10 @@
 
 namespace App\Controller\Component;
 
+use App\Util\AppUtil;
+use App\Manager\LogManager;
 use App\Manager\AuthManager;
+use App\Manager\ServiceManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,11 +19,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class MonitoringManagerController extends AbstractController
 {
+    private AppUtil $appUtil;
+    private LogManager $logManager;
     private AuthManager $authManager;
+    private ServiceManager $serviceManager;
 
-    public function __construct(AuthManager $authManager)
+    public function __construct(AppUtil $appUtil, LogManager $logManager, AuthManager $authManager, ServiceManager $serviceManager)
     {
+        $this->appUtil = $appUtil;
+        $this->logManager = $logManager;
         $this->authManager = $authManager;
+        $this->serviceManager = $serviceManager;
     }
 
     /**
@@ -31,10 +40,37 @@ class MonitoringManagerController extends AbstractController
     #[Route('/manager/monitoring', methods:['GET'], name: 'app_manager_monitoring')]
     public function monitoring(): Response
     {
+        // get services list
+        $services = $this->serviceManager->getServicesList();
+
+        // get monitoring logs
+        $monitoringLogs = $this->logManager->getMonitoringLogs($this->appUtil->getPageLimiter());
+
         // return about view
         return $this->render('component/monitoring-manager/monitoring-dashboard.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository()
+            'userData' => $this->authManager->getLoggedUserRepository(),
+
+            // monitoring data
+            'services' => $services,
+            'monitoringLogs' => $monitoringLogs,
+            'serviceManager' => $this->serviceManager,
+        ]);
+    }
+
+    #[Route('/manager/monitoring/config', methods:['GET'], name: 'app_manager_monitoring_config')]
+    public function monitoringConfig(): Response
+    {
+        // get services list
+        $services = $this->serviceManager->getServicesList();
+
+        // return about view
+        return $this->render('component/monitoring-manager/monitoring-config.twig', [
+            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+            'userData' => $this->authManager->getLoggedUserRepository(),
+
+            // services config data
+            'services' => $services,
         ]);
     }
 }
