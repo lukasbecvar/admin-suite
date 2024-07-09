@@ -10,13 +10,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Class MonitroingManager
+ * Class MonitoringManager
  *
  * The manager for methos associated with monitroing process
  *
  * @package App\Manager
  */
-class MonitroingManager
+class MonitoringManager
 {
     private AppUtil $appUtil;
     private ServerUtil $serverUtil;

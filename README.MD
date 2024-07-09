@@ -149,7 +149,7 @@ Solution for administration and monitoring linux private servers
     - [X] Log offline status
     - [X] Service status change email alert
     - [X] Service monitoring entity datafixtures
-    - [ ] Monitoring manager unit test
+    - [X] Monitoring manager unit test
     - [ ] Loop command unit test
 - [ ] Service monitoring dashboard
     - [ ] Status log
