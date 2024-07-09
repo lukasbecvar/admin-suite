@@ -46,7 +46,7 @@ class MonitoringManagerController extends AbstractController
         // get monitoring logs
         $monitoringLogs = $this->logManager->getMonitoringLogs($this->appUtil->getPageLimiter());
 
-        // return about view
+        // return view
         return $this->render('component/monitoring-manager/monitoring-dashboard.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
@@ -64,7 +64,7 @@ class MonitoringManagerController extends AbstractController
         // get services list
         $services = $this->serviceManager->getServicesList();
 
-        // return about view
+        // return view
         return $this->render('component/monitoring-manager/monitoring-config.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),

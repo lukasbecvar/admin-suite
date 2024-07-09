@@ -158,7 +158,6 @@ Solution for administration and monitoring linux private servers
 ## 0.9
 - [ ] Todo manager
     - [ ] Add todo
-    - [ ] Move todo in list (up or down)
     - [ ] Edit todo
     - [ ] Close todo
     - [ ] View closed todo list
