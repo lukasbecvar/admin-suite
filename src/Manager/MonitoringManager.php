@@ -146,7 +146,7 @@ class MonitoringManager
                 $this->emailManager->sendEmail($this->appUtil->getAdminContactEmail(), 'monitoring status', ['serviceName' => $serviceName, 'monitoringMesssage' => $message, 'monitoringStatus' => $currentStatus], 'monitoring-status');
 
                 // log status chnage
-                $this->logManager->log('monitoring', 'Service: ' . $serviceName . ' status changed to: ' . $currentStatus . ' message: ' . $message, 2);
+                $this->logManager->log('monitoring', $serviceName . ' status: ' . $currentStatus . ' msg: ' . $message, 2); $this->
 
                 // update monitoring status
                 $this->setMonitoringStatus($serviceName, $message, $currentStatus);
