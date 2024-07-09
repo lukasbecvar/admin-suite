@@ -82,9 +82,9 @@
                             {% set color = 'red-400' %}
                         {% elseif row.name == 'log-manager'%}
                             {% set color = 'blue-400' %}
-                        {% elseif row.name == 'anti-log' or row.name == 'monitoring'  %}
+                        {% elseif row.name == 'anti-log' or row.name == 'monitoring' %}
                             {% set color = 'yellow-400' %}
-                        {% elseif row.name == 'user-manager' or row.name == 'account-settings' or row.name == 'action-runner' %}
+                        {% elseif row.name == 'user-manager' or row.name == 'account-settings' or row.name == 'action-runner' or row.name == 'todo-manager' %}
                             {% set color = 'green-400' %}
                         {% else %}
                             {% set color = 'white' %}

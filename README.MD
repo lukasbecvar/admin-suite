@@ -157,10 +157,13 @@ Solution for administration and monitoring linux private servers
 
 ## 0.9
 - [ ] Todo manager
-    - [ ] Add todo
-    - [ ] Edit todo
+    - [X] Add todo
+    - [X] Todo view
+    - [ ] Todo entity datafixture
     - [ ] Close todo
+    - [ ] Edit todo
     - [ ] View closed todo list
+    - [ ] Todo manager tests
 
 ## 1.0
 - [ ] Redesign CLI front-end outputs
