@@ -148,7 +148,7 @@ Solution for administration and monitoring linux private servers
     - [X] Monitroing entity for log services state
     - [X] Log offline status
     - [X] Service status change email alert
-    - [ ] Service monitoring entity datafixtures
+    - [X] Service monitoring entity datafixtures
     - [ ] Monitoring manager unit test
     - [ ] Loop command unit test
 - [ ] Service monitoring dashboard
@@ -166,6 +166,7 @@ Solution for administration and monitoring linux private servers
     - [ ] View closed todo list
 
 ## 1.0
+- [ ] Redesign CLI front-end outputs
 - [ ] Refactor
 - [ ] Readme doc
 - [ ] Manual testing
