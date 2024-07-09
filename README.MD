@@ -159,10 +159,11 @@ Solution for administration and monitoring linux private servers
 - [ ] Todo manager
     - [X] Add todo
     - [X] Todo view
-    - [ ] Todo entity datafixture
+    - [X] Todo entity datafixture
     - [ ] Close todo
     - [ ] Edit todo
     - [ ] View closed todo list
+    - [ ] Todo data AES encryption
     - [ ] Todo manager tests
 
 ## 1.0
