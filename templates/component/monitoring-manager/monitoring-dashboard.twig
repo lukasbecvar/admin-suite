@@ -3,6 +3,130 @@
 {# USER MANAGER TABLE COMPONENT #}
 {% block component %} 
 <div class="users-manager">
-    ffff
+    <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
+        
+        {# BACK BUTTON #}
+        <a href={{ path('app_dashboard') }} class="border border-neutral-500 font-bold px-1 text-white">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+
+        {# CONFIG BUTTON #}
+        <a href={{ path('app_manager_monitoring_config') }} class="border border-neutral-500 font-bold px-1 ml-1 text-white">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+        </a>
+        <span class="mr-1 text-white">Monitoring</span>
+    </div>
+
+    {# SERVICES STATUS LOG #}
+    {% if monitoringLogs|length > 0 %}        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2">
+            <div class="bg-neutral-900 border border-neutral-500 shadow-md card-color w-full sm:col-span-2 card-component">
+                <div class="px-2 py-2 border-b border-neutral-500 font-extrabold text-white">Status log</div>
+                <div class="p-1 card-text" style="max-height: 200px; overflow-y: auto;">
+                    {% for log in monitoringLogs %}
+                        <p class="text-gray-200">[{{ log.time|date('Y-m-d H:i:s') }}]: {{ log.message }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {# SERVICES STATUS CARDS #}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2">
+
+        {# SERVICES DASHBOARD CARD #}
+        <div class="border border-gray-500 shadow-lg overflow-hidden w-full max-h-50 card-color card-component">
+            <div class="px-2 py-2 border-b border-gray-500 text-white font-bold">Internal services</div>
+            <div class="p-1 overflow-y-auto h-50">
+                
+                {# UFW SERVICE #}
+                <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-500">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-gray-300 font-semibold">UFW</span>
+                        <span class="text-white ml-r">
+                            {% if serviceManager.isUfwRunning() %}
+                                [<span class="text-green-500 font-bold">ONLINE</span>]
+                            {% else %}
+                                [<span class="text-red-500 font-bold">OFFLINE</span>]
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        {% if serviceManager.isUfwRunning() %}
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'reload', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-600 hover:bg-yellow-500 text-white px-2 py-1 text-l font-bold">Reload</a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_manager_monitoring'}) }} class="bg-red-600 hover:bg-red-500 text-white px-2 py-1 text-l font-bold">Stop</a>
+                        {% else %}
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_manager_monitoring'}) }} class="bg-green-600 hover:bg-green-500 text-white px-2 py-1 text-l font-bold">Start</a>
+                        {% endif %}
+                    </div>
+                </div> 
+
+                {# SERVICES LIST #}
+                {% for service in services %}
+                    {% if service.enable %}
+                        {% if service.type == 'systemd' %}
+                            
+                            {# SERVICE STATUS #}
+                            {% set serviceStatus = serviceManager.isServiceRunning(service.service_name) %}
+
+                            {# SERVICE ITEM #}
+                            <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-500">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-gray-300 font-semibold">{{ service.display_name }}</span>
+                                    <span class="text-white ml-r">
+                                        {% if serviceStatus %}
+                                            [<span class="text-green-500 font-bold">ONLINE</span>]
+                                        {% else %}
+                                            [<span class="text-red-500 font-bold">OFFLINE</span>]
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    {% if serviceStatus %}
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-600 hover:bg-yellow-500 text-white px-2 py-1 text-l font-bold">Restart</a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="bg-red-600 hover:bg-red-500 text-white px-2 py-1 text-l font-bold">Stop</a>
+                                    {% else %}
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="bg-green-600 hover:bg-green-500 text-white px-2 py-1 text-l font-bold">Start</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        {# SERVICES DASHBOARD CARD #}
+        <div class="border border-gray-500 shadow-lg overflow-hidden w-full max-h-50 card-color card-component">
+            <div class="px-2 py-2 border-b border-gray-500 text-white font-bold">HTTP services</div>
+            <div class="p-1 overflow-y-auto h-50">
+
+                {# SERVICES LIST #}
+                {% for service in services %}
+                    {% if service.enable %}
+                        {% if service.type == 'http' %}
+                            
+                            {# SERVICE STATUS #}
+                            {% set serviceStatus = serviceManager.checkWebsiteStatus(service.url) %}
+
+                            {# SERVICE ITEM #}
+                            <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-500">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-gray-300 font-semibold">{{ service.display_name }}</span>
+                                    <span class="text-white ml-r">
+                                        {% if serviceStatus.responseCode == 200 %}
+                                            [<span class="text-green-500 font-bold">ONLINE</span>]
+                                        {% else %}
+                                            [<span class="text-red-500 font-bold">OFFLINE</span>]
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

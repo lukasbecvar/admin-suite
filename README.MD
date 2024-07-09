@@ -150,11 +150,10 @@ Solution for administration and monitoring linux private servers
     - [X] Service status change email alert
     - [X] Service monitoring entity datafixtures
     - [X] Monitoring manager unit test
-- [ ] Service monitoring dashboard
-    - [ ] Status log
-    - [ ] View service tree (form services.json)
-    - [ ] Service status card
-- [ ] Use config/suite/ files only as example to create config files in app root (for gitignore configuration)
+- [X] Service monitoring dashboard
+    - [X] Service status card
+    - [X] Status log
+    - [X] View service tree (form services.json)
 
 ## 0.9
 - [ ] Todo manager
