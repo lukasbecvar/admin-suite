@@ -38,7 +38,12 @@ Encore
                         "./templates/**/*.twig",
                     ],
                     theme: {
-                        extend: {},
+                        extend: {
+
+                            screens: {
+                                'phn': '360px',
+                            },
+                        },
                     },
                     plugins: [],
                     safelist: [

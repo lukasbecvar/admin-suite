@@ -53,14 +53,6 @@
                 </a>
             </li>
 
-            {# USERS-MANAGER LINK #}
-            <li>
-                <a href={{ path('app_manager_users') }} class="flex items-center border-b border-gray-600 block px-3">
-                    <i class="fas fa-users mr-1"></i>&nbsp;
-                    <span>Users manager</span>
-                </a>
-            </li>
-
             {# MONITORING-MANAGER LINK #}
             <li>
                 <a href={{ path('app_manager_monitoring') }} class="flex items-center border-b border-gray-600 block px-3">
@@ -74,6 +66,22 @@
                 <a href={{ path('app_diagnostic') }} class="flex items-center border-b border-gray-600 block px-3">
                     <i class="fas fa-check-double mr-2"></i>&nbsp;
                     <span>Diagnostics</span>
+                </a>
+            </li>
+
+            {# TODO-MANAGER LINK #}
+            <li>
+                <a href={{ path('app_todo_manager') }} class="flex items-center border-b border-gray-600 block px-3">
+                    <i class="fas fa-tasks mr-2"></i>&nbsp;
+                    <span>Todo manager</span>
+                </a>
+            </li>
+
+            {# USERS-MANAGER LINK #}
+            <li>
+                <a href={{ path('app_manager_users') }} class="flex items-center border-b border-gray-600 block px-3">
+                    <i class="fas fa-users mr-1"></i>&nbsp;
+                    <span>Users manager</span>
                 </a>
             </li>
 
