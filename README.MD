@@ -165,6 +165,7 @@ Solution for administration and monitoring linux private servers
     - [ ] View closed todo list
     - [ ] Todo data AES encryption
     - [ ] Todo manager tests
+- [ ] System user (for non loggedin logs & CLI process)
 
 ## 1.0
 - [ ] Redesign CLI front-end outputs
