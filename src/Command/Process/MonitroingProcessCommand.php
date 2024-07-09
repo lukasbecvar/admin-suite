@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Process;
 
 use App\Util\AppUtil;
 use App\Manager\MonitoringManager;
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Command to monitoring services
  *
- * @package App\Command
+ * @package App\Command\Process
  */
 #[AsCommand(name: 'app:process:monitroing', description: 'Main service monitoring process loop')]
 class MonitroingProcessCommand extends Command
@@ -52,7 +52,7 @@ class MonitroingProcessCommand extends Command
             exit(0);
         });
 
-        /** @phpstan-ignore-next-line */
+        /** @phpstan-ignore-next-line (infinite monitoring loop) */
         while (true) {
             // init monitroing process
             $this->monitoringManager->monitorInit($io);
