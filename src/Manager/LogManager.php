@@ -200,7 +200,7 @@ class LogManager
     {
         $repository = $this->entityManager->getRepository(Log::class);
 
-        return $repository->count(['name' => 'authenticator']);
+        return $repository->count(['name' => 'authenticator', 'status' => 'UNREADED']);
     }
 
     /**
