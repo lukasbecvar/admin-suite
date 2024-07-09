@@ -46,12 +46,6 @@ class MonitroingProcessCommand extends Command
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
-        // set up signal handling to allow termination via SIGINT (Ctrl+C)
-        pcntl_signal(SIGINT, function () use ($io) {
-            $io->info('monitoring process terminated.');
-            exit(0);
-        });
-
         /** @phpstan-ignore-next-line (infinite monitoring loop) */
         while (true) {
             // init monitroing process
