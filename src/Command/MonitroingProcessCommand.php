@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\Util\AppUtil;
-use App\Manager\MonitroingManager;
+use App\Manager\MonitoringManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -21,12 +21,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 class MonitroingProcessCommand extends Command
 {
     private AppUtil $appUtil;
-    private MonitroingManager $monitroingManager;
+    private MonitoringManager $monitoringManager;
 
-    public function __construct(AppUtil $appUtil, MonitroingManager $monitroingManager)
+    public function __construct(AppUtil $appUtil, MonitoringManager $monitoringManager)
     {
         $this->appUtil = $appUtil;
-        $this->monitroingManager = $monitroingManager;
+        $this->monitoringManager = $monitoringManager;
         parent::__construct();
     }
 
@@ -55,7 +55,7 @@ class MonitroingProcessCommand extends Command
         /** @phpstan-ignore-next-line */
         while (true) {
             // init monitroing process
-            $this->monitroingManager->monitorInit($io);
+            $this->monitoringManager->monitorInit($io);
 
             // sleep monitoring interval
             sleep($this->appUtil->getMonitroingInterval() * 60);
