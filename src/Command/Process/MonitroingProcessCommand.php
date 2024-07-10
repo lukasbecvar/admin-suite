@@ -3,6 +3,7 @@
 namespace App\Command\Process;
 
 use App\Util\AppUtil;
+use App\Manager\DatabaseManager;
 use App\Manager\MonitoringManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -21,11 +22,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class MonitroingProcessCommand extends Command
 {
     private AppUtil $appUtil;
+    private DatabaseManager $databaseManager;
     private MonitoringManager $monitoringManager;
 
-    public function __construct(AppUtil $appUtil, MonitoringManager $monitoringManager)
+    public function __construct(AppUtil $appUtil, DatabaseManager $databaseManager, MonitoringManager $monitoringManager)
     {
         $this->appUtil = $appUtil;
+        $this->databaseManager = $databaseManager;
         $this->monitoringManager = $monitoringManager;
         parent::__construct();
     }
@@ -46,10 +49,30 @@ class MonitroingProcessCommand extends Command
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
+        // init database down flag
+        $databaseDown = false;
+
         /** @phpstan-ignore-next-line (infinite monitoring loop) */
         while (true) {
-            // init monitroing process
-            $this->monitoringManager->monitorInit($io);
+            // check if database is down
+            $dbState = $this->databaseManager->isDatabaseDown();
+
+            // check database state
+            if ($dbState) {
+                // print database is down message
+                $this->monitoringManager->handleDatabaseDown($io, $databaseDown);
+
+                // set database down flag
+                $databaseDown = true;
+            } else {
+                // init monitroing process
+                $this->monitoringManager->monitorInit($io);
+
+                // reset database down flag after resolve database status
+                if ($databaseDown) {
+                    $databaseDown = false;
+                }
+            }
 
             // sleep monitoring interval
             sleep($this->appUtil->getMonitroingInterval() * 60);
