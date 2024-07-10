@@ -4,9 +4,23 @@
 {% block component %} 
 <div class="users-manager flex flex-col h-[calc(100vh-30px)] overflow-hidden">
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation flex-none">
+       
+        {# BACK BUTTON #}
         <a href={{ path('app_dashboard') }} class="border border-neutral-500 font-bold px-1 text-white">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
+
+        {# STATUS FILTER LINK #}
+        {% if filter == 'closed' %}            
+            <a href={{ path('app_todo_manager', {'filter': 'open'}) }} class="ml-1 border border-neutral-500 font-bold px-1 text-white">
+                <i class="fa fa-tasks" aria-hidden="true"></i>
+            </a>
+        {% else %}
+            <a href={{ path('app_todo_manager', {'filter': 'closed'}) }} class="ml-1 border border-neutral-500 font-bold px-1 text-white">
+                <i class="fa fa-check" aria-hidden="true"></i>
+            </a>
+        {% endif %}
+
         <span class="mr-1 text-white">Todo list</span>
     </div>
 
@@ -22,14 +36,16 @@
                             <div class="flex-grow">
                                 <span class="text-white">{{ todo.todoText|e }}</span>
                             </div>
-                            <div class="flex space-x-2">
-                                <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} class="text-green-500 text-xl hover:text-green-200 focus:outline-none mr-0.5">
-                                    <i class="fa fa-check" aria-hidden="true"></i>
-                                </a>
-                                <a href="#" class="text-neutral-400 text-xl hover:text-white focus:outline-none">
-                                    <i class="fa fa-edit" aria-hidden="true"></i>
-                                </a>
-                            </div>
+                            {% if filter == 'open' %}
+                                <div class="flex space-x-2">
+                                    <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} class="text-green-500 text-xl hover:text-green-200 focus:outline-none mr-0.5">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="#" class="text-neutral-400 text-xl hover:text-white focus:outline-none">
+                                        <i class="fa fa-edit" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>                    
                     {% endfor %}
                 </div>

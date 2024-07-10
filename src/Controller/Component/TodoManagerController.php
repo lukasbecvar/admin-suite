@@ -41,8 +41,11 @@ class TodoManagerController extends AbstractController
     #[Route('/manager/todo', methods:['GET', 'POST'], name: 'app_todo_manager')]
     public function todoTable(Request $request): Response
     {
+        // get query parameter filter
+        $filter = (string) $request->query->get('filter', 'open');
+
         // get todo list
-        $todos = $this->todoManager->getTodos();
+        $todos = $this->todoManager->getTodos($filter);
 
         // create the todo create form
         $form = $this->createForm(CreateTodoFormType::class);
@@ -68,6 +71,7 @@ class TodoManagerController extends AbstractController
             'userData' => $this->authManager->getLoggedUserRepository(),
 
             // todo manager data
+            'filter' => $filter,
             'todos' => $todos,
             'createTodoForm' => $form->createView()
         ]);
