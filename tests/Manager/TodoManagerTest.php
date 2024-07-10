@@ -17,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * Class TodoManagerTest
  *
  * Test for the TodoManager class
- * 
+ *
  * @package App\Tests\Manager
  */
 class TodoManagerTest extends TestCase
