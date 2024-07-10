@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Todo;
+use App\Util\SecurityUtil;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
@@ -15,6 +16,13 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
  */
 class TodoFixtures extends Fixture
 {
+    private SecurityUtil $securityUtil;
+
+    public function __construct(SecurityUtil $securityUtil)
+    {
+        $this->securityUtil = $securityUtil;
+    }
+
     /**
      * Load the todo fixtures
      *
@@ -25,9 +33,9 @@ class TodoFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         // user ID 1 todos
-        for ($i = 1; $i <= 80; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $todo = new Todo();
-            $todo->setTodoText("Todo item for user 1 - Todo $i");
+            $todo->setTodoText($this->securityUtil->encryptAes("Todo item for user 1 - Todo $i"));
             $todo->setAddedTime(new \DateTime());
             $todo->setStatus('open');
             $todo->setUserId(1);
@@ -43,7 +51,7 @@ class TodoFixtures extends Fixture
         // user ID 2 todos
         for ($i = 1; $i <= 20; $i++) {
             $todo = new Todo();
-            $todo->setTodoText("Todo item for user 2 - Todo $i");
+            $todo->setTodoText($this->securityUtil->encryptAes("Todo item for user 2 - Todo $i"));
             $todo->setAddedTime(new \DateTime());
             $todo->setStatus('open');
             $todo->setUserId(2);
