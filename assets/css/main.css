@@ -173,12 +173,10 @@ main {
 
 .users-manager .profile-link:hover {
 	color: rgb(255, 255, 7) !important;
-	text-decoration: underline;
 }
 
 .users-manager .role-update-button:hover {
 	color: rgb(255, 255, 7) !important;
-	text-decoration: underline;
 }
 
 /* account settings component */

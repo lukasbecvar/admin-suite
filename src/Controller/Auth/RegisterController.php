@@ -65,6 +65,8 @@ class RegisterController extends AbstractController
             // check if the username is already taken
             if ($this->userManager->checkIfUserExist($username)) {
                 $this->addFlash('error', 'Username is already taken.');
+            } elseif ($this->authManager->isUsernameBlocked($username)) {
+                $this->addFlash('error', 'Username: ' . $username . ' is blocked.');
             } else {
                 try {
                     // register the new user

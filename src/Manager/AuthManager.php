@@ -62,6 +62,28 @@ class AuthManager
     }
 
     /**
+     * Check if a username is blocked
+     *
+     * @param string $username The username to check
+     *
+     * @return bool True if the username is blocked, false otherwise
+     */
+    public function isUsernameBlocked(string $username): bool
+    {
+        $blockedUsernames = file_get_contents(__DIR__ . '/../../config/suite/blocked-usernames.json');
+
+        // check if blocked usernames is empty
+        if (!$blockedUsernames) {
+            return false;
+        }
+
+        // decode json
+        $blockedUsernames = (array) json_decode($blockedUsernames, true);
+
+        return in_array($username, $blockedUsernames);
+    }
+
+    /**
      * Register a new user to database
      *
      * @param string $username The username of the new user
@@ -74,7 +96,7 @@ class AuthManager
     public function registerUser(string $username, string $password): void
     {
         // check if username is system
-        if ($username == 'system') {
+        if ($this->isUsernameBlocked($username)) {
             $this->errorManager->handleError(
                 'error to register new user: username is system',
                 Response::HTTP_FORBIDDEN

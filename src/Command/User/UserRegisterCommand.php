@@ -79,6 +79,12 @@ class UserRegisterCommand extends Command
             return Command::FAILURE;
         }
 
+        // check if username is blocked
+        if ($this->authManager->isUsernameBlocked($username)) {
+            $io->error('Error username: ' . $username . ' is blocked!');
+            return Command::FAILURE;
+        }
+
         // check if username is used
         if ($this->userManager->checkIfUserExist($username)) {
             $io->error('Error username: ' . $username . ' is already used!');
