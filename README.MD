@@ -156,6 +156,7 @@ Solution for administration and monitoring linux private servers
     - [X] View service tree (form services.json)
 
 ## 0.9
+- [X] System user (for non loggedin logs & CLI process)
 - [ ] Todo manager
     - [X] Add todo
     - [X] Todo view
@@ -165,7 +166,6 @@ Solution for administration and monitoring linux private servers
     - [X] Edit todo
     - [X] Todo data AES encryption
     - [ ] Todo manager tests
-- [ ] System user (for non loggedin logs & CLI process)
 
 ## 1.0
 - [ ] Redesign CLI front-end outputs

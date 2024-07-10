@@ -73,6 +73,14 @@ class AuthManager
      */
     public function registerUser(string $username, string $password): void
     {
+        // check if username is system
+        if ($username == 'system') {
+            $this->errorManager->handleError(
+                'error to register new user: username is system',
+                Response::HTTP_FORBIDDEN
+            );
+        }
+
         // check if user already exist
         if ($this->userManager->checkIfUserExist($username)) {
             return;
