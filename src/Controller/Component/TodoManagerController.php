@@ -4,6 +4,7 @@ namespace App\Controller\Component;
 
 use App\Manager\AuthManager;
 use App\Manager\TodoManager;
+use App\Manager\ErrorManager;
 use App\Form\Todo\CreateTodoFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -21,11 +22,13 @@ class TodoManagerController extends AbstractController
 {
     private TodoManager $todoManager;
     private AuthManager $authManager;
+    private ErrorManager $errorManager;
 
-    public function __construct(TodoManager $todoManager, AuthManager $authManager)
+    public function __construct(TodoManager $todoManager, AuthManager $authManager, ErrorManager $errorManager)
     {
         $this->todoManager = $todoManager;
         $this->authManager = $authManager;
+        $this->errorManager = $errorManager;
     }
 
     /**
@@ -68,5 +71,30 @@ class TodoManagerController extends AbstractController
             'todos' => $todos,
             'createTodoForm' => $form->createView()
         ]);
+    }
+
+    /**
+     * Handle the todo close function
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The response todo manager close component view
+     */
+    #[Route('/manager/todo/close', methods:['GET'], name: 'app_todo_manager_close')]
+    public function closeTodo(Request $request): Response
+    {
+        // get todo id
+        $todoId = (int) $request->query->get('id');
+
+        // check if the todo id is valid
+        if ($todoId == 0) { 
+            $this->errorManager->handleError('invalid todo id', 400);
+        }
+
+        // close the todo
+        $this->todoManager->closeTodo($todoId);
+
+        // self redirect back to todo manager
+        return $this->redirectToRoute('app_todo_manager');
     }
 }

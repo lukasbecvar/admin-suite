@@ -29,7 +29,7 @@ class TodoFixtures extends Fixture
             $todo = new Todo();
             $todo->setTodoText("Todo item for user 1 - Todo $i");
             $todo->setAddedTime(new \DateTime());
-            $todo->setStatus('pending');
+            $todo->setStatus('open');
             $todo->setUserId(1);
 
             // set completed_time for some todos
@@ -45,7 +45,7 @@ class TodoFixtures extends Fixture
             $todo = new Todo();
             $todo->setTodoText("Todo item for user 2 - Todo $i");
             $todo->setAddedTime(new \DateTime());
-            $todo->setStatus('pending');
+            $todo->setStatus('open');
             $todo->setUserId(2);
 
             // set completed_time for some todos

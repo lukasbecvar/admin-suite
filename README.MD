@@ -160,7 +160,7 @@ Solution for administration and monitoring linux private servers
     - [X] Add todo
     - [X] Todo view
     - [X] Todo entity datafixture
-    - [ ] Close todo
+    - [X] Close todo
     - [ ] Edit todo
     - [ ] View closed todo list
     - [ ] Todo data AES encryption
