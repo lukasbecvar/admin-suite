@@ -67,7 +67,12 @@ class NonAuthRedirectTest extends WebTestCase
 
             // monitoring manager
             ['/manager/monitoring'],
-            ['/manager/monitoring/config']
+            ['/manager/monitoring/config'],
+
+            // todo manager
+            ['/manager/todo'],
+            ['/manager/todo/edit'],
+            ['/manager/todo/close']
         ];
     }
 
