@@ -32,7 +32,7 @@
 
                     {# TODO ITEM #}
                     {% for todo in todos %}
-                        <div class="flex items-center justify-between p-2 px-4 hover:bg-neutral-700">
+                        <div class="flex items-center justify-between p-2 px-4 hover:bg-neutral-700" data-todo-id="{{ todo.id }}">
                             <div class="flex-grow">
                                 <span class="text-white">{{ todo.todoText|e }}</span>
                             </div>
@@ -41,9 +41,9 @@
                                     <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} class="text-green-500 text-xl hover:text-green-200 focus:outline-none mr-0.5">
                                         <i class="fa fa-check" aria-hidden="true"></i>
                                     </a>
-                                    <a href="#" class="text-neutral-400 text-xl hover:text-white focus:outline-none">
+                                    <button data-todo-id="{{ todo.id }}" class="text-neutral-400 text-xl hover:text-white focus:outline-none">
                                         <i class="fa fa-edit" aria-hidden="true"></i>
-                                    </a>
+                                    </button>
                                 </div>
                             {% endif %}
                         </div>                    
@@ -66,7 +66,7 @@
 
             <div class="flex flex-col phn:flex-row">
                 {# TODO TEXT INPUT #}
-                {{ form_widget(createTodoForm.todo_text, {'attr': {'class': 'flex-1 bg-neutral-700 rounded-t-lg phn:rounded-l-lg phn:rounded-t-none px-4 py-2 focus:outline-none text-white', 'placeholder': 'Todo text'}}) }}
+                {{ form_widget(createTodoForm.todo_text, {'autocomplete': 'off', 'attr': {'class': 'flex-1 bg-neutral-700 rounded-t-lg phn:rounded-l-lg phn:rounded-t-none px-4 py-2 focus:outline-none text-white', 'placeholder': 'Todo text'}}) }}
 
                 {# ADD TODO BUTTON #}
                 <button class="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-b-lg phn:rounded-r-lg phn:rounded-b-none mt-2 phn:mt-0 focus:outline-none">
@@ -76,4 +76,19 @@
         </div>
     {{ form_end(createTodoForm) }}
 </div>
+
+{# TODO EDIT POPUP OVERLAY #}
+<div id="editPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-neutral-900 rounded-lg p-6 border border-neutral-700">
+        <h2 class="text-lg font-bold mb-4 text-white">Edit Todo</h2>
+        <input type="text" id="editTodoInput" class="bg-neutral-800 text-white w-full p-2 border rounded-lg focus:outline-none" placeholder="New todo text" maxlength="255">
+        <div class="flex justify-end mt-4">
+            <button id="cancelEditButton" class="bg-red-500 text-white px-4 py-2 rounded-lg mr-2">Cancel</button>
+            <button id="confirmEditButton" class="bg-green-500 text-white px-4 py-2 rounded-lg">Save</button>
+        </div>
+    </div>
+</div>
+
+{# POPUP FUNCTIONS #}
+{{ encore_entry_script_tags('todo-manager-js') }}
 {% endblock %}

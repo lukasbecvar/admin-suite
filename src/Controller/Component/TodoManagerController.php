@@ -78,6 +78,37 @@ class TodoManagerController extends AbstractController
     }
 
     /**
+     * Handle the todo edit function
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The response todo manager edit component view
+     */
+    #[Route('/manager/todo/edit', methods:['GET'], name: 'app_todo_manager_edit')]
+    public function editTodo(Request $request): Response
+    {
+        // get todo id
+        $todoId = (int) $request->query->get('id');
+        $newTodoText = (string) $request->query->get('todo');
+
+        // check if the todo id is valid
+        if ($todoId == 0) {
+            $this->errorManager->handleError('invalid todo id', 400);
+        }
+
+        // check if the new todo text is valid
+        if ($newTodoText == '') {
+            $this->errorManager->handleError('invalid todo text', 400);
+        }
+
+        // edit the todo
+        $this->todoManager->editTodo($todoId, $newTodoText);
+
+        // self redirect back to todo manager
+        return $this->redirectToRoute('app_todo_manager');
+    }
+
+    /**
      * Handle the todo close function
      *
      * @param Request $request The request object
@@ -91,7 +122,7 @@ class TodoManagerController extends AbstractController
         $todoId = (int) $request->query->get('id');
 
         // check if the todo id is valid
-        if ($todoId == 0) { 
+        if ($todoId == 0) {
             $this->errorManager->handleError('invalid todo id', 400);
         }
 
