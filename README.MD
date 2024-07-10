@@ -163,7 +163,7 @@ Solution for administration and monitoring linux private servers
     - [X] Close todo
     - [X] View closed todo list
     - [X] Edit todo
-    - [ ] Todo data AES encryption
+    - [X] Todo data AES encryption
     - [ ] Todo manager tests
 - [ ] System user (for non loggedin logs & CLI process)
 

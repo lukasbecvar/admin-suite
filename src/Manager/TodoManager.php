@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\Todo;
+use App\Util\SecurityUtil;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -16,17 +17,20 @@ class TodoManager
 {
     private LogManager $logManager;
     private AuthManager $authManager;
+    private SecurityUtil $securityUtil;
     private ErrorManager $errorManager;
     private EntityManagerInterface $entityManagerInterface;
 
     public function __construct(
         LogManager $logManager,
         AuthManager $authManager,
+        SecurityUtil $securityUtil,
         ErrorManager $errorManager,
         EntityManagerInterface $entityManagerInterface
     ) {
         $this->logManager = $logManager;
         $this->authManager = $authManager;
+        $this->securityUtil = $securityUtil;
         $this->errorManager = $errorManager;
         $this->entityManagerInterface = $entityManagerInterface;
     }
@@ -38,7 +42,26 @@ class TodoManager
      */
     public function getTodos(string $filter = 'open'): array
     {
-        return $this->entityManagerInterface->getRepository(Todo::class)->findBy(['user_id' => $this->authManager->getLoggedUserId(), 'status' => $filter], ['id' => 'DESC']);
+        // init the plain todo list
+        $plainTodos = [];
+
+        // get the todo list
+        $todos = $this->entityManagerInterface->getRepository(Todo::class)->findBy(['user_id' => $this->authManager->getLoggedUserId(), 'status' => $filter], ['id' => 'DESC']);
+
+        // decrypt the todo texts
+        foreach ($todos as $todo) {
+            $plainTodos[] = [
+                'id' => $todo->getId(),
+                'todoText' => $this->securityUtil->decryptAes((string) $todo->getTodoText()),
+                'addedTime' => $todo->getAddedTime(),
+                'completedTime' => $todo->getCompletedTime(),
+                'status' => $todo->getStatus(),
+                'userId' => $todo->getUserId()
+            ];
+        }
+
+        // return the plain todo list
+        return $plainTodos;
     }
 
     /**
@@ -67,6 +90,9 @@ class TodoManager
     {
         // create the todo entity
         $todo = new Todo();
+
+        // encrypt the todo text
+        $todoText = $this->securityUtil->encryptAes($todoText);
 
         try {
             // set todo properties
@@ -114,6 +140,9 @@ class TodoManager
         if ($todo->getStatus() !== 'open') {
             $this->errorManager->handleError('todo: ' . $todoId . ' is closed', 403);
         }
+
+        // encrypt the todo text
+        $todoText = $this->securityUtil->encryptAes($todoText);
 
         try {
             // set todo properties
