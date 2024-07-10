@@ -75,6 +75,7 @@ class LogsManagerController extends AbstractController
 
             // instances for logs manager view
             'userManager' => $this->userManager,
+            'authManager' => $this->authManager,
             'visitorInfoUtil' => $this->visitorInfoUtil,
 
             // logs data
