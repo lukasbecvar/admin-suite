@@ -161,8 +161,8 @@ Solution for administration and monitoring linux private servers
     - [X] Todo view
     - [X] Todo entity datafixture
     - [X] Close todo
+    - [X] View closed todo list
     - [ ] Edit todo
-    - [ ] View closed todo list
     - [ ] Todo data AES encryption
     - [ ] Todo manager tests
 - [ ] System user (for non loggedin logs & CLI process)
