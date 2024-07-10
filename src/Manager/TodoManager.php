@@ -20,9 +20,9 @@ class TodoManager
     private EntityManagerInterface $entityManagerInterface;
 
     public function __construct(
-        LogManager $logManager, 
-        AuthManager $authManager, 
-        ErrorManager $errorManager, 
+        LogManager $logManager,
+        AuthManager $authManager,
+        ErrorManager $errorManager,
         EntityManagerInterface $entityManagerInterface
     ) {
         $this->logManager = $logManager;
@@ -39,6 +39,21 @@ class TodoManager
     public function getTodos(string $filter = 'open'): array
     {
         return $this->entityManagerInterface->getRepository(Todo::class)->findBy(['user_id' => $this->authManager->getLoggedUserId(), 'status' => $filter], ['id' => 'DESC']);
+    }
+
+    /**
+     * Get todo status
+     *
+     * @param int $todoId The todo id
+     *
+     * @return string|null The todo status
+     */
+    public function getTodoStatus(int $todoId): ?string
+    {
+        /** @var Todo $todo */
+        $todo = $this->entityManagerInterface->getRepository(Todo::class)->find($todoId);
+
+        return $todo->getStatus();
     }
 
     /**
@@ -73,15 +88,16 @@ class TodoManager
     }
 
     /**
-     * Close a todo
+     * Edit a todo
      *
      * @param int $todoId The todo id
+     * @param string $todoText The todo text
      *
      * @return void
      */
-    public function closeTodo(int $todoId): void
+    public function editTodo(int $todoId, string $todoText): void
     {
-        // get the todo entity
+        /** @var Todo $todo */
         $todo = $this->entityManagerInterface->getRepository(Todo::class)->find($todoId);
 
         // check if the todo is not null
@@ -92,6 +108,54 @@ class TodoManager
         // check if the user is the owner of the todo
         if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
             $this->errorManager->handleError('you are not the owner of the todo: ' . $todoId, 403);
+        }
+
+        // check if the todo is closed
+        if ($todo->getStatus() !== 'open') {
+            $this->errorManager->handleError('todo: ' . $todoId . ' is closed', 403);
+        }
+
+        try {
+            // set todo properties
+            $todo->setTodoText($todoText);
+            $todo->setCompletedTime(null);
+
+            // save the todo entity
+            $this->entityManagerInterface->persist($todo);
+            $this->entityManagerInterface->flush();
+
+            // log the todo creation
+            $this->logManager->log('todo-manager', 'todo edited', 3);
+        } catch (\Exception $e) {
+            $this->errorManager->handleError('error to edit todo: ' . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Close a todo
+     *
+     * @param int $todoId The todo id
+     *
+     * @return void
+     */
+    public function closeTodo(int $todoId): void
+    {
+        /** @var Todo $todo */
+        $todo = $this->entityManagerInterface->getRepository(Todo::class)->find($todoId);
+
+        // check if the todo is not null
+        if ($todo === null) {
+            $this->errorManager->handleError('todo: ' . $todoId . ' not found', 404);
+        }
+
+        // check if the user is the owner of the todo
+        if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
+            $this->errorManager->handleError('you are not the owner of the todo: ' . $todoId, 403);
+        }
+
+        // check if the todo is closed
+        if ($todo->getStatus() !== 'open') {
+            $this->errorManager->handleError('todo: ' . $todoId . ' is already closed', 403);
         }
 
         try {

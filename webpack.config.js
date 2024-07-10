@@ -6,9 +6,11 @@ Encore
     .setOutputPath('public/build/')
     .setPublicPath('/build')
 
-    // register css entries
+    // register css
     .addEntry('index-css', './assets/css/index.css')
 
+    // register js
+    .addEntry('todo-manager-js', './assets/js/todo-manager.js')
     .addEntry('user-manager-js', './assets/js/user-manager.js')
     .addEntry('loading-component-js', './assets/js/loading-component.js')
 
