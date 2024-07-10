@@ -7,8 +7,8 @@ use App\Util\AppUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Util\VisitorInfoUtil;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Finder\Finder;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -24,6 +24,7 @@ class LogManager
     private CookieUtil $cookieUtil;
     private SessionUtil $sessionUtil;
     private ErrorManager $errorManager;
+    private DatabaseManager $databaseManager;
     private VisitorInfoUtil $visitorInfoUtil;
     private EntityManagerInterface $entityManager;
 
@@ -32,6 +33,7 @@ class LogManager
         CookieUtil $cookieUtil,
         SessionUtil $sessionUtil,
         ErrorManager $errorManager,
+        DatabaseManager $databaseManager,
         VisitorInfoUtil $visitorInfoUtil,
         EntityManagerInterface $entityManager
     ) {
@@ -41,6 +43,7 @@ class LogManager
         $this->errorManager = $errorManager;
         $this->entityManager = $entityManager;
         $this->visitorInfoUtil = $visitorInfoUtil;
+        $this->databaseManager = $databaseManager;
     }
 
     /**
@@ -56,6 +59,11 @@ class LogManager
      */
     public function log(string $name, string $message, int $level = 1): void
     {
+        // check if database is down
+        if ($this->databaseManager->isDatabaseDown()) {
+            return;
+        }
+
         // check if log blocking is enabled
         if ($this->isAntiLogEnabled()) {
             return;

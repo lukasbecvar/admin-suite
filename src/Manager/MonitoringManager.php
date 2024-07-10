@@ -26,8 +26,15 @@ class MonitoringManager
     private ServiceManager $serviceManager;
     private EntityManagerInterface $entityManagerInterface;
 
-    public function __construct(AppUtil $appUtil, LogManager $logManager, ServerUtil $serverUtil, EmailManager $emailManager, ErrorManager $errorManager, ServiceManager $serviceManager, EntityManagerInterface $entityManagerInterface)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        LogManager $logManager,
+        ServerUtil $serverUtil,
+        EmailManager $emailManager,
+        ErrorManager $errorManager,
+        ServiceManager $serviceManager,
+        EntityManagerInterface $entityManagerInterface
+    ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->serverUtil = $serverUtil;
@@ -49,7 +56,7 @@ class MonitoringManager
         try {
             return $this->entityManagerInterface->getRepository(ServiceMonitoring::class)->findOneBy($search);
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get service monitoring repository', Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError('error to get service monitoring repository: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             return null;
         }
     }
@@ -158,6 +165,25 @@ class MonitoringManager
     }
 
     /**
+     * Handle database down
+     *
+     * @param SymfonyStyle $io The io interface
+     * @param bool $databaseDown The database down flag
+     *
+     * @return void
+     */
+    public function handleDatabaseDown(SymfonyStyle $io, bool $databaseDown): void
+    {
+        // check if database is down flag is set
+        if ($databaseDown == false) {
+            $this->emailManager->sendEmail($this->appUtil->getAdminContactEmail(), 'monitoring status', ['serviceName' => 'mysql', 'monitoringMesssage' => 'Mysql server down detected', 'monitoringStatus' => 'critical'], 'monitoring-status');
+        }
+
+        // print database is down message
+        $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>database is down</fg=red>');
+    }
+
+    /**
      * Init monitroing process (called from monitroing process command)
      *
      * @param SymfonyStyle $io The io interface
@@ -172,7 +198,7 @@ class MonitoringManager
         }
 
         // monitor cpu usage
-        if ($this->serverUtil->getCpuUsage() > 95) {
+        if ($this->serverUtil->getCpuUsage() > 98) {
             $this->handleMonitoringStatus('system-cpu-usage', 'critical', 'cpu usage is too high');
             $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>cpu usage is too high</fg=red>');
         } else {
@@ -181,7 +207,7 @@ class MonitoringManager
         }
 
         // monitor ram usage
-        if ($this->serverUtil->getRamUsagePercentage() > 95) {
+        if ($this->serverUtil->getRamUsagePercentage() > 98) {
             $this->handleMonitoringStatus('system-ram-usage', 'critical', 'ram usage is too high');
             $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>ram usage is too high</fg=red>');
         } else {
@@ -190,7 +216,7 @@ class MonitoringManager
         }
 
         // monitor disk usage
-        if ($this->serverUtil->getDriveUsagePercentage() > 95) {
+        if ($this->serverUtil->getDriveUsagePercentage() > 98) {
             $this->handleMonitoringStatus('system-disk-usage', 'critical', 'disk space is too low');
             $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>disk space is too low/fg=red>');
         } else {
