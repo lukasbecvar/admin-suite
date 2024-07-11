@@ -2,9 +2,11 @@
 
 namespace Tests\Unit\Util;
 
+use App\Util\JsonUtil;
 use App\Util\ServerUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class ServerUtilTest
@@ -15,16 +17,23 @@ use PHPUnit\Framework\TestCase;
  */
 class ServerUtilTest extends TestCase
 {
+    /** @var ServerUtil */
     private ServerUtil $serverUtil;
+
+    /** @var ErrorManager */
     private ErrorManager $errorManager;
+
+    /** @var JsonUtil|MockObject */
+    private JsonUtil|MockObject $jsonUtilMock;
 
     protected function setUp(): void
     {
         // create mock error manager
+        $this->jsonUtilMock = $this->createMock(JsonUtil::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
 
         // create instance of ServerUtil
-        $this->serverUtil = new ServerUtil($this->errorManager);
+        $this->serverUtil = new ServerUtil($this->jsonUtilMock, $this->errorManager);
         parent::setUp();
     }
 

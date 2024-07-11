@@ -157,7 +157,7 @@ class LogsManagerController extends AbstractController
         }
 
         // self exception log content
-        $log = file_get_contents(__DIR__ . '/../../../var/log/exception.log');
+        $log = file_get_contents($this->appUtil->getAppRootDir() . '/var/log/exception.log');
 
         return $this->render('component/logs-manager/self-exception-logs.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),

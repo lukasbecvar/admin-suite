@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use App\Entity\User;
 use App\Util\AppUtil;
+use App\Util\JsonUtil;
 use App\Util\CacheUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
@@ -24,6 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthManager
 {
     private AppUtil $appUtil;
+    private JsonUtil $jsonUtil;
     private CacheUtil $cacheUtil;
     private LogManager $logManager;
     private CookieUtil $cookieUtil;
@@ -37,6 +39,7 @@ class AuthManager
 
     public function __construct(
         AppUtil $appUtil,
+        JsonUtil $jsonUtil,
         CacheUtil $cacheUtil,
         LogManager $logManager,
         CookieUtil $cookieUtil,
@@ -49,6 +52,7 @@ class AuthManager
         EntityManagerInterface $entityManager
     ) {
         $this->appUtil = $appUtil;
+        $this->jsonUtil = $jsonUtil;
         $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
         $this->cookieUtil = $cookieUtil;
@@ -70,15 +74,11 @@ class AuthManager
      */
     public function isUsernameBlocked(string $username): bool
     {
-        $blockedUsernames = file_get_contents(__DIR__ . '/../../config/suite/blocked-usernames.json');
+        $blockedUsernames = $this->jsonUtil->getJson($this->appUtil->getAppRootDir() . '/config/suite/blocked-usernames.json');
 
-        // check if blocked usernames is empty
-        if (!$blockedUsernames) {
+        if ($blockedUsernames == null) {
             return false;
         }
-
-        // decode json
-        $blockedUsernames = (array) json_decode($blockedUsernames, true);
 
         return in_array($username, $blockedUsernames);
     }

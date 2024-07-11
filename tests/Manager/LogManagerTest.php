@@ -37,7 +37,6 @@ class LogManagerTest extends TestCase
     /** @var LogRepository|MockObject */
     private LogRepository|MockObject $repositoryMock;
 
-
     /** @var ErrorManager|MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 

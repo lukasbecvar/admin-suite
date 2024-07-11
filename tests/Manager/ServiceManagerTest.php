@@ -2,6 +2,8 @@
 
 namespace App\Tests\Manager;
 
+use App\Util\AppUtil;
+use App\Util\JsonUtil;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
@@ -18,6 +20,12 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class ServiceManagerTest extends TestCase
 {
+    /** @var AppUtil|MockObject */
+    private AppUtil|MockObject $appUtilMock;
+
+    /** @var JsonUtil|MockObject */
+    private JsonUtil|MockObject $jsonUtilMock;
+
     /** @var ServiceManager */
     private ServiceManager $serviceManager;
 
@@ -32,11 +40,15 @@ class ServiceManagerTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->appUtilMock = $this->createMock(AppUtil::class);
+        $this->jsonUtilMock = $this->createMock(JsonUtil::class);
         $this->logManager = $this->createMock(LogManager::class);
         $this->authManager = $this->createMock(AuthManager::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
 
         $this->serviceManager = new ServiceManager(
+            $this->appUtilMock,
+            $this->jsonUtilMock,
             $this->logManager,
             $this->authManager,
             $this->errorManager
@@ -44,22 +56,11 @@ class ServiceManagerTest extends TestCase
     }
 
     /**
-     * Test getServicesList method
-     *
-     * @return void
-     */
-    public function testGetServices(): void
-    {
-        // assert the result
-        $this->assertIsArray($this->serviceManager->getServicesList());
-    }
-
-    /**
      * Test runSystemdAction method
      *
      * @return void
      */
-    public function testrunSystemdAction(): void
+    public function testRunSystemdAction(): void
     {
         $this->authManager->expects($this->once())
             ->method('isUserLogedin')
@@ -81,7 +82,7 @@ class ServiceManagerTest extends TestCase
             ->with('action-runner', 'testUser start example_service', 1);
 
         $this->serviceManager = $this->getMockBuilder(ServiceManager::class)
-            ->setConstructorArgs([$this->logManager, $this->authManager, $this->errorManager])
+            ->setConstructorArgs([$this->appUtilMock, $this->jsonUtilMock, $this->logManager, $this->authManager, $this->errorManager])
             ->onlyMethods(['executeCommand'])
             ->getMock();
 

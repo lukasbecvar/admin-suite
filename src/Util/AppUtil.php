@@ -2,6 +2,8 @@
 
 namespace App\Util;
 
+use Symfony\Component\HttpKernel\KernelInterface;
+
 /**
  * Class AppUtil
  *
@@ -12,10 +14,21 @@ namespace App\Util;
 class AppUtil
 {
     private ServerUtil $serverUtil;
+    private KernelInterface $kernelInterface;
 
-    public function __construct(ServerUtil $serverUtil)
+    public function __construct(ServerUtil $serverUtil, KernelInterface $kernelInterface)
     {
         $this->serverUtil = $serverUtil;
+        $this->kernelInterface = $kernelInterface;
+    }
+
+    /** Get the application root directory
+     *
+     * @return string The application root directory
+     */
+    public function getAppRootDir(): string
+    {
+        return $this->kernelInterface->getProjectDir();
     }
 
     /**
@@ -36,7 +49,7 @@ class AppUtil
      */
     public function isAssetsExist(): bool
     {
-        return file_exists(__DIR__ . '/../../public/build/');
+        return file_exists($this->getAppRootDir() . '/public/build/');
     }
 
     /**
