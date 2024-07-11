@@ -9,14 +9,8 @@
     {{ encore_entry_link_tags('index-css') }}
     <title>Admin suite</title>
 </head>
-<div id="loader-wrapper">
-    <div id="loader"></div>
-</div>
 <body>
     {# <======= MAIN COMPONENT WRAPPER =======> #}
     {% block body %}{% endblock %}
-
-    {# <======= REGISTER SCRIPTS =======> #}
-    {{ encore_entry_script_tags('loading-component-js') }}
 </body>
 </html>
