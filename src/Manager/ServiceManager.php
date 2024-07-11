@@ -2,6 +2,8 @@
 
 namespace App\Manager;
 
+use App\Util\AppUtil;
+use App\Util\JsonUtil;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -13,15 +15,21 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ServiceManager
 {
+    private AppUtil $appUtil;
+    private JsonUtil $jsonUtil;
     private LogManager $logManager;
     private AuthManager $authManager;
     private ErrorManager $errorManager;
 
     public function __construct(
+        AppUtil $appUtil,
+        JsonUtil $jsonUtil,
         LogManager $logManager,
         AuthManager $authManager,
         ErrorManager $errorManager
     ) {
+        $this->appUtil = $appUtil;
+        $this->jsonUtil = $jsonUtil;
         $this->logManager = $logManager;
         $this->authManager = $authManager;
         $this->errorManager = $errorManager;
@@ -34,22 +42,15 @@ class ServiceManager
      */
     public function getServicesList(): ?array
     {
-        $servicesList = null;
+        // default example config path
+        $configPath = $this->appUtil->getAppRootDir() . '/config/suite/services.json';
 
-        try {
-            // get services list from services.json
-            $servicesFile = file_get_contents(__DIR__ . '/../../config/suite/services.json');
-
-            if ($servicesFile) {
-                // decode json
-                $servicesList = (array) json_decode($servicesFile, true);
-            }
-        } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get services-list.json file: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-            ;
+        // set config path
+        if (file_exists($this->appUtil->getAppRootDir() . '/services.json')) {
+            $configPath = $this->appUtil->getAppRootDir() . '/services.json';
         }
 
-        return $servicesList;
+        return $this->jsonUtil->getJson($configPath);
     }
 
     /**

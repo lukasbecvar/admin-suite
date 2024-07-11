@@ -33,5 +33,9 @@
 /yarn-error.log
 /package-lock.json
 
+# custom suite configs
+package-requirements.json
+services.json
+
 # docker services files
 _docker/services

@@ -4,9 +4,12 @@ namespace App\Tests\Util;
 
 use Twig\Environment;
 use App\Util\AppUtil;
+use App\Util\JsonUtil;
 use App\Util\ServerUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class AppUtilTest
@@ -26,13 +29,21 @@ class AppUtilTest extends TestCase
     /** @var ErrorManager */
     private ErrorManager $errorManager;
 
+    /** @var KernelInterface */
+    private KernelInterface $kernelInterface;
+
+    /** @var JsonUtil|MockObject */
+    private JsonUtil|MockObject $jsonUtilMock;
+
     protected function setUp(): void
     {
         $twigMock = $this->createMock(Environment::class);
         $this->errorManager = new ErrorManager($twigMock);
-        $this->serverUtil = new ServerUtil($this->errorManager);
+        $this->jsonUtilMock = $this->createMock(JsonUtil::class);
+        $this->kernelInterface = $this->createMock(KernelInterface::class);
+        $this->serverUtil = new ServerUtil($this->jsonUtilMock, $this->errorManager);
 
-        $this->appUtil = new AppUtil($this->serverUtil);
+        $this->appUtil = new AppUtil($this->serverUtil, $this->kernelInterface);
     }
 
     /**

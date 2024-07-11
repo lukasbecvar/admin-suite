@@ -14,10 +14,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ServerUtil
 {
+    private JsonUtil $jsonUtil;
     private ErrorManager $errorManager;
 
-    public function __construct(ErrorManager $errorManager)
+    public function __construct(JsonUtil $jsonUtil, ErrorManager $errorManager)
     {
+        $this->jsonUtil = $jsonUtil;
         $this->errorManager = $errorManager;
     }
 
@@ -254,18 +256,18 @@ class ServerUtil
      */
     public function getNotInstalledRequirements(): array
     {
-        $appList = [];
         $notFoundApps = [];
 
-        // get list of required apps
-        try {
-            $appList = file_get_contents(__DIR__ . '/../../config/suite/package-requirements.json');
-            if ($appList) {
-                $appList = json_decode($appList, true);
-            }
-        } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get not installed requirements ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        // default example config path
+        $configPath = __DIR__ . '/../../config/suite/package-requirements.json';
+
+        // set config path
+        if (file_exists(__DIR__ . '/../../package-requirements.json')) {
+            $configPath = __DIR__ . '/../../package-requirements.json';
         }
+
+        /** @var array<string> $appList get list of required apps */
+        $appList = $this->jsonUtil->getJson($configPath);
 
         if (is_iterable($appList)) {
             // check if app is installed

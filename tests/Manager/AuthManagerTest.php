@@ -5,6 +5,7 @@ namespace App\Tests\Manager;
 use ReflectionClass;
 use App\Entity\User;
 use App\Util\AppUtil;
+use App\Util\JsonUtil;
 use App\Util\CacheUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
@@ -32,6 +33,9 @@ class AuthManagerTest extends TestCase
 {
     /** @var AppUtil|MockObject */
     private AppUtil|MockObject $appUtilMock;
+
+    /** @var JsonUtil|MockObject */
+    private JsonUtil|MockObject $jsonUtilMock;
 
     /** @var CacheUtil|MockObject */
     private CacheUtil|MockObject $cacheUtilMock;
@@ -69,6 +73,7 @@ class AuthManagerTest extends TestCase
     protected function setUp(): void
     {
         $this->appUtilMock = $this->createMock(AppUtil::class);
+        $this->jsonUtilMock = $this->createMock(JsonUtil::class);
         $this->cacheUtilMock = $this->createMock(CacheUtil::class);
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->cookieUtilMock = $this->createMock(CookieUtil::class);
@@ -82,6 +87,7 @@ class AuthManagerTest extends TestCase
 
         $this->authManager = new AuthManager(
             $this->appUtilMock,
+            $this->jsonUtilMock,
             $this->cacheUtilMock,
             $this->logManagerMock,
             $this->cookieUtilMock,

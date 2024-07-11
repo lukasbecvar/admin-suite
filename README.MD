@@ -168,10 +168,10 @@ Solution for administration and monitoring linux private servers
     - [X] Todo manager tests
 
 ## 1.0
-- [ ] Internal improvements
-    - [ ] Json util (get from file or url)
-    - [ ] Config suite rework (use config/suite only for example)
-    - [ ] Create ignored configs in root and use to primary configs
+- [X] Internal improvements
+    - [X] Json util (get from file or url)
+    - [X] Config suite rework (use config/suite only for example)
+    - [X] Create ignored configs in root and use to primary configs
 - [ ] UI redesign
     - [ ] Email template style
     - [ ] Complete design improvement
