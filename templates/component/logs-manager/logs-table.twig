@@ -4,11 +4,6 @@
 {% block component %} 
 <div class="users-manager">
     <div class="flex items-center bg-neutral-900 border-b border-neutral-700 sub-navigation whitespace-nowrap">
-        {# GO TO RAW LOGS DATABASE #}
-        <a href="#" class="border border-neutral-500 font-bold px-1 text-white">
-            <i class="fa fa-database" aria-hidden="true"></i>
-        </a>
-
         {# SET ALL LOGS READED #}
         <a href={{ path('app_manager_logs_set_readed') }} class="border border-neutral-500 font-bold px-1 text-white ml-1">
             <i class="fa fa-check" aria-hidden="true"></i>

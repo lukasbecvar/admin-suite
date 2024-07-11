@@ -6,6 +6,8 @@ use App\Entity\Todo;
 use App\Util\SecurityUtil;
 use Doctrine\ORM\EntityManagerInterface;
 
+use function Symfony\Component\String\b;
+
 /**
  * Class TodoManager
  *
@@ -200,6 +202,45 @@ class TodoManager
             $this->logManager->log('todo-manager', 'todo closed', 3);
         } catch (\Exception $e) {
             $this->errorManager->handleError('error to close todo: ' . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Delete a todo
+     *
+     * @param int $todoId The todo id
+     *
+     * @return void
+     */
+    public function deleteTodo(int $todoId): void
+    {
+        try {
+            // get the todo entity
+            $todo = $this->entityManagerInterface->getRepository(Todo::class)->find($todoId);
+
+            // check if the todo entity is found
+            if ($todo == null) {
+                $this->errorManager->handleError('todo not found', 404);
+            } else {
+                // check if the user is the owner of the todo
+                if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
+                    $this->errorManager->handleError('you are not the owner of the todo: ' . $todoId, 403);
+                }
+
+                // check if the todo is closed
+                if ($todo->getStatus() != 'closed') {
+                    $this->errorManager->handleError('todo: ' . $todoId . ' is not closed', 403);
+                }
+
+                // delete the todo entity
+                $this->entityManagerInterface->remove($todo);
+                $this->entityManagerInterface->flush();
+
+                // log the todo deletion
+                $this->logManager->log('todo-manager', 'todo deleted', 3);
+            }
+        } catch (\Exception $e) {
+            $this->errorManager->handleError('error to delete todo: ' . $e->getMessage(), 500);
         }
     }
 }

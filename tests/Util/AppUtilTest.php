@@ -276,12 +276,12 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test get monitroing interval
+     * Test get monitoring interval
      *
      * @return void
      */
-    public function testGetMonitroingInterval(): void
+    public function testGetMonitoringInterval(): void
     {
-        $this->assertSame(5, $this->appUtil->getMonitroingInterval());
+        $this->assertSame(5, $this->appUtil->getMonitoringInterval());
     }
 }

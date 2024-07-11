@@ -12,14 +12,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class MonitroingProcessCommand
+ * Class MonitoringProcessCommand
  *
  * Command to monitoring services
  *
  * @package App\Command\Process
  */
-#[AsCommand(name: 'app:process:monitroing', description: 'Main service monitoring process loop')]
-class MonitroingProcessCommand extends Command
+#[AsCommand(name: 'app:process:monitoring', description: 'Main service monitoring process loop')]
+class MonitoringProcessCommand extends Command
 {
     private AppUtil $appUtil;
     private DatabaseManager $databaseManager;
@@ -75,7 +75,7 @@ class MonitroingProcessCommand extends Command
             }
 
             // sleep monitoring interval
-            sleep($this->appUtil->getMonitroingInterval() * 60);
+            sleep($this->appUtil->getMonitoringInterval() * 60);
         }
 
         /** @phpstan-ignore-next-line */

@@ -30,6 +30,11 @@
             <div class="flex-1 overflow-y-auto">
                 <div class="divide-y divide-neutral-700">
 
+                    {# TODO LIST IS EMPTY INFORMATION #}
+                    {% if todos|length == 0 %}
+                        <p class="flex items-center justify-center mt-10 mb-20 text-2xl text-white font-bold">This todo list is empty</p>
+                    {% endif %}
+
                     {# TODO ITEM #}
                     {% for todo in todos %}
                         <div class="flex items-center justify-between p-2 px-4 hover:bg-neutral-700" data-todo-id="{{ todo.id }}">
@@ -45,6 +50,10 @@
                                         <i class="fa fa-edit" aria-hidden="true"></i>
                                     </button>
                                 </div>
+                            {% else %}
+                                <a href={{ path('app_todo_manager_delete', {'id': todo.id}) }} class="text-red-500 text-xl hover:text-red-200 focus:outline-none mr-0.5">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </a>
                             {% endif %}
                         </div>                    
                     {% endfor %}

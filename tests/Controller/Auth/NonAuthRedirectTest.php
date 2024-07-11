@@ -72,7 +72,8 @@ class NonAuthRedirectTest extends WebTestCase
             // todo manager
             ['/manager/todo'],
             ['/manager/todo/edit'],
-            ['/manager/todo/close']
+            ['/manager/todo/close'],
+            ['/manager/todo/delete']
         ];
     }
 
