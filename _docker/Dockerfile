@@ -24,3 +24,6 @@ RUN pecl install apcu \
 
 # enable apache rewrite module
 RUN a2enmod rewrite
+
+USER root
+CMD ["apache2-foreground"]

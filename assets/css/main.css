@@ -85,7 +85,7 @@ main {
 }
 
 .nav-bar .about-link:hover {
-	background-color: cyan;
+	background-color: rgb(24, 190, 190);
 }
 
 .nav-bar .logout-link {
@@ -103,6 +103,10 @@ main {
 	width: 200px;
 	transition: transform 0.3s ease;
 	transform: translateX(-100%);
+}
+
+#sidebar ul {
+	font-size: 14px !important;
 }
 
 #sidebar .profile-image {
