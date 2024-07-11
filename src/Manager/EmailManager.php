@@ -49,6 +49,26 @@ class EmailManager
     }
 
     /**
+     * Send a monitoring status email
+     *
+     * @param string $recipient The recipient email
+     * @param string $serviceName The service name
+     * @param string $message The message
+     * @param string $status The status
+     *
+     * @return void
+     */
+    public function sendMonitoringStatusEmail(string $recipient, string $serviceName, string $message, string $status): void
+    {
+        $this->sendEmail($recipient, 'monitoring status', [
+            'serviceName' => $serviceName,
+            'monitoringMesssage' => $message,
+            'monitoringStatus' => $status,
+            'time' => date('Y-m-d H:i:s')
+        ], 'monitoring-status');
+    }
+
+    /**
      * Send an email with a template and context data
      *
      * @param string $recipient The recipient email

@@ -173,7 +173,7 @@ Solution for administration and monitoring linux private servers
     - [X] Config suite rework (use config/suite only for example)
     - [X] Create ignored configs in root and use to primary configs
 - [ ] UI redesign
-    - [ ] Email template style
+    - [X] Email template style
     - [ ] Complete design improvement
     - [ ] Color correction
     - [ ] Responsive design
