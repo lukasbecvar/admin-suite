@@ -2,6 +2,11 @@
 
 {# MAIN ADMIN COMPONENT LAYOUT #}
 {% block body %}
+    {# <======= LOADER COMPONENT =======> #}
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+    </div>
+    
     {# NAVBAR #}
     {% include 'element/navigation.twig' %}
 
@@ -35,5 +40,8 @@
             }
         </script>
     {% endif %}
+
+    {# <======= REGISTER SCRIPTS =======> #}
+    {{ encore_entry_script_tags('loading-component-js') }}
 {% endblock %}
  
