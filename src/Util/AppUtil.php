@@ -136,11 +136,11 @@ class AppUtil
         return (int) $_ENV['LIMIT_CONTENT_PER_PAGE'];
     }
 
-    /** Get monitroing wait interval
+    /** Get monitoring wait interval
      *
-     * @return int The monitroing wait interval
+     * @return int The monitoring wait interval
      */
-    public function getMonitroingInterval(): int
+    public function getMonitoringInterval(): int
     {
         return (int) $_ENV['MONITORING_INTERVAL'];
     }

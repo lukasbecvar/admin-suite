@@ -145,7 +145,7 @@ Solution for administration and monitoring linux private servers
     - [X] Monitoring loop command (check if all services is online)
     - [X] HTTP service type (check website response code & response time)
     - [X] Monitor system resource usage
-    - [X] Monitroing entity for log services state
+    - [X] Monitoring entity for log services state
     - [X] Log offline status
     - [X] Service status change email alert
     - [X] Service monitoring entity datafixtures
@@ -172,12 +172,7 @@ Solution for administration and monitoring linux private servers
     - [X] Json util (get from file or url)
     - [X] Config suite rework (use config/suite only for example)
     - [X] Create ignored configs in root and use to primary configs
-- [ ] UI redesign
-    - [X] Email template style
-    - [ ] Complete design improvement
-    - [ ] Color correction
-    - [ ] Responsive design
-    - [ ] Test on mobile devices
+- [X] Completed todo delete
 - [ ] Refactor
     - [ ] Naming
     - [ ] Doc

@@ -82,7 +82,7 @@ class TodoManagerController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The response todo manager edit component view
+     * @return Response The response todo manager component redirect
      */
     #[Route('/manager/todo/edit', methods:['GET'], name: 'app_todo_manager_edit')]
     public function editTodo(Request $request): Response
@@ -113,7 +113,7 @@ class TodoManagerController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The response todo manager close component view
+     * @return Response The response todo manager  component redirect
      */
     #[Route('/manager/todo/close', methods:['GET'], name: 'app_todo_manager_close')]
     public function closeTodo(Request $request): Response
@@ -131,5 +131,32 @@ class TodoManagerController extends AbstractController
 
         // self redirect back to todo manager
         return $this->redirectToRoute('app_todo_manager');
+    }
+
+    /**
+     * Handle the todo delete function
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The response todo manager redirect
+     */
+    #[Route('/manager/todo/delete', methods:['GET'], name: 'app_todo_manager_delete')]
+    public function deleteTodo(Request $request): Response
+    {
+        // get todo id
+        $todoId = (int) $request->query->get('id');
+
+        // check if the todo id is valid
+        if ($todoId == 0) {
+            $this->errorManager->handleError('invalid todo id', 400);
+        }
+
+        // delete the todo
+        $this->todoManager->deleteTodo($todoId);
+
+        // self redirect back to todo manager
+        return $this->redirectToRoute('app_todo_manager', [
+            'filter' => 'closed'
+        ]);
     }
 }

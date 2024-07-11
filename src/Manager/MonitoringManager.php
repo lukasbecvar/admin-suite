@@ -12,7 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Class MonitoringManager
  *
- * The manager for methos associated with monitroing process
+ * The manager for methos associated with monitoring process
  *
  * @package App\Manager
  */
@@ -153,7 +153,7 @@ class MonitoringManager
                 $this->emailManager->sendEmail($this->appUtil->getAdminContactEmail(), 'monitoring status', ['serviceName' => $serviceName, 'monitoringMesssage' => $message, 'monitoringStatus' => $currentStatus], 'monitoring-status');
 
                 // log status chnage
-                $this->logManager->log('monitoring', $serviceName . ' status: ' . $currentStatus . ' msg: ' . $message, 2); $this->
+                $this->logManager->log('monitoring', $serviceName . ' status: ' . $currentStatus . ' msg: ' . $message, 2);
 
                 // update monitoring status
                 $this->setMonitoringStatus($serviceName, $message, $currentStatus);
@@ -184,7 +184,7 @@ class MonitoringManager
     }
 
     /**
-     * Init monitroing process (called from monitroing process command)
+     * Init monitoring process (called from monitoring process command)
      *
      * @param SymfonyStyle $io The io interface
      *
@@ -194,7 +194,7 @@ class MonitoringManager
     {
         // check if method is called from cli
         if (php_sapi_name() != 'cli') {
-            $this->errorManager->handleError('error to init monitroing process: this method can only be called from cli', Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError('error to init monitoring process: this method can only be called from cli', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // monitor cpu usage
@@ -259,8 +259,8 @@ class MonitoringManager
                     if ($serviceStatus['isOnline']) {
                         // check service response code
                         if ($serviceStatus['responseCode'] != $service['accept_code']) {
-                            $this->handleMonitoringStatus($service['service_name'], 'not-accepting-code', $service['display_name'] . ' is not accepting code ' . $service['accept_code']);
-                            $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not accepting code ' . $service['accept_code'] . '</fg=red>');
+                            $this->handleMonitoringStatus($service['service_name'], 'not-accepting-code', $service['display_name'] . ' is not accepting code ' . $service['accept_code'] . ' (response code: ' . $serviceStatus['responseCode'] . ')');
+                            $io->writeln('[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not accepting code ' . $service['accept_code'] . ' (response code: ' . $serviceStatus['responseCode'] . ')</fg=red>');
 
                         // check service response time
                         } elseif ($serviceStatus['responseTime'] > $service['max_response_time']) {

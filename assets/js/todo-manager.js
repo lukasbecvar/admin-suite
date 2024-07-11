@@ -25,10 +25,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // handle confirm button
     confirmEditButton.addEventListener('click', function () {
+        confirmEdit();
+    });
+
+    function confirmEdit() {
         if (editTodoInput.value.length >= 1 && editTodoInput.value.length <= 255) {
             window.location.href = `/manager/todo/edit?id=${currentTodoId}&todo=${encodeURIComponent(editTodoInput.value)}`;
         } else {
             alert('Todo text must be between 1 and 255 characters');
+        }
+    }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            if (editTodoInput.value.length >= 1 && editTodoInput.value.length <= 255) {
+                confirmEdit();
+            }
         }
     });
 
