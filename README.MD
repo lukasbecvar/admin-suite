@@ -173,7 +173,6 @@ Solution for administration and monitoring linux private servers
     - [X] Config suite rework (use config/suite only for example)
     - [X] Create ignored configs in root and use to primary configs
 - [X] Completed todo delete
-- [ ] Simple markdown doc
 - [ ] Refactor
 - [ ] Complete manual testing
 
