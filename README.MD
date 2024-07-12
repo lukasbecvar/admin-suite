@@ -1,4 +1,4 @@
-# Admin suite
+# <h1 align="center">Admin suite</h1>
 Solution for administration and monitoring linux private servers
 
 <p align="center">
