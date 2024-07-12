@@ -45,7 +45,7 @@
 - [ ] Upgrade script (github action release run over SSH)
 
 ## Dependencies
-This project uses the following technologies:
+This project uses the following technologies
 * PHP
     * [Website](https://php.net)
 * Symfony
