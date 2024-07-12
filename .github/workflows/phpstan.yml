@@ -11,20 +11,21 @@ jobs:
     name: PHPStan analyse
     runs-on: ubuntu-latest
 
-    # phpstan test process
     steps:
     # checkout code
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # set up PHP environment
-    - name: Set up PHP
+    # setup PHP
+    - name: Setup PHP
       uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
 
     # install project dependencies
     - name: Install dependencies
-      run: composer install
+      run: composer install --no-interaction --no-progress --no-suggest
 
-    # run PHPStan analysis
+    # run PHPStan process
     - name: Run PHPStan
       run: ./vendor/bin/phpstan analyse --configuration phpstan.neon

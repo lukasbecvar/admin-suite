@@ -50,15 +50,15 @@ class LinuxCheckMiddleware
             if ($this->appUtil->isDevMode()) {
                 $this->errorManager->handleError(
                     'This system is only for linux.',
-                    Response::HTTP_UPGRADE_REQUIRED
+                    Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             } else {
                 $this->logger->error('this system is only for linux');
             }
 
             // render the maintenance template
-            $content = $this->errorManager->getErrorView(Response::HTTP_UPGRADE_REQUIRED);
-            $response = new Response($content, Response::HTTP_UPGRADE_REQUIRED);
+            $content = $this->errorManager->getErrorView(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response = new Response($content, Response::HTTP_INTERNAL_SERVER_ERROR);
             $event->setResponse($response);
         }
     }

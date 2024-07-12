@@ -1,6 +1,6 @@
 {
     "name": "admin-suite",
-    "version": "1.0.0",
+    "version": "1.0",
     "description": "Solution for Linux server with custom services administration and monitoring",
     "main": "webpack.config.js",
     "author": "Lukáš Bečvář",

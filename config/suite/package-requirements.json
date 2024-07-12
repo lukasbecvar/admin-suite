@@ -1,17 +1,19 @@
 [
     "Zend OPcache",
     "pdo_mysql",
-    "mysqli",
     "openssl",
-    "apache",
     "systemd",
+    "apache",
+    "nload",
     "intl",
     "apcu",
     "sudo",
     "curl",
+    "htop",
     "rpm",
     "pdo",
     "dom",
     "npm",
-    "ufw"
+    "ufw",
+    "tree"
 ]

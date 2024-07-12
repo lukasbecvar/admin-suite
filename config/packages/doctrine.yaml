@@ -1,17 +1,16 @@
 doctrine:
     dbal:
-        # database data (get from .env)
+        # database connection options (get from .env)
         driver: '%env(DATABASE_DRIVER)%'
         host: '%env(DATABASE_HOST)%'
         port: '%env(DATABASE_PORT)%'
         dbname: '%env(DATABASE_NAME)%'
         user: '%env(resolve:DATABASE_USERNAME)%'
         password: '%env(resolve:DATABASE_PASSWORD)%'
-        
-        # database server version
-        server_version: '8.0.31'
-        
+
+        # server configuration
         charset: utf8mb4
+        server_version: '8.0.31'
         profiling_collect_backtrace: '%kernel.debug%'
     orm:
         auto_generate_proxy_classes: true

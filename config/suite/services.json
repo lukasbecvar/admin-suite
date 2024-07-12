@@ -5,15 +5,27 @@
         "type": "systemd",
         "enable": true 
     },
-    "docker": {
-        "service_name": "docker",
-        "display_name": "Docker",
+    "apache2": {
+        "service_name": "apache2",
+        "display_name": "Apache2",
         "type": "systemd",
         "enable": true 
     },
-    "becvar_site": {
-        "service_name": "becvar-site",
-        "display_name": "Becvar site",
+    "mysql": {
+        "service_name": "mysql",
+        "display_name": "Mysql",
+        "type": "systemd",
+        "enable": true 
+    },
+    "openvpn": {
+        "service_name": "openvpn",
+        "display_name": "OpenVPN",
+        "type": "systemd",
+        "enable": true 
+    },
+    "becvar.xyz": {
+        "service_name": "becvar.xyz",
+        "display_name": "becvar.xyz website",
         "url": "https://becvar.xyz",
         "accept_code": 200,
         "max_response_time": 1000,

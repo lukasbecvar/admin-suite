@@ -9,7 +9,7 @@
     printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinterForPhpUnit9"
 >
     <php>
-        <!-- environment Variables -->
+        <!-- environment variables -->
         <server name="APP_ENV" value="test" force="true"/>
         <server name="SYMFONY_DEBUG" value="0"/>
         <server name="SHELL_VERBOSITY" value="-1"/>

@@ -27,3 +27,7 @@ sudo rm -rf var/
 
 # delete docker services data
 sudo rm -rf _docker/services/
+
+# delete custom config files
+rm -rf package-requirements.json
+rm -rf services.json
