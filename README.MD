@@ -1,7 +1,5 @@
 # <h1 align="center">Admin suite</h1>
-
 ### <p align="center">Solution for administration and monitoring linux private servers</p>
-
 <p align="center">
     <a href="https://github.com/lordbecvold/admin-suite/blob/main/DOC.MD" target="_blank">Documentation</a> |
     <a href="https://github.com/lordbecvold/admin-suite/blob/main/LICENSE" target="_blank">License</a> |
@@ -45,6 +43,18 @@
 - [ ] Setup script (for non docker env)
 - [ ] Doc/About & download page (github pages)
 - [ ] Upgrade script (github action release run over SSH)
+
+## Dependencies
+This project uses the following technologies:
+* PHP
+    * [Website](https://php.net)
+* Symfony
+    * [Website](https://symfony.com)
+* Tailwind
+    * [Website](https://tailwindcss.com)
+* NPM / Webpack encore
+    * [NPM](https://docs.npmjs.com)
+    * [Encore](https://symfony.com/doc/current/frontend/encore/index.html)
 
 ## License
 The framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
