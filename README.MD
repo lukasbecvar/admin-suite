@@ -1,6 +1,13 @@
 # Admin suite
 Solution for administration and monitoring linux private servers
 
+[![Documentation](https://img.shields.io/badge/License-MIT-blue.svg)](DOC.MD)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/lordbecvold/yourproject)](https://github.com/lordbecvold/admin-suite/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/lordbecvold/yourproject)](https://github.com/lordbecvold/admin-suite/network/members)
+[![GitHub Issues](https://img.shields.io/github/issues/lordbecvold/yourproject)](https://github.com/lordbecvold/admin-suite/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/lordbecvold/yourproject)](https://github.com/lordbecvold/admin-suite/pulls)
+
 ## Dashboard preview
 ![Dashboard](.github/assets/preview.png)
 
