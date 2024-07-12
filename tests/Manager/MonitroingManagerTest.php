@@ -4,12 +4,12 @@ namespace App\Tests\Manager;
 
 use App\Util\AppUtil;
 use App\Util\ServerUtil;
+use App\Manager\LogManager;
 use App\Manager\EmailManager;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Manager\ServiceManager;
 use App\Entity\ServiceMonitoring;
-use App\Manager\LogManager;
 use App\Manager\MonitoringManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManagerInterface;

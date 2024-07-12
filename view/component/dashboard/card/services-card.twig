@@ -1,0 +1,60 @@
+<div class="border border-gray-500 shadow-lg overflow-hidden w-full max-h-50 card-color card-component">
+    <div class="px-2 py-2 border-b border-gray-500 text-white font-bold">Services [<a href={{ path('app_manager_monitoring') }} class="card-rederer">monitoring</a>]</div>
+    <div class="p-1 overflow-y-auto h-60">
+        
+        {# UFW SERVICE #}
+        <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-500">
+            <div class="flex items-center space-x-2">
+                <span class="text-gray-300 font-semibold">UFW</span>
+                <span class="text-white ml-r">
+                    {% if serviceManager.isUfwRunning() %}
+                        [<span class="text-green-500 font-bold">ONLINE</span>]
+                    {% else %}
+                        [<span class="text-red-500 font-bold">OFFLINE</span>]
+                    {% endif %}
+                </span>
+            </div>
+            <div class="flex items-center space-x-1">
+                {% if serviceManager.isUfwRunning() %}
+                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'reload', 'referer': 'app_dashboard'}) }} class="bg-yellow-600 hover:bg-yellow-500 text-white px-2 py-1 text-l font-bold">Reload</a>
+                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_dashboard'}) }} class="bg-red-600 hover:bg-red-500 text-white px-2 py-1 text-l font-bold">Stop</a>
+                {% else %}
+                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_dashboard'}) }} class="bg-green-600 hover:bg-green-500 text-white px-2 py-1 text-l font-bold">Start</a>
+                {% endif %}
+            </div>
+        </div> 
+
+        {# SERVICES LIST #}
+        {% for service in services %}
+            {% if service.enable %}
+                <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-500">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-gray-300 font-semibold">{{ service.display_name }}</span>
+                        <span class="text-white ml-r">
+                            {% if service.type == 'systemd' %}   
+                                {% set serviceStatus = serviceManager.isServiceRunning(service.service_name) %}
+                            {% else %}
+                                {% set serviceStatus = serviceManager.checkWebsiteStatus(service.url) %}
+                            {% endif %}
+                            {% if serviceStatus %}
+                                [<span class="text-green-500 font-bold">ONLINE</span>]
+                            {% else %}
+                                [<span class="text-red-500 font-bold">OFFLINE</span>]
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% if service.type == 'systemd' %}                                
+                        <div class="flex items-center space-x-1">
+                            {% if serviceStatus %}
+                                <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'restart', 'referer': 'app_dashboard'}) }} class="bg-yellow-600 hover:bg-yellow-500 text-white px-2 py-1 text-l font-bold">Restart</a>
+                                <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_dashboard'}) }} class="bg-red-600 hover:bg-red-500 text-white px-2 py-1 text-l font-bold">Stop</a>
+                            {% else %}
+                                <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_dashboard'}) }} class="bg-green-600 hover:bg-green-500 text-white px-2 py-1 text-l font-bold">Start</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

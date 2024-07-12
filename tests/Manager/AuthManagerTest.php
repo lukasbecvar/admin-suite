@@ -31,6 +31,9 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class AuthManagerTest extends TestCase
 {
+    /** @var ErrorManager */
+    private ErrorManager $errorManagerMock;
+
     /** @var AppUtil|MockObject */
     private AppUtil|MockObject $appUtilMock;
 
@@ -39,9 +42,6 @@ class AuthManagerTest extends TestCase
 
     /** @var CacheUtil|MockObject */
     private CacheUtil|MockObject $cacheUtilMock;
-
-    /** @var EmailManager|MockObject */
-    private EmailManager|MockObject $emailManagerMock;
 
     /** @var LogManager|MockObject */
     private LogManager|MockObject $logManagerMock;
@@ -55,8 +55,8 @@ class AuthManagerTest extends TestCase
     /** @var UserManager|MockObject */
     private UserManager|MockObject $userManagerMock;
 
-    /** @var ErrorManager */
-    private ErrorManager $errorManagerMock;
+    /** @var EmailManager|MockObject */
+    private EmailManager|MockObject $emailManagerMock;
 
     /** @var SecurityUtil|MockObject */
     private SecurityUtil|MockObject $securityUtilMock;

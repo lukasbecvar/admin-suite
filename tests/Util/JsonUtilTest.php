@@ -2,11 +2,10 @@
 
 namespace Tests\Unit\Util;
 
-use App\Manager\ErrorManager;
-use App\Util\JsonUtil;
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Twig\Environment;
+use App\Util\JsonUtil;
+use App\Manager\ErrorManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class JsonUtilTest
@@ -17,11 +16,11 @@ use Twig\Environment;
  */
 class JsonUtilTest extends TestCase
 {
-    /** @var ErrorManager */
-    private ErrorManager $errorManager;
-
     /** @var JsonUtil */
     private JsonUtil $jsonUtil;
+
+    /** @var ErrorManager */
+    private ErrorManager $errorManager;
 
     protected function setUp(): void
     {
@@ -63,7 +62,9 @@ class JsonUtilTest extends TestCase
     {
         // set expect exception
         $this->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
-        $this->expectExceptionMessage('error to get json data from non_existent_file.json with error: file_get_contents(non_existent_file.json): Failed to open stream: No such file or directory');
+        $this->expectExceptionMessage(
+            'error to get json data from non_existent_file.json with error: file_get_contents(non_existent_file.json): Failed to open stream: No such file or directory'
+        );
 
         // call the method
         $this->jsonUtil->getJson('non_existent_file.json');

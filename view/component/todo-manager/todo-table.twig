@@ -3,8 +3,8 @@
 {# TODO LIST COMPONENT #}
 {% block component %} 
 <div class="users-manager flex flex-col h-[calc(100vh-30px)] overflow-hidden">
+    {# SUB NAVIGATION #}
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation flex-none">
-       
         {# BACK BUTTON #}
         <a href={{ path('app_dashboard') }} class="border border-neutral-500 font-bold px-1 text-white">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
@@ -20,7 +20,6 @@
                 <i class="fa fa-check" aria-hidden="true"></i>
             </a>
         {% endif %}
-
         <span class="mr-1 text-white">Todo list</span>
     </div>
 
@@ -63,27 +62,7 @@
     </div>
 
     {# ADD TODO INPUT #}
-    {{ form_start(createTodoForm) }}
-        <div class="bg-neutral-800 p-4 flex-none border-t border-neutral-500">
-
-            {# FORM CONSTRAINTS ERROR #}
-            {% if createTodoForm.todo_text.vars.errors|length > 0 %}
-                <div class="text-red-500 text-l">
-                    {{ form_errors(createTodoForm.todo_text) }}
-                </div>
-            {% endif %}
-
-            <div class="flex flex-col phn:flex-row">
-                {# TODO TEXT INPUT #}
-                {{ form_widget(createTodoForm.todo_text, {'autocomplete': 'off', 'attr': {'class': 'flex-1 bg-neutral-700 rounded-t-lg phn:rounded-l-lg phn:rounded-t-none px-4 py-2 focus:outline-none text-white', 'placeholder': 'Todo text'}}) }}
-
-                {# ADD TODO BUTTON #}
-                <button class="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-b-lg phn:rounded-r-lg phn:rounded-b-none mt-2 phn:mt-0 focus:outline-none">
-                    Add
-                </button>
-            </div>
-        </div>
-    {{ form_end(createTodoForm) }}
+    {% include "component/todo-manager/form/create-todo-form.twig" %}
 </div>
 
 {# TODO EDIT POPUP OVERLAY #}

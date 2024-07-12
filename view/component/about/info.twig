@@ -2,6 +2,7 @@
 
 {# APP ABOUT INFO COMPONENT #}
 {% block component %} 
+{# SUB NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
     <a href={{ path('app_dashboard') }} class="border border-neutral-500 font-bold px-1 text-white">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
@@ -11,19 +12,27 @@
 
 {# ABOUT-INFO BOX #}
 <div class="p-6 mx-auto border border-neutral-700 card-color shadow-lg shadow-md space-y-4 md:mt-10 md:max-w-md">
+    
+    {# APP VERSION INFO #}
     <div class="text-center">
         <h1 class="text-2xl font-bold text-gray-100">ADMIN-SUITE</h1>
         <p class="text-sm text-gray-300">v{{ appVersion }}</p>
     </div>
+
+    {# APP DESCRIPTION #}
     <div class="text-center">
         <p class="text-gray-200">Solution for administration and monitoring linux private servers</p>
     </div>
+
+    {# APP AUTHOR INFO #}
     <div class="text-center">
         <p class="text-lg text-white">Lukáš Bečvář</p>
         <a href="https://github.com/lordbecvold/admin-suite" class="text-blue-400 hover:underline" target="_blank">
             <i class="fab fa-github"></i> GitHub
         </a>
     </div>
+
+    {# COPYRIGHT INFO #}
     <div class="text-center pt-4 border-t border-gray-200 border-gray-700">
         <p class="text-xs text-gray-400">&copy; {{ "now"|date("Y") }}</p>
     </div>

@@ -56,14 +56,6 @@ class UsersManagerController extends AbstractController
     #[Route('/manager/users', methods:['GET'], name: 'app_manager_users')]
     public function usersTable(Request $request): Response
     {
-        // check if user have admin permissions
-        if (!$this->authManager->isLoggedInUserAdmin()) {
-            return $this->render('component/no-permissions.twig', [
-                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-                'userData' => $this->authManager->getLoggedUserRepository(),
-            ]);
-        }
-
         // get current page from request query params
         $page = (int) $request->query->get('page', '1');
 
@@ -130,14 +122,6 @@ class UsersManagerController extends AbstractController
     #[Route('/manager/users/profile', methods:['GET'], name: 'app_manager_users_profile')]
     public function userProfile(Request $request): Response
     {
-        // check if user have admin permissions
-        if (!$this->authManager->isLoggedInUserAdmin()) {
-            return $this->render('component/no-permissions.twig', [
-                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-                'userData' => $this->authManager->getLoggedUserRepository(),
-            ]);
-        }
-
         // get user id
         $userId = (int) $request->query->get('id', '0');
 
@@ -237,7 +221,7 @@ class UsersManagerController extends AbstractController
         }
 
         // render users manager register form view
-        return $this->render('component/users-manager/forms/user-register.twig', [
+        return $this->render('component/users-manager/form/user-register-form.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
 

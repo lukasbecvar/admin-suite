@@ -8,7 +8,6 @@ use App\Manager\BanManager;
 use App\Manager\LogManager;
 use App\Manager\UserManager;
 use App\Manager\AuthManager;
-use App\Manager\EmailManager;
 use App\Manager\ServiceManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -55,11 +54,8 @@ class DashboardController extends AbstractController
      * @return Response The dashboard view
      */
     #[Route('/dashboard', methods:['GET'], name: 'app_dashboard')]
-    public function dashboard(EmailManager $emailManager): Response
+    public function dashboard(): Response
     {
-
-        $emailManager->sendMonitoringStatusEmail('lordbecvold@gmail.com', 'test', 'test', 'ok');
-
         // get warning data
         $diagnosticData = $this->appUtil->getDiagnosticData();
         $antiLogStatus = $this->logManager->isAntiLogEnabled();
@@ -88,7 +84,7 @@ class DashboardController extends AbstractController
         $usersCount = $this->userManager->getUsersCount();
 
         // return dashboard view
-        return $this->render('dashboard.twig', [
+        return $this->render('component/dashboard/dashboard.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
 

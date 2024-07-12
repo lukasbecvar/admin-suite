@@ -1,0 +1,23 @@
+<div class="card-color border border-neutral-500 shadow-md overflow-hidden w-full max-h-50 card-component">
+    <div class="px-2 py-2 border-b border-neutral-500 text-white font-bold">Process list</div>
+    <div class="overflow-y-auto max-h-60">
+        <table class="min-w-full divide-y divide-neutral-500 bg-neutral-900 text-white">
+            <thead>
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">PID</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">User</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Process</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-neutral-500 bg-neutral-800">
+                {% for process in processList %}
+                <tr class="hover:bg-neutral-700">
+                    <td class="px-4 py-2 whitespace-nowrap text-sm font-bold">{{ process.pid }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm">{{ process.user }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm">{{ process.process }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

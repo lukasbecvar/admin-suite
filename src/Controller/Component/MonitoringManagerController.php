@@ -24,8 +24,12 @@ class MonitoringManagerController extends AbstractController
     private AuthManager $authManager;
     private ServiceManager $serviceManager;
 
-    public function __construct(AppUtil $appUtil, LogManager $logManager, AuthManager $authManager, ServiceManager $serviceManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        LogManager $logManager,
+        AuthManager $authManager,
+        ServiceManager $serviceManager
+    ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->authManager = $authManager;
@@ -58,6 +62,11 @@ class MonitoringManagerController extends AbstractController
         ]);
     }
 
+    /**
+     * Renders the services config page
+     *
+     * @return Response The rendered monitoring config page view
+     */
     #[Route('/manager/monitoring/config', methods:['GET'], name: 'app_manager_monitoring_config')]
     public function monitoringConfig(): Response
     {

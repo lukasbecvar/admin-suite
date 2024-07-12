@@ -76,7 +76,7 @@ class SecurityCheckMiddlewareTest extends TestCase
         // expect the response to be set
         $event->expects($this->once())
             ->method('setResponse')
-            ->with(new Response('SSL Required Content', 426));
+            ->with(new Response('SSL Required Content', Response::HTTP_UPGRADE_REQUIRED));
 
         // execute the middleware
         $this->middleware->onKernelRequest($event);

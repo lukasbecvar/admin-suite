@@ -70,7 +70,13 @@ class BannedCheckMiddlewareTest extends TestCase
             'admin_contact' => 'admin@example.com'
         ])->willReturn('Rendered Template');
 
-        $middleware = new BannedCheckMiddleware($this->appUtil, $this->twig, $this->logManager, $this->banManager, $this->authManager);
+        $middleware = new BannedCheckMiddleware(
+            $this->appUtil,
+            $this->twig,
+            $this->logManager,
+            $this->banManager,
+            $this->authManager
+        );
 
         $request = new Request();
         $event = $this->createMock(RequestEvent::class);
@@ -96,7 +102,13 @@ class BannedCheckMiddlewareTest extends TestCase
         $this->authManager->method('getLoggedUserId')->willReturn(1);
         $this->banManager->method('isUserBanned')->with(1)->willReturn(false);
 
-        $middleware = new BannedCheckMiddleware($this->appUtil, $this->twig, $this->logManager, $this->banManager, $this->authManager);
+        $middleware = new BannedCheckMiddleware(
+            $this->appUtil,
+            $this->twig,
+            $this->logManager,
+            $this->banManager,
+            $this->authManager
+        );
 
         $request = new Request();
         $event = $this->createMock(RequestEvent::class);

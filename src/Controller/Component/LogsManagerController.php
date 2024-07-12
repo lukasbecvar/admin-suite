@@ -51,14 +51,6 @@ class LogsManagerController extends AbstractController
     #[Route('/manager/logs', methods:['GET'], name: 'app_manager_logs')]
     public function logsTable(Request $request): Response
     {
-        // check if user have admin permissions
-        if (!$this->authManager->isLoggedInUserAdmin()) {
-            return $this->render('component/no-permissions.twig', [
-                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-                'userData' => $this->authManager->getLoggedUserRepository(),
-            ]);
-        }
-
         // get current page from request query params
         $page = (int) $request->query->get('page', '1');
 
@@ -69,7 +61,7 @@ class LogsManagerController extends AbstractController
         $userId = $request->query->get('user_id', '0');
 
         // return logs table view
-        return $this->render('component/logs-manager/logs-table.twig', [
+        return $this->render('component/log-manager/logs-table.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
 
@@ -125,7 +117,8 @@ class LogsManagerController extends AbstractController
             $logContent = $this->logManager->getSystemLogContent($logFile);
         }
 
-        return $this->render('component/logs-manager/system-logs.twig', [
+        // render the system logs table
+        return $this->render('component/log-manager/system-logs.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
 
@@ -159,7 +152,8 @@ class LogsManagerController extends AbstractController
         // self exception log content
         $log = file_get_contents($this->appUtil->getAppRootDir() . '/var/log/exception.log');
 
-        return $this->render('component/logs-manager/self-exception-logs.twig', [
+        // render the self exception logs view
+        return $this->render('component/log-manager/self-exception-logs.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
 
@@ -207,7 +201,10 @@ class LogsManagerController extends AbstractController
             return $this->redirectToRoute('app_dashboard');
         }
 
+        // set log status to readed
         $this->logManager->updateLogStatusById($id, 'READED');
+
+        // redirect back to the logs table page
         return $this->redirectToRoute('app_manager_logs', [
             'page' => $page,
             'filter' => $filter,

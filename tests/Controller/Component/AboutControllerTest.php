@@ -19,10 +19,9 @@ class AboutControllerTest extends CustomTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->client = static::createClient();
 
+        // simulate user authentication
         $this->simulateLogin($this->client);
     }
 

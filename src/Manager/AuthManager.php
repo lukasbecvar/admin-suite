@@ -74,7 +74,9 @@ class AuthManager
      */
     public function isUsernameBlocked(string $username): bool
     {
-        $blockedUsernames = $this->jsonUtil->getJson($this->appUtil->getAppRootDir() . '/config/suite/blocked-usernames.json');
+        $blockedUsernames = $this->jsonUtil->getJson(
+            $this->appUtil->getAppRootDir() . '/config/suite/blocked-usernames.json'
+        );
 
         if ($blockedUsernames == null) {
             return false;
@@ -154,7 +156,11 @@ class AuthManager
                 $this->entityManager->flush();
 
                 // log action
-                $this->logManager->log('authenticator', 'new registration user: ' . $username, 1);
+                $this->logManager->log(
+                    'authenticator',
+                    'new registration user: ' . $username,
+                    level: 1
+                );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
                     'error to register new user: ' . $e->getMessage(),
@@ -253,7 +259,11 @@ class AuthManager
             }
         } else {
             // log invalid credentials
-            $this->logManager->log('authenticator', 'invalid login user: ' . $username . ':' . $password, 2);
+            $this->logManager->log(
+                'authenticator',
+                'invalid login user: ' . $username . ':' . $password,
+                level: 2
+            );
         }
 
         return false;
@@ -302,7 +312,11 @@ class AuthManager
                 }
 
                 // log action
-                $this->logManager->log('authenticator', 'login user: ' . $username, 1);
+                $this->logManager->log(
+                    'authenticator',
+                    'login user: ' . $username,
+                    level: 1
+                );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
                     'error to login user: ' . $e->getMessage(),
@@ -420,7 +434,11 @@ class AuthManager
             }
 
             // log logout event
-            $this->logManager->log('authenticator', 'logout user: ' . $user->getUsername(), 1);
+            $this->logManager->log(
+                'authenticator',
+                'logout user: ' . $user->getUsername(),
+                level: 1
+            );
 
             // unset login cookie
             $this->cookieUtil->unset('user-token');
@@ -428,6 +446,59 @@ class AuthManager
             // unset login session
             $this->sessionUtil->destroySession();
         }
+    }
+
+    /**
+     * Reset user password
+     *
+     * @param string $username The username of the user
+     *
+     * @return string|null The new password or null on error
+     */
+    public function resetUserPassword(string $username): ?string
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->userManager->getUserRepository(['username' => $username]);
+
+        // check if user exist
+        if ($user != null) {
+            try {
+                // generate new password
+                $newPassword = ByteString::fromRandom(32)->toString();
+
+                // hash new password
+                $newPasswordHash = $this->securityUtil->generateHash($newPassword);
+
+                // genetate new token
+                $newToken = $this->generateUserToken();
+
+                // set new password
+                $user->setPassword($newPasswordHash);
+                $user->setToken($newToken);
+
+                // flush update to database
+                $this->entityManager->flush();
+
+                // log password reset
+                $this->logManager->log(
+                    'authenticator',
+                    'user: ' . $username . ' password reset is success',
+                    level: 2
+                );
+            } catch (\Exception $e) {
+                $this->errorManager->handleError(
+                    'error to reset user password: ' . $e->getMessage(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+                return null;
+            }
+
+            // return new password
+            return $newPassword;
+        }
+
+        // return non existing user
+        return null;
     }
 
     /**
@@ -469,8 +540,13 @@ class AuthManager
         }
 
         // log action
-        $this->logManager->log('authenticator', 'regenerate all users tokens', 3);
+        $this->logManager->log(
+            'authenticator',
+            'regenerate all users tokens',
+            level: 3
+        );
 
+        // return process state output
         return $state;
     }
 

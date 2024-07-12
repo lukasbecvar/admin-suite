@@ -43,6 +43,7 @@ class AntiLogControllerTest extends CustomTestCase
      */
     public function testAnitLogEnable(): void
     {
+        // simulate user authentication
         $this->simulateLogin($this->client);
 
         // create request
