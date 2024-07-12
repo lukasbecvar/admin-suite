@@ -150,7 +150,7 @@ main {
     border: 1px solid #24d3ff;
 }
 
-/* users manager component */
+/* users-manager component */
 .users-manager .delete-button {
 	font-weight: 400;
 	color: rgb(255, 70, 70);
@@ -183,7 +183,7 @@ main {
 	color: rgb(255, 255, 7) !important;
 }
 
-/* account settings component */
+/* account-settings component */
 .account-settings .profile-image {
 	width: 60px;
 	height: 60px;

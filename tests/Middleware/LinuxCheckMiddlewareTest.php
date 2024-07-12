@@ -78,19 +78,19 @@ class LinuxCheckMiddlewareTest extends TestCase
             ->method('handleError')
             ->with(
                 'This system is only for linux.',
-                Response::HTTP_UPGRADE_REQUIRED
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
 
         $this->errorManagerMock->expects($this->once())
             ->method('getErrorView')
-            ->with(Response::HTTP_UPGRADE_REQUIRED)
+            ->with(Response::HTTP_INTERNAL_SERVER_ERROR)
             ->willReturn('<html><body><h1>Upgrade Required</h1></body></html>');
 
         $eventMock = $this->createMock(RequestEvent::class);
         $eventMock->expects($this->once())
             ->method('setResponse')
             ->with($this->callback(function (Response $response) {
-                $this->assertEquals(Response::HTTP_UPGRADE_REQUIRED, $response->getStatusCode());
+                $this->assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
                 $this->assertStringContainsString('Upgrade Required', (string) $response->getContent());
                 return true;
             }));

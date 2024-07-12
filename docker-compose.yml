@@ -1,4 +1,4 @@
-# This Docker Compose configuration defines local development services.
+# This Docker Compose configuration defines local development services
 version: '3'
 
 # docker network config
@@ -25,11 +25,11 @@ services:
             - dev
 
     # web server container
-    apache_php:
+    app:
         build:
             context: .
             dockerfile: ./_docker/Dockerfile
-        container_name: admin_suite_apache
+        container_name: admin_suite_app
         restart: always
         depends_on:
             - mysql

@@ -27,12 +27,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # setup PHP environment
+      # setup PHP
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
-          extensions: mbstring, intl, pdo_mysql, pdo, mysqli, zip
+          extensions: mbstring, intl, pdo_mysql, pdo, zip
 
       # install dependencies
       - name: Install dependencies

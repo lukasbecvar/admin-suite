@@ -190,7 +190,7 @@
         },
         "files": [
             "config/packages/twig.yaml",
-            "templates/base.twig"
+            "view/base.twig"
         ]
     },
     "symfony/validator": {
