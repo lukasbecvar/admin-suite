@@ -1,6 +1,6 @@
 # <h1 align="center">Admin suite</h1>
 
-# <p align="center">Solution for administration and monitoring linux private servers</p>
+## <p align="center">Solution for administration and monitoring linux private servers</p>
 
 <p align="center">
     <a href="https://github.com/lordbecvold/admin-suite/blob/main/DOC.MD" target="_blank">Documentation</a> |
