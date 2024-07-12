@@ -23,8 +23,11 @@ class ActionRunnerController extends AbstractController
     private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
 
-    public function __construct(AuthManager $authManager, ErrorManager $errorManager, ServiceManager $serviceManager)
-    {
+    public function __construct(
+        AuthManager $authManager,
+        ErrorManager $errorManager,
+        ServiceManager $serviceManager
+    ) {
         $this->authManager = $authManager;
         $this->errorManager = $errorManager;
         $this->serviceManager = $serviceManager;

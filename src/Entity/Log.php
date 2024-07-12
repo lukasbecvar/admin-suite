@@ -43,16 +43,33 @@ class Log
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
+    /**
+     * Get the id of the log
+     *
+     * @return int|null The id of the log or null if not found
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Get the name of the log
+     *
+     * @return string|null The name of the log or null if not found
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * Set the name of the log
+     *
+     * @param string $name The name of the log
+     *
+     * @return static The current object
+     */
     public function setName(string $name): static
     {
         $this->name = $name;
@@ -60,11 +77,23 @@ class Log
         return $this;
     }
 
+    /**
+     * Get the message of the log
+     *
+     * @return string|null The message of the log or null if not found
+     */
     public function getMessage(): ?string
     {
         return $this->message;
     }
 
+    /**
+     * Set the message of the log
+     *
+     * @param string $message The message of the log
+     *
+     * @return static The current object
+     */
     public function setMessage(string $message): static
     {
         $this->message = $message;
@@ -72,11 +101,23 @@ class Log
         return $this;
     }
 
+    /**
+     * Get the time of the log
+     *
+     * @return \DateTimeInterface|null The time of the log or null if not found
+     */
     public function getTime(): ?\DateTimeInterface
     {
         return $this->time;
     }
 
+    /**
+     * Set the time of the log
+     *
+     * @param \DateTimeInterface $time The time of the log
+     *
+     * @return static The current object
+     */
     public function setTime(\DateTimeInterface $time): static
     {
         $this->time = $time;
@@ -84,11 +125,23 @@ class Log
         return $this;
     }
 
+    /**
+     * Get the user agent of the log
+     *
+     * @return string|null The user agent of the log or null if not found
+     */
     public function getUserAgent(): ?string
     {
         return $this->user_agent;
     }
 
+    /**
+     * Set the user agent of the log
+     *
+     * @param string $user_agent The user agent of the log
+     *
+     * @return static The current object
+     */
     public function setUserAgent(string $user_agent): static
     {
         // prevent maximal user agent length
@@ -101,11 +154,23 @@ class Log
         return $this;
     }
 
+    /**
+     * Get the ip adderss of the log
+     *
+     * @return string|null The ip adderss of the log or null if not found
+     */
     public function getIpAdderss(): ?string
     {
         return $this->ip_adderss;
     }
 
+    /**
+     * Set the ip adderss of the log
+     *
+     * @param string $ip_adderss The ip adderss of the log
+     *
+     * @return static The current object
+     */
     public function setIpAdderss(string $ip_adderss): static
     {
         $this->ip_adderss = $ip_adderss;
@@ -113,11 +178,23 @@ class Log
         return $this;
     }
 
+    /**
+     * Get the id of the user who created the log
+     *
+     * @return int|null The id of the user who created the log or null if not found
+     */
     public function getUserId(): ?int
     {
         return $this->user_id;
     }
 
+    /**
+     * Set the id of the user who created the log
+     *
+     * @param int $user_id The id of the user who created the log
+     *
+     * @return static The current object
+     */
     public function setUserId(int $user_id): static
     {
         $this->user_id = $user_id;
@@ -125,11 +202,23 @@ class Log
         return $this;
     }
 
+    /**
+     * Get the status of the log
+     *
+     * @return string|null The status of the log or null if not found
+     */
     public function getStatus(): ?string
     {
         return $this->status;
     }
 
+    /**
+     * Set the status of the log
+     *
+     * @param string $status The status of the log
+     *
+     * @return static The current object
+     */
     public function setStatus(string $status): static
     {
         $this->status = $status;

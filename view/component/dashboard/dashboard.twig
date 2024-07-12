@@ -1,0 +1,44 @@
+{% extends 'common/layout.twig' %}
+
+{# MAIN ADMIN-SUITE DASHBOARD #}
+{% block component %} 
+<div class="w-full dashbard-component">
+    
+    {# MAIN DASHBOARD CARDS #}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2">
+        
+        {# WARNINGS BOX CARD #}
+        {% include "component/dashboard/card/warning-card.twig" %}
+
+        {# SERVICES DASHBOARD CARD #}
+        {% include "component/dashboard/card/services-card.twig" %}
+
+        {# PROCESS LIST DASHBOARD CARD #}
+        {% include "component/dashboard/card/process-list-card.twig" %}
+
+        {# HOST SYSTEM INFO #}
+        {% include "component/dashboard/card/system-info-card.twig" %}
+
+        {# HOST SYSTEM RESOURCES #}
+        {% include "component/dashboard/card/system-resources-card.twig" %}
+
+        {# LOGS INFO CARD #}
+        {% include "component/dashboard/card/log-info-card.twig" %}
+
+        {# USERS INFO CARD #}
+        {% include "component/dashboard/card/users-info-card.twig" %}
+    </div>
+</div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const divElement = document.getElementById('wrarning-box');
+        const elements = document.getElementById('wraning-elements');
+        if (elements.innerHTML.trim() === '') {
+            divElement.style.display = 'none';
+        } else {
+            divElement.style.display = 'block';
+        }
+    });
+</script>
+{% endblock %}

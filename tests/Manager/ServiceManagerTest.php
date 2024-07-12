@@ -82,9 +82,13 @@ class ServiceManagerTest extends TestCase
             ->with('action-runner', 'testUser start example_service', 1);
 
         $this->serviceManager = $this->getMockBuilder(ServiceManager::class)
-            ->setConstructorArgs([$this->appUtilMock, $this->jsonUtilMock, $this->logManager, $this->authManager, $this->errorManager])
-            ->onlyMethods(['executeCommand'])
-            ->getMock();
+            ->setConstructorArgs([
+                $this->appUtilMock,
+                $this->jsonUtilMock,
+                $this->logManager,
+                $this->authManager,
+                $this->errorManager
+            ])->onlyMethods(['executeCommand'])->getMock();
 
         $this->serviceManager->runSystemdAction('example_service', 'start');
     }

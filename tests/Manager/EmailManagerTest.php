@@ -81,7 +81,11 @@ class EmailManagerTest extends TestCase
         ];
 
         $this->logManagerMock->expects($this->never())->method('log');
-        $this->mailerMock->expects($this->once())->method('send')->willThrowException(new \Symfony\Component\Mailer\Exception\TransportException());
+        $this->mailerMock->expects($this->once())
+            ->method('send')
+            ->willThrowException(
+                new \Symfony\Component\Mailer\Exception\TransportException()
+            );
         $this->errorManagerMock->expects($this->once())->method('handleError');
 
         $_ENV['MAILER_ENABLED'] = 'true';

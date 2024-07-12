@@ -84,7 +84,7 @@ class UserUpdateRoleCommand extends Command
             return Command::FAILURE;
         }
 
-        // check is id is valid
+        // check is id valid
         if ($userRepository->getId() == null) {
             $io->error('Error user id not found.');
             return Command::FAILURE;

@@ -1,17 +1,17 @@
 {% extends 'common/base.twig' %}
 
-{# USER REGISTER COMPONENT (ONLY FIRST ACCOUNT) #}
+{# USER REGISTER COMPONENT #}
 {% block body %}
 <div class="auth-component flex justify-center items-center h-screen">
     <div class="text-white max-w-md w-full bg-dark shadow-md px-4 py-4 mb-1 border border-gray-600 background-dark opacity-90 m-w-95">
         <h2 class="text-2xl mb-4 text-center text-white">Register</h2>
 
-        {# SUCCESS MESSAGE RETURN BOX #}
+        {# SUCCESS MESSAGE BOX #}
         {% for message in app.flashes('success') %}
             <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
         {% endfor %}
 
-        {# ERROR MESSAGE RETURN BOX #}
+        {# ERROR MESSAGE BOX #}
         {% for message in app.flashes('error') %}
             <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
         {% endfor %}

@@ -39,6 +39,10 @@ class RegenerateAuthTokensCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        // fix get CLI ip address
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+        $_SERVER['HTTP_USER_AGENT'] = 'console';
+
         // regenerate all tokens and get state
         $regenerateState = $this->authManager->regenerateUsersTokens();
 

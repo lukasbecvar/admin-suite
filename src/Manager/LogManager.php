@@ -196,6 +196,7 @@ class LogManager
             $count = $repository->count(['status' => $status]);
         }
 
+        // return logs count
         return $count;
     }
 
@@ -365,6 +366,7 @@ class LogManager
         // log action
         $this->log('log-manager', 'system logs viewed', level: 3);
 
+        // return log files
         return $logFiles;
     }
 
@@ -396,6 +398,7 @@ class LogManager
         // log action
         $this->log('log-manager', 'system log: ' . $logFile . ' viewed', level: 3);
 
+        // return log content
         return $log;
     }
 }

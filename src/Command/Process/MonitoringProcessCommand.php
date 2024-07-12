@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class MonitoringProcessCommand
  *
- * Command to monitoring services
+ * Command to monitoring services process (run in infinite loop as service)
  *
  * @package App\Command\Process
  */
@@ -25,8 +25,11 @@ class MonitoringProcessCommand extends Command
     private DatabaseManager $databaseManager;
     private MonitoringManager $monitoringManager;
 
-    public function __construct(AppUtil $appUtil, DatabaseManager $databaseManager, MonitoringManager $monitoringManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        DatabaseManager $databaseManager,
+        MonitoringManager $monitoringManager
+    ) {
         $this->appUtil = $appUtil;
         $this->databaseManager = $databaseManager;
         $this->monitoringManager = $monitoringManager;
@@ -49,7 +52,7 @@ class MonitoringProcessCommand extends Command
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
-        // init database down flag
+        // database down flag
         $databaseDown = false;
 
         /** @phpstan-ignore-next-line (infinite monitoring loop) */
@@ -59,7 +62,7 @@ class MonitoringProcessCommand extends Command
 
             // check database state
             if ($dbState) {
-                // print database is down message
+                // handle database down message
                 $this->monitoringManager->handleDatabaseDown($io, $databaseDown);
 
                 // set database down flag

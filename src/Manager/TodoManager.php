@@ -6,8 +6,6 @@ use App\Entity\Todo;
 use App\Util\SecurityUtil;
 use Doctrine\ORM\EntityManagerInterface;
 
-use function Symfony\Component\String\b;
-
 /**
  * Class TodoManager
  *
@@ -48,7 +46,12 @@ class TodoManager
         $plainTodos = [];
 
         // get the todo list
-        $todos = $this->entityManagerInterface->getRepository(Todo::class)->findBy(['user_id' => $this->authManager->getLoggedUserId(), 'status' => $filter], ['id' => 'DESC']);
+        $todos = $this->entityManagerInterface
+            ->getRepository(Todo::class)
+            ->findBy([
+                'user_id' => $this->authManager->getLoggedUserId(),
+                'status' => $filter
+            ], ['id' => 'DESC']);
 
         // decrypt the todo texts
         foreach ($todos as $todo) {

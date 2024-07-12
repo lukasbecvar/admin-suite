@@ -2,11 +2,9 @@
 
 namespace App\Tests\Command\User;
 
-use App\Util\SecurityUtil;
-use App\Manager\LogManager;
+use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use PHPUnit\Framework\TestCase;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Application;
 use PHPUnit\Framework\MockObject\MockObject;
 use App\Command\User\UserPasswordResetCommand;
@@ -22,17 +20,11 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class UserPasswordResetCommandTest extends TestCase
 {
-    /** @var LogManager|MockObject */
-    private LogManager|MockObject $logManagerMock;
+    /** @var AuthManager|MockObject */
+    private AuthManager|MockObject $authManager;
 
     /** @var UserManager|MockObject */
     private UserManager|MockObject $userManagerMock;
-
-    /** @var SecurityUtil|MockObject */
-    private SecurityUtil|MockObject $securityUtilMock;
-
-    /** @var EntityManagerInterface|MockObject */
-    private EntityManagerInterface|MockObject $entityManagerMock;
 
     /**
      * Sets up the mock objects before each test
@@ -41,10 +33,8 @@ class UserPasswordResetCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logManagerMock = $this->createMock(LogManager::class);
+        $this->authManager = $this->createMock(AuthManager::class);
         $this->userManagerMock = $this->createMock(UserManager::class);
-        $this->securityUtilMock = $this->createMock(SecurityUtil::class);
-        $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
     }
 
     /**
@@ -52,40 +42,20 @@ class UserPasswordResetCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteSuccess(): void
+    public function testExecuteResetSuccess(): void
     {
         $username = 'testuser';
-        $newPassword = 'newRandomPassword';
-        $userRepositoryMock = $this->createMock(\App\Entity\User::class);
 
         $this->userManagerMock->expects($this->once())
             ->method('checkIfUserExist')
             ->with($username)
             ->willReturn(true);
 
-        $this->userManagerMock->expects($this->once())
-            ->method('getUserRepository')
-            ->with(['username' => $username])
-            ->willReturn($userRepositoryMock);
-
-        $this->securityUtilMock->expects($this->once())
-            ->method('generateHash')
-            ->with($this->isType('string'))
-            ->willReturn($newPassword);
-
-        $this->entityManagerMock->expects($this->once())
-            ->method('flush');
-
-        $this->logManagerMock->expects($this->once())
-            ->method('log')
-            ->with('authenticator', $this->stringContains('password reset with cli command is success'));
-
-        $userRepositoryMock->expects($this->once())
-            ->method('setPassword')
-            ->with($newPassword);
+        $this->authManager->expects($this->once())
+            ->method('resetUserPassword');
 
         $application = new Application();
-        $command = new UserPasswordResetCommand($this->logManagerMock, $this->userManagerMock, $this->securityUtilMock, $this->entityManagerMock);
+        $command = new UserPasswordResetCommand($this->authManager, $this->userManagerMock);
         $application->add($command);
 
         $commandTester = new CommandTester($application->find('app:user:password:reset'));
@@ -111,7 +81,7 @@ class UserPasswordResetCommandTest extends TestCase
             ->willReturn(false);
 
         $application = new Application();
-        $command = new UserPasswordResetCommand($this->logManagerMock, $this->userManagerMock, $this->securityUtilMock, $this->entityManagerMock);
+        $command = new UserPasswordResetCommand($this->authManager, $this->userManagerMock);
         $application->add($command);
 
         $commandTester = new CommandTester($application->find('app:user:password:reset'));
@@ -132,7 +102,7 @@ class UserPasswordResetCommandTest extends TestCase
         $username = '';
 
         $application = new Application();
-        $command = new UserPasswordResetCommand($this->logManagerMock, $this->userManagerMock, $this->securityUtilMock, $this->entityManagerMock);
+        $command = new UserPasswordResetCommand($this->authManager, $this->userManagerMock);
         $application->add($command);
 
         $commandTester = new CommandTester($application->find('app:user:password:reset'));

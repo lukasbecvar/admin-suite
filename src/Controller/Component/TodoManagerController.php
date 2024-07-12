@@ -24,8 +24,11 @@ class TodoManagerController extends AbstractController
     private AuthManager $authManager;
     private ErrorManager $errorManager;
 
-    public function __construct(TodoManager $todoManager, AuthManager $authManager, ErrorManager $errorManager)
-    {
+    public function __construct(
+        TodoManager $todoManager,
+        AuthManager $authManager,
+        ErrorManager $errorManager
+    ) {
         $this->todoManager = $todoManager;
         $this->authManager = $authManager;
         $this->errorManager = $errorManager;

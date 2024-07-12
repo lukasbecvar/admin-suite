@@ -2,11 +2,8 @@
 
 namespace App\Command\User;
 
-use App\Util\SecurityUtil;
-use App\Manager\LogManager;
 use App\Manager\UserManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\String\ByteString;
+use App\Manager\AuthManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputArgument;
@@ -24,21 +21,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:user:password:reset', description: 'Reset the user password')]
 class UserPasswordResetCommand extends Command
 {
-    private LogManager $logManager;
+    private AuthManager $authManager;
     private UserManager $userManager;
-    private SecurityUtil $securityUtil;
-    private EntityManagerInterface $entityManagerInterface;
 
     public function __construct(
-        LogManager $logManager,
+        AuthManager $authManager,
         UserManager $userManager,
-        SecurityUtil $securityUtil,
-        EntityManagerInterface $entityManagerInterface
     ) {
-        $this->logManager = $logManager;
+        $this->authManager = $authManager;
         $this->userManager = $userManager;
-        $this->securityUtil = $securityUtil;
-        $this->entityManagerInterface = $entityManagerInterface;
         parent::__construct();
     }
 
@@ -89,24 +80,10 @@ class UserPasswordResetCommand extends Command
             return Command::FAILURE;
         }
 
-        /** @var \App\Entity\User $userRepository */
-        $userRepository = $this->userManager->getUserRepository(['username' => $username]);
-
         // reset user password
         try {
-            // generate user password
-            $newPassword = ByteString::fromRandom(32)->toString();
-
-            $newPasswordHash = $this->securityUtil->generateHash($newPassword);
-
-            // set new password
-            $userRepository->setPassword($newPasswordHash);
-
-            // flush update to database
-            $this->entityManagerInterface->flush();
-
-            // log password reset
-            $this->logManager->log('authenticator', 'user: ' . $username . ' password reset with cli command is success', 1);
+            // reset user password
+            $newPassword = $this->authManager->resetUserPassword($username);
 
             $io->success('User: ' . $username . ' new password is ' . $newPassword);
             return Command::SUCCESS;

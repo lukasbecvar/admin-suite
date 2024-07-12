@@ -43,6 +43,7 @@ class ActionRunnerControllerTest extends CustomTestCase
      */
     public function testServiceActionRunnerSuccess(): void
     {
+        // simulate user authentication
         $this->simulateLogin($this->client);
 
         // create request

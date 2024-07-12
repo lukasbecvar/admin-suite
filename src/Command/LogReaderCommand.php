@@ -26,8 +26,11 @@ class LogReaderCommand extends Command
     private UserManager $userManager;
     private VisitorInfoUtil $visitorInfoUtil;
 
-    public function __construct(LogManager $logManager, UserManager $userManager, VisitorInfoUtil $visitorInfoUtil)
-    {
+    public function __construct(
+        LogManager $logManager,
+        UserManager $userManager,
+        VisitorInfoUtil $visitorInfoUtil
+    ) {
         $this->logManager = $logManager;
         $this->userManager = $userManager;
         $this->visitorInfoUtil = $visitorInfoUtil;

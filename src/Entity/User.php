@@ -49,16 +49,33 @@ class User
     #[ORM\Column(type: Types::TEXT)]
     private ?string $profile_pic = null;
 
+    /**
+     * Get the id of the user
+     *
+     * @return int|null The id of the user or null if not found
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Get the username of the user
+     *
+     * @return string|null The username of the user or null if not found
+     */
     public function getUsername(): ?string
     {
         return $this->username;
     }
 
+    /**
+     * Set the username of the user
+     *
+     * @param string $username The username of the user
+     *
+     * @return static The current object
+     */
     public function setUsername(string $username): static
     {
         $this->username = $username;
@@ -66,11 +83,23 @@ class User
         return $this;
     }
 
+    /**
+     * Get the password of the user
+     *
+     * @return string|null The password of the user or null if not found
+     */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
+    /**
+     * Set the password of the user
+     *
+     * @param string $password The password of the user
+     *
+     * @return static The current object
+     */
     public function setPassword(string $password): static
     {
         $this->password = $password;
@@ -78,11 +107,23 @@ class User
         return $this;
     }
 
+    /**
+     * Get the role of the user
+     *
+     * @return string|null The role of the user or null if not found
+     */
     public function getRole(): ?string
     {
         return $this->role;
     }
 
+    /**
+     * Set the role of the user
+     *
+     * @param string $role The role of the user
+     *
+     * @return static The current object
+     */
     public function setRole(string $role): static
     {
         $this->role = $role;
@@ -90,11 +131,23 @@ class User
         return $this;
     }
 
+    /**
+     * Get the ip address of the user
+     *
+     * @return string|null The ip address of the user or null if not found
+     */
     public function getIpAddress(): ?string
     {
         return $this->ip_address;
     }
 
+    /**
+     * Set the ip address of the user
+     *
+     * @param string $ip_address The ip address of the user
+     *
+     * @return static The current object
+     */
     public function setIpAddress(string $ip_address): static
     {
         $this->ip_address = $ip_address;
@@ -102,11 +155,23 @@ class User
         return $this;
     }
 
+    /**
+     * Get the user agent of the user
+     *
+     * @return string|null The user agent of the user or null if not found
+     */
     public function getUserAgent(): ?string
     {
         return $this->user_agent;
     }
 
+    /**
+     * Set the user agent of the user
+     *
+     * @param string $user_agent The user agent of the user
+     *
+     * @return static The current object
+     */
     public function setUserAgent(string $user_agent): static
     {
         // prevent maximal user agent length
@@ -119,11 +184,23 @@ class User
         return $this;
     }
 
+    /**
+     * Get the register time of the user
+     *
+     * @return \DateTimeInterface|null The register time of the user or null if not found
+     */
     public function getRegisterTime(): ?\DateTimeInterface
     {
         return $this->register_time;
     }
 
+    /**
+     * Set the register time of the user
+     *
+     * @param \DateTimeInterface $register_time The register time of the user
+     *
+     * @return static The current object
+     */
     public function setRegisterTime(\DateTimeInterface $register_time): static
     {
         $this->register_time = $register_time;
@@ -131,11 +208,23 @@ class User
         return $this;
     }
 
+    /**
+     * Get the last login time of the user
+     *
+     * @return \DateTimeInterface|null The last login time of the user or null if not found
+     */
     public function getLastLoginTime(): ?\DateTimeInterface
     {
         return $this->last_login_time;
     }
 
+    /**
+     * Set the last login time of the user
+     *
+     * @param \DateTimeInterface $last_login_time The last login time of the user
+     *
+     * @return static The current object
+     */
     public function setLastLoginTime(\DateTimeInterface $last_login_time): static
     {
         $this->last_login_time = $last_login_time;
@@ -143,11 +232,23 @@ class User
         return $this;
     }
 
+    /**
+     * Get the token of the user
+     *
+     * @return string|null The token of the user or null if not found
+     */
     public function getToken(): ?string
     {
         return $this->token;
     }
 
+    /**
+     * Set the token of the user
+     *
+     * @param string $token The token of the user
+     *
+     * @return static The current object
+     */
     public function setToken(string $token): static
     {
         $this->token = $token;
@@ -155,11 +256,23 @@ class User
         return $this;
     }
 
+    /**
+     * Get the profile pic of the user
+     *
+     * @return string|null The profile pic of the user or null if not found
+     */
     public function getProfilePic(): ?string
     {
         return $this->profile_pic;
     }
 
+    /**
+     * Set the profile pic of the user
+     *
+     * @param string $profile_pic The profile pic of the user
+     *
+     * @return static The current object
+     */
     public function setProfilePic(string $profile_pic): static
     {
         $this->profile_pic = $profile_pic;

@@ -2,10 +2,20 @@
 
 {# ACCOUNT SETTINGS TABLE COMPONENT #}
 {% block component %}
+{# SUB NAVIGATION #}
+<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation text-white">
+    <a href={{ path('app_dashboard') }} class="border border-neutral-500 font-bold px-1">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+    </a>
+    <span class="mr-1">Account settings</span>
+</div>
+
+{# ACCOUNT SETTINGS TABLE #}
 <div class="w-full flex justify-center">
     <div class="w-full max-w-3xl card-color shadow-lg p-6 md:mt-10 border border-gray-600 account-settings">
         <h2 class="text-2xl font-semibold mb-6 text-white text-center">Account Settings</h2>
         <div class="space-y-6">
+
             {# PROFILE PICTURE SETTINGS COMPONENT #}
             <div class="bg-neutral-800 p-4 rounded-md flex items-center justify-between border border-gray-700 hover:shadow-lg transition-shadow duration-300 transform">
                 <div class="flex items-center space-x-4 w-1/3">

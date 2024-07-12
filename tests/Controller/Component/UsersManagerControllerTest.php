@@ -23,8 +23,7 @@ class UsersManagerControllerTest extends CustomTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
+        // simulate user authentication
         $this->client = static::createClient();
 
         // @phpstan-ignore-next-line

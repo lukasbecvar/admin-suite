@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\ServiceMonitoring;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * Class ServiceMonitoringRepository

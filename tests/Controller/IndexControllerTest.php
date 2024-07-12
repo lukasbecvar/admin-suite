@@ -43,6 +43,7 @@ class IndexControllerTest extends CustomTestCase
      */
     public function testIndexLoadLoggedIn(): void
     {
+        // simulate user authentication
         $this->simulateLogin($this->client);
 
         $this->client->request('GET', '/');
