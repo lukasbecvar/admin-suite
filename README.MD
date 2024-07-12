@@ -1,7 +1,9 @@
 # Admin suite
 Solution for administration and monitoring linux private servers
 
-[![Documentation](https://github.com/lordbecvold/admin-suite/blob/main/DOC.MD)](https://github.com/lordbecvold/admin-suite/blob/main/DOC.MD)
+<p align="center">
+    <a href="https://github.com/lordbecvold/admin-suite/blob/main/DOC.MD">Documentation</a>
+</p>
 
 ## Dashboard preview
 ![Dashboard](.github/assets/preview.png)
