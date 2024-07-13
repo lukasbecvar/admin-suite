@@ -10,7 +10,6 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-# 1.1
 - [ ] Custom non linux detected error message (Linux check middleware)
 - [ ] Exception log warning alert
 - [ ] Database browser
@@ -22,29 +21,22 @@
     - [ ] Delete all rows
     - [ ] Dump SQL structure
     - [ ] Backup database (download SQL file)
-
-# 1.2
 - [ ] File browser & editor
     - [ ] List files in filesystem
     - [ ] Rename files
     - [ ] Remove files
     - [ ] Move files
     - [ ] Open files in txt editor
-
-# 1.3
 - [ ] Terminal component
     - [ ] Simple command execution
     - [ ] Interactive command execution
     - [ ] MySQL CLI
-
-# 1.4
 - [ ] Internal chat component
-
-# 1.5
 - [ ] Host server emergency shutdown
 - [ ] Setup script (for non docker env)
-- [ ] Doc/About & download page (github pages)
 - [ ] Upgrade script (github action release run over SSH)
+- [ ] Better readme
+- [ ] Doc/About & download page (github pages)
 
 ## Dependencies
 This project uses the following technologies
