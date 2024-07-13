@@ -11,6 +11,7 @@
 
 ## ROADMAP
 # 1.1
+- [ ] Custom non linux detected error message (Linux check middleware)
 - [ ] Exception log warning alert
 - [ ] Database browser
     - [ ] All databases list
