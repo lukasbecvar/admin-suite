@@ -11,6 +11,7 @@
 
 ## ROADMAP
 # 1.1
+- [ ] Exception log warning alert
 - [ ] Database browser
     - [ ] All databases list
     - [ ] Browse tables
