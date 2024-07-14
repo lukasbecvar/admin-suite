@@ -47,12 +47,13 @@ class TodoManager
         $plainTodos = [];
 
         // get the todo list
-        $todos = $this->entityManagerInterface
-            ->getRepository(Todo::class)
-            ->findBy([
+        $todos = $this->entityManagerInterface->getRepository(Todo::class)->findBy(
+            [
                 'user_id' => $this->authManager->getLoggedUserId(),
                 'status' => $filter
-            ], ['id' => 'DESC']);
+            ],
+            ['id' => 'DESC']
+        );
 
         // decrypt the todo texts
         foreach ($todos as $todo) {
