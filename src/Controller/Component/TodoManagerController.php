@@ -96,12 +96,18 @@ class TodoManagerController extends AbstractController
 
         // check if the todo id is valid
         if ($todoId == 0) {
-            $this->errorManager->handleError('invalid todo id', 400);
+            $this->errorManager->handleError(
+                message: 'invalid todo id',
+                code: Response::HTTP_BAD_REQUEST
+            );
         }
 
         // check if the new todo text is valid
         if ($newTodoText == '') {
-            $this->errorManager->handleError('invalid todo text', 400);
+            $this->errorManager->handleError(
+                message: 'invalid todo text',
+                code: Response::HTTP_BAD_REQUEST
+            );
         }
 
         // edit the todo
@@ -126,7 +132,10 @@ class TodoManagerController extends AbstractController
 
         // check if the todo id is valid
         if ($todoId == 0) {
-            $this->errorManager->handleError('invalid todo id', 400);
+            $this->errorManager->handleError(
+                message: 'invalid todo id',
+                code: Response::HTTP_BAD_REQUEST
+            );
         }
 
         // close the todo
@@ -151,7 +160,10 @@ class TodoManagerController extends AbstractController
 
         // check if the todo id is valid
         if ($todoId == 0) {
-            $this->errorManager->handleError('invalid todo id', 400);
+            $this->errorManager->handleError(
+                message: 'invalid todo id',
+                code: Response::HTTP_BAD_REQUEST
+            );
         }
 
         // delete the todo

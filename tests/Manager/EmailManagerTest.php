@@ -46,6 +46,10 @@ class EmailManagerTest extends TestCase
      */
     public function testSendEmailWithDisabledMailer(): void
     {
+        // set mailer enabled to false
+        $_ENV['MAILER_ENABLED'] = 'false';
+
+        // create test email
         $recipient = 'recipient@example.com';
         $subject = 'Test Subject';
         $context = [
@@ -54,14 +58,14 @@ class EmailManagerTest extends TestCase
             'time' => date('Y-m-d H:i:s')
         ];
 
+        // mock log manager
         $this->logManagerMock->expects($this->never())->method('log');
         $this->mailerMock->expects($this->never())->method('send');
 
-        $_ENV['MAILER_ENABLED'] = 'false';
-
+        // create email manager
         $emailManager = new EmailManager($this->logManagerMock, $this->mailerMock, $this->errorManagerMock);
 
-        // call send email method
+        // call method
         $emailManager->sendEmail($recipient, $subject, $context);
     }
 
@@ -72,6 +76,10 @@ class EmailManagerTest extends TestCase
      */
     public function testSendEmailWithTransportException(): void
     {
+        // set mailer enabled to true
+        $_ENV['MAILER_ENABLED'] = 'true';
+
+        // create test email
         $recipient = 'recipient@example.com';
         $subject = 'Test Subject';
         $context = [
@@ -80,19 +88,19 @@ class EmailManagerTest extends TestCase
             'time' => date('Y-m-d H:i:s')
         ];
 
+        // mock log manager
         $this->logManagerMock->expects($this->never())->method('log');
-        $this->mailerMock->expects($this->once())
-            ->method('send')
-            ->willThrowException(
-                new \Symfony\Component\Mailer\Exception\TransportException()
-            );
+        $this->mailerMock->expects($this->once())->method('send')->willThrowException(
+            new \Symfony\Component\Mailer\Exception\TransportException()
+        );
+
+        // mock error manager
         $this->errorManagerMock->expects($this->once())->method('handleError');
 
-        $_ENV['MAILER_ENABLED'] = 'true';
-
+        // create email manager
         $emailManager = new EmailManager($this->logManagerMock, $this->mailerMock, $this->errorManagerMock);
 
-        // call send email method
+        // call method
         $emailManager->sendEmail($recipient, $subject, $context);
     }
 }

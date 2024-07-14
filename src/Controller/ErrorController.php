@@ -77,8 +77,7 @@ class ErrorController extends AbstractController
     {
         // get exception code
         $statusCode = $exception instanceof HttpException
-            ? $exception->getStatusCode()
-            : Response::HTTP_INTERNAL_SERVER_ERROR;
+            ? $exception->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
 
         // handle errors in dev mode
         if ($this->appUtil->isDevMode()) {

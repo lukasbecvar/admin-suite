@@ -59,7 +59,7 @@ class TodoManagerTest extends TestCase
     }
 
     /**
-     * Test getTodos method
+     * Test get todos
      *
      * @return void
      */
@@ -87,14 +87,14 @@ class TodoManagerTest extends TestCase
         $todos = $this->todoManager->getTodos($filter);
 
         // assert the result
-        $this->assertIsArray($todos); // Ensure $todos is an array
+        $this->assertIsArray($todos);
         $this->assertCount(1, $todos);
-        $this->assertArrayHasKey('todoText', $todos[0]); // Ensure 'todoText' key exists
+        $this->assertArrayHasKey('todoText', $todos[0]);
         $this->assertEquals('decrypted text', $todos[0]['todoText']);
     }
 
     /**
-     * Test createTodo method
+     * Test create todo
      *
      * @return void
      */
@@ -121,7 +121,7 @@ class TodoManagerTest extends TestCase
     }
 
     /**
-     * Test editTodo method
+     * Test edit todo
      *
      * @return void
      */
@@ -162,7 +162,7 @@ class TodoManagerTest extends TestCase
     }
 
     /**
-     * Test closeTodo method
+     * Test close todo
      *
      * @return void
      */

@@ -24,11 +24,11 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
     /** @var AuthManager|MockObject */
     private AuthManager|MockObject $authManagerMock;
 
-    /** @var UrlGeneratorInterface|MockObject */
-    private UrlGeneratorInterface|MockObject $urlGeneratorMock;
-
     /** @var AuthentificatedCheckMiddleware */
     private AuthentificatedCheckMiddleware $middleware;
+
+    /** @var UrlGeneratorInterface|MockObject */
+    private UrlGeneratorInterface|MockObject $urlGeneratorMock;
 
     protected function setUp(): void
     {

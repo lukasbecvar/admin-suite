@@ -53,8 +53,8 @@ class DatabaseOnlineMiddleware
             // handle debug mode exception
             if ($this->appUtil->isDevMode()) {
                 $this->errorManager->handleError(
-                    'database connection error: ' . $e->getMessage(),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                    message: 'database connection error: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             } else {
                 $this->logger->error('database connection error: ' . $e->getMessage());

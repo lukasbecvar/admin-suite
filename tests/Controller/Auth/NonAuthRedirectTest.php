@@ -89,7 +89,7 @@ class NonAuthRedirectTest extends WebTestCase
     {
         $this->client->request('GET', $url);
 
-        // assert
+        // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
         $this->assertTrue($this->client->getResponse()->isRedirect('/login'));
     }

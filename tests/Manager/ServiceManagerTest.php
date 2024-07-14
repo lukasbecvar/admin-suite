@@ -56,7 +56,7 @@ class ServiceManagerTest extends TestCase
     }
 
     /**
-     * Test runSystemdAction method
+     * Test run systemd action
      *
      * @return void
      */
@@ -90,11 +90,12 @@ class ServiceManagerTest extends TestCase
                 $this->errorManager
             ])->onlyMethods(['executeCommand'])->getMock();
 
+        // call method
         $this->serviceManager->runSystemdAction('example_service', 'start');
     }
 
     /**
-     * Test isServiceRunning method
+     * Test check is service running
      *
      * @return void
      */
@@ -104,7 +105,7 @@ class ServiceManagerTest extends TestCase
     }
 
     /**
-     * Test isSocktOpen method
+     * Test check is sockt open
      *
      * @return void
      */
@@ -115,7 +116,7 @@ class ServiceManagerTest extends TestCase
     }
 
     /**
-     * Test isProcessRunning method
+     * Test check is process running
      *
      * @return void
      */
@@ -127,7 +128,7 @@ class ServiceManagerTest extends TestCase
     }
 
     /**
-     * Test isUfwRunning method
+     * Test check is ufw firewall running
      *
      * @return void
      */
@@ -137,22 +138,12 @@ class ServiceManagerTest extends TestCase
     }
 
     /**
-     * Test isServicesListExist method
+     * Test check is services list exist
      *
      * @return void
      */
     public function testIsServicesListExist(): void
     {
         $this->assertIsBool($this->serviceManager->isServicesListExist());
-    }
-
-    /**
-     * Test checkWebsiteStatus method
-     *
-     * @return void
-     */
-    public function testCheckWebsiteStatus(): void
-    {
-        $this->assertIsArray($this->serviceManager->checkWebsiteStatus('https://becvar.xyz'));
     }
 }

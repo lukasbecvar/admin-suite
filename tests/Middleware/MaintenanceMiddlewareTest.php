@@ -64,7 +64,9 @@ class MaintenanceMiddlewareTest extends TestCase
         $event->expects($this->once())
             ->method('setResponse')
             ->with($this->callback(function ($response) {
-                return $response instanceof Response && $response->getStatusCode() === 503 && $response->getContent() === 'Maintenance Mode Content';
+                return $response instanceof Response &&
+                    $response->getStatusCode() === 503 &&
+                    $response->getContent() === 'Maintenance Mode Content';
             }));
 
         $middleware->onKernelRequest($event);

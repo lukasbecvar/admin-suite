@@ -26,7 +26,10 @@ class UserRegisterCommandTest extends TestCase
     /** @var UserManager|MockObject */
     private UserManager $userManager;
 
+    /** @var Application */
     private Application $application;
+
+    /** @var UserRegisterCommand */
     private UserRegisterCommand $command;
 
     protected function setUp(): void
@@ -85,9 +88,10 @@ class UserRegisterCommandTest extends TestCase
         // execute the command with an existing username
         $commandTester->execute(['username' => 'testuser']);
 
-        // assert the output contains the error message
+        // get output
         $output = $commandTester->getDisplay();
 
+        // assert output
         $this->assertStringContainsString('Error username: testuser is already used!', $output);
         $this->assertSame(Command::FAILURE, $commandTester->getStatusCode());
     }

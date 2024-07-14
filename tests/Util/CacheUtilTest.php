@@ -36,7 +36,7 @@ class CacheUtilTest extends TestCase
     }
 
     /**
-     * Test the isCatched method
+     * Test check is key catched
      *
      * @return void
      */
@@ -59,7 +59,7 @@ class CacheUtilTest extends TestCase
     }
 
     /**
-     * Test the getValue method
+     * Test get catched value
      *
      * @return void
      */
@@ -80,7 +80,7 @@ class CacheUtilTest extends TestCase
     }
 
     /**
-     * Test the setValue method
+     * Test set value in cache
      *
      * @return void
      */
@@ -114,7 +114,7 @@ class CacheUtilTest extends TestCase
     }
 
     /**
-     * Test the deleteValue method
+     * Test delete value from cache
      *
      * @return void
      */

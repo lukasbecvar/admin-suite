@@ -20,7 +20,7 @@ class CustomTestCase extends WebTestCase
     /**
      * Simulate a user login
      *
-     * @param KernelBrowser $client
+     * @param KernelBrowser $client The KernelBrowser instance
      *
      * @return void
      */

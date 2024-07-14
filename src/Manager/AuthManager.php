@@ -74,15 +74,20 @@ class AuthManager
      */
     public function isUsernameBlocked(string $username): bool
     {
+        // get blocked usernames config file
         $blockedUsernames = $this->jsonUtil->getJson(
             $this->appUtil->getAppRootDir() . '/config/suite/blocked-usernames.json'
         );
 
+        // check if blocked usernames config file found
         if ($blockedUsernames == null) {
             return false;
         }
 
-        return in_array($username, $blockedUsernames);
+        // check if username is blocked
+        $result = in_array($username, $blockedUsernames);
+
+        return $result;
     }
 
     /**
@@ -157,14 +162,14 @@ class AuthManager
 
                 // log action
                 $this->logManager->log(
-                    'authenticator',
-                    'new registration user: ' . $username,
+                    name: 'authenticator',
+                    message: 'new registration user: ' . $username,
                     level: 1
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
-                    'error to register new user: ' . $e->getMessage(),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                    message: 'error to register new user: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
         }
@@ -182,9 +187,12 @@ class AuthManager
             return null;
         }
 
-        // return logged user
-        return $this->userManager
-            ->getUserRepository(['token' => $this->sessionUtil->getSessionValue('user-token')]);
+        // get logged user repository
+        $repository = $this->userManager->getUserRepository(
+            ['token' => $this->sessionUtil->getSessionValue('user-token')]
+        );
+
+        return $repository;
     }
 
     /**
@@ -260,8 +268,8 @@ class AuthManager
         } else {
             // log invalid credentials
             $this->logManager->log(
-                'authenticator',
-                'invalid login user: ' . $username . ':' . $password,
+                name: 'authenticator',
+                message: 'invalid login user: ' . $username . ':' . $password,
                 level: 2
             );
         }
@@ -305,22 +313,22 @@ class AuthManager
                 // send email alert
                 if (!$this->logManager->isAntiLogEnabled()) {
                     $this->emailManager->sendDefaultEmail(
-                        $this->appUtil->getAdminContactEmail(),
-                        'LOGIN ALERT',
-                        'User ' . $username . ' has logged to admin-suite dashboard, login log has been saved in database.'
+                        recipient: $this->appUtil->getAdminContactEmail(),
+                        subject: 'LOGIN ALERT',
+                        message: 'User ' . $username . ' has logged to admin-suite dashboard, login log has been saved in database.'
                     );
                 }
 
                 // log action
                 $this->logManager->log(
-                    'authenticator',
-                    'login user: ' . $username,
+                    name: 'authenticator',
+                    message: 'login user: ' . $username,
                     level: 1
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
-                    'error to login user: ' . $e->getMessage(),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                    message: 'error to login user: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
         }
@@ -343,8 +351,8 @@ class AuthManager
         // check if repo found
         if ($repo == null) {
             $this->errorManager->handleError(
-                'error to update user data: user not found',
-                Response::HTTP_NOT_FOUND
+                message: 'error to update user data: user not found',
+                code: Response::HTTP_NOT_FOUND
             );
             return;
         }
@@ -359,8 +367,8 @@ class AuthManager
             $this->entityManager->flush();
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                'error to update user data: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to update user data: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -372,6 +380,8 @@ class AuthManager
      */
     public function getLoggedUserId(): int
     {
+        $userId = 0;
+
         // check if user logged in
         if ($this->isUserLogedin()) {
             // get user token
@@ -382,11 +392,12 @@ class AuthManager
 
             // check if user exist
             if ($user != null) {
-                return (int) $user->getId();
+                // get user id
+                $userId = (int) $user->getId();
             }
         }
 
-        return 0;
+        return $userId;
     }
 
     /**
@@ -427,16 +438,16 @@ class AuthManager
             // check if repo found
             if ($user == null) {
                 $this->errorManager->handleError(
-                    'error to update user data: user not found',
-                    Response::HTTP_NOT_FOUND
+                    message: 'error to update user data: user not found',
+                    code: Response::HTTP_NOT_FOUND
                 );
                 return;
             }
 
             // log logout event
             $this->logManager->log(
-                'authenticator',
-                'logout user: ' . $user->getUsername(),
+                name: 'authenticator',
+                message: 'logout user: ' . $user->getUsername(),
                 level: 1
             );
 
@@ -481,14 +492,14 @@ class AuthManager
 
                 // log password reset
                 $this->logManager->log(
-                    'authenticator',
-                    'user: ' . $username . ' password reset is success',
+                    name: 'authenticator',
+                    message: 'user: ' . $username . ' password reset is success',
                     level: 2
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
-                    'error to reset user password: ' . $e->getMessage(),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                    message: 'error to reset user password: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
                 return null;
             }
@@ -541,8 +552,8 @@ class AuthManager
 
         // log action
         $this->logManager->log(
-            'authenticator',
-            'regenerate all users tokens',
+            name: 'authenticator',
+            message: 'regenerate all users tokens',
             level: 3
         );
 

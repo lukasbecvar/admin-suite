@@ -45,8 +45,8 @@ class LogoutController extends AbstractController
         } else {
             // handle logout error
             $this->errorManager->handleError(
-                'logout error: unknown error in logout process',
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'logout error: unknown error in logout process',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
 
             // error return

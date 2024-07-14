@@ -70,7 +70,14 @@ class TodoManagerControllerTest extends CustomTestCase
         // make request
         $this->client->request('POST', '/manager/todo', [
             'create_todo_form' => [
-                'todo_text' => 'asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfafff'
+                'todo_text' => '
+                    asdfasdfasdfasdfasdfasdfasdfasdfasdfa
+                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
+                    dfasdfasdfasdfasdfasdfasdfasdfasdfasd
+                    fasdfasdfasdfasdfasdfasdfasdfasdfasdf
+                    asdfasdfasdfasdfasdfasdfasdfasdfasdfa
+                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
+                    dfasdfasdfasdfasdfasdfasdfasdfafff'
             ]
         ]);
 

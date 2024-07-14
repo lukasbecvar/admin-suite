@@ -20,6 +20,9 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class AutoLoginMiddlewareTest extends TestCase
 {
+    /** @var AutoLoginMiddleware */
+    private AutoLoginMiddleware $middleware;
+
     /** @var CookieUtil|MockObject */
     private CookieUtil|MockObject $cookieUtilMock;
 
@@ -31,9 +34,6 @@ class AutoLoginMiddlewareTest extends TestCase
 
     /** @var UserManager|MockObject */
     private UserManager|MockObject $userManagerMock;
-
-    /** @var AutoLoginMiddleware */
-    private AutoLoginMiddleware $middleware;
 
     protected function setUp(): void
     {

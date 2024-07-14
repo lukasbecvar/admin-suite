@@ -49,16 +49,16 @@ class LinuxCheckMiddleware
             // handle debug mode exception
             if ($this->appUtil->isDevMode()) {
                 $this->errorManager->handleError(
-                    'This system is only for linux.',
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                    message: 'This system is only for linux.',
+                    code: Response::HTTP_NOT_IMPLEMENTED
                 );
             } else {
                 $this->logger->error('this system is only for linux');
             }
 
             // render the maintenance template
-            $content = $this->errorManager->getErrorView(Response::HTTP_INTERNAL_SERVER_ERROR);
-            $response = new Response($content, Response::HTTP_INTERNAL_SERVER_ERROR);
+            $content = $this->errorManager->getErrorView(Response::HTTP_NOT_IMPLEMENTED);
+            $response = new Response($content, Response::HTTP_NOT_IMPLEMENTED);
             $event->setResponse($response);
         }
     }

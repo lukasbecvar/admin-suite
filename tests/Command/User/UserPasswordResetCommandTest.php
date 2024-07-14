@@ -54,6 +54,7 @@ class UserPasswordResetCommandTest extends TestCase
         $this->authManager->expects($this->once())
             ->method('resetUserPassword');
 
+        // create command
         $application = new Application();
         $command = new UserPasswordResetCommand($this->authManager, $this->userManagerMock);
         $application->add($command);
@@ -61,7 +62,10 @@ class UserPasswordResetCommandTest extends TestCase
         $commandTester = new CommandTester($application->find('app:user:password:reset'));
         $commandTester->execute(['username' => $username]);
 
+        // get output
         $output = $commandTester->getDisplay();
+
+        // assert output
         $this->assertStringContainsString('new password is', $output);
         $this->assertEquals(Command::SUCCESS, $commandTester->getStatusCode());
     }
@@ -80,14 +84,19 @@ class UserPasswordResetCommandTest extends TestCase
             ->with($username)
             ->willReturn(false);
 
+        // create command
         $application = new Application();
         $command = new UserPasswordResetCommand($this->authManager, $this->userManagerMock);
         $application->add($command);
 
+        // execute command
         $commandTester = new CommandTester($application->find('app:user:password:reset'));
         $commandTester->execute(['username' => $username]);
 
+        // get output
         $output = $commandTester->getDisplay();
+
+        // assert output
         $this->assertStringContainsString('Error username: ' . $username . ' does not exist!', $output);
         $this->assertEquals(Command::FAILURE, $commandTester->getStatusCode());
     }
@@ -101,14 +110,19 @@ class UserPasswordResetCommandTest extends TestCase
     {
         $username = '';
 
+        // create command
         $application = new Application();
         $command = new UserPasswordResetCommand($this->authManager, $this->userManagerMock);
         $application->add($command);
 
+        // execute command
         $commandTester = new CommandTester($application->find('app:user:password:reset'));
         $commandTester->execute(['username' => $username]);
 
+        // get output
         $output = $commandTester->getDisplay();
+
+        // assert output
         $this->assertStringContainsString('Username cannot be empty.', $output);
         $this->assertEquals(Command::FAILURE, $commandTester->getStatusCode());
     }

@@ -219,22 +219,22 @@ class BanManagerTest extends TestCase
      */
     public function testGetBannedUsers(): void
     {
-        // Create test users
+        // create test users
         $user1 = $this->createMock(User::class);
         $user2 = $this->createMock(User::class);
         $user3 = $this->createMock(User::class);
 
-        // Set user IDs
+        // set user IDs
         $user1->method('getId')->willReturn(1);
         $user2->method('getId')->willReturn(2);
         $user3->method('getId')->willReturn(3);
 
-        // Mock UserManager to return the list of users
+        // mock UserManager to return the list of users
         $this->userManagerMock
             ->method('getAllUsersRepository')
             ->willReturn([$user1, $user2, $user3]);
 
-        // Mock BannedRepository to return banned users based on user IDs
+        // mock BannedRepository to return banned users based on user IDs
         $this->repositoryMock
             ->method('findOneBy')
             ->willReturnCallback(function ($criteria) {
@@ -247,10 +247,10 @@ class BanManagerTest extends TestCase
                 return null;
             });
 
-        // Call the method
+        // call the method
         $bannedUsers = $this->banManager->getBannedUsers();
 
-        // Assert the banned users list
+        // assert the banned users list
         $this->assertCount(2, $bannedUsers);
         $this->assertContains($user1, $bannedUsers);
         $this->assertContains($user3, $bannedUsers);

@@ -5,10 +5,6 @@
     box-sizing: border-box;
 }
 
-.main-content {
-	display: none;
-}
-
 html {
 	scroll-behavior: smooth;
 }
@@ -241,11 +237,13 @@ main {
 	#sidebar {
 		top: 30px;
 		width: 100%;
-        border-left: 1px solid rgb(75 85 99);
-        border-bottom: 1px solid rgb(75 85 99);
+        border-right: none;
 	}
 	.nav-bar .about-link {
 		margin-top: -0.8px !important;
+	}
+	#main-content.active {
+		display: none;
 	}
 }
 

@@ -7,8 +7,8 @@ php bin/console cache:clear
 rm -rf migrations/
 
 # delete composer files
-rm -rf composer.lock
 rm -rf vendor/
+rm -rf composer.lock
 
 # delete npm packages
 rm -rf node_modules/
@@ -29,5 +29,5 @@ sudo rm -rf var/
 sudo rm -rf _docker/services/
 
 # delete custom config files
-rm -rf package-requirements.json
 rm -rf services.json
+rm -rf package-requirements.json

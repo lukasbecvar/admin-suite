@@ -23,14 +23,14 @@ class SecurityCheckMiddlewareTest extends TestCase
     /** @var AppUtil|MockObject */
     private AppUtil|MockObject $appUtilMock;
 
+    /** @var SecurityCheckMiddleware */
+    private SecurityCheckMiddleware $middleware;
+
     /** @var LoggerInterface|MockObject */
     private LoggerInterface|MockObject $loggerMock;
 
     /** @var ErrorManager|MockObject */
     private ErrorManager|MockObject $errorManagerMock;
-
-    /** @var SecurityCheckMiddleware */
-    private SecurityCheckMiddleware $middleware;
 
     protected function setUp(): void
     {

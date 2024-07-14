@@ -49,6 +49,24 @@ class LogReaderCommandTest extends TestCase
     }
 
     /**
+     * Test execute with invalid status
+     *
+     * @return void
+     */
+    public function testExecuteWithInvalidStatus(): void
+    {
+        // execute command with empty status
+        $this->commandTester->execute(['status' => '']);
+
+        // get output
+        $output = $this->commandTester->getDisplay();
+
+        // assert output
+        $this->assertStringContainsString('status cannot be empty.', $output);
+        $this->assertEquals(Command::FAILURE, $this->commandTester->getStatusCode());
+    }
+
+    /**
      * Test execute with valid status
      *
      * @return void
@@ -73,9 +91,7 @@ class LogReaderCommandTest extends TestCase
         $this->visitorInfoUtil->method('getOs')->willReturn('OS');
 
         // execute command
-        $this->commandTester->execute([
-            'status' => 'all'
-        ]);
+        $this->commandTester->execute(['status' => 'all']);
 
         // get output
         $output = $this->commandTester->getDisplay();
@@ -88,25 +104,5 @@ class LogReaderCommandTest extends TestCase
         $this->assertStringContainsString('127.0.0.1', $output);
         $this->assertStringContainsString('Test User', $output);
         $this->assertEquals(Command::SUCCESS, $this->commandTester->getStatusCode());
-    }
-
-    /**
-     * Test execute with invalid status
-     *
-     * @return void
-     */
-    public function testExecuteWithInvalidStatus(): void
-    {
-        // execute command with empty status
-        $this->commandTester->execute([
-            'status' => ''
-        ]);
-
-        // get output
-        $output = $this->commandTester->getDisplay();
-
-        // assert output
-        $this->assertStringContainsString('status cannot be empty.', $output);
-        $this->assertEquals(Command::FAILURE, $this->commandTester->getStatusCode());
     }
 }

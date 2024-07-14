@@ -37,8 +37,8 @@ class CacheUtil
             return $this->cacheItemPoolInterface->getItem($key)->isHit();
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                'error to get cache value: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to get cache value: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
             return false;
         }
@@ -57,8 +57,8 @@ class CacheUtil
             return $this->cacheItemPoolInterface->getItem($key);
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                'error to get cache value: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to get cache value: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
             return null;
         }
@@ -85,8 +85,8 @@ class CacheUtil
             $this->cacheItemPoolInterface->save($cache_item);
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                'error to store cache value: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to store cache value: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -104,8 +104,8 @@ class CacheUtil
             $this->cacheItemPoolInterface->deleteItem($key);
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                'error to delete cache value: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to delete cache value: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }

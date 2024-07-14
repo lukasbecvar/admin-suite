@@ -32,7 +32,7 @@ class DatabaseManagerTest extends TestCase
     }
 
     /**
-     * Test the getDatabaseConnection method
+     * Test the getDatabaseConnection method with database online
      *
      * @return void
      */
@@ -43,7 +43,7 @@ class DatabaseManagerTest extends TestCase
     }
 
     /**
-     * Test the isDatabaseDown method
+     * Test the getDatabaseConnection method with database offline
      *
      * @return void
      */

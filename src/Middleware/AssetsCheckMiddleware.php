@@ -40,8 +40,8 @@ class AssetsCheckMiddleware
 
             // build the response
             $response = new Response(
-                'Error: build resources not found, please contact service administrator & report this bug on email: ' . $_ENV['ADMIN_CONTACT'],
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                content: 'Error: build resources not found, please contact service administrator & report this bug on email: ' . $_ENV['ADMIN_CONTACT'],
+                status: Response::HTTP_INTERNAL_SERVER_ERROR
             );
 
             // set the response

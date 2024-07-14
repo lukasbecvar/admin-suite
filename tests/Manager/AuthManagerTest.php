@@ -396,6 +396,7 @@ class AuthManagerTest extends TestCase
         // get online list
         $result = $this->authManager->getOnlineUsers();
 
+        // assert result
         $this->assertIsArray($result);
     }
 }

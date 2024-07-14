@@ -38,7 +38,7 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test getHostUptime method
+     * Test get host uptime
      *
      * @return void
      */
@@ -53,7 +53,7 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test getHostLoadAverage method
+     * Test get cpu load average
      *
      * @return void
      */
@@ -69,7 +69,7 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test getRamUsage method
+     * Test get ram usage
      *
      * @return void
      */
@@ -86,7 +86,7 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test getRamUsagePercentage method
+     * Test get ram usage percentage
      *
      * @return void
      */
@@ -102,7 +102,7 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test getDiskUsage method
+     * Test get software info
      *
      * @return void
      */
@@ -116,7 +116,7 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test getDiskUsage method
+     * Test check is web user sudo
      *
      * @return void
      */
@@ -130,7 +130,7 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test getDriveUsagePercentage method
+     * Test get drive usage percentage
      *
      * @return void
      */
@@ -144,7 +144,7 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test getDiskUsage method
+     * Test get disk usage
      *
      * @return void
      */
@@ -158,7 +158,7 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test getDiskUsage method
+     * Test check is system linux
      *
      * @return void
      */
@@ -172,7 +172,7 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test getProcessList method
+     * Test get process list
      *
      * @return void
      */
