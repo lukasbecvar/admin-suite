@@ -25,6 +25,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LogManagerTest extends TestCase
 {
+    /** @var LogManager */
+    private LogManager $logManager;
+
     /** @var AppUtil|MockObject */
     private AppUtil|MockObject $appUtilMock;
 
@@ -49,9 +52,6 @@ class LogManagerTest extends TestCase
     /** @var EntityManagerInterface|MockObject */
     private EntityManagerInterface|MockObject $entityManagerMock;
 
-    /** @var LogManager */
-    private LogManager $logManager;
-
     protected function setUp(): void
     {
         $this->appUtilMock = $this->createMock(AppUtil::class);
@@ -75,7 +75,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test main log method
+     * Test log message
      *
      * @return void
      */
