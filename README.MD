@@ -9,8 +9,15 @@
 ## Dashboard preview
 ![Dashboard](.github/assets/preview.png)
 
-## ROADMAP
+### 1.1 TODOS
+- [ ] Todo priority system
+- [ ] Get todo list CLI command 
 - [ ] Exception log warning alert
+- [ ] Host server emergency shutdown
+- [ ] Upgrade action (release run over SSH)
+- [ ] Better readme
+
+## ROADMAP
 - [ ] Database browser
     - [ ] All databases list
     - [ ] Browse tables
@@ -31,11 +38,15 @@
     - [ ] Interactive command execution
     - [ ] MySQL CLI
 - [ ] Internal chat component
-- [ ] Host server emergency shutdown
-- [ ] Setup script (for non docker env)
-- [ ] Upgrade script (github action release run over SSH)
-- [ ] Better readme
+    - [ ] Basic chat room
+    - [ ] Display usernames & profile pictures
+    - [ ] Link higlighting
 - [ ] Doc/About & download page (github pages)
+    - [ ] About homepage
+    - [ ] Download page
+    - [ ] Base documentation
+    - [ ] Installation documentation
+    - [ ] Components documentation
 
 ## Dependencies
 This project uses the following technologies
