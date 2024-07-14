@@ -18,62 +18,76 @@ class NonAuthRedirectTest extends WebTestCase
 {
     private KernelBrowser $client;
 
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-    }
+    /**
+     * Auth required routes list
+     *
+     * @return array<array<string>>
+     */
+    private const ROUTES = [
+        'admin_dashboard' => [
+            '/admin',
+            '/dashboard'
+        ],
+        'anti_log' => [
+            '/13378/antilog'
+        ],
+        'user_manager' => [
+            '/manager/users',
+            '/manager/users/ban',
+            '/manager/users/delete',
+            '/manager/users/register',
+            '/manager/users/role/update'
+        ],
+        'account_settings' => [
+            '/account/settings',
+            '/manager/users/profile',
+            '/account/settings/change/picture',
+            '/account/settings/change/username',
+            '/account/settings/change/password'
+        ],
+        'logs_manager' => [
+            '/manager/logs',
+            '/manager/logs/system',
+            '/manager/logs/set/readed',
+            '/manager/logs/exception/self'
+        ],
+        'diagnostic' => [
+            '/diagnostic'
+        ],
+        'action_runner' => [
+            '/service/action/runner'
+        ],
+        'monitoring_manager' => [
+            '/manager/monitoring',
+            '/manager/monitoring/config'
+        ],
+        'todo_manager' => [
+            '/manager/todo',
+            '/manager/todo/edit',
+            '/manager/todo/close',
+            '/manager/todo/delete'
+        ]
+    ];
 
     /**
      * Auth required routes list
      *
      * @return array<array<string>>
      */
-    public function provideAdminUrls(): array
+    protected function provideAdminUrls(): array
     {
-        return [
-            // admin dashboard routes
-            ['/admin'],
-            ['/dashboard'],
+        $urls = [];
+        foreach (self::ROUTES as $category => $routes) {
+            foreach ($routes as $route) {
+                $urls[] = [$route];
+            }
+        }
+        return $urls;
+    }
 
-            // anti-log route
-            ['/13378/antilog'],
-
-            // users manager system routes
-            ['/manager/users'],
-            ['/manager/users/ban'],
-            ['/manager/users/delete'],
-            ['/manager/users/register'],
-            ['/manager/users/role/update'],
-
-            // account settings routes
-            ['/account/settings'],
-            ['/manager/users/profile'],
-            ['/account/settings/change/picture'],
-            ['/account/settings/change/username'],
-            ['/account/settings/change/password'],
-
-            // logs manager
-            ['/manager/logs'],
-            ['/manager/logs/system'],
-            ['/manager/logs/system'],
-            ['/manager/logs/set/readed'],
-
-            // diagnostic page
-            ['/diagnostic'],
-
-            // action runner
-            ['/service/action/runner'],
-
-            // monitoring manager
-            ['/manager/monitoring'],
-            ['/manager/monitoring/config'],
-
-            // todo manager
-            ['/manager/todo'],
-            ['/manager/todo/edit'],
-            ['/manager/todo/close'],
-            ['/manager/todo/delete']
-        ];
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
     }
 
     /**
