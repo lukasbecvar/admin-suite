@@ -24,7 +24,7 @@
     </div>
 
     {# TODO LIST #}
-    <div class="flex-1 overflow-y-auto card-component ">
+    <div class="flex-1 overflow-y-auto card-component">
         <div class="bg-neutral-800 overflow-hidden h-full flex flex-col">
             <div class="flex-1 overflow-y-auto">
                 <div class="divide-y divide-neutral-700">
@@ -40,22 +40,23 @@
                             <div class="flex-grow">
                                 <span class="text-white">{{ todo.todoText|e }}</span>
                             </div>
-                            {% if filter == 'open' %}
-                                <div class="flex space-x-2">
-                                    <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} class="text-green-500 text-xl hover:text-green-200 focus:outline-none mr-0.5">
-                                        <i class="fa fa-check" aria-hidden="true"></i>
-                                    </a>
+                            <div class="flex space-x-2 ml-1">
+                                {% if filter == 'open' %}
                                     <button data-todo-id="{{ todo.id }}" class="text-neutral-400 text-xl hover:text-white focus:outline-none">
                                         <i class="fa fa-edit" aria-hidden="true"></i>
                                     </button>
-                                </div>
-                            {% else %}
-                                <a href={{ path('app_todo_manager_delete', {'id': todo.id}) }} class="text-red-500 text-xl hover:text-red-200 focus:outline-none mr-0.5">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                </a>
-                            {% endif %}
+                                    <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} class="text-green-500 text-xl hover:text-green-200 focus:outline-none mr-0.5">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    </a>
+                                {% else %}
+                                    <a href={{ path('app_todo_manager_delete', {'id': todo.id}) }} class="text-red-500 text-xl hover:text-red-200 focus:outline-none mr-0.5">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
                         </div>                    
                     {% endfor %}
+
                 </div>
             </div>
         </div>

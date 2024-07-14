@@ -10,7 +10,6 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-- [ ] Todo manager CLI
 - [ ] Exception log warning alert
 - [ ] Database browser
     - [ ] All databases list

@@ -32,7 +32,6 @@ class TodoFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        // user ID 1 todos
         for ($i = 1; $i <= 20; $i++) {
             $todo = new Todo();
             $todo->setTodoText($this->securityUtil->encryptAes("Todo item for user 1 - Todo $i"));
@@ -43,22 +42,7 @@ class TodoFixtures extends Fixture
             // set completed_time for some todos
             if ($i % 3 == 0) {
                 $todo->setCompletedTime(new \DateTime());
-            }
-
-            $manager->persist($todo);
-        }
-
-        // user ID 2 todos
-        for ($i = 1; $i <= 20; $i++) {
-            $todo = new Todo();
-            $todo->setTodoText($this->securityUtil->encryptAes("Todo item for user 2 - Todo $i"));
-            $todo->setAddedTime(new \DateTime());
-            $todo->setStatus('open');
-            $todo->setUserId(2);
-
-            // set completed_time for some todos
-            if ($i % 4 == 0) {
-                $todo->setCompletedTime(new \DateTime());
+                $todo->setStatus('closed');
             }
 
             $manager->persist($todo);
