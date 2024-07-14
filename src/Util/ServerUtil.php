@@ -52,21 +52,21 @@ class ServerUtil
         $load = 100;
         $loads = sys_getloadavg();
 
-        // Check if sys_getloadavg() returned an array
+        // check if sys_getloadavg() returned an array
         if (!is_array($loads) || count($loads) < 1) {
-            return $load; // Return default value if load average is unavailable
+            return $load; // return default value if load average is unavailable
         }
 
-        // Fetch number of CPU cores
+        // fetch number of CPU cores
         $coreNums = (string) shell_exec("grep -P '^processor' /proc/cpuinfo | wc -l");
 
-        // Validate core nums
+        // validate core nums
         if ($coreNums !== null && trim($coreNums) !== '') {
             $coreNums = trim($coreNums);
             $load = round($loads[0] / (intval($coreNums) + 1) * 100, 2);
         }
 
-        // Overload fix
+        // overload fix
         if ($load > 100) {
             $load = 100;
         }
@@ -119,7 +119,10 @@ class ServerUtil
     {
         $ramUsageData = $this->getRamUsage();
 
-        return (int) (((float) $ramUsageData['used'] / (float) $ramUsageData['total']) * 100);
+        // calculate percentage
+        $usage = (int) (((float) $ramUsageData['used'] / (float) $ramUsageData['total']) * 100);
+
+        return $usage;
     }
 
     /**
@@ -132,7 +135,10 @@ class ServerUtil
         try {
             return (int) exec("df --output=used -BG / | awk 'NR==2 { print int($1) }'");
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get disk usage ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                message: 'error to get disk usage ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
             return null;
         }
     }
@@ -147,7 +153,10 @@ class ServerUtil
         try {
             return (string) exec("df -Ph / | awk 'NR == 2{print $5}' | tr -d '%'");
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get drive usage percentage ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                message: 'error to get drive usage percentage ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
             return null;
         }
     }
@@ -162,7 +171,10 @@ class ServerUtil
         try {
             return (string) exec('whoami');
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get web username ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                message: 'error to get web username ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
             return null;
         }
     }
@@ -294,7 +306,10 @@ class ServerUtil
         try {
             exec('ps aux', $output);
         } catch (\Exception $exception) {
-            $this->errorManager->handleError('error to get process list ' . $exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                message: 'error to get process list ' . $exception->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
             return null;
         }
 
@@ -342,7 +357,10 @@ class ServerUtil
         try {
             exec($command);
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to executed command: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                message: 'error to executed command: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

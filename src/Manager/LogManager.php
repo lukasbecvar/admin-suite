@@ -112,8 +112,8 @@ class LogManager
             $this->entityManager->flush();
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                'log-error: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'log-error: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -129,7 +129,11 @@ class LogManager
         $this->log('anti-log', 'anti-log enabled');
 
         // set the anti-log cookie
-        $this->cookieUtil->set('anti-log', $this->appUtil->getAntiLogToken(), time() + (60 * 60 * 24 * 7 * 365));
+        $this->cookieUtil->set(
+            name: 'anti-log',
+            value: $this->appUtil->getAntiLogToken(),
+            expiration: time() + (60 * 60 * 24 * 7 * 365)
+        );
     }
 
     /**
@@ -209,7 +213,9 @@ class LogManager
     {
         $repository = $this->entityManager->getRepository(Log::class);
 
-        return $repository->count(['name' => 'authenticator', 'status' => 'UNREADED']);
+        return $repository->count(
+            ['name' => 'authenticator', 'status' => 'UNREADED']
+        );
     }
 
     /**
@@ -288,7 +294,10 @@ class LogManager
 
         // check if log found
         if (!$log) {
-            $this->errorManager->handleError('log status update error: log id: ' . $id . ' not found', Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                message: 'log status update error: log id: ' . $id . ' not found',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         // update status
@@ -299,7 +308,10 @@ class LogManager
             // flush data to database
             $this->entityManager->flush();
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to update log status: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                message: 'error to update log status: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -331,7 +343,10 @@ class LogManager
             // flush changes to the database
             $this->entityManager->flush();
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to set all logs status to "READED": ' . $e, Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                message: 'error to set all logs status to "READED": ' . $e,
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -360,7 +375,10 @@ class LogManager
                 }
             }
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get system logs: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                message: 'error to get system logs: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         // log action
@@ -385,18 +403,28 @@ class LogManager
         // check if file exists
         $filePath = $this->appUtil->getSystemLogsDirectory() . '/' . $logFile;
         if (!file_exists($filePath)) {
-            $this->errorManager->handleError('error to get log file: ' . $filePath . ' not found', Response::HTTP_NOT_FOUND);
+            $this->errorManager->handleError(
+                message: 'error to get log file: ' . $filePath . ' not found',
+                code: Response::HTTP_NOT_FOUND
+            );
         }
 
         try {
             // get log file content
             $log = file_get_contents($filePath);
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to get log file: ' . $logFile . ', ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->errorManager->handleError(
+                message: 'error to get log file: ' . $logFile . ', ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         // log action
-        $this->log('log-manager', 'system log: ' . $logFile . ' viewed', level: 3);
+        $this->log(
+            name: 'log-manager',
+            message: 'system log: ' . $logFile . ' viewed',
+            level: 3
+        );
 
         // return log content
         return $log;

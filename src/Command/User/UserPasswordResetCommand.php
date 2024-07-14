@@ -82,9 +82,9 @@ class UserPasswordResetCommand extends Command
 
         // reset user password
         try {
-            // reset user password
             $newPassword = $this->authManager->resetUserPassword($username);
 
+            // display success message
             $io->success('User: ' . $username . ' new password is ' . $newPassword);
             return Command::SUCCESS;
         } catch (\Exception $e) {

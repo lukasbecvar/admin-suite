@@ -64,13 +64,17 @@ class BanManager
             $this->entityManager->flush();
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                'error to ban user: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to ban user: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 
         // log action
-        $this->logManager->log('ban-manager', 'user: ' . $userId . ' has been banned', 1);
+        $this->logManager->log(
+            name: 'ban-manager',
+            message: 'user: ' . $userId . ' has been banned',
+            level: 1
+        );
     }
 
     /**
@@ -140,13 +144,17 @@ class BanManager
                 $this->entityManager->flush();
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
-                    'error to unban user: ' . $e->getMessage(),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                    message: 'error to unban user: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
 
             // log action
-            $this->logManager->log('ban-manager', 'user: ' . $userId . ' is unbanned', 1);
+            $this->logManager->log(
+                name: 'ban-manager',
+                message: 'user: ' . $userId . ' is unbanned',
+                level: 1
+            );
         }
     }
 
@@ -184,6 +192,9 @@ class BanManager
     {
         $repository = $this->entityManager->getRepository(Banned::class);
 
-        return $repository->count(['status' => 'active']);
+        // get banned count
+        $count =  $repository->count(['status' => 'active']);
+
+        return $count;
     }
 }

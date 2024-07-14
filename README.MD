@@ -10,7 +10,7 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-- [ ] Custom non linux detected error message (Linux check middleware)
+- [ ] Todo manager CLI
 - [ ] Exception log warning alert
 - [ ] Database browser
     - [ ] All databases list

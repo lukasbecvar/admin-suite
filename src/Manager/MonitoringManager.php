@@ -57,8 +57,8 @@ class MonitoringManager
             return $this->entityManagerInterface->getRepository(ServiceMonitoring::class)->findOneBy($search);
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                'error to get service monitoring repository: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to get service monitoring repository: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
             return null;
         }
@@ -93,8 +93,8 @@ class MonitoringManager
                 $this->entityManagerInterface->persist($serviceMonitoring);
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
-                    'error to persist service monitoring: ' . $e->getMessage(),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                    message: 'error to persist service monitoring: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
         } else {
@@ -109,8 +109,8 @@ class MonitoringManager
             $this->entityManagerInterface->flush();
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                'error to flush service monitoring: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to flush service monitoring: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -136,8 +136,8 @@ class MonitoringManager
             return null;
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                'error to get service status: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to get service status: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
             return null;
         }
@@ -171,8 +171,8 @@ class MonitoringManager
 
                 // log status chnage
                 $this->logManager->log(
-                    'monitoring',
-                    $serviceName . ' status: ' . $currentStatus . ' msg: ' . $message,
+                    name: 'monitoring',
+                    message: $serviceName . ' status: ' . $currentStatus . ' msg: ' . $message,
                     level: 2
                 );
 
@@ -198,10 +198,10 @@ class MonitoringManager
         // check if database is down flag is set
         if ($databaseDown == false) {
             $this->emailManager->sendMonitoringStatusEmail(
-                $this->appUtil->getAdminContactEmail(),
-                'Mysql',
-                'Mysql server down detected',
-                'critical'
+                recipient: $this->appUtil->getAdminContactEmail(),
+                serviceName: 'Mysql',
+                message: 'Mysql server down detected',
+                currentStatus: 'critical'
             );
         }
 
@@ -221,8 +221,8 @@ class MonitoringManager
         // check if method is called from cli
         if (php_sapi_name() != 'cli') {
             $this->errorManager->handleError(
-                'error to init monitoring process: this method can only be called from cli',
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to init monitoring process: this method can only be called from cli',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 

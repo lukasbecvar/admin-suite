@@ -101,7 +101,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test setAntiLog method
+     * Test set anti-log token
      *
      * @return void
      */
@@ -118,7 +118,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test unSetAntiLog method
+     * Test unset anti-log token
      *
      * @return void
      */
@@ -133,7 +133,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test isAntiLogEnabled method
+     * Test is anti-log enabled
      *
      * @return void
      */
@@ -148,7 +148,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test isAntiLogEnabled when cookie is not set
+     * Test is anti-log enabled when cookie is not set
      *
      * @return void
      */
@@ -176,7 +176,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test getLogsCountWhereStatus method
+     * Test get logs count
      *
      * @return void
      */
@@ -188,7 +188,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test getAuthLogsCount method
+     * Test get auth logs count
      *
      * @return void
      */
@@ -200,7 +200,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test getLogsWhereStatus method
+     * Test get logs
      *
      * @return void
      */
@@ -220,7 +220,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test setAllLogsToReaded method
+     * Test set all logs to readed
      *
      * @return void
      */
@@ -253,7 +253,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test updateLogStatusById when log is found and status is updated.
+     * Test updateLogStatusById when log is found and status is updated
      *
      * @return void
      */
@@ -281,11 +281,12 @@ class LogManagerTest extends TestCase
         $this->entityManagerMock->expects($this->once())
             ->method('flush');
 
+        // call method
         $this->logManager->updateLogStatusById($logId, $newStatus);
     }
 
     /**
-     * Test updateLogStatusById when an exception is thrown during flush.
+     * Test updateLogStatusById when an exception is thrown during flush
      *
      * @return void
      */
@@ -314,13 +315,13 @@ class LogManagerTest extends TestCase
             ->method('flush')
             ->willThrowException(new \Exception('Test Exception'));
 
-        $this->errorManagerMock->expects($this->once())
-            ->method('handleError')
+        $this->errorManagerMock->expects($this->once())->method('handleError')
             ->with(
                 'error to update log status: Test Exception',
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
 
+        // call method
         $this->logManager->updateLogStatusById($logId, $newStatus);
     }
 }

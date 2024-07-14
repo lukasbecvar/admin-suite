@@ -234,7 +234,7 @@ class ServiceManager
      *
      * @return void
      */
-    public function executeCommand($command): void
+    public function executeCommand(string $command): void
     {
         try {
             exec($command);
@@ -260,8 +260,8 @@ class ServiceManager
 
         if ($ch == false) {
             $this->errorManager->handleError(
-                'error to check website status: ' . $url,
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to check website status: ' . $url,
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
             return ['isOnline' => false, 'responseTime' => 0, 'responseCode' => 0];
         }

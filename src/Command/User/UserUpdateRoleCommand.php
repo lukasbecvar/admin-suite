@@ -104,7 +104,6 @@ class UserUpdateRoleCommand extends Command
 
         // update role
         try {
-            // update role
             $this->userManager->updateUserRole($userRepository->getId(), $role);
 
             // success message

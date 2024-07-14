@@ -42,18 +42,23 @@ class UserDeleteCommandTest extends TestCase
     {
         $username = 'nonexistentuser';
 
+        // configure the UserManager mock to return false for non-existent user
         $this->userManagerMock->method('checkIfUserExist')->with($username)->willReturn(false);
 
+        // create command
         $command = new UserDeleteCommand($this->userManagerMock);
 
         $application = new Application();
         $application->add($command);
         $commandTester = new CommandTester($application->find('app:user:delete'));
 
+        // execute command
         $commandTester->execute(['username' => $username]);
 
+        // get output
         $output = $commandTester->getDisplay();
 
+        // assert output
         $this->assertStringContainsString('Error username: ' . $username . ' not exist!', $output);
         $this->assertEquals(Command::FAILURE, $commandTester->getStatusCode());
     }
@@ -67,16 +72,21 @@ class UserDeleteCommandTest extends TestCase
     {
         $username = 123; // invalid type
 
+        // create command
         $command = new UserDeleteCommand($this->userManagerMock);
 
+        // create application and add command
         $application = new Application();
         $application->add($command);
         $commandTester = new CommandTester($application->find('app:user:delete'));
 
+        // execute command
         $commandTester->execute(['username' => $username]);
 
+        // get output
         $output = $commandTester->getDisplay();
 
+        // assert output
         $this->assertStringContainsString('Invalid username provided.', $output);
         $this->assertEquals(Command::FAILURE, $commandTester->getStatusCode());
     }
@@ -99,15 +109,21 @@ class UserDeleteCommandTest extends TestCase
         $this->userManagerMock->method('deleteUser')->with($userId)
             ->will($this->throwException(new \Exception('Some error occurred')));
 
+
+        // create command
         $command = new UserDeleteCommand($this->userManagerMock);
 
         $application = new Application();
         $application->add($command);
         $commandTester = new CommandTester($application->find('app:user:delete'));
 
+        // execute command
         $commandTester->execute(['username' => $username]);
 
+        // get output
         $output = $commandTester->getDisplay();
+
+        // assert output
         $this->assertStringContainsString('Process error: Some error occurred', $output);
         $this->assertEquals(Command::FAILURE, $commandTester->getStatusCode());
     }
@@ -129,15 +145,20 @@ class UserDeleteCommandTest extends TestCase
         $this->userManagerMock->method('getUserRepository')->with(['username' => $username])->willReturn($user);
         $this->userManagerMock->expects($this->once())->method('deleteUser')->with($userId);
 
+        // create command
         $command = new UserDeleteCommand($this->userManagerMock);
 
         $application = new Application();
         $application->add($command);
         $commandTester = new CommandTester($application->find('app:user:delete'));
 
+        // execute command
         $commandTester->execute(['username' => $username]);
 
+        // get output
         $output = $commandTester->getDisplay();
+
+        // assert output
         $this->assertStringContainsString('User: ' . $username . ' has been deleted!', $output);
         $this->assertEquals(Command::SUCCESS, $commandTester->getStatusCode());
     }

@@ -47,7 +47,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test is SSL
+     * Test check is SSL
      *
      * @return void
      */
@@ -164,7 +164,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test calculateMaxPages method
+     * Test calculate max pages
      *
      * @return void
      */
@@ -178,7 +178,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test getAdminContactEmail
+     * Test get admin contact email
      *
      * @return void
      */
@@ -192,7 +192,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test getSystemLogsDirectory
+     * Test get system logs directory
      *
      * @return void
      */
@@ -202,7 +202,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test getAntiLogToken
+     * Test get anti log token
      *
      * @return void
      */
@@ -216,7 +216,7 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test getHasherConfig
+     * Test get hasher config
      *
      * @return void
      */

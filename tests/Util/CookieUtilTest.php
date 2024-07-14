@@ -16,11 +16,11 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class CookieUtilTest extends TestCase
 {
-    /** @var SecurityUtil|MockObject */
-    private SecurityUtil|MockObject $securityUtilMock;
-
     /** @var CookieUtil */
     private CookieUtil $cookieUtil;
+
+    /** @var SecurityUtil|MockObject */
+    private SecurityUtil|MockObject $securityUtilMock;
 
     protected function setUp(): void
     {
@@ -34,11 +34,11 @@ class CookieUtilTest extends TestCase
     }
 
     /**
-     * Test the set method
+     * test set cookie
      *
      * @return void
      */
-    public function testSet(): void
+    public function testSetCookie(): void
     {
         // set cookie values
         $name = 'test_cookie';
@@ -60,7 +60,7 @@ class CookieUtilTest extends TestCase
     }
 
     /**
-     * Test the is set cookie check method
+     * Test check is set cookie check
      *
      * @return void
      */
@@ -72,7 +72,7 @@ class CookieUtilTest extends TestCase
     }
 
     /**
-     * Test the get method
+     * Test get cookie value
      *
      * @return void
      */
@@ -100,11 +100,11 @@ class CookieUtilTest extends TestCase
     }
 
     /**
-     * Test the unset method
+     * Test the unset cookie
      *
      * @return void
      */
-    public function testUnset(): void
+    public function testUnsetCookie(): void
     {
         // set cookie values
         $name = 'test_cookie';

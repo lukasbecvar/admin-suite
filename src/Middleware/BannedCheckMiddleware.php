@@ -62,7 +62,11 @@ class BannedCheckMiddleware
                 ]);
 
                 // log banned access
-                $this->logManager->log('ban-manager', 'banned user trying to access page', 3);
+                $this->logManager->log(
+                    name: 'ban-manager',
+                    message: 'banned user trying to access page',
+                    level: 3
+                );
 
                 $response = new Response($content, Response::HTTP_FORBIDDEN);
                 $event->setResponse($response);

@@ -96,7 +96,10 @@ class AccountSettingsController extends AbstractController
 
                     // update profile picture
                     try {
-                        $this->userManager->updateProfilePicture($this->authManager->getLoggedUserId(), $imageCode);
+                        $this->userManager->updateProfilePicture(
+                            userId: $this->authManager->getLoggedUserId(),
+                            newProfilePicture: $imageCode
+                        );
 
                         // redirect back to the account settings page
                         return $this->redirectToRoute('app_account_settings_table');
@@ -152,7 +155,10 @@ class AccountSettingsController extends AbstractController
                 } else {
                     // change the username
                     try {
-                        $this->userManager->updateUsername($this->authManager->getLoggedUserId(), $username);
+                        $this->userManager->updateUsername(
+                            userId: $this->authManager->getLoggedUserId(),
+                            newUsername: $username
+                        );
 
                         // redirect back to the account settings page
                         return $this->redirectToRoute('app_account_settings_table');
@@ -198,13 +204,16 @@ class AccountSettingsController extends AbstractController
             // check if the new password is empty
             if ($password == null) {
                 $this->errorManager->handleError(
-                    'error to get password from request data',
-                    Response::HTTP_BAD_REQUEST
+                    message:'error to get password from request data',
+                    code:Response::HTTP_BAD_REQUEST
                 );
             } else {
                 // change the password
                 try {
-                    $this->userManager->updatePassword($this->authManager->getLoggedUserId(), $password);
+                    $this->userManager->updatePassword(
+                        userId: $this->authManager->getLoggedUserId(),
+                        newPassword: $password
+                    );
 
                     // redirect back to the account settings page
                     return $this->redirectToRoute('app_account_settings_table');

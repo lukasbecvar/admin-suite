@@ -5,6 +5,7 @@ namespace App\Manager;
 use App\Entity\Todo;
 use App\Util\SecurityUtil;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class TodoManager
@@ -81,7 +82,19 @@ class TodoManager
         /** @var Todo $todo */
         $todo = $this->entityManagerInterface->getRepository(Todo::class)->find($todoId);
 
-        return $todo->getStatus();
+        // check if todo found
+        if ($todo == null) {
+            $this->errorManager->handleError(
+                message: 'todo not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+            return null;
+        }
+
+        // get todo status
+        $status = $todo->getStatus();
+
+        return $status;
     }
 
     /**
@@ -112,9 +125,16 @@ class TodoManager
             $this->entityManagerInterface->flush();
 
             // log the todo creation
-            $this->logManager->log('todo-manager', 'new todo created', 3);
+            $this->logManager->log(
+                name: 'todo-manager',
+                message: 'new todo created',
+                level: 3
+            );
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to create todo: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError(
+                message: 'error to create todo: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -133,17 +153,26 @@ class TodoManager
 
         // check if the todo is not null
         if ($todo === null) {
-            $this->errorManager->handleError('todo: ' . $todoId . ' not found', 404);
+            $this->errorManager->handleError(
+                message: 'todo: ' . $todoId . ' not found',
+                code: Response::HTTP_NOT_FOUND
+            );
         }
 
         // check if the user is the owner of the todo
         if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
-            $this->errorManager->handleError('you are not the owner of the todo: ' . $todoId, 403);
+            $this->errorManager->handleError(
+                message: 'you are not the owner of the todo: ' . $todoId,
+                code: Response::HTTP_FORBIDDEN
+            );
         }
 
         // check if the todo is closed
         if ($todo->getStatus() !== 'open') {
-            $this->errorManager->handleError('todo: ' . $todoId . ' is closed', 403);
+            $this->errorManager->handleError(
+                message: 'todo: ' . $todoId . ' is closed',
+                code: Response::HTTP_FORBIDDEN
+            );
         }
 
         // encrypt the todo text
@@ -159,9 +188,16 @@ class TodoManager
             $this->entityManagerInterface->flush();
 
             // log the todo creation
-            $this->logManager->log('todo-manager', 'todo edited', 3);
+            $this->logManager->log(
+                name: 'todo-manager',
+                message: 'todo edited',
+                level: 3
+            );
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to edit todo: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError(
+                message: 'error to edit todo: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -179,17 +215,26 @@ class TodoManager
 
         // check if the todo is not null
         if ($todo === null) {
-            $this->errorManager->handleError('todo: ' . $todoId . ' not found', 404);
+            $this->errorManager->handleError(
+                message: 'todo: ' . $todoId . ' not found',
+                code: Response::HTTP_NOT_FOUND
+            );
         }
 
         // check if the user is the owner of the todo
         if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
-            $this->errorManager->handleError('you are not the owner of the todo: ' . $todoId, 403);
+            $this->errorManager->handleError(
+                message: 'you are not the owner of the todo: ' . $todoId,
+                code: Response::HTTP_FORBIDDEN
+            );
         }
 
         // check if the todo is closed
         if ($todo->getStatus() !== 'open') {
-            $this->errorManager->handleError('todo: ' . $todoId . ' is already closed', 403);
+            $this->errorManager->handleError(
+                message: 'todo: ' . $todoId . ' is already closed',
+                code: Response::HTTP_FORBIDDEN
+            );
         }
 
         try {
@@ -202,9 +247,16 @@ class TodoManager
             $this->entityManagerInterface->flush();
 
             // log the todo creation
-            $this->logManager->log('todo-manager', 'todo closed', 3);
+            $this->logManager->log(
+                name: 'todo-manager',
+                message: 'todo closed',
+                level: 3
+            );
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to close todo: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError(
+                message: 'error to close todo: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -223,16 +275,25 @@ class TodoManager
 
             // check if the todo entity is found
             if ($todo == null) {
-                $this->errorManager->handleError('todo not found', 404);
+                $this->errorManager->handleError(
+                    message: 'todo not found',
+                    code: Response::HTTP_NOT_FOUND
+                );
             } else {
                 // check if the user is the owner of the todo
                 if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
-                    $this->errorManager->handleError('you are not the owner of the todo: ' . $todoId, 403);
+                    $this->errorManager->handleError(
+                        message: 'you are not the owner of the todo: ' . $todoId,
+                        code: Response::HTTP_FORBIDDEN
+                    );
                 }
 
                 // check if the todo is closed
                 if ($todo->getStatus() != 'closed') {
-                    $this->errorManager->handleError('todo: ' . $todoId . ' is not closed', 403);
+                    $this->errorManager->handleError(
+                        message: 'todo: ' . $todoId . ' is not closed',
+                        code: Response::HTTP_FORBIDDEN
+                    );
                 }
 
                 // delete the todo entity
@@ -240,10 +301,17 @@ class TodoManager
                 $this->entityManagerInterface->flush();
 
                 // log the todo deletion
-                $this->logManager->log('todo-manager', 'todo deleted', 3);
+                $this->logManager->log(
+                    name: 'todo-manager',
+                    message: 'todo deleted',
+                    level: 3
+                );
             }
         } catch (\Exception $e) {
-            $this->errorManager->handleError('error to delete todo: ' . $e->getMessage(), 500);
+            $this->errorManager->handleError(
+                message: 'error to delete todo: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

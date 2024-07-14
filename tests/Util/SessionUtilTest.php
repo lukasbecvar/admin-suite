@@ -18,14 +18,14 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SessionUtilTest extends TestCase
 {
+    /** @var SessionUtil */
+    private SessionUtil $sessionUtil;
+
     /** @var SecurityUtil|MockObject */
     private SecurityUtil|MockObject $securityUtilMock;
 
     /** @var ErrorManager|MockObject */
     private ErrorManager|MockObject $errorManagerMock;
-
-    /** @var SessionUtil */
-    private SessionUtil $sessionUtil;
 
     protected function setUp(): void
     {
@@ -36,7 +36,7 @@ class SessionUtilTest extends TestCase
     }
 
     /**
-     * Test the startSession method
+     * Test start session
      *
      * @return void
      */
@@ -55,7 +55,7 @@ class SessionUtilTest extends TestCase
     }
 
     /**
-     * Test the setSession method
+     * Test destroy session
      *
      * @return void
      */
@@ -72,7 +72,7 @@ class SessionUtilTest extends TestCase
     }
 
     /**
-     * Test the checkSession method
+     * Test check session value
      *
      * @return void
      */
@@ -90,7 +90,7 @@ class SessionUtilTest extends TestCase
     }
 
     /**
-     * Test the setSession method
+     * Test set session value
      *
      * @return void
      */
@@ -115,7 +115,7 @@ class SessionUtilTest extends TestCase
     }
 
     /**
-     * Test the getSession method
+     * Test get session value
      *
      * @return void
      */

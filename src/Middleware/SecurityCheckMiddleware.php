@@ -45,8 +45,8 @@ class SecurityCheckMiddleware
             // handle debug mode exception
             if ($this->appUtil->isDevMode()) {
                 $this->errorManager->handleError(
-                    'ssl is required to access this site.',
-                    Response::HTTP_UPGRADE_REQUIRED
+                    message: 'ssl is required to access this site.',
+                    code: Response::HTTP_UPGRADE_REQUIRED
                 );
             } else {
                 $this->logger->error('ssl is required to access this site.');

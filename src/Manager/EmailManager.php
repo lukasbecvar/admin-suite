@@ -54,16 +54,16 @@ class EmailManager
      * @param string $recipient The recipient email
      * @param string $serviceName The service name
      * @param string $message The message
-     * @param string $status The status
+     * @param string $currentStatus The status
      *
      * @return void
      */
-    public function sendMonitoringStatusEmail(string $recipient, string $serviceName, string $message, string $status): void
+    public function sendMonitoringStatusEmail(string $recipient, string $serviceName, string $message, string $currentStatus): void
     {
         $this->sendEmail($recipient, 'monitoring status', [
             'serviceName' => $serviceName,
             'monitoringMesssage' => $message,
-            'monitoringStatus' => $status,
+            'monitoringStatus' => $currentStatus,
             'time' => date('Y-m-d H:i:s')
         ], 'monitoring-status');
     }
@@ -103,8 +103,8 @@ class EmailManager
             $this->logManager->log('email-send', 'email sent to ' . $recipient . ' with subject: ' . $subject, 3);
         } catch (TransportExceptionInterface $e) {
             $this->errorManager->handleError(
-                'email sending failed: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'email sending failed: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }

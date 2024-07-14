@@ -116,13 +116,13 @@ class UserManager
     /**
      * Get the username of a user
      *
-     * @param int $id The id of the user to get the username
+     * @param int $userId The id of the user to get the username
      *
      * @return string The username of the user
      */
-    public function getUsernameById(int $id): ?string
+    public function getUsernameById(int $userId): ?string
     {
-        $repo = $this->getUserRepository(['id' => $id]);
+        $repo = $this->getUserRepository(['id' => $userId]);
 
         // check if user exist
         if ($repo != null) {
@@ -135,13 +135,13 @@ class UserManager
     /**
      * Get the role of a user
      *
-     * @param int $id The id of the user to get the role
+     * @param int $userId The id of the user to get the role
      *
      * @return string The role of the user
      */
-    public function getUserRoleById(int $id): ?string
+    public function getUserRoleById(int $userId): ?string
     {
-        $repo = $this->getUserRepository(['id' => $id]);
+        $repo = $this->getUserRepository(['id' => $userId]);
 
         // check if user exist
         if ($repo != null) {
@@ -154,13 +154,13 @@ class UserManager
     /**
      * Checks if the specified user has the admin role
      *
-     * @param int $id The id of the user to check the admin role
+     * @param int $userId The id of the user to check the admin role
      *
      * @return bool True if the user has the admin role, otherwise false
      */
-    public function isUserAdmin(int $id): bool
+    public function isUserAdmin(int $userId): bool
     {
-        $role = $this->getUserRoleById($id);
+        $role = $this->getUserRoleById($userId);
 
         // check if user has admin role
         if ($role == 'ADMIN' || $role == 'DEVELOPER' || $role == 'OWNER') {
@@ -173,17 +173,17 @@ class UserManager
     /**
      * Update the role of a user
      *
-     * @param int $id The id of the user to add the admin role
+     * @param int $userId The id of the user to add the admin role
      * @param string $role The role to add
      *
      * @throws \Exception If there is an error while adding the admin role
      *
      * @return void
      */
-    public function updateUserRole(int $id, string $role): void
+    public function updateUserRole(int $userId, string $role): void
     {
         // get user repo
-        $repo = $this->getUserRepository(['id' => $id]);
+        $repo = $this->getUserRepository(['id' => $userId]);
 
         // convert new user role to uppercase
         $role = strtoupper($role);
@@ -199,14 +199,14 @@ class UserManager
 
                 // log action
                 $this->logManager->log(
-                    'user-manager',
-                    'update role (' . $role . ') for user: ' . $repo->getUsername(),
+                    name: 'user-manager',
+                    message: 'update role (' . $role . ') for user: ' . $repo->getUsername(),
                     level: 3
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
-                    'error to grant admin permissions: ' . $e->getMessage(),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                    message: 'error to grant admin permissions: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
         }
@@ -223,10 +223,10 @@ class UserManager
 
         // get users count
         $count = $repository
-                    ->createQueryBuilder('p')
-                    ->select('COUNT(p.id)')
-                    ->getQuery()
-                    ->getSingleScalarResult();
+            ->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
 
         // check if count is zero
         if ($count == 0) {
@@ -239,16 +239,16 @@ class UserManager
     /**
      * Delete a user
      *
-     * @param int $id The id of the user to delete
+     * @param int $userId The id of the user to delete
      *
      * @throws \Exception If there is an error while deleting the user
      *
      * @return void
      */
-    public function deleteUser(int $id): void
+    public function deleteUser(int $userId): void
     {
         // get user repo
-        $repo = $this->getUserRepository(['id' => $id]);
+        $repo = $this->getUserRepository(['id' => $userId]);
 
         // check if user exist
         if ($repo != null) {
@@ -258,11 +258,15 @@ class UserManager
                 $this->entityManager->flush();
 
                 // log action
-                $this->logManager->log('user-manager', 'user: ' . $repo->getUsername() . ' deleted', 1);
+                $this->logManager->log(
+                    name: 'user-manager',
+                    message: 'user: ' . $repo->getUsername() . ' deleted',
+                    level: 1
+                );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
-                    'error to delete user: ' . $e->getMessage(),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                    message: 'error to delete user: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
         }
@@ -271,17 +275,17 @@ class UserManager
     /**
      * Update the user username
      *
-     * @param int $id The id of the user to update the username
+     * @param int $userId The id of the user to update the username
      * @param string $newUsername The new username
      *
      * @throws \Exception If there is an error while updating the username.
      *
      * @return void
      */
-    public function updateUsername(int $id, string $newUsername): void
+    public function updateUsername(int $userId, string $newUsername): void
     {
         // get user repo
-        $repo = $this->getUserRepository(['id' => $id]);
+        $repo = $this->getUserRepository(['id' => $userId]);
 
         // check if user exist
         if ($repo != null) {
@@ -297,14 +301,14 @@ class UserManager
 
                 // log action
                 $this->logManager->log(
-                    'account-settings',
-                    'update username (' . $newUsername . ') for user: ' . $oldUsername,
+                    name: 'account-settings',
+                    message: 'update username (' . $newUsername . ') for user: ' . $oldUsername,
                     level: 3
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
-                    'error to update username: ' . $e->getMessage(),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                    message: 'error to update username: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
         }
@@ -313,17 +317,17 @@ class UserManager
     /**
      * Update the user password
      *
-     * @param int $id The id of the user to update the password
+     * @param int $userId The id of the user to update the password
      * @param string $newPassword The new password
      *
      * @throws \Exception If there is an error while updating the password.
      *
      * @return void
      */
-    public function updatePassword(int $id, string $newPassword): void
+    public function updatePassword(int $userId, string $newPassword): void
     {
         // get user repo
-        $repo = $this->getUserRepository(['id' => $id]);
+        $repo = $this->getUserRepository(['id' => $userId]);
 
         // check if user exist
         if ($repo != null) {
@@ -339,14 +343,14 @@ class UserManager
 
                 // log action
                 $this->logManager->log(
-                    'account-settings',
-                    'update password for user: ' . $repo->getUsername(),
+                    name: 'account-settings',
+                    message: 'update password for user: ' . $repo->getUsername(),
                     level: 3
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
-                    'error to update password: ' . $e->getMessage(),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                    message: 'error to update password: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
         }
@@ -355,17 +359,17 @@ class UserManager
     /**
      * Update the user profile picture
      *
-     * @param int $id The id of the user to update the profile picture
+     * @param int $userId The id of the user to update the profile picture
      * @param string $newProfilePicture The new profile picture
      *
      * @throws \Exception If there is an error while updating the profile picture.
      *
      * @return void
      */
-    public function updateProfilePicture(int $id, string $newProfilePicture): void
+    public function updateProfilePicture(int $userId, string $newProfilePicture): void
     {
         // get user repo
-        $repo = $this->getUserRepository(['id' => $id]);
+        $repo = $this->getUserRepository(['id' => $userId]);
 
         // check if user exist
         if ($repo != null) {
@@ -378,14 +382,14 @@ class UserManager
 
                 // log action
                 $this->logManager->log(
-                    'account-settings',
-                    'update profile picture for user: ' . $repo->getUsername(),
+                    name: 'account-settings',
+                    message: 'update profile picture for user: ' . $repo->getUsername(),
                     level: 3
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
-                    'error to update profile picture: ' . $e->getMessage(),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                    message: 'error to update profile picture: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
         }
