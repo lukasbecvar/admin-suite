@@ -10,6 +10,7 @@
 ![Dashboard](.github/assets/preview.png)
 
 ### 1.1 TODOS
+- [ ] Fix performance issues
 - [ ] Get todo list CLI command 
 - [ ] Exception log warning alert
 - [ ] Host server emergency shutdown
