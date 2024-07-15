@@ -18,10 +18,6 @@ rm -rf package-lock.json
 rm -rf public/build/
 rm -rf public/bundles/
 
-# delete phpdoc cache files
-rm -rf .phpdoc
-rm -rf .phpcs-cache
-
 # delete symfony cache folder
 sudo rm -rf var/
 
