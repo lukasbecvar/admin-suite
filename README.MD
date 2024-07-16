@@ -12,6 +12,7 @@
 ### 1.1 TODOS
 - [ ] Fix performance issues
 - [ ] Get todo list CLI command 
+- [ ] Text linkify in todo list
 - [ ] Exception log warning alert
 - [ ] Host server emergency shutdown
 - [ ] Upgrade action (release run over SSH)
