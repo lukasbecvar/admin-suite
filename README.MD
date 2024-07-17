@@ -10,9 +10,10 @@
 ![Dashboard](.github/assets/preview.png)
 
 ### 1.1 TODOS
-- [ ] Fix performance issues
-- [ ] Get todo list CLI command 
+- [ ] Cache manager -> util
 - [ ] Text linkify in todo list
+- [ ] Get todo list CLI command 
+- [ ] Fix performance issues
 - [ ] Exception log warning alert
 - [ ] Host server emergency shutdown
 - [ ] Upgrade action (release run over SSH)
