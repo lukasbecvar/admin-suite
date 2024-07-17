@@ -10,7 +10,6 @@
 ![Dashboard](.github/assets/preview.png)
 
 ### 1.1 TODOS
-- [ ] Cache manager -> util
 - [ ] Text linkify in todo list
 - [ ] Get todo list CLI command 
 - [ ] Fix performance issues
