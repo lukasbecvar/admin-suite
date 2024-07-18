@@ -10,7 +10,6 @@
 ![Dashboard](.github/assets/preview.png)
 
 ### 1.1 TODOS
-- [ ] Twig output escape
 - [ ] Get todo list CLI command 
 - [ ] Fix performance issues
 
