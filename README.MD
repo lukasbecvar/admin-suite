@@ -9,11 +9,8 @@
 ## Dashboard preview
 ![Dashboard](.github/assets/preview.png)
 
-### 1.1 TODOS
-- [ ] Get todo list CLI command 
-- [ ] Fix performance issues
-
 ## ROADMAP
+- [ ] Fix performance issues
 - [ ] Upgrade action (release run over SSH)
 - [ ] Database browser
     - [ ] All databases list
