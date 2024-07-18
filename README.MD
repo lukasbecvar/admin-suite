@@ -11,15 +11,11 @@
 
 ### 1.1 TODOS
 - [ ] Twig output escape
-- [ ] Text linkify in todo list
 - [ ] Get todo list CLI command 
 - [ ] Fix performance issues
-- [ ] Exception log warning alert
-- [ ] Host server emergency shutdown
-- [ ] Upgrade action (release run over SSH)
-- [ ] Better readme
 
 ## ROADMAP
+- [ ] Upgrade action (release run over SSH)
 - [ ] Database browser
     - [ ] All databases list
     - [ ] Browse tables

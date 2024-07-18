@@ -38,7 +38,7 @@
                     {% for todo in todos %}
                         <div class="flex items-center justify-between p-2 px-4 hover:bg-neutral-700" data-todo-id="{{ todo.id }}">
                             <div class="flex-grow">
-                                <span class="text-white">{{ todo.todoText|e }}</span>
+                                <span class="text-white">{{ todo.todoText|e|linkify }}</span>
                             </div>
                             <div class="flex space-x-2 ml-1">
                                 {% if filter == 'open' %}
