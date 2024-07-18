@@ -29,7 +29,7 @@
             {% if service.enable %}
                 <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-500">
                     <div class="flex items-center space-x-2">
-                        <span class="text-gray-300 font-semibold">{{ service.display_name }}</span>
+                        <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
                         <span class="text-white ml-r">
                             {% if service.type == 'systemd' %}   
                                 {% set serviceStatus = serviceManager.isServiceRunning(service.service_name) %}

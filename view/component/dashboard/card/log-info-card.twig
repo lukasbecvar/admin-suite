@@ -3,18 +3,18 @@
     <div class="p-3">
         <div class="flex mb-2">
             <div class="w-1/2 pr-4">
-                <p class="text-gray-300 mb-1">Logs count: <span class="text-white">{{ allLogsCount }}</span></p>
+                <p class="text-gray-300 mb-1">Logs count: <span class="text-white">{{ allLogsCount|e }}</span></p>
             </div>
             <div class="w-1/2">
-                <p class="text-gray-300 mb-1">Auth logs: <span class="text-white">{{ authLogsCount }}</span></p>
+                <p class="text-gray-300 mb-1">Auth logs: <span class="text-white">{{ authLogsCount|e }}</span></p>
             </div>
         </div>
         <div class="flex">
             <div class="w-1/2 pr-4">
-                <p class="text-gray-300 mb-1">Readed: <span class="text-white">{{ readedLogsCount }}</span></p>
+                <p class="text-gray-300 mb-1">Readed: <span class="text-white">{{ readedLogsCount|e }}</span></p>
             </div>
             <div class="w-1/2">
-                <p class="text-gray-300 mb-1">Unreaded: <span class="text-white">{{ unreadedLogsCount }}</span></p>
+                <p class="text-gray-300 mb-1">Unreaded: <span class="text-white">{{ unreadedLogsCount|e }}</span></p>
             </div>
         </div>
     </div>

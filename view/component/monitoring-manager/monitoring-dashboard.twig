@@ -25,7 +25,7 @@
                 <div class="px-2 py-2 border-b border-neutral-500 font-extrabold text-white">Status log</div>
                 <div class="p-1 card-text" style="max-height: 200px; overflow-y: auto;">
                     {% for log in monitoringLogs %}
-                        <p class="text-gray-200">[{{ log.time|date('Y-m-d H:i:s') }}]: {{ log.message }}</p>
+                        <p class="text-gray-200">[{{ log.time|date('Y-m-d H:i:s') }}]: {{ log.message|e }}</p>
                     {% endfor %}
                 </div>
             </div>
@@ -73,7 +73,7 @@
                             {# SERVICE ITEM #}
                             <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-500">
                                 <div class="flex items-center space-x-2">
-                                    <span class="text-gray-300 font-semibold">{{ service.display_name }}</span>
+                                    <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
                                     <span class="text-white ml-r">
                                         {% if serviceStatus %}
                                             [<span class="text-green-500 font-bold">ONLINE</span>]
@@ -113,7 +113,7 @@
                             {# SERVICE ITEM #}
                             <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-500">
                                 <div class="flex items-center space-x-2">
-                                    <span class="text-gray-300 font-semibold">{{ service.display_name }}</span>
+                                    <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
                                     <span class="text-white ml-r">
                                         {% if serviceStatus.responseCode == 200 %}
                                             [<span class="text-green-500 font-bold">ONLINE</span>]

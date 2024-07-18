@@ -34,7 +34,7 @@
                         <i class="fa fa-exclamation-triangle"></i>
                     </span>
                     <span class="text-red-400">
-                        Not found requirements: {{ diagnosticData.notInstalledRequirements|join(', ') }}
+                        Not found requirements: {{ diagnosticData.notInstalledRequirements|join(', ')|e }}
                     </span>
                 </span>
             {% endif %}
@@ -177,7 +177,7 @@
                         <i class="fa fa-exclamation-triangle"></i>
                     </span>
                     <span class="text-red-400">
-                        Permissions error: please add "{{ diagnosticData.webUsername }} ALL=NOPASSWD: ALL" to /etc/sudoers
+                        Permissions error: please add "{{ diagnosticData.webUsername|e }} ALL=NOPASSWD: ALL" to /etc/sudoers
                     </span>
                 </span>
             {% endif %}

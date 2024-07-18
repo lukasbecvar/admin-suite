@@ -14,7 +14,7 @@
 
         {# NOT INSTALLED REQUIREMENTS ALERT #}
         {% if diagnosticData.notInstalledRequirements|length > 0 %}
-            <p class="text-red-400">Not found requirements: {{ diagnosticData.notInstalledRequirements|join(', ') }}.</p>
+            <p class="text-red-400">Not found requirements: {{ diagnosticData.notInstalledRequirements|join(', ')|e }}.</p>
         {% endif %}
 
         {# DEV MODE ALERT #}
@@ -29,7 +29,7 @@
 
         {# WEB USER PERMISSIONS ALERT #}
         {% if diagnosticData.isWebUserSudo == false %}
-            <p class="text-red-400">Permissions error: please add "{{ diagnosticData.webUsername }} ALL=NOPASSWD: ALL" to /etc/sudoers.</p>
+            <p class="text-red-400">Permissions error: please add "{{ diagnosticData.webUsername|e }} ALL=NOPASSWD: ALL" to /etc/sudoers.</p>
         {% endif %}
 
         {# DISK SPACE ALERT #}

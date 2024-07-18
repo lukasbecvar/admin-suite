@@ -12,9 +12,9 @@
             <tbody class="divide-y divide-neutral-500 bg-neutral-800">
                 {% for process in processList %}
                 <tr class="hover:bg-neutral-700">
-                    <td class="px-4 py-2 whitespace-nowrap text-sm font-bold">{{ process.pid }}</td>
-                    <td class="px-4 py-2 whitespace-nowrap text-sm">{{ process.user }}</td>
-                    <td class="px-4 py-2 whitespace-nowrap text-sm">{{ process.process }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm font-bold">{{ process.pid|e }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm">{{ process.user|e }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm">{{ process.process|e }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

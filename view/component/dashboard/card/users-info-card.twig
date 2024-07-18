@@ -3,15 +3,15 @@
     <div class="p-3">
         <div class="flex mb-2">
             <div class="w-1/2 pr-4">
-                <p class="text-gray-300 mb-1">Users count: <span class="text-white">{{ usersCount }}</span></p>
+                <p class="text-gray-300 mb-1">Users count: <span class="text-white">{{ usersCount|e }}</span></p>
             </div>
             <div class="w-1/2">
-                <p class="text-gray-300 mb-1">Online: <span class="text-white">{{ onlineUsersCount }} (<a href={{ path('app_manager_users', {'filter': 'online'}) }} class="link">list</a>)</span></p>
+                <p class="text-gray-300 mb-1">Online: <span class="text-white">{{ onlineUsersCount|e }} (<a href={{ path('app_manager_users', {'filter': 'online'}) }} class="link">list</a>)</span></p>
             </div>
         </div>
         <div class="flex">
             <div class="w-1/2 pr-4">
-                <p class="text-gray-300 mb-1">Banned: <span class="text-white">{{ bannedUsersCount }}  (<a href={{ path('app_manager_users', {'filter': 'banned'}) }} class="link">list</a>)</span></p>
+                <p class="text-gray-300 mb-1">Banned: <span class="text-white">{{ bannedUsersCount|e }}  (<a href={{ path('app_manager_users', {'filter': 'banned'}) }} class="link">list</a>)</span></p>
             </div>
         </div>
     </div>
