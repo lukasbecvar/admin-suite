@@ -17,6 +17,15 @@ main {
 	margin-top: 30px; 
 }
 
+.linkify {
+	color: rgb(67, 126, 255);
+}
+
+.linkify:hover {
+	color: rgb(23, 129, 250);
+	text-decoration: underline;
+}
+
 .mr-1px {
 	margin-right: 1px;
 }
