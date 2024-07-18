@@ -33,7 +33,7 @@
         {% endif %}
 
         {# DISK SPACE ALERT #}
-        {% if diagnosticData.driveSpace < 90 %}
+        {% if diagnosticData.driveSpace > 90 %}
             <p class="text-red-400"> main disk storage is full, please delete some unnecessary data or increase disk space.</p>
         {% endif %}
 
