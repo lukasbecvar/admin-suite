@@ -10,8 +10,6 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-- [ ] Fix performance issues
-- [ ] Improve UI design
 - [ ] Database browser
     - [ ] All databases list
     - [ ] Browse tables
@@ -21,20 +19,22 @@
     - [ ] Delete all rows
     - [ ] Dump SQL structure
     - [ ] Backup database (download SQL file)
+- [ ] Terminal component
+    - [ ] Simple command execution
+    - [ ] Interactive command execution
+    - [ ] MySQL CLI
 - [ ] File browser & editor
     - [ ] List files in filesystem
     - [ ] Rename files
     - [ ] Remove files
     - [ ] Move files
     - [ ] Open files in txt editor
-- [ ] Terminal component
-    - [ ] Simple command execution
-    - [ ] Interactive command execution
-    - [ ] MySQL CLI
 - [ ] Internal chat component
     - [ ] Basic chat room
     - [ ] Display usernames & profile pictures
     - [ ] Link higlighting
+- [ ] Fix performance issues
+- [ ] Improve UI design
 - [ ] Doc/About & download page (github pages)
     - [ ] About homepage
     - [ ] Download page
