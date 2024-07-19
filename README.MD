@@ -11,6 +11,7 @@
 
 ## ROADMAP
 - [ ] Fix performance issues
+- [ ] Improve UI design
 - [ ] Database browser
     - [ ] All databases list
     - [ ] Browse tables
