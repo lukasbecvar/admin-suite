@@ -4,16 +4,13 @@
     "openssl",
     "systemd",
     "apache",
-    "nload",
     "intl",
     "apcu",
     "sudo",
     "curl",
-    "htop",
     "rpm",
     "pdo",
     "dom",
     "npm",
-    "ufw",
-    "tree"
+    "ufw"
 ]

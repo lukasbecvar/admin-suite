@@ -243,10 +243,13 @@ class ServerUtil
     public function isServiceInstalled(string $serviceName): bool
     {
         // check dpkg package
-        exec('dpkg -l | grep ' . escapeshellarg($serviceName), $output, $returnCode);
+        if ($serviceName != 'curl') {
+            exec('dpkg -l | grep ' . escapeshellarg($serviceName), $output, $returnCode);
 
-        if ($returnCode === 0) {
-            return true;
+            // check if dpkg package is installed
+            if ($returnCode === 0) {
+                return true;
+            }
         }
 
         // check php extension
