@@ -14,17 +14,21 @@
             <span class="mr-1 text-white">{{ logName|e }}</span>
         {% endif %}
     </div>
-
     {% if exceptionContent == 'non-selected' %}
         {# LOG SELECT BOX #}
         <div class="bg-neutral-900 text-white p-6">
-            <h3 class="text-2xl font-semibold text-white mb-4">Exception Files</h3>
             <ul class="space-y-2">
-                {% for exceptionFile in exceptionFiles %}
-                    <li>
-                        <a href={{ path('app_manager_logs_exception_files', { file: exceptionFile.name }) }} class="block p-3 bg-neutral-800 hover:bg-blue-600">{{ exceptionFile.name }}</a>
-                    </li>
-                {% endfor %}
+                {# EXCEPTION FILES LIST #}
+                {% if exceptionFiles|length < 1 %}
+                    <h1 class="text-center mt-5 text-xl">Not enough exception files</h1>
+                {% else %}                    
+                    <h3 class="text-2xl font-semibold text-white mb-4">Exception Files</h3>
+                    {% for exceptionFile in exceptionFiles %}
+                        <li>
+                            <a href={{ path('app_manager_logs_exception_files', { file: exceptionFile.name }) }} class="block p-3 bg-neutral-800 hover:bg-blue-600">{{ exceptionFile.name }}</a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
             </ul>
         </div>
     {% else %}
