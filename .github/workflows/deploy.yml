@@ -30,6 +30,7 @@ jobs:
 
           # stop apache and clear cache
           sudo systemctl stop apache2
+          sudo systemctl stop admin-suite-monitoring
           sudo sh scripts/clear.sh
                    
           # pull the latest changes
@@ -56,3 +57,4 @@ jobs:
 
           # start apache
           sudo systemctl start apache2
+          sudo systemctl start admin-suite-monitoring

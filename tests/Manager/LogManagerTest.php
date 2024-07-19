@@ -4,6 +4,7 @@ namespace App\Tests\Manager;
 
 use App\Entity\Log;
 use App\Util\AppUtil;
+use App\Util\JsonUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Manager\LogManager;
@@ -31,6 +32,9 @@ class LogManagerTest extends TestCase
     /** @var AppUtil|MockObject */
     private AppUtil|MockObject $appUtilMock;
 
+    /** @var JsonUtil|MockObject */
+    private JsonUtil|MockObject $jsonUtilMock;
+
     /** @var CookieUtil|MockObject */
     private CookieUtil|MockObject $cookieUtilMock;
 
@@ -55,6 +59,7 @@ class LogManagerTest extends TestCase
     protected function setUp(): void
     {
         $this->appUtilMock = $this->createMock(AppUtil::class);
+        $this->jsonUtilMock = $this->createMock(JsonUtil::class);
         $this->cookieUtilMock = $this->createMock(CookieUtil::class);
         $this->sessionUtilMock = $this->createMock(SessionUtil::class);
         $this->repositoryMock = $this->createMock(LogRepository::class);
@@ -65,6 +70,7 @@ class LogManagerTest extends TestCase
 
         $this->logManager = new LogManager(
             $this->appUtilMock,
+            $this->jsonUtilMock,
             $this->cookieUtilMock,
             $this->sessionUtilMock,
             $this->errorManagerMock,

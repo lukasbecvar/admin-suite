@@ -48,6 +48,12 @@ class MonitoringProcessCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        // print waiting message
+        $io->writeln('<fg=yellow>Waiting for 30 seconds to ensure that the database is up...</>');
+
+        // wait 30 seconds to ensure that the database is up
+        sleep(30);
+
         // fix get CLI ip address
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';

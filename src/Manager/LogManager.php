@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use App\Entity\Log;
 use App\Util\AppUtil;
+use App\Util\JsonUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Util\VisitorInfoUtil;
@@ -21,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 class LogManager
 {
     private AppUtil $appUtil;
+    private JsonUtil $jsonUtil;
     private CookieUtil $cookieUtil;
     private SessionUtil $sessionUtil;
     private ErrorManager $errorManager;
@@ -30,6 +32,7 @@ class LogManager
 
     public function __construct(
         AppUtil $appUtil,
+        JsonUtil $jsonUtil,
         CookieUtil $cookieUtil,
         SessionUtil $sessionUtil,
         ErrorManager $errorManager,
@@ -38,6 +41,7 @@ class LogManager
         EntityManagerInterface $entityManager
     ) {
         $this->appUtil = $appUtil;
+        $this->jsonUtil = $jsonUtil;
         $this->cookieUtil = $cookieUtil;
         $this->sessionUtil = $sessionUtil;
         $this->errorManager = $errorManager;
@@ -386,6 +390,51 @@ class LogManager
 
         // return log files
         return $logFiles;
+    }
+
+    /**
+     * Get exception files
+     *
+     * @return array<mixed>|null
+     */
+    public function getExceptionFiles(): ?array
+    {
+        $files = [];
+
+        // defualt config file path
+        $configFile = __DIR__ . '/../../exception-files.json';
+
+        // check if config file exists
+        if (!file_exists($configFile)) {
+            $configFile = __DIR__ . '/../../config/suite/exception-files.json';
+        }
+
+        try {
+            /** @var array<string,array<string,string>> $exceptionFiles */
+            $exceptionFiles = $this->jsonUtil->getJson($configFile);
+
+            if (!is_array($exceptionFiles)) {
+                $this->errorManager->handleError(
+                    message: 'error to get exception files: exception files config is not an array',
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+                return null;
+            }
+
+            // check if exception files exist and add them to the files array
+            foreach ($exceptionFiles as $exceptionFile) {
+                if (file_exists($exceptionFile['path'])) {
+                    $files[$exceptionFile['name']] = $exceptionFile;
+                }
+            }
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get exception files: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return $files;
     }
 
     /**
