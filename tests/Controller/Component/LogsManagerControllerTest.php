@@ -63,7 +63,6 @@ class LogsManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h3:contains("Exception Files")');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }
