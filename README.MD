@@ -11,7 +11,6 @@
 
 ## ROADMAP
 - [ ] Fix performance issues
-- [ ] Upgrade action (release run over SSH)
 - [ ] Database browser
     - [ ] All databases list
     - [ ] Browse tables
