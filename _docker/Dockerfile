@@ -13,11 +13,10 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libzip-dev \ 
     unzip \
-    sudo \
     curl \
     zip \
     rpm 
-    
+
 # install PHP extensions
 RUN docker-php-ext-install \
     pdo_mysql \
