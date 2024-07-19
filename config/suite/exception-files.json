@@ -1,10 +1,10 @@
 {
     "admin-suite": {
         "name": "admin-suite",
-        "path": "/var/www/var/log/exception.log"
+        "path": "/services/website/admin-suite/var/log/exception.log"
     },
-    "devlog": {
-        "name": "admin-suite devlog",
-        "path": "/var/www/var/log/dev.log"
+    "becvar-site": {
+        "name": "becvar-site",
+        "path": "/services/website/becvar.xyz/var/log/exception.log"
     }
 }

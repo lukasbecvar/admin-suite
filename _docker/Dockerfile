@@ -9,14 +9,20 @@ WORKDIR /var/www
 
 # update packages and install dependencies
 RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
     libicu-dev \
     libzip-dev \ 
     unzip \
+    curl \
     zip \
     rpm 
     
 # install PHP extensions
-RUN docker-php-ext-install pdo_mysql pdo intl
+RUN docker-php-ext-install \
+    pdo_mysql \
+    intl \
+    pdo \
+    curl
 
 # install OPCache
 RUN docker-php-ext-install opcache
