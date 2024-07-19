@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libzip-dev \ 
     unzip \
+    sudo \
     curl \
     zip \
     rpm 

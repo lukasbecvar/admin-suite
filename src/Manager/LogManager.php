@@ -438,6 +438,42 @@ class LogManager
     }
 
     /**
+     * Delete exception file
+     *
+     * @param string $exceptionFile The name of the exception file to delete
+     *
+     * @throws \Exception If there is an error during file deletion
+     *
+     * @return void
+     */
+    public function deleteExceptionFile(string $exceptionFile): void
+    {
+        /** @var array<string,array<string,string>> $exceptionFiles */
+        $exceptionFiles = $this->getExceptionFiles();
+
+        try {
+            // check if exception file exists
+            if (isset($exceptionFiles[$exceptionFile])) {
+                $exceptionFile = $exceptionFiles[$exceptionFile]['path'];
+
+                // delete exception file
+                if (file_exists($exceptionFile)) {
+                    // unlink exception file
+                    unlink($exceptionFile);
+
+                    // log action
+                    $this->log('log-manager', 'exception file deleted: ' . $exceptionFile, level: 1);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to delete exception file: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
      * Retrieves the content of a specific system log file
      *
      * @param string $logFile The relative pathname of the log file to retrieve

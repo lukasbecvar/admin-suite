@@ -192,6 +192,36 @@ class LogsManagerController extends AbstractController
     }
 
     /**
+     * Delete exception file
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The response containing the rendered template
+     */
+    #[Route('/manager/logs/exception/delete', methods:['GET'], name: 'app_manager_logs_exception_delete')]
+    public function deleteExceptionFile(Request $request): Response
+    {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
+        }
+
+        // get exception file name from query parameter
+        $exceptionFile = (string) $request->query->get('file', 'none');
+
+        // delete exception file
+        if ($exceptionFile !== 'none') {
+            $this->logManager->deleteExceptionFile($exceptionFile);
+        }
+
+        // redirect back to the exception files page
+        return $this->redirectToRoute('app_manager_logs_exception_files');
+    }
+
+    /**
      * Sets logs to 'READED'
      *
      * @param Request $request The request object
