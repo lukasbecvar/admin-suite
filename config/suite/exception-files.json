@@ -1,0 +1,10 @@
+{
+    "admin-suite": {
+        "name": "admin-suite",
+        "path": "/var/www/var/log/exception.log"
+    },
+    "devlog": {
+        "name": "admin-suite devlog",
+        "path": "/var/www/var/log/dev.log"
+    }
+}

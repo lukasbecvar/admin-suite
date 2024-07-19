@@ -138,8 +138,8 @@ class LogsManagerController extends AbstractController
      *
      * @return Response The rendered template containing the log contents
      */
-    #[Route('/manager/logs/exception/self', methods:['GET'], name: 'app_manager_logs_exception')]
-    public function selfExceptionLog(): Response
+    #[Route('/manager/logs/exception/files', methods:['GET'], name: 'app_manager_logs_exception_files')]
+    public function exceptionFiles(Request $request): Response
     {
         // check if user have admin permissions
         if (!$this->authManager->isLoggedInUserAdmin()) {
@@ -149,16 +149,45 @@ class LogsManagerController extends AbstractController
             ]);
         }
 
-        // self exception log content
-        $log = file_get_contents($this->appUtil->getAppRootDir() . '/var/log/exception.log');
+        // get exception files
+        $exceptionFiles = $this->logManager->getExceptionFiles();
 
-        // render the self exception logs view
-        return $this->render('component/log-manager/self-exception-logs.twig', [
+        // get selected exception file from query parameter
+        $exceptionFile = (string) $request->query->get('file', 'none');
+
+        // deflaut exception file content value
+        $exceptionContent = 'non-selected';
+
+        // get exception file content
+        if ($exceptionFile !== 'none' && isset($exceptionFiles[$exceptionFile])) {
+            $fileInfo = $exceptionFiles[$exceptionFile];
+
+            // Ensure $fileInfo is an array and contains 'path'
+            if (is_array($fileInfo) && isset($fileInfo['path'])) {
+                $exceptionFilePath = $fileInfo['path'];
+
+                // check if exception file path is a string
+                if (is_string($exceptionFilePath) && file_exists($exceptionFilePath)) {
+                    $exceptionContent = file_get_contents($exceptionFilePath);
+                } else {
+                    $exceptionContent = 'exception file not found';
+                }
+            } else {
+                $exceptionContent = 'exception file info invalid';
+            }
+        }
+
+        // render the exception files view
+        return $this->render('component/log-manager/exception-files.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
             'userData' => $this->authManager->getLoggedUserRepository(),
 
-            // log data
-            'logContent' => $log,
+            // exception files
+            'exceptionFiles' => $exceptionFiles,
+
+            // log file content
+            'exceptionContent' => $exceptionContent,
+            'logName' => $exceptionFile
         ]);
     }
 

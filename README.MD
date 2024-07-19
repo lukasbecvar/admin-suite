@@ -12,11 +12,6 @@
 ## ROADMAP
 - [ ] Fix performance issues
 - [ ] Improve UI design
-- [ ] Exception Warning
-    - [ ] Config with exception logs list
-    - [ ] Monitor new exception in list
-    - [ ] Send exception warning email alert
-    - [ ] Show exception in warning box
 - [ ] Database browser
     - [ ] All databases list
     - [ ] Browse tables

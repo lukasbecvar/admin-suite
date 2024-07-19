@@ -38,7 +38,7 @@ class LogsManagerControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[href="/manager/logs/set/readed"]');
         $this->assertSelectorExists('a[href="/manager/logs/system"]');
-        $this->assertSelectorExists('a[href="/manager/logs/exception/self"]');
+        $this->assertSelectorExists('a[href="/manager/logs/exception/files"]');
         $this->assertSelectorExists('a[href="/13378/antilog?state=enable"]');
         $this->assertSelectorExists('select[name="filter"]');
         $this->assertSelectorExists('th:contains("#")');
@@ -53,17 +53,17 @@ class LogsManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test case for loading the self exception logs page
+     * Test case for loading the exception files page
      *
      * @return void
      */
-    public function testLoadSelfExceptionLogs(): void
+    public function testLoadExceptionFiles(): void
     {
-        $this->client->request('GET', '/manager/logs/exception/self');
+        $this->client->request('GET', '/manager/logs/exception/files');
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('span:contains("Exception logs")');
+        $this->assertSelectorExists('h3:contains("Exception Files")');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }
