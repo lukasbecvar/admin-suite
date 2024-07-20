@@ -236,6 +236,11 @@ main {
 	text-decoration: underline;
 }
 
+/* todo manager component */
+.todo-manager {
+	height: calc(111.1vh - 30px);
+}
+
 /* mobile devices style */
 @media screen and (max-width: 400px) { 
 	.phone-none {
@@ -254,6 +259,9 @@ main {
 	}
 	#main-content.active {
 		display: none;
+	}
+	.todo-manager {
+		height: calc(101.5vh - 30px);
 	}
 }
 
