@@ -35,6 +35,14 @@ main {
 	margin-left: 1.8px !important;
 }
 
+.mt-02 {
+	margin-top: 3px !important;
+}
+
+.bg-neutral-850 {
+	background-color: #222222 !important;
+}
+
 .mrc-2 {
 	margin-right: 6.8px !important;
 }
@@ -63,7 +71,7 @@ main {
 }
 
 .card-color {
-	background-color: #202020;
+	background-color: #1d1d1d;
 }
 
 /* main navigation */
@@ -239,6 +247,7 @@ main {
 /* todo manager component */
 .todo-manager {
 	height: calc(111.1vh - 30px);
+	background-color: #1b1b1b;
 }
 
 /* mobile devices style */

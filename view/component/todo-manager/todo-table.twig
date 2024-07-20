@@ -6,17 +6,17 @@
     {# SUB NAVIGATION #}
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation flex-none">
         {# BACK BUTTON #}
-        <a href={{ path('app_dashboard') }} class="border border-neutral-500 font-bold px-1 text-white">
+        <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
 
         {# STATUS FILTER LINK #}
         {% if filter == 'closed' %}            
-            <a href={{ path('app_todo_manager', {'filter': 'open'}) }} class="ml-1 border border-neutral-500 font-bold px-1 text-white">
+            <a href={{ path('app_todo_manager', {'filter': 'open'}) }} class="ml-1 border border-gray-600 font-bold px-1 text-white">
                 <i class="fa fa-tasks" aria-hidden="true"></i>
             </a>
         {% else %}
-            <a href={{ path('app_todo_manager', {'filter': 'closed'}) }} class="ml-1 border border-neutral-500 font-bold px-1 text-white">
+            <a href={{ path('app_todo_manager', {'filter': 'closed'}) }} class="ml-1 border border-gray-600 font-bold px-1 text-white">
                 <i class="fa fa-check" aria-hidden="true"></i>
             </a>
         {% endif %}
@@ -25,7 +25,7 @@
 
     {# TODO LIST #}
     <div class="flex-1 overflow-y-auto card-component">
-        <div class="bg-neutral-800 overflow-hidden h-full flex flex-col">
+        <div class="overflow-hidden h-full flex flex-col">
             <div class="flex-1 overflow-y-auto">
                 <div class="divide-y divide-neutral-700">
 

@@ -5,7 +5,7 @@
 <div class="bg-neutral-900">
     {# SUB NAVIGATION #}
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
-        <a href={{ path(logContent == 'non-selected' ? 'app_manager_logs' : 'app_manager_logs_system') }} class="border border-neutral-500 font-bold px-1 text-white">
+        <a href={{ path(logContent == 'non-selected' ? 'app_manager_logs' : 'app_manager_logs_system') }} class="border border-gray-600 font-bold px-1 text-white">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
         {% if logFile == 'none' %}

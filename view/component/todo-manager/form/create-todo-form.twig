@@ -1,6 +1,6 @@
 {# CREATE NEW TODO FORM #}
 {{ form_start(createTodoForm) }}
-    <div class="bg-neutral-800 p-4 flex-none border-t border-neutral-500">
+    <div class="bg-neutral-800 p-4 flex-none border-t border-gray-600">
 
         {# FORM CONSTRAINTS ERROR #}
         {% if createTodoForm.todo_text.vars.errors|length > 0 %}
