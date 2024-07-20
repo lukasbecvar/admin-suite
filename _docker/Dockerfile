@@ -11,10 +11,7 @@ WORKDIR /var/www
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libicu-dev \
-    libzip-dev \ 
-    unzip \
     curl \
-    zip \
     rpm 
 
 # install PHP extensions
