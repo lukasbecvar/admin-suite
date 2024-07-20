@@ -7,12 +7,12 @@
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
         
         {# BACK BUTTON #}
-        <a href={{ path('app_dashboard') }} class="border border-neutral-500 font-bold px-1 text-white">
+        <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
 
         {# CONFIG BUTTON #}
-        <a href={{ path('app_manager_monitoring_config') }} class="border border-neutral-500 font-bold px-1 ml-1 text-white">
+        <a href={{ path('app_manager_monitoring_config') }} class="border border-gray-600 font-bold px-1 ml-1 text-white">
             <i class="fa fa-cog" aria-hidden="true"></i>
         </a>
         <span class="mr-1 text-white">Monitoring</span>
@@ -20,9 +20,9 @@
 
     {# SERVICES STATUS LOG #}
     {% if monitoringLogs|length > 0 %}        
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2">
-            <div class="bg-neutral-900 border border-neutral-500 shadow-md card-color w-full sm:col-span-2 card-component">
-                <div class="px-2 py-2 border-b border-neutral-500 font-extrabold text-white">Status log</div>
+        <div class="grid grid-cols-1 sm:grid-cols-1 gap-2 p-2">
+            <div class="bg-neutral-900 border border-gray-600 shadow-md card-color w-full sm:col-span-2 card-component">
+                <div class="px-2 py-2 border-b border-gray-600 font-extrabold text-white">Status log</div>
                 <div class="p-1 card-text" style="max-height: 200px; overflow-y: auto;">
                     {% for log in monitoringLogs %}
                         <p class="text-gray-200">[{{ log.time|date('Y-m-d H:i:s') }}]: {{ log.message|e }}</p>
@@ -33,15 +33,14 @@
     {% endif %}
 
     {# SERVICES STATUS CARDS #}
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2">
-
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2 pt-0">
         {# SERVICES DASHBOARD CARD #}
-        <div class="border border-gray-500 shadow-lg overflow-hidden w-full max-h-50 card-color card-component">
-            <div class="px-2 py-2 border-b border-gray-500 text-white font-bold">Internal services</div>
-            <div class="p-1 overflow-y-auto h-50">
+        <div class="border border-gray-600 shadow-lg overflow-hidden w-full max-h-50 card-color card-component">
+            <div class="px-2 py-2 border-b border-gray-600 text-white font-bold">Internal services</div>
+            <div class="p-1 overflow-y-auto h-70">
                 
                 {# UFW SERVICE #}
-                <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-500">
+                <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-600 rounded">
                     <div class="flex items-center space-x-2">
                         <span class="text-gray-300 font-semibold">UFW</span>
                         <span class="text-white ml-r">
@@ -54,10 +53,10 @@
                     </div>
                     <div class="flex items-center space-x-1">
                         {% if serviceManager.isUfwRunning() %}
-                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'reload', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-600 hover:bg-yellow-500 text-white px-2 py-1 text-l font-bold">Reload</a>
-                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_manager_monitoring'}) }} class="bg-red-600 hover:bg-red-500 text-white px-2 py-1 text-l font-bold">Stop</a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'reload', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-700 hover:bg-yellow-600 text-white px-2 py-1 text-l font-bold">Reload</a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_manager_monitoring'}) }} class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 text-l font-bold">Stop</a>
                         {% else %}
-                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_manager_monitoring'}) }} class="bg-green-600 hover:bg-green-500 text-white px-2 py-1 text-l font-bold">Start</a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_manager_monitoring'}) }} class="bg-green-700 hover:bg-green-600 text-white px-2 py-1 text-l font-bold">Start</a>
                         {% endif %}
                     </div>
                 </div> 
@@ -71,7 +70,7 @@
                             {% set serviceStatus = serviceManager.isServiceRunning(service.service_name) %}
 
                             {# SERVICE ITEM #}
-                            <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-500">
+                            <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-600">
                                 <div class="flex items-center space-x-2">
                                     <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
                                     <span class="text-white ml-r">
@@ -84,10 +83,10 @@
                                 </div>
                                 <div class="flex items-center space-x-1">
                                     {% if serviceStatus %}
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-600 hover:bg-yellow-500 text-white px-2 py-1 text-l font-bold">Restart</a>
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="bg-red-600 hover:bg-red-500 text-white px-2 py-1 text-l font-bold">Stop</a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-700 hover:bg-yellow-600 text-white px-2 py-1 text-l font-bold">Restart</a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 text-l font-bold">Stop</a>
                                     {% else %}
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="bg-green-600 hover:bg-green-500 text-white px-2 py-1 text-l font-bold">Start</a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="bg-green-700 hover:bg-green-600 text-white px-2 py-1 text-l font-bold">Start</a>
                                     {% endif %}
                                 </div>
                             </div>
@@ -98,8 +97,8 @@
         </div>
 
         {# SERVICES DASHBOARD CARD #}
-        <div class="border border-gray-500 shadow-lg overflow-hidden w-full max-h-50 card-color card-component">
-            <div class="px-2 py-2 border-b border-gray-500 text-white font-bold">HTTP services</div>
+        <div class="border border-gray-600 shadow-lg overflow-hidden w-full max-h-50 card-color card-component">
+            <div class="px-2 py-2 border-b border-gray-600 text-white font-bold">HTTP services</div>
             <div class="p-1 overflow-y-auto h-50">
 
                 {# SERVICES LIST #}
@@ -111,7 +110,7 @@
                             {% set serviceStatus = serviceManager.checkWebsiteStatus(service.url) %}
 
                             {# SERVICE ITEM #}
-                            <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-500">
+                            <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-600">
                                 <div class="flex items-center space-x-2">
                                     <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
                                     <span class="text-white ml-r">

@@ -10,7 +10,6 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-- [ ] Improve UI design
 - [ ] Database browser
     - [ ] All databases list
     - [ ] Browse tables
@@ -41,7 +40,7 @@
     - [ ] Installation documentation
     - [ ] Components documentation
 
-## Primary use case
+## Primary use
 I created this project to manage my personal servers. I wanted a simple and easy-to-use solution that would allow me to monitor and manage my servers without relying on complex software or complicated setups. This project aims to manage single server instances, not clusters.
 
 ## Contributing

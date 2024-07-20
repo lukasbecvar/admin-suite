@@ -5,27 +5,27 @@
 <div class="users-manager">
     <div class="flex items-center bg-neutral-900 border-b border-neutral-700 sub-navigation whitespace-nowrap">
         {# SET ALL LOGS READED #}
-        <a href={{ path('app_manager_logs_set_readed') }} class="border border-neutral-500 font-bold px-1 text-white ml-1">
+        <a href={{ path('app_manager_logs_set_readed') }} class="border border-gray-600 font-bold px-1 text-white ml-1">
             <i class="fa fa-check" aria-hidden="true"></i>
         </a>
 
         {# SYSTEM LOG READER #}
-        <a href={{ path('app_manager_logs_system') }} class="border border-neutral-500 font-bold px-1 text-white ml-1">
+        <a href={{ path('app_manager_logs_system') }} class="border border-gray-600 font-bold px-1 text-white ml-1">
             <i class="fas fa-server"></i>
         </a>
 
         {# WEB EXCEPTION LOG #}
-        <a href={{ path('app_manager_logs_exception_files') }} class="border border-neutral-500 font-bold px-1 text-white ml-1">
+        <a href={{ path('app_manager_logs_exception_files') }} class="border border-gray-600 font-bold px-1 text-white ml-1">
             <i class="fa fa-bomb"></i>
         </a>
 
         {# ANTI-LOG SETTINGS LINK #}
         {% if antiLogEnabled %}
-            <a href={{ path('app_anti_log_enable', {'state': 'disable'}) }} class="border border-neutral-500 font-bold px-1 text-white ml-1">
+            <a href={{ path('app_anti_log_enable', {'state': 'disable'}) }} class="border border-gray-600 font-bold px-1 text-white ml-1">
                 <i class="fa fa-toggle-on" aria-hidden="true"></i>
             </a>
         {% else %}
-            <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="border border-neutral-500 font-bold px-1 text-white ml-1">
+            <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="border border-gray-600 font-bold px-1 text-white ml-1">
                 <i class="fa fa-toggle-off" aria-hidden="true"></i>
             </a>
         {% endif %}
@@ -37,7 +37,7 @@
         <span class="mr-1 phone-only"></span>
         <div>
             <form method="get" action={{ path('app_manager_logs') }}>
-                <select name="filter" onchange="this.form.submit()" class="bg-neutral-800 text-white border border-neutral-500 rounded">
+                <select name="filter" onchange="this.form.submit()" class="bg-neutral-800 text-white border border-gray-600 rounded">
                     <option value="UNREADED">UNREADED</option>
                     <option value="READED" {% if filter == 'READED' %}selected{% endif %}>READED</option>
                     <option value="all" {% if filter == 'all' %}selected{% endif %}>ALL</option>

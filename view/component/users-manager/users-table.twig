@@ -5,7 +5,7 @@
 <div class="users-manager">
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
         {# LINK TO USER REGISTER FORM #}
-        <a href={{ path('app_manager_users_register') }} class="border border-neutral-500 px-1 text-white ml-1">
+        <a href={{ path('app_manager_users_register') }} class="border border-gray-600 px-1 text-white ml-1">
             <i class="fa fa-plus" aria-hidden="true"></i>
         </a>
 
@@ -13,7 +13,7 @@
         <span class="mr-1"></span>
         <div>
             <form method="get" action={{ path('app_manager_users') }}>
-                <select name="filter" onchange="this.form.submit()" class="bg-neutral-800 text-white border border-neutral-500 rounded">
+                <select name="filter" onchange="this.form.submit()" class="bg-neutral-800 text-white border border-gray-600 rounded">
                     <option value="">All Users</option>
                     <option value="online" {% if filter == 'online' %}selected{% endif %}>Online</option>
                     <option value="banned" {% if filter == 'banned' %}selected{% endif %}>Banned</option>
@@ -60,7 +60,7 @@
     
                         {# USER ROW #}
                         <tr class="hover:bg-neutral-800 border-b border-neutral-600">
-                            <td class="text-white p-1 border-b border-neutral-600">{{ row.id|e }}</td>
+                            <td class="text-white p-1 border-b border-neutral-600 pl-2">{{ row.id|e }}</td>
                             <td class="text-white p-1 border-b border-neutral-600">
                                 <a href={{ path('app_manager_users_profile', {'id': row.id}) }} class="profile-link">{{ row.username |e}}</a>
                             </td>
