@@ -41,6 +41,12 @@
     - [ ] Installation documentation
     - [ ] Components documentation
 
+## Primary use case
+I created this project to manage my personal servers. I wanted a simple and easy-to-use solution that would allow me to monitor and manage my servers without relying on complex software or complicated setups. This project aims to manage single server instances, not clusters.
+
+## Contributing
+Contributions are welcome! Please fork this repository and submit pull requests for any features, bug fixes, or enhancements. If you have any questions or need help, feel free to open an issue or contact me directly.
+
 ## Dependencies
 This project uses the following technologies
 * PHP
