@@ -24,28 +24,33 @@ class ServerUtil
     }
 
     /**
-     * Get the host uptime.
+     * Get the host uptime
      *
-     * @return string The formatted host uptime.
+     * @return string The formatted host uptime
      */
     public function getHostUptime(): string
     {
         // get host uptime
-        $up_time = (int) strtok((string) exec('cat /proc/uptime'), '.');
+        $uptimeString = file_get_contents('/proc/uptime');
+        if ($uptimeString === false) {
+            return 'error: Unable to read uptime.';
+        }
+
+        $uptime = (int) strtok($uptimeString, '.');
 
         // get uptime values
-        $days = sprintf('%2d', ($up_time / (3600 * 24)));
-        $hours = sprintf('%2d', (($up_time % (3600 * 24)) / 3600));
-        $min = sprintf('%2d', ($up_time % (3600 * 24) % 3600) / 60);
+        $days = floor($uptime / (3600 * 24));
+        $hours = floor(($uptime % (3600 * 24)) / 3600);
+        $minutes = floor(($uptime % 3600) / 60);
 
         // format output
-        return 'Days: ' . $days . ', Hours: ' . $hours . ', Min: ' . $min;
+        return sprintf('Days: %02d, Hours: %02d, Min: %02d', $days, $hours, $minutes);
     }
 
     /**
-     * Get the CPU usage percentage.
+     * Get the CPU usage percentage
      *
-     * @return float The CPU usage percentage.
+     * @return float The CPU usage percentage
      */
     public function getCpuUsage(): float
     {
@@ -58,12 +63,16 @@ class ServerUtil
         }
 
         // fetch number of CPU cores
-        $coreNums = (string) shell_exec("grep -P '^processor' /proc/cpuinfo | wc -l");
+        $cpuInfo = file_get_contents('/proc/cpuinfo');
+        if ($cpuInfo === false) {
+            return $load; // return default value if unable to read cpuinfo
+        }
 
-        // validate core nums
-        if ($coreNums !== null && trim($coreNums) !== '') {
-            $coreNums = trim($coreNums);
-            $load = round($loads[0] / (intval($coreNums) + 1) * 100, 2);
+        $coreNums = substr_count($cpuInfo, 'processor');
+
+        // calculate CPU usage
+        if ($coreNums > 0) {
+            $load = round($loads[0] / $coreNums * 100, 2);
         }
 
         // overload fix
@@ -75,45 +84,41 @@ class ServerUtil
     }
 
     /**
-     * Get the RAM usage information.
+     * Get the RAM usage information
      *
-     * @return array<string, string> An array containing RAM usage information.
+     * @return array<string, string> An array containing RAM usage information
      */
     public function getRamUsage(): array
     {
-        exec('cat /proc/meminfo', $memoryRaw);
+        $memoryRaw = file_get_contents('/proc/meminfo');
         $memoryFree = 0;
         $memoryTotal = 0;
-        $memoryUsed = 0;
 
-        foreach ($memoryRaw as $line) {
-            if (strstr($line, 'MemTotal')) {
-                $memoryTotal = filter_var($line, FILTER_SANITIZE_NUMBER_INT);
-                if ($memoryTotal !== false) {
-                    $memoryTotal = (float) $memoryTotal / 1048576;
-                }
-            }
-            if (strstr($line, 'MemFree')) {
-                $memoryFree = filter_var($line, FILTER_SANITIZE_NUMBER_INT);
-                if ($memoryFree !== false) {
-                    $memoryFree = (float) $memoryFree / 1048576;
+        if ($memoryRaw !== false) {
+            $lines = explode("\n", $memoryRaw);
+            foreach ($lines as $line) {
+                if (str_contains($line, 'MemTotal:')) {
+                    $memoryTotal = (float) filter_var($line, FILTER_SANITIZE_NUMBER_INT) / 1048576;
+                } elseif (str_contains($line, 'MemFree:')) {
+                    $memoryFree = (float) filter_var($line, FILTER_SANITIZE_NUMBER_INT) / 1048576;
                 }
             }
         }
 
+        // calculate memory usage
         $memoryUsed = $memoryTotal - $memoryFree;
 
-        return array(
+        return [
             'used'  => number_format($memoryUsed, 2),
-            'free'  => number_format((float) $memoryFree, 2),
-            'total' => number_format((float) $memoryTotal, 2)
-        );
+            'free'  => number_format($memoryFree, 2),
+            'total' => number_format($memoryTotal, 2)
+        ];
     }
 
     /**
-     * Get the RAM usage percentage.
+     * Get the RAM usage percentage
      *
-     * @return int The RAM usage percentage.
+     * @return int The RAM usage percentage
      */
     public function getRamUsagePercentage(): int
     {
@@ -126,17 +131,18 @@ class ServerUtil
     }
 
     /**
-     * Get the disk usage.
+     * Get the disk usage
      *
-     * @return int|null The disk usage.
+     * @return int|null The disk usage
      */
     public function getDiskUsage(): ?int
     {
         try {
-            return (int) exec("df --output=used -BG / | awk 'NR==2 { print int($1) }'");
+            $diskUsage = disk_total_space('/') - disk_free_space('/');
+            return (int) ($diskUsage / 1073741824); // convert bytes to GB
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                message: 'error to get disk usage ' . $e->getMessage(),
+                message: 'Error getting disk usage: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
             return null;
@@ -144,17 +150,26 @@ class ServerUtil
     }
 
     /**
-     * Get the drive usage percentage.
+     * Get the drive usage percentage
      *
-     * @return string|null The drive usage percentage or null on error.
+     * @return string|null The drive usage percentage or null on error
      */
     public function getDriveUsagePercentage(): ?string
     {
         try {
-            return (string) exec("df -Ph / | awk 'NR == 2{print $5}' | tr -d '%'");
+            $totalSpace = disk_total_space('/');
+            $freeSpace = disk_free_space('/');
+            $usedSpace = $totalSpace - $freeSpace;
+
+            if ($totalSpace > 0) {
+                $usagePercentage = ($usedSpace / $totalSpace) * 100;
+                return (string) (int) number_format($usagePercentage, 2); // format to 2 decimal places
+            } else {
+                return null; // handle case where total space is 0 to avoid division by zero
+            }
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                message: 'error to get drive usage percentage ' . $e->getMessage(),
+                message: 'error getting drive usage percentage: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
             return null;
@@ -162,9 +177,9 @@ class ServerUtil
     }
 
     /**
-     * Get the web username.
+     * Get the web username
      *
-     * @return string|null The web username or null on error.
+     * @return string|null The web username or null on error
      */
     public function getWebUsername(): ?string
     {
@@ -180,9 +195,9 @@ class ServerUtil
     }
 
     /**
-     * Check if the system is running Linux.
+     * Check if the system is running Linux
      *
-     * @return bool True if the system is running Linux, false otherwise.
+     * @return bool True if the system is running Linux, false otherwise
      */
     public function isSystemLinux(): bool
     {
@@ -195,9 +210,9 @@ class ServerUtil
     }
 
     /**
-     * Check if the web user has sudo privileges.
+     * Check if the web user has sudo privileges
      *
-     * @return bool True if the web user has sudo privileges, false otherwise.
+     * @return bool True if the web user has sudo privileges, false otherwise
      */
     public function isWebUserSudo(): bool
     {
@@ -216,39 +231,64 @@ class ServerUtil
     }
 
     /**
-     * Get information about installed software packages and the Linux distribution.
+     * Get information about installed software packages and the Linux distribution
      *
-     * @return array<mixed> An array containing information about installed software packages and the Linux distribution. *
+     * @return array<mixed> An array containing information about installed software packages and the Linux distribution
      */
     public function getSystemInfo(): array
     {
-        $distro = array();
-        exec('rpm -qai | grep "Name        :\|Version     :\|Release     :\|Install Date:\|Group       :\|Size        :"', $softwareRaw);
-        exec('uname -mrs', $distroRaw);
-        exec('cat /etc/*-release', $distroNameRaw);
-        $distroParts = explode(' ', $distroRaw[0]);
-        $distro['operating_system'] = $distroNameRaw[0];
-        $distro['kernel_version'] = $distroParts[0] . ' ' . $distroParts[1];
-        $distro['kernel_arch'] = $distroParts[2];
+        $distro = [];
+
+        // get kernel version and architecture
+        $kernelInfo = php_uname('r') . ' ' . php_uname('m');
+        $distro['kernel_version'] = php_uname('s') . ' ' . $kernelInfo;
+        $distro['kernel_arch'] = php_uname('m');
+
+        // get distribution name
+        $releaseFiles = glob('/etc/*-release');
+        $distroName = '';
+
+        // check if release files exist
+        if (!is_iterable($releaseFiles)) {
+            return $distro;
+        }
+
+        foreach ($releaseFiles as $file) {
+            $content = file_get_contents($file);
+            if ($content !== false) {
+                $distroName .= $content;
+            }
+        }
+        $distro['operating_system'] = trim($distroName);
+
         return $distro;
     }
 
     /**
-     * Checks if a service is or is php extension installed.
+     * Checks if a service is or is php extension installed
      *
-     * @param string $serviceName The name of the service.
+     * @param string $serviceName The name of the service
      *
-     * @return bool The service is installed, false otherwise.
+     * @return bool The service is installed, false otherwise
      */
     public function isServiceInstalled(string $serviceName): bool
     {
+        static $installedPackages = null;
+
+        // get the list of installed dpkg packages
+        if ($installedPackages === null) {
+            $output = shell_exec('dpkg -l');
+            if ($output != null) {
+                $installedPackages = explode("\n", $output);
+            }
+        }
+
         // check dpkg package
         if ($serviceName != 'curl') {
-            exec('dpkg -l | grep ' . escapeshellarg($serviceName), $output, $returnCode);
-
-            // check if dpkg package is installed
-            if ($returnCode === 0) {
-                return true;
+            foreach ($installedPackages as $package) {
+                if (stripos($package, $serviceName) !== false) {
+                    return true;
+                }
             }
         }
 
@@ -261,13 +301,13 @@ class ServerUtil
     }
 
     /**
-     * Get a list of required applications that are not installed.
+     * Get a list of required applications that are not installed
      *
      * This method reads a JSON file containing a list of required applications
      * and checks if each application is installed. It returns an array of applications
-     * that are not found on the system.
+     * that are not found on the system
      *
-     * @return array<string> List of applications that are not installed.
+     * @return array<string> List of applications that are not installed
      */
     public function getNotInstalledRequirements(): array
     {
@@ -298,51 +338,79 @@ class ServerUtil
     }
 
     /**
-     * Get a list of running processes.
+     * Get a list of running processes
      *
-     * @return array<array<string>> List of running processes.
+     * @return array<array<string>> List of running processes
      */
     public function getProcessList(): ?array
     {
-        $output = [];
+        $processes = [];
 
         try {
-            exec('ps aux', $output);
-        } catch (\Exception $exception) {
+            // open process for reading
+            $process = proc_open('ps aux', [
+                1 => ['pipe', 'w'],  // stdout is a pipe that we read from
+                2 => ['pipe', 'w']   // stderr is a pipe that we read from
+            ], $pipes);
+
+            if (is_resource($process)) {
+                // read stdout
+                $output = stream_get_contents($pipes[1]);
+                fclose($pipes[1]);
+
+                // read stderr
+                $errors = stream_get_contents($pipes[2]);
+                fclose($pipes[2]);
+
+                // close process
+                $returnValue = proc_close($process);
+
+                if ($returnValue !== 0) {
+                    $this->errorManager->handleError(
+                        message: 'error getting process list: ' . $errors,
+                        code: Response::HTTP_INTERNAL_SERVER_ERROR
+                    );
+                    return null;
+                }
+
+                // check if output is null
+                if ($output == null) {
+                    $this->errorManager->handleError(
+                        message: 'error getting process list: output is null',
+                        code: Response::HTTP_INTERNAL_SERVER_ERROR
+                    );
+                    return null;
+                }
+
+                // split output into lines
+                $lines = explode("\n", $output);
+
+                // remove the header line
+                array_shift($lines);
+
+                foreach ($lines as $line) {
+                    /** @var array<string> $parts */
+                    $parts = preg_split('/\s+/', $line);
+
+                    if (count($parts) > 10) {
+                        $pid = $parts[1];
+                        $user = $parts[0];
+                        $processName = implode(' ', array_slice($parts, 10));
+
+                        $processes[] = [
+                            'pid' => $pid,
+                            'user' => $user,
+                            'process' => $processName,
+                        ];
+                    }
+                }
+            }
+        } catch (\Exception $e) {
             $this->errorManager->handleError(
-                message: 'error to get process list ' . $exception->getMessage(),
+                message: 'error getting process list: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
             return null;
-        }
-
-        // remove the first line (header) from the output
-        if (count($output) > 0) {
-            unset($output[0]);
-        }
-
-        $processes = [];
-
-        foreach ($output as $line) {
-            // split the line into parts based on whitespace
-            $parts = preg_split('/\s+/', $line);
-
-            // check if the line contains parts
-            if ($parts) {
-                // extract PID, User, and Process
-                $pid = $parts[1];
-                $user = $parts[0];
-
-                // combine the remaining parts into the process name
-                $process = implode(' ', array_slice($parts, 10));
-
-                // create an array with PID, User, and Process
-                $processes[] = [
-                    'pid' => $pid,
-                    'user' => $user,
-                    'process' => $process,
-                ];
-            }
         }
 
         return $processes;

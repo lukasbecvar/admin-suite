@@ -10,6 +10,7 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
+- [ ] Improve UI design
 - [ ] Database browser
     - [ ] All databases list
     - [ ] Browse tables
@@ -33,8 +34,6 @@
     - [ ] Basic chat room
     - [ ] Display usernames & profile pictures
     - [ ] Link higlighting
-- [ ] Fix performance issues
-- [ ] Improve UI design
 - [ ] Doc/About & download page (github pages)
     - [ ] About homepage
     - [ ] Download page
