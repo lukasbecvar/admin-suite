@@ -49,7 +49,7 @@ class NonAuthRedirectTest extends WebTestCase
             '/manager/logs',
             '/manager/logs/system',
             '/manager/logs/set/readed',
-            '/manager/logs/exception/self'
+            '/manager/logs/exception/files'
         ],
         'diagnostic' => [
             '/diagnostic'
