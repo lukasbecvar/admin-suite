@@ -363,6 +363,12 @@ class LogManager
      */
     public function getSystemLogs(): array
     {
+        // system logs directory
+        $systemLogsDirectory = $this->appUtil->getSystemLogsDirectory();
+
+        // set permissions to 777 for system logs directory
+        shell_exec('sudo chmod -R 777 ' . $systemLogsDirectory);
+
         // initialize Finder
         $finder = new Finder();
 
@@ -370,7 +376,7 @@ class LogManager
         $logFiles = [];
 
         try {
-            $finder->files()->in($this->appUtil->getSystemLogsDirectory());
+            $finder->files()->in($systemLogsDirectory);
             // iterate over found files
             foreach ($finder as $file) {
                 // check if log is not archived
@@ -390,6 +396,48 @@ class LogManager
 
         // return log files
         return $logFiles;
+    }
+
+    /**
+     * Retrieves the content of a specific system log file
+     *
+     * @param string $logFile The relative pathname of the log file to retrieve
+     * @throws \Exception If there is an error during file retrieval (e.g., file not found or permission issue)
+     *
+     * @return mixed The content of the log file, or null if the file does not exist
+     */
+    public function getSystemLogContent(string $logFile): mixed
+    {
+        $log = null;
+
+        // check if file exists
+        $filePath = $this->appUtil->getSystemLogsDirectory() . '/' . $logFile;
+        if (!file_exists($filePath)) {
+            $this->errorManager->handleError(
+                message: 'error to get log file: ' . $filePath . ' not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        try {
+            // get log file content
+            $log = file_get_contents($filePath);
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get log file: ' . $logFile . ', ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // log action
+        $this->log(
+            name: 'log-manager',
+            message: 'system log: ' . $logFile . ' viewed',
+            level: 3
+        );
+
+        // return log content
+        return $log;
     }
 
     /**
@@ -471,47 +519,5 @@ class LogManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-    }
-
-    /**
-     * Retrieves the content of a specific system log file
-     *
-     * @param string $logFile The relative pathname of the log file to retrieve
-     * @throws \Exception If there is an error during file retrieval (e.g., file not found or permission issue)
-     *
-     * @return mixed The content of the log file, or null if the file does not exist
-     */
-    public function getSystemLogContent(string $logFile): mixed
-    {
-        $log = null;
-
-        // check if file exists
-        $filePath = $this->appUtil->getSystemLogsDirectory() . '/' . $logFile;
-        if (!file_exists($filePath)) {
-            $this->errorManager->handleError(
-                message: 'error to get log file: ' . $filePath . ' not found',
-                code: Response::HTTP_NOT_FOUND
-            );
-        }
-
-        try {
-            // get log file content
-            $log = file_get_contents($filePath);
-        } catch (\Exception $e) {
-            $this->errorManager->handleError(
-                message: 'error to get log file: ' . $logFile . ', ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
-
-        // log action
-        $this->log(
-            name: 'log-manager',
-            message: 'system log: ' . $logFile . ' viewed',
-            level: 3
-        );
-
-        // return log content
-        return $log;
     }
 }
