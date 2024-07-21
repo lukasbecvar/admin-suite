@@ -48,11 +48,11 @@ main {
 }
 
 .link {
-	color: rgb(15, 91, 255);
+	color: rgb(49, 114, 255);
 }
 
 .link:hover {
-	color: rgb(32, 136, 255);
+	color: rgb(24, 132, 255);
 	text-decoration: underline;
 }
 
@@ -63,7 +63,7 @@ main {
 #main-content {
 	position: relative;
 	margin-left: 0; 
-	transition: margin-left 0.3s ease; 
+	transition: margin-left 0.2s ease; 
 }
 
 #main-content.active {
@@ -101,7 +101,7 @@ main {
 	background-color: #161616;
 	z-index: 999; 
 	width: 200px;
-	transition: transform 0.3s ease;
+	transition: transform 0.2s ease;
 	transform: translateX(-100%);
 }
 
@@ -212,7 +212,7 @@ main {
     height: 100%;
     background-color: rgb(18, 163, 163);
     width: 0%;
-    transition: width 0.3s ease;
+    transition: width 0.2s ease;
 }
 
 .dashbard-component .card-text {
@@ -220,7 +220,7 @@ main {
 }
 
 .dashbard-component .card-rederer {
-	color: rgb(15, 91, 255) !important;
+	color: rgb(255, 255, 255) !important;
 }
 
 .dashbard-component .card-rederer:hover {
@@ -240,10 +240,18 @@ main {
 		display: none;
 	}
 	main {
-		margin-top: 30px; 
+		margin-top: 38px; 
+	}
+	.nav-bar {
+		position: fixed;
+		top: 0;
+		width: 100%;
+		z-index: 1000;
+		background-color: #161616;
+		height: 38px;
 	}
 	#sidebar {
-		top: 30px;
+		top: 38px;
 		width: 100%;
         border-right: none;
 	}
@@ -261,10 +269,10 @@ main {
 		height: calc(101.5vh - 30px);
 	}
 	.nav-bar #menu-toggle {
-		font-size: 30px !important;
+		font-size: 33px !important;
 	}
 	.nav-bar .logout-link {
-		font-size: 30px !important;
+		font-size: 33px !important;
 	}
 }
 
