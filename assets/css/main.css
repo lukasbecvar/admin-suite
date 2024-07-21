@@ -15,7 +15,7 @@ body {
 }
 
 main {
-	margin-top: 30px; 
+	margin-top: 35px; 
 }
 
 .linkify {
@@ -81,7 +81,7 @@ main {
 	width: 100%;
 	z-index: 1000;
 	background-color: #161616;
-	height: 30px;
+	height: 35px;
 }
 
 .nav-bar #menu-toggle {
@@ -92,11 +92,15 @@ main {
 	font-size: 25px !important;
 }
 
+.nav-bar .menu-text {
+	margin-right: 5px;
+}
+
 /* sidebar element */
 #sidebar {
 	position: fixed;
-	top: 30px; 
-	height: calc(100% - 30px); 
+	top: 35px; 
+	height: calc(100% - 35px); 
 	overflow-y: auto; 
 	background-color: #161616;
 	z-index: 999; 
