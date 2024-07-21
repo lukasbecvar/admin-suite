@@ -84,24 +84,8 @@ main {
 	height: 30px;
 }
 
-.nav-bar .about-link {
-	font-size: 12px !important;
-	border: 1px solid white;
-	margin-top: 0.5px !important;
-	padding-top: 1px;
-	padding-left: 5px;
-	padding-right: 5px;
-	border-radius: 100px;
-	color: rgb(29, 29, 29);
-	background-color: white;
-}
-
 .nav-bar #menu-toggle {
 	font-size: 25px !important;
-}
-
-.nav-bar .about-link:hover {
-	background-color: rgb(24, 190, 190);
 }
 
 .nav-bar .logout-link {
@@ -122,7 +106,7 @@ main {
 }
 
 #sidebar ul {
-	font-size: 14px !important;
+	font-size: 16px !important;
 }
 
 #sidebar .profile-image {
@@ -263,14 +247,24 @@ main {
 		width: 100%;
         border-right: none;
 	}
-	.nav-bar .about-link {
-		margin-top: -0.8px !important;
+	#sidebar ul {
+		font-size: 22px !important;
+	}
+	#sidebar ul li span {
+		padding-bottom: 3px !important;
+		padding-top: 3px !important;
 	}
 	#main-content.active {
 		display: none;
 	}
 	.todo-manager {
 		height: calc(101.5vh - 30px);
+	}
+	.nav-bar #menu-toggle {
+		font-size: 30px !important;
+	}
+	.nav-bar .logout-link {
+		font-size: 30px !important;
 	}
 }
 
