@@ -44,7 +44,7 @@ Encore
                         extend: {
 
                             screens: {
-                                'phn': '360px',
+                                'phn': '340px',
                             },
                         },
                     },
