@@ -1,6 +1,6 @@
-{# CREATE NEW TODO FORM #}
+{# CREATE NEW TODO FORM #} 
 {{ form_start(createTodoForm) }}
-    <div class="bg-neutral-800 p-4 flex-none border-t border-gray-600">
+    <div class="bg-neutral-800 p-2 flex-none border-b border-t border-gray-600">
 
         {# FORM CONSTRAINTS ERROR #}
         {% if createTodoForm.todo_text.vars.errors|length > 0 %}
@@ -11,11 +11,11 @@
 
         <div class="flex flex-col phn:flex-row">
             {# TODO TEXT INPUT #}
-            {{ form_widget(createTodoForm.todo_text, {'autocomplete': 'off', 'attr': {'class': 'flex-1 bg-neutral-700 rounded-t-lg phn:rounded-l-lg phn:rounded-t-none px-4 py-2 focus:outline-none text-white', 'placeholder': 'Todo text'}}) }}
+            {{ form_widget(createTodoForm.todo_text, {'autocomplete': 'off', 'attr': {'class': 'flex-1 bg-neutral-700 phn:rounded-l-lg px-4 py-2 focus:outline-none text-white', 'placeholder': 'Todo text'}}) }}
 
             {# ADD TODO BUTTON #}
             <button class="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-b-lg phn:rounded-r-lg phn:rounded-b-none mt-2 phn:mt-0 focus:outline-none">
-                Add
+                <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
         </div>
     </div>

@@ -1,4 +1,4 @@
-{% extends 'common/layout.twig' %}
+{% extends 'common/layout.twig' %} 
 
 {# TODO LIST COMPONENT #}
 {% block component %} 
@@ -23,6 +23,11 @@
         <span class="mr-1 text-white">Todo list</span>
     </div>
 
+    {# INCLIUDE CREATE TODO FORM #}
+    {% if filter == 'open' %}
+        {% include "component/todo-manager/form/create-todo-form.twig" %}
+    {% endif %}
+
     {# TODO LIST #}
     <div class="flex-1 overflow-y-auto card-component">
         <div class="overflow-hidden h-full flex flex-col">
@@ -42,7 +47,7 @@
                             </div>
                             <div class="flex space-x-2 ml-1">
                                 {% if filter == 'open' %}
-                                    <button data-todo-id="{{ todo.id }}" class="text-neutral-400 text-xl hover:text-white focus:outline-none">
+                                    <button data-todo-id="{{ todo.id }}" class="ml-1 text-neutral-400 text-xl hover:text-white focus:outline-none">
                                         <i class="fa fa-edit" aria-hidden="true"></i>
                                     </button>
                                     <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} class="text-green-500 text-xl hover:text-green-200 focus:outline-none mr-0.5">
@@ -56,14 +61,10 @@
                             </div>
                         </div>                    
                     {% endfor %}
-
                 </div>
             </div>
         </div>
     </div>
-
-    {# ADD TODO INPUT #}
-    {% include "component/todo-manager/form/create-todo-form.twig" %}
 </div>
 
 {# TODO EDIT POPUP OVERLAY #}

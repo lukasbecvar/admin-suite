@@ -1,5 +1,5 @@
 /* admin-suite: main app styles */
-* {
+* { 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -238,7 +238,7 @@ main {
 
 /* todo manager component */
 .todo-manager {
-	height: calc(111.1vh - 35px);
+	height: 100%;
 	background-color: #1b1b1b;
 }
 
@@ -273,9 +273,6 @@ main {
 	#main-content.active {
 		display: none;
 	}
-	.todo-manager {
-		height: calc(101.5vh - 30px);
-	}
 	.nav-bar #menu-toggle {
 		font-size: 33px !important;
 	}
@@ -287,6 +284,13 @@ main {
 /* only non phone devices style */
 @media screen and (min-width: 400px) { 
 	.phone-only {
+		display: none;
+	}
+}
+
+/* disable mini mode on small devices */
+@media screen and (max-width: 200px) { 
+	.mini-disabled {
 		display: none;
 	}
 }
