@@ -59,7 +59,7 @@
                         {% endif %}
     
                         {# USER ROW #}
-                        <tr class="hover:bg-neutral-800 border-b border-neutral-600">
+                        <tr class="hover:bg-neutral-800 border-b border-neutral-600 text-lg">
                             <td class="text-white p-1 border-b border-neutral-600 pl-2">{{ row.id|e }}</td>
                             <td class="text-white p-1 border-b border-neutral-600">
                                 <a href={{ path('app_manager_users_profile', {'id': row.id}) }} class="profile-link">{{ row.username |e}}</a>
