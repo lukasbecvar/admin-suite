@@ -4,7 +4,7 @@
 {% block component %} 
 <div class="users-manager">
     {# SUB NAVIGATION #}
-    <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation">
+    <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
         
         {# BACK BUTTON #}
         <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white">
@@ -33,7 +33,7 @@
     {% endif %}
 
     {# SERVICES STATUS CARDS #}
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2 pt-0">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2 pt-1">
         {# SERVICES DASHBOARD CARD #}
         <div class="border border-gray-600 shadow-lg overflow-hidden w-full max-h-50 card-color card-component">
             <div class="px-2 py-2 border-b border-gray-600 text-white font-bold">Internal services</div>

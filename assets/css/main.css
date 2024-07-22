@@ -96,6 +96,10 @@ main {
 	margin-right: 5px;
 }
 
+.breadcrumb {
+	font-size: 20px;
+}
+
 /* sidebar element */
 #sidebar {
 	position: fixed;
@@ -234,7 +238,7 @@ main {
 
 /* todo manager component */
 .todo-manager {
-	height: calc(111.1vh - 30px);
+	height: calc(111.1vh - 35px);
 	background-color: #1b1b1b;
 }
 
