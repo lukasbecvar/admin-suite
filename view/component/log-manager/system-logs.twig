@@ -22,7 +22,7 @@
             <ul class="space-y-2">
                 {% for logFile in logFiles %}
                     <li>
-                        <a href={{ path('app_manager_logs_system', { file: logFile }) }} class="block p-3 bg-neutral-800 hover:bg-blue-600">{{ logFile }}</a>
+                        <a href={{ path('app_manager_logs_system', { file: logFile }) }} class="block p-3 bg-neutral-800 hover:bg-blue-600 break-words">{{ logFile }}</a>
                     </li>
                 {% endfor %}
             </ul>
