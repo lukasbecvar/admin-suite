@@ -1,0 +1,12 @@
+{% extends 'common/layout.twig' %}
+
+{% block component %}
+<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
+    <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+    </a>
+    <span class="mr-1 text-white">Database</span>
+</div>
+
+<p>database</p>
+{% endblock %}
