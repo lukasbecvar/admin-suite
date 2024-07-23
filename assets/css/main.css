@@ -39,12 +39,16 @@ main {
 	margin-top: 3px !important;
 }
 
-.bg-neutral-850 {
-	background-color: #222222 !important;
-}
-
 .mrc-2 {
 	margin-right: 6.8px !important;
+}
+
+.mrc-3 {
+	margin-right: 10px !important;
+}
+
+.bg-neutral-850 {
+	background-color: #222222 !important;
 }
 
 .link {

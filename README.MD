@@ -19,6 +19,7 @@
     - [ ] Delete all rows
     - [ ] Dump SQL structure
     - [ ] Backup database (download SQL file)
+    - [ ] Database manager tests
 - [ ] Terminal component
     - [ ] Simple command execution
     - [ ] Interactive command execution
