@@ -3,6 +3,7 @@
 namespace App\Controller\Component;
 
 use App\Manager\AuthManager;
+use App\Manager\DatabaseManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,10 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class DatabaseBrowserController extends AbstractController
 {
     private AuthManager $authManager;
+    private DatabaseManager $databaseManager;
 
-    public function __construct(AuthManager $authManager)
+    public function __construct(AuthManager $authManager, DatabaseManager $databaseManager)
     {
         $this->authManager = $authManager;
+        $this->databaseManager = $databaseManager;
     }
 
     /**
@@ -31,9 +34,15 @@ class DatabaseBrowserController extends AbstractController
     #[Route('/manager/database', methods:['GET'], name: 'app_manager_database')]
     public function databaseBrowser(): Response
     {
+        // get the list of databases
+        $databases = $this->databaseManager->getDatabasesList();
+
         return $this->render('component/database-browser/database-list.twig', [
             'isAdmin' => true,
             'userData' => $this->authManager->getLoggedUserRepository(),
+
+            // database browser data
+            'databases' => $databases
         ]);
     }
 }

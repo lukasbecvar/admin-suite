@@ -55,4 +55,18 @@ class DatabaseManagerTest extends TestCase
         // assert that isDatabaseDown returns true
         $this->assertTrue($this->databaseManager->isDatabaseDown());
     }
+
+    /**
+     * Test the get databases list method
+     *
+     * @return void
+     */
+    public function testGetDatabasesList(): void
+    {
+        // get the list of databases
+        $output = $this->databaseManager->getDatabasesList();
+
+        // assert output is an array
+        $this->assertIsArray($output);
+    }
 }

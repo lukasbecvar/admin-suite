@@ -45,4 +45,41 @@ class DatabaseManager
 
         return false;
     }
+
+    /**
+     * Get the list of databases
+     *
+     * @return array<int,array<string,mixed>> The list of databases
+     */
+    public function getDatabasesList(): array
+    {
+        $sql = 'SHOW DATABASES';
+        $stmt = $this->connection->executeQuery($sql);
+        $databases = $stmt->fetchAllAssociative();
+
+        $databaseInfo = [];
+        foreach ($databases as $db) {
+            $dbName = $db['Database'];
+
+            // get the number of tables
+            $sqlTables = "SELECT COUNT(*) as table_count FROM information_schema.tables WHERE table_schema = :dbName";
+            $stmtTables = $this->connection->executeQuery($sqlTables, ['dbName' => $dbName]);
+            $tableCount = $stmtTables->fetchOne();
+
+            // get the size of the database
+            $sqlSize = "SELECT SUM(data_length + index_length) / 1024 / 1024 as size_mb 
+                        FROM information_schema.tables 
+                        WHERE table_schema = :dbName";
+            $stmtSize = $this->connection->executeQuery($sqlSize, ['dbName' => $dbName]);
+            $sizeMb = $stmtSize->fetchOne();
+
+            $databaseInfo[] = [
+                'name' => $dbName,
+                'table_count' => $tableCount,
+                'size_mb' => $sizeMb
+            ];
+        }
+
+        return $databaseInfo;
+    }
 }
