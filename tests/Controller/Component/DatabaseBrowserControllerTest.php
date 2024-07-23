@@ -80,4 +80,31 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'No tables found');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
+
+    /**
+     * Tests that the table browser page loads successfully
+     *
+     * @return void
+     */
+    public function testLoadTableBrowser(): void
+    {
+        $this->client->request('GET', '/manager/database/table', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'users'
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'users');
+        $this->assertSelectorTextContains('body', 'id');
+        $this->assertSelectorTextContains('body', 'username');
+        $this->assertSelectorTextContains('body', 'password');
+        $this->assertSelectorTextContains('body', 'ip_address');
+        $this->assertSelectorTextContains('body', 'user_agent');
+        $this->assertSelectorTextContains('body', 'register_time');
+        $this->assertSelectorTextContains('body', 'last_login_time');
+        $this->assertSelectorTextContains('body', 'token');
+        $this->assertSelectorTextContains('body', 'profile_pic');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
 }
