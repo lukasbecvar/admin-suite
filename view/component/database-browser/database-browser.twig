@@ -1,0 +1,85 @@
+{% extends 'common/layout.twig' %}
+
+{# DATABASE BROWSER COMPONENT - DATABASE & TABLES LIST #}
+{% block component %}
+{# SUB-NAVIGATION #}
+<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb p-4">
+    {% if databaseName == '' %}
+        <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+        <span class="mr-1 text-white">Databases</span>
+    {% else %}
+        <a href={{ path('app_manager_database') }} class="border border-gray-600 font-bold px-1 text-white">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+        <span class="mr-1 text-white">{{ databaseName|e }}</span>
+    {% endif %}
+</div>
+
+<div class="database-browser md:p-4">
+    <div class="max-w-4xl mx-auto">
+        <div class="overflow-x-auto">
+            {% if databaseName == '' %}
+                {# DATABASE LIST #}
+                <table class="min-w-full bg-neutral-900 text-white border border-neutral-700 card-color">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2 border-b border-neutral-700 text-left">Database</th>
+                            <th class="px-4 py-2 border-b border-neutral-700 text-right">Tables</th>
+                            <th class="px-4 py-2 border-b border-neutral-700 text-right">Size (MB)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for database in databases %}
+                            <tr class="hover:bg-neutral-800">
+                                <td class="px-4 py-2 border-b border-neutral-700 text-left">
+                                    <a href={{ path('app_manager_database', {'database': database.name}) }} class="database-link">
+                                        {{ database.name|e }}
+                                    </a>
+                                </td>
+                                <td class="px-4 py-2 border-b border-neutral-700 text-right">
+                                    {{ database.table_count|e }}
+                                </td>
+                                <td class="px-4 py-2 border-b border-neutral-700 text-right">
+                                    {{ database.size_mb|number_format(2)|e }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                {# TABLES LIST #}
+                {% if tables|length == 0 %}
+                    <p class="flex items-center justify-center mt-20 mb-20 text-2xl text-white font-bold">
+                        No tables found
+                    </p>
+                {% else %}
+                    <table class="min-w-full bg-neutral-900 text-white border border-neutral-700 card-color">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-2 border-b border-neutral-700 text-left">Table</th>
+                                <th class="px-4 py-2 border-b border-neutral-700 text-right">Size (MB)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for table in tables %}
+                                <tr class="hover:bg-neutral-800">
+                                    <td class="px-4 py-2 border-b border-neutral-700 text-left">
+                                        <a href="#" class="database-link">
+                                            {{ table.name|e }}
+                                        </a>
+                                    </td>
+                                    <td class="px-4 py-2 border-b border-neutral-700 text-right">
+                                        {{ table.size_mb|number_format(2)|e }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
