@@ -246,6 +246,15 @@ main {
 	background-color: #1b1b1b;
 }
 
+/* database browser component */
+.database-browser .database-link {
+	color: rgb(112, 112, 255);
+}
+
+.database-browser .database-link:hover {
+	color: rgb(162, 162, 255);
+}
+
 /* mobile devices style */
 @media screen and (max-width: 400px) { 
 	.phone-none {

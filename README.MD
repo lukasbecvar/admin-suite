@@ -11,7 +11,7 @@
 
 ## ROADMAP
 - [ ] Database browser
-    - [ ] All databases list
+    - [X] All databases list
     - [ ] Browse tables
     - [ ] Add row
     - [ ] Edit values
@@ -19,7 +19,6 @@
     - [ ] Delete all rows
     - [ ] Dump SQL structure
     - [ ] Backup database (download SQL file)
-    - [ ] Database manager tests
 - [ ] Terminal component
     - [ ] Simple command execution
     - [ ] Interactive command execution
@@ -33,7 +32,9 @@
 - [ ] Internal chat component
     - [ ] Basic chat room
     - [ ] Display usernames & profile pictures
-    - [ ] Link higlighting
+    - [ ] Link higlightin
+- [ ] Refactoring
+    - [ ] Save return to variable before return
 - [ ] Doc/About & download page (github pages)
     - [ ] About homepage
     - [ ] Download page
