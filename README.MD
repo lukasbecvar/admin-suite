@@ -13,12 +13,15 @@
 - [ ] Database browser
     - [X] All databases list
     - [X] Browse tables
+    - [X] Table browser
     - [ ] Add row
-    - [ ] Edit values
-    - [ ] Delete rows
+    - [ ] Delete row
     - [ ] Delete all rows
+    - [ ] Edit values
+    - [ ] SQL executor
     - [ ] Dump SQL structure
     - [ ] Backup database (download SQL file)
+    - [ ] Link log/user manager to unfiltered database browser
 - [ ] Terminal component
     - [ ] Simple command execution
     - [ ] Interactive command execution
@@ -35,6 +38,8 @@
     - [ ] Link higlightin
 - [ ] Refactoring
     - [ ] Save return to variable before return
+    - [ ] Better HTML/TWIG structure
+    - [ ] Log level int in object const     
 - [ ] Doc/About & download page (github pages)
     - [ ] About homepage
     - [ ] Download page

@@ -11,7 +11,6 @@ use App\Manager\LogManager;
 use App\Util\VisitorInfoUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
-use App\Manager\DatabaseManager;
 use App\Repository\LogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -47,9 +46,6 @@ class LogManagerTest extends TestCase
     /** @var ErrorManager|MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
-    /** @var DatabaseManager|MockObject */
-    private DatabaseManager|MockObject $databaseManagerMock;
-
     /** @var VisitorInfoUtil|MockObject */
     private VisitorInfoUtil|MockObject $visitorInfoUtilMock;
 
@@ -64,7 +60,6 @@ class LogManagerTest extends TestCase
         $this->sessionUtilMock = $this->createMock(SessionUtil::class);
         $this->repositoryMock = $this->createMock(LogRepository::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
-        $this->databaseManagerMock = $this->createMock(DatabaseManager::class);
         $this->visitorInfoUtilMock = $this->createMock(VisitorInfoUtil::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
@@ -74,7 +69,6 @@ class LogManagerTest extends TestCase
             $this->cookieUtilMock,
             $this->sessionUtilMock,
             $this->errorManagerMock,
-            $this->databaseManagerMock,
             $this->visitorInfoUtilMock,
             $this->entityManagerMock
         );

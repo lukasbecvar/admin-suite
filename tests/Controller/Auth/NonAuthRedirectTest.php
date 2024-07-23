@@ -68,7 +68,8 @@ class NonAuthRedirectTest extends WebTestCase
             '/manager/todo/delete'
         ],
         'database_manager' => [
-            '/manager/database'
+            '/manager/database',
+            '/manager/database/table'
         ]
     ];
 

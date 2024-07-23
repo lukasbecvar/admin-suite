@@ -248,11 +248,12 @@ main {
 
 /* database browser component */
 .database-browser .database-link {
-	color: rgb(112, 112, 255);
+	color: rgb(96 165 250);
+	font-weight: bold;
 }
 
 .database-browser .database-link:hover {
-	color: rgb(162, 162, 255);
+	color: rgb(147, 185, 231);
 }
 
 /* mobile devices style */
