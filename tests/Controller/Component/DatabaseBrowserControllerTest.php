@@ -26,7 +26,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the database list page loads successfully and contains the expected content
+     * Tests that the database list page loads successfully
      *
      * @return void
      */
@@ -40,7 +40,44 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'Database');
         $this->assertSelectorTextContains('body', 'Tables');
         $this->assertSelectorTextContains('body', 'Size (MB)');
-        $this->assertSelectorTextContains('body', 'admin_suite');
+        $this->assertSelectorTextContains('body', $_ENV['DATABASE_NAME']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Tests that the tables list page loads successfully
+     *
+     * @return void
+     */
+    public function testLoadTablesList(): void
+    {
+        $this->client->request('GET', '/manager/database', [
+            'database' => $_ENV['DATABASE_NAME']
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', $_ENV['DATABASE_NAME']);
+        $this->assertSelectorTextContains('Table', 'Size (MB)');
+        $this->assertSelectorTextContains('body', 'users');
+        $this->assertSelectorTextContains('body', 'logs');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Tests that the tables list page when database
+     *
+     * @return void
+     */
+    public function testLoadTablesListNotFoundDatabase(): void
+    {
+        $this->client->request('GET', '/manager/database', [
+            'database' => 'blblablanonexistdatabaseokokcsmuckmuckxoxo'
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'No tables found');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

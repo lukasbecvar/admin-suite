@@ -12,7 +12,7 @@
 ## ROADMAP
 - [ ] Database browser
     - [X] All databases list
-    - [ ] Browse tables
+    - [X] Browse tables
     - [ ] Add row
     - [ ] Edit values
     - [ ] Delete rows
