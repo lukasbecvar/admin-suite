@@ -107,4 +107,140 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'profile_pic');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
+
+    /**
+     * Tests that the row add form loads successfully
+     *
+     * @return void
+     */
+    public function testLoadRowAddForm(): void
+    {
+        $this->client->request('GET', '/manager/database/add', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'users'
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Add row to users');
+        $this->assertSelectorTextContains('body', 'Id');
+        $this->assertSelectorTextContains('body', 'Username');
+        $this->assertSelectorTextContains('body', 'Password');
+        $this->assertSelectorTextContains('body', 'Ip_address');
+        $this->assertSelectorTextContains('body', 'User_agent');
+        $this->assertSelectorTextContains('body', 'Register_time');
+        $this->assertSelectorTextContains('body', 'Last_login_time');
+        $this->assertSelectorTextContains('body', 'Token');
+        $this->assertSelectorTextContains('body', 'Profile_pic');
+        $this->assertSelectorTextContains('body', 'Add Row');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test submit row add form with invalid type
+     *
+     * @return void
+     */
+    public function testSubmitRowAddFormInvalidType(): void
+    {
+        $this->client->request('POST', '/manager/database/add', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'users',
+
+            // submit form data
+            'id' => 'invalid',
+            'username' => 'testuser',
+            'password' => 'testpassword',
+            'ip_address' => '127.0.0.1',
+            'user_agent' => 'testagent',
+            'register_time' => '2022-01-01 00:00:00',
+            'last_login_time' => '2022-01-01 00:00:00',
+            'token' => 'testtoken',
+            'profile_pic' => 'testprofilepic'
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'The field id must be a number.');
+        $this->assertSelectorTextContains('body', 'Add row to users');
+        $this->assertSelectorTextContains('body', 'Id');
+        $this->assertSelectorTextContains('body', 'Username');
+        $this->assertSelectorTextContains('body', 'Password');
+        $this->assertSelectorTextContains('body', 'Ip_address');
+        $this->assertSelectorTextContains('body', 'User_agent');
+        $this->assertSelectorTextContains('body', 'Register_time');
+        $this->assertSelectorTextContains('body', 'Last_login_time');
+        $this->assertSelectorTextContains('body', 'Token');
+        $this->assertSelectorTextContains('body', 'Profile_pic');
+        $this->assertSelectorTextContains('body', 'Add Row');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test submit row add form with empty value
+     *
+     * @return void
+     */
+    public function testSubmitRowAddFormEmptyValue(): void
+    {
+        $this->client->request('POST', '/manager/database/add', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'users',
+
+            // submit form data
+            'id' => '',
+            'username' => 'testuser',
+            'password' => 'testpassword',
+            'ip_address' => '127.0.0.1',
+            'user_agent' => 'testagent',
+            'register_time' => '2022-01-01 00:00:00',
+            'last_login_time' => '2022-01-01 00:00:00',
+            'token' => 'testtoken',
+            'profile_pic' => 'testprofilepic'
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'The field id is required and cannot be empty.');
+        $this->assertSelectorTextContains('body', 'Add row to users');
+        $this->assertSelectorTextContains('body', 'Id');
+        $this->assertSelectorTextContains('body', 'Username');
+        $this->assertSelectorTextContains('body', 'Password');
+        $this->assertSelectorTextContains('body', 'Ip_address');
+        $this->assertSelectorTextContains('body', 'User_agent');
+        $this->assertSelectorTextContains('body', 'Register_time');
+        $this->assertSelectorTextContains('body', 'Last_login_time');
+        $this->assertSelectorTextContains('body', 'Token');
+        $this->assertSelectorTextContains('body', 'Profile_pic');
+        $this->assertSelectorTextContains('body', 'Add Row');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test successful row add form submission
+     *
+     * @return void
+     */
+    public function testSubmitRowAddFormValid(): void
+    {
+        $this->client->request('POST', '/manager/database/add', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'users',
+
+            // submit form data
+            'id' => random_int(100000000, 1000000000),
+            'username' => 'testuser',
+            'password' => 'testpassword',
+            'ip_address' => '127.0.0.1',
+            'user_agent' => 'testagent',
+            'register_time' => '2022-01-01 00:00:00',
+            'last_login_time' => '2022-01-01 00:00:00',
+            'role' => 'admin',
+            'token' => 'testtoken',
+            'profile_pic' => 'testprofilepic'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
 }

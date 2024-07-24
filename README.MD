@@ -37,7 +37,9 @@
     - [ ] Display usernames & profile pictures
     - [ ] Link higlightin
 - [ ] Refactoring
+    - [ ] Add response codes to all controllers returns
     - [ ] Save return to variable before return
+    - [ ] Better names for methods & variables
     - [ ] Better HTML/TWIG structure
     - [ ] Log level int in object const     
 - [ ] Doc/About & download page (github pages)

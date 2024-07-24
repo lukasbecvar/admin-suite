@@ -7,6 +7,9 @@
     <a href={{ path('app_manager_database', {'database': databaseName}) }} class="border border-gray-600 font-bold px-1 text-white">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
+    <a href={{ path('app_manager_database_add', {'database': databaseName, 'table': tableName}) }} class="border border-gray-600 font-bold px-1 text-white ml-1">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+    </a>
     <span class="mr-1 text-white">{{ tableName|e }}</span>
 </div>
 

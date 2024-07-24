@@ -141,4 +141,124 @@ class DatabaseBrowserController extends AbstractController
             'tableData' => $tableData
         ]);
     }
+
+    /**
+     * Renders the add row form for a specific table in a specific database
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The rendered add row form
+     */
+    #[Route('/manager/database/add', methods: ['GET', 'POST'], name: 'app_manager_database_add')]
+    public function databaseAddRow(Request $request): Response
+    {
+        // get request parameters
+        $tableName = (string) $request->query->get('table');
+        $databaseName = (string) $request->query->get('database');
+
+        // check if table name and database name are set
+        if (empty($tableName) || empty($databaseName)) {
+            $this->errorManager->handleError(
+                message: 'Table name and database name are required',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check if table exists
+        if (!$this->databaseManager->isTableExists($databaseName, $tableName)) {
+            $this->errorManager->handleError(
+                message: "Table '{$tableName}' not found in database '{$databaseName}'",
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // get columns to generate form
+        $columns = $this->databaseManager->getColumnsList($databaseName, $tableName);
+
+        // prepare form data
+        $errors = [];
+        $formData = [];
+
+        // check if form is submitted with POST method
+        if ($request->isMethod('POST')) {
+            /** @var array<mixed> $formData */
+            $formData = $request->request->all();
+
+            // form data validation
+            foreach ($columns as $column) {
+                /** @var string $columnName */
+                $columnName = $column['COLUMN_NAME'];
+
+                /** @var string $isNullable */
+                $isNullable = $column['IS_NULLABLE'] === 'YES';
+
+                /** @var string $columnType */
+                $columnType = $column['COLUMN_TYPE'];
+
+                // check if value is present for non-nullable fields
+                if (!$isNullable && empty($formData[$columnName])) {
+                    $errors[] = 'The field ' . $columnName . ' is required and cannot be empty.';
+                }
+
+                // check if value is valid for specific column types
+                if (!empty($formData[$columnName])) {
+                    /** @var string $value */
+                    $value = $formData[$columnName];
+                    if (strpos($columnType, 'int') !== false && !is_numeric($value)) {
+                        $errors[] = 'The field ' . $columnName . ' must be a number.';
+                    }
+                    if (strpos($columnType, 'varchar') !== false) {
+                        $maxLength = (int) filter_var($columnType, FILTER_SANITIZE_NUMBER_INT);
+                        if (strlen($value) > $maxLength) {
+                            $errors[] = 'The field ' . $columnName . ' must not exceed {$maxLength} characters.';
+                        }
+                    }
+                }
+            }
+
+            $rowId = 0;
+            if (isset($formData['id'])) {
+                /** @var int $rowId */
+                $rowId = $formData['id'];
+            }
+
+            // check if record already exists
+            if ($rowId != 0) {
+                if ($this->databaseManager->doesRecordExist($databaseName, $tableName, $rowId)) {
+                    $errors[] = 'Record with ID ' . $rowId . ' already exists.';
+                }
+            }
+
+            // check errors
+            if (empty($errors)) {
+                // add row to table
+                $this->databaseManager->addRowToTable($formData, $databaseName, $tableName);
+
+                // get the last page number
+                $lastPageNumber = $this->databaseManager->getLastPageNumber($databaseName, $tableName);
+
+                // redirect to table browser
+                return $this->redirectToRoute('app_manager_database_table_browser', [
+                    'database' => $databaseName,
+                    'table' => $tableName,
+                    'page' => $lastPageNumber
+                ], Response::HTTP_FOUND);
+            }
+        }
+
+        // render the add row form
+        return $this->render('component/database-browser/add-row.twig', [
+            'isAdmin' => true,
+            'userData' => $this->authManager->getLoggedUserRepository(),
+
+            // filter data
+            'databaseName' => $databaseName,
+            'tableName' => $tableName,
+
+            // form data
+            'formData' => $formData,
+            'columns' => $columns,
+            'errors' => $errors
+        ]);
+    }
 }
