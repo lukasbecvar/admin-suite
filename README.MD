@@ -14,8 +14,8 @@
     - [X] All databases list
     - [X] Browse tables
     - [X] Table browser
-    - [ ] Add row
-    - [ ] Delete row
+    - [X] Add row
+    - [X] Delete row
     - [ ] Delete all rows
     - [ ] Edit values
     - [ ] SQL executor

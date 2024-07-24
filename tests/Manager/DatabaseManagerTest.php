@@ -179,4 +179,18 @@ class DatabaseManagerTest extends TestCase
         // assert output is a boolean
         $this->assertIsBool($output);
     }
+
+    /**
+     * Test the delete row by id method
+     *
+     * @return void
+     */
+    public function testDeleteRowById(): void
+    {
+        // delete the row
+        $output = $this->databaseManager->deleteRowById($_ENV['DATABASE_NAME'], 'users', 2);
+
+        // assert output is a boolean
+        $this->assertTrue($output);
+    }
 }
