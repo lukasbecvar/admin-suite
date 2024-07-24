@@ -243,4 +243,21 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
+
+    /**
+     * Test successful row delete form submission
+     *
+     * @return void
+     */
+    public function testdeleteRowSuccess(): void
+    {
+        $this->client->request('GET', '/manager/database/delete', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'users',
+            'id' => 5
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
 }

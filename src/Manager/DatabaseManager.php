@@ -481,4 +481,44 @@ class DatabaseManager
             );
         }
     }
+
+    /**
+     * Delete a row from a specific table in a specific database
+     *
+     * @param string $dbName The name of the database
+     * @param string $tableName The name of the table
+     * @param int $id The ID of the row to delete
+     *
+     * @throws \Exception If an error occurs while executing the query
+     *
+     * @return bool True if the row was deleted successfully, false otherwise
+     */
+    public function deleteRowById(string $dbName, string $tableName, int $id): bool
+    {
+        // sql query to delete a row with the specific ID
+        $sql = "DELETE FROM {$dbName}.{$tableName} WHERE id = :id";
+
+        try {
+            // execute the delete query
+            $this->connection->executeStatement($sql, [
+                'id' => $id
+            ]);
+
+            // log the event
+            $this->logManager->log(
+                name: 'database-manager',
+                message: "Deleted row with ID: $id from table: $tableName in database: $dbName",
+                level: 3
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error deleting row: ' . $e->getMessage() . ' from table: ' . $tableName . ' in database: ' . $dbName,
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            return false;
+        }
+    }
 }

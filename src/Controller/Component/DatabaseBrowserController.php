@@ -152,6 +152,14 @@ class DatabaseBrowserController extends AbstractController
     #[Route('/manager/database/add', methods: ['GET', 'POST'], name: 'app_manager_database_add')]
     public function databaseAddRow(Request $request): Response
     {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
+        }
+
         // get request parameters
         $tableName = (string) $request->query->get('table');
         $databaseName = (string) $request->query->get('database');
@@ -260,5 +268,64 @@ class DatabaseBrowserController extends AbstractController
             'columns' => $columns,
             'errors' => $errors
         ]);
+    }
+
+    /**
+     * Renders the delete row form for a specific table in a specific database
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The rendered delete row form
+     */
+    #[Route('/manager/database/delete', methods: ['GET', 'POST'], name: 'app_manager_database_delete')]
+    public function databaseDeleteRow(Request $request): Response
+    {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
+        }
+
+        // get request parameters
+        $id = (int) $request->query->get('id');
+        $page = (int) $request->query->get('page', '1');
+        $tableName = (string) $request->query->get('table');
+        $databaseName = (string) $request->query->get('database');
+
+        // check if table name and database name are set
+        if (empty($tableName) || empty($databaseName) || empty($id)) {
+            $this->errorManager->handleError(
+                message: 'table name/database name and row id are required',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check if table exists
+        if (!$this->databaseManager->isTableExists($databaseName, $tableName)) {
+            $this->errorManager->handleError(
+                message: "table '{$tableName}' not found in database '{$databaseName}'",
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // check if record exists
+        if (!$this->databaseManager->doesRecordExist($databaseName, $tableName, $id)) {
+            $this->errorManager->handleError(
+                message: "record with ID '{$id}' not found in table '{$tableName}' in database '{$databaseName}'",
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // delete row from table
+        $this->databaseManager->deleteRowById($databaseName, $tableName, $id);
+
+        // redirect to table browser
+        return $this->redirectToRoute('app_manager_database_table_browser', [
+            'database' => $databaseName,
+            'table' => $tableName,
+            'page' => $page
+        ], Response::HTTP_FOUND);
     }
 }
