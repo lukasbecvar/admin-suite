@@ -16,7 +16,7 @@
     - [X] Table browser
     - [X] Add row
     - [X] Delete row
-    - [ ] Delete all rows
+    - [X] Table truncate function
     - [ ] Edit values
     - [ ] SQL executor
     - [ ] Dump SQL structure
