@@ -20,8 +20,12 @@ class DatabaseManager
     private Connection $connection;
     private ErrorManager $errorManager;
 
-    public function __construct(AppUtil $appUtil, LogManager $logManager, Connection $connection, ErrorManager $errorManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        LogManager $logManager,
+        Connection $connection,
+        ErrorManager $errorManager
+    ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->connection = $connection;
@@ -184,7 +188,7 @@ class DatabaseManager
      *
      * @return bool True if the table exists, false otherwise
      */
-    public function tableExists(string $dbName, string $tableName): bool
+    public function isTableExists(string $dbName, string $tableName): bool
     {
         $sql = "SELECT COUNT(*) 
                 FROM information_schema.tables 
@@ -221,7 +225,7 @@ class DatabaseManager
      */
     public function getTableRowCount(string $dbName, string $tableName): int
     {
-        if (!$this->tableExists($dbName, $tableName)) {
+        if (!$this->isTableExists($dbName, $tableName)) {
             return 0;
         }
 
@@ -263,7 +267,7 @@ class DatabaseManager
      */
     public function getTableData(string $dbName, string $tableName, int $page = 1): ?array
     {
-        if (!$this->tableExists($dbName, $tableName)) {
+        if (!$this->isTableExists($dbName, $tableName)) {
             $this->errorManager->handleError(
                 message: 'table. ' . $tableName . ' not found in database: ' . $dbName,
                 code: Response::HTTP_NOT_FOUND
@@ -307,5 +311,174 @@ class DatabaseManager
         }
 
         return null;
+    }
+
+    /**
+     * Get the last page number for a specific table in a specific database
+     *
+     * @param string $dbName The name of the database
+     * @param string $tableName The name of the table
+     *
+     * @throws \Exception If an error occurs while executing the query
+     *
+     * @return int The last page number
+     */
+    public function getLastPageNumber(string $dbName, string $tableName): int
+    {
+        if (!$this->isTableExists($dbName, $tableName)) {
+            $this->errorManager->handleError(
+                message: 'table ' . $tableName . ' not found in database: ' . $dbName,
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // get the number of rows in the table
+        $pageLimit = $this->appUtil->getPageLimiter();
+
+        // build the SQL query to get the total number of rows
+        $sql = "SELECT COUNT(*) AS total_rows FROM {$dbName}.{$tableName}";
+
+        try {
+            $stmt = $this->connection->executeQuery($sql);
+            $result = $stmt->fetchAssociative();
+
+            if (!$result || !isset($result['total_rows'])) {
+                throw new \RuntimeException('Failed to retrieve the total row count.');
+            }
+
+            $totalRows = $result['total_rows'];
+
+            // calculate the total number of pages
+            $totalPages = (int) ceil($totalRows / $pageLimit);
+
+            // return the last page number
+            return max($totalPages, 1);
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error retrieving the total row count: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return 1; // default to page 1 if there is an error
+    }
+
+    /**
+     * Get the list of columns in a specific table in a specific database
+     *
+     * @param string $dbName The name of the database
+     * @param string $tableName The name of the table
+     *
+     * @throws \Exception If an error occurs while executing the query
+     *
+     * @return array<int,array<string,mixed>> The list of columns
+     */
+    public function getColumnsList(string $dbName, string $tableName): array
+    {
+        $sql = "SELECT 
+                    COLUMN_NAME, 
+                    COLUMN_TYPE, 
+                    IS_NULLABLE, 
+                    COLUMN_KEY, 
+                    COLUMN_DEFAULT, 
+                    EXTRA 
+                FROM information_schema.COLUMNS 
+                WHERE TABLE_SCHEMA = :dbName AND TABLE_NAME = :tableName
+                ORDER BY ORDINAL_POSITION";
+
+        try {
+            $stmt = $this->connection->executeQuery($sql, [
+                'dbName' => $dbName,
+                'tableName' => $tableName,
+            ]);
+            $columns = $stmt->fetchAllAssociative();
+            return $columns;
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: 'Error retrieving columns from table: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return [];
+    }
+
+    /**
+     * Check if a record with the given ID exists in the specified table and database.
+     *
+     * @param string $databaseName The name of the database.
+     * @param string $tableName The name of the table.
+     * @param int|string $id The ID to check for.
+     *
+     * @throws \Exception If an error occurs while executing the query
+     *
+     * @return bool True if the record exists, false otherwise.
+     */
+    public function doesRecordExist(string $databaseName, string $tableName, $id): bool
+    {
+        $sql = sprintf(
+            "SELECT COUNT(*) AS count FROM %s.%s WHERE id = :id",
+            $this->connection->quoteIdentifier($databaseName),
+            $this->connection->quoteIdentifier($tableName)
+        );
+
+        try {
+            /** @var array<string,int> $result */
+            $result = $this->connection->fetchAssociative($sql, ['id' => $id]);
+
+            return (int) $result['count'] > 0;
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error checking if record exists: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return false;
+    }
+
+    /**
+     * Add row to table
+     *
+     * @param array<mixed> $formData The submitted form data
+     * @param string $databaseName The name of the database
+     * @param string $tableName The name of the table
+     *
+     * @throws \Exception If an error occurs while executing the query
+     *
+     * @return void
+     */
+    public function addRowToTable(array $formData, string $databaseName, string $tableName): void
+    {
+        // unset database and table name from form data
+        unset($formData['database']);
+        unset($formData['table']);
+
+        try {
+            $columnsList = array_keys($formData);
+            $placeholders = array_map(fn($column) => ':' . $column, $columnsList);
+            $sql = sprintf(
+                'INSERT INTO %s.%s (%s) VALUES (%s)',
+                $databaseName,
+                $tableName,
+                implode(',', $columnsList),
+                implode(',', $placeholders)
+            );
+
+            // execute the query
+            $this->connection->executeQuery($sql, $formData);
+
+            // log the action
+            $this->logManager->log(
+                name: 'database-manager',
+                message: 'add row to table: ' . $tableName,
+                level: 3
+            );
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error adding row: ' . $e->getMessage() . ' to table: ' . $tableName,
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 }
