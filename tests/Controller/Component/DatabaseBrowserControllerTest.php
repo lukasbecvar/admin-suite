@@ -249,12 +249,49 @@ class DatabaseBrowserControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testdeleteRowSuccess(): void
+    public function testDeleteRowSuccess(): void
     {
         $this->client->request('GET', '/manager/database/delete', [
             'database' => $_ENV['DATABASE_NAME'],
             'table' => 'users',
             'id' => 5
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    /**
+     * Tests that the table truncate confirmation page loads successfully
+     *
+     * @return void
+     */
+    public function testLoadTableTruncateConfirmation(): void
+    {
+        $this->client->request('GET', '/manager/database/truncate', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'logs'
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Truncate table logs');
+        $this->assertSelectorTextContains('body', 'YES');
+        $this->assertSelectorTextContains('body', 'NO');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test successful table truncate form submission
+     *
+     * @return void
+     */
+    public function testSubmitTableTruncateConfirmation(): void
+    {
+        $this->client->request('GET', '/manager/database/truncate', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'logs',
+            'confirm' => 'yes'
         ]);
 
         // assert response

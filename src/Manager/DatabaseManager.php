@@ -496,7 +496,7 @@ class DatabaseManager
     public function deleteRowById(string $dbName, string $tableName, int $id): bool
     {
         // sql query to delete a row with the specific ID
-        $sql = "DELETE FROM {$dbName}.{$tableName} WHERE id = :id";
+        $sql = 'DELETE FROM ' . $dbName . '.' . $tableName . ' WHERE id = :id';
 
         try {
             // execute the delete query
@@ -507,7 +507,7 @@ class DatabaseManager
             // log the event
             $this->logManager->log(
                 name: 'database-manager',
-                message: "Deleted row with ID: $id from table: $tableName in database: $dbName",
+                message: "deleted row with ID: $id from table: $tableName in database: $dbName",
                 level: 3
             );
 
@@ -519,6 +519,37 @@ class DatabaseManager
             );
 
             return false;
+        }
+    }
+
+    /**
+     * Truncate a table in a specific database
+     *
+     * @param string $dbName The name of the database
+     * @param string $tableName The name of the table
+     *
+     * @throws \Exception If an error occurs while executing the query
+     *
+     * @return void
+     */
+    public function tableTruncate(string $dbName, string $tableName): void
+    {
+        $sql = 'TRUNCATE TABLE ' . $dbName . '.' . $tableName;
+
+        try {
+            $this->connection->executeStatement($sql);
+
+            // log the event
+            $this->logManager->log(
+                name: 'database-manager',
+                message: "truncated table: $tableName in database: $dbName",
+                level: 3
+            );
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error truncating table: ' . $e->getMessage() . ' in database: ' . $dbName,
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

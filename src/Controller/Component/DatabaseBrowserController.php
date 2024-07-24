@@ -255,7 +255,7 @@ class DatabaseBrowserController extends AbstractController
         }
 
         // render the add row form
-        return $this->render('component/database-browser/add-row.twig', [
+        return $this->render('component/database-browser/form/add-row.twig', [
             'isAdmin' => true,
             'userData' => $this->authManager->getLoggedUserRepository(),
 
@@ -277,7 +277,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @return Response The rendered delete row form
      */
-    #[Route('/manager/database/delete', methods: ['GET', 'POST'], name: 'app_manager_database_delete')]
+    #[Route('/manager/database/delete', methods: ['GET'], name: 'app_manager_database_delete')]
     public function databaseDeleteRow(Request $request): Response
     {
         // check if user have admin permissions
@@ -305,7 +305,7 @@ class DatabaseBrowserController extends AbstractController
         // check if table exists
         if (!$this->databaseManager->isTableExists($databaseName, $tableName)) {
             $this->errorManager->handleError(
-                message: "table '{$tableName}' not found in database '{$databaseName}'",
+                message: 'table ' . $tableName . ' not found in database ' . $databaseName,
                 code: Response::HTTP_NOT_FOUND
             );
         }
@@ -313,7 +313,7 @@ class DatabaseBrowserController extends AbstractController
         // check if record exists
         if (!$this->databaseManager->doesRecordExist($databaseName, $tableName, $id)) {
             $this->errorManager->handleError(
-                message: "record with ID '{$id}' not found in table '{$tableName}' in database '{$databaseName}'",
+                message: 'record with ID ' . $id . ' not found in table ' . $tableName . ' in database ' . $databaseName,
                 code: Response::HTTP_NOT_FOUND
             );
         }
@@ -326,6 +326,68 @@ class DatabaseBrowserController extends AbstractController
             'database' => $databaseName,
             'table' => $tableName,
             'page' => $page
+        ], Response::HTTP_FOUND);
+    }
+
+    /**
+     * Renders the truncate table form for a specific table in a specific database
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The rendered truncate table form
+     */
+    #[Route('/manager/database/truncate', methods: ['GET'], name: 'app_manager_database_truncate')]
+    public function databaseTruncateTable(Request $request): Response
+    {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
+        }
+
+        // get request parameters
+        $confirm = (string) $request->query->get('confirm', 'no');
+        $tableName = (string) $request->query->get('table');
+        $databaseName = (string) $request->query->get('database');
+
+        // check confirmation
+        if ($confirm !== 'yes') {
+            return $this->render('component/database-browser/form/truncate-confirmation.twig', [
+                'isAdmin' => true,
+                'userData' => $this->authManager->getLoggedUserRepository(),
+
+                // confirmation data
+                'databaseName' => $databaseName,
+                'tableName' => $tableName
+            ]);
+        }
+
+        // check if table name and database name are set
+        if (empty($tableName) || empty($databaseName)) {
+            $this->errorManager->handleError(
+                message: 'table name and database name are required',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check if table exists
+        if (!$this->databaseManager->isTableExists($databaseName, $tableName)) {
+            $this->errorManager->handleError(
+                message: 'table ' . $tableName . ' not found in database ' . $databaseName,
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // truncate table
+        $this->databaseManager->tableTruncate($databaseName, $tableName);
+
+        // redirect to table browser
+        return $this->redirectToRoute('app_manager_database_table_browser', [
+            'database' => $databaseName,
+            'table' => $tableName,
+            'page' => 1
         ], Response::HTTP_FOUND);
     }
 }
