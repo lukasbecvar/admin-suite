@@ -70,9 +70,10 @@ class NonAuthRedirectTest extends WebTestCase
         'database_manager' => [
             '/manager/database',
             '/manager/database/add',
+            '/manager/database/edit',
             '/manager/database/table',
             '/manager/database/delete',
-            '/manager/database/truncate'
+            '/manager/database/truncate',
         ]
     ];
 

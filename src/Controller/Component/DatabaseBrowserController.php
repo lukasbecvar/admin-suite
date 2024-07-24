@@ -271,6 +271,143 @@ class DatabaseBrowserController extends AbstractController
     }
 
     /**
+     * Renders the edit row form for a specific table in a specific database
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The rendered edit row form
+     */
+    #[Route('/manager/database/edit', methods: ['GET', 'POST'], name: 'app_manager_database_edit')]
+    public function databaseEditRow(Request $request): Response
+    {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
+        }
+
+        // get request parameters
+        $id = (int) $request->query->get('id');
+        $page = (int) $request->query->get('page', '1');
+        $tableName = (string) $request->query->get('table');
+        $databaseName = (string) $request->query->get('database');
+
+        // check if table name and database name are set
+        if (empty($tableName) || empty($databaseName) || empty($id)) {
+            $this->errorManager->handleError(
+                message: 'table name/database name and row id are required',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check if table exists
+        if (!$this->databaseManager->isTableExists($databaseName, $tableName)) {
+            $this->errorManager->handleError(
+                message: 'table ' . $tableName . ' not found in database ' . $databaseName,
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // check if record exists
+        if (!$this->databaseManager->doesRecordExist($databaseName, $tableName, $id)) {
+            $this->errorManager->handleError(
+                message: 'record with ID ' . $id . ' not found in table ' . $tableName . ' in database ' . $databaseName,
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // get columns to generate form
+        $columns = $this->databaseManager->getColumnsList($databaseName, $tableName);
+
+        // fetch existing row data for pre-filling the form
+        $existingData = $this->databaseManager->getRowById($databaseName, $tableName, $id);
+
+        // initialize form data with existing values or empty if not found
+        $formData = $existingData ?: [];
+
+        // unset id column
+        if ($columns[0]['COLUMN_NAME'] == 'id') {
+            unset($columns[0]);
+        }
+
+        // prepare form data
+        $errors = [];
+
+        // check if form is submitted with POST method
+        if ($request->isMethod('POST')) {
+            /** @var array<mixed> $formData */
+            $formData = $request->request->all();
+
+            // form data validation
+            foreach ($columns as $column) {
+                /** @var string $columnName */
+                $columnName = $column['COLUMN_NAME'];
+
+                /** @var string $isNullable */
+                $isNullable = $column['IS_NULLABLE'] === 'YES';
+
+                /** @var string $columnType */
+                $columnType = $column['COLUMN_TYPE'];
+
+                // check if value is present for non-nullable fields
+                if (!$isNullable && empty($formData[$columnName])) {
+                    $errors[] = 'The field ' . $columnName . ' is required and cannot be empty.';
+                }
+
+                // check if value is valid for specific column types
+                if (!empty($formData[$columnName])) {
+                    /** @var string $value */
+                    $value = $formData[$columnName];
+                    if (strpos($columnType, 'int') !== false && !is_numeric($value)) {
+                        $errors[] = 'The field ' . $columnName . ' must be a number.';
+                    }
+                    if (strpos($columnType, 'varchar') !== false) {
+                        $maxLength = (int) filter_var($columnType, FILTER_SANITIZE_NUMBER_INT);
+                        if (strlen($value) > $maxLength) {
+                            $errors[] = 'The field ' . $columnName . ' must not exceed {$maxLength} characters.';
+                        }
+                    }
+                }
+            }
+
+            // set row id
+            $formData['id'] = $id;
+
+            // check errors
+            if (empty($errors)) {
+                // update row in table
+                $this->databaseManager->updateRowById($formData, $databaseName, $tableName, $id);
+
+                // redirect to table browser
+                return $this->redirectToRoute('app_manager_database_table_browser', [
+                    'database' => $databaseName,
+                    'table' => $tableName,
+                    'page' => $page
+                ], Response::HTTP_FOUND);
+            }
+        }
+
+        // render the edit row form
+        return $this->render('component/database-browser/form/edit-row.twig', [
+            'isAdmin' => true,
+            'userData' => $this->authManager->getLoggedUserRepository(),
+
+            // filter data
+            'databaseName' => $databaseName,
+            'tableName' => $tableName,
+            'page' => $page,
+            'id' => $id,
+
+            // form data
+            'formData' => $formData,
+            'columns' => $columns,
+            'errors' => $errors
+        ]);
+    }
+
+    /**
      * Renders the delete row form for a specific table in a specific database
      *
      * @param Request $request The request object

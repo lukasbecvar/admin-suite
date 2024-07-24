@@ -297,4 +297,95 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
+
+    public function testLoadRowEditForm(): void
+    {
+        $this->client->request('GET', '/manager/database/edit', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'users',
+            'id' => 6
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Edit row 6 in users');
+        $this->assertSelectorTextContains('body', 'Username');
+        $this->assertSelectorTextContains('body', 'Password');
+        $this->assertSelectorTextContains('body', 'Ip_address');
+        $this->assertSelectorTextContains('body', 'User_agent');
+        $this->assertSelectorTextContains('body', 'Register_time');
+        $this->assertSelectorTextContains('body', 'Last_login_time');
+        $this->assertSelectorTextContains('body', 'Token');
+        $this->assertSelectorTextContains('body', 'Profile_pic');
+        $this->assertSelectorTextContains('body', 'Update Row');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test submit edit form with empty value
+     *
+     * @return void
+     */
+    public function testSubmitEditFormWithEmptyValue(): void
+    {
+        $this->client->request('POST', '/manager/database/edit', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'users',
+            'id' => 6,
+
+            // submit form data
+            'username' => '',
+            'password' => 'testpassword',
+            'ip_address' => '127.0.0.1',
+            'user_agent' => 'testagent',
+            'register_time' => '2022-01-01 00:00:00',
+            'last_login_time' => '2022-01-01 00:00:00',
+            'role' => 'admin',
+            'token' => 'testtoken',
+            'profile_pic' => 'testprofilepic'
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'The field username is required and cannot be empty.');
+        $this->assertSelectorTextContains('body', 'Edit row 6 in users');
+        $this->assertSelectorTextContains('body', 'Username');
+        $this->assertSelectorTextContains('body', 'Password');
+        $this->assertSelectorTextContains('body', 'Ip_address');
+        $this->assertSelectorTextContains('body', 'User_agent');
+        $this->assertSelectorTextContains('body', 'Register_time');
+        $this->assertSelectorTextContains('body', 'Last_login_time');
+        $this->assertSelectorTextContains('body', 'Token');
+        $this->assertSelectorTextContains('body', 'Profile_pic');
+        $this->assertSelectorTextContains('body', 'Update Row');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test successful row edit form submission
+     *
+     * @return void
+     */
+    public function testSubmitRowEditFormValid(): void
+    {
+        $this->client->request('POST', '/manager/database/edit', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'users',
+            'id' => 6,
+
+            // submit form data
+            'username' => 'testuser',
+            'password' => 'testpassword',
+            'ip_address' => '127.0.0.1',
+            'user_agent' => 'testagent',
+            'register_time' => '2022-01-01 00:00:00',
+            'last_login_time' => '2022-01-01 00:00:00',
+            'role' => 'admin',
+            'token' => 'testtoken',
+            'profile_pic' => 'testprofilepic'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
 }

@@ -17,7 +17,7 @@
     - [X] Add row
     - [X] Delete row
     - [X] Table truncate function
-    - [ ] Edit values
+    - [X] Row editor
     - [ ] SQL executor
     - [ ] Dump SQL structure
     - [ ] Backup database (download SQL file)
