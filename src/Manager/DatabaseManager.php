@@ -404,6 +404,44 @@ class DatabaseManager
     }
 
     /**
+     * Get a row from a specific table in a specific database by ID
+     *
+     * @param string $databaseName The name of the database
+     * @param string $tableName The name of the table
+     * @param int $id The ID of the row to retrieve
+     *
+     * @throws \Exception If an error occurs while executing the query
+     *
+     * @return array<mixed>|null The row data or null if not found
+     */
+    public function getRowById(string $databaseName, string $tableName, int $id): ?array
+    {
+        $sql = 'SELECT * FROM ' . $databaseName . '.' . $tableName . ' WHERE id = :id';
+
+        try {
+            $stmt = $this->connection->executeQuery($sql, ['id' => $id]);
+            $row = $stmt->fetchAssociative();
+
+            // check if the row exists
+            if (!$row) {
+                $this->errorManager->handleError(
+                    message: 'error retrieving row id: ' . $id . ' in table: ' . $tableName . ' in database: ' . $databaseName . ' row not found',
+                    code: Response::HTTP_NOT_FOUND
+                );
+            }
+
+            return $row ?: null;
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error retrieving row: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return null;
+    }
+
+    /**
      * Check if a record with the given ID exists in the specified table and database.
      *
      * @param string $databaseName The name of the database.
@@ -477,6 +515,54 @@ class DatabaseManager
         } catch (\Exception $e) {
             $this->errorManager->handleError(
                 message: 'error adding row: ' . $e->getMessage() . ' to table: ' . $tableName,
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Update a row in a specific table in a specific database
+     *
+     * @param array<mixed> $formData The submitted form data
+     * @param string $databaseName The name of the database
+     * @param string $tableName The name of the table
+     * @param int $id The ID of the row to update
+     *
+     * @throws \Exception If an error occurs while executing the query
+     *
+     * @return void
+     */
+    public function updateRowById(array $formData, string $databaseName, string $tableName, int $id): void
+    {
+        // unset unnecessary keys from form data
+        unset($formData['database'], $formData['table'], $formData['page']);
+
+        try {
+            // Create the list of column placeholders for the update query
+            $columnsList = array_keys($formData);
+            $setClause = implode(', ', array_map(fn($column) => "$column = :$column", $columnsList));
+
+            // Build the SQL query for updating the row
+            $sql = sprintf(
+                'UPDATE %s.%s SET %s WHERE id = :id',
+                $databaseName,
+                $tableName,
+                $setClause
+            );
+
+            // Execute the query with the data
+            $formData['id'] = $id;
+            $this->connection->executeQuery($sql, $formData);
+
+            // Log the update action
+            $this->logManager->log(
+                name: 'database-manager',
+                message: "Updated row with ID: $id in table: $tableName in database: $databaseName",
+                level: 3
+            );
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: "Error updating row: " . $e->getMessage() . " in table: $tableName in database: $databaseName",
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

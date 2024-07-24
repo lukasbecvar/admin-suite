@@ -32,7 +32,12 @@
                             {% for column in tableData[0]|keys %}
                                 <th class="text-left px-2 py-3 border-b border-neutral-700 text-left">{{ column }}</th>
                             {% endfor %}
-                            <th class="text-left px-2 py-3 border-b border-neutral-700 text-left"><i class="fa fa-trash" aria-hidden="true"></i></th>
+                            <th class="text-left px-2 py-3 border-b border-neutral-700 text-left">
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </th>
+                            <th class="text-left px-2 py-3 border-b border-neutral-700 text-left">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,6 +47,11 @@
                                 {% for column in row %}
                                     <td class="px-2 py-2 border-b border-neutral-700 text-left">{{ column }}</td>
                                 {% endfor %}
+                                <td class="px-2 py-2 border-b border-neutral-700 text-left">
+                                    <a href={{ path('app_manager_database_edit', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }} class="text-yellow-400 hover:text-yellow-300">
+                                        <i class="fa fa-edit" aria-hidden="true"></i>
+                                    </a>
+                                </td>
                                 <td class="px-2 py-2 border-b border-neutral-700 text-left">
                                     <a href={{ path('app_manager_database_delete', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }} class="text-red-500 hover:text-red-400">
                                         <i class="fa fa-trash" aria-hidden="true"></i>

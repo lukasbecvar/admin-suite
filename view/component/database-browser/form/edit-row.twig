@@ -1,18 +1,18 @@
 {% extends 'common/layout.twig' %}
 
-{# DATABASE BROWSER COMPONENT - ADD ROW TO TABLE #}
+{# DATABASE BROWSER COMPONENT - EDIT ROW IN TABLE #}
 {% block component %}
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb p-4">
-    <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="border border-gray-600 font-bold px-1 text-white">
+    <a href="{{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }}" class="border border-gray-600 font-bold px-1 text-white">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
     <span class="mr-1 text-white">{{ tableName|e }}</span>
 </div>
 
-{# ROW ADD FORM #}
+{# ROW EDIT FORM #}
 <div class="add-row-input mx-auto max-w-4xl p-4 bg-neutral-800 shadow-lg border border-gray-600">
-    <h2 class="text-2xl text-white mb-4 text-center">Add row to {{ tableName|e }}</h2>
+    <h2 class="text-2xl text-white mb-4 text-center">Edit row {{ id|e }} in {{ tableName|e }}</h2>
 
     {# ERROR BOX #}
     {% if errors is not empty %}
@@ -27,7 +27,7 @@
     {% endif %}
 
     {# FORM INPUTS #}
-    <form method="post" action={{ path('app_manager_database_add', {'database': databaseName, 'table': tableName}) }}>
+    <form method="post" action={{ path('app_manager_database_edit', {'database': databaseName, 'table': tableName, 'id': id, 'page': page}) }}>
         <div class="space-y-4">
             {% for column in columns %}
                 <div>
@@ -38,7 +38,7 @@
                             type="datetime-local"
                             name="{{ column.COLUMN_NAME|e }}"
                             id="{{ column.COLUMN_NAME|e }}"
-                            value="{{ formData[column.COLUMN_NAME]|default('')|e }}"
+                            value="{{ formData[column.COLUMN_NAME]|e }}"
                         >
                     {% else %}
                         <input 
@@ -53,7 +53,7 @@
             {% endfor %}
         </div>
         <div class="mt-6 text-right">
-            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 shadow" type="submit">Add Row</button>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 shadow" type="submit">Update Row</button>
         </div>
     </form>
 </div>
