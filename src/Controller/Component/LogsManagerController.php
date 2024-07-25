@@ -70,6 +70,9 @@ class LogsManagerController extends AbstractController
             'authManager' => $this->authManager,
             'visitorInfoUtil' => $this->visitorInfoUtil,
 
+            // database name
+            'mainDatabase' => $this->appUtil->getMainDatabaseName(),
+
             // logs data
             'logsCount' => $this->logManager->getLogsCountWhereStatus($filter, (int) $userId),
             'logs' => $this->logManager->getLogsWhereStatus($filter, (int) $userId, (int) $page),

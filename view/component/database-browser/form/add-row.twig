@@ -1,0 +1,60 @@
+{% extends 'common/layout.twig' %}
+
+{# DATABASE BROWSER COMPONENT - ADD ROW TO TABLE #}
+{% block component %}
+{# SUB-NAVIGATION #}
+<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb p-4">
+    <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="border border-gray-600 font-bold px-1 text-white">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+    </a>
+    <span class="mr-1 text-white">{{ tableName|e }}</span>
+</div>
+
+{# ROW ADD FORM #}
+<div class="add-row-input mx-auto max-w-4xl p-4 bg-neutral-800 shadow-lg border border-gray-600">
+    <h2 class="text-2xl text-white mb-4 text-center">Add row to {{ tableName|e }}</h2>
+
+    {# ERROR BOX #}
+    {% if errors is not empty %}
+        <div class="bg-red-700 text-white p-4 mb-4">
+            <h3 class="font-bold">There were some errors:</h3>
+            <ul class="list-disc ml-5">
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {# FORM INPUTS #}
+    <form method="post" action={{ path('app_manager_database_add', {'database': databaseName, 'table': tableName}) }}>
+        <div class="space-y-4">
+            {% for column in columns %}
+                <div>
+                    <label class="block text-gray-200 mb-1" for="{{ column.COLUMN_NAME|e }}">{{ column.COLUMN_NAME|capitalize|e }}</label>
+                    {% if column.COLUMN_TYPE == 'datetime' %}
+                        <input 
+                            class="form-input w-full px-4 py-2 border border-gray-600 bg-neutral-700 text-white focus:outline-none focus:border-blue-500"
+                            type="datetime-local"
+                            name="{{ column.COLUMN_NAME|e }}"
+                            id="{{ column.COLUMN_NAME|e }}"
+                            value="{{ formData[column.COLUMN_NAME]|default('')|e }}"
+                        >
+                    {% else %}
+                        <input 
+                            class="form-input w-full px-4 py-2 border border-gray-600 bg-neutral-700 text-white focus:outline-none focus:border-blue-500"
+                            type="text"
+                            name="{{ column.COLUMN_NAME|e }}"
+                            id="{{ column.COLUMN_NAME|e }}"
+                            value="{{ formData[column.COLUMN_NAME]|default('')|e }}"
+                        >
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="mt-6 text-right">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 shadow" type="submit">Add Row</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

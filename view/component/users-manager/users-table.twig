@@ -4,6 +4,16 @@
 {% block component %} 
 <div class="users-manager">
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
+        {# BACK BUTTON #}
+        <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+        
+        {# LINK TO UNFILTERED LOGS #}
+        <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': 'users'}) }} class="border border-gray-600 font-bold px-1 text-white ml-1">
+            <i class="fa fa-database" aria-hidden="true"></i>
+        </a>
+        
         {# LINK TO USER REGISTER FORM #}
         <a href={{ path('app_manager_users_register') }} class="border border-gray-600 px-1 text-white ml-1">
             <i class="fa fa-plus" aria-hidden="true"></i>
@@ -149,21 +159,34 @@
                     {% set nextPage = currentPage < totalPages ? currentPage + 1 : totalPages %}
                     {% set startPage = max(currentPage - 2, 1) %}
                     {% set endPage = min(currentPage + 2, totalPages) %}
-                    <li>
-                        <a href={{ path('app_manager_users', {'page': previousPage}) }} class="block px-4 py-2 text-white hover:bg-neutral-800 {% if currentPage == 1 %}cursor-not-allowed opacity-50{% endif %}" {% if currentPage == 1 %}disabled{% endif %}>Previous</a>
-                    </li>
+                    {% if currentPage > 1 %}
+                        <li>
+                            <a href={{ path('app_manager_users', {'page': previousPage}) }} class="block px-4 py-2 text-white hover:bg-neutral-800">Previous</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <span class="block px-4 py-2 text-white bg-neutral-800 cursor-not-allowed opacity-50">Previous</span>
+                        </li>
+                    {% endif %}
                     {% for page in startPage..endPage %}
                         <li>
                             <a href={{ path('app_manager_users', {'page': page}) }} class="block px-4 py-2 text-white {% if page == currentPage %}bg-neutral-800{% else %}hover:bg-neutral-800{% endif %}">{{ page }}</a>
                         </li>
                     {% endfor %}
-                    <li>
-                        <a href={{ path('app_manager_users', {'page': nextPage}) }} class="block px-4 py-2 text-white hover:bg-neutral-800 {% if currentPage == totalPages %}cursor-not-allowed opacity-50{% endif %}" {% if currentPage == totalPages %}disabled{% endif %}>Next</a>
-                    </li>
+                    {% if currentPage < totalPages %}
+                        <li>
+                            <a href={{ path('app_manager_users', {'page': nextPage}) }} class="block px-4 py-2 text-white hover:bg-neutral-800">Next</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <span class="block px-4 py-2 text-white bg-neutral-800 cursor-not-allowed opacity-50">Next</span>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     {% endif %}
+
     
     {# USER DELETE POPUP OVERLAY #}
     <div id="popup-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center hidden z-50">

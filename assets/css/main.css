@@ -39,12 +39,16 @@ main {
 	margin-top: 3px !important;
 }
 
-.bg-neutral-850 {
-	background-color: #222222 !important;
-}
-
 .mrc-2 {
 	margin-right: 6.8px !important;
+}
+
+.mrc-3 {
+	margin-right: 10px !important;
+}
+
+.bg-neutral-850 {
+	background-color: #222222 !important;
 }
 
 .link {
@@ -240,6 +244,23 @@ main {
 .todo-manager {
 	height: 100%;
 	background-color: #1b1b1b;
+}
+
+/* database browser component */
+.database-browser .database-link {
+	color: rgb(96 165 250);
+	font-weight: bold;
+}
+
+.database-browser .database-link:hover {
+	color: rgb(147, 185, 231);
+}
+
+@media screen and (min-width: 800px) { 
+	.add-row-input {
+		margin-top: 30px;
+		margin-bottom: 30px;
+	}
 }
 
 /* mobile devices style */

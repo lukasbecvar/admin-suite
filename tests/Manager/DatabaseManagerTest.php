@@ -2,7 +2,10 @@
 
 namespace App\Tests\Manager;
 
+use App\Util\AppUtil;
+use App\Manager\LogManager;
 use Doctrine\DBAL\Connection;
+use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Manager\DatabaseManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -16,19 +19,42 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class DatabaseManagerTest extends TestCase
 {
+    /** @var AppUtil|MockObject */
+    private AppUtil|MockObject $appUtilMock;
+
     /** @var DatabaseManager */
     private DatabaseManager $databaseManager;
+
+    /** @var LogManager|MockObject */
+    private LogManager|MockObject $logManagerMock;
 
     /** @var Connection|MockObject */
     private Connection|MockObject $connectionMock;
 
+    /** @var ErrorManager|MockObject */
+    private ErrorManager|MockObject $errorManagerMock;
+
     protected function setUp(): void
     {
+        // create a mock for the AppUtil class
+        $this->appUtilMock = $this->createMock(AppUtil::class);
+
         // create a mock for the Connection class
         $this->connectionMock = $this->createMock(Connection::class);
 
+        // create a mock for the LogManager class
+        $this->logManagerMock = $this->createMock(LogManager::class);
+
+        // create a mock for the ErrorManager class
+        $this->errorManagerMock = $this->createMock(ErrorManager::class);
+
         // initialize the DatabaseManager with the mock connection
-        $this->databaseManager = new DatabaseManager($this->connectionMock);
+        $this->databaseManager = new DatabaseManager(
+            $this->appUtilMock,
+            $this->logManagerMock,
+            $this->connectionMock,
+            $this->errorManagerMock
+        );
     }
 
     /**
@@ -54,5 +80,117 @@ class DatabaseManagerTest extends TestCase
 
         // assert that isDatabaseDown returns true
         $this->assertTrue($this->databaseManager->isDatabaseDown());
+    }
+
+    /**
+     * Test the get databases list method
+     *
+     * @return void
+     */
+    public function testGetDatabasesList(): void
+    {
+        // get the list of databases
+        $output = $this->databaseManager->getDatabasesList();
+
+        // assert output is an array
+        $this->assertIsArray($output);
+    }
+
+    /**
+     * Test the get tables list method
+     *
+     * @return void
+     */
+    public function testGetTablesList(): void
+    {
+        // get the list of tables
+        $output = $this->databaseManager->getTablesList($_ENV['DATABASE_NAME']);
+
+        // assert output is an array
+        $this->assertIsArray($output);
+    }
+
+    /**
+     * Test the get rows count method
+     *
+     * @return void
+     */
+    public function testGetRowsCount(): void
+    {
+        // get the number of rows in the table
+        $output = $this->databaseManager->getTableRowCount($_ENV['DATABASE_NAME'], 'users');
+
+        // assert output is an integer
+        $this->assertIsInt($output);
+    }
+
+    /**
+     * Test the get table data method
+     *
+     * @return void
+     */
+    public function testGetTableData(): void
+    {
+        // get the data from the table
+        $output = $this->databaseManager->getTableData($_ENV['DATABASE_NAME'], 'users', 1);
+
+        // assert output is an array
+        $this->assertIsArray($output);
+    }
+
+    /**
+     * Test the get last page number method
+     *
+     * @return void
+     */
+    public function testGetLastPageNumber(): void
+    {
+        // get the last page number
+        $output = $this->databaseManager->getLastPageNumber($_ENV['DATABASE_NAME'], 'users');
+
+        // assert output is an integer
+        $this->assertIsInt($output);
+    }
+
+    /**
+     * Test the get columns list method
+     *
+     * @return void
+     */
+    public function testGetColumnsList(): void
+    {
+        // get the columns list
+        $output = $this->databaseManager->getColumnsList($_ENV['DATABASE_NAME'], 'users');
+
+        // assert output is an array
+        $this->assertIsArray($output);
+    }
+
+    /**
+     * Test the doesRecordExist method
+     *
+     * @return void
+     */
+    public function testDoesRecordExist(): void
+    {
+        // check if the record exists
+        $output = $this->databaseManager->doesRecordExist($_ENV['DATABASE_NAME'], 'users', 1);
+
+        // assert output is a boolean
+        $this->assertIsBool($output);
+    }
+
+    /**
+     * Test the delete row by id method
+     *
+     * @return void
+     */
+    public function testDeleteRowById(): void
+    {
+        // delete the row
+        $output = $this->databaseManager->deleteRowById($_ENV['DATABASE_NAME'], 'users', 2);
+
+        // assert output is a boolean
+        $this->assertTrue($output);
     }
 }
