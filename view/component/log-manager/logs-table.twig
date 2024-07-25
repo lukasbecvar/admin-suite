@@ -4,6 +4,16 @@
 {% block component %} 
 <div class="users-manager">
     <div class="flex items-center bg-neutral-900 border-b border-neutral-700 sub-navigation whitespace-nowrap breadcrumb">
+        {# BACK BUTTON #}
+        <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+       
+        {# LINK TO UNFILTERED LOGS #}
+        <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': 'logs'}) }} class="border border-gray-600 font-bold px-1 text-white ml-1">
+            <i class="fa fa-database" aria-hidden="true"></i>
+        </a>
+
         {# SET ALL LOGS READED #}
         <a href={{ path('app_manager_logs_set_readed') }} class="border border-gray-600 font-bold px-1 text-white ml-1">
             <i class="fa fa-check" aria-hidden="true"></i>
@@ -75,7 +85,7 @@
                         {# SET LOG LINE COLOR #}
                         {% if row.name == 'exception' or row.name == 'authenticator' or row.name == 'ban-manager' %}
                             {% set color = 'red-400' %}
-                        {% elseif row.name == 'log-manager' or row.name == 'email-send' %}
+                        {% elseif row.name == 'log-manager' or row.name == 'email-send' or row.name == 'database-manager' %}
                             {% set color = 'blue-400' %}
                         {% elseif row.name == 'anti-log' or row.name == 'monitoring' %}
                             {% set color = 'yellow-400' %}
@@ -126,17 +136,29 @@
                     {% set nextPage = currentPage < totalPages ? currentPage + 1 : totalPages %}
                     {% set startPage = max(currentPage - 2, 1) %}
                     {% set endPage = min(currentPage + 2, totalPages) %}
-                    <li>
-                        <a href={{ path('app_manager_logs', {'page': previousPage, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white hover:bg-neutral-800 {% if currentPage == 1 %}cursor-not-allowed opacity-50{% endif %}" {% if currentPage == 1 %}disabled{% endif %}>Previous</a>
-                    </li>
+                    {% if currentPage > 1 %}
+                        <li>
+                            <a href={{ path('app_manager_logs', {'page': previousPage, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white hover:bg-neutral-800">Previous</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <span class="block px-4 py-2 text-white bg-neutral-800 cursor-not-allowed opacity-50">Previous</span>
+                        </li>
+                    {% endif %}
                     {% for page in startPage..endPage %}
                         <li>
                             <a href={{ path('app_manager_logs', {'page': page, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white {% if page == currentPage %}bg-neutral-800{% else %}hover:bg-neutral-800{% endif %}">{{ page }}</a>
                         </li>
                     {% endfor %}
-                    <li>
-                        <a href={{ path('app_manager_logs', {'page': nextPage, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white hover:bg-neutral-800 {% if currentPage == totalPages %}cursor-not-allowed opacity-50{% endif %}" {% if currentPage == totalPages %}disabled{% endif %}>Next</a>
-                    </li>
+                    {% if currentPage < totalPages %}
+                        <li>
+                            <a href={{ path('app_manager_logs', {'page': nextPage, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white hover:bg-neutral-800">Next</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <span class="block px-4 py-2 text-white bg-neutral-800 cursor-not-allowed opacity-50">Next</span>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

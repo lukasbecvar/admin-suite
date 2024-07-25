@@ -10,15 +10,6 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-- [ ] Database browser
-    - [ ] All databases list
-    - [ ] Browse tables
-    - [ ] Add row
-    - [ ] Edit values
-    - [ ] Delete rows
-    - [ ] Delete all rows
-    - [ ] Dump SQL structure
-    - [ ] Backup database (download SQL file)
 - [ ] Terminal component
     - [ ] Simple command execution
     - [ ] Interactive command execution
@@ -32,7 +23,13 @@
 - [ ] Internal chat component
     - [ ] Basic chat room
     - [ ] Display usernames & profile pictures
-    - [ ] Link higlighting
+    - [ ] Link higlightin
+- [ ] Refactoring
+    - [ ] Add response codes to all controllers returns
+    - [ ] Save return to variable before return
+    - [ ] Better names for methods & variables
+    - [ ] Better HTML/TWIG structure
+    - [ ] Log level int in object const     
 - [ ] Doc/About & download page (github pages)
     - [ ] About homepage
     - [ ] Download page

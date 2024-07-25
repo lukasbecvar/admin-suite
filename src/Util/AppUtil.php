@@ -155,6 +155,15 @@ class AppUtil
         return $_ENV['ANTI_LOG_TOKEN'];
     }
 
+    /** Get the main database name
+     *
+     * @return string The main database name
+     */
+    public function getMainDatabaseName(): string
+    {
+        return $_ENV['DATABASE_NAME'];
+    }
+
     /**
      * Get the hasher configuration
      *
