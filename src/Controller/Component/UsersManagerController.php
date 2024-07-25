@@ -97,6 +97,9 @@ class UsersManagerController extends AbstractController
             'userManager' => $this->userManager,
             'visitorInfoUtil' => $this->visitorInfoUtil,
 
+            // database name
+            'mainDatabase' => $this->appUtil->getMainDatabaseName(),
+
             // users manager data
             'users' => $usersData,
             'onlineList' => $onlineList,

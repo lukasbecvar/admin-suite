@@ -4,6 +4,16 @@
 {% block component %} 
 <div class="users-manager">
     <div class="flex items-center bg-neutral-900 border-b border-neutral-700 sub-navigation whitespace-nowrap breadcrumb">
+        {# BACK BUTTON #}
+        <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+       
+        {# LINK TO UNFILTERED LOGS #}
+        <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': 'logs'}) }} class="border border-gray-600 font-bold px-1 text-white ml-1">
+            <i class="fa fa-database" aria-hidden="true"></i>
+        </a>
+
         {# SET ALL LOGS READED #}
         <a href={{ path('app_manager_logs_set_readed') }} class="border border-gray-600 font-bold px-1 text-white ml-1">
             <i class="fa fa-check" aria-hidden="true"></i>

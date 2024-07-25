@@ -10,18 +10,6 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-- [ ] Database browser
-    - [X] All databases list
-    - [X] Browse tables
-    - [X] Table browser
-    - [X] Add row
-    - [X] Delete row
-    - [X] Table truncate function
-    - [X] Row editor
-    - [ ] SQL executor
-    - [ ] Dump SQL structure
-    - [ ] Backup database (download SQL file)
-    - [ ] Link log/user manager to unfiltered database browser
 - [ ] Terminal component
     - [ ] Simple command execution
     - [ ] Interactive command execution
