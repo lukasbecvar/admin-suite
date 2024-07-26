@@ -10,20 +10,12 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-- [ ] Terminal component
-    - [ ] Simple command execution
-    - [ ] Interactive command execution
-    - [ ] MySQL CLI
-- [ ] File browser & editor
-    - [ ] List files in filesystem
-    - [ ] Rename files
-    - [ ] Remove files
-    - [ ] Move files
-    - [ ] Open files in txt editor
+### 1.6
 - [ ] Internal chat component
     - [ ] Basic chat room
     - [ ] Display usernames & profile pictures
     - [ ] Link higlightin
+### 1.7
 - [ ] Refactoring
     - [ ] Add response codes to all controllers returns
     - [ ] Save return to variable before return
@@ -36,6 +28,18 @@
     - [ ] Base documentation
     - [ ] Installation documentation
     - [ ] Components documentation
+### 1.8
+- [ ] Terminal component
+    - [ ] Simple command execution
+    - [ ] Interactive command execution
+    - [ ] MySQL CLI
+### 1.9
+- [ ] File browser & editor
+    - [ ] List files in filesystem
+    - [ ] Rename files
+    - [ ] Remove files
+    - [ ] Move files
+    - [ ] Open files in txt editor
 
 ## Primary use
 I created this project to manage my personal servers. I wanted a simple and easy-to-use solution that would allow me to monitor and manage my servers without relying on complex software or complicated setups. This project aims to manage single server instances, not clusters.
