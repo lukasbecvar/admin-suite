@@ -12,12 +12,20 @@
 ## ROADMAP
 ### 1.6
 - [ ] Internal chat component
-    - [ ] Basic chat room
-    - [ ] Display usernames & profile pictures
+    - [X] Chat frontend
+    - [ ] Chat functionality
+        - [ ] Chat message entity
+        - [ ] Send chat message
+        - [ ] Receive chat message
+        - [ ] Infinite chat history loading
+        - [ ] Online users list
+        - [ ] Link to user profile in user list
+        - [ ] Username in list color by role
     - [ ] Link higlightin
     - [ ] Chat test
 ### 1.7
 - [ ] Refactoring
+    - [ ] Design improvements
     - [ ] Add response codes to all controllers returns
     - [ ] Save return to variable before return
     - [ ] Better names for methods & variables

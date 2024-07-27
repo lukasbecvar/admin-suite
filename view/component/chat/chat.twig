@@ -3,12 +3,21 @@
 {# INTERNAL CHAT COMPONENT #}
 {% block component %}
 {# SUB NAVIGATION #}
-<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation text-white breadcrumb">
+<div class="bg-neutral-900 border-b  border-gray-600 sub-navigation text-white breadcrumb">
     <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
     <span class="mr-1">Internal chat</span>
 </div>
+    <div class="flex flex-grow overflow-hidden chat-component">
+        {# CHAT MESSAGES BOX #}
+        {% include 'component/chat/message-box.twig' %}
 
-<p>chat</p>
+        {# USER LIST BOX #}
+        {% include 'component/chat/user-list.twig' %}
+    </div>
+
+    {# MESSAGE INPUT BOX #}
+    {% include 'component/chat/form/message-input.form.twig' %}
+</div>
 {% endblock %}
