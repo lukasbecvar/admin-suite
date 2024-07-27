@@ -74,6 +74,9 @@ class NonAuthRedirectTest extends WebTestCase
             '/manager/database/table',
             '/manager/database/delete',
             '/manager/database/truncate',
+        ],
+        'chat' => [
+            '/chat'
         ]
     ];
 
