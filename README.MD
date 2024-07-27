@@ -15,6 +15,7 @@
     - [ ] Basic chat room
     - [ ] Display usernames & profile pictures
     - [ ] Link higlightin
+    - [ ] Chat test
 ### 1.7
 - [ ] Refactoring
     - [ ] Add response codes to all controllers returns
