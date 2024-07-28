@@ -23,6 +23,8 @@
     - [ ] Move files
     - [ ] Open files in txt editor
 ### 1.9
+- [ ] Complete refactor
+### 2.0
 - [ ] Doc/About & download page (github pages)
     - [ ] About homepage
     - [ ] Download page
