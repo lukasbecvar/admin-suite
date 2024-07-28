@@ -1,7 +1,6 @@
 # <h1 align="center">Admin suite</h1>
 ### <p align="center">Solution for administration and monitoring linux private servers</p>
 <p align="center">
-    <a href="https://github.com/lordbecvold/admin-suite/blob/main/DOC.MD" target="_blank">Documentation</a> |
     <a href="https://github.com/lordbecvold/admin-suite/blob/main/LICENSE" target="_blank">License</a> |
     <a href="https://becvar.xyz" target="_blank">Author</a>
 </p>
@@ -10,45 +9,50 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-### 1.6
-- [ ] Internal chat component
-    - [X] Chat frontend
-    - [ ] Chat functionality
-        - [ ] Chat message entity
-        - [ ] Send chat message
-        - [ ] Receive chat message
-        - [ ] Infinite chat history loading
-        - [ ] Online users list
-        - [ ] Link to user profile in user list
-        - [ ] Username in list color by role
-    - [ ] Link higlightin
-    - [ ] Chat test
 ### 1.7
-- [ ] Refactoring
-    - [ ] Design improvements
-    - [ ] Add response codes to all controllers returns
-    - [ ] Save return to variable before return
-    - [ ] Better names for methods & variables
-    - [ ] Better HTML/TWIG structure
-    - [ ] Log level int in object const     
-- [ ] Doc/About & download page (github pages)
-    - [ ] About homepage
-    - [ ] Download page
-    - [ ] Base documentation
-    - [ ] Installation documentation
-    - [ ] Components documentation
-### 1.8
 - [ ] Terminal component
     - [ ] Simple command execution
     - [ ] Interactive command execution
     - [ ] MySQL CLI
-### 1.9
+### 1.8
 - [ ] File browser & editor
     - [ ] List files in filesystem
     - [ ] Rename files
     - [ ] Remove files
     - [ ] Move files
     - [ ] Open files in txt editor
+### 1.9
+- [ ] Doc/About & download page (github pages)
+    - [ ] About homepage
+    - [ ] Download page
+    - [ ] Base documentation
+    - [ ] Installation documentation
+    - [ ] Components documentation
+
+## Requirements
+* OS Linux
+* PHP 8.3
+* Mysql - PDO driver
+* PHP-OpenSSL extension
+* PHP Intl extension
+* PHP Curl extension
+* MySQL 8
+* Composer
+* NPM 9.2.0 or higher
+
+## Installation
+Installation is very simple like any other PHP project.
+* Clone repo
+* Create apache virtual host or nginx configuration line ([apache-config](https://github.com/lordbecvold/admin-suite/blob/main/_docker/configs/apache-site.conf))
+* Create .env file with your configuration (.env.prod)
+* Create admin suite database
+* Run database migrations (script/migrate.sh)
+* Create user with console command or web interface (webinterface allows to create user if users table is empty)
+
+## Configuration
+* Configure your package-requitements.json & services.json in root file (for example use config/suite files)
+* Create systemd or screen service for monitoring process (console command infinite loop)
+* You can edit the config files directly in config/suite but it is better to create your own in the project root because these files will be loaded primarily and ignored by git when using the pull for update.
 
 ## Primary use
 I created this project to manage my personal servers. I wanted a simple and easy-to-use solution that would allow me to monitor and manage my servers without relying on complex software or complicated setups. This project aims to manage single server instances, not clusters.

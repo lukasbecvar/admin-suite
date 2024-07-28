@@ -1,3 +1,4 @@
+# test code with phpstan
 name: PHPStan
 
 on:
