@@ -52,7 +52,7 @@ Installation is very simple like any other PHP project.
 ## Configuration
 * Configure your package-requitements.json & services.json in root file (for example use config/suite files)
 * Create systemd or screen service for monitoring process (console command infinite loop)
-* You can edit the config files directly in config/suite but it is better to create your own in the project root because these files will be loaded primarily and ignored by git when using the pull for update.
+* You can edit the config files directly in config/suite but it is better to create your own in the project root because these files will be loaded primarily and ignored by git when using the pull for update
 
 ## Primary use
 I created this project to manage my personal servers. I wanted a simple and easy-to-use solution that would allow me to monitor and manage my servers without relying on complex software or complicated setups. This project aims to manage single server instances, not clusters.
