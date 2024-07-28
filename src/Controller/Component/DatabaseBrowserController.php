@@ -527,4 +527,78 @@ class DatabaseBrowserController extends AbstractController
             'page' => 1
         ], Response::HTTP_FOUND);
     }
+
+    /**
+     * Dump database to file
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The rendered database dump page
+     */
+    #[Route('/manager/database/dump', methods: ['GET'], name: 'app_manager_database_dump')]
+    public function databaseDump(Request $request): Response
+    {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
+        }
+
+        // get request parameters
+        $select = (string) $request->query->get('select', 'yes');
+        $databaseName = (string) $request->query->get('database');
+        $plain = (string) $request->query->get('plain', 'no');
+
+        // check if dump mode is select
+        if ($select === 'yes') {
+            // get databases list
+            $databases = $this->databaseManager->getDatabasesList();
+
+            return $this->render('component/database-browser/database-dump.twig', [
+                'isAdmin' => true,
+                'userData' => $this->authManager->getLoggedUserRepository(),
+
+                // database dump data
+                'databases' => $databases,
+            ]);
+        }
+
+        // check if database name and plain flag are set
+        if (empty($databaseName) || empty($plain)) {
+            $this->errorManager->handleError(
+                message: 'database name and plain flag are required',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check if database exists
+        if (!$this->databaseManager->isDatabaseExists($databaseName)) {
+            $this->errorManager->handleError(
+                message: 'database ' . $databaseName . ' not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // check if plain flag is set
+        if ($plain === 'yes') {
+            $plain = true;
+        } else {
+            $plain = false;
+        }
+
+        // get database dump
+        $databaseDump = $this->databaseManager->getDatabaseDump($databaseName, $plain);
+
+        // return the database dump
+        return new Response(
+            content: $databaseDump,
+            status: Response::HTTP_OK,
+            headers:[
+                'Content-Type' => 'application/sql',
+                'Content-Disposition' => 'attachment; filename="' . $databaseName . '_dump.sql' . '"',
+            ]
+        );
+    }
 }
