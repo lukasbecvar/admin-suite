@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function () {
             currentTodoId = this.closest('button').dataset.todoId
             editPopup.classList.remove('hidden')
+            editTodoInput.value = this.closest('button').dataset.todoText
             editTodoInput.focus()
         })
     })

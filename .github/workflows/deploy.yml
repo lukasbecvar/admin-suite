@@ -28,9 +28,11 @@ jobs:
           # go to the project directory
           cd /services/website/admin-suite
 
-          # stop apache and clear cache
+          # stop admin-suite services
           sudo systemctl stop apache2
           sudo systemctl stop admin-suite-monitoring
+
+          # clear cache & packages
           sudo sh scripts/clear.sh
                    
           # pull the latest changes
@@ -55,6 +57,6 @@ jobs:
           sudo chmod -R 777 var/
           sudo chown -R www-data:www-data var/
 
-          # start apache
+          # start admin-suite services
           sudo systemctl start apache2
           sudo systemctl start admin-suite-monitoring
