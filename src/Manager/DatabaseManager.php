@@ -113,6 +113,34 @@ class DatabaseManager
     }
 
     /**
+     * Check if a database exists
+     *
+     * @param string $dbName The name of the database
+     *
+     * @throws \Exception If an error occurs while executing the query
+     *
+     * @return bool True if the database exists, false otherwise
+     */
+    public function isDatabaseExists(string $dbName): bool
+    {
+        $sql = 'SHOW DATABASES LIKE :dbName';
+
+        try {
+            $stmt = $this->connection->executeQuery($sql, ['dbName' => $dbName]);
+            $count = $stmt->fetchOne();
+
+            return $count > 0;
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error checking if database exists: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return false;
+    }
+
+    /**
      * Get the list of tables in a database
      *
      * @param string $dbName The database name
@@ -637,5 +665,73 @@ class DatabaseManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+    }
+
+    /**
+     * Get database dump
+     *
+     * @param string $dbName The name of the database
+     * @param bool $plain Whether to return the dump in plain text format
+     *
+     * @throws \Exception If an error occurs while executing the query
+     *
+     * @return string The database dump
+     */
+    public function getDatabaseDump(string $dbName, bool $plain = false): string
+    {
+        $tables = $this->connection->fetchAllAssociative('SHOW TABLES FROM ' . $this->connection->quoteIdentifier($dbName));
+
+        $dump = '';
+
+        try {
+            foreach ($tables as $table) {
+                /** @var string $tableName */
+                $tableName = $table['Tables_in_' . $dbName];
+                $createTableStmt = $this->connection->fetchAssociative('SHOW CREATE TABLE ' . $dbName . '.' . $this->connection->quoteIdentifier($tableName));
+
+                if (!$createTableStmt) {
+                    $this->errorManager->handleError(
+                        message: 'error dumping database: table not found',
+                        code: Response::HTTP_INTERNAL_SERVER_ERROR
+                    );
+                    return '';
+                }
+
+                $dump .= $createTableStmt['Create Table'] . ";\n\n";
+
+                if (!$plain) {
+                    $rows = $this->connection->fetchAllAssociative('SELECT * FROM ' . $dbName . '.' . $this->connection->quoteIdentifier($tableName));
+                    foreach ($rows as $row) {
+                        $values = [];
+                        foreach ($row as $value) {
+
+                            /** @var string $value */
+                            if ($value === null) {
+                                $values[] = 'NULL';
+                            } else {
+                                $values[] = $this->connection->quote($value);
+                            }
+                        }
+                        $values = implode(', ', $values);
+                        $dump .= 'INSERT INTO ' . $this->connection->quoteIdentifier($tableName) . ' VALUES (' . $values . ");\n";
+                    }
+                    $dump .= "\n";
+                }
+            }
+
+            // log the action
+            $this->logManager->log(
+                name: 'database-manager',
+                message: 'get database dump',
+                level: 1
+            );
+        } catch (\Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error dumping database: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return $dump;
     }
 }

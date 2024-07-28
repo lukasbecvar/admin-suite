@@ -97,6 +97,20 @@ class DatabaseManagerTest extends TestCase
     }
 
     /**
+     * Test the isDatabaseExists method
+     *
+     * @return void
+     */
+    public function testIsDatabaseExists(): void
+    {
+        // check if the database exists
+        $output = $this->databaseManager->isDatabaseExists($_ENV['DATABASE_NAME']);
+
+        // assert output is a boolean
+        $this->assertIsBool($output);
+    }
+
+    /**
      * Test the get tables list method
      *
      * @return void
@@ -192,5 +206,19 @@ class DatabaseManagerTest extends TestCase
 
         // assert output is a boolean
         $this->assertTrue($output);
+    }
+
+    /**
+     * Test the getDatabaseDump method
+     *
+     * @return void
+     */
+    public function testGetDatabaseDump(): void
+    {
+        // get the database dump
+        $output = $this->databaseManager->getDatabaseDump($_ENV['DATABASE_NAME'], true);
+
+        // assert output is a string
+        $this->assertIsString($output);
     }
 }

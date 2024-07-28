@@ -14,6 +14,7 @@
     - [ ] Simple command execution
     - [ ] Interactive command execution
     - [ ] MySQL CLI
+    - [ ] Link to terminal MySQL-CLI in database manager sub menu
 ### 1.8
 - [ ] File browser & editor
     - [ ] List files in filesystem

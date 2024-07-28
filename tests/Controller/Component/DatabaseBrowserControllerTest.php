@@ -388,4 +388,42 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
+
+    /**
+     * Tests that the database dump page loads successfully
+     *
+     * @return void
+     */
+    public function testLoadDumpPage(): void
+    {
+        $this->client->request('GET', '/manager/database/dump', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'select' => 'yes'
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Dump database');
+        $this->assertSelectorTextContains('body', 'Structure');
+        $this->assertSelectorTextContains('body', 'Data');
+        $this->assertSelectorTextContains('body', $_ENV['DATABASE_NAME']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Tests that the database dump page loads successfully
+     *
+     * @return void
+     */
+    public function testLoadDumpPageNotFoundSelect(): void
+    {
+        $this->client->request('GET', '/manager/database/dump', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'plain' => 'yes',
+            'select' => 'no'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
 }
