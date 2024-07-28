@@ -43,7 +43,7 @@
 ## Installation
 Installation is very simple like any other PHP project.
 * Clone repo
-* Create apache virtual host or nginx configuration line ([apache-config](https://github.com/lordbecvold/admin-suite/blob/main/_docker/configs/apache-site.conf))
+* Create apache virtual host or nginx configuration like ([apache-config](https://github.com/lordbecvold/admin-suite/blob/main/_docker/configs/apache-site.conf))
 * Create .env file with your configuration (.env.prod)
 * Create admin suite database
 * Run database migrations (script/migrate.sh)
