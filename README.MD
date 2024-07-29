@@ -9,9 +9,10 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-### 1.7
-- [ ] Complete refactor
-### 1.8
+- [ ] Database SQL console
+- [ ] Internal chat
+- [ ] File explorer
+- [ ] Terminal component
 - [ ] Doc/About & download page (github pages)
     - [ ] About homepage
     - [ ] Download page
