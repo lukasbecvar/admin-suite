@@ -10,21 +10,8 @@
 
 ## ROADMAP
 ### 1.7
-- [ ] Terminal component
-    - [ ] Simple command execution
-    - [ ] Interactive command execution
-    - [ ] MySQL CLI
-    - [ ] Link to terminal MySQL-CLI in database manager sub menu
-### 1.8
-- [ ] File browser & editor
-    - [ ] List files in filesystem
-    - [ ] Rename files
-    - [ ] Remove files
-    - [ ] Move files
-    - [ ] Open files in txt editor
-### 1.9
 - [ ] Complete refactor
-### 2.0
+### 1.8
 - [ ] Doc/About & download page (github pages)
     - [ ] About homepage
     - [ ] Download page
