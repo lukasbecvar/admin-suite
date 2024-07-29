@@ -10,6 +10,7 @@
 
 ## ROADMAP
 - [ ] Database SQL console
+- [ ] Todo manager priority system
 - [ ] Internal chat
 - [ ] File explorer
 - [ ] Terminal component
