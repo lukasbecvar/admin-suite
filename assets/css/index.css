@@ -12,6 +12,7 @@
 @import './loading-component.css';
 
 /* main app style */
+@import './global.css';
 @import './main.css';
 
 /* others styles */
