@@ -2,6 +2,8 @@
 
 namespace App\Manager;
 
+use PDO;
+use PDOException;
 use App\Util\AppUtil;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Response;
@@ -733,5 +735,77 @@ class DatabaseManager
         }
 
         return $dump;
+    }
+
+    /**
+     * Execute a query
+     *
+     * @param string $query The query to execute
+     *
+     * @throws \Exception If an error occurs while executing the query
+     *
+     * @return string The output of the query
+     */
+    public function executeQuery(string $query): string
+    {
+        try {
+            // create a new PDO instance
+            $pdo = new PDO(
+                'mysql:host=' . $_ENV['DATABASE_HOST'] . ';dbname=' . $_ENV['DATABASE_NAME'],
+                $_ENV['DATABASE_USERNAME'],
+                $_ENV['DATABASE_PASSWORD'],
+                [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']
+            );
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            // execute multiple queries
+            $result = '';
+            $queries = explode(';', $query); // split the query by semicolon
+
+            foreach ($queries as $q) {
+                $q = trim($q);
+                if (!empty($q)) {
+                    // execute the query
+                    $stmt = $pdo->query($q);
+
+                    // check statement
+                    if ($stmt == false) {
+                        $this->errorManager->handleError(
+                            message: 'error executing query statement: ' . $q,
+                            code: Response::HTTP_INTERNAL_SERVER_ERROR
+                        );
+
+                        return '';
+                    }
+
+                    // fetch all results
+                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    // format results as a string
+                    if ($data) {
+                        foreach ($data as $row) {
+                            $result .= implode("\t", $row) . "\n";
+                        }
+                    }
+                }
+            }
+
+            // default output
+            if (empty($result)) {
+                $result = 'Query executed successfully';
+            }
+
+            // log the action
+            $this->logManager->log(
+                name: 'database-manager',
+                message: 'Executed query',
+                level: 3
+            );
+
+            return $result;
+        } catch (PDOException $e) {
+            // return the error message
+            return $e->getMessage();
+        }
     }
 }
