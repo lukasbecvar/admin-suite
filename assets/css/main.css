@@ -1,93 +1,4 @@
-/* admin-suite: global app style */
-* { 
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-	scroll-behavior: smooth;
-}
-
-body {
-	background-color: #161616;
-}
-
-main {
-	margin-top: 25px; 
-}
-
-.linkify {
-	color: rgb(67, 126, 255);
-}
-
-.linkify:hover {
-	color: rgb(23, 129, 250);
-	text-decoration: underline;
-}
-
-.mr-1px {
-	margin-right: 1px;
-}
-
-.ml-05 {
-	margin-left: 1.8px !important;
-}
-
-.mt-02 {
-	margin-top: 3px !important;
-}
-
-.mrc-2 {
-	margin-right: 6.8px !important;
-}
-
-.mrc-3 {
-	margin-right: 10px !important;
-}
-
-.bg-neutral-850 {
-	background-color: #222222 !important;
-}
-
-.link {
-	color: rgb(49, 114, 255);
-}
-
-.link:hover {
-	color: rgb(24, 132, 255);
-	text-decoration: underline;
-}
-
-.background-dark {
-    background: rgb(20, 20, 20) !important;
-}
-
-#main-content {
-	position: relative;
-	margin-left: 0; 
-	transition: margin-left 0.2s ease; 
-}
-
-#main-content.active {
-	margin-left: 180px; 
-}
-
-.card-color {
-	background-color: #1d1d1d;
-}
-
-.component-container {
-	display: flex;
-	flex-direction: column;
-	height: calc(100vh - 25px);
-}
-  
-.component {
-	flex-grow: 1;
-	overflow-y: auto; 
-}
-
+/* admin-suite: main app style */
 /* main navigation */
 .nav-bar {
 	position: fixed;
@@ -292,12 +203,6 @@ main {
 	.phone-none {
 		display: none;
 	}
-	main {
-		margin-top: 30px; 
-	}
-	.component-container {
-		height: calc(100vh - 30px);
-	}
 	.nav-bar {
 		position: fixed;
 		top: 0;
@@ -317,9 +222,6 @@ main {
 	#sidebar ul li span {
 		padding-bottom: 3px !important;
 		padding-top: 3px !important;
-	}
-	#main-content.active {
-		display: none;
 	}
 	.nav-bar #menu-toggle {
 		font-size: 25px !important;

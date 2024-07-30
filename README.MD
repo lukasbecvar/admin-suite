@@ -9,7 +9,6 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-- [ ] Todo manager priority system
 - [ ] Internal chat
 - [ ] File explorer
 - [ ] Terminal component
