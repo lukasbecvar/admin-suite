@@ -2,6 +2,7 @@
 
 {# LOG MANAGER TABLE #}
 {% block component %} 
+{# SUB-NAVIGATION #}
 <div class="users-manager">
     <div class="flex items-center bg-neutral-900 border-b border-neutral-700 sub-navigation whitespace-nowrap breadcrumb">
         {# BACK BUTTON #}
@@ -61,20 +62,20 @@
         <p class="flex items-center justify-center mt-20 mb-20 text-2xl text-white font-bold">No relative logs were found</p>
     {% else %}
         {# LOG VIEW TABLE #}
-        <div class="bg-neutral-900 border-b border-neutral-700 overflow-x-auto">
+        <div class="bg-neutral-900 overflow-x-auto component">
             <table class="min-w-full divide-y divide-white whitespace-nowrap">
                 <thead>
-                    <tr class="hover:bg-neutral-800 border-b border-neutral-600">
-                        <th class="text-left text-white p-1">#</th>
-                        <th class="text-left text-white p-1">Name</th>
-                        <th class="text-left text-white p-1">Message</th>
-                        <th class="text-left text-white p-1">Time</th>
-                        <th class="text-left text-white p-1">Browser</th>
-                        <th class="text-left text-white p-3">OS</th>
-                        <th class="text-left text-white p-1">IP Address</th>
-                        <th class="text-left text-white p-1">User</th>
+                    <tr class="border-b border-neutral-600">
+                        <th class="text-left text-white p-1 py-2">#</th>
+                        <th class="text-left text-white p-1 py-2">Name</th>
+                        <th class="text-left text-white p-1 py-2">Message</th>
+                        <th class="text-left text-white p-1 py-2">Time</th>
+                        <th class="text-left text-white p-1 py-2">Browser</th>
+                        <th class="text-left text-white p-3 py-2">OS</th>
+                        <th class="text-left text-white p-1 py-2">IP Address</th>
+                        <th class="text-left text-white p-1 py-2">User</th>
                         {% if filter == 'UNREADED' %}
-                            <th class="text-left text-white p-1"><i class="fa fa-check" aria-hidden="true"></th>
+                            <th class="text-left text-white p-1 py-2"><i class="fa fa-check" aria-hidden="true"></th>
                         {% endif %}
                         </tr>
                 </thead>

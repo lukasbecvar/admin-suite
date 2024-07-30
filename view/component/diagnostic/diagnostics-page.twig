@@ -2,7 +2,7 @@
 
 {# DIAGNOSTICS PAGE #}
 {% block component %} 
-{# SUB NAVIGATION #}
+{# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
     <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
@@ -11,11 +11,11 @@
 </div>
 
 {# DIAGNOSTICS CARDS #}
-<div class="flex-center mx-1 mt-2">
+<div class="flex-center mx-1 mt-2 component">
 
     {# HOST SYSTEM DIAGNOSTICS CARD #}
     <div class="shadow-lg text-white mb-3 border border-gray-600 card-color">
-        <div class="px-4 py-3 mb-2 border-b border-gray-600">System diagnostics</div>
+        <div class="px-3 py-2 mb-2 border-b border-gray-600">System diagnostics</div>
         
         {# NOT-INSTALLED-REQUIREMENTS CHECK #}
         <div class="px-4 py-1">
@@ -112,7 +112,7 @@
 
     {# SELF WEB DIAGNOSTICS CARD #}
     <div class="shadow-lg text-white mb-3 border border-gray-600 card-color">
-        <div class="px-4 py-3 border-b border-gray-600">Website diagnostics</div>
+        <div class="px-3 py-2 border-b border-gray-600">Website diagnostics</div>
 
         {# SSL-RUNNING CHECK #}
         <div class="px-4 py-2">

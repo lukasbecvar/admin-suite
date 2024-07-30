@@ -1,7 +1,6 @@
 {# CREATE NEW TODO FORM #} 
 {{ form_start(createTodoForm) }}
     <div class="bg-neutral-900 flex-none">
-
         {# FORM CONSTRAINTS ERROR #}
         {% if createTodoForm.todo_text.vars.errors|length > 0 %}
             <div class="text-red-500 text-l">
