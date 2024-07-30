@@ -16,14 +16,10 @@
 
     <div class="mt-6 text-center">
         {# SUBMIT BUTTON #}
-        <a href={{ path('app_manager_database_truncate', {'database': databaseName, 'table': tableName, 'confirm': 'yes'}) }} class="mr-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 shadow">
-            YES
-        </a>
+        <a href={{ path('app_manager_database_truncate', {'database': databaseName, 'table': tableName, 'confirm': 'yes'}) }} class="mr-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 shadow">YES</a>
 
         {# CANCEL BUTTON #}
-        <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 shadow">
-            NO
-        </a>
+        <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 shadow">NO</a>
     </div>
 </div>
 {% endblock %}

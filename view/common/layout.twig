@@ -15,7 +15,9 @@
     
     {# MAIN COMPONENT INIT #}
     <main id="main-content" class="md:active">
-        {% block component %}{% endblock %}
+        <div class="component-container">
+            {% block component %}{% endblock %}
+        </div>
     </main>
 
     {# SIDEBAR TOGGLE SCRIPT #}
