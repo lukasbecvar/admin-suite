@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Middleware\EscapeRequestDataMiddleware;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Class EscapeRequestDataMiddlewareTest
@@ -25,6 +26,8 @@ class EscapeRequestDataMiddlewareTest extends TestCase
      */
     public function testEscapeRequestData(): void
     {
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+
         // arrange
         $securityUtil = $this->createMock(SecurityUtil::class);
         $securityUtil->method('escapeString')->willReturnCallback(function ($value) {
@@ -51,7 +54,7 @@ class EscapeRequestDataMiddlewareTest extends TestCase
         );
 
         // act
-        $middleware = new EscapeRequestDataMiddleware($securityUtil);
+        $middleware = new EscapeRequestDataMiddleware($securityUtil, $urlGenerator);
         $middleware->onKernelRequest($event);
 
         // assert response

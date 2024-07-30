@@ -20,6 +20,11 @@
         <i class="fa fa-download" aria-hidden="true"></i>
     </a>
 
+    {# LINK TO DATABASE CONSOLE #}
+    <a href={{ path('app_manager_database_console') }} class="ml-1 border border-gray-600 font-bold px-1 text-white">
+        <i class="fa fa-terminal" aria-hidden="true"></i>
+    </a> 
+
     {# SUB-TITLE #}
     {% if databaseName == '' %}
         <span class="mr-1 text-white">Databases</span>

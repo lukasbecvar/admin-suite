@@ -426,4 +426,21 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
+
+    /**
+     * Tests that the database console page loads successfully
+     *
+     * @return void
+     */
+    public function testLoadDatabaseConsolePage(): void
+    {
+        $this->client->request('GET', '/manager/database/console');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Query console');
+        $this->assertSelectorTextContains('body', 'Database console');
+        $this->assertSelectorTextContains('body', 'Execute Query');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
 }

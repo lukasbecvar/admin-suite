@@ -6,6 +6,7 @@ use App\Util\AppUtil;
 use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
 use App\Manager\DatabaseManager;
+use App\Form\Database\QueryConsoleFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -600,5 +601,49 @@ class DatabaseBrowserController extends AbstractController
                 'Content-Disposition' => 'attachment; filename="' . $databaseName . '_dump.sql' . '"',
             ]
         );
+    }
+
+    /**
+     * Renders the database console page
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The rendered database console page
+     */
+    #[Route('/manager/database/console', methods: ['GET', 'POST'], name: 'app_manager_database_console')]
+    public function databaseConsole(Request $request): Response
+    {
+        // check if user have admin permissions
+        if (!$this->authManager->isLoggedInUserAdmin()) {
+            return $this->render('component/no-permissions.twig', [
+                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
+                'userData' => $this->authManager->getLoggedUserRepository(),
+            ]);
+        }
+
+        // create query console form
+        $queryForm = $this->createForm(QueryConsoleFormType::class);
+        $queryForm->handleRequest($request);
+
+        // default output
+        $output = null;
+
+        // check if form is submitted
+        if ($queryForm->isSubmitted() && $queryForm->isValid()) {
+            /** @var string $query */
+            $query = $queryForm->get('query')->getData();
+
+            // execute query
+            $output = $this->databaseManager->executeQuery($query);
+        }
+
+        return $this->render('component/database-browser/database-console.twig', [
+            'isAdmin' => true,
+            'userData' => $this->authManager->getLoggedUserRepository(),
+
+            // query console form
+            'queryForm' => $queryForm->createView(),
+            'output' => $output
+        ]);
     }
 }
