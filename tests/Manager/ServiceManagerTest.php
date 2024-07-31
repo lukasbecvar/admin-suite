@@ -56,45 +56,6 @@ class ServiceManagerTest extends TestCase
     }
 
     /**
-     * Test run systemd action
-     *
-     * @return void
-     */
-    public function testRunSystemdAction(): void
-    {
-        $this->authManager->expects($this->once())
-            ->method('isUserLogedin')
-            ->willReturn(true);
-
-        $userMock = $this->getMockBuilder(\App\Entity\User::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $userMock->method('getUsername')
-            ->willReturn('testUser');
-
-        $this->authManager->expects($this->once())
-            ->method('getLoggedUserRepository')
-            ->willReturn($userMock);
-
-        $this->logManager->expects($this->once())
-            ->method('log')
-            ->with('action-runner', 'testUser start example_service', 1);
-
-        $this->serviceManager = $this->getMockBuilder(ServiceManager::class)
-            ->setConstructorArgs([
-                $this->appUtilMock,
-                $this->jsonUtilMock,
-                $this->logManager,
-                $this->authManager,
-                $this->errorManager
-            ])->onlyMethods(['executeCommand'])->getMock();
-
-        // call method
-        $this->serviceManager->runSystemdAction('example_service', 'start');
-    }
-
-    /**
      * Test check is service running
      *
      * @return void

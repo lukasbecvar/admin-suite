@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 /**
  * Class QueryConsoleFormType
  *
- * The query console form
+ * The database query console form
  *
  * @package App\Form\Database
  */

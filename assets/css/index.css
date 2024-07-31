@@ -9,7 +9,7 @@
 @import '../../node_modules/tailwindcss//components';
 
 /* loading component */
-@import './loading-component.css';
+@import './loading.css';
 
 /* main app style */
 @import './global.css';

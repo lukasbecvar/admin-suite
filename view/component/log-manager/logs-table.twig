@@ -45,7 +45,7 @@
         <span class="mr-1 text-white phone-none">Logs: ({{ logsCount|e }})</span>
 
         {# FILTER FORM #}
-        <span class="mr-1 phone-only"></span>
+        <span class="mr-1 non-phone-only"></span>
         <div>
             <form method="get" action={{ path('app_manager_logs') }}>
                 <select name="filter" onchange="this.form.submit()" class="bg-neutral-800 text-white border border-gray-600 rounded">

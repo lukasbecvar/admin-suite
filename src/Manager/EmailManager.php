@@ -19,15 +19,18 @@ class EmailManager
     private LogManager $logManager;
     private MailerInterface $mailer;
     private ErrorManager $errorManager;
+    private DatabaseManager $databaseManager;
 
     public function __construct(
         LogManager $logManager,
         MailerInterface $mailer,
-        ErrorManager $errorManager
+        ErrorManager $errorManager,
+        DatabaseManager $databaseManager
     ) {
         $this->mailer = $mailer;
         $this->logManager = $logManager;
         $this->errorManager = $errorManager;
+        $this->databaseManager = $databaseManager;
     }
 
     /**
@@ -100,7 +103,9 @@ class EmailManager
             $this->mailer->send($email);
 
             // log email sending
-            $this->logManager->log('email-send', 'email sent to ' . $recipient . ' with subject: ' . $subject, 3);
+            if (!$this->databaseManager->isDatabaseDown()) {
+                $this->logManager->log('email-send', 'email sent to ' . $recipient . ' with subject: ' . $subject, 3);
+            }
         } catch (TransportExceptionInterface $e) {
             $this->errorManager->handleError(
                 message: 'email sending failed: ' . $e->getMessage(),

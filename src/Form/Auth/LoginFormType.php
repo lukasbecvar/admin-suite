@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 /**
  * Class LoginFormType
  *
- * The auth login form type
+ * The user auth login form
  *
  * @package App\Form\Auth
  */

@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 /**
  * Class UsernameChangeFormType
  *
- * The username change form type
+ * The username change form
  *
  * @package App\Form\AccountSettings
  */

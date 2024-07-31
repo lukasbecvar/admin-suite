@@ -6,14 +6,21 @@ use App\Entity\User;
 use App\Entity\Banned;
 use App\Manager\BanManager;
 use App\Manager\LogManager;
+use App\Manager\UserManager;
 use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
-use App\Manager\UserManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\BannedRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * Class BanManagerTest
+ *
+ * Test the BanManager class
+ *
+ * @package App\Tests\Manager
+ */
 class BanManagerTest extends TestCase
 {
     /** @var BanManager */

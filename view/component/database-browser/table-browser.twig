@@ -34,12 +34,14 @@
                             {% endfor %}
 
                             {# EDIT AND DELETE BUTTONS #}
-                            <th class="text-left px-2 py-2 border-b border-neutral-700 text-left">
-                                <i class="fa fa-edit" aria-hidden="true"></i>
-                            </th>
-                            <th class="text-left px-2 py-2 border-b border-neutral-700 text-left">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                            </th>
+                            {% if 'id' in tableData[0]|keys %}
+                                <th class="text-left px-2 py-2 border-b border-neutral-700 text-left">
+                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                </th>
+                                <th class="text-left px-2 py-2 border-b border-neutral-700 text-left">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -61,13 +63,6 @@
                                         <a href={{ path('app_manager_database_delete', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }} class="text-red-500 hover:text-red-400">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
-                                    </td>
-                                {% else %}
-                                    <td class="px-2 py-2 border-b border-neutral-700 text-left">
-                                        <i class="fa fa-ban" aria-hidden="true"></i>
-                                    </td>
-                                    <td class="px-2 py-2 border-b border-neutral-700 text-left">
-                                        <i class="fa fa-ban" aria-hidden="true"></i>
                                     </td>
                                 {% endif %}
                             </tr>

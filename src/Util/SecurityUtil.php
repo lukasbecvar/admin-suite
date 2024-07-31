@@ -42,9 +42,9 @@ class SecurityUtil
         $config = $this->appUtil->getHasherConfig();
 
         $options = [
-            'memory_cost' => $config['memory_cost'],
+            'threads' => $config['threads'],
             'time_cost' => $config['time_cost'],
-            'threads' => $config['threads']
+            'memory_cost' => $config['memory_cost']
         ];
 
         // generate hash

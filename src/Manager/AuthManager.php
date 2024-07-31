@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class AuthManager
  *
- * User authentication and authorization contains logic
+ * User authentication and authorization logic
  *
  * @package App\Manager
  */
@@ -358,9 +358,9 @@ class AuthManager
         }
 
         // update user data
-        $repo->setLastLoginTime(new \DateTime());
-        $repo->setIpAddress($this->visitorInfoUtil->getIP() ?? 'Unknown');
-        $repo->setUserAgent($this->visitorInfoUtil->getUserAgent() ?? 'Unknown');
+        $repo->setLastLoginTime(new \DateTime())
+            ->setIpAddress($this->visitorInfoUtil->getIP() ?? 'Unknown')
+            ->setUserAgent($this->visitorInfoUtil->getUserAgent() ?? 'Unknown');
 
         // flush updated user data
         try {
@@ -433,7 +433,9 @@ class AuthManager
         // check if user logged in
         if ($this->isUserLogedin()) {
             // init user
-            $user = $this->userManager->getUserRepository(['token' => $this->getLoggedUserToken()]);
+            $user = $this->userManager->getUserRepository([
+                'token' => $this->getLoggedUserToken()
+            ]);
 
             // check if repo found
             if ($user == null) {
@@ -469,7 +471,9 @@ class AuthManager
     public function resetUserPassword(string $username): ?string
     {
         /** @var \App\Entity\User $user */
-        $user = $this->userManager->getUserRepository(['username' => $username]);
+        $user = $this->userManager->getUserRepository([
+            'username' => $username
+        ]);
 
         // check if user exist
         if ($user != null) {
@@ -554,7 +558,7 @@ class AuthManager
         $this->logManager->log(
             name: 'authenticator',
             message: 'regenerate all users tokens',
-            level: 3
+            level: 1
         );
 
         // return process state output
@@ -609,8 +613,7 @@ class AuthManager
 
         // Check if $users is iterable
         if (!is_iterable($users)) {
-            // handle the case where $users is not iterable, maybe log an error
-            // or return an empty array if it's acceptable.
+            // handle the case where $users is not iterable.
             return $onlineVisitors;
         }
 

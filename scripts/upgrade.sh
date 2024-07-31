@@ -32,3 +32,6 @@ sudo chown -R www-data:www-data var/
 # start admin-suite services
 sudo systemctl start apache2
 sudo systemctl start admin-suite-monitoring
+
+# make initial request for reload cache
+curl -X GET https://admin-suite.becvar.xyz

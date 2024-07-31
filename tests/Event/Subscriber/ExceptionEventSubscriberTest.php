@@ -5,6 +5,7 @@ namespace App\Tests\Event\Subscriber;
 use App\Manager\LogManager;
 use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\TestCase;
+use App\Manager\DatabaseManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use App\Event\Subscriber\ExceptionEventSubscriber;
@@ -29,11 +30,21 @@ class ExceptionEventSubscriberTest extends TestCase
     /** @var ExceptionEventSubscriber */
     private ExceptionEventSubscriber $subscriber;
 
+    /** @var MockObject|DatabaseManager */
+    private MockObject|DatabaseManager $databaseManager;
+
     protected function setUp(): void
     {
         $this->logManager = $this->createMock(LogManager::class);
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->subscriber = new ExceptionEventSubscriber($this->logManager, $this->logger);
+        $this->databaseManager = $this->createMock(DatabaseManager::class);
+
+        // create event subscriber instance
+        $this->subscriber = new ExceptionEventSubscriber(
+            $this->logManager,
+            $this->logger,
+            $this->databaseManager
+        );
     }
 
     /**

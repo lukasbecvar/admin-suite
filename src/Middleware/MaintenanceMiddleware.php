@@ -23,8 +23,8 @@ class MaintenanceMiddleware
 
     public function __construct(
         AppUtil $appUtil,
-        LoggerInterface $loggerInterface,
-        ErrorManager $errorManager
+        ErrorManager $errorManager,
+        LoggerInterface $loggerInterface
     ) {
         $this->appUtil = $appUtil;
         $this->logger = $loggerInterface;

@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 /**
  * Class ProfilePicChangeFormType
  *
- * The profile picture change form type
+ * The user profile picture change form
  *
  * @package App\Form\AccountSettings
  */

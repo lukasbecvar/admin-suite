@@ -86,7 +86,12 @@ class UserManager
         $offset = ($page - 1) * $perPage;
 
         // get user repo
-        return $this->entityManager->getRepository(User::class)->findBy([], null, $perPage, $offset);
+        return $this->entityManager->getRepository(User::class)->findBy(
+            [],
+            null,
+            $perPage,
+            $offset
+        );
     }
 
     /**
@@ -201,7 +206,7 @@ class UserManager
                 $this->logManager->log(
                     name: 'user-manager',
                     message: 'update role (' . $role . ') for user: ' . $repo->getUsername(),
-                    level: 3
+                    level: 1
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
@@ -303,7 +308,7 @@ class UserManager
                 $this->logManager->log(
                     name: 'account-settings',
                     message: 'update username (' . $newUsername . ') for user: ' . $oldUsername,
-                    level: 3
+                    level: 1
                 );
             } catch (\Exception $e) {
                 $this->errorManager->handleError(

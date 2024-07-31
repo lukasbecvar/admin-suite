@@ -52,7 +52,11 @@ class MaintenanceMiddlewareTest extends TestCase
             ->method('isMaintenance')
             ->willReturn(true);
 
-        $middleware = new MaintenanceMiddleware($this->appUtilMock, $this->loggerMock, $this->errorManagerMock);
+        $middleware = new MaintenanceMiddleware(
+            $this->appUtilMock,
+            $this->errorManagerMock,
+            $this->loggerMock
+        );
 
         $event = $this->createMock(RequestEvent::class);
 
@@ -83,7 +87,11 @@ class MaintenanceMiddlewareTest extends TestCase
             ->method('isMaintenance')
             ->willReturn(false);
 
-        $middleware = new MaintenanceMiddleware($this->appUtilMock, $this->loggerMock, $this->errorManagerMock);
+        $middleware = new MaintenanceMiddleware(
+            $this->appUtilMock,
+            $this->errorManagerMock,
+            $this->loggerMock
+        );
 
         $event = $this->createMock(RequestEvent::class);
 

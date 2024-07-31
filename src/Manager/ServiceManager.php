@@ -288,7 +288,7 @@ class ServiceManager
         curl_close($ch);
 
         // determine if the site is online
-        $isOnline = ($httpCode >= 200);
+        $isOnline = ($httpCode >= Response::HTTP_OK);
 
         // return an array with the results
         return [

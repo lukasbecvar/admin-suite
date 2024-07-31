@@ -2,6 +2,7 @@
 
 namespace App\Controller\Component;
 
+use App\Util\AppUtil;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use App\Manager\ErrorManager;
@@ -23,24 +24,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class AccountSettingsController extends AbstractController
 {
+    private AppUtil $appUtil;
     private UserManager $userManager;
     private AuthManager $authManager;
     private ErrorManager $errorManager;
 
     public function __construct(
+        AppUtil $appUtil,
         UserManager $userManager,
         AuthManager $authManager,
         ErrorManager $errorManager
     ) {
+        $this->appUtil = $appUtil;
         $this->userManager = $userManager;
         $this->authManager = $authManager;
         $this->errorManager = $errorManager;
     }
 
     /**
-     * Render the account settings table
+     * Render the account settings page
      *
-     * @return Response
+     * @return Response The default account settings page
      */
     #[Route('/account/settings', methods:['GET'], name: 'app_account_settings_table')]
     public function accountSettingsTable(): Response
@@ -57,7 +61,7 @@ class AccountSettingsController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The response view
+     * @return Response The response view with the change profile picture form
      */
     #[Route('/account/settings/change/picture', methods:['GET', 'POST'], name: 'app_account_settings_change_picture')]
     public function accountSettingsChangePicture(Request $request): Response
@@ -74,8 +78,8 @@ class AccountSettingsController extends AbstractController
             // check if image is uploaded file instance
             if (!($image instanceof UploadedFile)) {
                 $this->errorManager->handleError(
-                    'error to get image data',
-                    Response::HTTP_BAD_REQUEST
+                    message: 'error to get image data',
+                    code: Response::HTTP_BAD_REQUEST
                 );
             } else {
                 // get image extension
@@ -103,8 +107,16 @@ class AccountSettingsController extends AbstractController
 
                         // redirect back to the account settings page
                         return $this->redirectToRoute('app_account_settings_table');
-                    } catch (\Exception) {
-                        $this->addFlash('error', 'An error occurred while changing the profile picture.');
+                    } catch (\Exception $e) {
+                        // handle change profile picture error
+                        if ($this->appUtil->isDevMode()) {
+                            $this->errorManager->handleError(
+                                message: 'change profile picture error: ' . $e->getMessage(),
+                                code: Response::HTTP_INTERNAL_SERVER_ERROR
+                            );
+                        } else {
+                            $this->addFlash('error', 'An error occurred while changing the profile picture.');
+                        }
                     }
                 }
             }
@@ -125,7 +137,7 @@ class AccountSettingsController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The response view
+     * @return Response The response view with the change username form
      */
     #[Route('/account/settings/change/username', methods:['GET', 'POST'], name: 'app_account_settings_change_username')]
     public function accountSettingsChangeUsername(Request $request): Response
@@ -136,7 +148,7 @@ class AccountSettingsController extends AbstractController
 
         // check if the form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var \App\Entity\User $data */
+            /** @var \App\Entity\User $data form input data */
             $data = $form->getData();
 
             // get new username
@@ -145,8 +157,8 @@ class AccountSettingsController extends AbstractController
             // check if the new username is empty
             if ($username == null) {
                 $this->errorManager->handleError(
-                    'error to get username from request data',
-                    Response::HTTP_BAD_REQUEST
+                    message: 'error to get username from request data',
+                    code: Response::HTTP_BAD_REQUEST
                 );
             } else {
                 // check if the username is already taken
@@ -162,8 +174,16 @@ class AccountSettingsController extends AbstractController
 
                         // redirect back to the account settings page
                         return $this->redirectToRoute('app_account_settings_table');
-                    } catch (\Exception) {
-                        $this->addFlash('error', 'An error occurred while changing the username.');
+                    } catch (\Exception $e) {
+                        // handle change username error
+                        if ($this->appUtil->isDevMode()) {
+                            $this->errorManager->handleError(
+                                message: 'change username error: ' . $e->getMessage(),
+                                code: Response::HTTP_INTERNAL_SERVER_ERROR
+                            );
+                        } else {
+                            $this->addFlash('error', 'An error occurred while changing the username.');
+                        }
                     }
                 }
             }
@@ -184,7 +204,7 @@ class AccountSettingsController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The response view
+     * @return Response The response view with the change password form
      */
     #[Route('/account/settings/change/password', methods:['GET', 'POST'], name: 'app_account_settings_change_password')]
     public function accountSettingsChangePassword(Request $request): Response
@@ -195,7 +215,7 @@ class AccountSettingsController extends AbstractController
 
         // check if the form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var \App\Entity\User $data */
+            /** @var \App\Entity\User $data form input data */
             $data = $form->getData();
 
             // get new password
@@ -204,8 +224,8 @@ class AccountSettingsController extends AbstractController
             // check if the new password is empty
             if ($password == null) {
                 $this->errorManager->handleError(
-                    message:'error to get password from request data',
-                    code:Response::HTTP_BAD_REQUEST
+                    message: 'error to get password from request data',
+                    code: Response::HTTP_BAD_REQUEST
                 );
             } else {
                 // change the password
@@ -217,8 +237,16 @@ class AccountSettingsController extends AbstractController
 
                     // redirect back to the account settings page
                     return $this->redirectToRoute('app_account_settings_table');
-                } catch (\Exception) {
-                    $this->addFlash('error', 'An error occurred while changing the password.');
+                } catch (\Exception $e) {
+                    // handle change password error
+                    if ($this->appUtil->isDevMode()) {
+                        $this->errorManager->handleError(
+                            message: 'change password error: ' . $e->getMessage(),
+                            code: Response::HTTP_INTERNAL_SERVER_ERROR
+                        );
+                    } else {
+                        $this->addFlash('error', 'An error occurred while changing the password.');
+                    }
                 }
             }
         }

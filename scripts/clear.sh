@@ -3,7 +3,7 @@
 # clean app cache
 php bin/console cache:clear
 
-# delete migrations
+# delete old migrations
 rm -rf migrations/
 
 # delete composer files

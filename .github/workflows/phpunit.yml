@@ -49,4 +49,4 @@ jobs:
 
       # run PHPUnit tests
       - name: Run PHPUnit tests
-        run: php bin/phpunit
+        run: php ./bin/phpunit

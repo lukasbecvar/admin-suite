@@ -21,12 +21,8 @@ class AppErrorException extends HttpException
      * @param \Throwable|null $previous The previous exception
      * @param array<string> $headers The headers
      */
-    public function __construct(
-        int $code,
-        string $message,
-        \Throwable $previous = null,
-        array $headers = []
-    ) {
+    public function __construct(int $code, string $message, \Throwable $previous = null, array $headers = [])
+    {
         parent::__construct($code, $message, $previous, $headers);
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Controller\Auth;
 
+use App\Util\AppUtil;
 use App\Manager\UserManager;
 use App\Manager\AuthManager;
+use App\Manager\ErrorManager;
 use App\Form\Auth\RegistrationFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,13 +21,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class RegisterController extends AbstractController
 {
+    private AppUtil $appUtil;
     private AuthManager $authManager;
     private UserManager $userManager;
+    private ErrorManager $errorManager;
 
-    public function __construct(AuthManager $authManager, UserManager $userManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        AuthManager $authManager,
+        UserManager $userManager,
+        ErrorManager $errorManager
+    ) {
+        $this->appUtil = $appUtil;
         $this->authManager = $authManager;
         $this->userManager = $userManager;
+        $this->errorManager = $errorManager;
     }
 
     /**
@@ -54,8 +64,7 @@ class RegisterController extends AbstractController
 
         // check if the form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
-            // get the form data
-            /** @var \App\Entity\User $data */
+            /** @var \App\Entity\User $data get the form data */
             $data = $form->getData();
 
             // get the username and password
@@ -77,8 +86,16 @@ class RegisterController extends AbstractController
 
                     // redirect to the login page
                     return $this->redirectToRoute('app_dashboard');
-                } catch (\Exception) {
-                    $this->addFlash('error', 'An error occurred while registering the new user.');
+                } catch (\Exception $e) {
+                    // handle register error
+                    if ($this->appUtil->isDevMode()) {
+                        $this->errorManager->handleError(
+                            message: 'register error: ' . $e->getMessage(),
+                            code: Response::HTTP_INTERNAL_SERVER_ERROR
+                        );
+                    } else {
+                        $this->addFlash('error', 'An error occurred while registering the new user.');
+                    }
                 }
             }
         }

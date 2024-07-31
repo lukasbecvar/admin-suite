@@ -1,4 +1,4 @@
-/* admin-suite: users manager component (handle delete, role update, ban, unban popup functionality) */
+/* admin-suite: users manager component (handle delete, role update, ban, unban popup) */
 document.addEventListener('DOMContentLoaded', function() {
     // elements related to delete functionality
     var deleteButtons = document.querySelectorAll('.delete-button')

@@ -115,11 +115,11 @@ class TodoManager
 
         try {
             // set todo properties
-            $todo->setTodoText($todoText);
-            $todo->setAddedTime(new \DateTime());
-            $todo->setCompletedTime(null);
-            $todo->setStatus('open');
-            $todo->setUserId($this->authManager->getLoggedUserId());
+            $todo->setTodoText($todoText)
+                ->setAddedTime(new \DateTime())
+                ->setCompletedTime(null)
+                ->setStatus('open')
+                ->setUserId($this->authManager->getLoggedUserId());
 
             // save the todo entity
             $this->entityManagerInterface->persist($todo);

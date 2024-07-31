@@ -35,10 +35,12 @@ class ServiceMonitoringFixtures extends Fixture
 
         foreach ($data as [$serviceName, $message, $status, $lastUpdateTime]) {
             $serviceMonitoring = new ServiceMonitoring();
-            $serviceMonitoring->setServiceName($serviceName);
-            $serviceMonitoring->setMessage($message);
-            $serviceMonitoring->setStatus($status);
-            $serviceMonitoring->setLastUpdateTime(new \DateTime($lastUpdateTime));
+
+            // set data
+            $serviceMonitoring->setServiceName($serviceName)
+                ->setMessage($message)
+                ->setStatus($status)
+                ->setLastUpdateTime(new \DateTime($lastUpdateTime));
 
             // persist data
             $manager->persist($serviceMonitoring);
