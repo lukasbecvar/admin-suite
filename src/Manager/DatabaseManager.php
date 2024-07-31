@@ -685,6 +685,17 @@ class DatabaseManager
 
         $dump = '';
 
+        // dump header
+        $dump .= '-- Database: ' . $dbName . " dumped at: " . date('Y-m-d H:i:s') . " with admin-suite\n\n";
+
+        // set character
+        $dump .= 'SET NAMES utf8mb4;' . "\n\n";
+
+        // drop and create database
+        $dump .= 'DROP DATABASE IF EXISTS ' . $dbName . ";\n";
+        $dump .= 'CREATE DATABASE ' . $dbName . ";\n";
+        $dump .= 'USE ' . $dbName . ";\n\n";
+
         try {
             foreach ($tables as $table) {
                 /** @var string $tableName */

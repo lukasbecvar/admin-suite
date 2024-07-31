@@ -76,7 +76,7 @@ class ServerUtil
         // validate the number of cores obtained
         if ($coreNums > 0) {
             // calculate CPU usage in percentage
-            $load = round($loads[0] / $coreNums * 100, 2);
+            $load = round(min($loads[0] / $coreNums * 100, 100), 2);
         }
 
         return $load;
