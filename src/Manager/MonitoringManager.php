@@ -159,29 +159,23 @@ class MonitoringManager
 
         // check if status changed
         if ($lastStatus != $currentStatus) {
-            // check if last status is pending
-            if ($lastStatus == 'pending') {
-                // send monitoring status email
-                $this->emailManager->sendMonitoringStatusEmail(
-                    $this->appUtil->getAdminContactEmail(),
-                    $serviceName,
-                    $message,
-                    $currentStatus
-                );
+            // send monitoring status email
+            $this->emailManager->sendMonitoringStatusEmail(
+                $this->appUtil->getAdminContactEmail(),
+                $serviceName,
+                $message,
+                $currentStatus
+            );
 
-                // log status chnage
-                $this->logManager->log(
-                    name: 'monitoring',
-                    message: $serviceName . ' status: ' . $currentStatus . ' msg: ' . $message,
-                    level: 1
-                );
+            // log status chnage
+            $this->logManager->log(
+                name: 'monitoring',
+                message: $serviceName . ' status: ' . $currentStatus . ' msg: ' . $message,
+                level: 1
+            );
 
-                // update monitoring status
-                $this->setMonitoringStatus($serviceName, $message, $currentStatus);
-            } else {
-                // set pending status
-                $this->setMonitoringStatus($serviceName, $message, 'pending');
-            }
+            // update monitoring status
+            $this->setMonitoringStatus($serviceName, $message, $currentStatus);
         }
     }
 
@@ -350,10 +344,10 @@ class MonitoringManager
                             $this->handleMonitoringStatus(
                                 serviceName: $service['service_name'],
                                 currentStatus: 'not-responding',
-                                message: $service['display_name'] . ' is not responding in ' . $service['max_response_time']
+                                message: $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . 'ms'
                             );
                             $io->writeln(
-                                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . '</fg=red>'
+                                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . ' ms</fg=red>'
                             );
 
                         // status ok
