@@ -32,26 +32,34 @@
             display: inline-block;
             padding-bottom: 10px;
             color: white;
+            margin: 0;
         }
         h2::after {
             content: '';
             position: absolute;
             left: 50%;
             bottom: 0;
-            width: 100%;
+            width: 50%;
             height: 3px;
             background-color: #ff5555;
             transform: translateX(-50%);
         }
         .content {
-            color: white;
+            color: #ffffff;
+            background-color: #333;
+            padding: 15px;
+            border-radius: 5px;
             margin-top: 20px;
+            word-wrap: break-word;
         }
         .footer {
             margin-top: 20px;
             text-align: center;
             font-size: 0.9em;
             color: #aaaaaa;
+        }
+        .footer p {
+            margin: 0;
         }
     </style>
 </head>
@@ -64,7 +72,7 @@
             {{ message|e }}
         </div>
         <div class="footer">
-            <p>({{ time|e }}) Admin Suite.</p>
+            <p>&copy; {{ time|e }} Admin Suite. All rights reserved.</p>
         </div>
     </div>
 </body>

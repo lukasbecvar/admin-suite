@@ -32,6 +32,7 @@
             display: inline-block;
             padding-bottom: 10px;
             color: white;
+            margin: 0;
         }
         h2::after {
             content: '';
@@ -48,10 +49,17 @@
         }
         .info-item {
             margin-bottom: 10px;
-            color: white;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
         }
         .info-item span {
             font-weight: bold;
+            color: #ffa9a9;
         }
         .alert {
             margin-top: 20px;
@@ -59,7 +67,7 @@
             padding: 15px;
             border-left: 4px solid #fd4d4d;
             border-radius: 4px;
-            color: white;
+            color: #ffffff;
         }
         .footer {
             margin-top: 20px;
@@ -76,16 +84,20 @@
         </div>
         <div class="event-info">
             <div class="info-item">
-                <span>Service name:</span> {{ serviceName|e }}
+                <span>Service name:</span>
+                <div>{{ serviceName|e }}</div>
             </div>
             <div class="info-item">
-                <span>Alert:</span> {{ monitoringMesssage|e }}
+                <span>Alert:</span>
+                <div>{{ monitoringMesssage|e }}</div>
             </div>
             <div class="info-item">
-                <span>Status:</span> {{ monitoringStatus|e }}
+                <span>Status:</span>
+                <div>{{ monitoringStatus|e }}</div>
             </div>
             <div class="info-item">
-                <span>Time:</span> {{ time|e }}
+                <span>Time:</span>
+                <div>{{ time|e }}</div>
             </div>
         </div>
         <div class="alert">
