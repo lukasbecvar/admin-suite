@@ -53,7 +53,7 @@ class LinuxCheckMiddleware
                     code: Response::HTTP_NOT_IMPLEMENTED
                 );
             } else {
-                $this->logger->error('this system is only for linux');
+                $this->logger->error('this system can only be used on linux');
             }
 
             // render the maintenance template

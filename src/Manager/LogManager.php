@@ -81,8 +81,8 @@ class LogManager
         }
 
         // get user data
-        $userAgent = (string) $this->visitorInfoUtil->getUserAgent();
         $ipAddress = $this->visitorInfoUtil->getIP();
+        $userAgent = (string) $this->visitorInfoUtil->getUserAgent();
 
         // check if the ip address is null
         if ($ipAddress == null) {
@@ -455,7 +455,7 @@ class LogManager
         }
 
         try {
-            /** @var array<string,array<string,string>> $exceptionFiles */
+            /** @var array<string,array<string,string>> $exceptionFiles list of exception files */
             $exceptionFiles = $this->jsonUtil->getJson($configFile);
 
             if (!is_array($exceptionFiles)) {
@@ -493,7 +493,7 @@ class LogManager
      */
     public function deleteExceptionFile(string $exceptionFile): void
     {
-        /** @var array<string,array<string,string>> $exceptionFiles */
+        /** @var array<string,array<string,string>> $exceptionFiles list of exception files */
         $exceptionFiles = $this->getExceptionFiles();
 
         try {
@@ -507,7 +507,11 @@ class LogManager
                     unlink($exceptionFile);
 
                     // log action
-                    $this->log('log-manager', 'exception file deleted: ' . $exceptionFile, level: 1);
+                    $this->log(
+                        name: 'log-manager',
+                        message: 'exception file deleted: ' . $exceptionFile,
+                        level: 1
+                    );
                 }
             }
         } catch (\Exception $e) {

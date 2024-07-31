@@ -1,5 +1,4 @@
 framework:
-    # filesystem cache adapter
     cache:
         app: cache.adapter.filesystem
         system: cache.adapter.system

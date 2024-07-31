@@ -760,7 +760,7 @@ class DatabaseManager
 
             // execute multiple queries
             $result = '';
-            $queries = explode(';', $query); // split the query by semicolon
+            $queries = explode(';', $query); // split the query
 
             foreach ($queries as $q) {
                 $q = trim($q);

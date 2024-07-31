@@ -14,11 +14,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class MonitoringProcessCommand
  *
- * Command to monitoring services process (run in infinite loop as service)
+ * Command to monitor services process (run in infinite loop as a service)
  *
  * @package App\Command\Process
  */
-#[AsCommand(name: 'app:process:monitoring', description: 'Main service monitoring process loop')]
+#[AsCommand(name: 'app:process:monitoring', description: 'Service monitoring process loop')]
 class MonitoringProcessCommand extends Command
 {
     private AppUtil $appUtil;
@@ -37,7 +37,7 @@ class MonitoringProcessCommand extends Command
     }
 
     /**
-     * Executes the command to monitoring services
+     * Executes the command to monitoring services process
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
@@ -48,46 +48,55 @@ class MonitoringProcessCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        // print waiting message
-        $io->writeln('<fg=yellow>Waiting for 30 seconds to ensure that the database is up...</>');
-
-        // wait 30 seconds to ensure that the database is up
-        sleep(30);
-
-        // fix get CLI ip address
+        // set up environment for CLI
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
-        // database down flag
-        $databaseDown = false;
+        // handle monitoring
+        $this->monitor($io);
+
+        return Command::SUCCESS;
+    }
+
+    /**
+     * Monitor the services
+     *
+     * @param SymfonyStyle $io The io interface
+     *
+     * @return void
+     */
+    private function monitor(SymfonyStyle $io): void
+    {
+        $dbDownFlag = false;
 
         /** @phpstan-ignore-next-line (infinite monitoring loop) */
         while (true) {
-            // check if database is down
-            $dbState = $this->databaseManager->isDatabaseDown();
-
             // check database state
-            if ($dbState) {
-                // handle database down message
-                $this->monitoringManager->handleDatabaseDown($io, $databaseDown);
+            $databaseDown = $this->databaseManager->isDatabaseDown();
 
-                // set database down flag
-                $databaseDown = true;
+            // check if database down handled before
+            if ($databaseDown) {
+                if (!$dbDownFlag) {
+                    // handle database down situation
+                    $this->monitoringManager->handleDatabaseDown($io, $dbDownFlag);
+                    $dbDownFlag = true;
+                }
+
+                // sleep to ensure that the database is up
+                $io->writeln('<fg=yellow>Waiting to ensure that the database is up...</>');
+                sleep(10);
             } else {
-                // init monitroing process
+                if ($dbDownFlag) {
+                    // reset the flag if the database is back up
+                    $dbDownFlag = false;
+                }
+
+                // initialize monitoring process
                 $this->monitoringManager->monitorInit($io);
 
-                // reset database down flag after resolve database status
-                if ($databaseDown) {
-                    $databaseDown = false;
-                }
+                // sleep for the monitoring interval
+                sleep($this->appUtil->getMonitoringInterval() * 60);
             }
-
-            // sleep monitoring interval
-            sleep($this->appUtil->getMonitoringInterval() * 60);
         }
-
-        /** @phpstan-ignore-next-line */
-        return Command::SUCCESS;
     }
 }

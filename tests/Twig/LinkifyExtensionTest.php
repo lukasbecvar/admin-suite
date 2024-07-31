@@ -31,11 +31,11 @@ class LinkifyExtensionTest extends TestCase
         return [
             [
                 'Check this out: http://example.com',
-                'Check this out: <a href="http://example.com" class="linkify" target="_blank">http://example.com</a>'
+                'Check this out: <a href="http://example.com" class="link" target="_blank">http://example.com</a>'
             ],
             [
                 'Visit https://example.com for more info.',
-                'Visit <a href="https://example.com" class="linkify" target="_blank">https://example.com</a> for more info.'
+                'Visit <a href="https://example.com" class="link" target="_blank">https://example.com</a> for more info.'
             ],
             [
                 'No links here!',
@@ -43,7 +43,7 @@ class LinkifyExtensionTest extends TestCase
             ],
             [
                 'Multiple links: http://example.com and https://example.org',
-                'Multiple links: <a href="http://example.com" class="linkify" target="_blank">http://example.com</a> and <a href="https://example.org" class="linkify" target="_blank">https://example.org</a>'
+                'Multiple links: <a href="http://example.com" class="link" target="_blank">http://example.com</a> and <a href="https://example.org" class="link" target="_blank">https://example.org</a>'
             ],
             [
                 '',

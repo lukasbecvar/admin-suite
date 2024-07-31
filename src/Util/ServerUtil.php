@@ -54,30 +54,29 @@ class ServerUtil
      */
     public function getCpuUsage(): float
     {
-        $load = 100;
+        $load = 0;
         $loads = sys_getloadavg();
 
-        // check if sys_getloadavg() returned an array
+        // check if sys_getloadavg() returned an array and has at least one value
         if (!is_array($loads) || count($loads) < 1) {
             return $load; // return default value if load average is unavailable
         }
 
-        // fetch number of CPU cores
-        $cpuInfo = file_get_contents('/proc/cpuinfo');
-        if ($cpuInfo === false) {
-            return $load; // return default value if unable to read cpuinfo
+        // get number of CPU cores
+        $coreNums = shell_exec('nproc');
+
+        // check if nproc command returned a valid number of cores
+        if (!$coreNums) {
+            return 0;
         }
 
-        $coreNums = substr_count($cpuInfo, 'processor');
+        // fetch number of CPU cores using nproc command
+        $coreNums = (int) trim($coreNums);
 
-        // calculate CPU usage
+        // validate the number of cores obtained
         if ($coreNums > 0) {
+            // calculate CPU usage in percentage
             $load = round($loads[0] / $coreNums * 100, 2);
-        }
-
-        // overload fix
-        if ($load > 100) {
-            $load = 100;
         }
 
         return $load;
@@ -414,24 +413,5 @@ class ServerUtil
         }
 
         return $processes;
-    }
-
-    /**
-     * Executes a command
-     *
-     * @param string $command The command to execute
-     *
-     * @return void
-     */
-    public function executeCommand($command): void
-    {
-        try {
-            exec($command);
-        } catch (\Exception $e) {
-            $this->errorManager->handleError(
-                message: 'error to executed command: ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
     }
 }

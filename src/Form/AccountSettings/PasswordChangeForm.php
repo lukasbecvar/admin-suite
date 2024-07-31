@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 /**
  * Class PasswordChangeForm
  *
- * The password change form type
+ * The user password change form
  *
  * @package App\Form\AccountSettings
  */

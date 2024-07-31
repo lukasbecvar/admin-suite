@@ -74,6 +74,12 @@ class UsersManagerController extends AbstractController
         // get online users list
         $onlineList = $this->authManager->getOnlineUsersList();
 
+        // get admin suite database name
+        $mainDatabase = $this->appUtil->getMainDatabaseName();
+
+        // get current visitor ip (for highlight current user)
+        $currentVisitorIp = $this->visitorInfoUtil->getIp();
+
         // get users data from database based on filter
         switch ($filter) {
             case 'online':
@@ -98,7 +104,7 @@ class UsersManagerController extends AbstractController
             'visitorInfoUtil' => $this->visitorInfoUtil,
 
             // database name
-            'mainDatabase' => $this->appUtil->getMainDatabaseName(),
+            'mainDatabase' => $mainDatabase,
 
             // users manager data
             'users' => $usersData,
@@ -106,7 +112,7 @@ class UsersManagerController extends AbstractController
 
             // filter helpers
             'filter' => $filter,
-            'currentIp' => $this->visitorInfoUtil->getIp(),
+            'currentIp' => $currentVisitorIp,
 
             // pagination data
             'currentPage' => $page,
@@ -197,8 +203,7 @@ class UsersManagerController extends AbstractController
 
         // check if the form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
-            // get the form data
-            /** @var \App\Entity\User $data */
+            /** @var \App\Entity\User $data get the form data */
             $data = $form->getData();
 
             // get the username and password
@@ -217,8 +222,15 @@ class UsersManagerController extends AbstractController
                     return $this->redirectToRoute('app_manager_users', [
                         'page' => $this->appUtil->calculateMaxPages($usersCount, $pageLimit)
                     ]);
-                } catch (\Exception) {
-                    $this->addFlash('error', 'An error occurred while registering the new user.');
+                } catch (\Exception $e) {
+                    if ($this->appUtil->isDevMode()) {
+                        $this->errorManager->handleError(
+                            message: 'create user error: ' . $e->getMessage(),
+                            code: Response::HTTP_INTERNAL_SERVER_ERROR
+                        );
+                    } else {
+                        $this->addFlash('error', 'An error occurred while registering the new user.');
+                    }
                 }
             }
         }
@@ -397,6 +409,14 @@ class UsersManagerController extends AbstractController
         if ($status != 'active' && $status !== 'inactive') {
             $this->errorManager->handleError(
                 message: 'invalid request user "status" parameter accept only active or inactive',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check if user id is self ban
+        if ($userId == $this->authManager->getLoggedUserId()) {
+            $this->errorManager->handleError(
+                message: 'you cannot ban yourself',
                 code: Response::HTTP_BAD_REQUEST
             );
         }

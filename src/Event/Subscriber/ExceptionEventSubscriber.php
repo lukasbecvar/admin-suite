@@ -4,6 +4,7 @@ namespace App\Event\Subscriber;
 
 use App\Manager\LogManager;
 use Psr\Log\LoggerInterface;
+use App\Manager\DatabaseManager;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -19,11 +20,16 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
 {
     private LogManager $logManager;
     private LoggerInterface $logger;
+    private DatabaseManager $databaseManager;
 
-    public function __construct(LogManager $logManager, LoggerInterface $logger)
-    {
+    public function __construct(
+        LogManager $logManager,
+        LoggerInterface $logger,
+        DatabaseManager $databaseManager
+    ) {
         $this->logger = $logger;
         $this->logManager = $logManager;
+        $this->databaseManager = $databaseManager;
     }
 
     /**
@@ -60,8 +66,10 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
 
         // check if the event can be logged in database
         if ($this->canBeEventLogged($message)) {
-            // log the exception
-            $this->logManager->log('exception', $message, 1);
+            // log the exception to admin-suite database
+            if (!$this->databaseManager->isDatabaseDown()) {
+                $this->logManager->log('exception', $message, 1);
+            }
         }
 
         // log the error message with monolog (file storage)
@@ -81,6 +89,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
         $blockedErrorPatterns = [
             'log-error:',
             'Unknown database',
+            'Connection refused',
             'database connection',
             'Base table or view not found',
             'An exception occurred in the driver'

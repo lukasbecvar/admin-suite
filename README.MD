@@ -9,7 +9,6 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-- [ ] Internal chat
 - [ ] File explorer
 - [ ] Terminal component
 - [ ] Doc/About & download page (github pages)
@@ -41,7 +40,7 @@ Installation is very simple like any other PHP project.
 
 ## Configuration
 * Configure your package-requitements.json & services.json in root file (for example use config/suite files)
-* Create systemd or screen service for monitoring process (console command infinite loop)
+* Create systemd or screen service for monitoring process (console command infinite loop) ([systemd-config](https://github.com/lordbecvold/admin-suite/blob/main/_docker/configs/systemd.service))
 * You can edit the config files directly in config/suite but it is better to create your own in the project root because these files will be loaded primarily and ignored by git when using the pull for update
 
 ## Primary use

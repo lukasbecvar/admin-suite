@@ -57,9 +57,9 @@ class ActionRunnerController extends AbstractController
         }
 
         // get request parameters
-        $service = (string) $request->query->get('service', null);
         $action = (string) $request->query->get('action', null);
         $referer = (string) $request->query->get('referer', null);
+        $service = (string) $request->query->get('service', null);
 
         // check if request parameters are null
         if ($referer == null || $service == null || $action == null) {

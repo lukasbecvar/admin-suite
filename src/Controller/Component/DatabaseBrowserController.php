@@ -80,9 +80,9 @@ class DatabaseBrowserController extends AbstractController
             'userData' => $this->authManager->getLoggedUserRepository(),
 
             // database browser data
-            'databaseName' => $databaseName,
+            'tables' => $tables,
             'databases' => $databases,
-            'tables' => $tables
+            'databaseName' => $databaseName
         ]);
     }
 
@@ -138,8 +138,8 @@ class DatabaseBrowserController extends AbstractController
             'limitPerPage' => $limitPerPage,
 
             // table data
-            'tableDataCount' => $tableDataCount,
-            'tableData' => $tableData
+            'tableData' => $tableData,
+            'tableDataCount' => $tableDataCount
         ]);
     }
 
@@ -261,13 +261,13 @@ class DatabaseBrowserController extends AbstractController
             'userData' => $this->authManager->getLoggedUserRepository(),
 
             // filter data
-            'databaseName' => $databaseName,
             'tableName' => $tableName,
+            'databaseName' => $databaseName,
 
             // form data
-            'formData' => $formData,
+            'errors' => $errors,
             'columns' => $columns,
-            'errors' => $errors
+            'formData' => $formData
         ]);
     }
 
@@ -386,7 +386,7 @@ class DatabaseBrowserController extends AbstractController
                     'database' => $databaseName,
                     'table' => $tableName,
                     'page' => $page
-                ], Response::HTTP_FOUND);
+                ]);
             }
         }
 
@@ -396,15 +396,15 @@ class DatabaseBrowserController extends AbstractController
             'userData' => $this->authManager->getLoggedUserRepository(),
 
             // filter data
-            'databaseName' => $databaseName,
-            'tableName' => $tableName,
-            'page' => $page,
             'id' => $id,
+            'page' => $page,
+            'tableName' => $tableName,
+            'databaseName' => $databaseName,
 
             // form data
-            'formData' => $formData,
+            'errors' => $errors,
             'columns' => $columns,
-            'errors' => $errors
+            'formData' => $formData
         ]);
     }
 
@@ -461,10 +461,10 @@ class DatabaseBrowserController extends AbstractController
 
         // redirect to table browser
         return $this->redirectToRoute('app_manager_database_table_browser', [
-            'database' => $databaseName,
+            'page' => $page,
             'table' => $tableName,
-            'page' => $page
-        ], Response::HTTP_FOUND);
+            'database' => $databaseName
+        ]);
     }
 
     /**
@@ -523,10 +523,10 @@ class DatabaseBrowserController extends AbstractController
 
         // redirect to table browser
         return $this->redirectToRoute('app_manager_database_table_browser', [
-            'database' => $databaseName,
+            'page' => 1,
             'table' => $tableName,
-            'page' => 1
-        ], Response::HTTP_FOUND);
+            'database' => $databaseName
+        ]);
     }
 
     /**
@@ -548,9 +548,9 @@ class DatabaseBrowserController extends AbstractController
         }
 
         // get request parameters
+        $plain = (string) $request->query->get('plain', 'no');
         $select = (string) $request->query->get('select', 'yes');
         $databaseName = (string) $request->query->get('database');
-        $plain = (string) $request->query->get('plain', 'no');
 
         // check if dump mode is select
         if ($select === 'yes') {
@@ -630,7 +630,7 @@ class DatabaseBrowserController extends AbstractController
 
         // check if form is submitted
         if ($queryForm->isSubmitted() && $queryForm->isValid()) {
-            /** @var string $query */
+            /** @var string $query sql query input */
             $query = $queryForm->get('query')->getData();
 
             // execute query
@@ -642,8 +642,8 @@ class DatabaseBrowserController extends AbstractController
             'userData' => $this->authManager->getLoggedUserRepository(),
 
             // query console form
-            'queryForm' => $queryForm->createView(),
-            'output' => $output
+            'output' => $output,
+            'queryForm' => $queryForm->createView()
         ]);
     }
 }

@@ -6,6 +6,7 @@ use App\Manager\LogManager;
 use App\Manager\EmailManager;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
+use App\Manager\DatabaseManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Mailer\MailerInterface;
 
@@ -27,6 +28,9 @@ class EmailManagerTest extends TestCase
     /** @var ErrorManager|MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
+    /** @var DatabaseManager|MockObject */
+    private DatabaseManager|MockObject $databaseManager;
+
     /**
      * Sets up the mock objects before each test
      *
@@ -37,6 +41,7 @@ class EmailManagerTest extends TestCase
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->mailerMock = $this->createMock(MailerInterface::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
+        $this->databaseManager = $this->createMock(DatabaseManager::class);
     }
 
     /**
@@ -63,7 +68,12 @@ class EmailManagerTest extends TestCase
         $this->mailerMock->expects($this->never())->method('send');
 
         // create email manager
-        $emailManager = new EmailManager($this->logManagerMock, $this->mailerMock, $this->errorManagerMock);
+        $emailManager = new EmailManager(
+            $this->logManagerMock,
+            $this->mailerMock,
+            $this->errorManagerMock,
+            $this->databaseManager
+        );
 
         // call method
         $emailManager->sendEmail($recipient, $subject, $context);
@@ -98,7 +108,12 @@ class EmailManagerTest extends TestCase
         $this->errorManagerMock->expects($this->once())->method('handleError');
 
         // create email manager
-        $emailManager = new EmailManager($this->logManagerMock, $this->mailerMock, $this->errorManagerMock);
+        $emailManager = new EmailManager(
+            $this->logManagerMock,
+            $this->mailerMock,
+            $this->errorManagerMock,
+            $this->databaseManager
+        );
 
         // call method
         $emailManager->sendEmail($recipient, $subject, $context);

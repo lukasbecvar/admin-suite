@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class LogsManagerController
  *
- * Controller to manage or display of logs
+ * Controller to manage or display logs
  *
  * @package App\Controller\Component
  */
@@ -46,7 +46,7 @@ class LogsManagerController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The response object containing the rendered view
+     * @return Response The logs table view
      */
     #[Route('/manager/logs', methods:['GET'], name: 'app_manager_logs')]
     public function logsTable(Request $request): Response
@@ -60,6 +60,15 @@ class LogsManagerController extends AbstractController
         // get user id from query param
         $userId = $request->query->get('user_id', '0');
 
+        // get page filters
+        $limitPerPage = $this->appUtil->getPageLimiter();
+        $mainDatabase = $this->appUtil->getMainDatabaseName();
+
+        // get logs data
+        $isAntiLogEnabled = $this->logManager->isAntiLogEnabled();
+        $logsCount = $this->logManager->getLogsCountWhereStatus($filter, (int) $userId);
+        $logs = $this->logManager->getLogsWhereStatus($filter, (int) $userId, (int) $page);
+
         // return logs table view
         return $this->render('component/log-manager/logs-table.twig', [
             'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
@@ -71,20 +80,20 @@ class LogsManagerController extends AbstractController
             'visitorInfoUtil' => $this->visitorInfoUtil,
 
             // database name
-            'mainDatabase' => $this->appUtil->getMainDatabaseName(),
+            'mainDatabase' => $mainDatabase,
 
             // logs data
-            'logsCount' => $this->logManager->getLogsCountWhereStatus($filter, (int) $userId),
-            'logs' => $this->logManager->getLogsWhereStatus($filter, (int) $userId, (int) $page),
+            'logs' => $logs,
+            'logsCount' => $logsCount,
 
             // anti log data
-            'antiLogEnabled' => $this->logManager->isAntiLogEnabled(),
+            'antiLogEnabled' =>  $isAntiLogEnabled,
 
             // filter helpers
+            'filter' => $filter,
             'userId' => $userId,
             'currentPage' => (int) $page,
-            'limitPerPage' => $this->appUtil->getPageLimiter(),
-            'filter' => $filter,
+            'limitPerPage' => $limitPerPage
         ]);
     }
 
@@ -93,7 +102,7 @@ class LogsManagerController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The response containing the rendered template
+     * @return Response The system log view
      */
     #[Route('/manager/logs/system', methods:['GET'], name: 'app_manager_logs_system')]
     public function systemLogsTable(Request $request): Response
@@ -139,7 +148,9 @@ class LogsManagerController extends AbstractController
     /**
      * Fetches and displays the contents of the exception log
      *
-     * @return Response The rendered template containing the log contents
+     * @param Request $request The request object
+     *
+     * @return Response The exception log view
      */
     #[Route('/manager/logs/exception/files', methods:['GET'], name: 'app_manager_logs_exception_files')]
     public function exceptionFiles(Request $request): Response
@@ -189,8 +200,8 @@ class LogsManagerController extends AbstractController
             'exceptionFiles' => $exceptionFiles,
 
             // log file content
-            'exceptionContent' => $exceptionContent,
-            'logName' => $exceptionFile
+            'logName' => $exceptionFile,
+            'exceptionContent' => $exceptionContent
         ]);
     }
 
@@ -199,7 +210,7 @@ class LogsManagerController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The response containing the rendered template
+     * @return Response The redirect response
      */
     #[Route('/manager/logs/exception/delete', methods:['GET'], name: 'app_manager_logs_exception_delete')]
     public function deleteExceptionFile(Request $request): Response

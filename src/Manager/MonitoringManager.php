@@ -125,7 +125,7 @@ class MonitoringManager
     public function getMonitoringStatus(string $serviceName): ?string
     {
         try {
-            /** @var \App\Entity\ServiceMonitoring $repo */
+            /** @var \App\Entity\ServiceMonitoring $repo the monitored service repository */
             $repo = $this->getServiceMonitoringRepository(['service_name' => $serviceName]);
 
             // check if repository is found
@@ -173,7 +173,7 @@ class MonitoringManager
                 $this->logManager->log(
                     name: 'monitoring',
                     message: $serviceName . ' status: ' . $currentStatus . ' msg: ' . $message,
-                    level: 2
+                    level: 1
                 );
 
                 // update monitoring status

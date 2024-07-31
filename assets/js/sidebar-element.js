@@ -1,5 +1,5 @@
 /* admin-suite: sidebar element script */
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', function() {
     // get elements
     const sidebar = document.getElementById('sidebar')
     const mainContent = document.getElementById('main-content')
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // handle swipe gestures
     function handleSwipeGesture() {
-        const swipeThreshold = 100
+        const swipeThreshold = 80
         if (!hasHorizontalOverflow() || hasHorizontalOverflowAtStart()) {
             if (isHorizontalSwipe) {
                 if (touchEndX - touchStartX > swipeThreshold) {
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // setup swipe detection for an element
     function setupSwipeDetection(element) {
-        element.addEventListener('touchstart', (e) => {
+        element.addEventListener('touchstart', function(e) {
             touchStartX = e.changedTouches[0].screenX
             touchStartY = e.changedTouches[0].screenY
             touchEndX = touchStartX
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             isHorizontalSwipe = true
         })
 
-        element.addEventListener('touchmove', (e) => {
+        element.addEventListener('touchmove', function(e) {
             touchEndX = e.changedTouches[0].screenX
             touchEndY = e.changedTouches[0].screenY
 
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         })
 
-        element.addEventListener('touchend', (e) => {
+        element.addEventListener('touchend', function() {
             handleSwipeGesture()
         })
     }

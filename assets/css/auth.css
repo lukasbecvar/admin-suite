@@ -1,4 +1,8 @@
 /* admin-suite: auth component style */
+.background-dark {
+    background: rgb(20, 20, 20) !important;
+}
+
 .auth-component::before {
     content: '';
     position: fixed;
@@ -74,7 +78,7 @@
 	height: 20px;
 }
 
-/* mobile devices style */
+/* apply on mobile devices */
 @media screen and (max-width: 550px) { 
 	.m-w-95 {
 		max-width: 95%;
