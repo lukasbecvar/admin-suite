@@ -760,7 +760,7 @@ class DatabaseManager
 
             // execute multiple queries
             $result = '';
-            $queries = explode(';', $query); // split the query
+            $queries = $this->splitQueries($query); // split the query
 
             foreach ($queries as $q) {
                 $q = trim($q);
@@ -807,5 +807,46 @@ class DatabaseManager
             // return the error message
             return $e->getMessage();
         }
+    }
+
+    /**
+     * Split a SQL query into multiple queries
+     *
+     * @param string $sql The SQL query to split
+     *
+     * @return array<string> The array of queries
+     */
+    public function splitQueries(string $sql): array
+    {
+        $queries = [];
+        $currentQuery = '';
+        $insideString = false;
+        $escaped = false;
+
+        for ($i = 0; $i < strlen($sql); $i++) {
+            $char = $sql[$i];
+
+            if ($char === '\\') {
+                $escaped = !$escaped;
+            } elseif ($char === '\'' || $char === '"') {
+                if (!$escaped) {
+                    $insideString = !$insideString;
+                }
+                $escaped = false;
+            } elseif ($char === ';' && !$insideString) {
+                $queries[] = $currentQuery;
+                $currentQuery = '';
+                continue;
+            }
+
+            $currentQuery .= $char;
+        }
+
+        // add the last query if exists
+        if (!empty($currentQuery)) {
+            $queries[] = $currentQuery;
+        }
+
+        return $queries;
     }
 }
