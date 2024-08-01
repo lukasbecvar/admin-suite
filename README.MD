@@ -10,13 +10,7 @@
 
 ## ROADMAP
 - [ ] File explorer
-- [ ] Terminal component
-- [ ] Doc/About & download page (github pages)
-    - [ ] About homepage
-    - [ ] Download page
-    - [ ] Base documentation
-    - [ ] Installation documentation
-    - [ ] Components documentation
+- [ ] Terminal
 
 ## Requirements
 * OS Linux
