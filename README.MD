@@ -9,8 +9,6 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## ROADMAP
-- [ ] Requirements and configuration check command
-- [ ] Better entity relation mapping
 - [ ] File explorer
 - [ ] Terminal
 
