@@ -23,7 +23,7 @@
                 </div>
                 <div class="flex items-center justify-center flex-1">
                     {% if userData.getProfilePic == 'default_pic' %}
-                        <img class="rounded-full h-10 w-10 object-cover" src={{ asset('/build/images/default-profile.jpg') }} alt="profile picture">
+                        <img class="rounded-full h-10 w-10 object-cover" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture">
                     {% else %}
                         <img class="rounded-full h-10 w-10 object-cover" src="data:image/jpeg;base64,{{ userData.getProfilePic|e }}" alt="profile picture">
                     {% endif %}

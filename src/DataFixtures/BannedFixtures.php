@@ -24,7 +24,7 @@ class BannedFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        // testing banned users
+        // testing banned users ids
         $bannedUserIds = [3, 5, 6];
 
         // random reasons for banned users

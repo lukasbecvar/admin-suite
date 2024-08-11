@@ -14,22 +14,22 @@ services:
             - '../src/Kernel.php'
 
     # --------------------------------------------------------------------------------- #
-    # error handeling listener for error manager
+    # error handeling controller for app exception
     Symfony\Component\HttpKernel\EventListener\ErrorListener:
         arguments:
             $controller: 'App\Controller\ErrorController::show'
 
-    # internal exception error event
+    # exception event subscriber
     App\Event\Subscriber\ExceptionEventSubscriber:
         tags:
             - { name: kernel.event_subscriber }
 
-    # resources build checker
+    # resource build check middleware
     App\Middleware\AssetsCheckMiddleware:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 10 }
 
-    # check if system is linux
+    # linux check middleware
     App\Middleware\LinuxCheckMiddleware:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 9 }
@@ -39,32 +39,32 @@ services:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 8 }
 
-    # database online checker
+    # database online checker middleware
     App\Middleware\DatabaseOnlineMiddleware:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 7 }
 
-    # security check service
+    # security check middleware
     App\Middleware\SecurityCheckMiddleware:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 6 }
 
-    # maintenance mode checker
+    # handle maintenance mode middleware
     App\Middleware\MaintenanceMiddleware:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 5 }
 
-    # auto login middleware for remember me
+    # handle auto-login middleware for remember me
     App\Middleware\AutoLoginMiddleware:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 4 }
 
-    # authentificated check middleware
+    # check if user is authentificated middleware
     App\Middleware\AuthentificatedCheckMiddleware:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 3 }
 
-    # authorization check middleware
+    # user permissions authorization check middleware
     App\Middleware\AuthorizationMiddleware:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 2 }

@@ -37,11 +37,13 @@ class AutoLoginMiddlewareTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->cookieUtilMock = $this->createMock(CookieUtil::class);
         $this->sessionUtilMock = $this->createMock(SessionUtil::class);
         $this->authManagerMock = $this->createMock(AuthManager::class);
         $this->userManagerMock = $this->createMock(UserManager::class);
 
+        // create the middleware instance
         $this->middleware = new AutoLoginMiddleware(
             $this->cookieUtilMock,
             $this->sessionUtilMock,
@@ -58,13 +60,10 @@ class AutoLoginMiddlewareTest extends TestCase
     public function testRequestUserAlreadyLoggedIn(): void
     {
         // mock the auth manager
-        $this->authManagerMock->expects($this->once())
-            ->method('isUserLogedin')
-            ->willReturn(true);
+        $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(true);
 
         // mock the url generator
-        $this->cookieUtilMock->expects($this->never())
-            ->method('get');
+        $this->cookieUtilMock->expects($this->never())->method('get');
 
         // call the middleware method
         $this->middleware->onKernelRequest();
@@ -78,16 +77,13 @@ class AutoLoginMiddlewareTest extends TestCase
     public function testRequestCookieNotSet(): void
     {
         // mock the auth manager
-        $this->authManagerMock->expects($this->once())
-            ->method('isUserLogedin')
-            ->willReturn(false);
+        $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(false);
 
         // unser cookie token
         unset($_COOKIE['user-token']);
 
         // mock the cookie util
-        $this->cookieUtilMock->expects($this->never())
-            ->method('get');
+        $this->cookieUtilMock->expects($this->never())->method('get');
 
         // call the middleware method
         $this->middleware->onKernelRequest();
@@ -106,31 +102,19 @@ class AutoLoginMiddlewareTest extends TestCase
         $user->setUsername('testuser');
 
         // mock the cookie util
-        $this->cookieUtilMock->method('isCookieSet')
-            ->with('user-token')
-            ->willReturn(true);
+        $this->cookieUtilMock->method('isCookieSet')->with('user-token')->willReturn(true);
 
         // mock the auth manager
-        $this->authManagerMock->expects($this->once())
-            ->method('isUserLogedin')
-            ->willReturn(false);
+        $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(false);
 
         // mock the cookie util
-        $this->cookieUtilMock->expects($this->once())
-            ->method('get')
-            ->with('user-token')
-            ->willReturn($userToken);
+        $this->cookieUtilMock->expects($this->once())->method('get')->with('user-token')->willReturn($userToken);
 
         // mock the user manager
-        $this->userManagerMock->expects($this->exactly(2))
-            ->method('getUserRepository')
-            ->with(['token' => $userToken])
-            ->willReturn($user);
+        $this->userManagerMock->expects($this->exactly(2))->method('getUserRepository')->with(['token' => $userToken])->willReturn($user);
 
         // mock the session util
-        $this->authManagerMock->expects($this->once())
-            ->method('login')
-            ->with('testuser', true);
+        $this->authManagerMock->expects($this->once())->method('login')->with('testuser', true);
 
         // call the middleware method
         $this->middleware->onKernelRequest();
@@ -147,35 +131,22 @@ class AutoLoginMiddlewareTest extends TestCase
         $userToken = 'invalid_token';
 
         // mock the cookie util
-        $this->cookieUtilMock->method('isCookieSet')
-            ->with('user-token')
-            ->willReturn(true);
+        $this->cookieUtilMock->method('isCookieSet')->with('user-token')->willReturn(true);
 
         // mock the auth manager
-        $this->authManagerMock->expects($this->once())
-            ->method('isUserLogedin')
-            ->willReturn(false);
+        $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(false);
 
         // mock the cookie util
-        $this->cookieUtilMock->expects($this->once())
-            ->method('get')
-            ->with('user-token')
-            ->willReturn($userToken);
+        $this->cookieUtilMock->expects($this->once())->method('get')->with('user-token')->willReturn($userToken);
 
         // mock the user manager
-        $this->userManagerMock->expects($this->once())
-            ->method('getUserRepository')
-            ->with(['token' => $userToken])
-            ->willReturn(null);
+        $this->userManagerMock->expects($this->once())->method('getUserRepository')->with(['token' => $userToken])->willReturn(null);
 
         // mock the session util
-        $this->cookieUtilMock->expects($this->once())
-            ->method('unset')
-            ->with('user-token');
+        $this->cookieUtilMock->expects($this->once())->method('unset')->with('user-token');
 
         // mock the session util
-        $this->sessionUtilMock->expects($this->once())
-            ->method('destroySession');
+        $this->sessionUtilMock->expects($this->once())->method('destroySession');
 
         // call the middleware method
         $this->middleware->onKernelRequest();

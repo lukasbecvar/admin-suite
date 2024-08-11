@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
         command = command.toLowerCase()
 
         // clear terminal history
-        if (command === 'clear') {
+        if (command === 'clear' || command === 'cls') {
             terminal.innerHTML = ''
         } else {
             commandContainer.style.display = 'none'

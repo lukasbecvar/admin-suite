@@ -19,6 +19,7 @@ class VisitorInfoUtilTest extends TestCase
 
     protected function setUp(): void
     {
+        // create the visitor info util instance
         $this->visitorInfoUtil = new VisitorInfoUtil();
     }
 

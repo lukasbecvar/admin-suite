@@ -31,18 +31,13 @@ class AssetsCheckMiddlewareTest extends TestCase
         $loggerMock = $this->createMock(LoggerInterface::class);
 
         // set up expectations for the mock objects
-        $appUtilMock->expects($this->once())
-            ->method('isAssetsExist')
-            ->willReturn(false);
+        $appUtilMock->expects($this->once())->method('isAssetsExist')->willReturn(false);
 
         // mock the logger error method
-        $loggerMock->expects($this->once())
-            ->method('error')
-            ->with('build resources not found');
+        $loggerMock->expects($this->once())->method('error')->with('build resources not found');
 
         // mock the setResponse method
-        $eventMock->expects($this->once())
-            ->method('setResponse')
+        $eventMock->expects($this->once())->method('setResponse')
             ->with($this->callback(function ($response) {
                 return $response instanceof Response
                     && $response->getStatusCode() === Response::HTTP_INTERNAL_SERVER_ERROR

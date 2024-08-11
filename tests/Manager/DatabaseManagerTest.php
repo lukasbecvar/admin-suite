@@ -36,16 +36,10 @@ class DatabaseManagerTest extends TestCase
 
     protected function setUp(): void
     {
-        // create a mock for the AppUtil class
+        // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
-
-        // create a mock for the Connection class
         $this->connectionMock = $this->createMock(Connection::class);
-
-        // create a mock for the LogManager class
         $this->logManagerMock = $this->createMock(LogManager::class);
-
-        // create a mock for the ErrorManager class
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
 
         // initialize the DatabaseManager with the mock connection

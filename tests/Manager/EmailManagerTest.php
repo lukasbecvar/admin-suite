@@ -38,6 +38,7 @@ class EmailManagerTest extends TestCase
      */
     protected function setUp(): void
     {
+        // mock dependencies
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->mailerMock = $this->createMock(MailerInterface::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);

@@ -11,15 +11,15 @@ php bin/console doctrine:database:create --if-not-exists --env=test
 php bin/console doctrine:migrations:migrate --no-interaction --env=test
 php bin/console doctrine:fixtures:load --no-interaction --env=test
 
-# run phpcs process
+# test code with php code sniffer rules
 yellow_echo 'PHPCS: testing...'
 php bin/phpcbf
 php bin/phpcs
 
-# analyze phpstan
+# test code with phpstan analyzer
 yellow_echo 'PHPSTAN: testing...'
 php bin/phpstan analyze -vvv
 
-# PHPUnit tests
+# run unit tests
 yellow_echo 'PHPUnit: testing...'
 php bin/phpunit

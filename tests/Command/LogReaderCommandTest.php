@@ -35,16 +35,19 @@ class LogReaderCommandTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->logManager = $this->createMock(LogManager::class);
         $this->userManager = $this->createMock(UserManager::class);
         $this->visitorInfoUtil = $this->createMock(VisitorInfoUtil::class);
 
         $command = new LogReaderCommand($this->logManager, $this->userManager, $this->visitorInfoUtil);
 
+        // get application instance and add command
         $application = new Application();
         $application->add($command);
-
         $command = $application->find('app:log:reader');
+
+        // create command tester instance
         $this->commandTester = new CommandTester($command);
     }
 
@@ -83,10 +86,14 @@ class LogReaderCommandTest extends TestCase
         $log->method('getIpAdderss')->willReturn('127.0.0.1');
         $log->method('getUserId')->willReturn(1);
 
+        // mock log manager
         $this->logManager->method('getLogsWhereStatus')->willReturn([$log]);
         $this->logManager->method('getLogsCountWhereStatus')->willReturn(1);
 
+        // mock user manager
         $this->userManager->method('getUsernameById')->willReturn('Test User');
+
+        // mock visitor info util
         $this->visitorInfoUtil->method('getBrowserShortify')->willReturn('Browser');
         $this->visitorInfoUtil->method('getOs')->willReturn('OS');
 

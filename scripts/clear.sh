@@ -4,16 +4,16 @@
 php bin/console cache:clear
 
 # delete composer files
-rm -rf vendor/
 rm -rf composer.lock
+rm -rf vendor/
 
 # delete npm packages
-rm -rf node_modules/
 rm -rf package-lock.json
+rm -rf node_modules/
 
 # delete builded assets
-rm -rf public/build/
 rm -rf public/bundles/
+rm -rf public/assets/
 
 # delete symfony cache folder
 sudo rm -rf var/

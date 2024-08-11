@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class RegisterController
  *
- * Controller to handle registration component
+ * Controller responsible for handling the user registration functionality
  *
  * @package App\Controller\Auth
  */
@@ -43,7 +43,7 @@ class RegisterController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The response object
+     * @return Response The registration view or redirect
      */
     #[Route('/register', methods:['GET', 'POST'], name: 'app_auth_register')]
     public function register(Request $request): Response

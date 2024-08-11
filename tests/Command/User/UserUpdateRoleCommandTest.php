@@ -28,7 +28,10 @@ class UserUpdateRoleCommandTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->userManager = $this->createMock(UserManager::class);
+
+        // create command tester instance
         $this->commandTester = $this->createCommandTester();
     }
 

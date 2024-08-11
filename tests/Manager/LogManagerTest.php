@@ -50,6 +50,7 @@ class LogManagerTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->cookieUtilMock = $this->createMock(CookieUtil::class);
         $this->sessionUtilMock = $this->createMock(SessionUtil::class);
@@ -58,6 +59,7 @@ class LogManagerTest extends TestCase
         $this->visitorInfoUtilMock = $this->createMock(VisitorInfoUtil::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
+        // create the log manager instance
         $this->logManager = new LogManager(
             $this->appUtilMock,
             $this->cookieUtilMock,
@@ -177,8 +179,7 @@ class LogManagerTest extends TestCase
     public function testUnSetAntiLog(): void
     {
         // expect unset method to be called
-        $this->cookieUtilMock->expects($this->once())->method('unset')
-            ->with('anti-log');
+        $this->cookieUtilMock->expects($this->once())->method('unset')->with('anti-log');
 
         // call the unSetAntiLog method
         $this->logManager->unSetAntiLog();
@@ -191,8 +192,11 @@ class LogManagerTest extends TestCase
      */
     public function testIsAntiLogEnabled(): void
     {
+        // mock cookie util
         $this->cookieUtilMock->method('isCookieSet')->willReturn(true);
         $this->cookieUtilMock->method('get')->willReturn('test-token');
+
+        // mock app util
         $this->appUtilMock->method('getEnvValue')->willReturn('test-token');
 
         // call the isAntiLogEnabled method and assert true
@@ -206,6 +210,7 @@ class LogManagerTest extends TestCase
      */
     public function testIsAntiLogEnabledWhenCookieNotSet(): void
     {
+        // mock cookie util
         $this->cookieUtilMock->method('isCookieSet')->willReturn(false);
 
         // call the isAntiLogEnabled method and assert false
@@ -219,8 +224,11 @@ class LogManagerTest extends TestCase
      */
     public function testIsAntiLogEnabledWhenTokenInvalid(): void
     {
+        // mock cookie util
         $this->cookieUtilMock->method('isCookieSet')->willReturn(true);
         $this->cookieUtilMock->method('get')->willReturn('invalid-token');
+
+        // mock app util
         $this->appUtilMock->method('getEnvValue')->willReturn('test-token');
 
         // call the isAntiLogEnabled method and assert false
@@ -260,9 +268,8 @@ class LogManagerTest extends TestCase
     {
         $log1 = new Log();
 
-        $this->repositoryMock->method('findBy')
-            ->with(['status' => 'unread'])
-            ->willReturn([$log1]);
+        // mock repository to return logs with 'UNREADED' status
+        $this->repositoryMock->method('findBy')->with(['status' => 'unread'])->willReturn([$log1]);
 
         // call get logs method
         $logs = $this->logManager->getLogsWhereStatus();
@@ -287,10 +294,12 @@ class LogManagerTest extends TestCase
 
         $logs = [$mockLog1, $mockLog2];
 
+        // mock entity manager
         $this->entityManagerMock->expects($this->once())
             ->method('getRepository')
             ->willReturn($this->repositoryMock);
 
+        // mock repository
         $this->repositoryMock->expects($this->once())
             ->method('findBy')
             ->with(['status' => 'UNREADED'])
@@ -314,17 +323,20 @@ class LogManagerTest extends TestCase
         $logId = 1;
         $newStatus = 'READED';
 
+        // mock log entity
         $logMock = $this->createMock(Log::class);
         $logMock->expects($this->once())
             ->method('setStatus')
             ->with($newStatus);
 
+        // mock repository
         $repositoryMock = $this->createMock(LogRepository::class);
         $repositoryMock->expects($this->once())
             ->method('find')
             ->with($logId)
             ->willReturn($logMock);
 
+        // mock entity manager
         $this->entityManagerMock->expects($this->once())
             ->method('getRepository')
             ->with(Log::class)
@@ -347,17 +359,20 @@ class LogManagerTest extends TestCase
         $logId = 1;
         $newStatus = 'READED';
 
+        // mock log entity
         $logMock = $this->createMock(Log::class);
         $logMock->expects($this->once())
             ->method('setStatus')
             ->with($newStatus);
 
+        // mock repository
         $repositoryMock = $this->createMock(LogRepository::class);
         $repositoryMock->expects($this->once())
             ->method('find')
             ->with($logId)
             ->willReturn($logMock);
 
+        // mock entity manager
         $this->entityManagerMock->expects($this->once())
             ->method('getRepository')
             ->with(Log::class)
@@ -367,6 +382,7 @@ class LogManagerTest extends TestCase
             ->method('flush')
             ->willThrowException(new \Exception('Test Exception'));
 
+        // mock error manager
         $this->errorManagerMock->expects($this->once())->method('handleError')
             ->with(
                 'error to update log status: Test Exception',

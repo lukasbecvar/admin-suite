@@ -26,6 +26,7 @@ class RequirementsCheckCommandTest extends TestCase
      */
     public function testRequirementsCheckCommand(): void
     {
+        // mock dependencies
         $serverUtil = $this->createMock(ServerUtil::class);
         $databaseManager = $this->createMock(DatabaseManager::class);
 

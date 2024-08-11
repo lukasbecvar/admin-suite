@@ -1,4 +1,4 @@
 #!/bin/bash
 
-# database migration for update database structure
+# generate migration file for database update structure to latest version
 php bin/console make:migration --no-interaction

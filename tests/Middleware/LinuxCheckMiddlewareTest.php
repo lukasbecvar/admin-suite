@@ -28,6 +28,7 @@ class LinuxCheckMiddlewareTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->serverUtilMock = $this->createMock(ServerUtil::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
@@ -41,10 +42,10 @@ class LinuxCheckMiddlewareTest extends TestCase
      */
     public function testRequestLinuxSystem(): void
     {
-        $this->serverUtilMock->expects($this->once())
-            ->method('isSystemLinux')
-            ->willReturn(true);
+        // mock the server util
+        $this->serverUtilMock->expects($this->once())->method('isSystemLinux')->willReturn(true);
 
+        // create the middleware instance
         $middleware = new LinuxCheckMiddleware(
             $this->appUtilMock,
             $this->serverUtilMock,
@@ -52,10 +53,11 @@ class LinuxCheckMiddlewareTest extends TestCase
             $this->errorManagerMock
         );
 
+        // mock request event
         $eventMock = $this->createMock(RequestEvent::class);
-        $eventMock->expects($this->never())
-            ->method('setResponse');
+        $eventMock->expects($this->never())->method('setResponse');
 
+        // execute the middleware
         $middleware->onKernelRequest($eventMock);
     }
 
@@ -66,14 +68,17 @@ class LinuxCheckMiddlewareTest extends TestCase
      */
     public function testRequestNonLinuxSystem(): void
     {
+        // mock the server util
         $this->serverUtilMock->expects($this->once())
             ->method('isSystemLinux')
             ->willReturn(false);
 
+        // mock the app util
         $this->appUtilMock->expects($this->once())
             ->method('isDevMode')
             ->willReturn(true);
 
+        // mock the error manager
         $this->errorManagerMock->expects($this->once())
             ->method('handleError')
             ->with(
@@ -81,11 +86,13 @@ class LinuxCheckMiddlewareTest extends TestCase
                 Response::HTTP_NOT_IMPLEMENTED
             );
 
+        // mock the error manager
         $this->errorManagerMock->expects($this->once())
             ->method('getErrorView')
             ->with(Response::HTTP_NOT_IMPLEMENTED)
             ->willReturn('<html><body><h1>Upgrade Required</h1></body></html>');
 
+        // mock request event
         $eventMock = $this->createMock(RequestEvent::class);
         $eventMock->expects($this->once())
             ->method('setResponse')
@@ -95,6 +102,7 @@ class LinuxCheckMiddlewareTest extends TestCase
                 return true;
             }));
 
+        // create the middleware instance
         $middleware = new LinuxCheckMiddleware(
             $this->appUtilMock,
             $this->serverUtilMock,
@@ -102,6 +110,7 @@ class LinuxCheckMiddlewareTest extends TestCase
             $this->errorManagerMock
         );
 
+        // execute the middleware
         $middleware->onKernelRequest($eventMock);
     }
 }

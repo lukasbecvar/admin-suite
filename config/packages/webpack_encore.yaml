@@ -1,8 +1,8 @@
 webpack_encore:
-    output_path: '%kernel.project_dir%/public/build'
+    output_path: '%kernel.project_dir%/public/assets'
     script_attributes:
         defer: true
 
 framework:
     assets:
-        json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'
+        json_manifest_path: '%kernel.project_dir%/public/assets/manifest.json'

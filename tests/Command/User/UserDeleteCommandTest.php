@@ -30,6 +30,7 @@ class UserDeleteCommandTest extends TestCase
      */
     protected function setUp(): void
     {
+        // mock dependencies
         $this->userManagerMock = $this->createMock(UserManager::class);
     }
 
@@ -104,11 +105,12 @@ class UserDeleteCommandTest extends TestCase
         $user = $this->createMock(User::class);
         $user->method('getId')->willReturn($userId);
 
+        // mock user manager
         $this->userManagerMock->method('checkIfUserExist')->with($username)->willReturn(true);
-        $this->userManagerMock->method('getUserRepository')->with(['username' => $username])->willReturn($user);
+        $this->userManagerMock->method('getUserRepository')->with(['username' => $username])
+            ->willReturn($user);
         $this->userManagerMock->method('deleteUser')->with($userId)
             ->will($this->throwException(new \Exception('Some error occurred')));
-
 
         // create command
         $command = new UserDeleteCommand($this->userManagerMock);
@@ -141,8 +143,10 @@ class UserDeleteCommandTest extends TestCase
         $user = $this->createMock(User::class);
         $user->method('getId')->willReturn($userId);
 
+        // mock user manager
         $this->userManagerMock->method('checkIfUserExist')->with($username)->willReturn(true);
-        $this->userManagerMock->method('getUserRepository')->with(['username' => $username])->willReturn($user);
+        $this->userManagerMock->method('getUserRepository')->with(['username' => $username])
+            ->willReturn($user);
         $this->userManagerMock->expects($this->once())->method('deleteUser')->with($userId);
 
         // create command

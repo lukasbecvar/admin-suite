@@ -94,7 +94,7 @@ class TerminalApiController extends AbstractController
         // check if command is blocked
         foreach ($blockedCommands as $blockedCommand) {
             /** @var string $blockedCommand */
-            if (str_starts_with($command ?? '', $blockedCommand)) {
+            if (str_starts_with($command ?? '', $blockedCommand) || str_starts_with($command ?? '', 'sudo ' . $blockedCommand)) {
                 return new Response('command: ' . $command . ' is not allowed!', Response::HTTP_OK);
             }
         }

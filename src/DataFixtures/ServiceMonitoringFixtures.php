@@ -24,6 +24,7 @@ class ServiceMonitoringFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
+        // testing service monitoring data
         $data = [
             ['system-cpu-usage', 'cpu usage is ok', 'ok', '2024-07-08 15:17:38'],
             ['system-ram-usage', 'ram usage is ok', 'ok', '2024-07-08 15:17:38'],

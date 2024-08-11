@@ -30,8 +30,11 @@ class CacheUtilTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->cacheItemPoolMock = $this->createMock(CacheItemPoolInterface::class);
+
+        // create the cache util instance
         $this->cacheUtil = new CacheUtil($this->errorManagerMock, $this->cacheItemPoolMock);
     }
 

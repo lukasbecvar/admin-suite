@@ -28,9 +28,11 @@ class AppUtilTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->jsonUtilMock = $this->createMock(JsonUtil::class);
         $this->kernelInterface = $this->createMock(KernelInterface::class);
 
+        // create the app util instance
         $this->appUtil = new AppUtil($this->jsonUtilMock, $this->kernelInterface);
     }
 

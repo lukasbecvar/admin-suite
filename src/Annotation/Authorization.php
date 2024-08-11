@@ -21,6 +21,11 @@ class Authorization
         $this->authorization = $authorization;
     }
 
+    /**
+     * Get the authorization value
+     *
+     * @return string The authorization value
+     */
     public function getAuthorization(): string
     {
         return $this->authorization;

@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class LogoutController
  *
- * The controller for logout component
+ * The controller responsible for handling the user logout functionality
  *
  * @package App\Controller\Auth
  */

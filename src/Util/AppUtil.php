@@ -51,7 +51,7 @@ class AppUtil
      */
     public function isAssetsExist(): bool
     {
-        return file_exists($this->getAppRootDir() . '/public/build/');
+        return file_exists($this->getAppRootDir() . '/public/assets/');
     }
 
     /**

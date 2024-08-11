@@ -68,6 +68,7 @@ class AuthManagerTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->cacheUtilMock = $this->createMock(CacheUtil::class);
         $this->logManagerMock = $this->createMock(LogManager::class);
@@ -80,6 +81,7 @@ class AuthManagerTest extends TestCase
         $this->visitorInfoUtilMock = $this->createMock(VisitorInfoUtil::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
+        // create auth manager instance
         $this->authManager = new AuthManager(
             $this->appUtilMock,
             $this->cacheUtilMock,
@@ -353,9 +355,7 @@ class AuthManagerTest extends TestCase
         $userId = 1;
 
         // Expect the cache manager's setValue method to be called once
-        $this->cacheUtilMock->expects($this->once())
-            ->method('setValue')
-            ->with('online_user_' . $userId, 'online', 300);
+        $this->cacheUtilMock->expects($this->once())->method('setValue')->with('online_user_' . $userId, 'online', 300);
 
         // Call the method
         $this->authManager->cacheOnlineUser($userId);
@@ -369,9 +369,7 @@ class AuthManagerTest extends TestCase
     public function testGetUserStatus(): void
     {
         // mock the cache manager to return null status
-        $this->cacheUtilMock->method('getValue')
-            ->with('online_user_1')
-            ->willReturn(new CacheItem());
+        $this->cacheUtilMock->method('getValue')->with('online_user_1')->willReturn(new CacheItem());
 
         // call the method again
         $status = $this->authManager->getUserStatus(1);

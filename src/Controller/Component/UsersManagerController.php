@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class UsersManagerController
  *
- * The controller handle users-manager component
+ * The controller handle users manager component
  *
  * @package App\Controller
  */

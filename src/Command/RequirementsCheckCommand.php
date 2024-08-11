@@ -79,6 +79,24 @@ class RequirementsCheckCommand extends Command
             $io->error('services.json config file not found');
         }
 
+        // terminal aliases config file exist check
+        if (file_exists(__DIR__ . '/../../terminal-aliases.json')) {
+            $io->success('services config file found in /terminal-aliases.json');
+        } elseif (file_exists(__DIR__ . '/../../config/suite/terminal-aliases.json')) {
+            $io->success('services config file found in /config/suite/terminal-aliases.json');
+        } else {
+            $io->error('terminal-aliases.json config file not found');
+        }
+
+        // terminal blocked commands config file exist check
+        if (file_exists(__DIR__ . '/../../terminal-blocked-commands.json')) {
+            $io->success('services config file found in /terminal-blocked-commands.json');
+        } elseif (file_exists(__DIR__ . '/../../config/suite/terminal-blocked-commands.json')) {
+            $io->success('services config file found in /config/suite/terminal-blocked-commands.json');
+        } else {
+            $io->error('terminal-blocked-commands.json config file not found');
+        }
+
         // check database connection
         if (!$this->databaseManager->isDatabaseDown()) {
             $io->success('Database connected successfully');

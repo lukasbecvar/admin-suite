@@ -29,9 +29,11 @@ class SecurityUtilTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->jsonUtilMock = $this->createMock(JsonUtil::class);
         $this->kernelInterface = $this->createMock(KernelInterface::class);
 
+        // create the security util instance
         $this->securityUtil = new SecurityUtil(new AppUtil($this->jsonUtilMock, $this->kernelInterface));
     }
 
