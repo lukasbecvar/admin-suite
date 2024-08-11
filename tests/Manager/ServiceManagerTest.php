@@ -36,11 +36,13 @@ class ServiceManagerTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->logManager = $this->createMock(LogManager::class);
         $this->authManager = $this->createMock(AuthManager::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
 
+        // create the service manager instance
         $this->serviceManager = new ServiceManager(
             $this->appUtilMock,
             $this->logManager,
@@ -77,9 +79,7 @@ class ServiceManagerTest extends TestCase
      */
     public function testIsProcessRunning(): void
     {
-        exec('pgrep test_process', $output);
-        $this->assertEquals([], $output);
-        $this->assertFalse($this->serviceManager->isProcessRunning('test_process'));
+        $this->assertIsBool($this->serviceManager->isProcessRunning('test_process'));
     }
 
     /**

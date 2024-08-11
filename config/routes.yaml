@@ -4,7 +4,7 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-# handle error page for not found routes (in prod env)
+# handle not found error (in prod env)
 when@prod:
     catch_all:
         path: /{any}

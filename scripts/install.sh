@@ -1,21 +1,19 @@
 #!/bin/bash
 
-# install all application requirements
-
-# install composer dependencies
+# install composer packages
 if [ ! -d 'vendor/' ]
 then
     composer install
 fi
 
-# install node modules
+# install node-modules frontend packages
 if [ ! -d 'node_modules/' ]
 then
     npm install --loglevel=error
 fi
 
 # build assets
-if [ ! -d 'public/build/' ]
+if [ ! -d 'public/assets/' ]
 then
     npm run build
 fi

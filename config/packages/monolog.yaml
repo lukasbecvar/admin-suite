@@ -1,5 +1,6 @@
 monolog:
     handlers:
+        # exception log handler
         exception:
             type: stream
             path: '%kernel.logs_dir%/exception.log'
@@ -9,6 +10,7 @@ monolog:
 when@dev:
     monolog:
         handlers:
+            # debug dev log handler
             main:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"

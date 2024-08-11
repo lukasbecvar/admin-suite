@@ -38,7 +38,7 @@ class MonitoringManagerController extends AbstractController
     }
 
     /**
-     * Renders the monitoring manager page
+     * Renders the monitoring dashboard page
      *
      * @return Response The rendered monitoring manager page view
      */
@@ -67,7 +67,7 @@ class MonitoringManagerController extends AbstractController
     }
 
     /**
-     * Renders the services config page
+     * Renders the monitored services config page
      *
      * @return Response The rendered monitoring config page view
      */

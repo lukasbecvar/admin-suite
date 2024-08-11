@@ -35,6 +35,7 @@ class ExceptionEventSubscriberTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->logManager = $this->createMock(LogManager::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->databaseManager = $this->createMock(DatabaseManager::class);

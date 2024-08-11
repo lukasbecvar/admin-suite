@@ -19,14 +19,14 @@ sed -i 's/^\(APP_ENV=\)dev/\1prod/' .env
 # install dependencies
 sh scripts/install.sh
 
-# run database migrations
+# run database migration
 php bin/console doctrine:database:create --if-not-exists
 php bin/console doctrine:migrations:migrate --no-interaction
                     
-# run app commands
+# regenerate auth tokens (for user authentication)
 php bin/console app:auth:tokens:regenerate
 
-# set permissions
+# fix storage permissions
 sudo chmod -R 777 var/
 sudo chown -R www-data:www-data var/
 
@@ -37,5 +37,5 @@ sudo systemctl start admin-suite-monitoring
 # disable maintenance mode
 php bin/console app:toggle:maintenance
 
-# make initial request for reload cache
-curl -X GET https://admin-suite.becvar.xyz
+# make initial request for reload OPcache
+curl -X GET https://admin.becvar.xyz

@@ -31,6 +31,7 @@ class UserBanCommandTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->banManager = $this->createMock(BanManager::class);
         $this->userManager = $this->createMock(UserManager::class);
 
@@ -38,7 +39,7 @@ class UserBanCommandTest extends TestCase
         $command = new UserBanCommand($this->banManager, $this->userManager);
         $application->add($command);
 
-        // create command tester
+        // create command tester instance
         $this->commandTester = new CommandTester($application->find('app:user:ban'));
     }
 

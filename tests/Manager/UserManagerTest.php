@@ -45,14 +45,18 @@ class UserManagerTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->securityUtilMock = $this->createMock(SecurityUtil::class);
         $this->userRepositoryMock = $this->createMock(UserRepository::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
+
+        // mock user repository
         $this->entityManagerMock->method('getRepository')->willReturn($this->userRepositoryMock);
 
+        // create the user manager instance
         $this->userManager = new UserManager(
             $this->appUtilMock,
             $this->logManagerMock,
@@ -249,12 +253,16 @@ class UserManagerTest extends TestCase
      */
     public function testDeleteUser(): void
     {
+        // mock user entity
         $user = new User();
         $user->setUsername('testUser');
         $this->userRepositoryMock->method('findOneBy')->willReturn($user);
 
+        // mock entity manager
         $this->entityManagerMock->expects($this->once())->method('remove')->with($user);
         $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // mock log manager
         $this->logManagerMock->expects($this->once())
             ->method('log')->with('user-manager', 'user: testUser deleted');
 

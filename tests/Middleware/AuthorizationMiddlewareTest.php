@@ -32,8 +32,11 @@ class AuthorizationMiddlewareTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->twig = $this->createMock(Environment::class);
         $this->authManager = $this->createMock(AuthManager::class);
+
+        // create the middleware instance
         $this->authorizationMiddleware = new AuthorizationMiddleware($this->twig, $this->authManager);
     }
 
@@ -48,6 +51,7 @@ class AuthorizationMiddlewareTest extends TestCase
         $request = new Request();
         $request->attributes->set('_controller', 'App\Controller\AntiLogController::enableAntiLog');
 
+        // mock request event
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
         $event->expects($this->once())->method('setResponse')->with($this->callback(function ($response) {
@@ -65,11 +69,11 @@ class AuthorizationMiddlewareTest extends TestCase
 
         // mock Twig response
         $this->twig->method('render')
-                   ->with('component/no-permissions.twig', [
-                        'isAdmin' => false,
-                        'userData' => $mockUser
-                   ])
-                   ->willReturn('Forbidden content');
+            ->with('component/no-permissions.twig', [
+                'isAdmin' => false,
+                'userData' => $mockUser
+           ])
+            ->willReturn('Forbidden content');
 
         // execute the middleware
         $this->authorizationMiddleware->onKernelRequest($event);
@@ -86,6 +90,7 @@ class AuthorizationMiddlewareTest extends TestCase
         $request = new Request();
         $request->attributes->set('_controller', 'App\Controller\AntiLogController::enableAntiLog');
 
+        // mock request event
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
 
@@ -110,6 +115,7 @@ class AuthorizationMiddlewareTest extends TestCase
         $request = new Request();
         $request->attributes->set('_controller', 'App\Controller\IndexController::index');
 
+        // mock request event
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
 

@@ -3,17 +3,17 @@ const Encore = require('@symfony/webpack-encore');
 
 Encore
     // set build path
-    .setOutputPath('public/build/')
-    .setPublicPath('/build')
+    .setOutputPath('public/assets/')
+    .setPublicPath('/assets')
 
     // register css
     .addEntry('index-css', './assets/css/index.css')
 
     // register js
     .addEntry('terminal-js', './assets/js/terminal.js')
+    .addEntry('todo-manager-js', './assets/js/todo-manager.js')
+    .addEntry('user-manager-js', './assets/js/user-manager.js')
     .addEntry('sidebar-element-js', './assets/js/sidebar-element.js')
-    .addEntry('todo-manager-js', './assets/js/manager/todo-manager.js')
-    .addEntry('user-manager-js', './assets/js/manager/user-manager.js')
     .addEntry('loading-component-js', './assets/js/loading-component.js')
 
     // copy static assets

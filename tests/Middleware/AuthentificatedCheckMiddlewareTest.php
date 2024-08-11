@@ -32,9 +32,11 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->authManagerMock = $this->createMock(AuthManager::class);
         $this->urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
 
+        // create the middleware instance
         $this->middleware = new AuthentificatedCheckMiddleware(
             $this->authManagerMock,
             $this->urlGeneratorMock
@@ -63,9 +65,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
     public function testRequestUserAlreadyLoggedIn(): void
     {
         // mock the auth manager
-        $this->authManagerMock->expects($this->once())
-            ->method('isUserLogedin')
-            ->willReturn(true);
+        $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(true);
 
         // mock the url generator
         $event = $this->createRequestEvent('/admin');
@@ -85,8 +85,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
     public function testRequestLoginPage(): void
     {
         // mock the auth manager
-        $this->authManagerMock->expects($this->never())
-            ->method('isUserLogedin');
+        $this->authManagerMock->expects($this->never())->method('isUserLogedin');
 
         // create request event
         $event = $this->createRequestEvent('/login');
@@ -106,8 +105,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
     public function testRequestRegisterPage(): void
     {
         // mock the auth manager
-        $this->authManagerMock->expects($this->never())
-            ->method('isUserLogedin');
+        $this->authManagerMock->expects($this->never())->method('isUserLogedin');
 
         // create request event
         $event = $this->createRequestEvent('/register');
@@ -127,8 +125,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
     public function testRequestRootPage(): void
     {
         // mock the auth manager
-        $this->authManagerMock->expects($this->never())
-            ->method('isUserLogedin');
+        $this->authManagerMock->expects($this->never())->method('isUserLogedin');
 
         // create request event
         $event = $this->createRequestEvent('/');
@@ -148,8 +145,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
     public function testRequestErrorPage(): void
     {
         // mock the auth manager
-        $this->authManagerMock->expects($this->never())
-            ->method('isUserLogedin');
+        $this->authManagerMock->expects($this->never())->method('isUserLogedin');
 
         // create request event
         $event = $this->createRequestEvent('/error');
@@ -169,8 +165,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
     public function testRequestProfilerPage(): void
     {
         // mock the auth manager
-        $this->authManagerMock->expects($this->never())
-            ->method('isUserLogedin');
+        $this->authManagerMock->expects($this->never())->method('isUserLogedin');
 
         // create request event
         $event = $this->createRequestEvent('/_profiler');
@@ -191,8 +186,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
     {
         // mock the auth manager
         $this->authManagerMock->expects($this->once())
-            ->method('isUserLogedin')
-            ->willReturn(false);
+            ->method('isUserLogedin')->willReturn(false);
 
         // mock the url generator
         $this->urlGeneratorMock->expects($this->once())

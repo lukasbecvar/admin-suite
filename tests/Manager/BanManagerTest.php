@@ -46,6 +46,7 @@ class BanManagerTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->userManagerMock = $this->createMock(UserManager::class);
         $this->authManagerMock = $this->createMock(AuthManager::class);
@@ -54,9 +55,7 @@ class BanManagerTest extends TestCase
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
         // entity manager mock
-        $this->entityManagerMock
-            ->method('getRepository')
-            ->willReturn($this->repositoryMock);
+        $this->entityManagerMock->method('getRepository')->willReturn($this->repositoryMock);
 
         // create the ban manager instance
         $this->banManager = new BanManager(
@@ -83,18 +82,11 @@ class BanManagerTest extends TestCase
 
         // mock User entity
         $userMock = $this->createMock(User::class);
-        $userMock
-            ->method('getUsername')
-            ->willReturn($loggedUsername);
+        $userMock->method('getUsername')->willReturn($loggedUsername);
 
-        // mock methods
-        $this->authManagerMock
-            ->method('getLoggedUserId')
-            ->willReturn($loggedUserId);
-
-        $this->authManagerMock
-            ->method('getLoggedUserRepository')
-            ->willReturn($userMock);
+        // mock auth manager
+        $this->authManagerMock->method('getLoggedUserId')->willReturn($loggedUserId);
+        $this->authManagerMock->method('getLoggedUserRepository')->willReturn($userMock);
 
         // repository mock
         $this->repositoryMock
@@ -184,18 +176,11 @@ class BanManagerTest extends TestCase
 
         // mock user entity
         $userMock = $this->createMock(User::class);
-        $userMock
-            ->method('getUsername')
-            ->willReturn($loggedUsername);
+        $userMock->method('getUsername')->willReturn($loggedUsername);
 
         // mock auth manager
-        $this->authManagerMock
-            ->method('getLoggedUserId')
-            ->willReturn($loggedUserId);
-
-        $this->authManagerMock
-            ->method('getLoggedUserRepository')
-            ->willReturn($userMock);
+        $this->authManagerMock->method('getLoggedUserId')->willReturn($loggedUserId);
+        $this->authManagerMock->method('getLoggedUserRepository')->willReturn($userMock);
 
         // repository mock
         $this->repositoryMock
@@ -205,8 +190,7 @@ class BanManagerTest extends TestCase
 
         // log manager mock
         $this->logManagerMock
-            ->expects($this->once())
-            ->method('log')
+            ->expects($this->once())->method('log')
             ->with(
                 'ban-manager',
                 'user: ' . $userId . ' is unbanned'
@@ -237,9 +221,7 @@ class BanManagerTest extends TestCase
         $user3->method('getId')->willReturn(3);
 
         // mock UserManager to return the list of users
-        $this->userManagerMock
-            ->method('getAllUsersRepository')
-            ->willReturn([$user1, $user2, $user3]);
+        $this->userManagerMock->method('getAllUsersRepository')->willReturn([$user1, $user2, $user3]);
 
         // mock BannedRepository to return banned users based on user IDs
         $this->repositoryMock

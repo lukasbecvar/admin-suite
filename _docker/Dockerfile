@@ -4,7 +4,7 @@ FROM php:8.3-apache
 # set default apache working directory
 WORKDIR /var/www
 
-# copy project files to container
+# copy project files to image
 # COPY . /var/www/
 
 # update packages and install dependencies

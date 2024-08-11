@@ -34,7 +34,6 @@ class ServerUtilTest extends TestCase
 
         // create instance of ServerUtil
         $this->serverUtil = new ServerUtil($this->appUtilMock, $this->errorManager);
-        parent::setUp();
     }
 
     /**

@@ -27,8 +27,11 @@ class FilesystemUtilTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->logManager = $this->createMock(LogManager::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
+
+        // create the filesystem util instance
         $this->filesystemUtil = new FilesystemUtil($this->logManager, $this->errorManager);
     }
 
@@ -39,6 +42,7 @@ class FilesystemUtilTest extends TestCase
      */
     public function testGetFilesListSuccess(): void
     {
+        // get the list of files
         $list = $this->filesystemUtil->getFilesList('/');
 
         // check result array

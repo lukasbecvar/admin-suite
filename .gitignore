@@ -24,7 +24,7 @@
 /.phpcs-cache
 
 # npm files
-/public/build/
+/public/assets/
 /node_modules/
 /npm-debug.log
 /yarn-error.log

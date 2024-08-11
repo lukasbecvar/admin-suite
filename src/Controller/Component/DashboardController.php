@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class DashboardController
  *
- * Controller to handle the dashboard component
+ * Controller for the dashboard component
  *
  * @package App\Controller
  */
