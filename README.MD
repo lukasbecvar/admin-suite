@@ -22,7 +22,7 @@ Installation is very simple like any other PHP project.
 * Configure your package-requitements.json & services.json in root file (for example use config/suite files)
 * Create systemd or screen service for monitoring process (console command infinite loop) ([systemd-config](https://github.com/lordbecvold/admin-suite/blob/main/_docker/configs/monitoring-systemd.service))
 
-## Exeption monitoring
+## Exception monitoring
 In config exception-files.json it is possible to set paths to exception files and track exceptions from your applications via log manager
 
 ## External log API
