@@ -5,6 +5,6 @@
     },
     "becvar-site": {
         "name": "becvar-site",
-        "path": "/services/website/becvar.xyz/var/log/exception.log"
+        "path": "/services/website/becvar-site/var/log/exception.log"
     }
 }
