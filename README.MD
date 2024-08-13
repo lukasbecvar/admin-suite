@@ -55,9 +55,6 @@ Contributions are welcome! Please fork this repository and submit pull requests 
 * Composer
 * NPM package manager and assets build tool for encore build
 
-## TODO
-- [ ] Button tooltips
-
 ## Dependencies
 This project uses the following technologies
 * PHP
