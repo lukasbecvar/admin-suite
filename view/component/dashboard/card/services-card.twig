@@ -17,9 +17,9 @@
             </div>
             <div class="flex items-center space-x-1">
                 {% if serviceManager.isUfwRunning() %}
-                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_dashboard'}) }} class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 text-l font-bold">Stop</a>
+                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_dashboard'}) }} class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 text-l font-bold" title="Stop service">Stop</a>
                 {% else %}
-                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_dashboard'}) }} class="bg-green-700 hover:bg-green-600 text-white px-2 py-1 text-l font-bold">Start</a>
+                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_dashboard'}) }} class="bg-green-700 hover:bg-green-600 text-white px-2 py-1 text-l font-bold" title="Start service">Start</a>
                 {% endif %}
             </div>
         </div> 
@@ -43,9 +43,9 @@
                         {% if service.type == 'systemd' %}                                
                             <div class="flex items-center space-x-1">
                                 {% if serviceStatus %}
-                                    <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_dashboard'}) }} class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 text-l font-bold">Stop</a>
+                                    <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_dashboard'}) }} class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 text-l font-bold" title="Stop service">Stop</a>
                                 {% else %}
-                                    <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_dashboard'}) }} class="bg-green-700 hover:bg-green-600 text-white px-2 py-1 text-l font-bold">Start</a>
+                                    <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_dashboard'}) }} class="bg-green-700 hover:bg-green-600 text-white px-2 py-1 text-l font-bold" title="Start service">Start</a>
                                 {% endif %}
                             </div>
                         {% endif %}

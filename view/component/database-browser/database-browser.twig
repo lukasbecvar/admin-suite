@@ -6,22 +6,22 @@
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb p-4">
     {# BACK BUTTON #}
     {% if databaseName == '' %}
-        <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white">
+        <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white" title="Back to dashboard">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
     {% else %}
-        <a href={{ path('app_manager_database') }} class="border border-gray-600 font-bold px-1 text-white">
+        <a href={{ path('app_manager_database') }} class="border border-gray-600 font-bold px-1 text-white" title="Back to database browser">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
     {% endif %}
 
     {# LINK TO DATABASE DUMPER #}
-    <a href={{ path('app_manager_database_dump') }} class="ml-1 border border-gray-600 font-bold px-1 text-white">
+    <a href={{ path('app_manager_database_dump') }} class="ml-1 border border-gray-600 font-bold px-1 text-white" title="Database dumper">
         <i class="fa fa-download" aria-hidden="true"></i>
     </a>
 
     {# LINK TO DATABASE CONSOLE #}
-    <a href={{ path('app_manager_database_console') }} class="ml-1 border border-gray-600 font-bold px-1 text-white">
+    <a href={{ path('app_manager_database_console') }} class="ml-1 border border-gray-600 font-bold px-1 text-white" title="Database query console">
         <i class="fa fa-terminal" aria-hidden="true"></i>
     </a> 
 

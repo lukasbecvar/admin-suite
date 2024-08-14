@@ -6,17 +6,17 @@
     {# SUB-NAVIGATION #}
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
         {# BACK BUTTON #}
-        <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white">
+        <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white" title="Back to dashboard">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
         
         {# LINK TO UNFILTERED LOGS #}
-        <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': 'users'}) }} class="border border-gray-600 font-bold px-1 text-white ml-1">
+        <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': 'users'}) }} class="border border-gray-600 font-bold px-1 text-white ml-1" title="View un-filtered users">
             <i class="fa fa-database" aria-hidden="true"></i>
         </a>
         
         {# LINK TO USER REGISTER FORM #}
-        <a href={{ path('app_manager_users_register') }} class="border border-gray-600 px-1 text-white ml-1">
+        <a href={{ path('app_manager_users_register') }} class="border border-gray-600 px-1 text-white ml-1" title="Add new user">
             <i class="fa fa-plus" aria-hidden="true"></i>
         </a>
 

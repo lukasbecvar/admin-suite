@@ -4,7 +4,7 @@
 {% block component %}
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb p-4">
-    <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="border border-gray-600 font-bold px-1 text-white">
+    <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="border border-gray-600 font-bold px-1 text-white" title="Back to database table browser">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
     <span class="mr-1 text-white">{{ tableName|e }}</span>
