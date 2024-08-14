@@ -4,13 +4,13 @@
 {% block component %}
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb p-4">
-    <a href={{ path('app_manager_database', {'database': databaseName}) }} class="border border-gray-600 font-bold px-1 text-white">
+    <a href={{ path('app_manager_database', {'database': databaseName}) }} class="border border-gray-600 font-bold px-1 text-white" title="Back to database browser">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
-    <a href={{ path('app_manager_database_add', {'database': databaseName, 'table': tableName}) }} class="border border-gray-600 font-bold px-1 text-white ml-1">
+    <a href={{ path('app_manager_database_add', {'database': databaseName, 'table': tableName}) }} class="border border-gray-600 font-bold px-1 text-white ml-1" title="Add new record to table">
         <i class="fa fa-plus" aria-hidden="true"></i>
     </a>
-    <a href={{ path('app_manager_database_truncate', {'database': databaseName, 'table': tableName}) }} class="border border-gray-600 font-bold px-1 text-white ml-1">
+    <a href={{ path('app_manager_database_truncate', {'database': databaseName, 'table': tableName}) }} class="border border-gray-600 font-bold px-1 text-white ml-1" title="Drop all records from table">
         <i class="fa fa-trash" aria-hidden="true"></i>
     </a>
     <span class="mr-1 text-white">{{ tableName|e }}</span>
@@ -55,12 +55,12 @@
                                 {# EDIT AND DELETE BUTTONS #}
                                 {% if row.id|default(null) is not null %}
                                     <td class="px-2 py-2 border-b border-neutral-700 text-left">
-                                        <a href={{ path('app_manager_database_edit', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }} class="text-yellow-400 hover:text-yellow-300">
+                                        <a href={{ path('app_manager_database_edit', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }} class="text-yellow-400 hover:text-yellow-300" title="Edit record">
                                             <i class="fa fa-edit" aria-hidden="true"></i>
                                         </a>
                                     </td>
                                     <td class="px-2 py-2 border-b border-neutral-700 text-left">
-                                        <a href={{ path('app_manager_database_delete', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }} class="text-red-500 hover:text-red-400">
+                                        <a href={{ path('app_manager_database_delete', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }} class="text-red-500 hover:text-red-400" title="Delete record">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
                                     </td>
