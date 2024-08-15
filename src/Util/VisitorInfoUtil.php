@@ -42,8 +42,13 @@ class VisitorInfoUtil
         // get user agent
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
 
-        // return user agent
-        return $userAgent !== null ? $userAgent : 'Unknown';
+        /** @var string $browserAgent return user agent */
+        $browserAgent = $userAgent !== null ? $userAgent : 'Unknown';
+
+        // escape user agent
+        $browserAgent = htmlspecialchars($browserAgent, ENT_QUOTES | ENT_HTML5);
+
+        return $browserAgent;
     }
 
     /**
