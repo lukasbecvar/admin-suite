@@ -68,4 +68,4 @@ This project uses the following technologies
     * [Encore](https://symfony.com/doc/current/frontend/encore/index.html)
 
 ## License
-This prject is open-sourced software licensed under the [MIT license](https://github.com/lordbecvold/admin-suite/blob/main/LICENSE).
+This software is licensed under the [MIT license](https://github.com/lordbecvold/admin-suite/blob/main/LICENSE).
