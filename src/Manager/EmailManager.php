@@ -104,11 +104,13 @@ class EmailManager
 
             // log email sending
             if (!$this->databaseManager->isDatabaseDown()) {
-                $this->logManager->log(
-                    name: 'email-send',
-                    message: 'email sent to ' . $recipient . ' with subject: ' . $subject,
-                    level: LogManager::LEVEL_INFO
-                );
+                if ($subject != 'monitoring status') {
+                    $this->logManager->log(
+                        name: 'email-send',
+                        message: 'email sent to ' . $recipient . ' with subject: ' . $subject,
+                        level: LogManager::LEVEL_INFO
+                    );
+                }
             }
         } catch (TransportExceptionInterface $e) {
             $this->errorManager->handleError(
