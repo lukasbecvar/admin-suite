@@ -18,17 +18,25 @@
 }
 
 .auth-form-input {
-	border: 1px solid rgba(230, 230, 230, 0.24);
-	background: rgba(153, 153, 153, 0.062);
-	text-align: center;
-	font-family: arial;
-	font-size: 17px;
-	padding: 4px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background: rgba(255, 255, 255, 0.041);
+	text-align: left;
+	font-family: 'Inter', sans-serif;
+	font-size: 16px;
+	padding: 8px 12px;
 	color: white;
-	transition: all 0.2s ease;
+	transition: all 0.3s ease;
 	width: 100%;
-    margin-top: 3px;
-    margin-bottom: 3px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border-radius: 4px;
+	text-align: center;
+}
+
+.auth-form-input:focus {
+	color: white;
+	border-color: #63b3ed;
+	box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
 }
 
 .auth-form-input:-webkit-autofill, 

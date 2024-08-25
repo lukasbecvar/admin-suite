@@ -1,22 +1,24 @@
-<div class="card-color border border-gray-600 shadow-md overflow-hidden w-full">
-    <div class="px-2 py-1 border-b border-gray-600 text-white font-bold text-sm">System Information</div>
-    <div class="p-3">
-        <div class="flex mb-2">
-            <div class="w-1/2 pr-4">
+<div class="card-color border border-gray-600 shadow-lg rounded-lg overflow-hidden w-full">
+    <div class="px-3 py-2 border-b border-gray-600 text-white font-bold text-sm">System Information</div>
+    <div class="p-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            {# Uptime #}
+            <div class="flex flex-col">
                 <p class="text-gray-300 mb-1">Uptime</p>
                 <p class="text-white font-medium">{{ hostUptime|e }}</p>
             </div>
-            <div class="w-1/2">
+            {# System #}
+            <div class="flex flex-col">
                 <p class="text-gray-300 mb-1">System</p>
                 <p class="text-white font-medium">{{ hostSystemInfo.operating_system|split('"')[1]|trim('" NAME')|e }}</p>
             </div>
-        </div>
-        <div class="flex mb-2">
-            <div class="w-1/2 pr-4">
+            {# Kernel #}
+            <div class="flex flex-col">
                 <p class="text-gray-300 mb-1">Kernel</p>
                 <p class="text-white font-medium">{{ hostSystemInfo.kernel_version|e }}</p>
             </div>
-            <div class="w-1/2">
+            {# Architecture #}
+            <div class="flex flex-col">
                 <p class="text-gray-300 mb-1">Architecture</p>
                 <p class="text-white font-medium">{{ hostSystemInfo.kernel_arch|e }}</p>
             </div>

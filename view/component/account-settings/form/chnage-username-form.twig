@@ -3,26 +3,26 @@
 {# ACCOUNT SETTING CHANGE USERNAME #}
 {% block component %}
 {# SUB NAVIGATION #}
-<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation text-white breadcrumb">
-    <a href={{ path('app_account_settings_table') }} class="border border-gray-600 font-bold px-1" title="Back to account settings">
+<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation text-white breadcrumb py-2 px-4 flex items-center">
+    <a href={{ path('app_account_settings_table') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2" title="Back to account settings">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
-    <span class="mr-1">Username settings</span>
+    <span class="mr-1">Password settings</span>
 </div>
 
 {# USERNAME CHANGE FORM #}
 <div class="flex justify-center items-center mb-10 component">
-    <div class="text-white max-w-md w-full card-color shadow-md px-3 py-3 border border-gray-600 m-w-95">
-        <h2 class="text-xl mb-2 text-center text-white">Change username</h2>
+    <div class="text-white max-w-md w-full bg-dark shadow-md px-3 py-1 border border-gray-600 rounded-lg m-w-95">
+        <h2 class="text-xl mt-2 mb-2 text-center text-white">Change username</h2>
     
         {# SUCCESS MESSAGE BOX #}
         {% for message in app.flashes('success') %}
-            <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
+            <div class="bg-green-700 text-white p-3 mb-1 rounded text-center">{{ message|e }}</div>
         {% endfor %}
     
         {# ERROR MESSAGE BOX #}
         {% for message in app.flashes('error') %}
-            <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
+            <div class="bg-red-700 text-white p-3 mb-1 rounded text-center">{{ message|e }}</div>
         {% endfor %}
     
         {# USERNAME CHANGE FORM #}
@@ -32,7 +32,9 @@
             {{ form_row(usernameChangeForm.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
 
             {# FORM SUBMIT BUTTON #}
-            <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Change</button>
+            <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+                Change
+            </button>
         {{ form_end(usernameChangeForm) }}
     </div>
 </div>

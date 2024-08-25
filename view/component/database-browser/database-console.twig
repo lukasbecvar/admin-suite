@@ -4,14 +4,14 @@
 {% block component %}
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb p-4">
-    <a href={{ path('app_manager_database') }} class="border border-gray-600 font-bold px-1 text-white" title="Back to database browser">
+    <a href={{ path('app_manager_database') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2" title="Back to database browser">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
     <span class="mr-1 text-white">Query console</span>
 </div>
 
 {# DATABASE CONSOLE #}
-<div class="bg-gray-800 p-2 shadow-md card-color border border-gray-600 mb-2 database-console">
+<div class="bg-gray-800 p-2 shadow-md card-color border border-gray-600 mb-2 database-console rounded-lg">
     <h2 class="text-2xl text-center text-white font-semibold">Database console</h2>
 
     {# OUTPUT BOX #}

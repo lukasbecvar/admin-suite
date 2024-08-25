@@ -137,9 +137,10 @@
 
 /* dashboard component */
 .dashbard-component .progress-bar {
+	border-radius: 20px;
 	border: 1px solid rgb(161, 161, 161);
     width: 100%;
-    height: 10px;
+    height: 15px;
     background-color: #272727;
     margin-bottom: 10px;
 }

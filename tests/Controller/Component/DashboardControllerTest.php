@@ -39,7 +39,7 @@ class DashboardControllerTest extends CustomTestCase
         $this->assertSelectorExists('button[id="menu-toggle"]');
         $this->assertSelectorExists('a[href="/logout"]');
         $this->assertSelectorExists('aside[id="sidebar"]');
-        $this->assertSelectorExists('div[class="profile-image mt-2"]');
+        $this->assertSelectorExists('img[alt="profile picture"]');
         $this->assertSelectorExists('div[class="username font-bold text-xl"]');
         $this->assertSelectorExists('div[class="role text-base"]');
         $this->assertSelectorExists('a[href="/dashboard"]');
@@ -55,7 +55,7 @@ class DashboardControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'Process list');
         $this->assertSelectorTextContains('body', 'Monitoring');
         $this->assertSelectorTextContains('body', 'System Information');
-        $this->assertSelectorTextContains('body', 'System resources');
+        $this->assertSelectorTextContains('body', 'System Resources');
         $this->assertSelectorTextContains('body', 'Logs');
         $this->assertSelectorTextContains('body', 'Users');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);

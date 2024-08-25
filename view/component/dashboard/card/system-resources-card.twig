@@ -1,17 +1,17 @@
-<div class="bg-neutral-900 border border-gray-600 shadow-md card-color w-full">
-    <div class="px-2 py-1 border-b border-gray-600 font-extrabold text-white text-sm">System resources</div>
-    <div class="p-3">
+<div class="card-color border border-gray-600 shadow-lg rounded-lg w-full">
+    <div class="px-3 py-2 border-b border-gray-600 font-extrabold text-white text-sm">System Resources</div>
+    <div class="p-4">
         <p class="text-white mb-1">CPU: {{ diagnosticData.cpuUsage|e }}%</p>
         <div class="progress-bar">
-            <div class="progress" style="width: {{ diagnosticData.cpuUsage|e }}%;"></div>
+            <div class="progress rounded-md" style="width: {{ diagnosticData.cpuUsage|e }}%;"></div>
         </div>
         <p class="text-white mb-1">RAM: ({{ ramUsage.used|e }}G / {{ diagnosticData.ramUsage|e }}%)</p>
         <div class="progress-bar">
-            <div class="progress" style="width: {{ diagnosticData.ramUsage|e }}%;"></div>
+            <div class="progress rounded-md" style="width: {{ diagnosticData.ramUsage|e }}%;"></div>
         </div>
         <p class="text-white mb-1">DISK: ({{ diskUsage|e }}G / {{ diagnosticData.driveSpace|e }}%)</p>
         <div class="progress-bar">
-            <div class="progress" style="width: {{ diagnosticData.driveSpace|e }}%;"></div>
+            <div class="progress rounded-md" style="width: {{ diagnosticData.driveSpace|e }}%;"></div>
         </div>
     </div>
 </div>
