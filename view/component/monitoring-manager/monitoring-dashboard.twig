@@ -83,7 +83,7 @@
                                 <div class="flex items-center space-x-1">
                                     {% if serviceStatus %}
                                         <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-700 hover:bg-yellow-600 text-white px-3 py-1 rounded text-xs font-bold">Restart</a>
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="bg-red-700 hover:bg-red-600 text-white px-3 py-1 rounded text-xsfont-bold">Stop</a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="bg-red-700 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-bold">Stop</a>
                                     {% else %}
                                         <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="bg-green-700 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-bold">Start</a>
                                     {% endif %}

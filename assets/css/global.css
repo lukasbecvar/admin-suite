@@ -18,6 +18,10 @@ input {
 	outline: none;
 }
 
+.bg-neutral-850 {
+	background-color: rgb(30, 30, 30) !important;
+}
+
 .link {
 	color: rgb(49, 114, 255);
 }
