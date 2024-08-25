@@ -4,7 +4,7 @@
 {% block component %} 
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
-    <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 text-white" title="Back to dashboard">
+    <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2" title="Back to dashboard">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
     <span class="mr-1 text-white">Diagnostics</span>
@@ -14,9 +14,8 @@
 <div class="flex-center mx-1 mt-2 component">
 
     {# HOST SYSTEM DIAGNOSTICS CARD #}
-    <div class="shadow-lg text-white mb-3 border border-gray-600 card-color">
+    <div class="shadow-lg text-white mb-3 border border-gray-600 card-color rounded-lg">
         <div class="px-3 py-2 mb-2 border-b border-gray-600">System diagnostics</div>
-        
         {# NOT-INSTALLED-REQUIREMENTS CHECK #}
         <div class="px-4 py-1">
             {% if diagnosticData.notInstalledRequirements is empty %}
@@ -39,7 +38,6 @@
                 </span>
             {% endif %}
         </div>
-
         {# DISK-SPACE CHECK #}
         <div class="px-4 py-1">
             {% if diagnosticData.driveSpace < 90 %}
@@ -62,7 +60,6 @@
                 </span>
             {% endif %}
         </div>
- 
         {# CPU-OVERLOAD CHECK #}
         <div class="px-4 py-1">
             {% if diagnosticData.cpuUsage > 98.00 %}
@@ -85,7 +82,6 @@
                 </span>
             {% endif %}
         </div>
-
         {# RAM-OVERLOAD CHECK #}
         <div class="px-4 py-1">
             {% if diagnosticData.ramUsage > 98.00 %}
@@ -111,9 +107,8 @@
     </div>
 
     {# SELF WEB DIAGNOSTICS CARD #}
-    <div class="shadow-lg text-white mb-3 border border-gray-600 card-color">
+    <div class="shadow-lg text-white mb-3 border border-gray-600 card-color rounded-lg">
         <div class="px-3 py-2 border-b border-gray-600">Website diagnostics</div>
-
         {# SSL-RUNNING CHECK #}
         <div class="px-4 py-2">
             {% if diagnosticData.isSSL %}
@@ -136,7 +131,6 @@
                 </span>
             {% endif %}
         </div>
-
         {# DEV-MODE CHECK #}
         <div class="px-4 py-2">
             {% if diagnosticData.isDevMode %}
@@ -159,7 +153,6 @@
                 </span>
             {% endif %}
         </div>
-
         {# WEBSERVER USER PERMISSIONS CHECK #}
         <div class="px-4 py-2">
             {% if diagnosticData.isWebUserSudo %}

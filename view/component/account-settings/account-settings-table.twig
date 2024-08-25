@@ -4,7 +4,7 @@
 {% block component %}
 {# SUB NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation text-white breadcrumb">
-    <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1" title="Back to dashboard">
+    <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2" title="Back to dashboard">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
     <span class="mr-1">Account settings</span>
@@ -12,7 +12,7 @@
 
 {# ACCOUNT SETTINGS TABLE #}
 <div class="w-full flex justify-center">
-    <div class="w-full max-w-3xl card-color shadow-lg p-4 md:mt-10 border border-gray-600 account-settings">
+    <div class="w-full max-w-3xl card-color shadow-lg p-4 md:mt-10 border border-gray-600 rounded-lg account-settings">
         <h2 class="text-xl font-semibold mb-4 text-white text-center">Account Settings</h2>
         <div class="space-y-6">
 

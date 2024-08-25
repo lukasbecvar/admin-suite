@@ -1,13 +1,14 @@
-<div class="border border-gray-600 shadow-lg overflow-hidden w-full max-h-50 card-color card-component">
-    <div class="px-2 py-1 border-b border-gray-600 text-white font-bold">
-        <a href={{ path('app_manager_monitoring') }} class="card-rederer text-sm">Monitoring</a>
+<div class="border border-gray-600 shadow-lg rounded-lg overflow-hidden w-full card-color max-h-50">
+    <div class="px-3 py-2 border-b border-gray-600 text-white font-bold text-sm flex items-center justify-between">
+        <span>Monitoring</span>
+        <a href={{ path('app_manager_monitoring') }} class="text-indigo-400 hover:text-indigo-300 text-xs" title="Go to monitoring">View All</a>
     </div>
-    <div class="p-1 overflow-y-auto h-60">
+    <div class="p-2 overflow-y-auto max-h-72">
         {# UFW SERVICE #}
-        <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-600 rounded text-sm">
+        <div class="hover:bg-neutral-800 flex justify-between items-center mb-2 bg-neutral-900 p-2 border border-gray-600 rounded-md text-sm">
             <div class="flex items-center space-x-2">
                 <span class="text-gray-300 font-semibold">UFW</span>
-                <span class="text-white ml-r">
+                <span class="text-white">
                     {% if serviceManager.isUfwRunning() %}
                         [<span class="text-green-500 font-bold">ONLINE</span>]
                     {% else %}
@@ -15,23 +16,23 @@
                     {% endif %}
                 </span>
             </div>
-            <div class="flex items-center space-x-1">
+            <div class="flex items-center space-x-2">
                 {% if serviceManager.isUfwRunning() %}
-                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_dashboard'}) }} class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 text-l font-bold" title="Stop service">Stop</a>
+                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_dashboard'}) }} class="bg-red-700 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-bold" title="Stop service">Stop</a>
                 {% else %}
-                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_dashboard'}) }} class="bg-green-700 hover:bg-green-600 text-white px-2 py-1 text-l font-bold" title="Start service">Start</a>
+                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_dashboard'}) }} class="bg-green-700 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-bold" title="Start service">Start</a>
                 {% endif %}
             </div>
-        </div> 
+        </div>
 
         {# SERVICES LIST #}
         {% for service in services %}
             {% if service.enable %}
                 {% if service.type == 'systemd' %}
-                    <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-900 p-1 border border-gray-600 rounded text-sm">
-                        <div class="flex items-center space-x-1">
+                    <div class="hover:bg-neutral-800 flex justify-between items-center mb-2 bg-neutral-900 p-2 border border-gray-600 rounded-md text-sm">
+                        <div class="flex items-center space-x-2">
                             <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
-                            <span class="text-white ml-r">
+                            <span class="text-white">
                                 {% set serviceStatus = serviceManager.isServiceRunning(service.service_name) %}
                                 {% if serviceStatus %}
                                     [<span class="text-green-500 font-bold">ONLINE</span>]
@@ -40,12 +41,12 @@
                                 {% endif %}
                             </span>
                         </div>
-                        {% if service.type == 'systemd' %}                                
-                            <div class="flex items-center space-x-1">
+                        {% if service.type == 'systemd' %}
+                            <div class="flex items-center space-x-2">
                                 {% if serviceStatus %}
-                                    <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_dashboard'}) }} class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 text-l font-bold" title="Stop service">Stop</a>
+                                    <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_dashboard'}) }} class="bg-red-700 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-bold" title="Stop service">Stop</a>
                                 {% else %}
-                                    <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_dashboard'}) }} class="bg-green-700 hover:bg-green-600 text-white px-2 py-1 text-l font-bold" title="Start service">Start</a>
+                                    <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_dashboard'}) }} class="bg-green-700 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-bold" title="Start service">Start</a>
                                 {% endif %}
                             </div>
                         {% endif %}

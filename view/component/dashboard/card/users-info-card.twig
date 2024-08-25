@@ -1,19 +1,18 @@
-<div class="bg-neutral-900 border border-gray-600 shadow-md card-color w-full">
-    <div class="px-2 py-1 border-b border-gray-600 font-extrabold text-white">
-        <a href={{ path('app_manager_users') }} class="card-rederer text-sm" title="Go to users manager">Users</a>
+<div class="card-color border border-gray-600 shadow-lg rounded-lg w-full">
+    <div class="px-3 py-2 border-b border-gray-600 text-white font-bold text-sm flex items-center justify-between">
+        <span>Users</span>
+        <a href={{ path('app_manager_users') }} class="text-indigo-400 hover:text-indigo-300 text-xs" title="Go to users manager">View All</a>
     </div>
-    <div class="p-3">
-        <div class="flex mb-2">
-            <div class="w-1/2 pr-4">
-                <p class="text-gray-300 mb-1">Users count: <span class="text-white">{{ usersCount|e }}</span></p>
+    <div class="p-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <p class="text-gray-300 mb-1">Users count: <span class="text-white font-semibold">{{ usersCount|e }}</span></p>
             </div>
-            <div class="w-1/2">
-                <p class="text-gray-300 mb-1">Online: <span class="text-white">{{ onlineUsersCount|e }} (<a href={{ path('app_manager_users', {'filter': 'online'}) }} class="link">list</a>)</span></p>
+            <div>
+                <p class="text-gray-300 mb-1">Online: <span class="text-white font-semibold">{{ onlineUsersCount|e }} (<a href="{{ path('app_manager_users', {'filter': 'online'}) }}" class="text-blue-400 hover:text-blue-300">list</a>)</span></p>
             </div>
-        </div>
-        <div class="flex">
-            <div class="w-1/2 pr-4">
-                <p class="text-gray-300 mb-1">Banned: <span class="text-white">{{ bannedUsersCount|e }}  (<a href={{ path('app_manager_users', {'filter': 'banned'}) }} class="link">list</a>)</span></p>
+            <div class="col-span-2">
+                <p class="text-gray-300 mb-1">Banned: <span class="text-white font-semibold">{{ bannedUsersCount|e }} (<a href="{{ path('app_manager_users', {'filter': 'banned'}) }}" class="text-blue-400 hover:text-blue-300">list</a>)</span></p>
             </div>
         </div>
     </div>

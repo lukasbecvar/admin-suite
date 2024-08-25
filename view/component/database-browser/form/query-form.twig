@@ -5,19 +5,17 @@
             {{ form_row(queryForm.query, {
                 'label_attr': {'class': 'block text-sm font-medium text-gray-300'},
                 'attr': {
-                    'class': 'mt-1 block w-full p-2.5 bg-neutral-900 border border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500 resize-none',
+                    'class': 'mt-1 block w-full p-2.5 rounded-lg bg-neutral-900 border border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500 resize-none',
                     'style': 'resize: none;'
-                }
-            }) 
-        }}
-    </div>
+                }}) 
+            }}
+        </div>
 
-    {# FORM SUBMIT BUTTON #}
-    <div class="text-right">
-        <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            Execute Query
-        </button>
-    </div>
-        
+        {# FORM SUBMIT BUTTON #}
+        <div class="text-right">
+            <button type="submit" class="bg-blue-600 rounded-lg text-white font-bold py-2 px-4 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Execute Query
+            </button>
+        </div>
     {{ form_end(queryForm) }}
 </div>

@@ -3,31 +3,31 @@
 {# ACCOUNT SETTING CHANGE PICTURE #}
 {% block component %}
 {# SUB NAVIGATION #}
-<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation text-white breadcrumb">
-    <a href={{ path('app_account_settings_table') }} class="border border-gray-600 font-bold px-1" title="Back to account settings">
+<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation text-white breadcrumb py-2 px-4 flex items-center">
+    <a href={{ path('app_account_settings_table') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2" title="Back to account settings">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
-    <span class="mr-1">Picture settings</span>
+    <span class="mr-1">Password settings</span>
 </div>
 
 {# PICTURE CHANGE FORM #}
 <div class="flex justify-center items-center mb-10 component">
-    <div class="text-white max-w-md w-full card-color shadow-md px-3 py-3 border border-gray-600 m-w-95">
-        <h2 class="text-xl mb-2 text-center text-white">Change picture</h2>
+    <div class="text-white max-w-md w-full bg-dark shadow-md px-3 py-1 border border-gray-600 rounded-lg m-w-95">
+        <h2 class="text-xl mt-2 mb-2 text-center text-white">Change picture</h2>
     
         {# SUCCESS MESSAGE BOX #}
         {% for message in app.flashes('success') %}
-            <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
+            <div class="bg-green-700 text-white p-3 mb-1 rounded text-center">{{ message|e }}</div>
         {% endfor %}
     
         {# ERROR MESSAGE BOX #}
         {% for message in app.flashes('error') %}
-            <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
+            <div class="bg-red-700 text-white p-3 mb-1 rounded text-center">{{ message|e }}</div>
         {% endfor %}
 
         {# IMAGE PREVIEW BOX #}
-        <div class="image-preview mb-4 flex justify-center">
-            <div class="relative rounded-lg overflow-hidden border-2 border-gray-600 shadow-lg" style="display: none;" id="image-preview-container">
+        <div class="image-preview mb-2 flex justify-center">
+            <div class="relative rounded-lg overflow-hidden border border-gray-600 shadow-lg" style="display: none;" id="image-preview-container">
                 <img id="preview-image" src="#" alt="Image preview" class="w-40 h-40 object-cover">
             </div>
         </div>
@@ -36,13 +36,15 @@
         {{ form_start(profilePicChangeForm) }}
     
             {# FORM FIELDS #}
-            <div class="mb-4">
+            <div class="mb-2">
                 {{ form_label(profilePicChangeForm['profile-pic'], 'Choose Picture', {'label_attr': {'class': 'block text-sm font-bold mb-2'}}) }}
                 {{ form_row(profilePicChangeForm['profile-pic'], {'attr': {'class': 'block w-full px-3 py-2 mt-1 bg-neutral-800 text-white border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500', 'accept': 'image/*', 'onchange': 'previewImage(this)'}}) }}
             </div>
 
             {# FORM SUBMIT BUTTON #}
-            <button type="submit" class="mt-1 mb-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Change</button>
+            <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+                Change
+            </button>
         {{ form_end(profilePicChangeForm) }}
     </div>
 </div>
