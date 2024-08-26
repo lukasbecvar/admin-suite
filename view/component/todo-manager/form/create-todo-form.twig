@@ -8,14 +8,17 @@
             </div>
         {% endif %}
 
-        <div class="flex flex-col phn:flex-row">
-            {# TODO TEXT INPUT #}
-            {{ form_widget(createTodoForm.todo_text, {'attr': {'class': 'border-b border-gray-600 flex-1 bg-neutral-800 px-2 py-1 text-white', 'placeholder': 'Todo text'}}) }}
-
-            {# ADD TODO BUTTON #}
-            <button class="border border-gray-600 bg-green-700 hover:bg-green-600 text-white px-4 py-2 mt-2 phn:mt-0 focus:outline-none">
-                <i class="fa fa-plus" aria-hidden="true"></i>
-            </button>
+        <div class="bg-neutral-900 flex-none p-1 py-1 border-b border-neutral-700">
+            <div class="flex items-center space-x-1">
+        
+                {# TODO TEXT INPUT #}
+                {{ form_widget(createTodoForm.todo_text, {'attr': {'class': 'border border-gray-600 rounded-lg flex-1 bg-neutral-800 px-4 py-2 text-white', 'placeholder': 'Enter new todo...'}}) }}
+                
+                {# ADD TODO BUTTON #}
+                <button class="border border-gray-600 bg-green-600 hover:bg-green-500 text-white rounded-lg px-4 py-2 mt-0 focus:outline-none flex items-center h-full">
+                    <i class="fa fa-plus text-xl" aria-hidden="true"></i>
+                    <span class="hidden sm:inline ml-2">Add Todo</span>
+                </button>
+            </div>
         </div>
-    </div>
 {{ form_end(createTodoForm) }}

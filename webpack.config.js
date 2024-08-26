@@ -43,7 +43,6 @@ Encore
                     ],
                     theme: {
                         extend: {
-
                             screens: {
                                 'phn': '340px',
                             },
