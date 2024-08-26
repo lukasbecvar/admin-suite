@@ -31,22 +31,22 @@
         <div class="space-y-4">
             {% for column in columns %}
                 <div>
-                    <label class="block text-gray-200 mb-1" for="{{ column.COLUMN_NAME|e }}">{{ column.COLUMN_NAME|capitalize|e }}</label>
+                    <label class="block text-gray-200 mb-1" for={{ column.COLUMN_NAME|e }}>{{ column.COLUMN_NAME|capitalize|e }}</label>
                     {% if column.COLUMN_TYPE == 'datetime' %}
                         <input 
                             class="form-input rounded-lg w-full px-4 py-2 border border-gray-600 bg-neutral-700 text-white focus:outline-none focus:border-blue-500"
                             type="datetime-local"
-                            name="{{ column.COLUMN_NAME|e }}"
-                            id="{{ column.COLUMN_NAME|e }}"
-                            value="{{ formData[column.COLUMN_NAME]|default('')|e }}"
+                            name={{ column.COLUMN_NAME|e }}
+                            id={{ column.COLUMN_NAME|e }}
+                            value={{ formData[column.COLUMN_NAME]|default('')|e }}
                         >
                     {% else %}
                         <input 
                             class="form-input rounded-lg w-full px-4 py-2 border border-gray-600 bg-neutral-700 text-white focus:outline-none focus:border-blue-500"
                             type="text"
-                            name="{{ column.COLUMN_NAME|e }}"
-                            id="{{ column.COLUMN_NAME|e }}"
-                            value="{{ formData[column.COLUMN_NAME]|default('')|e }}"
+                            name={{ column.COLUMN_NAME|e }}
+                            id={{ column.COLUMN_NAME|e }}
+                            value={{ formData[column.COLUMN_NAME]|default('')|e }}
                         >
                     {% endif %}
                 </div>
