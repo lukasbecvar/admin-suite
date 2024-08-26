@@ -168,7 +168,7 @@
 /* todo manager component */
 .todo-manager {
 	height: 100%;
-	background-color: #1b1b1b;
+	background-color: rgb(23 23 23);;
 }
 
 /* database browser component */
