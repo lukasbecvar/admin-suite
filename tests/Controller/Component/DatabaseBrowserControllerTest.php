@@ -5,6 +5,7 @@ namespace App\Tests\Controller\Component;
 use App\Tests\CustomTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\String\ByteString;
 
 /**
  * Class DatabaseBrowserControllerTest
@@ -374,14 +375,14 @@ class DatabaseBrowserControllerTest extends CustomTestCase
             'id' => 6,
 
             // submit form data
-            'username' => 'testuser',
+            'username' => 'testuser: ' . ByteString::fromRandom(6),
             'password' => 'testpassword',
             'ip_address' => '127.0.0.1',
             'user_agent' => 'testagent',
             'register_time' => '2022-01-01 00:00:00',
             'last_login_time' => '2022-01-01 00:00:00',
             'role' => 'admin',
-            'token' => 'testtoken',
+            'token' => ByteString::fromRandom(16),
             'profile_pic' => 'testprofilepic'
         ]);
 
