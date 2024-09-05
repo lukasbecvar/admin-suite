@@ -12,7 +12,7 @@
 
 {# PICTURE CHANGE FORM #}
 <div class="flex justify-center items-center mb-10 component">
-    <div class="text-white max-w-md w-full bg-dark shadow-md px-3 py-1 border border-gray-600 rounded-lg m-w-95">
+    <div class="text-white max-w-md w-full bg-dark shadow-md px-3 py-1 border border-gray-600 rounded m-w-95">
         <h2 class="text-xl mt-2 mb-2 text-center text-white">Change picture</h2>
     
         {# SUCCESS MESSAGE BOX #}
@@ -38,7 +38,7 @@
             {# FORM FIELDS #}
             <div class="mb-2">
                 {{ form_label(profilePicChangeForm['profile-pic'], 'Choose Picture', {'label_attr': {'class': 'block text-sm font-bold mb-2'}}) }}
-                {{ form_row(profilePicChangeForm['profile-pic'], {'attr': {'class': 'block w-full px-3 py-2 mt-1 bg-neutral-800 text-white border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500', 'accept': 'image/*', 'onchange': 'previewImage(this)'}}) }}
+                {{ form_row(profilePicChangeForm['profile-pic'], {'attr': {'class': 'block w-full px-3 py-2 mt-1 bg-neutral-800 text-white border border-gray-300 rounded focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500', 'accept': 'image/*', 'onchange': 'previewImage(this)'}}) }}
             </div>
 
             {# FORM SUBMIT BUTTON #}

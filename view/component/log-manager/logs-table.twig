@@ -130,7 +130,7 @@
     {# PAGINATION SYSTEM #}
     {% if (logsCount > limitPerPage) %}
         <div class="mt-2 flex justify-center mb-2">
-            <div class="border border-neutral-600 rounded-lg overflow-hidden">
+            <div class="border border-neutral-600 rounded overflow-hidden">
                 <ul class="flex">
                     {% set totalPages = (logsCount / limitPerPage)|round(0, 'ceil') %}
                     {% set previousPage = currentPage > 1 ? currentPage - 1 : 1 %}
