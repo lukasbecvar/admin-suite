@@ -5,7 +5,7 @@
 } 
 
 ::-webkit-scrollbar-track {
-	background: rgb(40, 40, 40);
+	background: rgb(42, 42, 42);
 }
  
 .card-component ::-webkit-scrollbar-track {

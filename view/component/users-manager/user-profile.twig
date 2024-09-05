@@ -11,7 +11,7 @@
 </div>
 
 {# PROFILE COMPONENT #}
-<div class="mx-auto bg-white card-color shadow-lg overflow-hidden border border-neutral-700 md:mt-5 md:max-w-md users-manager phone-max-h rounded-lg">
+<div class="mx-auto bg-white card-color shadow-lg overflow-hidden border border-neutral-700 md:mt-5 md:max-w-md users-manager phone-max-h rounded">
     <div class="text-white text-center py-3 border-b border-neutral-700">
         {% if userRepository.getProfilePic() == 'default_pic' %}
             <img class="w-24 h-24 rounded-full mx-auto" src={{ asset('/assets/images/default-profile.jpg') }} alt="User Profile Picture">

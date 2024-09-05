@@ -11,7 +11,7 @@
 </div>
 
 {# ROW ADD FORM #}
-<div class="add-row-input mx-auto max-w-4xl p-3 bg-neutral-800 shadow-lg border border-gray-600 rounded-lg">
+<div class="add-row-input mx-auto max-w-4xl p-3 bg-neutral-800 shadow-lg border border-gray-600 rounded">
     <h2 class="text-2xl text-white mb-4 text-center">Add row to {{ tableName|e }}</h2>
 
     {# ERROR BOX #}
@@ -34,7 +34,7 @@
                     <label class="block text-gray-200 mb-1" for={{ column.COLUMN_NAME|e }}>{{ column.COLUMN_NAME|capitalize|e }}</label>
                     {% if column.COLUMN_TYPE == 'datetime' %}
                         <input 
-                            class="form-input rounded-lg w-full px-4 py-2 border border-gray-600 bg-neutral-700 text-white focus:outline-none focus:border-blue-500"
+                            class="form-input rounded w-full px-4 py-2 border border-gray-600 bg-neutral-700 text-white focus:outline-none focus:border-blue-500"
                             type="datetime-local"
                             name={{ column.COLUMN_NAME|e }}
                             id={{ column.COLUMN_NAME|e }}
@@ -42,7 +42,7 @@
                         >
                     {% else %}
                         <input 
-                            class="form-input rounded-lg w-full px-4 py-2 border border-gray-600 bg-neutral-700 text-white focus:outline-none focus:border-blue-500"
+                            class="form-input rounded w-full px-4 py-2 border border-gray-600 bg-neutral-700 text-white focus:outline-none focus:border-blue-500"
                             type="text"
                             name={{ column.COLUMN_NAME|e }}
                             id={{ column.COLUMN_NAME|e }}
@@ -53,7 +53,7 @@
             {% endfor %}
         </div>
         <div class="mt-3 text-right">
-            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 shadow rounded-lg" type="submit">Add Row</button>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 shadow rounded" type="submit">Add Row</button>
         </div>
     </form>
 </div>

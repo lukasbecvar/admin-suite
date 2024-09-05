@@ -1,11 +1,11 @@
-<div class="border border-gray-600 shadow-lg rounded-lg overflow-hidden w-full card-color max-h-50">
+<div class="border border-gray-600 shadow-lg rounded overflow-hidden w-full card-color max-h-50">
     <div class="px-3 py-2 border-b border-gray-600 text-white font-bold text-sm flex items-center justify-between">
         <span>Monitoring</span>
         <a href={{ path('app_manager_monitoring') }} class="text-indigo-400 hover:text-indigo-300 text-xs" title="Go to monitoring">View All</a>
     </div>
     <div class="p-2 py-0 overflow-y-auto max-h-72">
         {# UFW SERVICE #}
-        <div class="hover:bg-neutral-800 flex justify-between items-center mb-2 mt-2 bg-neutral-900 p-2 border border-gray-600 rounded-md text-sm">
+        <div class="hover:bg-neutral-800 flex justify-between items-center mb-2 mt-2 bg-neutral-900 p-2 border border-gray-600 rounded text-sm">
             <div class="flex items-center space-x-2">
                 <span class="text-gray-300 font-semibold">UFW</span>
                 <span class="text-white">
@@ -29,7 +29,7 @@
         {% for service in services %}
             {% if service.enable %}
                 {% if service.type == 'systemd' %}
-                    <div class="hover:bg-neutral-800 flex justify-between items-center mb-2 bg-neutral-900 p-2 border border-gray-600 rounded-md text-sm">
+                    <div class="hover:bg-neutral-800 flex justify-between items-center mb-2 bg-neutral-900 p-2 border border-gray-600 rounded text-sm">
                         <div class="flex items-center space-x-2">
                             <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
                             <span class="text-white">
