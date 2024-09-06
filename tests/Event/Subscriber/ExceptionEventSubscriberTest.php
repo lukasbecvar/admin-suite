@@ -21,16 +21,16 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
  */
 class ExceptionEventSubscriberTest extends TestCase
 {
-    /** @var MockObject|LogManager */
+    /** @var MockObject&LogManager */
     private MockObject|LogManager $logManager;
 
-    /** @var MockObject|LoggerInterface */
+    /** @var MockObject&LoggerInterface */
     private MockObject|LoggerInterface $logger;
 
     /** @var ExceptionEventSubscriber */
     private ExceptionEventSubscriber $subscriber;
 
-    /** @var MockObject|DatabaseManager */
+    /** @var MockObject&DatabaseManager */
     private MockObject|DatabaseManager $databaseManager;
 
     protected function setUp(): void
@@ -77,9 +77,13 @@ class ExceptionEventSubscriberTest extends TestCase
         $property->setValue($exception, $trace);
 
         // create a new exception event
+        /** @var MockObject&HttpKernelInterface $kernel */
+        $kernel = $this->createMock(HttpKernelInterface::class);
+        /** @var MockObject&Request $request */
+        $request = $this->createMock(Request::class);
         $event = new ExceptionEvent(
-            $this->createMock(HttpKernelInterface::class),
-            $this->createMock(Request::class),
+            $kernel,
+            $request,
             HttpKernelInterface::MAIN_REQUEST,
             $exception
         );
@@ -115,9 +119,13 @@ class ExceptionEventSubscriberTest extends TestCase
         $property->setValue($exception, $trace);
 
         // create a new exception event
+        /** @var MockObject&HttpKernelInterface $kernel */
+        $kernel = $this->createMock(HttpKernelInterface::class);
+        /** @var MockObject&Request $request */
+        $request = $this->createMock(Request::class);
         $event = new ExceptionEvent(
-            $this->createMock(HttpKernelInterface::class),
-            $this->createMock(Request::class),
+            $kernel,
+            $request,
             HttpKernelInterface::MAIN_REQUEST,
             $exception
         );
@@ -152,9 +160,13 @@ class ExceptionEventSubscriberTest extends TestCase
         $property->setValue($exception, $trace);
 
         // create a new exception event
+        /** @var MockObject&HttpKernelInterface $kernel */
+        $kernel = $this->createMock(HttpKernelInterface::class);
+        /** @var MockObject&Request $request */
+        $request = $this->createMock(Request::class);
         $event = new ExceptionEvent(
-            $this->createMock(HttpKernelInterface::class),
-            $this->createMock(Request::class),
+            $kernel,
+            $request,
             HttpKernelInterface::MAIN_REQUEST,
             $exception
         );

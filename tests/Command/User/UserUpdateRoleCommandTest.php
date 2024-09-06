@@ -23,7 +23,7 @@ class UserUpdateRoleCommandTest extends TestCase
     /** @var CommandTester */
     private CommandTester $commandTester;
 
-    /** @var UserManager|MockObject */
+    /** @var UserManager&MockObject */
     private UserManager|MockObject $userManager;
 
     protected function setUp(): void

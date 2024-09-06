@@ -21,10 +21,10 @@ class SessionUtilTest extends TestCase
     /** @var SessionUtil */
     private SessionUtil $sessionUtil;
 
-    /** @var SecurityUtil|MockObject */
+    /** @var SecurityUtil&MockObject */
     private SecurityUtil|MockObject $securityUtilMock;
 
-    /** @var ErrorManager|MockObject */
+    /** @var ErrorManager&MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
     protected function setUp(): void
@@ -34,7 +34,10 @@ class SessionUtilTest extends TestCase
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
 
         // create the session util instance
-        $this->sessionUtil = new SessionUtil($this->securityUtilMock, $this->errorManagerMock);
+        $this->sessionUtil = new SessionUtil(
+            $this->securityUtilMock,
+            $this->errorManagerMock
+        );
     }
 
     /**

@@ -19,19 +19,19 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class ServiceManagerTest extends TestCase
 {
-    /** @var AppUtil|MockObject */
+    /** @var AppUtil&MockObject */
     private AppUtil|MockObject $appUtilMock;
 
     /** @var ServiceManager */
     private ServiceManager $serviceManager;
 
-    /** @var LogManager|MockObject */
+    /** @var LogManager&MockObject */
     private LogManager|MockObject $logManager;
 
-    /** @var AuthManager|MockObject */
+    /** @var AuthManager&MockObject */
     private AuthManager|MockObject $authManager;
 
-    /** @var ErrorManager|MockObject */
+    /** @var ErrorManager&MockObject */
     private ErrorManager|MockObject $errorManager;
 
     protected function setUp(): void

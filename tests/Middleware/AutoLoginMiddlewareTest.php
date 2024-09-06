@@ -23,16 +23,16 @@ class AutoLoginMiddlewareTest extends TestCase
     /** @var AutoLoginMiddleware */
     private AutoLoginMiddleware $middleware;
 
-    /** @var CookieUtil|MockObject */
+    /** @var CookieUtil&MockObject */
     private CookieUtil|MockObject $cookieUtilMock;
 
-    /** @var SessionUtil|MockObject */
+    /** @var SessionUtil&MockObject */
     private SessionUtil|MockObject $sessionUtilMock;
 
-    /** @var AuthManager|MockObject */
+    /** @var AuthManager&MockObject */
     private AuthManager|MockObject $authManagerMock;
 
-    /** @var UserManager|MockObject */
+    /** @var UserManager&MockObject */
     private UserManager|MockObject $userManagerMock;
 
     protected function setUp(): void

@@ -26,22 +26,22 @@ class BanManagerTest extends TestCase
     /** @var BanManager */
     private BanManager $banManager;
 
-    /** @var LogManager|MockObject */
+    /** @var LogManager&MockObject */
     private LogManager|MockObject $logManagerMock;
 
-    /** @var UserManager|MockObject */
+    /** @var UserManager&MockObject */
     private UserManager|MockObject $userManagerMock;
 
-    /** @var AuthManager|MockObject */
+    /** @var AuthManager&MockObject */
     private AuthManager|MockObject $authManagerMock;
 
-    /** @var ErrorManager|MockObject */
+    /** @var ErrorManager&MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
-    /** @var BannedRepository|MockObject */
+    /** @var BannedRepository&MockObject */
     private BannedRepository|MockObject $repositoryMock;
 
-    /** @var EntityManagerInterface|MockObject */
+    /** @var EntityManagerInterface&MockObject */
     private EntityManagerInterface|MockObject $entityManagerMock;
 
     protected function setUp(): void

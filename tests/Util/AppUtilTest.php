@@ -23,7 +23,7 @@ class AppUtilTest extends TestCase
     /** @var KernelInterface */
     private KernelInterface $kernelInterface;
 
-    /** @var JsonUtil|MockObject */
+    /** @var JsonUtil&MockObject */
     private JsonUtil|MockObject $jsonUtilMock;
 
     protected function setUp(): void
@@ -33,7 +33,10 @@ class AppUtilTest extends TestCase
         $this->kernelInterface = $this->createMock(KernelInterface::class);
 
         // create the app util instance
-        $this->appUtil = new AppUtil($this->jsonUtilMock, $this->kernelInterface);
+        $this->appUtil = new AppUtil(
+            $this->jsonUtilMock,
+            $this->kernelInterface
+        );
     }
 
     /**

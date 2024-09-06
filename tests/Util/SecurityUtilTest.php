@@ -21,10 +21,10 @@ class SecurityUtilTest extends TestCase
     /** @var SecurityUtil */
     private SecurityUtil $securityUtil;
 
-    /** @var JsonUtil|MockObject */
+    /** @var JsonUtil&MockObject */
     private JsonUtil|MockObject $jsonUtilMock;
 
-    /** @var KernelInterface|MockObject */
+    /** @var KernelInterface&MockObject */
     private KernelInterface|MockObject $kernelInterface;
 
     protected function setUp(): void
@@ -34,7 +34,9 @@ class SecurityUtilTest extends TestCase
         $this->kernelInterface = $this->createMock(KernelInterface::class);
 
         // create the security util instance
-        $this->securityUtil = new SecurityUtil(new AppUtil($this->jsonUtilMock, $this->kernelInterface));
+        $this->securityUtil = new SecurityUtil(
+            new AppUtil($this->jsonUtilMock, $this->kernelInterface)
+        );
     }
 
     /**

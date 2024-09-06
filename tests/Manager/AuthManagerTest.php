@@ -33,34 +33,34 @@ class AuthManagerTest extends TestCase
     /** @var ErrorManager */
     private ErrorManager $errorManagerMock;
 
-    /** @var AppUtil|MockObject */
+    /** @var AppUtil&MockObject */
     private AppUtil|MockObject $appUtilMock;
 
-    /** @var CacheUtil|MockObject */
+    /** @var CacheUtil&MockObject */
     private CacheUtil|MockObject $cacheUtilMock;
 
-    /** @var LogManager|MockObject */
+    /** @var LogManager&MockObject */
     private LogManager|MockObject $logManagerMock;
 
-    /** @var CookieUtil|MockObject */
+    /** @var CookieUtil&MockObject */
     private CookieUtil|MockObject $cookieUtilMock;
 
-    /** @var SessionUtil|MockObject */
+    /** @var SessionUtil&MockObject */
     private SessionUtil|MockObject $sessionUtilMock;
 
-    /** @var UserManager|MockObject */
+    /** @var UserManager&MockObject */
     private UserManager|MockObject $userManagerMock;
 
-    /** @var EmailManager|MockObject */
+    /** @var EmailManager&MockObject */
     private EmailManager|MockObject $emailManagerMock;
 
-    /** @var SecurityUtil|MockObject */
+    /** @var SecurityUtil&MockObject */
     private SecurityUtil|MockObject $securityUtilMock;
 
-    /** @var VisitorInfoUtil|MockObject */
+    /** @var VisitorInfoUtil&MockObject */
     private VisitorInfoUtil|MockObject $visitorInfoUtilMock;
 
-    /** @var EntityManagerInterface|MockObject */
+    /** @var EntityManagerInterface&MockObject */
     private EntityManagerInterface|MockObject $entityManagerMock;
 
     /** @var AuthManager */

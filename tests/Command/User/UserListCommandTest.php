@@ -8,6 +8,7 @@ use App\Util\VisitorInfoUtil;
 use PHPUnit\Framework\TestCase;
 use App\Command\User\UserListCommand;
 use Symfony\Component\Console\Application;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -19,15 +20,19 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class UserListCommandTest extends TestCase
 {
-    /**
-     * Test the execution of the UserListCommand
-     *
-     * @return void
-     */
-    public function testExecuteUserListCommand(): void
+    /** @var UserManager&MockObject */
+    private UserManager|MockObject $userManager;
+
+    /** @var VisitorInfoUtil&MockObject */
+    private VisitorInfoUtil|MockObject $visitorInfoUtil;
+
+    /** @var CommandTester */
+    private CommandTester $commandTester;
+
+    protected function setUp(): void
     {
         // mock UserManager
-        $userManager = $this->createMock(UserManager::class);
+        $this->userManager = $this->createMock(UserManager::class);
         $user1 = new User();
         $user1->setUsername('user1');
         $user1->setRole('ROLE_USER');
@@ -37,36 +42,44 @@ class UserListCommandTest extends TestCase
         $user1->setLastLoginTime(new \DateTime('2023-01-02 10:00:00'));
 
         // simulate returning one user
-        $userManager->expects($this->once())
+        $this->userManager->expects($this->once())
             ->method('getAllUsersRepository')
             ->willReturn([$user1]);
 
         // mock VisitorInfoUtil
-        $visitorInfoUtil = $this->createMock(VisitorInfoUtil::class);
-        $visitorInfoUtil->expects($this->once())
+        $this->visitorInfoUtil = $this->createMock(VisitorInfoUtil::class);
+        $this->visitorInfoUtil->expects($this->once())
             ->method('getBrowserShortify')
             ->with('Mozilla/5.0')
             ->willReturn('Mozilla');
-        $visitorInfoUtil->expects($this->once())
+        $this->visitorInfoUtil->expects($this->once())
             ->method('getOs')
             ->with('Mozilla/5.0')
             ->willReturn('Unknown OS');
 
         // create the command instance and inject mocks
-        $command = new UserListCommand($userManager, $visitorInfoUtil);
+        $command = new UserListCommand($this->userManager, $this->visitorInfoUtil);
 
         // set up the application and command tester
         $application = new Application();
         $application->add($command);
 
         $command = $application->find('app:user:list');
-        $commandTester = new CommandTester($command);
+        $this->commandTester = new CommandTester($command);
+    }
 
+    /**
+     * Test the execution of the UserListCommand
+     *
+     * @return void
+     */
+    public function testExecuteUserListCommand(): void
+    {
         // execute the command
-        $commandTester->execute(['command' => 'app:user:list']);
+        $this->commandTester->execute(['command' => 'app:user:list']);
 
         // get the output
-        $output = $commandTester->getDisplay();
+        $output = $this->commandTester->getDisplay();
 
         // assert output contains expected data
         $this->assertStringContainsString('Username', $output);

@@ -24,31 +24,31 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class MonitoringManagerTest extends TestCase
 {
-    /** @var AppUtil|MockObject */
+    /** @var AppUtil&MockObject */
     private AppUtil|MockObject $appUtilMock;
 
-    /** @var LogManager|MockObject */
+    /** @var LogManager&MockObject */
     private LogManager|MockObject $logManager;
 
     /** @var MonitoringManager */
     private MonitoringManager $monitoringManager;
 
-    /** @var ServerUtil|MockObject */
+    /** @var ServerUtil&MockObject */
     private ServerUtil|MockObject $serverUtilMock;
 
-    /** @var EmailManager|MockObject */
+    /** @var EmailManager&MockObject */
     private EmailManager|MockObject $emailManagerMock;
 
-    /** @var ErrorManager|MockObject */
+    /** @var ErrorManager&MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
-    /** @var EntityRepository<ServiceMonitoring>|MockObject */
+    /** @var EntityRepository<ServiceMonitoring>&MockObject */
     private EntityRepository|MockObject $repositoryMock;
 
-    /** @var ServiceManager|MockObject */
+    /** @var ServiceManager&MockObject */
     private ServiceManager|MockObject $serviceManagerMock;
 
-    /** @var EntityManagerInterface|MockObject */
+    /** @var EntityManagerInterface&MockObject */
     private EntityManagerInterface|MockObject $entityManagerMock;
 
     protected function setUp(): void

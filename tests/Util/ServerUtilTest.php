@@ -23,7 +23,7 @@ class ServerUtilTest extends TestCase
     /** @var ErrorManager */
     private ErrorManager $errorManager;
 
-    /** @var AppUtil|MockObject */
+    /** @var AppUtil&MockObject */
     private AppUtil|MockObject $appUtilMock;
 
     protected function setUp(): void
@@ -33,7 +33,10 @@ class ServerUtilTest extends TestCase
         $this->errorManager = $this->createMock(ErrorManager::class);
 
         // create instance of ServerUtil
-        $this->serverUtil = new ServerUtil($this->appUtilMock, $this->errorManager);
+        $this->serverUtil = new ServerUtil(
+            $this->appUtilMock,
+            $this->errorManager
+        );
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Manager\AuthManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use App\Command\RegenerateAuthTokensCommand;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -17,6 +18,34 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class RegenerateAuthTokensCommandTest extends TestCase
 {
+    /** @var AuthManager&MockObject */
+    private AuthManager|MockObject $authManager;
+
+    /** @var CommandTester */
+    private CommandTester $commandTester;
+
+    protected function setUp(): void
+    {
+        // mock AuthManager
+        $this->authManager = $this->createMock(AuthManager::class);
+
+        // set up the expected method calls and their return values
+        $this->authManager->expects($this->once())
+            ->method('regenerateUsersTokens')
+            ->willReturn(['status' => true]);
+
+        // create the command
+        $command = new RegenerateAuthTokensCommand($this->authManager);
+
+        // create an application and add the command
+        $application = new Application();
+        $application->add($command);
+
+        // create a command tester
+        $command = $application->find('app:auth:tokens:regenerate');
+        $this->commandTester = new CommandTester($command);
+    }
+
     /**
      * Test the execute method
      *
@@ -24,28 +53,11 @@ class RegenerateAuthTokensCommandTest extends TestCase
      */
     public function testRegenerateAuthTokensCommand(): void
     {
-        // mock AuthManager
-        $authManager = $this->createMock(AuthManager::class);
-
-        // set up the expected method calls and their return values
-        $authManager->expects($this->once())
-            ->method('regenerateUsersTokens')->willReturn(['status' => true]);
-
-        // create the command
-        $command = new RegenerateAuthTokensCommand($authManager);
-
-        // create an application and add the command
-        $application = new Application();
-        $application->add($command);
-
-        // create a command tester
-        $commandTester = new CommandTester($command);
-
         // execute the command
-        $commandTester->execute([]);
+        $this->commandTester->execute([]);
 
         // get output
-        $output = $commandTester->getDisplay();
+        $output = $this->commandTester->getDisplay();
 
         // assert the output
         $this->assertStringContainsString('All tokens is regenerated', $output);

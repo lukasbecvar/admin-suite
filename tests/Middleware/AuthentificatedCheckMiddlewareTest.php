@@ -21,13 +21,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class AuthentificatedCheckMiddlewareTest extends TestCase
 {
-    /** @var AuthManager|MockObject */
+    /** @var AuthManager&MockObject */
     private AuthManager|MockObject $authManagerMock;
 
     /** @var AuthentificatedCheckMiddleware */
     private AuthentificatedCheckMiddleware $middleware;
 
-    /** @var UrlGeneratorInterface|MockObject */
+    /** @var UrlGeneratorInterface&MockObject */
     private UrlGeneratorInterface|MockObject $urlGeneratorMock;
 
     protected function setUp(): void
@@ -52,8 +52,9 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
      */
     private function createRequestEvent(string $pathInfo): RequestEvent
     {
-        $request = new Request([], [], [], [], [], ['REQUEST_URI' => $pathInfo]);
+        /** @var HttpKernelInterface&MockObject $kernel */
         $kernel = $this->createMock(HttpKernelInterface::class);
+        $request = new Request([], [], [], [], [], ['REQUEST_URI' => $pathInfo]);
         return new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
     }
 

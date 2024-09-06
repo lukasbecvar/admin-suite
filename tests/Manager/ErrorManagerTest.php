@@ -5,6 +5,7 @@ namespace App\Tests\Manager;
 use Twig\Environment;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -17,6 +18,21 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class ErrorManagerTest extends TestCase
 {
+    /** @var Environment&MockObject */
+    private Environment|MockObject $twigMock;
+
+    /** @var ErrorManager */
+    private ErrorManager $errorManager;
+
+    protected function setUp(): void
+    {
+        // create the twig mock
+        $this->twigMock = $this->createMock(Environment::class);
+
+        // create the error manager
+        $this->errorManager = new ErrorManager($this->twigMock);
+    }
+
     /**
      * Test error handling
      *
@@ -24,18 +40,12 @@ class ErrorManagerTest extends TestCase
      */
     public function testHandleError(): void
     {
-        // create the twig mock
-        $twigMock = $this->createMock(Environment::class);
-
-        // create the error manager
-        $errorManager = new ErrorManager($twigMock);
-
         // expect the HttpException
         $this->expectException(HttpException::class);
         $this->expectExceptionMessage('Page not found');
         $this->expectExceptionCode(Response::HTTP_NOT_FOUND);
 
         // call handle the error
-        $errorManager->handleError('Page not found', Response::HTTP_NOT_FOUND);
+        $this->errorManager->handleError('Page not found', Response::HTTP_NOT_FOUND);
     }
 }

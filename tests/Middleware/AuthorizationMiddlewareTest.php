@@ -21,10 +21,10 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class AuthorizationMiddlewareTest extends TestCase
 {
-    /** @var Environment|MockObject */
+    /** @var Environment&MockObject */
     private Environment|MockObject $twig;
 
-    /** @var AuthManager|MockObject */
+    /** @var AuthManager&MockObject */
     private AuthManager|MockObject $authManager;
 
     /** @var AuthorizationMiddleware */
@@ -52,6 +52,7 @@ class AuthorizationMiddlewareTest extends TestCase
         $request->attributes->set('_controller', 'App\Controller\AntiLogController::enableAntiLog');
 
         // mock request event
+        /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
         $event->expects($this->once())->method('setResponse')->with($this->callback(function ($response) {
@@ -86,6 +87,7 @@ class AuthorizationMiddlewareTest extends TestCase
         $request->attributes->set('_controller', 'App\Controller\AntiLogController::enableAntiLog');
 
         // mock request event
+        /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
 
@@ -111,6 +113,7 @@ class AuthorizationMiddlewareTest extends TestCase
         $request->attributes->set('_controller', 'App\Controller\IndexController::index');
 
         // mock request event
+        /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
 
