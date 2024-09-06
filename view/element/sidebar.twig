@@ -4,20 +4,20 @@
         <div class="flex flex-col items-center mb-2 mt-2">
             {# PROFILE IMAGE #}
             <div class="profile-image mb-2">
-                {% if userData.getProfilePic == 'default_pic' %}
+                {% if getUserData().getProfilePic == 'default_pic' %}
                     <img class="rounded-full border border-gray-600 shadow-md" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture" width="80" height="80">
                 {% else %}
-                    <img class="rounded-full border border-gray-600 shadow-md" src="data:image/jpeg;base64,{{ userData.getProfilePic|e }}" alt="profile picture" width="80" height="80">
+                    <img class="rounded-full border border-gray-600 shadow-md" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture" width="80" height="80">
                 {% endif %}
             </div>
             {# USERNAME #}
-            <div class="username font-bold text-xl">{{ userData.username|e }}</div>
+            <div class="username font-bold text-xl">{{ getUserData().username|e }}</div>
             {# USER ROLE #}
             <div class="role text-base">
-                {% if isAdmin %}
-                    <span class="text-red-400">{{ userData.role|lower|e }}</span>
+                {% if isAdmin() %}
+                    <span class="text-red-400">{{ getUserData().role|lower|e }}</span>
                 {% else %}
-                    <span class="text-green-500">{{ userData.role|lower|e }}</span>
+                    <span class="text-green-500">{{ getUserData().role|lower|e }}</span>
                 {% endif %}
             </div>
         </div>
@@ -96,7 +96,7 @@
             <li>
                 <a href={{ path('app_todo_manager') }} class="flex items-center border-b border-gray-600 block px-3">
                     <i class="fas fa-tasks mr-2"></i>&nbsp;
-                    <span>Todos</span>
+                    <span>Todos ({{ getTodosCount() }})</span>
                 </a>
             </li>
 

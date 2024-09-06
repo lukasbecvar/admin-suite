@@ -50,10 +50,7 @@ class AccountSettingsController extends AbstractController
     public function accountSettingsTable(): Response
     {
         // return account settings table
-        return $this->render('component/account-settings/account-settings-table.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository()
-        ]);
+        return $this->render('component/account-settings/account-settings-table.twig');
     }
 
     /**
@@ -124,9 +121,6 @@ class AccountSettingsController extends AbstractController
 
         // render the change profile picture form
         return $this->render('component/account-settings/form/change-picture-form.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // profile picture change form
             'profilePicChangeForm' => $form->createView()
         ]);
@@ -191,9 +185,6 @@ class AccountSettingsController extends AbstractController
 
         // render the change username form
         return $this->render('component/account-settings/form/chnage-username-form.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // username change form
             'usernameChangeForm' => $form->createView()
         ]);
@@ -253,9 +244,6 @@ class AccountSettingsController extends AbstractController
 
         // render the change password form
         return $this->render('component/account-settings/form/change-password-form.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // password change form
             'passwordChangeForm' => $form->createView()
         ]);

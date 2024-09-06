@@ -68,12 +68,7 @@ class AuthorizationMiddlewareTest extends TestCase
         $this->authManager->method('getLoggedUserRepository')->willReturn($mockUser);
 
         // mock Twig response
-        $this->twig->method('render')
-            ->with('component/no-permissions.twig', [
-                'isAdmin' => false,
-                'userData' => $mockUser
-           ])
-            ->willReturn('Forbidden content');
+        $this->twig->method('render')->willReturn('Forbidden content');
 
         // execute the middleware
         $this->authorizationMiddleware->onKernelRequest($event);

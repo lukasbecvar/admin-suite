@@ -4,7 +4,6 @@ namespace App\Controller\Component;
 
 use App\Util\AppUtil;
 use App\Manager\LogManager;
-use App\Manager\AuthManager;
 use App\Manager\ServiceManager;
 use App\Annotation\Authorization;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,18 +21,15 @@ class MonitoringManagerController extends AbstractController
 {
     private AppUtil $appUtil;
     private LogManager $logManager;
-    private AuthManager $authManager;
     private ServiceManager $serviceManager;
 
     public function __construct(
         AppUtil $appUtil,
         LogManager $logManager,
-        AuthManager $authManager,
         ServiceManager $serviceManager
     ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
-        $this->authManager = $authManager;
         $this->serviceManager = $serviceManager;
     }
 
@@ -56,9 +52,6 @@ class MonitoringManagerController extends AbstractController
 
         // return view
         return $this->render('component/monitoring-manager/monitoring-dashboard.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // monitoring data
             'services' => $services,
             'monitoringLogs' => $monitoringLogs,
@@ -80,9 +73,6 @@ class MonitoringManagerController extends AbstractController
 
         // return view
         return $this->render('component/monitoring-manager/monitoring-config.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // services config data
             'services' => $services,
         ]);

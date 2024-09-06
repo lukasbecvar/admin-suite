@@ -99,6 +99,22 @@ class TodoManager
     }
 
     /**
+     * Get the number of todos
+     *
+     * @return int The number of todos
+     */
+    public function getTodosCount(string $status = 'open'): int
+    {
+        $count = $this->entityManagerInterface->getRepository(Todo::class)
+            ->count([
+                'user_id' => $this->authManager->getLoggedUserId(),
+                'status' => $status
+            ]);
+
+        return $count;
+    }
+
+    /**
      * Create a new todo
      *
      * @param string $todoText The todo text

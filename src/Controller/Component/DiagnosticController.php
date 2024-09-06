@@ -3,7 +3,6 @@
 namespace App\Controller\Component;
 
 use App\Util\ServerUtil;
-use App\Manager\AuthManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,12 +17,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class DiagnosticController extends AbstractController
 {
     private ServerUtil $serverUtil;
-    private AuthManager $authManager;
 
-    public function __construct(ServerUtil $serverUtil, AuthManager $authManager)
+    public function __construct(ServerUtil $serverUtil)
     {
         $this->serverUtil = $serverUtil;
-        $this->authManager = $authManager;
     }
 
     /**
@@ -39,9 +36,6 @@ class DiagnosticController extends AbstractController
 
         // return diagnostic view
         return $this->render('component/diagnostic/diagnostics-page.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // diagnostic data
             'diagnosticData' => $diagnosticData
         ]);

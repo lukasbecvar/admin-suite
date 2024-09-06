@@ -2,7 +2,6 @@
 
 namespace App\Controller\Component;
 
-use App\Manager\AuthManager;
 use App\Annotation\Authorization;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,13 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class TerminalController extends AbstractController
 {
-    private AuthManager $authManager;
-
-    public function __construct(AuthManager $authManager)
-    {
-        $this->authManager = $authManager;
-    }
-
     /**
      * Renders the terminal page
      *
@@ -34,9 +26,6 @@ class TerminalController extends AbstractController
     public function terminalPage(): Response
     {
         // return terminal view
-        return $this->render('component/terminal/terminal.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository()
-        ]);
+        return $this->render('component/terminal/terminal.twig');
     }
 }

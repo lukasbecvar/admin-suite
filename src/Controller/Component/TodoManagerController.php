@@ -2,7 +2,6 @@
 
 namespace App\Controller\Component;
 
-use App\Manager\AuthManager;
 use App\Manager\TodoManager;
 use App\Manager\ErrorManager;
 use App\Form\Todo\CreateTodoFormType;
@@ -21,16 +20,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class TodoManagerController extends AbstractController
 {
     private TodoManager $todoManager;
-    private AuthManager $authManager;
     private ErrorManager $errorManager;
 
     public function __construct(
         TodoManager $todoManager,
-        AuthManager $authManager,
         ErrorManager $errorManager
     ) {
         $this->todoManager = $todoManager;
-        $this->authManager = $authManager;
         $this->errorManager = $errorManager;
     }
 
@@ -70,9 +66,6 @@ class TodoManagerController extends AbstractController
 
         // return view
         return $this->render('component/todo-manager/todo-table.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // todo manager data
             'filter' => $filter,
             'todos' => $todos,

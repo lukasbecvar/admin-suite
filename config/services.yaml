@@ -13,8 +13,22 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    # twig extensions
     # --------------------------------------------------------------------------------- #
+    # auth manager extension
+    App\Twig\AuthManagerExtension:
+        arguments:
+            $authManager: '@App\Manager\AuthManager'
+        tags: [ 'twig.extension' ]
+
+    # todo manager extension
+    App\Twig\TodoManagerExtension:
+        arguments:
+            $todoManager: '@App\Manager\TodoManager'
+        tags: [ 'twig.extension' ]
+
     # error handeling controller for app exception
+    # --------------------------------------------------------------------------------- #
     Symfony\Component\HttpKernel\EventListener\ErrorListener:
         arguments:
             $controller: 'App\Controller\ErrorController::show'
@@ -24,6 +38,8 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    # app middlewares
+    # --------------------------------------------------------------------------------- #
     # resource build check middleware
     App\Middleware\AssetsCheckMiddleware:
         tags:

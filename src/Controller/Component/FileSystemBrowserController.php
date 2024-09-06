@@ -2,7 +2,6 @@
 
 namespace App\Controller\Component;
 
-use App\Manager\AuthManager;
 use App\Util\FilesystemUtil;
 use App\Annotation\Authorization;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,12 +18,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class FileSystemBrowserController extends AbstractController
 {
-    private AuthManager $authManager;
     private FilesystemUtil $filesystemUtil;
 
-    public function __construct(AuthManager $authManager, FilesystemUtil $filesystemUtil)
+    public function __construct(FilesystemUtil $filesystemUtil)
     {
-        $this->authManager = $authManager;
         $this->filesystemUtil = $filesystemUtil;
     }
 
@@ -47,9 +44,6 @@ class FileSystemBrowserController extends AbstractController
 
         // render the file browser list
         return $this->render('component/file-system/file-system-browser.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // file browser data
             'currentPath' => $path,
             'filesystemList' => $filesystemList
@@ -83,9 +77,6 @@ class FileSystemBrowserController extends AbstractController
 
         // render the file browser view
         return $this->render('component/file-system/file-system-view.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // file browser data
             'currentPath' => $path,
             'fileContent' => $fileContent
