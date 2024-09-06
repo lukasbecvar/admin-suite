@@ -14,16 +14,16 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class LinuxCheckMiddlewareTest extends TestCase
 {
-    /** @var AppUtil|MockObject */
+    /** @var AppUtil&MockObject */
     private AppUtil|MockObject $appUtilMock;
 
-    /** @var ServerUtil|MockObject */
+    /** @var ServerUtil&MockObject */
     private ServerUtil|MockObject $serverUtilMock;
 
-    /** @var LoggerInterface|MockObject */
+    /** @var LoggerInterface&MockObject */
     private LoggerInterface|MockObject $loggerMock;
 
-    /** @var ErrorManager|MockObject */
+    /** @var ErrorManager&MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
     protected function setUp(): void
@@ -54,6 +54,7 @@ class LinuxCheckMiddlewareTest extends TestCase
         );
 
         // mock request event
+        /** @var RequestEvent&MockObject $eventMock */
         $eventMock = $this->createMock(RequestEvent::class);
         $eventMock->expects($this->never())->method('setResponse');
 
@@ -93,6 +94,7 @@ class LinuxCheckMiddlewareTest extends TestCase
             ->willReturn('<html><body><h1>Upgrade Required</h1></body></html>');
 
         // mock request event
+        /** @var RequestEvent&MockObject $eventMock */
         $eventMock = $this->createMock(RequestEvent::class);
         $eventMock->expects($this->once())
             ->method('setResponse')

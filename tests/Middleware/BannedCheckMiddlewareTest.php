@@ -23,19 +23,19 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class BannedCheckMiddlewareTest extends TestCase
 {
-    /** @var AppUtil|MockObject */
+    /** @var AppUtil&MockObject */
     private AppUtil|MockObject $appUtil;
 
-    /** @var Environment|MockObject */
+    /** @var Environment&MockObject */
     private Environment|MockObject $twig;
 
-    /** @var LogManager|MockObject */
+    /** @var LogManager&MockObject */
     private LogManager|MockObject $logManager;
 
-    /** @var BanManager|MockObject */
+    /** @var BanManager&MockObject */
     private BanManager|MockObject $banManager;
 
-    /** @var AuthManager|MockObject */
+    /** @var AuthManager&MockObject */
     private AuthManager|MockObject $authManager;
 
     /**
@@ -88,6 +88,7 @@ class BannedCheckMiddlewareTest extends TestCase
 
         // mock request event
         $request = new Request();
+        /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
 
@@ -127,6 +128,7 @@ class BannedCheckMiddlewareTest extends TestCase
 
         // mock request event
         $request = new Request();
+        /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
 

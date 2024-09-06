@@ -20,10 +20,10 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class UserBanCommandTest extends TestCase
 {
-    /** @var BanManager|MockObject */
+    /** @var BanManager&MockObject */
     private BanManager|MockObject $banManager;
 
-    /** @var UserManager|MockObject */
+    /** @var UserManager&MockObject */
     private UserManager|MockObject $userManager;
 
     /** @var CommandTester */

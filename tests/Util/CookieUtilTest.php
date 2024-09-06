@@ -19,7 +19,7 @@ class CookieUtilTest extends TestCase
     /** @var CookieUtil */
     private CookieUtil $cookieUtil;
 
-    /** @var SecurityUtil|MockObject */
+    /** @var SecurityUtil&MockObject */
     private SecurityUtil|MockObject $securityUtilMock;
 
     protected function setUp(): void

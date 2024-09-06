@@ -24,13 +24,13 @@ class LogReaderCommandTest extends TestCase
     /** @var CommandTester */
     private CommandTester $commandTester;
 
-    /** @var LogManager|MockObject */
+    /** @var LogManager&MockObject */
     private LogManager|MockObject $logManager;
 
-    /** @var UserManager|MockObject */
+    /** @var UserManager&MockObject */
     private UserManager|MockObject $userManager;
 
-    /** @var VisitorInfoUtil|MockObject */
+    /** @var VisitorInfoUtil&MockObject */
     private VisitorInfoUtil|MockObject $visitorInfoUtil;
 
     protected function setUp(): void

@@ -32,7 +32,10 @@ class FilesystemUtilTest extends TestCase
         $this->errorManager = $this->createMock(ErrorManager::class);
 
         // create the filesystem util instance
-        $this->filesystemUtil = new FilesystemUtil($this->logManager, $this->errorManager);
+        $this->filesystemUtil = new FilesystemUtil(
+            $this->logManager,
+            $this->errorManager
+        );
     }
 
     /**

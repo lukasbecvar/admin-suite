@@ -22,10 +22,10 @@ class CacheUtilTest extends TestCase
     /** @var CacheUtil */
     private CacheUtil $cacheUtil;
 
-    /** @var CacheItemPoolInterface|MockObject */
+    /** @var CacheItemPoolInterface&MockObject */
     private CacheItemPoolInterface|MockObject $cacheItemPoolMock;
 
-    /** @var ErrorManager|MockObject */
+    /** @var ErrorManager&MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
     protected function setUp(): void
@@ -35,7 +35,10 @@ class CacheUtilTest extends TestCase
         $this->cacheItemPoolMock = $this->createMock(CacheItemPoolInterface::class);
 
         // create the cache util instance
-        $this->cacheUtil = new CacheUtil($this->errorManagerMock, $this->cacheItemPoolMock);
+        $this->cacheUtil = new CacheUtil(
+            $this->errorManagerMock,
+            $this->cacheItemPoolMock
+        );
     }
 
     /**

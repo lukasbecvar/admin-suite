@@ -27,25 +27,25 @@ class LogManagerTest extends TestCase
     /** @var LogManager */
     private LogManager $logManager;
 
-    /** @var AppUtil|MockObject */
+    /** @var AppUtil&MockObject */
     private AppUtil|MockObject $appUtilMock;
 
-    /** @var CookieUtil|MockObject */
+    /** @var CookieUtil&MockObject */
     private CookieUtil|MockObject $cookieUtilMock;
 
-    /** @var SessionUtil|MockObject */
+    /** @var SessionUtil&MockObject */
     private SessionUtil|MockObject $sessionUtilMock;
 
-    /** @var LogRepository|MockObject */
+    /** @var LogRepository&MockObject */
     private LogRepository|MockObject $repositoryMock;
 
-    /** @var ErrorManager|MockObject */
+    /** @var ErrorManager&MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
-    /** @var VisitorInfoUtil|MockObject */
+    /** @var VisitorInfoUtil&MockObject */
     private VisitorInfoUtil|MockObject $visitorInfoUtilMock;
 
-    /** @var EntityManagerInterface|MockObject */
+    /** @var EntityManagerInterface&MockObject */
     private EntityManagerInterface|MockObject $entityManagerMock;
 
     protected function setUp(): void

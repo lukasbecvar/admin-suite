@@ -25,19 +25,19 @@ class TodoManagerTest extends TestCase
     /** @var TodoManager */
     private TodoManager $todoManager;
 
-    /** @var LogManager|MockObject */
+    /** @var LogManager&MockObject */
     private LogManager|MockObject $logManagerMock;
 
-    /** @var AuthManager|MockObject */
+    /** @var AuthManager&MockObject */
     private AuthManager|MockObject $authManagerMock;
 
-    /** @var SecurityUtil|MockObject */
+    /** @var SecurityUtil&MockObject */
     private SecurityUtil|MockObject $securityUtilMock;
 
-    /** @var ErrorManager|MockObject */
+    /** @var ErrorManager&MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
-    /** @var EntityManagerInterface|MockObject */
+    /** @var EntityManagerInterface&MockObject */
     private EntityManagerInterface|MockObject $entityManagerMock;
 
     protected function setUp(): void

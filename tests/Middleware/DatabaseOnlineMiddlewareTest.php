@@ -21,16 +21,16 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class DatabaseOnlineMiddlewareTest extends TestCase
 {
-    /** @var AppUtil|MockObject */
+    /** @var AppUtil&MockObject */
     private AppUtil|MockObject $appUtilMock;
 
-    /** @var Connection|MockObject */
+    /** @var Connection&MockObject */
     private Connection|MockObject $connectionMock;
 
-    /** @var LoggerInterface|MockObject */
+    /** @var LoggerInterface&MockObject */
     private LoggerInterface|MockObject $loggerMock;
 
-    /** @var ErrorManager|MockObject */
+    /** @var ErrorManager&MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
     /**
@@ -63,6 +63,7 @@ class DatabaseOnlineMiddlewareTest extends TestCase
         );
 
         // mock request event
+        /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
 
         // mock the error manager
@@ -91,6 +92,7 @@ class DatabaseOnlineMiddlewareTest extends TestCase
         );
 
         // mock request event
+        /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
 
         // mock the database connection

@@ -19,16 +19,16 @@ use Symfony\Component\Mailer\MailerInterface;
  */
 class EmailManagerTest extends TestCase
 {
-    /** @var LogManager|MockObject */
+    /** @var LogManager&MockObject */
     private LogManager|MockObject $logManagerMock;
 
-    /** @var MailerInterface|MockObject */
+    /** @var MailerInterface&MockObject */
     private MailerInterface|MockObject $mailerMock;
 
-    /** @var ErrorManager|MockObject */
+    /** @var ErrorManager&MockObject */
     private ErrorManager|MockObject $errorManagerMock;
 
-    /** @var DatabaseManager|MockObject */
+    /** @var DatabaseManager&MockObject */
     private DatabaseManager|MockObject $databaseManager;
 
     /**
