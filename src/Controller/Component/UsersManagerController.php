@@ -96,9 +96,6 @@ class UsersManagerController extends AbstractController
 
         // render users manager table view
         return $this->render('component/users-manager/users-table.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // instances for users manager view
             'banManager' => $this->banManager,
             'userManager' => $this->userManager,
@@ -159,9 +156,6 @@ class UsersManagerController extends AbstractController
 
         // render profile view
         return $this->render('component/users-manager/user-profile.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // visitor info util instance
             'banManager' => $this->banManager,
             'visitorInfoUtil' => $this->visitorInfoUtil,
@@ -231,9 +225,6 @@ class UsersManagerController extends AbstractController
 
         // render users manager register form view
         return $this->render('component/users-manager/form/user-register-form.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // registration form
             'registrationForm' => $form->createView()
         ]);

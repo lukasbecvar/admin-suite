@@ -3,7 +3,6 @@
 namespace App\Controller\Component;
 
 use App\Util\AppUtil;
-use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
 use App\Manager\DatabaseManager;
 use App\Annotation\Authorization;
@@ -23,18 +22,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class DatabaseBrowserController extends AbstractController
 {
     private AppUtil $appUtil;
-    private AuthManager $authManager;
     private ErrorManager $errorManager;
     private DatabaseManager $databaseManager;
 
     public function __construct(
         AppUtil $appUtil,
-        AuthManager $authManager,
         ErrorManager $errorManager,
         DatabaseManager $databaseManager
     ) {
         $this->appUtil = $appUtil;
-        $this->authManager = $authManager;
         $this->errorManager = $errorManager;
         $this->databaseManager = $databaseManager;
     }
@@ -70,9 +66,6 @@ class DatabaseBrowserController extends AbstractController
 
         // render the database browser page
         return $this->render('component/database-browser/database-browser.twig', [
-            'isAdmin' => true,
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // database browser data
             'tables' => $tables,
             'databases' => $databases,
@@ -115,9 +108,6 @@ class DatabaseBrowserController extends AbstractController
 
         // render the table browser page
         return $this->render('component/database-browser/table-browser.twig', [
-            'isAdmin' => true,
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // filter data
             'currentPage' => $page,
             'tableName' => $tableName,
@@ -237,9 +227,6 @@ class DatabaseBrowserController extends AbstractController
 
         // render the add row form
         return $this->render('component/database-browser/form/add-row.twig', [
-            'isAdmin' => true,
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // filter data
             'tableName' => $tableName,
             'databaseName' => $databaseName,
@@ -365,9 +352,6 @@ class DatabaseBrowserController extends AbstractController
 
         // render the edit row form
         return $this->render('component/database-browser/form/edit-row.twig', [
-            'isAdmin' => true,
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // filter data
             'id' => $id,
             'page' => $page,
@@ -452,9 +436,6 @@ class DatabaseBrowserController extends AbstractController
         // check confirmation
         if ($confirm !== 'yes') {
             return $this->render('component/database-browser/form/truncate-confirmation.twig', [
-                'isAdmin' => true,
-                'userData' => $this->authManager->getLoggedUserRepository(),
-
                 // confirmation data
                 'databaseName' => $databaseName,
                 'tableName' => $tableName
@@ -510,9 +491,6 @@ class DatabaseBrowserController extends AbstractController
             $databases = $this->databaseManager->getDatabasesList();
 
             return $this->render('component/database-browser/database-dump.twig', [
-                'isAdmin' => true,
-                'userData' => $this->authManager->getLoggedUserRepository(),
-
                 // database dump data
                 'databases' => $databases,
             ]);
@@ -583,9 +561,6 @@ class DatabaseBrowserController extends AbstractController
         }
 
         return $this->render('component/database-browser/database-console.twig', [
-            'isAdmin' => true,
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // query console form
             'output' => $output,
             'queryForm' => $queryForm->createView()

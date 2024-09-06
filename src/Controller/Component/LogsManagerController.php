@@ -72,9 +72,6 @@ class LogsManagerController extends AbstractController
 
         // return logs table view
         return $this->render('component/log-manager/logs-table.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // instances for logs manager view
             'userManager' => $this->userManager,
             'authManager' => $this->authManager,
@@ -125,9 +122,6 @@ class LogsManagerController extends AbstractController
 
         // render the system logs table
         return $this->render('component/log-manager/system-logs.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // log files list
             'logFiles' => $logFiles,
 
@@ -180,9 +174,6 @@ class LogsManagerController extends AbstractController
 
         // render the exception files view
         return $this->render('component/log-manager/exception-files.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // exception files
             'exceptionFiles' => $exceptionFiles,
 

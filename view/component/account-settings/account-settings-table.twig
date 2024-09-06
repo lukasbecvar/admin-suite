@@ -22,10 +22,10 @@
                     <div class="text-sm font-medium text-gray-100">Profile Image</div>
                 </div>
                 <div class="flex items-center justify-center flex-1">
-                    {% if userData.getProfilePic == 'default_pic' %}
+                    {% if getUserData().getProfilePic == 'default_pic' %}
                         <img class="rounded-full h-10 w-10 object-cover" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture">
                     {% else %}
-                        <img class="rounded-full h-10 w-10 object-cover" src="data:image/jpeg;base64,{{ userData.getProfilePic|e }}" alt="profile picture">
+                        <img class="rounded-full h-10 w-10 object-cover" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture">
                     {% endif %}
                 </div>
                 <div class="w-1/3 text-right">
@@ -42,7 +42,7 @@
                     <div class="text-sm font-medium text-gray-100">Username</div>
                 </div>
                 <div class="flex items-center justify-center flex-1 text-sm text-gray-200">
-                    {{ userData.username|e }}
+                    {{ getUserData().username|e }}
                 </div>
                 <div class="w-1/3 text-right">
                     <a href={{ path('app_account_settings_change_username') }} class="font-bold text-indigo-400 hover:text-indigo-300 flex items-center justify-end space-x-1">

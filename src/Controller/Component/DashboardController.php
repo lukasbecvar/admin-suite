@@ -81,9 +81,6 @@ class DashboardController extends AbstractController
 
         // return dashboard view
         return $this->render('component/dashboard/dashboard.twig', [
-            'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-            'userData' => $this->authManager->getLoggedUserRepository(),
-
             // warning data
             'antiLogStatus' => $antiLogStatus,
             'diagnosticData' => $diagnosticData,

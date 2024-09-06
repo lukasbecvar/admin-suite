@@ -3,9 +3,9 @@
 namespace App\Tests\Controller\Component;
 
 use App\Tests\CustomTestCase;
+use Symfony\Component\String\ByteString;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\String\ByteString;
 
 /**
  * Class DatabaseBrowserControllerTest

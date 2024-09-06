@@ -67,10 +67,7 @@ class AuthorizationMiddleware
         // check if user have permission to access the page
         if ($authorizationRequired == 'ADMIN' && !$this->authManager->isLoggedInUserAdmin()) {
             // render the maintenance template
-            $content = $this->twig->render('component/no-permissions.twig', [
-                'isAdmin' => $this->authManager->isLoggedInUserAdmin(),
-                'userData' => $this->authManager->getLoggedUserRepository()
-            ]);
+            $content = $this->twig->render('component/no-permissions.twig');
 
             // set the response
             $response = new Response($content, Response::HTTP_FORBIDDEN);

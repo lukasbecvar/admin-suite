@@ -22,7 +22,7 @@
             {{ userRepository.getUsername()|e }} 
         </h1>
 
-        {% if isAdmin %}
+        {% if isAdmin() %}
             <p class="text-sm text-gray-400 dark:text-red-500 font-bold">{{ userRepository.getRole()|e }}</p>
         {% else %}
             <p class="text-sm text-gray-400 dark:text-gray-300 font-bold">{{ userRepository.getRole()|e }}</p>
