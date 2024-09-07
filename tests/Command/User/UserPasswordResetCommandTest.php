@@ -20,11 +20,8 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class UserPasswordResetCommandTest extends TestCase
 {
-    /** @var AuthManager&MockObject */
-    private AuthManager|MockObject $authManager;
-
-    /** @var UserManager&MockObject */
-    private UserManager|MockObject $userManagerMock;
+    private AuthManager & MockObject $authManager;
+    private UserManager & MockObject $userManagerMock;
 
     /**
      * Sets up the mock objects before each test

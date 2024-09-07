@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
  */
 class VisitorInfoUtilTest extends TestCase
 {
-    /** @var VisitorInfoUtil */
     private VisitorInfoUtil $visitorInfoUtil;
 
     protected function setUp(): void

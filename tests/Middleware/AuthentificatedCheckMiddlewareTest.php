@@ -21,14 +21,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class AuthentificatedCheckMiddlewareTest extends TestCase
 {
-    /** @var AuthManager&MockObject */
-    private AuthManager|MockObject $authManagerMock;
-
-    /** @var AuthentificatedCheckMiddleware */
+    private AuthManager & MockObject $authManagerMock;
     private AuthentificatedCheckMiddleware $middleware;
-
-    /** @var UrlGeneratorInterface&MockObject */
-    private UrlGeneratorInterface|MockObject $urlGeneratorMock;
+    private UrlGeneratorInterface & MockObject $urlGeneratorMock;
 
     protected function setUp(): void
     {

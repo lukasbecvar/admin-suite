@@ -22,26 +22,13 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class UserManagerTest extends TestCase
 {
-    /** @var AppUtil&MockObject */
-    private AppUtil|MockObject $appUtilMock;
-
-    /** @var UserManager */
     private UserManager $userManager;
-
-    /** @var ErrorManager */
     private ErrorManager $errorManagerMock;
-
-    /** @var LogManager&MockObject */
-    private LogManager|MockObject $logManagerMock;
-
-    /** @var SecurityUtil&MockObject */
-    private SecurityUtil|MockObject $securityUtilMock;
-
-    /** @var UserRepository&MockObject */
-    private UserRepository|MockObject $userRepositoryMock;
-
-    /** @var EntityManagerInterface&MockObject */
-    private EntityManagerInterface|MockObject $entityManagerMock;
+    private AppUtil & MockObject $appUtilMock;
+    private LogManager & MockObject $logManagerMock;
+    private SecurityUtil & MockObject $securityUtilMock;
+    private UserRepository & MockObject $userRepositoryMock;
+    private EntityManagerInterface & MockObject $entityManagerMock;
 
     protected function setUp(): void
     {

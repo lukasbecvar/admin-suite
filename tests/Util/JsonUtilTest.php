@@ -16,10 +16,7 @@ use PHPUnit\Framework\TestCase;
  */
 class JsonUtilTest extends TestCase
 {
-    /** @var JsonUtil */
     private JsonUtil $jsonUtil;
-
-    /** @var ErrorManager */
     private ErrorManager $errorManager;
 
     protected function setUp(): void

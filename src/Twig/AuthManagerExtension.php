@@ -31,7 +31,7 @@ class AuthManagerExtension extends AbstractExtension
     {
         return [
             new TwigFunction('isAdmin', [$this->authManager, 'isLoggedInUserAdmin']),
-            new TwigFunction('getUserData', [$this->authManager, 'getLoggedUserRepository']),
+            new TwigFunction('getUserData', [$this->authManager, 'getLoggedUserRepository'])
         ];
     }
 }

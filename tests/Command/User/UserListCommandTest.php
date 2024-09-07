@@ -20,14 +20,9 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class UserListCommandTest extends TestCase
 {
-    /** @var UserManager&MockObject */
-    private UserManager|MockObject $userManager;
-
-    /** @var VisitorInfoUtil&MockObject */
-    private VisitorInfoUtil|MockObject $visitorInfoUtil;
-
-    /** @var CommandTester */
     private CommandTester $commandTester;
+    private UserManager & MockObject $userManager;
+    private VisitorInfoUtil & MockObject $visitorInfoUtil;
 
     protected function setUp(): void
     {

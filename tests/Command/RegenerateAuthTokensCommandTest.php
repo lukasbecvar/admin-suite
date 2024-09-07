@@ -18,11 +18,8 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class RegenerateAuthTokensCommandTest extends TestCase
 {
-    /** @var AuthManager&MockObject */
-    private AuthManager|MockObject $authManager;
-
-    /** @var CommandTester */
     private CommandTester $commandTester;
+    private AuthManager & MockObject $authManager;
 
     protected function setUp(): void
     {

@@ -18,11 +18,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class ErrorManagerTest extends TestCase
 {
-    /** @var Environment&MockObject */
-    private Environment|MockObject $twigMock;
-
-    /** @var ErrorManager */
     private ErrorManager $errorManager;
+    private Environment & MockObject $twigMock;
 
     protected function setUp(): void
     {

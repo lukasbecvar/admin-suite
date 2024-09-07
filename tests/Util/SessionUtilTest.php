@@ -18,14 +18,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SessionUtilTest extends TestCase
 {
-    /** @var SessionUtil */
     private SessionUtil $sessionUtil;
-
-    /** @var SecurityUtil&MockObject */
-    private SecurityUtil|MockObject $securityUtilMock;
-
-    /** @var ErrorManager&MockObject */
-    private ErrorManager|MockObject $errorManagerMock;
+    private SecurityUtil & MockObject $securityUtilMock;
+    private ErrorManager & MockObject $errorManagerMock;
 
     protected function setUp(): void
     {

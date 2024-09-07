@@ -20,17 +20,10 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class SecurityCheckMiddlewareTest extends TestCase
 {
-    /** @var AppUtil&MockObject */
-    private AppUtil|MockObject $appUtilMock;
-
-    /** @var SecurityCheckMiddleware */
+    private AppUtil & MockObject $appUtilMock;
     private SecurityCheckMiddleware $middleware;
-
-    /** @var LoggerInterface&MockObject */
-    private LoggerInterface|MockObject $loggerMock;
-
-    /** @var ErrorManager&MockObject */
-    private ErrorManager|MockObject $errorManagerMock;
+    private LoggerInterface & MockObject $loggerMock;
+    private ErrorManager & MockObject $errorManagerMock;
 
     protected function setUp(): void
     {
@@ -59,7 +52,7 @@ class SecurityCheckMiddlewareTest extends TestCase
         $this->appUtilMock->expects($this->once())->method('isSsl')->willReturn(false);
 
         // create a RequestEvent with a dummy Request
-        /** @var RequestEvent&MockObject $event */
+        /** @var RequestEvent & MockObject $event */
         $event = $this->createMock(RequestEvent::class);
 
         // expect a response to be set
@@ -89,7 +82,7 @@ class SecurityCheckMiddlewareTest extends TestCase
         $this->appUtilMock->expects($this->once())->method('isSsl')->willReturn(true);
 
         // create a RequestEvent with a dummy Request
-        /** @var RequestEvent&MockObject $event */
+        /** @var RequestEvent & MockObject $event */
         $event = $this->createMock(RequestEvent::class);
 
         // expect no errors to be handled
@@ -113,7 +106,7 @@ class SecurityCheckMiddlewareTest extends TestCase
         $this->appUtilMock->expects($this->once())->method('isSSLOnly')->willReturn(false);
 
         // create a RequestEvent with a dummy Request
-        /** @var RequestEvent&MockObject $event */
+        /** @var RequestEvent & MockObject $event */
         $event = $this->createMock(RequestEvent::class);
 
         // expect no errors to be handled

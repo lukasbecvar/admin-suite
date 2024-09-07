@@ -22,7 +22,7 @@ class LinkifyExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('linkify', [$this, 'linkifyText'], ['is_safe' => ['html']]),
+            new TwigFilter('linkify', [$this, 'linkifyText'], ['is_safe' => ['html']])
         ];
     }
 

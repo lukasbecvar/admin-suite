@@ -22,23 +22,12 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class TodoManagerTest extends TestCase
 {
-    /** @var TodoManager */
     private TodoManager $todoManager;
-
-    /** @var LogManager&MockObject */
-    private LogManager|MockObject $logManagerMock;
-
-    /** @var AuthManager&MockObject */
-    private AuthManager|MockObject $authManagerMock;
-
-    /** @var SecurityUtil&MockObject */
-    private SecurityUtil|MockObject $securityUtilMock;
-
-    /** @var ErrorManager&MockObject */
-    private ErrorManager|MockObject $errorManagerMock;
-
-    /** @var EntityManagerInterface&MockObject */
-    private EntityManagerInterface|MockObject $entityManagerMock;
+    private LogManager & MockObject $logManagerMock;
+    private AuthManager & MockObject $authManagerMock;
+    private SecurityUtil & MockObject $securityUtilMock;
+    private ErrorManager & MockObject $errorManagerMock;
+    private EntityManagerInterface & MockObject $entityManagerMock;
 
     protected function setUp(): void
     {

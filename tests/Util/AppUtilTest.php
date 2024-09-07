@@ -17,14 +17,9 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class AppUtilTest extends TestCase
 {
-    /** @var AppUtil */
     private AppUtil $appUtil;
-
-    /** @var KernelInterface */
     private KernelInterface $kernelInterface;
-
-    /** @var JsonUtil&MockObject */
-    private JsonUtil|MockObject $jsonUtilMock;
+    private JsonUtil & MockObject $jsonUtilMock;
 
     protected function setUp(): void
     {

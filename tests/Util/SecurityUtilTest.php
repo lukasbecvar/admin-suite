@@ -18,14 +18,9 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class SecurityUtilTest extends TestCase
 {
-    /** @var SecurityUtil */
     private SecurityUtil $securityUtil;
-
-    /** @var JsonUtil&MockObject */
-    private JsonUtil|MockObject $jsonUtilMock;
-
-    /** @var KernelInterface&MockObject */
-    private KernelInterface|MockObject $kernelInterface;
+    private JsonUtil & MockObject $jsonUtilMock;
+    private KernelInterface & MockObject $kernelInterface;
 
     protected function setUp(): void
     {

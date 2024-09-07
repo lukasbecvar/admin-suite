@@ -20,14 +20,9 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class UserBanCommandTest extends TestCase
 {
-    /** @var BanManager&MockObject */
-    private BanManager|MockObject $banManager;
-
-    /** @var UserManager&MockObject */
-    private UserManager|MockObject $userManager;
-
-    /** @var CommandTester */
     private CommandTester $commandTester;
+    private BanManager & MockObject $banManager;
+    private UserManager & MockObject $userManager;
 
     protected function setUp(): void
     {

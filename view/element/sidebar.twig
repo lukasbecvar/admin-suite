@@ -5,9 +5,9 @@
             {# PROFILE IMAGE #}
             <div class="profile-image mb-2">
                 {% if getUserData().getProfilePic == 'default_pic' %}
-                    <img class="rounded-full border border-gray-600 shadow-md" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture" width="80" height="80">
+                    <img class="rounded border border-gray-600 shadow-md" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture" width="80" height="80">
                 {% else %}
-                    <img class="rounded-full border border-gray-600 shadow-md" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture" width="80" height="80">
+                    <img class="rounded border border-gray-600 shadow-md" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture" width="80" height="80">
                 {% endif %}
             </div>
             {# USERNAME #}
