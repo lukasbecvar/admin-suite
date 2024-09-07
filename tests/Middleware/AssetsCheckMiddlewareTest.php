@@ -19,14 +19,9 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class AssetsCheckMiddlewareTest extends TestCase
 {
-    /** @var AppUtil&MockObject */
-    private AppUtil|MockObject $appUtilMock;
-
-    /** @var LoggerInterface&MockObject */
-    private LoggerInterface|MockObject $loggerMock;
-
-    /** @var AssetsCheckMiddleware */
     private AssetsCheckMiddleware $middleware;
+    private AppUtil & MockObject $appUtilMock;
+    private LoggerInterface & MockObject $loggerMock;
 
     protected function setUp(): void
     {

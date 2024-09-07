@@ -19,20 +19,11 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class DatabaseManagerTest extends TestCase
 {
-    /** @var AppUtil&MockObject */
-    private AppUtil|MockObject $appUtilMock;
-
-    /** @var DatabaseManager */
     private DatabaseManager $databaseManager;
-
-    /** @var LogManager&MockObject */
-    private LogManager|MockObject $logManagerMock;
-
-    /** @var Connection&MockObject */
-    private Connection|MockObject $connectionMock;
-
-    /** @var ErrorManager&MockObject */
-    private ErrorManager|MockObject $errorManagerMock;
+    private AppUtil & MockObject $appUtilMock;
+    private LogManager & MockObject $logManagerMock;
+    private Connection & MockObject $connectionMock;
+    private ErrorManager & MockObject $errorManagerMock;
 
     protected function setUp(): void
     {

@@ -20,11 +20,8 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class UserUpdateRoleCommandTest extends TestCase
 {
-    /** @var CommandTester */
     private CommandTester $commandTester;
-
-    /** @var UserManager&MockObject */
-    private UserManager|MockObject $userManager;
+    private UserManager & MockObject $userManager;
 
     protected function setUp(): void
     {

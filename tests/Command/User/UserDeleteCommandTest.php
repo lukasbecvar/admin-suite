@@ -20,8 +20,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class UserDeleteCommandTest extends TestCase
 {
-    /** @var UserManager&MockObject */
-    private UserManager|MockObject $userManagerMock;
+    private UserManager & MockObject $userManagerMock;
 
     /**
      * Sets up the mock objects before each test

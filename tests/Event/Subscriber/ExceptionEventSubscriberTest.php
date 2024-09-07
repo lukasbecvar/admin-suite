@@ -21,17 +21,10 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
  */
 class ExceptionEventSubscriberTest extends TestCase
 {
-    /** @var MockObject&LogManager */
-    private MockObject|LogManager $logManager;
-
-    /** @var MockObject&LoggerInterface */
-    private MockObject|LoggerInterface $logger;
-
-    /** @var ExceptionEventSubscriber */
+    private MockObject & LogManager $logManager;
+    private MockObject & LoggerInterface $logger;
     private ExceptionEventSubscriber $subscriber;
-
-    /** @var MockObject&DatabaseManager */
-    private MockObject|DatabaseManager $databaseManager;
+    private MockObject & DatabaseManager $databaseManager;
 
     protected function setUp(): void
     {

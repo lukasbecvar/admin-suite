@@ -23,26 +23,13 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class BanManagerTest extends TestCase
 {
-    /** @var BanManager */
     private BanManager $banManager;
-
-    /** @var LogManager&MockObject */
-    private LogManager|MockObject $logManagerMock;
-
-    /** @var UserManager&MockObject */
-    private UserManager|MockObject $userManagerMock;
-
-    /** @var AuthManager&MockObject */
-    private AuthManager|MockObject $authManagerMock;
-
-    /** @var ErrorManager&MockObject */
-    private ErrorManager|MockObject $errorManagerMock;
-
-    /** @var BannedRepository&MockObject */
-    private BannedRepository|MockObject $repositoryMock;
-
-    /** @var EntityManagerInterface&MockObject */
-    private EntityManagerInterface|MockObject $entityManagerMock;
+    private LogManager & MockObject $logManagerMock;
+    private UserManager & MockObject $userManagerMock;
+    private AuthManager & MockObject $authManagerMock;
+    private ErrorManager & MockObject $errorManagerMock;
+    private BannedRepository & MockObject $repositoryMock;
+    private EntityManagerInterface & MockObject $entityManagerMock;
 
     protected function setUp(): void
     {

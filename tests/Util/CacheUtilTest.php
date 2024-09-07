@@ -19,14 +19,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CacheUtilTest extends TestCase
 {
-    /** @var CacheUtil */
     private CacheUtil $cacheUtil;
-
-    /** @var CacheItemPoolInterface&MockObject */
-    private CacheItemPoolInterface|MockObject $cacheItemPoolMock;
-
-    /** @var ErrorManager&MockObject */
-    private ErrorManager|MockObject $errorManagerMock;
+    private ErrorManager & MockObject $errorManagerMock;
+    private CacheItemPoolInterface & MockObject $cacheItemPoolMock;
 
     protected function setUp(): void
     {

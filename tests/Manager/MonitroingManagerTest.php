@@ -11,9 +11,9 @@ use PHPUnit\Framework\TestCase;
 use App\Manager\ServiceManager;
 use App\Entity\ServiceMonitoring;
 use App\Manager\MonitoringManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use App\Repository\ServiceMonitoringRepository;
 
 /**
  * Class MonitoringManagerTest
@@ -24,32 +24,15 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class MonitoringManagerTest extends TestCase
 {
-    /** @var AppUtil&MockObject */
-    private AppUtil|MockObject $appUtilMock;
-
-    /** @var LogManager&MockObject */
-    private LogManager|MockObject $logManager;
-
-    /** @var MonitoringManager */
+    private AppUtil & MockObject $appUtilMock;
+    private LogManager & MockObject $logManager;
     private MonitoringManager $monitoringManager;
-
-    /** @var ServerUtil&MockObject */
-    private ServerUtil|MockObject $serverUtilMock;
-
-    /** @var EmailManager&MockObject */
-    private EmailManager|MockObject $emailManagerMock;
-
-    /** @var ErrorManager&MockObject */
-    private ErrorManager|MockObject $errorManagerMock;
-
-    /** @var EntityRepository<ServiceMonitoring>&MockObject */
-    private EntityRepository|MockObject $repositoryMock;
-
-    /** @var ServiceManager&MockObject */
-    private ServiceManager|MockObject $serviceManagerMock;
-
-    /** @var EntityManagerInterface&MockObject */
-    private EntityManagerInterface|MockObject $entityManagerMock;
+    private ServerUtil & MockObject $serverUtilMock;
+    private EmailManager & MockObject $emailManagerMock;
+    private ErrorManager & MockObject $errorManagerMock;
+    private ServiceManager & MockObject $serviceManagerMock;
+    private EntityManagerInterface & MockObject $entityManagerMock;
+    private ServiceMonitoringRepository & MockObject $repositoryMock;
 
     protected function setUp(): void
     {
@@ -61,7 +44,7 @@ class MonitoringManagerTest extends TestCase
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $this->repositoryMock = $this->createMock(EntityRepository::class);
+        $this->repositoryMock = $this->createMock(ServiceMonitoringRepository::class);
 
         // mock entity manager
         $this->entityManagerMock->method('getRepository')->willReturn($this->repositoryMock);

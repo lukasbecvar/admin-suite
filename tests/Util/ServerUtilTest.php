@@ -17,14 +17,9 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class ServerUtilTest extends TestCase
 {
-    /** @var ServerUtil */
     private ServerUtil $serverUtil;
-
-    /** @var ErrorManager */
     private ErrorManager $errorManager;
-
-    /** @var AppUtil&MockObject */
-    private AppUtil|MockObject $appUtilMock;
+    private AppUtil & MockObject $appUtilMock;
 
     protected function setUp(): void
     {

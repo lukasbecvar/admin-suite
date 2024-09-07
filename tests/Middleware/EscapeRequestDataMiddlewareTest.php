@@ -21,13 +21,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class EscapeRequestDataMiddlewareTest extends TestCase
 {
-    /** @var RequestStack */
     private RequestStack $requestStack;
-
-    /** @var SecurityUtil&MockObject */
-    private SecurityUtil|MockObject $securityUtil;
-
-    /** @var EscapeRequestDataMiddleware */
+    private SecurityUtil & MockObject $securityUtil;
     private EscapeRequestDataMiddleware $middleware;
 
     protected function setUp(): void
@@ -41,7 +36,7 @@ class EscapeRequestDataMiddlewareTest extends TestCase
         // mock RequestStack
         $this->requestStack = new RequestStack();
 
-        /** @var MockObject&UrlGeneratorInterface $urlGeneratorInterface */
+        /** @var UrlGeneratorInterface $urlGeneratorInterface */
         $urlGeneratorInterface = $this->createMock(UrlGeneratorInterface::class);
 
         // create middleware instance
@@ -67,9 +62,9 @@ class EscapeRequestDataMiddlewareTest extends TestCase
         $this->requestStack->push($request);
 
         // create a request event
-        /** @var MockObject&HttpKernelInterface $kernel */
+        /** @var HttpKernelInterface $kernel */
         $kernel = $this->createMock(HttpKernelInterface::class);
-        /** @var MockObject&Request $request */
+        /** @var Request $request */
         $event = new RequestEvent(
             $kernel,
             $request,

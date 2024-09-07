@@ -1,11 +1,5 @@
 # env files
-/.env.local
 /.env.prod
-/.env.local.php
-/.env.*.local
-
-# config files
-/config/secrets/prod/prod.decrypt.private.php
 
 # bundles assets files
 /public/bundles/
@@ -26,8 +20,6 @@
 # npm files
 /public/assets/
 /node_modules/
-/npm-debug.log
-/yarn-error.log
 /package-lock.json
 
 # custom suite configs

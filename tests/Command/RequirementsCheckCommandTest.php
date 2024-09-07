@@ -20,14 +20,9 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class RequirementsCheckCommandTest extends TestCase
 {
-    /** @var ServerUtil&MockObject */
-    private ServerUtil|MockObject $serverUtil;
-
-    /** @var DatabaseManager&MockObject */
-    private DatabaseManager|MockObject $databaseManager;
-
-    /** @var CommandTester */
     private CommandTester $commandTester;
+    private ServerUtil & MockObject $serverUtil;
+    private DatabaseManager & MockObject $databaseManager;
 
     protected function setUp(): void
     {

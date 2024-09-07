@@ -20,20 +20,11 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class AutoLoginMiddlewareTest extends TestCase
 {
-    /** @var AutoLoginMiddleware */
     private AutoLoginMiddleware $middleware;
-
-    /** @var CookieUtil&MockObject */
-    private CookieUtil|MockObject $cookieUtilMock;
-
-    /** @var SessionUtil&MockObject */
-    private SessionUtil|MockObject $sessionUtilMock;
-
-    /** @var AuthManager&MockObject */
-    private AuthManager|MockObject $authManagerMock;
-
-    /** @var UserManager&MockObject */
-    private UserManager|MockObject $userManagerMock;
+    private CookieUtil & MockObject $cookieUtilMock;
+    private SessionUtil & MockObject $sessionUtilMock;
+    private AuthManager & MockObject $authManagerMock;
+    private UserManager & MockObject $userManagerMock;
 
     protected function setUp(): void
     {

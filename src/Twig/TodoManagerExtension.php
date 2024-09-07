@@ -30,7 +30,7 @@ class TodoManagerExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('getTodosCount', [$this->todoManager, 'getTodosCount']),
+            new TwigFunction('getTodosCount', [$this->todoManager, 'getTodosCount'])
         ];
     }
 }

@@ -20,17 +20,10 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class UserRegisterCommandTest extends TestCase
 {
-    /** @var AuthManager&MockObject */
-    private AuthManager|MockObject $authManager;
-
-    /** @var UserManager&MockObject */
-    private UserManager|MockObject $userManager;
-
-    /** @var Application */
     private Application $application;
-
-    /** @var UserRegisterCommand */
     private UserRegisterCommand $command;
+    private AuthManager & MockObject $authManager;
+    private UserManager & MockObject $userManager;
 
     protected function setUp(): void
     {

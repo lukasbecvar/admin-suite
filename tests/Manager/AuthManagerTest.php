@@ -30,41 +30,18 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class AuthManagerTest extends TestCase
 {
-    /** @var ErrorManager */
-    private ErrorManager $errorManagerMock;
-
-    /** @var AppUtil&MockObject */
-    private AppUtil|MockObject $appUtilMock;
-
-    /** @var CacheUtil&MockObject */
-    private CacheUtil|MockObject $cacheUtilMock;
-
-    /** @var LogManager&MockObject */
-    private LogManager|MockObject $logManagerMock;
-
-    /** @var CookieUtil&MockObject */
-    private CookieUtil|MockObject $cookieUtilMock;
-
-    /** @var SessionUtil&MockObject */
-    private SessionUtil|MockObject $sessionUtilMock;
-
-    /** @var UserManager&MockObject */
-    private UserManager|MockObject $userManagerMock;
-
-    /** @var EmailManager&MockObject */
-    private EmailManager|MockObject $emailManagerMock;
-
-    /** @var SecurityUtil&MockObject */
-    private SecurityUtil|MockObject $securityUtilMock;
-
-    /** @var VisitorInfoUtil&MockObject */
-    private VisitorInfoUtil|MockObject $visitorInfoUtilMock;
-
-    /** @var EntityManagerInterface&MockObject */
-    private EntityManagerInterface|MockObject $entityManagerMock;
-
-    /** @var AuthManager */
     private AuthManager $authManager;
+    private ErrorManager $errorManagerMock;
+    private AppUtil & MockObject $appUtilMock;
+    private CacheUtil & MockObject $cacheUtilMock;
+    private LogManager & MockObject $logManagerMock;
+    private CookieUtil & MockObject $cookieUtilMock;
+    private SessionUtil & MockObject $sessionUtilMock;
+    private UserManager & MockObject $userManagerMock;
+    private EmailManager & MockObject $emailManagerMock;
+    private SecurityUtil & MockObject $securityUtilMock;
+    private VisitorInfoUtil & MockObject $visitorInfoUtilMock;
+    private EntityManagerInterface & MockObject $entityManagerMock;
 
     protected function setUp(): void
     {

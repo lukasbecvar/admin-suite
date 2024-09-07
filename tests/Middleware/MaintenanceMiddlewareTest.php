@@ -20,14 +20,9 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class MaintenanceMiddlewareTest extends TestCase
 {
-    /** @var AppUtil&MockObject */
-    private AppUtil|MockObject $appUtilMock;
-
-    /** @var LoggerInterface&MockObject */
-    private LoggerInterface|MockObject $loggerMock;
-
-    /** @var ErrorManager&MockObject */
-    private ErrorManager|MockObject $errorManagerMock;
+    private AppUtil & MockObject $appUtilMock;
+    private LoggerInterface & MockObject $loggerMock;
+    private ErrorManager & MockObject $errorManagerMock;
 
     /**
      * Sets up the mock objects before each test
@@ -60,7 +55,7 @@ class MaintenanceMiddlewareTest extends TestCase
         );
 
         // mock request event
-        /** @var RequestEvent&MockObject $event */
+        /** @var RequestEvent & MockObject $event */
         $event = $this->createMock(RequestEvent::class);
 
         // mock the error manager
@@ -100,7 +95,7 @@ class MaintenanceMiddlewareTest extends TestCase
         );
 
         // mock request event
-        /** @var RequestEvent&MockObject $event */
+        /** @var RequestEvent & MockObject $event */
         $event = $this->createMock(RequestEvent::class);
 
         // mock the error manager

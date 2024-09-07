@@ -16,13 +16,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FilesystemUtilTest extends TestCase
 {
-    /** @var LogManager */
     private LogManager $logManager;
-
-    /** @var ErrorManager */
     private ErrorManager $errorManager;
-
-    /** @var FilesystemUtil */
     private FilesystemUtil $filesystemUtil;
 
     protected function setUp(): void

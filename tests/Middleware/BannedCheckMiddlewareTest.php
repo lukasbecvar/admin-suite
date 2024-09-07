@@ -23,20 +23,11 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class BannedCheckMiddlewareTest extends TestCase
 {
-    /** @var AppUtil&MockObject */
-    private AppUtil|MockObject $appUtil;
-
-    /** @var Environment&MockObject */
-    private Environment|MockObject $twig;
-
-    /** @var LogManager&MockObject */
-    private LogManager|MockObject $logManager;
-
-    /** @var BanManager&MockObject */
-    private BanManager|MockObject $banManager;
-
-    /** @var AuthManager&MockObject */
-    private AuthManager|MockObject $authManager;
+    private AppUtil & MockObject $appUtil;
+    private Environment & MockObject $twig;
+    private LogManager & MockObject $logManager;
+    private BanManager & MockObject $banManager;
+    private AuthManager & MockObject $authManager;
 
     /**
      * Sets up the mock objects before each test

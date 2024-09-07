@@ -21,13 +21,8 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class AuthorizationMiddlewareTest extends TestCase
 {
-    /** @var Environment&MockObject */
-    private Environment|MockObject $twig;
-
-    /** @var AuthManager&MockObject */
-    private AuthManager|MockObject $authManager;
-
-    /** @var AuthorizationMiddleware */
+    private Environment & MockObject $twig;
+    private AuthManager & MockObject $authManager;
     private AuthorizationMiddleware $authorizationMiddleware;
 
     protected function setUp(): void

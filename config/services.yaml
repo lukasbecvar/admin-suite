@@ -15,6 +15,11 @@ services:
 
     # twig extensions
     # --------------------------------------------------------------------------------- #
+    # linkify extension
+    App\Twig\LinkifyExtension:
+        tags:
+            - { name: 'twig.extension' }
+
     # auth manager extension
     App\Twig\AuthManagerExtension:
         arguments:
