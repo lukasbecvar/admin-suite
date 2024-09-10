@@ -38,6 +38,15 @@
         "type": "http",
         "enable": true 
     },
+    "paste.becvar.xyz": {
+        "service_name": "paste.becvar.xyz",
+        "display_name": "becvar.xyz paste",
+        "url": "https://paste.becvar.xyz",
+        "accept_code": 200,
+        "max_response_time": 3000,
+        "type": "http",
+        "enable": true 
+    },
     "nonlizard.xyz": {
         "service_name": "nonlizard.xyz",
         "display_name": "nonlizard.xyz website",
