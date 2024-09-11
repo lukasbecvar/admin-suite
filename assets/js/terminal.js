@@ -1,4 +1,4 @@
-/** admin-suite: terminal component */
+/** terminal component functionality */
 document.addEventListener("DOMContentLoaded", function() {
     // get html element list
     const commandContainer = document.getElementById('command-container')

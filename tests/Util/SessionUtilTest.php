@@ -133,10 +133,8 @@ class SessionUtilTest extends TestCase
         $_SESSION[$sessionName] = $encryptedValue;
 
         // mock the decryptAes method
-        $this->securityUtilMock->expects($this->once())
-            ->method('decryptAes')
-            ->with($encryptedValue)
-            ->willReturn($decryptedValue);
+        $this->securityUtilMock->expects($this->once())->method('decryptAes')
+            ->with($encryptedValue)->willReturn($decryptedValue);
 
         // get the session value
         $value = $this->sessionUtil->getSessionValue($sessionName);
@@ -163,14 +161,10 @@ class SessionUtilTest extends TestCase
         $_SESSION[$sessionName] = $encryptedValue;
 
         // mock the decryptAes method
-        $this->securityUtilMock->expects($this->once())
-            ->method('decryptAes')
-            ->with($encryptedValue)
-            ->willReturn(null);
+        $this->securityUtilMock->expects($this->once())->method('decryptAes')->with($encryptedValue)->willReturn(null);
 
         // mock the error manager
-        $this->errorManagerMock->expects($this->once())
-            ->method('handleError')
+        $this->errorManagerMock->expects($this->once())->method('handleError')
             ->with('error to decrypt session data', Response::HTTP_INTERNAL_SERVER_ERROR);
 
         // get the session value

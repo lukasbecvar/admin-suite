@@ -74,8 +74,17 @@ class UserListCommand extends Command
 
         // render the table
         $io->table(
-            ['#', 'Username', 'Role', 'Ip address', 'Browser', 'OS', 'Register time', 'Last login'],
-            $data
+            headers: [
+                '#',
+                'Username',
+                'Role',
+                'Ip address',
+                'Browser',
+                'OS',
+                'Register time',
+                'Last login'
+            ],
+            rows: $data
         );
 
         // return success code

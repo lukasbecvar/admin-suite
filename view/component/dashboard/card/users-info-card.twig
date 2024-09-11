@@ -6,13 +6,19 @@
     <div class="p-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-                <p class="text-gray-300 mb-1">Users count: <span class="text-white font-semibold">{{ usersCount|e }}</span></p>
+                <p class="text-gray-300 mb-1">Users count: <span class="text-white font-semibold">
+                    {{ usersCount|e }}</span>
+                </p>
             </div>
             <div>
-                <p class="text-gray-300 mb-1">Online: <span class="text-white font-semibold">{{ onlineUsersCount|e }} (<a href={{ path('app_manager_users', {'filter': 'online'}) }} class="text-blue-400 hover:text-blue-300">list</a>)</span></p>
+                <p class="text-gray-300 mb-1">Online: <span class="text-white font-semibold">
+                    {{ onlineUsersCount|e }} (<a href={{ path('app_manager_users', {'filter': 'online'}) }} class="text-blue-400 hover:text-blue-300">list</a>)</span>
+                </p>
             </div>
             <div class="col-span-2">
-                <p class="text-gray-300 mb-1">Banned: <span class="text-white font-semibold">{{ bannedUsersCount|e }} (<a href={{ path('app_manager_users', {'filter': 'banned'}) }} class="text-blue-400 hover:text-blue-300">list</a>)</span></p>
+                <p class="text-gray-300 mb-1">
+                    Banned: <span class="text-white font-semibold">{{ bannedUsersCount|e }} (<a href={{ path('app_manager_users', {'filter': 'banned'}) }} class="text-blue-400 hover:text-blue-300">list</a>)</span>
+                </p>
             </div>
         </div>
     </div>

@@ -167,8 +167,7 @@ class AuthManagerTest extends TestCase
         $this->sessionUtilMock->expects($this->exactly(2))->method('setSession');
 
         // mock the cookie util
-        $this->cookieUtilMock->expects($this->once())
-            ->method('set')
+        $this->cookieUtilMock->expects($this->once())->method('set')
             ->with('user-token', 'test_token', $this->anything());
 
         // mock the entity manager
@@ -332,7 +331,8 @@ class AuthManagerTest extends TestCase
         $userId = 1;
 
         // Expect the cache manager's setValue method to be called once
-        $this->cacheUtilMock->expects($this->once())->method('setValue')->with('online_user_' . $userId, 'online', 300);
+        $this->cacheUtilMock->expects($this->once())
+            ->method('setValue')->with('online_user_' . $userId, 'online', 300);
 
         // Call the method
         $this->authManager->cacheOnlineUser($userId);

@@ -63,28 +63,21 @@ class LinuxCheckMiddlewareTest extends TestCase
     public function testRequestNonLinuxSystem(): void
     {
         // mock the server util
-        $this->serverUtilMock->expects($this->once())
-            ->method('isSystemLinux')
-            ->willReturn(false);
+        $this->serverUtilMock->expects($this->once())->method('isSystemLinux')->willReturn(false);
 
         // mock the app util
-        $this->appUtilMock->expects($this->once())
-            ->method('isDevMode')
-            ->willReturn(true);
+        $this->appUtilMock->expects($this->once())->method('isDevMode')->willReturn(true);
 
         // mock the error manager
-        $this->errorManagerMock->expects($this->once())
-            ->method('handleError')
-            ->with(
-                'This system is only for linux.',
-                Response::HTTP_NOT_IMPLEMENTED
-            );
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'This system is only for linux.',
+            Response::HTTP_NOT_IMPLEMENTED
+        );
 
         // mock the error manager
-        $this->errorManagerMock->expects($this->once())
-            ->method('getErrorView')
-            ->with(Response::HTTP_NOT_IMPLEMENTED)
-            ->willReturn('<html><body><h1>Upgrade Required</h1></body></html>');
+        $this->errorManagerMock->expects($this->once())->method('getErrorView')->with(Response::HTTP_NOT_IMPLEMENTED)->willReturn(
+            '<html><body><h1>Upgrade Required</h1></body></html>'
+        );
 
         // mock request event
         /** @var RequestEvent & MockObject $eventMock */

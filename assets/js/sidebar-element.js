@@ -1,4 +1,4 @@
-/* admin-suite: sidebar element script */
+/* sidebar element functionality */
 document.addEventListener('DOMContentLoaded', function() {
     // get elements
     const sidebar = document.getElementById('sidebar')

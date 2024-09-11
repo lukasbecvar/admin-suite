@@ -76,16 +76,12 @@ class BanManagerTest extends TestCase
         $this->authManagerMock->method('getLoggedUserRepository')->willReturn($userMock);
 
         // repository mock
-        $this->repositoryMock
-            ->method('findOneBy')
-            ->with(['banned_user_id' => $userId, 'status' => 'active'])
-            ->willReturn(null);
+        $this->repositoryMock->method('findOneBy')
+            ->with(['banned_user_id' => $userId, 'status' => 'active'])->willReturn(null);
 
         // log manager mock
-        $this->logManagerMock
-            ->expects($this->once())
-            ->method('log')
-            ->with(
+        $this->logManagerMock->expects($this->once())
+            ->method('log')->with(
                 'ban-manager',
                 'user: ' . $userId . ' has been banned'
             );
@@ -107,10 +103,8 @@ class BanManagerTest extends TestCase
         $banned = new Banned();
 
         // repository mock
-        $this->repositoryMock
-            ->method('findOneBy')
-            ->with(['banned_user_id' => $userId, 'status' => 'active'])
-            ->willReturn($banned);
+        $this->repositoryMock->method('findOneBy')
+            ->with(['banned_user_id' => $userId, 'status' => 'active'])->willReturn($banned);
 
         // get banned status
         $status = $this->banManager->isUserBanned($userId);
@@ -135,10 +129,8 @@ class BanManagerTest extends TestCase
         $banned->setReason($reason);
 
         // repository mock
-        $this->repositoryMock
-            ->method('findOneBy')
-            ->with(['banned_user_id' => $userId, 'status' => 'active'])
-            ->willReturn($banned);
+        $this->repositoryMock->method('findOneBy')
+            ->with(['banned_user_id' => $userId, 'status' => 'active'])->willReturn($banned);
 
         // assert reason
         $this->assertEquals($reason, $this->banManager->getBanReason($userId));
@@ -170,15 +162,12 @@ class BanManagerTest extends TestCase
         $this->authManagerMock->method('getLoggedUserRepository')->willReturn($userMock);
 
         // repository mock
-        $this->repositoryMock
-            ->method('findOneBy')
-            ->with(['banned_user_id' => $userId, 'status' => 'active'])
-            ->willReturn($banned);
+        $this->repositoryMock->method('findOneBy')
+            ->with(['banned_user_id' => $userId, 'status' => 'active'])->willReturn($banned);
 
         // log manager mock
-        $this->logManagerMock
-            ->expects($this->once())->method('log')
-            ->with(
+        $this->logManagerMock->expects($this->once())
+            ->method('log')->with(
                 'ban-manager',
                 'user: ' . $userId . ' is unbanned'
             );
@@ -211,8 +200,7 @@ class BanManagerTest extends TestCase
         $this->userManagerMock->method('getAllUsersRepository')->willReturn([$user1, $user2, $user3]);
 
         // mock BannedRepository to return banned users based on user IDs
-        $this->repositoryMock
-            ->method('findOneBy')
+        $this->repositoryMock->method('findOneBy')
             ->willReturnCallback(function ($criteria) {
                 if ($criteria['banned_user_id'] == 1 && $criteria['status'] == 'active') {
                     return new Banned();

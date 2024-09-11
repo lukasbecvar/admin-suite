@@ -10,8 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # code checkout
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
     # deploy to the server using SSH
@@ -23,7 +22,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
 
-        # script to run on the server
+        # run upgrade script on the server 
         script: |
           # go to the project directory
           cd /services/website/admin-suite

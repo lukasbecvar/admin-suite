@@ -1,3 +1,4 @@
+/* database table reader component functionality */
 document.addEventListener('DOMContentLoaded', function() {
     // select popup elements
     const popup = document.getElementById('textPopup')

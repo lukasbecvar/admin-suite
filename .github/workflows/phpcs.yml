@@ -1,4 +1,4 @@
-# test code with php code sniffer rules
+# static code analysis with PHP CodeSniffer
 name: PHP-CodeSniffer
 
 on:
@@ -13,11 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # code checkout
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
-    # setup PHP 
+    # setup PHP
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:

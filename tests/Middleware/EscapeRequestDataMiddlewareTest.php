@@ -65,11 +65,7 @@ class EscapeRequestDataMiddlewareTest extends TestCase
         /** @var HttpKernelInterface $kernel */
         $kernel = $this->createMock(HttpKernelInterface::class);
         /** @var Request $request */
-        $event = new RequestEvent(
-            $kernel,
-            $request,
-            HttpKernelInterface::MAIN_REQUEST
-        );
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         // execute the middleware
         $this->middleware->onKernelRequest($event);

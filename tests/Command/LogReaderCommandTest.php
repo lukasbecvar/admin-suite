@@ -33,7 +33,11 @@ class LogReaderCommandTest extends TestCase
         $this->userManager = $this->createMock(UserManager::class);
         $this->visitorInfoUtil = $this->createMock(VisitorInfoUtil::class);
 
-        $command = new LogReaderCommand($this->logManager, $this->userManager, $this->visitorInfoUtil);
+        $command = new LogReaderCommand(
+            $this->logManager,
+            $this->userManager,
+            $this->visitorInfoUtil
+        );
 
         // get application instance and add command
         $application = new Application();

@@ -41,9 +41,10 @@ class SecurityUtilTest extends TestCase
      */
     public function testEscapeXss(): void
     {
-        // test escaping a string with special characters
         $input = '<script>alert("XSS");</script>';
         $expectedOutput = '&lt;script&gt;alert(&quot;XSS&quot;);&lt;/script&gt;';
+
+        // assert that the output is escaped
         $this->assertEquals($expectedOutput, $this->securityUtil->escapeString($input));
     }
 
@@ -54,9 +55,10 @@ class SecurityUtilTest extends TestCase
      */
     public function testEscapeNonXss(): void
     {
-        // test escaping a string without special characters
         $input = 'Hello, World!';
         $expectedOutput = 'Hello, World!';
+
+        // assert that the output is not escaped
         $this->assertEquals($expectedOutput, $this->securityUtil->escapeString($input));
     }
 

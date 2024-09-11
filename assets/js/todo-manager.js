@@ -1,4 +1,4 @@
-/* admin-suite: todo manager component (handle edit popup input function) */
+/* todo manager component (handle edit popup input function) */
 document.addEventListener('DOMContentLoaded', function () {
     let currentTodoId = null
 

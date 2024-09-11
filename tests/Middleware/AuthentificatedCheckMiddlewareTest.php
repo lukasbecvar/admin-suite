@@ -181,14 +181,11 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
     public function testRequestRedirectToLogin(): void
     {
         // mock the auth manager
-        $this->authManagerMock->expects($this->once())
-            ->method('isUserLogedin')->willReturn(false);
+        $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(false);
 
         // mock the url generator
         $this->urlGeneratorMock->expects($this->once())
-            ->method('generate')
-            ->with('app_auth_login')
-            ->willReturn('/login');
+            ->method('generate')->with('app_auth_login')->willReturn('/login');
 
         // create request event
         $event = $this->createRequestEvent('/dashboard');

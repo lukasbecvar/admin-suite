@@ -111,8 +111,17 @@ class LogReaderCommand extends Command
 
         // render the table
         $io->table(
-            ['#', 'Name', 'Message', 'time', 'Browser', 'OS', 'Ip Address', 'User'],
-            $data
+            headers: [
+                '#',
+                'Name',
+                'Message',
+                'time',
+                'Browser',
+                'OS',
+                'Ip Address',
+                'User'
+            ],
+            rows: $data
         );
 
         // return success code
