@@ -127,7 +127,9 @@ class LogManagerTest extends TestCase
 
         // expect process method to be called
         $this->entityManagerMock->expects($this->once())->method('persist');
-        $this->entityManagerMock->method('flush')->will($this->throwException(new \Exception('Database error')));
+        $this->entityManagerMock->method('flush')->will($this->throwException(
+            new \Exception('Database error')
+        ));
 
         // mock error manager
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
@@ -285,14 +287,11 @@ class LogManagerTest extends TestCase
             ->willReturn($this->repositoryMock);
 
         // mock repository
-        $this->repositoryMock->expects($this->once())
-            ->method('findBy')
-            ->with(['status' => 'UNREADED'])
-            ->willReturn($logs);
+        $this->repositoryMock->expects($this->once())->method('findBy')
+            ->with(['status' => 'UNREADED'])->willReturn($logs);
 
         // expect flush to be called once
-        $this->entityManagerMock->expects($this->once())
-            ->method('flush');
+        $this->entityManagerMock->expects($this->once())->method('flush');
 
         // call the method under test
         $this->logManager->setAllLogsToReaded();
@@ -310,25 +309,16 @@ class LogManagerTest extends TestCase
 
         // mock log entity
         $logMock = $this->createMock(Log::class);
-        $logMock->expects($this->once())
-            ->method('setStatus')
-            ->with($newStatus);
+        $logMock->expects($this->once())->method('setStatus')->with($newStatus);
 
         // mock repository
         $repositoryMock = $this->createMock(LogRepository::class);
-        $repositoryMock->expects($this->once())
-            ->method('find')
-            ->with($logId)
-            ->willReturn($logMock);
+        $repositoryMock->expects($this->once())->method('find')->with($logId)->willReturn($logMock);
 
         // mock entity manager
         $this->entityManagerMock->expects($this->once())
-            ->method('getRepository')
-            ->with(Log::class)
-            ->willReturn($repositoryMock);
-
-        $this->entityManagerMock->expects($this->once())
-            ->method('flush');
+            ->method('getRepository')->with(Log::class)->willReturn($repositoryMock);
+        $this->entityManagerMock->expects($this->once())->method('flush');
 
         // call method
         $this->logManager->updateLogStatusById($logId, $newStatus);
@@ -346,26 +336,17 @@ class LogManagerTest extends TestCase
 
         // mock log entity
         $logMock = $this->createMock(Log::class);
-        $logMock->expects($this->once())
-            ->method('setStatus')
-            ->with($newStatus);
+        $logMock->expects($this->once())->method('setStatus')->with($newStatus);
 
         // mock repository
         $repositoryMock = $this->createMock(LogRepository::class);
-        $repositoryMock->expects($this->once())
-            ->method('find')
-            ->with($logId)
-            ->willReturn($logMock);
+        $repositoryMock->expects($this->once())->method('find')->with($logId)->willReturn($logMock);
 
         // mock entity manager
         $this->entityManagerMock->expects($this->once())
-            ->method('getRepository')
-            ->with(Log::class)
-            ->willReturn($repositoryMock);
-
+        ->method('getRepository')->with(Log::class)->willReturn($repositoryMock);
         $this->entityManagerMock->expects($this->once())
-            ->method('flush')
-            ->willThrowException(new \Exception('Test Exception'));
+            ->method('flush')->willThrowException(new \Exception('Test Exception'));
 
         // mock error manager
         $this->errorManagerMock->expects($this->once())->method('handleError')

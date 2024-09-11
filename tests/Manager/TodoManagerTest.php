@@ -63,7 +63,8 @@ class TodoManagerTest extends TestCase
 
         // mock todo entity
         $todo = new Todo();
-        $todo->setTodoText('encrypted text')
+        $todo
+            ->setTodoText('encrypted text')
             ->setAddedTime(new \DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
@@ -106,13 +107,11 @@ class TodoManagerTest extends TestCase
         $this->securityUtilMock->method('encryptAes')->willReturn('encrypted text');
 
         // mock log manager
-        $this->logManagerMock->expects($this->once())
-            ->method('log')
+        $this->logManagerMock->expects($this->once())->method('log')
             ->with('todo-manager', 'new todo created', 4);
 
         // mock entity manager
-        $this->entityManagerMock->expects($this->once())
-            ->method('persist')
+        $this->entityManagerMock->expects($this->once())->method('persist')
             ->with($this->isInstanceOf(Todo::class));
         $this->entityManagerMock->expects($this->once())
             ->method('flush');

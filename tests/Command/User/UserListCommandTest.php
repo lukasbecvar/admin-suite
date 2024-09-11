@@ -38,8 +38,7 @@ class UserListCommandTest extends TestCase
 
         // simulate returning one user
         $this->userManager->expects($this->once())
-            ->method('getAllUsersRepository')
-            ->willReturn([$user1]);
+            ->method('getAllUsersRepository')->willReturn([$user1]);
 
         // mock VisitorInfoUtil
         $this->visitorInfoUtil = $this->createMock(VisitorInfoUtil::class);

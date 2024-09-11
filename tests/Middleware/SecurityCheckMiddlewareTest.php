@@ -57,13 +57,10 @@ class SecurityCheckMiddlewareTest extends TestCase
 
         // expect a response to be set
         $this->errorManagerMock->expects($this->once())
-            ->method('getErrorView')
-            ->with(426)
-            ->willReturn('SSL Required Content');
+            ->method('getErrorView')->with(426)->willReturn('SSL Required Content');
 
         // expect the response to be set
-        $event->expects($this->once())
-            ->method('setResponse')
+        $event->expects($this->once())->method('setResponse')
             ->with(new Response('SSL Required Content', Response::HTTP_UPGRADE_REQUIRED));
 
         // execute the middleware

@@ -1,4 +1,4 @@
-/* admin-suite: custom dark scrollbar */ 
+/* custom dark scrollbar */ 
 ::-webkit-scrollbar {
 	width: 10px;
 	height: 10px;
@@ -9,7 +9,7 @@
 }
  
 .card-component ::-webkit-scrollbar-track {
-	background: rgb(20, 20, 20);
+	background: rgb(15, 15, 15);
 }
 
 ::-webkit-scrollbar-thumb {

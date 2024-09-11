@@ -45,18 +45,15 @@ class AssetsCheckMiddlewareTest extends TestCase
 
         // set up expectations for the mock objects
         $this->appUtilMock->expects($this->once())
-            ->method('isAssetsExist')
-            ->willReturn(false);
+            ->method('isAssetsExist')->willReturn(false);
 
         // mock the logger error method
         $this->loggerMock->expects($this->once())
-            ->method('error')
-            ->with('build resources not found');
+            ->method('error')->with('build resources not found');
 
         // mock the setResponse method
         $eventMock->expects($this->once())
-            ->method('setResponse')
-            ->with($this->callback(function ($response) {
+            ->method('setResponse')->with($this->callback(function ($response) {
                 return $response instanceof Response
                     && $response->getStatusCode() === Response::HTTP_INTERNAL_SERVER_ERROR
                     && $response->getContent() === 'Error: build resources not found, please contact service administrator & report this bug on email: ' . ($_ENV['ADMIN_CONTACT'] ?? 'unknown');

@@ -1,4 +1,4 @@
-# test code with phpstan
+# static code analysis with PHPStan
 name: PHPStan
 
 on:
@@ -13,8 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # checkout code
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
     # setup PHP

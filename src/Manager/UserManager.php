@@ -87,10 +87,10 @@ class UserManager
 
         // get user repo
         return $this->entityManager->getRepository(User::class)->findBy(
-            [],
-            null,
-            $perPage,
-            $offset
+            criteria: [],
+            orderBy: null,
+            limit: $perPage,
+            offset: $offset
         );
     }
 
@@ -227,11 +227,7 @@ class UserManager
         $repository = $this->entityManager->getRepository(User::class);
 
         // get users count
-        $count = $repository
-            ->createQueryBuilder('p')
-            ->select('COUNT(p.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
+        $count = $repository->createQueryBuilder('p')->select('COUNT(p.id)')->getQuery()->getSingleScalarResult();
 
         // check if count is zero
         if ($count == 0) {

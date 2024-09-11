@@ -131,7 +131,7 @@ class VisitorInfoUtilTest extends TestCase
             )
         );
 
-        // test with unknown user agent
+        // assert unknown user agent
         $this->assertEquals('Unknown', $this->visitorInfoUtil->getBrowserShortify('Unknown User Agent'));
     }
 
@@ -142,8 +142,9 @@ class VisitorInfoUtilTest extends TestCase
      */
     public function testGetOs(): void
     {
-        // test with known user agent
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.9999.999 Safari/537.36';
+
+        // assert Windows OS
         $this->assertEquals('Windows', $this->visitorInfoUtil->getOS());
     }
 }

@@ -1,4 +1,4 @@
-/* admin-suite: auth component style */
+/* auth component style */
 .background-dark {
     background: rgb(20, 20, 20) !important;
 }
@@ -71,7 +71,9 @@
 	color: lightgrey;
 }
 
-.auth-form-input:-webkit-autofill, .form .auth-form-input:-webkit-autofill:hover, .form .auth-form-input:-webkit-autofill:focus {
+.auth-form-input:-webkit-autofill, 
+.form .auth-form-input:-webkit-autofill:hover, 
+.form .auth-form-input:-webkit-autofill:focus {
 	border: 1px solid rgba(230, 230, 230, 0.24);
 	-webkit-text-fill-color: white;
 	-webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset;

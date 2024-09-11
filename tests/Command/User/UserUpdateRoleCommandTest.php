@@ -162,7 +162,9 @@ class UserUpdateRoleCommandTest extends TestCase
         // mock methods
         $this->userManager->method('getUserRepository')->willReturn($user);
         $this->userManager->method('getUserRoleById')->willReturn('USER');
-        $this->userManager->method('updateUserRole')->will($this->throwException(new \Exception('Some error')));
+        $this->userManager->method('updateUserRole')->will($this->throwException(
+            new \Exception('Some error')
+        ));
 
         // execute command
         $this->commandTester->execute(['username' => 'testuser', 'role' => 'ADMIN']);

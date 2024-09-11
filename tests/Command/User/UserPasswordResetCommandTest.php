@@ -46,13 +46,10 @@ class UserPasswordResetCommandTest extends TestCase
 
         // mock user manager
         $this->userManagerMock->expects($this->once())
-            ->method('checkIfUserExist')
-            ->with($username)
-            ->willReturn(true);
+            ->method('checkIfUserExist')->with($username)->willReturn(true);
 
         // mock auth manager
-        $this->authManager->expects($this->once())
-            ->method('resetUserPassword');
+        $this->authManager->expects($this->once())->method('resetUserPassword');
 
         // create command
         $application = new Application();
@@ -81,9 +78,7 @@ class UserPasswordResetCommandTest extends TestCase
 
         // mock user manager
         $this->userManagerMock->expects($this->once())
-            ->method('checkIfUserExist')
-            ->with($username)
-            ->willReturn(false);
+            ->method('checkIfUserExist')->with($username)->willReturn(false);
 
         // create command
         $application = new Application();

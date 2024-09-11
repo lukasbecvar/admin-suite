@@ -90,19 +90,15 @@ class DatabaseOnlineMiddlewareTest extends TestCase
 
         // mock the database connection
         $this->connectionMock->expects($this->once())
-            ->method('executeQuery')
-            ->willThrowException(new \Exception('Database connection failed'));
+            ->method('executeQuery')->willThrowException(new \Exception('Database connection failed'));
 
         // mock the error manager
         $this->errorManagerMock->expects($this->once())
-            ->method('getErrorView')
-            ->with(Response::HTTP_INTERNAL_SERVER_ERROR)
-            ->willReturn('Internal Server Error Content');
+            ->method('getErrorView')->with(Response::HTTP_INTERNAL_SERVER_ERROR)->willReturn('Internal Server Error Content');
 
         // mock the response
         $event->expects($this->once())
-            ->method('setResponse')
-            ->with($this->callback(function ($response) {
+            ->method('setResponse')->with($this->callback(function ($response) {
                 return $response instanceof Response && $response->getStatusCode() === Response::HTTP_INTERNAL_SERVER_ERROR && $response->getContent() === 'Internal Server Error Content';
             }));
 

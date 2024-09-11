@@ -96,9 +96,7 @@ class UserRegisterCommandTest extends TestCase
      */
     public function testRegisterUserSuccess(): void
     {
-        $this->authManager->expects($this->once())
-            ->method('registerUser')
-            ->with('newuser');
+        $this->authManager->expects($this->once())->method('registerUser')->with('newuser');
 
         // create CommandTester
         $commandTester = new CommandTester($this->command);
