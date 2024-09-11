@@ -9,12 +9,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const cancelEditButton = document.getElementById('cancelEditButton')
     const confirmEditButton = document.getElementById('confirmEditButton')
 
+    // get raw string from escaped data
+    function decodeInput(input) {
+        const e = document.createElement('div')
+        e.innerHTML = input
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue
+    }
+
     // handle edit button
     editButtons.forEach(button => {
         button.addEventListener('click', function () {
             currentTodoId = this.closest('button').dataset.todoId
+            const todoText = this.closest('button').dataset.todoText
             editPopup.classList.remove('hidden')
-            editTodoInput.value = this.closest('button').dataset.todoText
+            editTodoInput.value = decodeInput(todoText)
             editTodoInput.focus()
         })
     })

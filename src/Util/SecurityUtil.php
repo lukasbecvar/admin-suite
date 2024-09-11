@@ -27,7 +27,7 @@ class SecurityUtil
      */
     public function escapeString(string $string): ?string
     {
-        return htmlspecialchars($string, ENT_QUOTES | ENT_HTML5);
+        return htmlspecialchars($string, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
 
     /**
