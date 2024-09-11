@@ -15,6 +15,7 @@ Encore
     .addEntry('user-manager-js', './assets/js/user-manager.js')
     .addEntry('sidebar-element-js', './assets/js/sidebar-element.js')
     .addEntry('loading-component-js', './assets/js/loading-component.js')
+    .addEntry('database-table-browser-js', './assets/js/database-table-browser.js')
 
     // copy static assets
     .copyFiles(

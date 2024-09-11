@@ -33,7 +33,8 @@ class CreateTodoFormType extends AbstractType
         $builder->add('todo_text', TextType::class, [
             'label' => false,
             'attr' => [
-                'autocomplete' => 'off'
+                'autocomplete' => 'off',
+                'maxlength' => 255
             ],
             'constraints' => [
                 new NotBlank(['message' => 'Please enter a todo text']),
