@@ -29,15 +29,18 @@
         </div>
     {% else %}
         {# LOG OUTPUT BOX #}
-        <div class="bg-neutral-900 text-white p-2 component">
+        <div class="bg-neutral-900 text-white component">
             <div>
                 {% if logContent == null %}
                     <h1 class="text-center mt-5 text-xl">Log file is empty</h1>
                 {% else %}
-                    <pre class="whitespace-pre-wrap break-words p-2 bg-neutral-800 rounded">{{ logContent|e }}</pre>
+                    <pre class="text-sm text-cyan overflow-auto"><code>{{ logContent|e }}</code></pre>
                 {% endif %}
             </div>
         </div>
     {% endif %}
 </div>
+
+{# INIT CODE HIGHLIGHT #}
+{{ encore_entry_script_tags('code-highlight-js') }}
 {% endblock %}
