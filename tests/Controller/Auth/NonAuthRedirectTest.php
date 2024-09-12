@@ -79,7 +79,8 @@ class NonAuthRedirectTest extends WebTestCase
         ],
         'file_browser' => [
             '/filesystem',
-            '/filesystem/view'
+            '/filesystem/view',
+            '/filesystem/get/resource'
         ],
         'terminal' => [
             '/terminal',

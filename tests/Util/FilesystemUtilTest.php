@@ -3,22 +3,22 @@
 namespace App\Tests\Util;
 
 use App\Manager\LogManager;
-use App\Util\FilesystemUtil;
+use App\Util\FileSystemUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class FilesystemUtilTest
+ * Class FileSystemUtilTest
  *
- * This class tests the FilesystemUtil class
+ * This class tests the FileSystemUtil class
  *
  * @package App\Tests\Util
  */
-class FilesystemUtilTest extends TestCase
+class FileSystemUtilTest extends TestCase
 {
     private LogManager $logManager;
     private ErrorManager $errorManager;
-    private FilesystemUtil $filesystemUtil;
+    private FileSystemUtil $fileSystemUtil;
 
     protected function setUp(): void
     {
@@ -27,7 +27,7 @@ class FilesystemUtilTest extends TestCase
         $this->errorManager = $this->createMock(ErrorManager::class);
 
         // create the filesystem util instance
-        $this->filesystemUtil = new FilesystemUtil(
+        $this->fileSystemUtil = new FileSystemUtil(
             $this->logManager,
             $this->errorManager
         );
@@ -41,7 +41,7 @@ class FilesystemUtilTest extends TestCase
     public function testGetFilesListSuccess(): void
     {
         // get the list of files
-        $list = $this->filesystemUtil->getFilesList('/');
+        $list = $this->fileSystemUtil->getFilesList('/');
 
         // check result array
         $this->assertIsArray($list);
@@ -59,10 +59,23 @@ class FilesystemUtilTest extends TestCase
      */
     public function testIsFileExecutableSuccess(): void
     {
-        $result = $this->filesystemUtil->isFileExecutable('/var/www/balbla.txt');
+        $result = $this->fileSystemUtil->isFileExecutable('/var/www/balbla.txt');
 
         // assert result is bool
         $this->assertIsBool($result);
+    }
+
+    /**
+     * Test the detectMediaType method
+     *
+     * @return void
+     */
+    public function testDetectMediaTypeSuccess(): void
+    {
+        $result = $this->fileSystemUtil->detectMediaType('/var/www/balbla.txt');
+
+        // assert result is string
+        $this->assertIsString('non-mediafile');
     }
 
     /**
@@ -72,7 +85,7 @@ class FilesystemUtilTest extends TestCase
      */
     public function testGetFileContentSuccess(): void
     {
-        $result = $this->filesystemUtil->getFileContent('/usr/lib/os-release');
+        $result = $this->fileSystemUtil->getFileContent('/usr/lib/os-release');
 
         // assert result is string
         $this->assertIsString($result);

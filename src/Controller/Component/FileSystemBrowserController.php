@@ -2,11 +2,12 @@
 
 namespace App\Controller\Component;
 
-use App\Util\FilesystemUtil;
+use App\Util\FileSystemUtil;
 use App\Annotation\Authorization;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -18,11 +19,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class FileSystemBrowserController extends AbstractController
 {
-    private FilesystemUtil $filesystemUtil;
+    private FileSystemUtil $fileSystemUtil;
 
-    public function __construct(FilesystemUtil $filesystemUtil)
+    public function __construct(FileSystemUtil $fileSystemUtil)
     {
-        $this->filesystemUtil = $filesystemUtil;
+        $this->fileSystemUtil = $fileSystemUtil;
     }
 
     /**
@@ -40,7 +41,7 @@ class FileSystemBrowserController extends AbstractController
         $path = (string) $request->query->get('path', '/');
 
         // get filesystem list
-        $filesystemList = $this->filesystemUtil->getFilesList($path);
+        $filesystemList = $this->fileSystemUtil->getFilesList($path);
 
         // render the file browser list
         return $this->render('component/file-system/file-system-browser.twig', [
@@ -48,6 +49,57 @@ class FileSystemBrowserController extends AbstractController
             'currentPath' => $path,
             'filesystemList' => $filesystemList
         ]);
+    }
+
+    /**
+     * Returns the contents of media files
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The file browser view response
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/filesystem/get/resource', methods:['GET'], name: 'app_file_system_get_resource')]
+    public function filesystemGetResource(Request $request): Response
+    {
+        // get the resource path
+        $path = (string) $request->query->get('path', '/');
+
+        // get the media type of the file
+        $mediaType = $this->fileSystemUtil->detectMediaType($path);
+
+        // check if the resource is a media file
+        if ($mediaType == 'non-mediafile') {
+            return $this->json([
+                'status' => 'error',
+                'message' => 'The resource is not a media file'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        // get the resource content
+        $resourceContent = $this->fileSystemUtil->getFileContent($path);
+
+        // check if resource content is null
+        if ($resourceContent == null) {
+            return $this->json([
+                'status' => 'error',
+                'message' => 'The resource content is null'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        // create a StreamedResponse with decrypted content
+        $response = new StreamedResponse(function () use ($resourceContent) {
+            echo $resourceContent;
+        });
+
+        // set headers
+        $response->headers->set('Content-Type', $mediaType);
+        $response->headers->set('Content-Disposition', 'inline; filename="' . $path . '"');
+        $response->headers->set('Cache-Control', 'public, max-age=3600');
+        $response->headers->set('Accept-Ranges', 'bytes');
+        $response->headers->set('Content-Length', (string) strlen($resourceContent));
+
+        return $response;
     }
 
     /**
@@ -66,19 +118,26 @@ class FileSystemBrowserController extends AbstractController
 
         // default file content value
         $fileContent = null;
+        $mediaType = null;
 
         // check if file is executable
-        if ($this->filesystemUtil->isFileExecutable($path)) {
+        if ($this->fileSystemUtil->isFileExecutable($path)) {
             $fileContent = 'You cannot view the content of an binnary executable file';
         } else {
+            // get the media type of the file
+            $mediaType = $this->fileSystemUtil->detectMediaType($path);
+
             // get file content
-            $fileContent = $this->filesystemUtil->getFileContent($path);
+            if ($mediaType == 'non-mediafile') {
+                $fileContent = $this->fileSystemUtil->getFileContent($path);
+            }
         }
 
         // render the file browser view
         return $this->render('component/file-system/file-system-view.twig', [
             // file browser data
             'currentPath' => $path,
+            'mediaType' => $mediaType,
             'fileContent' => $fileContent
         ]);
     }

@@ -31,9 +31,39 @@
 
     {# FILE CONTENT VIEW #}
     <div class="card-color shadow-md overflow-auto">
-        <div class="flex justify-between items-center">
-            <h3 class="text-lg font-medium text-gray-100 pl-2 pt-1">{{ currentPath|split('/')|last }}</h3>
+        {% set containerClass = mediaType == 'non-mediafile' ? 'flex justify-between items-center' : 'text-center' %}
+        <div class={{ containerClass }}>
+            <h3 class="text-lg font-medium text-gray-100 {{ mediaType == 'non-mediafile' ? 'pl-2 pt-1' : '' }}">
+                {{ currentPath|split('/')|last }}
+            </h3>
         </div>
-        <pre class="text-sm text-cyan card-color p-2 rounded mt-1 overflow-auto">{{ fileContent|e }}</pre>
+        {# RAW FILE CONTENT VIEW #}
+        {% if mediaType == 'non-mediafile' %}
+            <pre class="text-sm text-cyan card-color p-2 rounded mt-1 overflow-auto">{{ fileContent|e }}</pre>
+        {% else %}
+            {# IMAGE #}
+            {% if mediaType starts with 'image/' %}
+                <div class="flex justify-center items-center w-full h-auto mt-2 mb-4">
+                    <img src={{ path('app_file_system_get_resource', { 'path': currentPath }) }}
+                        alt={{ currentPath|e }}
+                        class="max-w-full max-h-[500px] shadow-lg object-contain">
+                </div>
+            {# VIDEO #}
+            {% elseif mediaType starts with 'video/' %}
+                <div class="flex justify-center items-center w-full h-auto mt-2 mb-2">
+                    <video controls class="max-w-full max-h-[500px] shadow-lg object-contain">
+                        <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            {# AUDIO #}
+            {% elseif mediaType starts with 'audio/' %}
+                <audio controls class="w-full shadow-lg mt-2 mb-2">
+                    <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
+                    Your browser does not support the audio tag.
+                </audio>
+            {% endif %}
+        {% endif %}
     </div>
+</div>
 {% endblock %}
