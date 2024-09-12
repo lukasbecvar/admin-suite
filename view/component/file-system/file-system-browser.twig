@@ -4,9 +4,31 @@
 {% block component %}
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
-    <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
-        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-    </a>
+    
+    {# GET BACK PATH #}
+    {% set pathParts = currentPath|split('/') %}
+    {% if pathParts|length > 1 %}
+        {% set pathParts = pathParts|filter(p => p != '') %}
+        {% if pathParts|length > 1 %}
+            {% set backPath = pathParts|slice(0, -1)|join('/') %}
+            {% set backPath = '/' ~ backPath %}
+        {% else %}
+            {% set backPath = '/' %}
+        {% endif %}
+    {% else %}
+        {% set backPath = '/' %}
+    {% endif %}
+    
+    {# BACK BUTTON #}
+    {% if backPath == '/' and currentPath == '/' %}
+        <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+    {% else %}
+        <a href={{ path('app_file_system_browser', { 'path': backPath }) }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+    {% endif %}
     <span class="mr-1 text-white">Filesystem</span>
 </div>
 
