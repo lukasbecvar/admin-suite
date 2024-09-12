@@ -8,13 +8,13 @@ use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class FilesystemUtil
+ * Class FileSystemUtil
  *
  * This class is responsible for handling filesystem related operations
  *
  * @package App\Util
  */
-class FilesystemUtil
+class FileSystemUtil
 {
     private LogManager $logManager;
     private ErrorManager $errorManager;
@@ -115,6 +115,50 @@ class FilesystemUtil
         }
 
         return false;
+    }
+
+    /**
+     * Detects the media type of a file
+     *
+     * @param string $path The path to the file
+     *
+     * @return string The media type of the file
+     */
+    public function detectMediaType(string $path): string
+    {
+        // check if file exists
+        if (!file_exists($path)) {
+            return 'non-mediafile';
+        }
+
+        // check if path is a directory or symbolic link
+        if (is_dir($path) || is_link($path)) {
+            return 'non-mediafile';
+        }
+
+        // get file MIME type
+        $mimeType = mime_content_type($path);
+
+        // check if MIME type is detected
+        if (!$mimeType) {
+            // handle error if MIME type detection fails
+            $this->errorManager->handleError(
+                message: 'Error: Unable to detect MIME type for ' . $path,
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+            return 'non-mediafile';
+        }
+
+        // determine if file is an image, video, or audio
+        if (str_starts_with($mimeType, 'image/')) {
+            return $mimeType;
+        } elseif (str_starts_with($mimeType, 'video/')) {
+            return $mimeType;
+        } elseif (str_starts_with($mimeType, 'audio/')) {
+            return $mimeType;
+        }
+
+        return 'non-mediafile';
     }
 
     /**
