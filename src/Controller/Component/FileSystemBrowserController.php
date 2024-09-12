@@ -132,7 +132,7 @@ class FileSystemBrowserController extends AbstractController
                 $fileContent = $this->fileSystemUtil->getFileContent($path);
             }
         }
-        
+
         // render the file browser view
         return $this->render('component/file-system/file-system-view.twig', [
             // file browser data
