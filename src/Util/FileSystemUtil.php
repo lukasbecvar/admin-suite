@@ -38,7 +38,7 @@ class FileSystemUtil
 
         try {
             $finder = new \Symfony\Component\Finder\Finder();
-            $finder->in($path)->depth('== 0');
+            $finder->in($path)->depth('== 0')->ignoreDotFiles(false)->ignoreVCS(false);
 
             // get file list as array
             $list = iterator_to_array($finder, false);
