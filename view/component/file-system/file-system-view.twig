@@ -37,7 +37,7 @@
     {# FILE CONTENT VIEW #}
     <div class="card-color shadow-md overflow-auto">
         {# RAW FILE CONTENT VIEW #}
-        {% if mediaType == 'non-mediafile' %}
+        {% if mediaType == 'non-mediafile' or mediaType == null %}
             <pre class="text-sm text-cyan rounded overflow-auto"><code>{{ fileContent|e }}</code></pre>
         {% else %}
             {# IMAGE #}
