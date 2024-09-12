@@ -86,6 +86,11 @@ class FileSystemUtil
      */
     public function isFileExecutable(string $path): bool
     {
+        // check if file is bash script
+        if (str_ends_with($path, '.sh') || str_ends_with($path, '.bash')) {
+            return false;
+        }
+
         // check file exists
         if (!file_exists($path)) {
             return false;

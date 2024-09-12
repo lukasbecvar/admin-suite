@@ -37,48 +37,17 @@
     </div>
 {% else %}
     {# LOG OUTPUT BOX #}
-    <div class="bg-neutral-900 text-white p-2 component">
+    <div class="bg-neutral-900 text-white component">
         <div>
             {% if exceptionContent is empty %}
                 <h1 class="text-center mt-5 text-xl">Exception file is empty</h1>
             {% else %}
-                {# split the log content into individual exception entries #}
-                {% set entries = exceptionContent|split('\n') %}
-                {% set groupedEntries = [] %}
-                {% set currentEntry = [] %}
-
-                {% for entry in entries %}
-                    {% if entry starts with '[2024-' %}
-                        {% if currentEntry is not empty %}
-                            {% set groupedEntries = groupedEntries|merge([currentEntry|join('\n')]) %}
-                        {% endif %}
-                        {% set currentEntry = [entry] %}
-                    {% else %}
-                        {% set currentEntry = currentEntry|merge([entry]) %}
-                    {% endif %}
-                {% endfor %}
-                    
-                {% if currentEntry is not empty %}
-                    {% set groupedEntries = groupedEntries|merge([currentEntry|join('\n')]) %}
-                {% endif %}
-
-                <div class="space-y-1">
-                    {% for groupedEntry in groupedEntries %}
-                        <div class="p-2 bg-neutral-800 rounded">
-                            {% set entryParts = groupedEntry|split(' ', 2) %}
-                            {% if entryParts|length > 1 %}
-                                <div class="text-yellow-200 font-mono break-words">
-                                    <span class="font-bold">{{ entryParts[0] }}</span>
-                                    <span class="text-white">{{ entryParts[1]|raw }}</span>
-                                </div>
-                            {% else %}
-                                <div class="text-white break-words">{{ groupedEntry|raw }}</div>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                </div>
+                <pre class="text-sm text-cyan overflow-auto"><code>{{ exceptionContent|e }}</code></pre>
             {% endif %}
         </div>
     {% endif %}
 </div>
+
+{# INIT CODE HIGHLIGHT #}
+{{ encore_entry_script_tags('code-highlight-js') }}
 {% endblock %}
