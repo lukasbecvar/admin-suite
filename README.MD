@@ -59,10 +59,18 @@ Contributions are welcome! Please fork this repository and submit pull requests 
 This project uses the following technologies
 * PHP
     * [Website](https://php.net)
-* Symfony
+* Symfony with doctrine
     * [Website](https://symfony.com)
+* PHPUnit
+    * [Github](https://github.com/sebastianbergmann/phpunit)
+* Sempro-PHP-Pretty-Print
+    * [Github](https://github.com/sempro/phpunit-pretty-print)
+* PHPStan
+    * [Github](https://github.com/phpstan/phpstan)
 * Tailwind
     * [Website](https://tailwindcss.com)
+* HighlightJS
+    * [Website](https://highlightjs.org)
 * NPM / Webpack encore
     * [NPM](https://docs.npmjs.com)
     * [Encore](https://symfony.com/doc/current/frontend/encore/index.html)
