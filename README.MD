@@ -63,7 +63,7 @@ This project uses the following technologies
     * [Website](https://symfony.com)
 * PHPUnit
     * [Github](https://github.com/sebastianbergmann/phpunit)
-* Sempro-PHP-Pretty-Print
+* Sempro-PHPUnit-Pretty-Print
     * [Github](https://github.com/sempro/phpunit-pretty-print)
 * PHPStan
     * [Github](https://github.com/phpstan/phpstan)
