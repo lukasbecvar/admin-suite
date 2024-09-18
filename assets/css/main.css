@@ -171,6 +171,10 @@
 	background-color: rgb(23 23 23);;
 }
 
+.todo-manager .add-todo-button {
+	height: 2.80rem !important;
+}
+
 /* database browser component */
 .database-browser .database-link {
 	color: rgb(96, 165, 250);
