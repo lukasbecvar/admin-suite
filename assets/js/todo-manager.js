@@ -38,15 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmEdit()
     })
 
-    // handle enter key press event
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            if (editTodoInput.value.length >= 1 && editTodoInput.value.length <= 255) {
-                confirmEdit()
-            }
-        }
-    })
-
     // handle escape key
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') {
