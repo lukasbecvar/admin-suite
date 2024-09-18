@@ -28,7 +28,7 @@ class ServiceMonitoringFixtures extends Fixture
         $data = [
             ['system-cpu-usage', 'cpu usage is ok', 'ok', '2024-07-08 15:17:38'],
             ['system-ram-usage', 'ram usage is ok', 'ok', '2024-07-08 15:17:38'],
-            ['system-disk-usage', 'disk usage is ok', 'ok', '2024-07-08 15:17:38'],
+            ['system-storage-usage', 'storage usage is ok', 'ok', '2024-07-08 15:17:38'],
             ['sshd', 'SSHD is not running', 'not-running', '2024-07-08 15:18:57'],
             ['docker', 'Docker is running', 'running', '2024-07-08 15:18:57'],
             ['becvar-site', 'Becvar site is online', 'online', '2024-07-08 16:12:28'],

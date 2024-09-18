@@ -58,7 +58,7 @@ class DashboardController extends AbstractController
 
         // get host system info
         $ramUsage = $this->serverUtil->getRamUsage();
-        $diskUsage = $this->serverUtil->getDiskUsage();
+        $storageUsage = $this->serverUtil->getStorageUsage();
         $hostUptime = $this->serverUtil->getHostUptime();
         $hostSystemInfo = $this->serverUtil->getSystemInfo();
 
@@ -87,7 +87,7 @@ class DashboardController extends AbstractController
 
             // host system info
             'ramUsage' => $ramUsage,
-            'diskUsage' => $diskUsage,
+            'storageUsage' => $storageUsage,
             'hostUptime' => $hostUptime,
             'hostSystemInfo' => $hostSystemInfo,
 

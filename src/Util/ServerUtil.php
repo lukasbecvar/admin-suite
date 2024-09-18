@@ -130,18 +130,18 @@ class ServerUtil
     }
 
     /**
-     * Get the disk usage
+     * Get the storage usage
      *
-     * @return int|null The disk usage
+     * @return int|null The storage usage
      */
-    public function getDiskUsage(): ?int
+    public function getStorageUsage(): ?int
     {
         try {
-            $diskUsage = disk_total_space('/') - disk_free_space('/');
-            return (int) ($diskUsage / 1073741824); // convert bytes to GB
+            $storageUsage = disk_total_space('/') - disk_free_space('/');
+            return (int) ($storageUsage / 1073741824); // convert bytes to GB
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                message: 'Error getting disk usage: ' . $e->getMessage(),
+                message: 'Error getting storage usage: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
             return null;
