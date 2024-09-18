@@ -141,17 +141,17 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test get disk usage
+     * Test get storage usage
      *
      * @return void
      */
-    public function testGetDiskUsage(): void
+    public function testGetStorageUsage(): void
     {
         // call the method being tested
-        $diskUsage = $this->serverUtil->getDiskUsage();
+        $storageUsage = $this->serverUtil->getStorageUsage();
 
         // assert that the result is an integer
-        $this->assertIsInt($diskUsage);
+        $this->assertIsInt($storageUsage);
     }
 
     /**

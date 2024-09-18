@@ -35,9 +35,9 @@
             <p class="text-red-400">Permissions error: please add "{{ diagnosticData.webUsername|e }} ALL=NOPASSWD: ALL" to /etc/sudoers.</p>
         {% endif %}
 
-        {# DISK SPACE ALERT #}
+        {# STORAGE SPACE ALERT #}
         {% if diagnosticData.driveSpace > 90 %}
-            <p class="text-red-400"> main disk storage is full, please delete some unnecessary data or increase disk space.</p>
+            <p class="text-red-400"> main storage is full, please delete some unnecessary data or increase storage space.</p>
         {% endif %}
 
         {# CPU OVERLOAD ALERT #}

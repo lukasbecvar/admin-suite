@@ -262,24 +262,24 @@ class MonitoringManager
             );
         }
 
-        // monitor disk usage
+        // monitor storage usage
         if ($this->serverUtil->getDriveUsagePercentage() > 98) {
             $this->handleMonitoringStatus(
-                serviceName: 'system-disk-usage',
+                serviceName: 'system-storage-usage',
                 currentStatus: 'critical',
-                message: 'disk space is too low'
+                message: 'storage space is too low'
             );
             $io->writeln(
-                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>disk space is too low/fg=red>'
+                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>storage space is too low/fg=red>'
             );
         } else {
             $this->handleMonitoringStatus(
-                serviceName: 'system-disk-usage',
+                serviceName: 'system-storage-usage',
                 currentStatus: 'ok',
-                message: 'disk space is ok'
+                message: 'storage space is ok'
             );
             $io->writeln(
-                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>disk space is ok</fg=green>'
+                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>storage space is ok</fg=green>'
             );
         }
 
