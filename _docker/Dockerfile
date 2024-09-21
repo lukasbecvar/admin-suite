@@ -19,7 +19,6 @@ RUN apt-get update && apt-get install -y \
 RUN docker-php-ext-install \
     pdo_mysql \
     intl \
-    pdo \
     curl
 
 # install OPCache
@@ -31,6 +30,3 @@ RUN pecl install apcu \
 
 # allow apache execute sudo commands without password
 RUN echo 'www-data ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-
-# enable apache rewrite module
-RUN a2enmod rewrite
