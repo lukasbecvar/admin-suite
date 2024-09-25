@@ -105,7 +105,7 @@
                             <td class="p-1 border-b border-neutral-600">{{ row.time|date('Y-m-d H:i:s')|e }}</td>
                             <td class="p-1 border-b border-neutral-600">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
                             <td class="p-1 border-b border-neutral-600">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
-                            <td class="p-1 border-b border-neutral-600">{{ row.ipAdderss|e }}</td>
+                            <td class="p-1 border-b border-neutral-600">{{ row.ipAddress|e }}</td>
                             <td class="p-1 border-b border-neutral-600">
                                 {% if userManager.getUsernameById(row.userId) != null or authManager.isUsernameBlocked(row.name) %}
                                     <a href={{ path('app_manager_users_profile', {'id': row.userId}) }} class="underline profile-link">{{ userManager.getUsernameById(row.userId) ?? 'system' }}</a>

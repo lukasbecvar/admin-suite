@@ -14,6 +14,9 @@ use App\Repository\BannedRepository;
  * @package App\Entity
  */
 #[ORM\Table(name: 'ban_list')]
+#[ORM\Index(name: 'status_idx', columns: ['status'])]
+#[ORM\Index(name: 'banned_by_id_idx', columns: ['banned_by_id'])]
+#[ORM\Index(name: 'banned_user_id_idx', columns: ['banned_user_id'])]
 #[ORM\Entity(repositoryClass: BannedRepository::class)]
 class Banned
 {

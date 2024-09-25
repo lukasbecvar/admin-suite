@@ -80,7 +80,7 @@ class LogReaderCommandTest extends TestCase
         $log->method('getMessage')->willReturn('Log message');
         $log->method('getTime')->willReturn(new \DateTime());
         $log->method('getUserAgent')->willReturn('User agent string');
-        $log->method('getIpAdderss')->willReturn('127.0.0.1');
+        $log->method('getIpAddress')->willReturn('127.0.0.1');
         $log->method('getUserId')->willReturn(1);
 
         // mock log manager

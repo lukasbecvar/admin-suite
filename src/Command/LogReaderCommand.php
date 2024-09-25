@@ -104,7 +104,7 @@ class LogReaderCommand extends Command
                 $log->getTime()->format('Y-m-d H:i:s'),
                 $this->visitorInfoUtil->getBrowserShortify($log->getUserAgent()),
                 $this->visitorInfoUtil->getOs($log->getUserAgent()),
-                $log->getIpAdderss(),
+                $log->getIpAddress(),
                 $user
             ];
         }

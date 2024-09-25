@@ -14,6 +14,12 @@ use App\Repository\LogRepository;
  * @package App\Entity
  */
 #[ORM\Table(name: 'logs')]
+#[ORM\Index(name: 'name_idx', columns: ['name'])]
+#[ORM\Index(name: 'time_idx', columns: ['time'])]
+#[ORM\Index(name: 'status_idx', columns: ['status'])]
+#[ORM\Index(name: 'user_id_idx', columns: ['user_id'])]
+#[ORM\Index(name: 'user_agent_idx', columns: ['user_agent'])]
+#[ORM\Index(name: 'ip_address_idx', columns: ['ip_address'])]
 #[ORM\Entity(repositoryClass: LogRepository::class)]
 class Log
 {
@@ -35,7 +41,7 @@ class Log
     private ?string $user_agent = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $ip_adderss = null;
+    private ?string $ip_address = null;
 
     #[ORM\Column]
     private ?int $level = null;
@@ -158,25 +164,25 @@ class Log
     }
 
     /**
-     * Get the ip adderss of the log
+     * Get the ip address of the log
      *
-     * @return string|null The ip adderss of the log or null if not found
+     * @return string|null The ip address of the log or null if not found
      */
-    public function getIpAdderss(): ?string
+    public function getIpAddress(): ?string
     {
-        return $this->ip_adderss;
+        return $this->ip_address;
     }
 
     /**
-     * Set the ip adderss of the log
+     * Set the ip address of the log
      *
-     * @param string $ip_adderss The ip adderss of the log
+     * @param string $ip_address The ip address of the log
      *
      * @return static The current object
      */
-    public function setIpAdderss(string $ip_adderss): static
+    public function setIpAddress(string $ip_address): static
     {
-        $this->ip_adderss = $ip_adderss;
+        $this->ip_address = $ip_address;
 
         return $this;
     }

@@ -193,8 +193,9 @@ class BanManager
         $repository = $this->entityManager->getRepository(Banned::class);
 
         // get banned count
-        $count =  $repository->count(['status' => 'active']);
+        $count = $repository->count(['status' => 'active']);
 
+        // return banned users count
         return $count;
     }
 }

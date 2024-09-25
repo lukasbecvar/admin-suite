@@ -24,10 +24,8 @@ class UserPasswordResetCommand extends Command
     private AuthManager $authManager;
     private UserManager $userManager;
 
-    public function __construct(
-        AuthManager $authManager,
-        UserManager $userManager,
-    ) {
+    public function __construct(AuthManager $authManager, UserManager $userManager)
+    {
         $this->authManager = $authManager;
         $this->userManager = $userManager;
         parent::__construct();
