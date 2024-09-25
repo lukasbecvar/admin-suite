@@ -22,10 +22,8 @@ class TodoManagerController extends AbstractController
     private TodoManager $todoManager;
     private ErrorManager $errorManager;
 
-    public function __construct(
-        TodoManager $todoManager,
-        ErrorManager $errorManager
-    ) {
+    public function __construct(TodoManager $todoManager, ErrorManager $errorManager)
+    {
         $this->todoManager = $todoManager;
         $this->errorManager = $errorManager;
     }

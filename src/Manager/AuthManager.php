@@ -140,6 +140,7 @@ class AuthManager
                 // init user entity
                 $user = new User();
 
+                // set user properties
                 $user->setUsername($username)
                     ->setPassword($password)
                     ->setRole('USER')
@@ -182,9 +183,9 @@ class AuthManager
         }
 
         // get logged user repository
-        $repository = $this->userManager->getUserRepository(
-            ['token' => $this->sessionUtil->getSessionValue('user-token')]
-        );
+        $repository = $this->userManager->getUserRepository([
+            'token' => $this->sessionUtil->getSessionValue('user-token')
+        ]);
 
         return $repository;
     }

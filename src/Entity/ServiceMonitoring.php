@@ -14,6 +14,8 @@ use App\Repository\ServiceMonitoringRepository;
  * @package App\Entity
  */
 #[ORM\Table(name: 'monitoring')]
+#[ORM\Index(name: 'status_idx', columns: ['status'])]
+#[ORM\Index(name: 'service_name_idx', columns: ['service_name'])]
 #[ORM\Entity(repositoryClass: ServiceMonitoringRepository::class)]
 class ServiceMonitoring
 {

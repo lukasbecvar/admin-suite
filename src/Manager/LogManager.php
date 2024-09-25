@@ -99,7 +99,7 @@ class LogManager
             ->setMessage($message)
             ->setStatus('UNREADED')
             ->setUserAgent($userAgent)
-            ->setIpAdderss($ipAddress)
+            ->setIpAddress($ipAddress)
             ->setTime(new \DateTime())
             ->setLevel($level);
 
