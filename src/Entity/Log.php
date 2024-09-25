@@ -14,12 +14,12 @@ use App\Repository\LogRepository;
  * @package App\Entity
  */
 #[ORM\Table(name: 'logs')]
-#[ORM\Index(name: 'name_idx', columns: ['name'])]
-#[ORM\Index(name: 'time_idx', columns: ['time'])]
-#[ORM\Index(name: 'status_idx', columns: ['status'])]
-#[ORM\Index(name: 'user_id_idx', columns: ['user_id'])]
-#[ORM\Index(name: 'user_agent_idx', columns: ['user_agent'])]
-#[ORM\Index(name: 'ip_address_idx', columns: ['ip_address'])]
+#[ORM\Index(name: 'logs_name_idx', columns: ['name'])]
+#[ORM\Index(name: 'logs_time_idx', columns: ['time'])]
+#[ORM\Index(name: 'logs_status_idx', columns: ['status'])]
+#[ORM\Index(name: 'logs_user_id_idx', columns: ['user_id'])]
+#[ORM\Index(name: 'logs_user_agent_idx', columns: ['user_agent'])]
+#[ORM\Index(name: 'logs_ip_address_idx', columns: ['ip_address'])]
 #[ORM\Entity(repositoryClass: LogRepository::class)]
 class Log
 {

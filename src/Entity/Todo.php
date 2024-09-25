@@ -14,8 +14,8 @@ use App\Repository\TodoRepository;
  * @package App\Entity
  */
 #[ORM\Table(name: 'todos')]
-#[ORM\Index(name: 'status_idx', columns: ['status'])]
-#[ORM\Index(name: 'user_id_idx', columns: ['user_id'])]
+#[ORM\Index(name: 'logs_status_idx', columns: ['status'])]
+#[ORM\Index(name: 'logs_user_id_idx', columns: ['user_id'])]
 #[ORM\Entity(repositoryClass: TodoRepository::class)]
 class Todo
 {

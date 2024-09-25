@@ -14,10 +14,10 @@ use App\Repository\UserRepository;
  * @package App\Entity
  */
 #[ORM\Table(name: 'users')]
-#[ORM\Index(name: 'role_idx', columns: ['role'])]
-#[ORM\Index(name: 'token_idx', columns: ['token'])]
-#[ORM\Index(name: 'username_idx', columns: ['username'])]
-#[ORM\Index(name: 'ip_address_idx', columns: ['ip_address'])]
+#[ORM\Index(name: 'logs_role_idx', columns: ['role'])]
+#[ORM\Index(name: 'logs_token_idx', columns: ['token'])]
+#[ORM\Index(name: 'logs_username_idx', columns: ['username'])]
+#[ORM\Index(name: 'logs_ip_address_idx', columns: ['ip_address'])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
 {
