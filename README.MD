@@ -1,7 +1,7 @@
 # <h1 align="center">Admin suite</h1>
 ### <p align="center">Solution for administration and monitoring linux private servers</p>
 <p align="center">
-    <a href="https://github.com/lordbecvold/admin-suite/blob/main/LICENSE" target="_blank">License</a> |
+    <a href="https://github.com/lukasbecvar/admin-suite/blob/main/LICENSE" target="_blank">License</a> |
     <a href="https://becvar.xyz" target="_blank">Author</a>
 </p>
 
@@ -16,8 +16,8 @@ I created this project to manage my personal servers. I wanted a simple and easy
 
 ## Installation
 Installation is very simple like any other PHP project.
-* Clone repo ``git clone git@github.com:lordbecvold/admin-suite.git``
-* Create apache virtual host or nginx configuration like ([apache-config](https://github.com/lordbecvold/admin-suite/blob/main/_docker/configs/apache-site.conf))
+* Clone repo ``git clone git@github.com:lukasbecvar/admin-suite.git``
+* Create apache virtual host or nginx configuration like ([apache-config](https://github.com/lukasbecvar/admin-suite/blob/main/_docker/configs/apache-site.conf))
 * Create .env file with your configuration (.env.prod)
 * Create admin suite database
 * Run database migrations (script/migrate.sh)
@@ -26,7 +26,7 @@ Installation is very simple like any other PHP project.
 ## Configuration
 * You can edit the config files directly in config/suite but it is better to create your own in the project root because these files will be loaded primarily and ignored by git when using the pull for update with scripts/upgrade.sh
 * Configure your package-requitements.json & services.json in root file (for example use config/suite files)
-* Create systemd or screen service for monitoring process (console command infinite loop) ([systemd-config](https://github.com/lordbecvold/admin-suite/blob/main/_docker/configs/monitoring-systemd.service))
+* Create systemd or screen service for monitoring process (console command infinite loop) ([systemd-config](https://github.com/lukasbecvar/admin-suite/blob/main/_docker/configs/monitoring-systemd.service))
 
 ## Exception monitoring
 In config exception-files.json it is possible to set paths to exception files and track exceptions from your applications via log manager
@@ -76,4 +76,4 @@ This project uses the following technologies
     * [Encore](https://symfony.com/doc/current/frontend/encore/index.html)
 
 ## License
-This software is licensed under the [MIT license](https://github.com/lordbecvold/admin-suite/blob/main/LICENSE).
+This software is licensed under the [MIT license](https://github.com/lukasbecvar/admin-suite/blob/main/LICENSE).
