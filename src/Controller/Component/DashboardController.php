@@ -79,11 +79,15 @@ class DashboardController extends AbstractController
         $bannedUsersCount = $this->banManager->getBannedCount();
         $usersCount = $this->userManager->getUsersCount();
 
+        // get exception files
+        $exceptionFiles = $this->logManager->getExceptionFiles();
+
         // return dashboard view
         return $this->render('component/dashboard/dashboard.twig', [
             // warning data
             'antiLogStatus' => $antiLogStatus,
             'diagnosticData' => $diagnosticData,
+            'exceptionFiles' => $exceptionFiles,
 
             // host system info
             'ramUsage' => $ramUsage,

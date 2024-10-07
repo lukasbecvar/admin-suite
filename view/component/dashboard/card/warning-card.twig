@@ -5,6 +5,11 @@
         </a>
     </div>
     <div class="p-2 card-text" id="wraning-elements">
+        {# CHECK IF EXCEPTION FILES IS FOUND #}
+        {% if exceptionFiles|length > 0 %} 
+            <p class="text-yellow-400">Exception found in monitored application <a href={{ path('app_manager_logs_exception_files') }}  class="link">view</a></p>
+        {% endif %}
+
         {# ANGLOG STATUS ALERT #}
         {% if antiLogStatus == false %}
             <p class="text-yellow-400">Logging for your browser is enabled you can disable <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="link">here</a></p>

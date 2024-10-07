@@ -92,7 +92,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
             'Connection refused',
             'database connection',
             'Base table or view not found',
-            'An exception occurred in the driver'
+            'An exception occurred in the driver',
         ];
 
         // check patterns in the error message
