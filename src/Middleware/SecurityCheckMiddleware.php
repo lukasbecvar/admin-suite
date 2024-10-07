@@ -3,7 +3,6 @@
 namespace App\Middleware;
 
 use App\Util\AppUtil;
-use Psr\Log\LoggerInterface;
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -18,16 +17,13 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 class SecurityCheckMiddleware
 {
     private AppUtil $appUtil;
-    private LoggerInterface $logger;
     private ErrorManager $errorManager;
 
     public function __construct(
         AppUtil $appUtil,
-        LoggerInterface $logger,
         ErrorManager $errorManager
     ) {
         $this->appUtil = $appUtil;
-        $this->logger = $logger;
         $this->errorManager = $errorManager;
     }
 
@@ -48,8 +44,6 @@ class SecurityCheckMiddleware
                     message: 'ssl is required to access this site.',
                     code: Response::HTTP_UPGRADE_REQUIRED
                 );
-            } else {
-                $this->logger->error('ssl is required to access this site.');
             }
 
             // render the maintenance template

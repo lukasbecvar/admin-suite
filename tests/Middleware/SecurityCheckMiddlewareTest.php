@@ -3,7 +3,6 @@
 namespace App\Tests\Middleware;
 
 use App\Util\AppUtil;
-use Psr\Log\LoggerInterface;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Middleware\SecurityCheckMiddleware;
@@ -22,20 +21,17 @@ class SecurityCheckMiddlewareTest extends TestCase
 {
     private AppUtil & MockObject $appUtilMock;
     private SecurityCheckMiddleware $middleware;
-    private LoggerInterface & MockObject $loggerMock;
     private ErrorManager & MockObject $errorManagerMock;
 
     protected function setUp(): void
     {
         // initialize mocks
         $this->appUtilMock = $this->createMock(AppUtil::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
 
         // create an instance of the class under test
         $this->middleware = new SecurityCheckMiddleware(
             $this->appUtilMock,
-            $this->loggerMock,
             $this->errorManagerMock
         );
     }

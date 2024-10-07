@@ -7,6 +7,13 @@ monolog:
             level: error
             channels: ['!event']
 
+        # exclude specific http codes from the exception log
+        filtered:
+            type: fingers_crossed
+            action_level: error
+            handler: exception
+            excluded_http_codes: [403, 404, 429, 501, 503]
+
 when@dev:
     monolog:
         handlers:
