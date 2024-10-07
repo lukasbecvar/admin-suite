@@ -199,7 +199,7 @@ class TodoManagerTest extends TestCase
         // mock log manager
         $this->logManagerMock->expects($this->once())
             ->method('log')
-            ->with('todo-manager', 'todo closed', 4);
+            ->with('todo-manager', 'todo: 1 closed', 4);
 
         // mock entity manager
         $this->entityManagerMock->expects($this->once())

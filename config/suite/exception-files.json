@@ -6,5 +6,9 @@
     "becvar-site": {
         "name": "becvar-site",
         "path": "/services/website/becvar-site/var/log/exception.log"
+    },
+    "code-paste": {
+        "name": "code-paste",
+        "path": "/services/website/code-paste/var/log/exception.log"
     }
 }

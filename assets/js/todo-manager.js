@@ -54,4 +54,18 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Todo text must be between 1 and 255 characters')
         }
     }
+
+    // prevent multiple clicks on delete link
+    document.querySelectorAll('.delete-link').forEach(function (link) {
+        link.addEventListener('click', function (event) {
+            // prevent multiple clicks
+            if (link.getAttribute('data-clicked') === 'true') {
+                event.preventDefault();
+                return;
+            }
+
+            // mark link as clicked
+            link.setAttribute('data-clicked', 'true');
+        });
+    });
 })

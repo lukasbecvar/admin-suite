@@ -266,7 +266,7 @@ class TodoManager
             // log the todo creation
             $this->logManager->log(
                 name: 'todo-manager',
-                message: 'todo closed',
+                message: 'todo: ' . $todoId . ' closed',
                 level: LogManager::LEVEL_INFO
             );
         } catch (\Exception $e) {
