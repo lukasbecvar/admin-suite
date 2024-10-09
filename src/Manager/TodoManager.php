@@ -246,14 +246,6 @@ class TodoManager
             );
         }
 
-        // check if the todo is closed
-        if ($todo->getStatus() !== 'open') {
-            $this->errorManager->handleError(
-                message: 'todo: ' . $todoId . ' is already closed',
-                code: Response::HTTP_FORBIDDEN
-            );
-        }
-
         try {
             // set the todo status to closed
             $todo->setStatus('closed');
