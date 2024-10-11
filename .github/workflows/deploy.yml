@@ -44,7 +44,13 @@ jobs:
           sed -i 's/^\(APP_ENV=\)dev/\1prod/' .env
 
           # install dependencies
-          sh scripts/install.sh
+          docker-compose run composer install --no-interaction
+
+          # install node-modules frontend packages
+          docker-compose run node npm install --loglevel=error
+
+          # build assets
+          docker-compose run node npm run build
 
           # run database migration
           php bin/console doctrine:database:create --if-not-exists
