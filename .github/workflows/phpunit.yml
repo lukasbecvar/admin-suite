@@ -35,12 +35,24 @@ jobs:
 
       # install dependencies
       - name: Install dependencies
-        run: sh scripts/install.sh
+        run: composer install --no-interaction --no-progress --no-suggest
       
+      # install node-modules
+      - name: Install node-modules
+        run: npm install --loglevel=error
+
+      # build assets
+      - name: Build assets
+        run: npm run build
+
+      # create database
+      - name: Create database
+        run: php bin/console doctrine:database:create --if-not-exists --env=test
+
       # migrate database
       - name: Migrate database
-        run: sh scripts/migrate.sh
-
+        run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
+        
       # load testing data
       - name: Load fixtures
         run: php bin/console doctrine:fixtures:load --no-interaction --env=test

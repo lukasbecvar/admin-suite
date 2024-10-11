@@ -29,4 +29,4 @@
 /services.json
 
 # docker services files
-_docker/services
+.docker/services

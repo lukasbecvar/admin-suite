@@ -17,7 +17,7 @@ I created this project to manage my personal servers. I wanted a simple and easy
 ## Installation
 Installation is very simple like any other PHP project.
 * Clone repo ``git clone git@github.com:lukasbecvar/admin-suite.git``
-* Create apache virtual host or nginx configuration like ([apache-config](https://github.com/lukasbecvar/admin-suite/blob/main/_docker/configs/apache-site.conf))
+* Create apache virtual host or nginx configuration like ([apache-config](https://github.com/lukasbecvar/admin-suite/blob/main/.docker/configs/apache-site.conf))
 * Create .env file with your configuration (.env.prod)
 * Create admin suite database
 * Run database migrations (script/migrate.sh)
@@ -26,7 +26,7 @@ Installation is very simple like any other PHP project.
 ## Configuration
 * You can edit the config files directly in config/suite but it is better to create your own in the project root because these files will be loaded primarily and ignored by git when using the pull for update with scripts/upgrade.sh
 * Configure your package-requitements.json & services.json in root file (for example use config/suite files)
-* Create systemd or screen service for monitoring process (console command infinite loop) ([systemd-config](https://github.com/lukasbecvar/admin-suite/blob/main/_docker/configs/monitoring-systemd.service))
+* Create systemd or screen service for monitoring process (console command infinite loop) ([systemd-config](https://github.com/lukasbecvar/admin-suite/blob/main/.docker/configs/monitoring-systemd.service))
 
 ## Exception monitoring
 In config exception-files.json it is possible to set paths to exception files and track exceptions from your applications via log manager
@@ -51,6 +51,9 @@ Authentication uses a completely custom user system with only a username and pas
 * PHP-Curl extension
 * Composer
 * NPM package manager and assets build tool for encore build
+
+## Development environment
+The complete stack for development is in Docker Compose, including PHP, Node, and Composer. You just need to run the docker-start script to launch it.
 
 ## Contributing
 Contributions are welcome! Please fork this repository and submit pull requests for any features, bug fixes, or enhancements. If you have any questions or need help, feel free to open an issue or contact me directly.

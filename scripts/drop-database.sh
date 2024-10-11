@@ -5,5 +5,7 @@
 [ "$APP_ENV" != "dev" ] && echo "This script is only for development environment" && exit 1
 
 # drop databases
-php bin/console doctrine:database:drop --force
-php bin/console doctrine:database:drop --env=test --force
+docker-compose run php bash -c "
+    php bin/console doctrine:database:drop --force &&
+    php bin/console doctrine:database:drop --env=test --force
+"
