@@ -22,6 +22,27 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
     private LoggerInterface $logger;
     private DatabaseManager $databaseManager;
 
+    /**
+     * List of error patterns that exclude from database log
+     *
+     * @var array<string>
+     */
+    private array $databaseLogBlockPattern = [
+        'log-error:',
+        'Unknown database',
+        'Base table or view not found',
+        'An exception occurred in the driver'
+    ];
+
+    /**
+     * List of error patterns that exclude from exception log
+     *
+     * @var array<string>
+     */
+    private array $exceptionLogBlockPattern = [
+        'No route found'
+    ];
+
     public function __construct(
         LogManager $logManager,
         LoggerInterface $logger,
@@ -72,33 +93,30 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
             }
         }
 
-        // log the error message with monolog (file storage)
-        $this->logger->error($message);
+        // check if the event can be logged
+        if ($this->canBeEventLogged($message, $this->exceptionLogBlockPattern)) {
+            // log the error message to exception log
+            $this->logger->error($message);
+        }
     }
 
     /**
-     * Check if an event can be logged
+     * Checks if an event can be logged based on the error message
      *
-     * @param string $errorMessage The error message
+     * @param string $errorMessage The error message to be checked
+     * @param array<string> $blockPatterns The list of patterns that can't be logged
      *
-     * @return bool If the event can be logged
+     * @return bool Returns true if the event can be dispatched, otherwise false
      */
-    public function canBeEventLogged(string $errorMessage): bool
+    public function canBeEventLogged(string $errorMessage, array $blockPatterns = null): bool
     {
-        // list of error patterns that should block event dispatch
-        $blockedErrorPatterns = [
-            'log-error:',
-            'Unknown database',
-            'Connection refused',
-            'database connection',
-            'Base table or view not found',
-            'An exception occurred in the driver',
-        ];
+        $blockPatterns = $blockPatterns ?? $this->databaseLogBlockPattern;
 
-        // check patterns in the error message
-        foreach ($blockedErrorPatterns as $pattern) {
-            // check if error message contains a blocked pattern
+        // loop through each blocked error pattern
+        foreach ($blockPatterns as $pattern) {
+            // check if the current pattern exists in the error message
             if (strpos($errorMessage, $pattern) !== false) {
+                // if a blocked pattern is found, return false
                 return false;
             }
         }
