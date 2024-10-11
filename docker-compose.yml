@@ -1,12 +1,29 @@
-# This Docker Compose configuration defines local development services
-version: '3'
+# docker compose configuration defines local development stack
 
 # docker network config
 networks:
-    dev:
+    main:
         driver: bridge
 
 services:
+    # composer service for managing php dependencies
+    composer:
+        image: composer:latest
+        container_name: composer
+        working_dir: /app
+        volumes:
+            - .:/app
+        command: composer install
+    
+    # node service for building assets
+    node:
+        image: node:latest
+        container_name: node
+        working_dir: /app
+        volumes:
+            - .:/app
+        command: npm run watch
+
     # database container
     mysql:
         image: mysql:latest
@@ -15,20 +32,20 @@ services:
         environment:
             - MYSQL_ROOT_PASSWORD=root
         volumes:
-            - ./_docker/configs/mysqld.conf:/etc/mysql/mysql.conf.d/mysqld.cnf
-            - ./_docker/services/mysql_database:/var/lib/mysql
-            - ./_docker/services/log:/var/log
+            - ./.docker/configs/mysqld.conf:/etc/mysql/mysql.conf.d/mysqld.cnf
+            - ./.docker/services/mysql_database:/var/lib/mysql
+            - ./.docker/services/log:/var/log
         mem_limit: 1g
         ports:
             - "3306:3306"
         networks:
-            - dev
+            - main
 
     # web server container
-    app:
+    php:
         build:
             context: .
-            dockerfile: ./_docker/Dockerfile
+            dockerfile: ./.docker/Dockerfile
         container_name: admin_suite_app
         restart: always
         depends_on:
@@ -36,12 +53,12 @@ services:
         environment:
             - DATABASE_HOST=mysql
         volumes:
-            - ./_docker/configs/apache-site.conf:/etc/apache2/sites-available/000-default.conf
-            - ./_docker/configs/php.ini:/usr/local/etc/php/php.ini
-            - ./_docker/services/log:/var/log
+            - ./.docker/configs/apache-site.conf:/etc/apache2/sites-available/000-default.conf
+            - ./.docker/configs/php.ini:/usr/local/etc/php/php.ini
+            - ./.docker/services/log:/var/log
             - ./:/var/www
-        mem_limit: 2g
+        mem_limit: 1g
         ports:
             - "80:80"
         networks:
-            - dev
+            - main

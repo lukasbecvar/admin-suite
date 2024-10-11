@@ -5,4 +5,4 @@
 [ "$APP_ENV" != "dev" ] && echo "This script is only for development environment" && exit 1
 
 # generate migration file for database update structure to latest version
-php bin/console make:migration --no-interaction
+docker-compose run php php bin/console make:migration --no-interaction
