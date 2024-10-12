@@ -2,15 +2,15 @@
 
 namespace App\Tests\Event\Subscriber;
 
-use App\Manager\LogManager;
+use App\Util\AppUtil;
 use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\TestCase;
-use App\Manager\DatabaseManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use App\Event\Subscriber\ExceptionEventSubscriber;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class ExceptionEventSubscriberTest
@@ -21,161 +21,72 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
  */
 class ExceptionEventSubscriberTest extends TestCase
 {
-    private MockObject & LogManager $logManager;
-    private MockObject & LoggerInterface $logger;
+    private AppUtil & MockObject $appUtil;
+    private LoggerInterface & MockObject $logger;
     private ExceptionEventSubscriber $subscriber;
-    private MockObject & DatabaseManager $databaseManager;
 
     protected function setUp(): void
     {
         // mock dependencies
-        $this->logManager = $this->createMock(LogManager::class);
+        $this->appUtil = $this->createMock(AppUtil::class);
+        $this->appUtil->method('getYamlConfig')->willReturn([
+            'monolog' => [
+                'handlers' => [
+                    'filtered' => [
+                        'excluded_http_codes' => [404, 405, 429, 503]
+                    ]
+                ]
+            ]
+        ]);
+
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->databaseManager = $this->createMock(DatabaseManager::class);
 
-        // create event subscriber instance
-        $this->subscriber = new ExceptionEventSubscriber(
-            $this->logManager,
-            $this->logger,
-            $this->databaseManager
-        );
+        // create instance of the ExceptionEventSubscriber
+        $this->subscriber = new ExceptionEventSubscriber($this->appUtil, $this->logger);
     }
 
     /**
-     * Test if the error message can be logged
+     * Test log error for non excluded http code
      *
      * @return void
      */
-    public function testCanBeEventLogged(): void
+    public function testOnKernelExceptionLogsErrorForNonExcludedHttpCode(): void
     {
-        // test error message without blocked pattern
-        $this->assertTrue($this->subscriber->canBeEventLogged('normal error message'));
+        // expect that logger->error() will be called once
+        $this->logger->expects($this->once())->method('error')->with('Test Exception Message');
 
-        // test error message with blocked pattern
-        $this->assertFalse($this->subscriber->canBeEventLogged('log-error: Something went wrong'));
-    }
+        // create instance of HttpException
+        $exception = new HttpException(500, 'Test Exception Message');
 
-    /**
-     * Test if the error message can be logged
-     *
-     * @return void
-     */
-    public function testExceptionLogsHandledError(): void
-    {
-        $exception = new \Exception('Test exception');
-        $trace = [['function' => 'handleError']];
-        $reflector = new \ReflectionClass($exception);
-        $property = $reflector->getProperty('trace');
-        $property->setAccessible(true);
-        $property->setValue($exception, $trace);
-
-        // create a new exception event
-        /** @var MockObject&HttpKernelInterface $kernel */
+        /** @var HttpKernelInterface & MockObject $kernel */
         $kernel = $this->createMock(HttpKernelInterface::class);
-        /** @var MockObject&Request $request */
+        /** @var Request & MockObject $request */
         $request = $this->createMock(Request::class);
-        $event = new ExceptionEvent(
-            $kernel,
-            $request,
-            HttpKernelInterface::MAIN_REQUEST,
-            $exception
-        );
+        $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $exception);
 
-        // check if the log manager logs the exception
-        $this->logManager
-            ->expects($this->once())
-            ->method('log')
-            ->with('exception', 'Test exception', 1);
-
-        // check if the logger logs the error message
-        $this->logger
-            ->expects($this->once())
-            ->method('error')
-            ->with('Test exception');
-
-        // handle the exception event
+        // call the onKernelException method
         $this->subscriber->onKernelException($event);
     }
 
     /**
-     * Test if message log is blocked
+     * Test does not log error for excluded http code
      *
      * @return void
      */
-    public function testExceptionDoesNotLogBlockedError(): void
+    public function testOnKernelExceptionDoesNotLogExcludedHttpCode(): void
     {
-        $exception = new \Exception('Unknown database error');
-        $trace = [['function' => 'handleError']];
-        $reflector = new \ReflectionClass($exception);
-        $property = $reflector->getProperty('trace');
-        $property->setAccessible(true);
-        $property->setValue($exception, $trace);
+        // expect that logger->error() will NOT be called
+        $this->logger->expects($this->never())->method('error');
 
-        // create a new exception event
-        /** @var MockObject&HttpKernelInterface $kernel */
+        // create instance of HttpException
+        $exception = new HttpException(404, 'Test Exception Message');
+        /** @var HttpKernelInterface & MockObject $kernel */
         $kernel = $this->createMock(HttpKernelInterface::class);
-        /** @var MockObject&Request $request */
+        /** @var Request & MockObject $request */
         $request = $this->createMock(Request::class);
-        $event = new ExceptionEvent(
-            $kernel,
-            $request,
-            HttpKernelInterface::MAIN_REQUEST,
-            $exception
-        );
+        $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $exception);
 
-        // check if the log manager logs the exception
-        $this->logManager
-            ->expects($this->never())
-            ->method('log');
-
-        // check if the logger logs the error message
-        $this->logger
-            ->expects($this->once())
-            ->method('error')
-            ->with('Unknown database error');
-
-        // handle the exception event
-        $this->subscriber->onKernelException($event);
-    }
-
-    /**
-     * Test exception does not log unhandled function
-     *
-     * @return void
-     */
-    public function testExceptionDoesNotLogUnhandledFunction(): void
-    {
-        $exception = new \Exception('Test exception');
-        $trace = [['function' => 'anotherFunction']];
-        $reflector = new \ReflectionClass($exception);
-        $property = $reflector->getProperty('trace');
-        $property->setAccessible(true);
-        $property->setValue($exception, $trace);
-
-        // create a new exception event
-        /** @var MockObject&HttpKernelInterface $kernel */
-        $kernel = $this->createMock(HttpKernelInterface::class);
-        /** @var MockObject&Request $request */
-        $request = $this->createMock(Request::class);
-        $event = new ExceptionEvent(
-            $kernel,
-            $request,
-            HttpKernelInterface::MAIN_REQUEST,
-            $exception
-        );
-
-        // check if the log manager logs the exception
-        $this->logManager
-            ->expects($this->never())
-            ->method('log');
-
-        // check if the logger logs the error message
-        $this->logger
-            ->expects($this->never())
-            ->method('error')
-            ->with('Test exception');
-
-        // handle the exception event
+        // call the onKernelException method
         $this->subscriber->onKernelException($event);
     }
 }

@@ -46,7 +46,7 @@ services:
         build:
             context: .
             dockerfile: ./.docker/Dockerfile
-        container_name: admin_suite_app
+        container_name: admin_suite_website
         restart: always
         depends_on:
             - mysql

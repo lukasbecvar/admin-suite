@@ -12,7 +12,7 @@ monolog:
             type: fingers_crossed
             action_level: error
             handler: exception
-            excluded_http_codes: [403, 404, 405, 429, 501, 503]
+            excluded_http_codes: [403, 404, 405, 426, 503]
 
 when@dev:
     monolog:
