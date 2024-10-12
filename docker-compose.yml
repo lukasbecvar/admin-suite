@@ -11,6 +11,7 @@ services:
         image: composer:latest
         container_name: composer
         working_dir: /app
+        mem_limit: 1g
         volumes:
             - .:/app
         command: composer install
@@ -20,6 +21,7 @@ services:
         image: node:latest
         container_name: node
         working_dir: /app
+        mem_limit: 1g
         volumes:
             - .:/app
         command: npm run watch
