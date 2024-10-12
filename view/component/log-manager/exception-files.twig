@@ -11,6 +11,10 @@
     {% if logName == 'none' %}
         <span class="mr-1 text-white">Exception files</span>
     {% else %}
+        <a href={{ path('app_manager_logs_exception_delete', { file: logName }) }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Delete exception log">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+        </a>
+
         <span class="mr-1 text-white">{{ logName|e }}</span>
     {% endif %}
 </div>
@@ -21,7 +25,7 @@
         <ul class="space-y-2">
             {# EXCEPTION FILES LIST #}
             {% if exceptionFiles|length < 1 %}
-                <h1 class="text-center mt-5 text-xl">Not enough exception files</h1>
+                <h1 class="text-center mt-5 text-xl">No exception files found</h1>
             {% else %}
                 <h3 class="text-2xl font-semibold text-white mb-4">Exception Files</h3>
                 {% for exceptionFile in exceptionFiles %}
