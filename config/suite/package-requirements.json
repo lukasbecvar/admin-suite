@@ -31,5 +31,7 @@
     "ufw",
     "git",
     "php",
-    "tar"
+    "tar",
+    "zip",
+    "gd"
 ]
