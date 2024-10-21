@@ -183,4 +183,67 @@ class AppUtil
     {
         return Yaml::parseFile($this->getAppRootDir() . '/config/' . $configFile);
     }
+
+    /**
+     * Update the environment variable value
+     *
+     * @param string $key The environment variable key
+     * @param string $value The environment variable value
+     *
+     * @throws \Exception If the environment file is not found or the environment variable is not found
+     */
+    public function updateEnvValue(string $key, string $value): void
+    {
+        // get base .env file
+        $mainEnvFile = $this->getAppRootDir() . '/.env';
+
+        // chec if .env file exists
+        if (!file_exists($mainEnvFile)) {
+            throw new \Exception('.env file not found');
+        }
+
+        // load base .env file content
+        $mainEnvContent = file_get_contents($mainEnvFile);
+        if ($mainEnvContent === false) {
+            throw new \Exception('Failed to read .env file');
+        }
+
+        // load current environment name
+        if (preg_match('/^APP_ENV=(\w+)$/m', $mainEnvContent, $matches)) {
+            $env = $matches[1];
+        } else {
+            throw new \Exception('APP_ENV not found in .env file');
+        }
+
+        // get current environment file
+        $envFile = $this->getAppRootDir() . '/.env.' . $env;
+
+        // check if current environment file exists
+        if (!file_exists($envFile)) {
+            throw new \Exception(".env.$env file not found");
+        }
+
+        // get current environment content
+        $envContent = file_get_contents($envFile);
+
+        // check if current environment loaded correctly
+        if ($envContent === false) {
+            throw new \Exception("Failed to read .env.$env file");
+        }
+
+        try {
+            if (preg_match('/^' . $key . '=.*/m', $envContent, $matches)) {
+                $newEnvContent = preg_replace('/^' . $key . '=.*/m', "$key=$value", $envContent);
+
+                // write new content to the environment file
+                if (file_put_contents($envFile, $newEnvContent) === false) {
+                    throw new \Exception('Failed to write to .env ' . $env . ' file');
+                }
+            } else {
+                throw new \Exception($key . ' not found in .env file');
+            }
+        } catch (\Exception $e) {
+            throw new \Exception('Error to update environment variable: ' . $e->getMessage());
+        }
+    }
 }

@@ -24,12 +24,18 @@ class NonAuthRedirectTest extends WebTestCase
      * @return array<array<string>>
      */
     private const ROUTES = [
-        'admin_dashboard' => [
-            '/admin',
-            '/dashboard'
+        'api' => [
+            '/api/system/terminal',
+            '/api/notifications/enabled',
+            '/api/notifications/subscribe',
+            '/api/notifications/public-key'
         ],
         'anti_log' => [
             '/13378/antilog'
+        ],
+        'admin_dashboard' => [
+            '/admin',
+            '/dashboard'
         ],
         'user_manager' => [
             '/manager/users',
