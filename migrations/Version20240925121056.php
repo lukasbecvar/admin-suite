@@ -10,20 +10,31 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Class Version20240925121056 migration
  * 
- * The default database schema for the application
+ * The database schema for add indexes to the tables
  * 
  * @package DoctrineMigrations
  */
 final class Version20240925121056 extends AbstractMigration
 {
+    /**
+     * Get the description of the migration
+     *
+     * @return string The description of the migration
+     */
     public function getDescription(): string
     {
-        return '';
+        return 'Migration for add indexes to the tables';
     }
 
+    /**
+     * Execute the migration
+     *
+     * @param Schema $schema The Doctrine schema
+     *
+     * @return void
+     */
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE INDEX ban_list_status_idx ON ban_list (status)');
         $this->addSql('CREATE INDEX ban_list_banned_by_id_idx ON ban_list (banned_by_id)');
         $this->addSql('CREATE INDEX ban_list_banned_user_id_idx ON ban_list (banned_user_id)');
@@ -43,9 +54,15 @@ final class Version20240925121056 extends AbstractMigration
         $this->addSql('CREATE INDEX logs_ip_address_idx ON users (ip_address)');
     }
 
+    /**
+     * Undo the migration
+     *
+     * @param Schema $schema The Doctrine schema
+     *
+     * @return void
+     */
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('DROP INDEX logs_status_idx ON todos');
         $this->addSql('DROP INDEX logs_user_id_idx ON todos');
         $this->addSql('DROP INDEX ban_list_status_idx ON ban_list');

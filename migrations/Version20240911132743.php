@@ -16,11 +16,23 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20240911132743 extends AbstractMigration
 {
+    /**
+     * Get the description of the migration
+     *
+     * @return string The description of the migration
+     */
     public function getDescription(): string
     {
-        return '';
+        return 'Default database schema';
     }
 
+    /**
+     * Execute the migration
+     *
+     * @param Schema $schema The Doctrine schema
+     *
+     * @return void
+     */
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE TABLE ban_list (id INT AUTO_INCREMENT NOT NULL, reason VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, time DATETIME NOT NULL, banned_by_id INT NOT NULL, banned_user_id INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
@@ -30,6 +42,13 @@ final class Version20240911132743 extends AbstractMigration
         $this->addSql('CREATE TABLE users (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, role VARCHAR(255) NOT NULL, ip_address VARCHAR(255) NOT NULL, user_agent VARCHAR(255) NOT NULL, register_time DATETIME NOT NULL, last_login_time DATETIME NOT NULL, token VARCHAR(255) NOT NULL, profile_pic LONGTEXT NOT NULL, UNIQUE INDEX UNIQ_1483A5E9F85E0677 (username), UNIQUE INDEX UNIQ_1483A5E95F37A13B (token), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
     }
 
+    /**
+     * Undo the migration
+     *
+     * @param Schema $schema The Doctrine schema
+     *
+     * @return void
+     */
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE ban_list');

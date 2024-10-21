@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use App\Manager\ServiceManager;
 use App\Entity\ServiceMonitoring;
 use App\Manager\MonitoringManager;
+use App\Manager\NotificationsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use App\Repository\ServiceMonitoringRepository;
@@ -33,6 +34,7 @@ class MonitoringManagerTest extends TestCase
     private ServiceManager & MockObject $serviceManagerMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
     private ServiceMonitoringRepository & MockObject $repositoryMock;
+    private NotificationsManager & MockObject $notificationsManagerMock;
 
     protected function setUp(): void
     {
@@ -45,6 +47,7 @@ class MonitoringManagerTest extends TestCase
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $this->repositoryMock = $this->createMock(ServiceMonitoringRepository::class);
+        $this->notificationsManagerMock = $this->createMock(NotificationsManager::class);
 
         // mock entity manager
         $this->entityManagerMock->method('getRepository')->willReturn($this->repositoryMock);
@@ -57,6 +60,7 @@ class MonitoringManagerTest extends TestCase
             $this->emailManagerMock,
             $this->errorManagerMock,
             $this->serviceManagerMock,
+            $this->notificationsManagerMock,
             $this->entityManagerMock
         );
     }

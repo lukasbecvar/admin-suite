@@ -24,6 +24,7 @@ class MonitoringManager
     private EmailManager $emailManager;
     private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
+    private NotificationsManager $notificationsManager;
     private EntityManagerInterface $entityManagerInterface;
 
     public function __construct(
@@ -33,6 +34,7 @@ class MonitoringManager
         EmailManager $emailManager,
         ErrorManager $errorManager,
         ServiceManager $serviceManager,
+        NotificationsManager $notificationsManager,
         EntityManagerInterface $entityManagerInterface
     ) {
         $this->appUtil = $appUtil;
@@ -41,6 +43,7 @@ class MonitoringManager
         $this->emailManager = $emailManager;
         $this->errorManager = $errorManager;
         $this->serviceManager = $serviceManager;
+        $this->notificationsManager = $notificationsManager;
         $this->entityManagerInterface = $entityManagerInterface;
     }
 
@@ -167,6 +170,9 @@ class MonitoringManager
                 $currentStatus
             );
 
+            // send monitoring status notification
+            $this->notificationsManager->sendNotification('monitoring ' . $serviceName, $message);
+
             // log status chnage
             $this->logManager->log(
                 name: 'monitoring',
@@ -197,6 +203,8 @@ class MonitoringManager
                 message: 'Mysql server down detected',
                 currentStatus: 'critical'
             );
+            // send push notification
+            $this->notificationsManager->sendNotification('monitoring', 'Mysql server down detected');
         }
 
         // print database is down message

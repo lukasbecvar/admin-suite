@@ -4,10 +4,11 @@ FROM php:8.3-apache
 # set default apache working directory
 WORKDIR /var/www
 
-# update packages and install dependencies
+# update packages and install dependencies and extension libraries
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libicu-dev \
+    libgmp-dev \
     curl \
     sudo \
     rpm 
@@ -16,9 +17,10 @@ RUN apt-get update && apt-get install -y \
 RUN docker-php-ext-install \
     pdo_mysql \
     intl \
-    curl
+    curl \
+    gmp
 
-# install OPCache
+# install OPCache extension
 RUN docker-php-ext-install opcache
 
 # allow apache execute sudo commands without password
