@@ -4,20 +4,20 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ServiceMonitoringRepository;
+use App\Repository\MonitoringStatusRepository;
 
 /**
- * Class ServiceMonitoring
+ * Class MonitoringStatus
  *
- * The ServiceMonitoring entity database table mapping class
+ * The MonitoringStatus entity database table mapping class
  *
  * @package App\Entity
  */
-#[ORM\Table(name: 'monitoring')]
+#[ORM\Table(name: 'monitoring_status')]
 #[ORM\Index(name: 'logs_status_idx', columns: ['status'])]
 #[ORM\Index(name: 'logs_service_name_idx', columns: ['service_name'])]
-#[ORM\Entity(repositoryClass: ServiceMonitoringRepository::class)]
-class ServiceMonitoring
+#[ORM\Entity(repositoryClass: MonitoringStatusRepository::class)]
+class MonitoringStatus
 {
     #[ORM\Id]
     #[ORM\Column]

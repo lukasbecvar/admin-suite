@@ -4,7 +4,7 @@ namespace App\Manager;
 
 use App\Util\AppUtil;
 use App\Util\ServerUtil;
-use App\Entity\ServiceMonitoring;
+use App\Entity\MonitoringStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -52,12 +52,12 @@ class MonitoringManager
      *
      * @param array<mixed> $search The search parameters
      *
-     * @return ServiceMonitoring|null The service monitoring repository
+     * @return MonitoringStatus|null The service monitoring repository
      */
-    public function getServiceMonitoringRepository(array $search): ?ServiceMonitoring
+    public function getMonitoringStatusRepository(array $search): ?MonitoringStatus
     {
         try {
-            return $this->entityManagerInterface->getRepository(ServiceMonitoring::class)->findOneBy($search);
+            return $this->entityManagerInterface->getRepository(MonitoringStatus::class)->findOneBy($search);
         } catch (\Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get service monitoring repository: ' . $e->getMessage(),
@@ -79,21 +79,21 @@ class MonitoringManager
     public function setMonitoringStatus(string $serviceName, string $message, string $status): void
     {
         // get service monitoring repository
-        $serviceMonitoring = $this->getServiceMonitoringRepository(['service_name' => $serviceName]);
+        $MonitoringStatus = $this->getMonitoringStatusRepository(['service_name' => $serviceName]);
 
         // check if service monitoring repository is found
-        if ($serviceMonitoring == null) {
-            $serviceMonitoring = new ServiceMonitoring();
+        if ($MonitoringStatus == null) {
+            $MonitoringStatus = new MonitoringStatus();
 
             // set monitored service properties
-            $serviceMonitoring->setServiceName($serviceName)
+            $MonitoringStatus->setServiceName($serviceName)
                 ->setStatus($status)
                 ->setMessage('new service initialization')
                 ->setLastUpdateTime(new \DateTime());
 
             // persist service monitoring
             try {
-                $this->entityManagerInterface->persist($serviceMonitoring);
+                $this->entityManagerInterface->persist($MonitoringStatus);
             } catch (\Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to persist service monitoring: ' . $e->getMessage(),
@@ -102,7 +102,7 @@ class MonitoringManager
             }
         } else {
             // update service monitoring properties
-            $serviceMonitoring->setMessage($message)
+            $MonitoringStatus->setMessage($message)
                 ->setStatus($status)
                 ->setLastUpdateTime(new \DateTime());
         }
@@ -128,8 +128,8 @@ class MonitoringManager
     public function getMonitoringStatus(string $serviceName): ?string
     {
         try {
-            /** @var \App\Entity\ServiceMonitoring $repo the monitored service repository */
-            $repo = $this->getServiceMonitoringRepository(['service_name' => $serviceName]);
+            /** @var \App\Entity\MonitoringStatus $repo the monitored service repository */
+            $repo = $this->getMonitoringStatusRepository(['service_name' => $serviceName]);
 
             // check if repository is found
             if ($repo != null) {
