@@ -9,12 +9,12 @@ use App\Manager\EmailManager;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Manager\ServiceManager;
-use App\Entity\ServiceMonitoring;
+use App\Entity\MonitoringStatus;
 use App\Manager\MonitoringManager;
 use App\Manager\NotificationsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-use App\Repository\ServiceMonitoringRepository;
+use App\Repository\MonitoringStatusRepository;
 
 /**
  * Class MonitoringManagerTest
@@ -33,7 +33,7 @@ class MonitoringManagerTest extends TestCase
     private ErrorManager & MockObject $errorManagerMock;
     private ServiceManager & MockObject $serviceManagerMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
-    private ServiceMonitoringRepository & MockObject $repositoryMock;
+    private MonitoringStatusRepository & MockObject $repositoryMock;
     private NotificationsManager & MockObject $notificationsManagerMock;
 
     protected function setUp(): void
@@ -46,7 +46,7 @@ class MonitoringManagerTest extends TestCase
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $this->repositoryMock = $this->createMock(ServiceMonitoringRepository::class);
+        $this->repositoryMock = $this->createMock(MonitoringStatusRepository::class);
         $this->notificationsManagerMock = $this->createMock(NotificationsManager::class);
 
         // mock entity manager
@@ -70,20 +70,20 @@ class MonitoringManagerTest extends TestCase
      *
      * @return void
      */
-    public function testGetServiceMonitoringRepository(): void
+    public function testGetMonitoringStatusRepository(): void
     {
         $search = ['service_name' => 'test_service'];
-        $serviceMonitoring = new ServiceMonitoring();
+        $MonitoringStatus = new MonitoringStatus();
 
         // mock repository
         $this->repositoryMock->expects($this->once())
-            ->method('findOneBy')->with($search)->willReturn($serviceMonitoring);
+            ->method('findOneBy')->with($search)->willReturn($MonitoringStatus);
 
         // call method
-        $result = $this->monitoringManager->getServiceMonitoringRepository($search);
+        $result = $this->monitoringManager->getMonitoringStatusRepository($search);
 
         // assert result
-        $this->assertSame($serviceMonitoring, $result);
+        $this->assertSame($MonitoringStatus, $result);
     }
 
     /**
@@ -103,7 +103,7 @@ class MonitoringManagerTest extends TestCase
 
         // mock entity manager
         $this->entityManagerMock->expects($this->once())
-            ->method('persist')->with($this->isInstanceOf(ServiceMonitoring::class));
+            ->method('persist')->with($this->isInstanceOf(MonitoringStatus::class));
         $this->entityManagerMock->expects($this->once())->method('flush');
 
         // call method
@@ -122,18 +122,18 @@ class MonitoringManagerTest extends TestCase
         $serviceName = 'test_service';
 
         // mock service monitoring entity
-        $serviceMonitoring = $this->createMock(ServiceMonitoring::class);
+        $MonitoringStatus = $this->createMock(MonitoringStatus::class);
 
         // mock repository
         $this->repositoryMock->expects($this->once())
-            ->method('findOneBy')->with(['service_name' => $serviceName])->willReturn($serviceMonitoring);
+            ->method('findOneBy')->with(['service_name' => $serviceName])->willReturn($MonitoringStatus);
 
         // mock service monitoring entity
-        $serviceMonitoring->expects($this->once())
-            ->method('setMessage')->with($message)->willReturn($serviceMonitoring);
-        $serviceMonitoring->expects($this->once())
-            ->method('setStatus')->with($status)->willReturn($serviceMonitoring);
-        $serviceMonitoring->expects($this->once())
+        $MonitoringStatus->expects($this->once())
+            ->method('setMessage')->with($message)->willReturn($MonitoringStatus);
+        $MonitoringStatus->expects($this->once())
+            ->method('setStatus')->with($status)->willReturn($MonitoringStatus);
+        $MonitoringStatus->expects($this->once())
             ->method('setLastUpdateTime')->with($this->isInstanceOf(\DateTime::class));
 
         // mock entity manager
@@ -152,15 +152,15 @@ class MonitoringManagerTest extends TestCase
     {
         $serviceName = 'test_service';
         $status = 'ok';
-        $serviceMonitoring = $this->createMock(ServiceMonitoring::class);
+        $MonitoringStatus = $this->createMock(MonitoringStatus::class);
 
         // mock repository
         $this->repositoryMock->expects($this->once())
             ->method('findOneBy')->with(['service_name' => $serviceName])
-            ->willReturn($serviceMonitoring);
+            ->willReturn($MonitoringStatus);
 
         // mock service monitoring entity
-        $serviceMonitoring->expects($this->once())->method('getStatus')->willReturn($status);
+        $MonitoringStatus->expects($this->once())->method('getStatus')->willReturn($status);
 
         // call method
         $result = $this->monitoringManager->getMonitoringStatus($serviceName);

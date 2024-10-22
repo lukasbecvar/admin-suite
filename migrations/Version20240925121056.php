@@ -44,8 +44,8 @@ final class Version20240925121056 extends AbstractMigration
         $this->addSql('CREATE INDEX logs_user_id_idx ON logs (user_id)');
         $this->addSql('CREATE INDEX logs_user_agent_idx ON logs (user_agent)');
         $this->addSql('CREATE INDEX logs_ip_address_idx ON logs (ip_address)');
-        $this->addSql('CREATE INDEX logs_status_idx ON monitoring (status)');
-        $this->addSql('CREATE INDEX logs_service_name_idx ON monitoring (service_name)');
+        $this->addSql('CREATE INDEX logs_status_idx ON monitoring_status (status)');
+        $this->addSql('CREATE INDEX logs_service_name_idx ON monitoring_status (service_name)');
         $this->addSql('CREATE INDEX logs_status_idx ON todos (status)');
         $this->addSql('CREATE INDEX logs_user_id_idx ON todos (user_id)');
         $this->addSql('CREATE INDEX logs_role_idx ON users (role)');
@@ -68,8 +68,8 @@ final class Version20240925121056 extends AbstractMigration
         $this->addSql('DROP INDEX ban_list_status_idx ON ban_list');
         $this->addSql('DROP INDEX ban_list_banned_by_id_idx ON ban_list');
         $this->addSql('DROP INDEX ban_list_banned_user_id_idx ON ban_list');
-        $this->addSql('DROP INDEX logs_status_idx ON monitoring');
-        $this->addSql('DROP INDEX logs_service_name_idx ON monitoring');
+        $this->addSql('DROP INDEX logs_status_idx ON monitoring_status');
+        $this->addSql('DROP INDEX logs_service_name_idx ON monitoring_status');
         $this->addSql('DROP INDEX logs_role_idx ON users');
         $this->addSql('DROP INDEX logs_token_idx ON users');
         $this->addSql('DROP INDEX logs_username_idx ON users');

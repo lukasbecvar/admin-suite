@@ -2,18 +2,18 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\ServiceMonitoring;
+use App\Entity\MonitoringStatus;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
 /**
- * Class ServiceMonitoringFixtures
+ * Class MonitoringStatusFixtures
  *
  * Service monitoring fixtures
  *
  * @package App\DataFixtures
  */
-class ServiceMonitoringFixtures extends Fixture
+class MonitoringStatusFixtures extends Fixture
 {
     /**
      * Load data fixtures with the passed EntityManager
@@ -35,16 +35,16 @@ class ServiceMonitoringFixtures extends Fixture
         ];
 
         foreach ($data as [$serviceName, $message, $status, $lastUpdateTime]) {
-            $serviceMonitoring = new ServiceMonitoring();
+            $MonitoringStatus = new MonitoringStatus();
 
             // set data
-            $serviceMonitoring->setServiceName($serviceName)
+            $MonitoringStatus->setServiceName($serviceName)
                 ->setMessage($message)
                 ->setStatus($status)
                 ->setLastUpdateTime(new \DateTime($lastUpdateTime));
 
             // persist data
-            $manager->persist($serviceMonitoring);
+            $manager->persist($MonitoringStatus);
         }
 
         // flush data
