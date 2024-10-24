@@ -19,8 +19,10 @@ Installation is very simple like any other PHP project.
 * Clone repo ``git clone git@github.com:lukasbecvar/admin-suite.git``
 * Create apache virtual host or nginx configuration like ([apache-config](https://github.com/lukasbecvar/admin-suite/blob/main/.docker/configs/apache-site.conf))
 * Create .env file with your configuration (.env.prod)
-* Create admin suite database
-* Run database migrations (script/migrate.sh)
+* Install dependencies ``npm install && composer install``
+* Build assets ``npm run build``
+* Create database ``php bin/console doctrine:database:create --if-not-exists``
+* Create migrations ``php bin/console doctrine:migrations:migrate --no-interaction``
 * Create user with console command or web interface (webinterface allows to create user if users table is empty)
 
 ## Configuration
