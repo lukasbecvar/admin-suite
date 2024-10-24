@@ -22,7 +22,7 @@ Installation is very simple like any other PHP project.
 * Install dependencies ``npm install && composer install``
 * Build assets ``npm run build``
 * Create database ``php bin/console doctrine:database:create --if-not-exists``
-* Create migrations ``php bin/console doctrine:migrations:migrate --no-interaction``
+* Migrate database ``php bin/console doctrine:migrations:migrate --no-interaction``
 * Create user with console command or web interface (webinterface allows to create user if users table is empty)
 
 ## Configuration
