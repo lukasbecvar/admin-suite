@@ -111,7 +111,6 @@ class FileSystemUtil
                 message: 'error get file info: ' . $path . ' file info detection failed',
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return false;
         }
 
         // check if the file type is supported
@@ -151,7 +150,6 @@ class FileSystemUtil
                 message: 'Error: Unable to detect MIME type for ' . $path,
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return 'non-mediafile';
         }
 
         // determine if file is an image, video, or audio
@@ -182,8 +180,6 @@ class FileSystemUtil
                 message: 'error opening file: ' . $path . ' does not exist',
                 code: Response::HTTP_NOT_FOUND
             );
-
-            return null;
         }
 
         try {
@@ -194,7 +190,6 @@ class FileSystemUtil
                     message: 'error opening file: ' . $path . ' is a directory or a link',
                     code: Response::HTTP_BAD_REQUEST
                 );
-                return null;
             }
 
             // get the file content
@@ -207,7 +202,6 @@ class FileSystemUtil
                     message: 'error opening file: ' . $path,
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
-                return null;
             }
 
             // log file access
@@ -226,7 +220,5 @@ class FileSystemUtil
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        return null;
     }
 }

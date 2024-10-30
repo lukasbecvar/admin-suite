@@ -42,7 +42,6 @@ class CacheUtil
                 message: 'error to get cache value: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return false;
         }
     }
 
@@ -62,7 +61,6 @@ class CacheUtil
                 message: 'error to get cache value: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return null;
         }
     }
 

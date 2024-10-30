@@ -89,7 +89,6 @@ class TodoManager
                 message: 'todo not found',
                 code: Response::HTTP_NOT_FOUND
             );
-            return null;
         }
 
         // get todo status

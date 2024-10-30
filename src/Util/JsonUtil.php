@@ -57,7 +57,6 @@ class JsonUtil
                 message: 'error to get json data from ' . $target . ' with error: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return null;
         }
     }
 }

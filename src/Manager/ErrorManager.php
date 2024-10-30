@@ -27,7 +27,7 @@ class ErrorManager
      * @param string $message The error message
      * @param int $code The error code
      *
-     * @return void
+     * @return never Always throws exception
      */
     public function handleError(string $message, int $code): void
     {

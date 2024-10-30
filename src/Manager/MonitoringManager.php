@@ -63,7 +63,6 @@ class MonitoringManager
                 message: 'error to get service monitoring repository: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return null;
         }
     }
 
@@ -142,7 +141,6 @@ class MonitoringManager
                 message: 'error to get service status: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return null;
         }
     }
 

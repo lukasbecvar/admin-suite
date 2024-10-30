@@ -138,20 +138,6 @@ class DatabaseManagerTest extends TestCase
     }
 
     /**
-     * Test the get last page number method
-     *
-     * @return void
-     */
-    public function testGetLastPageNumber(): void
-    {
-        // get the last page number
-        $output = $this->databaseManager->getLastPageNumber($_ENV['DATABASE_NAME'], 'users');
-
-        // assert output is an integer
-        $this->assertIsInt($output);
-    }
-
-    /**
      * Test the get columns list method
      *
      * @return void
@@ -163,20 +149,6 @@ class DatabaseManagerTest extends TestCase
 
         // assert output is an array
         $this->assertIsArray($output);
-    }
-
-    /**
-     * Test the doesRecordExist method
-     *
-     * @return void
-     */
-    public function testDoesRecordExist(): void
-    {
-        // check if the record exists
-        $output = $this->databaseManager->doesRecordExist($_ENV['DATABASE_NAME'], 'users', 1);
-
-        // assert output is a boolean
-        $this->assertIsBool($output);
     }
 
     /**

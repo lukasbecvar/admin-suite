@@ -113,7 +113,6 @@ class NotificationsManager
                 message: 'error to generate VAPID keys: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return [];
         }
     }
 

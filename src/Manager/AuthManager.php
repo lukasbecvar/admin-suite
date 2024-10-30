@@ -349,7 +349,6 @@ class AuthManager
                 message: 'error to update user data: user not found',
                 code: Response::HTTP_NOT_FOUND
             );
-            return;
         }
 
         // update user data
@@ -435,7 +434,6 @@ class AuthManager
                 message: 'error to get logged user username',
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return null;
         }
 
         return $userRepo->getUsername();
@@ -461,7 +459,6 @@ class AuthManager
                     message: 'error to update user data: user not found',
                     code: Response::HTTP_NOT_FOUND
                 );
-                return;
             }
 
             // log logout event
@@ -523,7 +520,6 @@ class AuthManager
                     message: 'error to reset user password: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
-                return null;
             }
 
             // return new password

@@ -138,8 +138,6 @@ class DatabaseManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        return false;
     }
 
     /**
@@ -204,8 +202,6 @@ class DatabaseManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        return null;
     }
 
     /**
@@ -239,8 +235,6 @@ class DatabaseManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        return false;
     }
 
     /**
@@ -280,8 +274,6 @@ class DatabaseManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        return 0;
     }
 
     /**
@@ -339,8 +331,6 @@ class DatabaseManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        return null;
     }
 
     /**
@@ -389,8 +379,6 @@ class DatabaseManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        return 1; // default to page 1 if there is an error
     }
 
     /**
@@ -425,12 +413,10 @@ class DatabaseManager
             return $columns;
         } catch (\Exception $e) {
             $this->errorManager->handleError(
-                message: 'Error retrieving columns from table: ' . $e->getMessage(),
+                message: 'error retrieving columns from table: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        return [];
     }
 
     /**
@@ -460,15 +446,13 @@ class DatabaseManager
                 );
             }
 
-            return $row ?: null;
+            return $row;
         } catch (\Exception $e) {
             $this->errorManager->handleError(
                 message: 'error retrieving row: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        return null;
     }
 
     /**
@@ -501,8 +485,6 @@ class DatabaseManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        return false;
     }
 
     /**
@@ -633,8 +615,6 @@ class DatabaseManager
                 message: 'error deleting row: ' . $e->getMessage() . ' from table: ' . $tableName . ' in database: ' . $dbName,
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-
-            return false;
         }
     }
 
@@ -707,7 +687,6 @@ class DatabaseManager
                         message: 'error dumping database: table not found',
                         code: Response::HTTP_INTERNAL_SERVER_ERROR
                     );
-                    return '';
                 }
 
                 $dump .= $createTableStmt['Create Table'] . ";\n\n";
@@ -785,8 +764,6 @@ class DatabaseManager
                             message: 'error executing query statement: ' . $q,
                             code: Response::HTTP_INTERNAL_SERVER_ERROR
                         );
-
-                        return '';
                     }
 
                     // fetch all results

@@ -49,8 +49,5 @@ class LogoutController extends AbstractController
             message: 'logout error: unknown error in logout process',
             code: Response::HTTP_INTERNAL_SERVER_ERROR
         );
-
-        // error return
-        return new Response('Internal server error', Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

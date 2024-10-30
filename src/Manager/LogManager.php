@@ -458,7 +458,6 @@ class LogManager
                     message: 'error to get exception files: exception files config is not an array',
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
-                return null;
             }
 
             // check if exception files exist and add them to the files array

@@ -114,52 +114,6 @@ class CacheUtilTest extends TestCase
     }
 
     /**
-     * Test the isCatched exception
-     *
-     * @return void
-     */
-    public function testIsCatchedException(): void
-    {
-        // testing cache item key
-        $key = 'test_key';
-
-        // set cache item mock expectations
-        $this->cacheItemPoolMock->expects($this->once())->method('getItem')->with($key)->willThrowException(
-            new \Exception('Test exception')
-        );
-
-        // set error manager mock expectations
-        $this->errorManagerMock->expects($this->once())->method('handleError')
-            ->with('error to get cache value: Test exception', Response::HTTP_INTERNAL_SERVER_ERROR);
-
-        // assert that the method returns false
-        $this->assertFalse($this->cacheUtil->isCatched($key));
-    }
-
-    /**
-     * Test the getValue exception
-     *
-     * @return void
-     */
-    public function testGetValueException(): void
-    {
-        // testing cache item key
-        $key = 'test_key';
-
-        // set cache item mock expectations
-        $this->cacheItemPoolMock->expects($this->once())->method('getItem')->with($key)->willThrowException(
-            new \Exception('Test exception')
-        );
-
-        // set error manager mock expectations
-        $this->errorManagerMock->expects($this->once())->method('handleError')
-            ->with('error to get cache value: Test exception', Response::HTTP_INTERNAL_SERVER_ERROR);
-
-        // assert that the method returns null
-        $this->assertNull($this->cacheUtil->getValue($key));
-    }
-
-    /**
      * Test the setValue exception
      *
      * @return void

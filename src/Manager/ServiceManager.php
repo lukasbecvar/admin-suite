@@ -99,7 +99,6 @@ class ServiceManager
                 'error to get service status: ' . $e->getMessage(),
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return false;
         }
 
         if ($output == null) {
@@ -165,7 +164,6 @@ class ServiceManager
                 'error to check process: ' . $e->getMessage(),
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return false;
         }
 
         // check if outputed pid
@@ -255,7 +253,6 @@ class ServiceManager
                 message: 'error to check website status: ' . $url,
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return ['isOnline' => false, 'responseTime' => 0, 'responseCode' => 0];
         }
 
         // Set options

@@ -144,7 +144,6 @@ class ServerUtil
                 message: 'Error getting storage usage: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return null;
         }
     }
 
@@ -171,7 +170,6 @@ class ServerUtil
                 message: 'error getting drive usage percentage: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return null;
         }
     }
 
@@ -189,7 +187,6 @@ class ServerUtil
                 message: 'error to get web username ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return null;
         }
     }
 
@@ -361,7 +358,6 @@ class ServerUtil
                         message: 'error getting process list: ' . $errors,
                         code: Response::HTTP_INTERNAL_SERVER_ERROR
                     );
-                    return null;
                 }
 
                 // check if output is null
@@ -370,7 +366,6 @@ class ServerUtil
                         message: 'error getting process list: output is null',
                         code: Response::HTTP_INTERNAL_SERVER_ERROR
                     );
-                    return null;
                 }
 
                 // split output into lines
@@ -401,7 +396,6 @@ class ServerUtil
                 message: 'error getting process list: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-            return null;
         }
 
         return $processes;

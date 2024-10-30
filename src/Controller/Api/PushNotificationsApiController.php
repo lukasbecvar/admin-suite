@@ -130,12 +130,6 @@ class PushNotificationsApiController extends AbstractController
                 message: 'error to subscribe push notifications: ' . $e->getMessage(),
                 code: JsonResponse::HTTP_INTERNAL_SERVER_ERROR
             );
-
-            // return error response
-            return $this->json([
-                'status' => 'error',
-                'message' => 'Error to subscribe push notifications'
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
