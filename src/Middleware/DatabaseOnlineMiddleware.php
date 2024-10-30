@@ -2,6 +2,7 @@
 
 namespace App\Middleware;
 
+use Exception;
 use App\Util\AppUtil;
 use Psr\Log\LoggerInterface;
 use Doctrine\DBAL\Connection;
@@ -40,7 +41,7 @@ class DatabaseOnlineMiddleware
      *
      * @param RequestEvent $event The request event
      *
-     * @throws \Exception If the database connection fails
+     * @throws Exception If the database connection fails
      *
      * @return void
      */
@@ -49,7 +50,7 @@ class DatabaseOnlineMiddleware
         try {
             // select for connection try
             $this->connection->executeQuery('SELECT 1');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // handle debug mode exception
             if ($this->appUtil->isDevMode()) {
                 $this->errorManager->handleError(

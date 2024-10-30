@@ -7,8 +7,10 @@ use App\Util\AppUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Util\VisitorInfoUtil;
+use DateTime;
 use Symfony\Component\Finder\Finder;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -56,7 +58,7 @@ class LogManager
      * @param string $message The log message
      * @param int $level The log level
      *
-     * @throws \Exception If the log entity cannot be persisted
+     * @throws Exception If the log entity cannot be persisted
      *
      * @return void
      */
@@ -100,7 +102,7 @@ class LogManager
             ->setStatus('UNREADED')
             ->setUserAgent($userAgent)
             ->setIpAddress($ipAddress)
-            ->setTime(new \DateTime())
+            ->setTime(new DateTime())
             ->setLevel($level);
 
             // set user id if user logged in
@@ -114,7 +116,7 @@ class LogManager
         try {
             $this->entityManager->persist($log);
             $this->entityManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'log-error: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -287,7 +289,7 @@ class LogManager
      *
      * @return void
      *
-     * @throws \Exception If there is an error during the update process
+     * @throws Exception If there is an error during the update process
      */
     public function updateLogStatusById(int $id, string $newStatus): void
     {
@@ -311,7 +313,7 @@ class LogManager
 
             // flush data to database
             $this->entityManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to update log status: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -325,7 +327,7 @@ class LogManager
      * This method fetches logs with status 'UNREADED' using getLogsWhereStatus()
      * updates their status to 'READED', and flushes the changes to the database
      *
-     * @throws \Exception If there is an error while updating the log statuses
+     * @throws Exception If there is an error while updating the log statuses
      *
      * @return void
      */
@@ -346,7 +348,7 @@ class LogManager
         try {
             // flush changes to the database
             $this->entityManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to set all logs status to "READED": ' . $e,
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -357,7 +359,7 @@ class LogManager
     /**
      * Retrieves a list of system log files
      *
-     * * @throws \Exception If there is an error during file retrieval (e.g., file not found or permission issue)
+     * * @throws Exception If there is an error during file retrieval (e.g., file not found or permission issue)
      *
      * @return array<string> An array of relative pathnames of log files found in the /var/log directory
      */
@@ -384,7 +386,7 @@ class LogManager
                     $logFiles[] = $file->getRelativePathname();
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get system logs: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -402,7 +404,7 @@ class LogManager
      * Retrieves the content of a specific system log file
      *
      * @param string $logFile The relative pathname of the log file to retrieve
-     * @throws \Exception If there is an error during file retrieval (e.g., file not found or permission issue)
+     * @throws Exception If there is an error during file retrieval (e.g., file not found or permission issue)
      *
      * @return mixed The content of the log file, or null if the file does not exist
      */
@@ -422,7 +424,7 @@ class LogManager
         try {
             // get log file content
             $log = file_get_contents($filePath);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get log file: ' . $logFile . ', ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -442,6 +444,8 @@ class LogManager
 
     /**
      * Get exception files
+     *
+     * @throws Exception If an error occurs while retrieving the exception files
      *
      * @return array<mixed>|null
      */
@@ -466,7 +470,7 @@ class LogManager
                     $files[$exceptionFile['name']] = $exceptionFile;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get exception files: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -481,7 +485,7 @@ class LogManager
      *
      * @param string $exceptionFile The name of the exception file to delete
      *
-     * @throws \Exception If there is an error during file deletion
+     * @throws Exception If there is an error during file deletion
      *
      * @return void
      */
@@ -508,7 +512,7 @@ class LogManager
                     );
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to delete exception file: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR

@@ -2,6 +2,8 @@
 
 namespace App\Manager;
 
+use DateTime;
+use Exception;
 use App\Util\AppUtil;
 use App\Util\ServerUtil;
 use App\Entity\MonitoringStatus;
@@ -52,13 +54,15 @@ class MonitoringManager
      *
      * @param array<mixed> $search The search parameters
      *
+     * @throws Exception If an error occurs while retrieving the repository
+     *
      * @return MonitoringStatus|null The service monitoring repository
      */
     public function getMonitoringStatusRepository(array $search): ?MonitoringStatus
     {
         try {
             return $this->entityManagerInterface->getRepository(MonitoringStatus::class)->findOneBy($search);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get service monitoring repository: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -72,6 +76,8 @@ class MonitoringManager
      * @param string $serviceName The name of the service
      * @param string $message The message to set for the service
      * @param string $status The status to set for the service
+     *
+     * @throws Exception If an error occurs while setting the status
      *
      * @return void
      */
@@ -88,12 +94,12 @@ class MonitoringManager
             $MonitoringStatus->setServiceName($serviceName)
                 ->setStatus($status)
                 ->setMessage('new service initialization')
-                ->setLastUpdateTime(new \DateTime());
+                ->setLastUpdateTime(new DateTime());
 
             // persist service monitoring
             try {
                 $this->entityManagerInterface->persist($MonitoringStatus);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to persist service monitoring: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -103,13 +109,13 @@ class MonitoringManager
             // update service monitoring properties
             $MonitoringStatus->setMessage($message)
                 ->setStatus($status)
-                ->setLastUpdateTime(new \DateTime());
+                ->setLastUpdateTime(new DateTime());
         }
 
         // flush changes to database
         try {
             $this->entityManagerInterface->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to flush service monitoring: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -121,6 +127,8 @@ class MonitoringManager
      * Get monitoring status for a service
      *
      * @param string $serviceName The name of the service
+     *
+     * @throws Exception If an error occurs while retrieving the status
      *
      * @return string|null The service monitoring status
      */
@@ -136,7 +144,7 @@ class MonitoringManager
             }
 
             return null;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get service status: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR

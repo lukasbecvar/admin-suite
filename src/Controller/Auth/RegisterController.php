@@ -2,6 +2,7 @@
 
 namespace App\Controller\Auth;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Manager\UserManager;
 use App\Manager\AuthManager;
@@ -86,7 +87,7 @@ class RegisterController extends AbstractController
 
                     // redirect to the login page
                     return $this->redirectToRoute('app_dashboard');
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     // handle register error
                     if ($this->appUtil->isDevMode()) {
                         $this->errorManager->handleError(

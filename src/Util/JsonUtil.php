@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use Exception;
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,6 +26,8 @@ class JsonUtil
      * Get JSON data from a file or URL
      *
      * @param string $target The file path or URL
+     *
+     * @throws Exception If an error occurs while retrieving the JSON data
      *
      * @return array<mixed>|null The decoded JSON data as an associative array or null on failure
      */
@@ -52,7 +55,7 @@ class JsonUtil
 
             // decode & return json
             return (array) json_decode($data, true);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get json data from ' . $target . ' with error: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR

@@ -2,6 +2,7 @@
 
 namespace App\Controller\Component;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
@@ -104,7 +105,7 @@ class AccountSettingsController extends AbstractController
 
                         // redirect back to the account settings page
                         return $this->redirectToRoute('app_account_settings_table');
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         // handle change profile picture error
                         if ($this->appUtil->isDevMode()) {
                             $this->errorManager->handleError(
@@ -168,7 +169,7 @@ class AccountSettingsController extends AbstractController
 
                         // redirect back to the account settings page
                         return $this->redirectToRoute('app_account_settings_table');
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         // handle change username error
                         if ($this->appUtil->isDevMode()) {
                             $this->errorManager->handleError(
@@ -228,7 +229,7 @@ class AccountSettingsController extends AbstractController
 
                     // redirect back to the account settings page
                     return $this->redirectToRoute('app_account_settings_table');
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     // handle change password error
                     if ($this->appUtil->isDevMode()) {
                         $this->errorManager->handleError(

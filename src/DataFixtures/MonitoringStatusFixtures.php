@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use DateTime;
 use App\Entity\MonitoringStatus;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -41,7 +42,7 @@ class MonitoringStatusFixtures extends Fixture
             $MonitoringStatus->setServiceName($serviceName)
                 ->setMessage($message)
                 ->setStatus($status)
-                ->setLastUpdateTime(new \DateTime($lastUpdateTime));
+                ->setLastUpdateTime(new DateTime($lastUpdateTime));
 
             // persist data
             $manager->persist($MonitoringStatus);

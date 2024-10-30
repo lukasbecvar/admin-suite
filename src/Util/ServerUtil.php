@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use Exception;
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -132,6 +133,8 @@ class ServerUtil
     /**
      * Get the storage usage
      *
+     * @throws Exception If an error occurs while getting the storage usage
+     *
      * @return int|null The storage usage
      */
     public function getStorageUsage(): ?int
@@ -139,7 +142,7 @@ class ServerUtil
         try {
             $storageUsage = disk_total_space('/') - disk_free_space('/');
             return (int) ($storageUsage / 1073741824); // convert bytes to GB
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'Error getting storage usage: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -149,6 +152,8 @@ class ServerUtil
 
     /**
      * Get the drive usage percentage
+     *
+     * @throws Exception If an error occurs while getting the drive usage percentage
      *
      * @return string|null The drive usage percentage or null on error
      */
@@ -165,7 +170,7 @@ class ServerUtil
             } else {
                 return null; // handle case where total space is 0 to avoid division by zero
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error getting drive usage percentage: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -176,13 +181,15 @@ class ServerUtil
     /**
      * Get the web username
      *
+     * @throws Exception If an error occurs while getting the web username
+     *
      * @return string|null The web username or null on error
      */
     public function getWebUsername(): ?string
     {
         try {
             return (string) exec('whoami');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get web username ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -328,6 +335,8 @@ class ServerUtil
     /**
      * Get a list of running processes
      *
+     * @throws Exception If an error occurs while getting the process list
+     *
      * @return array<array<string>> List of running processes
      */
     public function getProcessList(): ?array
@@ -391,7 +400,7 @@ class ServerUtil
                     }
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error getting process list: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR

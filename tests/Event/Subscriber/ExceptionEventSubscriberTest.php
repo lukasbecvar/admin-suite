@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Event\Subscriber\ExceptionEventSubscriber;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -56,7 +57,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $this->logger->expects($this->once())->method('error')->with('Test Exception Message');
 
         // create instance of HttpException
-        $exception = new HttpException(500, 'Test Exception Message');
+        $exception = new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'Test Exception Message');
 
         /** @var HttpKernelInterface & MockObject $kernel */
         $kernel = $this->createMock(HttpKernelInterface::class);
@@ -79,7 +80,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $this->logger->expects($this->never())->method('error');
 
         // create instance of HttpException
-        $exception = new HttpException(404, 'Test Exception Message');
+        $exception = new HttpException(Response::HTTP_NOT_FOUND, 'Test Exception Message');
         /** @var HttpKernelInterface & MockObject $kernel */
         $kernel = $this->createMock(HttpKernelInterface::class);
         /** @var Request & MockObject $request */

@@ -2,6 +2,7 @@
 
 namespace App\Tests\Manager;
 
+use DateTime;
 use App\Entity\Todo;
 use App\Util\SecurityUtil;
 use App\Manager\LogManager;
@@ -65,7 +66,7 @@ class TodoManagerTest extends TestCase
         $todo = new Todo();
         $todo
             ->setTodoText('encrypted text')
-            ->setAddedTime(new \DateTime())
+            ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
             ->setUserId($userId);
@@ -137,7 +138,7 @@ class TodoManagerTest extends TestCase
         // mock todo entity
         $todo = new Todo();
         $todo->setTodoText('encrypted text')
-            ->setAddedTime(new \DateTime())
+            ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
             ->setUserId($userId);
@@ -184,7 +185,7 @@ class TodoManagerTest extends TestCase
         // mock todo entity
         $todo = new Todo();
         $todo->setTodoText('encrypted text')
-            ->setAddedTime(new \DateTime())
+            ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
             ->setUserId($userId);

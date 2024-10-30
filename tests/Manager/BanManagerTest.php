@@ -80,11 +80,10 @@ class BanManagerTest extends TestCase
             ->with(['banned_user_id' => $userId, 'status' => 'active'])->willReturn(null);
 
         // log manager mock
-        $this->logManagerMock->expects($this->once())
-            ->method('log')->with(
-                'ban-manager',
-                'user: ' . $userId . ' has been banned'
-            );
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            'ban-manager',
+            'user: ' . $userId . ' has been banned'
+        );
 
         // call the method
         $this->banManager->banUser($userId, $reason);

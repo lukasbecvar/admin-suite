@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use DateTime;
 use App\Entity\Banned;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -42,7 +43,7 @@ class BannedFixtures extends Fixture
             $banned->setBannedUserId($userId)
                 ->setReason($reasons[array_rand($reasons)])
                 ->setStatus('active')
-                ->setTime(new \DateTime())
+                ->setTime(new DateTime())
                 ->setBannedById(1);
 
             // persist the banned user

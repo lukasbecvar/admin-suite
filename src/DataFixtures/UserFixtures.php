@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use DateTime;
 use App\Entity\User;
 use App\Util\SecurityUtil;
 use Doctrine\Persistence\ObjectManager;
@@ -44,8 +45,8 @@ class UserFixtures extends Fixture
             ->setRole('OWNER')
             ->setIpAddress('127.0.0.1')
             ->setUserAgent('DataFixtures-CLI')
-            ->setRegisterTime(new \DateTime())
-            ->setLastLoginTime(new \DateTime())
+            ->setRegisterTime(new DateTime())
+            ->setLastLoginTime(new DateTime())
             ->setToken(md5(random_bytes(32)))
             ->setProfilePic('default_pic');
 
@@ -58,7 +59,7 @@ class UserFixtures extends Fixture
         // create 100 random users
         for ($i = 1; $i <= 100; $i++) {
             // get current time
-            $time = new \DateTime();
+            $time = new DateTime();
 
             // create the test user
             $user = new User();

@@ -2,6 +2,7 @@
 
 namespace App\Command\User;
 
+use Exception;
 use App\Manager\UserManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -88,7 +89,7 @@ class UserDeleteCommand extends Command
             $this->userManager->deleteUser($userId);
             $io->success('User: ' . $username . ' has been deleted!');
             return Command::SUCCESS;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->error('Process error: ' . $e->getMessage());
             return Command::FAILURE;
         }

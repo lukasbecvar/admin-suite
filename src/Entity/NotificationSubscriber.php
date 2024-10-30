@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\NotificationSubscriberRepository;
@@ -34,7 +35,7 @@ class NotificationSubscriber
     private ?string $authToken = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $subscribed_time = null;
+    private ?DateTimeInterface $subscribed_time = null;
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
@@ -125,9 +126,9 @@ class NotificationSubscriber
     /**
      * Get the subscribed time of the notification subscriber
      *
-     * @return \DateTimeInterface|null The subscribed time of the notification subscriber or null if not found
+     * @return DateTimeInterface|null The subscribed time of the notification subscriber or null if not found
      */
-    public function getSubscribedTime(): ?\DateTimeInterface
+    public function getSubscribedTime(): ?DateTimeInterface
     {
         return $this->subscribed_time;
     }
@@ -135,11 +136,11 @@ class NotificationSubscriber
     /**
      * Set the subscribed time of the notification subscriber
      *
-     * @param \DateTimeInterface|null $subscribed_time The subscribed time of the notification subscriber
+     * @param DateTimeInterface|null $subscribed_time The subscribed time of the notification subscriber
      *
      * @return static The current object
      */
-    public function setSubscribedTime(?\DateTimeInterface $subscribed_time): static
+    public function setSubscribedTime(?DateTimeInterface $subscribed_time): static
     {
         $this->subscribed_time = $subscribed_time;
 

@@ -2,6 +2,7 @@
 
 namespace App\Command\User;
 
+use Exception;
 use App\Manager\UserManager;
 use App\Manager\AuthManager;
 use Symfony\Component\Console\Command\Command;
@@ -85,7 +86,7 @@ class UserPasswordResetCommand extends Command
             // display success message
             $io->success('User: ' . $username . ' new password is ' . $newPassword);
             return Command::SUCCESS;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->error('Process error: ' . $e->getMessage());
             return Command::FAILURE;
         }

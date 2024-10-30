@@ -349,11 +349,10 @@ class LogManagerTest extends TestCase
             ->method('flush')->willThrowException(new \Exception('Test Exception'));
 
         // mock error manager
-        $this->errorManagerMock->expects($this->once())->method('handleError')
-            ->with(
-                'error to update log status: Test Exception',
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'error to update log status: Test Exception',
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
 
         // call method
         $this->logManager->updateLogStatusById($logId, $newStatus);

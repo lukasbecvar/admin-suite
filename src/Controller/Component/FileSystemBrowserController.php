@@ -87,7 +87,7 @@ class FileSystemBrowserController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        // create a StreamedResponse with decrypted content
+        // create a StreamedResponse file content
         $response = new StreamedResponse(function () use ($resourceContent) {
             echo $resourceContent;
         });

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MonitoringStatusRepository;
@@ -34,7 +35,7 @@ class MonitoringStatus
     private ?string $status = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $last_update_time = null;
+    private ?DateTimeInterface $last_update_time = null;
 
     /**
      * Get the id of the service monitoring
@@ -121,9 +122,9 @@ class MonitoringStatus
     /**
      * Get the last update time of the service monitoring
      *
-     * @return \DateTimeInterface|null The last update time of the service monitoring or null if not found
+     * @return DateTimeInterface|null The last update time of the service monitoring or null if not found
      */
-    public function getLastUpdateTime(): ?\DateTimeInterface
+    public function getLastUpdateTime(): ?DateTimeInterface
     {
         return $this->last_update_time;
     }
@@ -131,11 +132,11 @@ class MonitoringStatus
     /**
      * Set the last update time of the service monitoring
      *
-     * @param \DateTimeInterface $last_update_time The last update time of the service monitoring
+     * @param DateTimeInterface $last_update_time The last update time of the service monitoring
      *
      * @return static The current object
      */
-    public function setLastUpdateTime(\DateTimeInterface $last_update_time): static
+    public function setLastUpdateTime(DateTimeInterface $last_update_time): static
     {
         $this->last_update_time = $last_update_time;
 

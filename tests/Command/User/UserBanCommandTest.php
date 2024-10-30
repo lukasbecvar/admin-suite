@@ -2,6 +2,7 @@
 
 namespace App\Tests\Command\User;
 
+use App\Entity\User;
 use App\Manager\BanManager;
 use App\Manager\UserManager;
 use PHPUnit\Framework\TestCase;
@@ -75,7 +76,7 @@ class UserBanCommandTest extends TestCase
 
         // mock methods
         $this->userManager->method('checkIfUserExist')->with($username)->willReturn(true);
-        $user = $this->createMock(\App\Entity\User::class);
+        $user = $this->createMock(User::class);
         $user->method('getId')->willReturn($userId);
         $this->userManager->method('getUserRepository')->with(['username' => $username])->willReturn($user);
         $this->banManager->method('isUserBanned')->with($userId)->willReturn(true);
@@ -107,7 +108,7 @@ class UserBanCommandTest extends TestCase
 
         // mock methods
         $this->userManager->method('checkIfUserExist')->with($username)->willReturn(true);
-        $user = $this->createMock(\App\Entity\User::class);
+        $user = $this->createMock(User::class);
         $user->method('getId')->willReturn($userId);
         $this->userManager->method('getUserRepository')->with(['username' => $username])->willReturn($user);
         $this->banManager->method('isUserBanned')->with($userId)->willReturn(false);

@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use App\Manager\DatabaseManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Exception\TransportException;
 
 /**
  * Class EmailManagerTest
@@ -95,7 +96,7 @@ class EmailManagerTest extends TestCase
         // mock log manager
         $this->logManagerMock->expects($this->never())->method('log');
         $this->mailerMock->expects($this->once())->method('send')->willThrowException(
-            new \Symfony\Component\Mailer\Exception\TransportException()
+            new TransportException()
         );
 
         // mock error manager

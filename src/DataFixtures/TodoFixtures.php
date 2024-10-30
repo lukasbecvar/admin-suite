@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use DateTime;
 use App\Entity\Todo;
 use App\Util\SecurityUtil;
 use Doctrine\Persistence\ObjectManager;
@@ -35,13 +36,13 @@ class TodoFixtures extends Fixture
         for ($i = 1; $i <= 20; $i++) {
             $todo = new Todo();
             $todo->setTodoText($this->securityUtil->encryptAes("Todo item for user 1 - Todo $i"))
-                ->setAddedTime(new \DateTime())
+                ->setAddedTime(new DateTime())
                 ->setStatus('open')
                 ->setUserId(1);
 
             // set completed_time for some todos
             if ($i % 3 == 0) {
-                $todo->setCompletedTime(new \DateTime())
+                $todo->setCompletedTime(new DateTime())
                     ->setStatus('closed');
             }
 

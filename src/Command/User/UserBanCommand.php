@@ -2,6 +2,7 @@
 
 namespace App\Command\User;
 
+use Exception;
 use App\Manager\BanManager;
 use App\Manager\UserManager;
 use Symfony\Component\Console\Command\Command;
@@ -96,7 +97,7 @@ class UserBanCommand extends Command
                 $io->success('User: ' . $username . ' banned.');
             }
             return Command::SUCCESS;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->error('Process error: ' . $e->getMessage());
             return Command::FAILURE;
         }

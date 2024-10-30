@@ -72,6 +72,7 @@ class LogApiController extends AbstractController
         // log the message
         $this->logManager->log($name, $message, $level);
 
+        // return success message
         return $this->json([
             'success' => 'Log message has been logged'
         ], JsonResponse::HTTP_OK);

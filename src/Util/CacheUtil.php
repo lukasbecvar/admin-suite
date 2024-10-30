@@ -3,6 +3,7 @@
 namespace App\Util;
 
 use App\Manager\ErrorManager;
+use Exception;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,13 +32,15 @@ class CacheUtil
      *
      * @param string $key The key to check in the cache
      *
+     * @throws Exception If an error occurs while checking the cache
+     *
      * @return bool True if the key exists in the cache, otherwise false
      */
     public function isCatched(string $key): bool
     {
         try {
             return $this->cacheItemPoolInterface->getItem($key)->isHit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get cache value: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -50,13 +53,15 @@ class CacheUtil
      *
      * @param string $key The key for which to retrieve the value
      *
+     * @throws Exception If an error occurs while retrieving the cache value
+     *
      * @return object|null The cached value associated with the key, or null if not found
      */
     public function getValue(string $key): ?object
     {
         try {
             return $this->cacheItemPoolInterface->getItem($key);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get cache value: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -71,6 +76,8 @@ class CacheUtil
      * @param mixed $value The value to store in the cache.
      * @param int $expiration The expiration time in seconds for the cached value
      *
+     * @throws Exception If an error occurs while storing the cache value
+     *
      * @return void
      */
     public function setValue(string $key, mixed $value, int $expiration): void
@@ -83,7 +90,7 @@ class CacheUtil
 
             // save value
             $this->cacheItemPoolInterface->save($cache_item);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to store cache value: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -96,13 +103,15 @@ class CacheUtil
      *
      * @param string $key The key of the value to delete from the cache
      *
+     * @throws Exception If an error occurs while deleting the cache value
+     *
      * @return void
      */
     public function deleteValue(string $key): void
     {
         try {
             $this->cacheItemPoolInterface->deleteItem($key);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to delete cache value: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR

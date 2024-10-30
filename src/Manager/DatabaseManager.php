@@ -3,7 +3,9 @@
 namespace App\Manager;
 
 use PDO;
+use Exception;
 use PDOException;
+use RuntimeException;
 use App\Util\AppUtil;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,7 +55,7 @@ class DatabaseManager
     {
         try {
             $this->connection->executeQuery('SELECT 1');
-        } catch (\Exception) {
+        } catch (Exception) {
             return true;
         }
 
@@ -63,7 +65,7 @@ class DatabaseManager
     /**
      * Get the list of databases
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return array<int,array<string,mixed>> The list of databases
      */
@@ -104,7 +106,7 @@ class DatabaseManager
                 message: 'get databases list',
                 level: LogManager::LEVEL_NOTICE
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get databases list: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -119,7 +121,7 @@ class DatabaseManager
      *
      * @param string $dbName The name of the database
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return bool True if the database exists, false otherwise
      */
@@ -132,7 +134,7 @@ class DatabaseManager
             $count = $stmt->fetchOne();
 
             return $count > 0;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error checking if database exists: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -145,7 +147,7 @@ class DatabaseManager
      *
      * @param string $dbName The database name
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return array<int,array<string,mixed>>|null The list of tables
      */
@@ -196,7 +198,7 @@ class DatabaseManager
             );
 
             return $tablesWithRows;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get tables list: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -210,7 +212,7 @@ class DatabaseManager
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return bool True if the table exists, false otherwise
      */
@@ -229,7 +231,7 @@ class DatabaseManager
             $count = $stmt->fetchOne();
 
             return $count > 0;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error checking if table exists: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -243,7 +245,7 @@ class DatabaseManager
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return int The number of rows in the table
      */
@@ -268,7 +270,7 @@ class DatabaseManager
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error retrieving row count from table: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -283,7 +285,7 @@ class DatabaseManager
      * @param string $tableName The name of the table
      * @param int $page The page number (1-based index)
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return array<mixed> The data from the table for the specified page
      */
@@ -325,7 +327,7 @@ class DatabaseManager
             );
 
             return $stmt->fetchAllAssociative();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error retrieving data from table: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -339,7 +341,7 @@ class DatabaseManager
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return int The last page number
      */
@@ -363,7 +365,7 @@ class DatabaseManager
             $result = $stmt->fetchAssociative();
 
             if (!$result || !isset($result['total_rows'])) {
-                throw new \RuntimeException('Failed to retrieve the total row count.');
+                throw new RuntimeException('Failed to retrieve the total row count.');
             }
 
             $totalRows = $result['total_rows'];
@@ -373,7 +375,7 @@ class DatabaseManager
 
             // return the last page number
             return max($totalPages, 1);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error retrieving the total row count: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -387,7 +389,7 @@ class DatabaseManager
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return array<int,array<string,mixed>> The list of columns
      */
@@ -411,7 +413,7 @@ class DatabaseManager
             ]);
             $columns = $stmt->fetchAllAssociative();
             return $columns;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error retrieving columns from table: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -426,7 +428,7 @@ class DatabaseManager
      * @param string $tableName The name of the table
      * @param int $id The ID of the row to retrieve
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return array<mixed>|null The row data or null if not found
      */
@@ -447,7 +449,7 @@ class DatabaseManager
             }
 
             return $row;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error retrieving row: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -462,7 +464,7 @@ class DatabaseManager
      * @param string $tableName The name of the table.
      * @param int|string $id The ID to check for.
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return bool True if the record exists, false otherwise.
      */
@@ -479,7 +481,7 @@ class DatabaseManager
             $result = $this->connection->fetchAssociative($sql, ['id' => $id]);
 
             return (int) $result['count'] > 0;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error checking if record exists: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -494,7 +496,7 @@ class DatabaseManager
      * @param string $databaseName The name of the database
      * @param string $tableName The name of the table
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return void
      */
@@ -524,7 +526,7 @@ class DatabaseManager
                 message: 'add row to table: ' . $tableName,
                 level: LogManager::LEVEL_NOTICE
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error adding row: ' . $e->getMessage() . ' to table: ' . $tableName,
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -540,7 +542,7 @@ class DatabaseManager
      * @param string $tableName The name of the table
      * @param int $id The ID of the row to update
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return void
      */
@@ -572,7 +574,7 @@ class DatabaseManager
                 message: "Updated row with ID: $id in table: $tableName in database: $databaseName",
                 level: LogManager::LEVEL_NOTICE
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: "Error updating row: " . $e->getMessage() . " in table: $tableName in database: $databaseName",
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -587,7 +589,7 @@ class DatabaseManager
      * @param string $tableName The name of the table
      * @param int $id The ID of the row to delete
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return bool True if the row was deleted successfully, false otherwise
      */
@@ -610,7 +612,7 @@ class DatabaseManager
             );
 
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error deleting row: ' . $e->getMessage() . ' from table: ' . $tableName . ' in database: ' . $dbName,
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -624,7 +626,7 @@ class DatabaseManager
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return void
      */
@@ -641,7 +643,7 @@ class DatabaseManager
                 message: "truncated table: $tableName in database: $dbName",
                 level: LogManager::LEVEL_CRITICAL
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error truncating table: ' . $e->getMessage() . ' in database: ' . $dbName,
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -655,7 +657,7 @@ class DatabaseManager
      * @param string $dbName The name of the database
      * @param bool $plain Whether to return the dump in plain text format
      *
-     * @throws \Exception If an error occurs while executing the query
+     * @throws Exception If an error occurs while executing the query
      *
      * @return string The database dump
      */
@@ -717,7 +719,7 @@ class DatabaseManager
                 message: 'get database dump',
                 level: LogManager::LEVEL_CRITICAL
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error dumping database: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -731,8 +733,6 @@ class DatabaseManager
      * Execute a query
      *
      * @param string $query The query to execute
-     *
-     * @throws \Exception If an error occurs while executing the query
      *
      * @return string The output of the query
      */

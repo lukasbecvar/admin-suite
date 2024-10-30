@@ -2,6 +2,7 @@
 
 namespace App\Tests\Command\User;
 
+use Exception;
 use App\Entity\User;
 use App\Manager\UserManager;
 use PHPUnit\Framework\TestCase;
@@ -163,7 +164,7 @@ class UserUpdateRoleCommandTest extends TestCase
         $this->userManager->method('getUserRepository')->willReturn($user);
         $this->userManager->method('getUserRoleById')->willReturn('USER');
         $this->userManager->method('updateUserRole')->will($this->throwException(
-            new \Exception('Some error')
+            new Exception('Some error')
         ));
 
         // execute command

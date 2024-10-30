@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use Exception;
 use App\Util\AppUtil;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -88,13 +89,15 @@ class ServiceManager
      *
      * @param string $service The name of the service
      *
+     * @throws Exception If an error occurs while checking the service status
+     *
      * @return bool The service is running, false otherwise
      */
     public function isServiceRunning(string $service): bool
     {
         try {
             $output = shell_exec('systemctl is-active ' . $service);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 'error to get service status: ' . $e->getMessage(),
                 Response::HTTP_INTERNAL_SERVER_ERROR
@@ -120,6 +123,8 @@ class ServiceManager
      * @param int $port The port number
      * @param int $timeout The maximal timeout in seconds
      *
+     * @throws Exception If an error occurs while checking the socket status
+     *
      * @return string Online if the socket is open, Offline otherwise
      */
     public function isSocktOpen(string $ip, int $port, int $timeout = 5): string
@@ -130,7 +135,7 @@ class ServiceManager
         // open service socket
         try {
             $service = @fsockopen($ip, $port, timeout: $timeout);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 'error to check socket: ' . $e->getMessage(),
                 Response::HTTP_INTERNAL_SERVER_ERROR
@@ -153,13 +158,15 @@ class ServiceManager
      *
      * @param string $process The name of the process
      *
+     * @throws Exception If an error occurs while checking the process status
+     *
      * @return bool The process is running, false otherwise
      */
     public function isProcessRunning(string $process): bool
     {
         try {
             exec('pgrep ' . $process, $pids);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 'error to check process: ' . $e->getMessage(),
                 Response::HTTP_INTERNAL_SERVER_ERROR
@@ -177,6 +184,8 @@ class ServiceManager
     /**
      * Checks if UFW (Uncomplicated Firewall) is running
      *
+     * @throws Exception If an error occurs while checking the UFW status
+     *
      * @return bool UFW is running, false otherwise
      */
     public function isUfwRunning(): bool
@@ -192,7 +201,7 @@ class ServiceManager
                     return true;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 'error to get ufw status' . $e->getMessage(),
                 Response::HTTP_INTERNAL_SERVER_ERROR
@@ -222,13 +231,15 @@ class ServiceManager
      *
      * @param string $command The command to execute
      *
+     * @throws Exception If an error occurs while executing the command
+     *
      * @return void
      */
     public function executeCommand(string $command): void
     {
         try {
             exec($command);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 'error to executed command: ' . $e->getMessage(),
                 Response::HTTP_INTERNAL_SERVER_ERROR

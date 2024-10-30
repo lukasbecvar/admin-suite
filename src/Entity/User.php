@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
@@ -42,10 +43,10 @@ class User
     private ?string $user_agent = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $register_time = null;
+    private ?DateTimeInterface $register_time = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $last_login_time = null;
+    private ?DateTimeInterface $last_login_time = null;
 
     #[ORM\Column(length: 255, unique: true)]
     private ?string $token = null;
@@ -191,9 +192,9 @@ class User
     /**
      * Get the register time of the user
      *
-     * @return \DateTimeInterface|null The register time of the user or null if not found
+     * @return DateTimeInterface|null The register time of the user or null if not found
      */
-    public function getRegisterTime(): ?\DateTimeInterface
+    public function getRegisterTime(): ?DateTimeInterface
     {
         return $this->register_time;
     }
@@ -201,11 +202,11 @@ class User
     /**
      * Set the register time of the user
      *
-     * @param \DateTimeInterface $register_time The register time of the user
+     * @param DateTimeInterface $register_time The register time of the user
      *
      * @return static The current object
      */
-    public function setRegisterTime(\DateTimeInterface $register_time): static
+    public function setRegisterTime(DateTimeInterface $register_time): static
     {
         $this->register_time = $register_time;
 
@@ -215,9 +216,9 @@ class User
     /**
      * Get the last login time of the user
      *
-     * @return \DateTimeInterface|null The last login time of the user or null if not found
+     * @return DateTimeInterface|null The last login time of the user or null if not found
      */
-    public function getLastLoginTime(): ?\DateTimeInterface
+    public function getLastLoginTime(): ?DateTimeInterface
     {
         return $this->last_login_time;
     }
@@ -225,11 +226,11 @@ class User
     /**
      * Set the last login time of the user
      *
-     * @param \DateTimeInterface $last_login_time The last login time of the user
+     * @param DateTimeInterface $last_login_time The last login time of the user
      *
      * @return static The current object
      */
-    public function setLastLoginTime(\DateTimeInterface $last_login_time): static
+    public function setLastLoginTime(DateTimeInterface $last_login_time): static
     {
         $this->last_login_time = $last_login_time;
 

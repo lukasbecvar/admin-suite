@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use Exception;
 use App\Util\AppUtil;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -33,6 +34,8 @@ class ToggleMaintenanceCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
+     * @throws Exception If an error occurs while toggling the maintenance mode
+     *
      * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -50,13 +53,13 @@ class ToggleMaintenanceCommand extends Command
                 $newMode = 'true';
             }
 
-            // update value
+            // update env value
             $this->appUtil->updateEnvValue('MAINTENANCE_MODE', $newMode);
 
             // return success status
             $io->success("MAINTENANCE_MODE in .env has been set to true");
             return Command::SUCCESS;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->error('Error to toggle maintenance mode: ' . $e->getMessage());
             return Command::FAILURE;
         }

@@ -7,6 +7,8 @@ use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
 use PHPUnit\Framework\TestCase;
 use App\Command\LogReaderCommand;
+use App\Entity\Log;
+use DateTime;
 use Symfony\Component\Console\Application;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Command\Command;
@@ -74,11 +76,11 @@ class LogReaderCommandTest extends TestCase
     public function testExecuteWithValidStatus(): void
     {
         // mock data
-        $log = $this->createMock(\App\Entity\Log::class);
+        $log = $this->createMock(Log::class);
         $log->method('getId')->willReturn(1);
         $log->method('getName')->willReturn('Log name');
         $log->method('getMessage')->willReturn('Log message');
-        $log->method('getTime')->willReturn(new \DateTime());
+        $log->method('getTime')->willReturn(new DateTime());
         $log->method('getUserAgent')->willReturn('User agent string');
         $log->method('getIpAddress')->willReturn('127.0.0.1');
         $log->method('getUserId')->willReturn(1);

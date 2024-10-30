@@ -2,6 +2,7 @@
 
 namespace App\Controller\Component;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Manager\BanManager;
 use App\Manager\AuthManager;
@@ -210,7 +211,7 @@ class UsersManagerController extends AbstractController
                     return $this->redirectToRoute('app_manager_users', [
                         'page' => $this->appUtil->calculateMaxPages($usersCount, $pageLimit)
                     ]);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     if ($this->appUtil->isDevMode()) {
                         $this->errorManager->handleError(
                             message: 'create user error: ' . $e->getMessage(),

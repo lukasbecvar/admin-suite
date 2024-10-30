@@ -2,6 +2,7 @@
 
 namespace App\Command\User;
 
+use Exception;
 use App\Manager\UserManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -109,7 +110,7 @@ class UserUpdateRoleCommand extends Command
             // success message
             $io->success('Role updated successfully.');
             return Command::SUCCESS;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->error('Error updating role: ' . $e->getMessage());
             return Command::FAILURE;
         }

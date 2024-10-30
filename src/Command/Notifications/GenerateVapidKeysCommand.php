@@ -2,6 +2,7 @@
 
 namespace App\Command\Notifications;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Manager\NotificationsManager;
 use Symfony\Component\Console\Command\Command;
@@ -70,7 +71,7 @@ class GenerateVapidKeysCommand extends Command
             // return success status
             $io->success('VAPID keys updated successfully.');
             return Command::SUCCESS;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->error('Error to generate VAPID keys: ' . $e->getMessage());
             return Command::FAILURE;
         }

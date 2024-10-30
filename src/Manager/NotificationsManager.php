@@ -2,13 +2,14 @@
 
 namespace App\Manager;
 
+use DateTime;
+use Exception;
 use App\Util\AppUtil;
 use Minishlink\WebPush\VAPID;
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
 use App\Entity\NotificationSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -82,7 +83,7 @@ class NotificationsManager
     /**
      * Regenerate VAPID keys
      *
-     * @throws \Exception If an error occurs while regenerating VAPID keys
+     * @throws Exception If an error occurs while regenerating VAPID keys
      *
      * @return array<string> The new VAPID keys
      */
@@ -108,7 +109,7 @@ class NotificationsManager
 
             // return new VAPID keys
             return $vapidKeys;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to generate VAPID keys: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -123,7 +124,7 @@ class NotificationsManager
      * @param string $publicKey The public key of the push notifications
      * @param string $authToken The auth token of the push notifications
      *
-     * @throws \Exception If the subscriber is not saved to the database
+     * @throws Exception If the subscriber is not saved to the database
      *
      * @return void
      */
@@ -139,7 +140,7 @@ class NotificationsManager
             $notoficationSubscriber->setEndpoint($endpoint)
                 ->setPublicKey($publicKey)
                 ->setAuthToken($authToken)
-                ->setSubscribedTime(new \DateTime())
+                ->setSubscribedTime(new DateTime())
                 ->setStatus('open')
                 ->setUserId($userId);
 
@@ -153,7 +154,7 @@ class NotificationsManager
                 message: 'Subscribe push notifications',
                 level: LogManager::LEVEL_INFO
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to subscribe push notifications: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -167,7 +168,7 @@ class NotificationsManager
      * @param int $id The id of the notifications subscriber
      * @param string $status The status of the notifications subscriber
      *
-     * @throws \Exception If the notifications subscriber is not found
+     * @throws Exception If the notifications subscriber is not found
      *
      * @return void
      */
@@ -187,7 +188,7 @@ class NotificationsManager
                 $notificationSubscriber->setStatus($status);
                 $this->entityManager->flush();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to update notifications subscriber status: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR

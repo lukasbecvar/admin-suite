@@ -2,6 +2,7 @@
 
 namespace App\Tests\Command\User;
 
+use DateTime;
 use App\Entity\User;
 use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
@@ -33,8 +34,8 @@ class UserListCommandTest extends TestCase
         $user1->setRole('ROLE_USER');
         $user1->setIpAddress('127.0.0.1');
         $user1->setUserAgent('Mozilla/5.0');
-        $user1->setRegisterTime(new \DateTime('2023-01-01 12:00:00'));
-        $user1->setLastLoginTime(new \DateTime('2023-01-02 10:00:00'));
+        $user1->setRegisterTime(new DateTime('2023-01-01 12:00:00'));
+        $user1->setLastLoginTime(new DateTime('2023-01-02 10:00:00'));
 
         // simulate returning one user
         $this->userManager->expects($this->once())

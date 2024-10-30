@@ -2,6 +2,8 @@
 
 namespace App\Manager;
 
+use DateTime;
+use Exception;
 use App\Entity\User;
 use App\Util\AppUtil;
 use App\Util\CacheUtil;
@@ -116,7 +118,7 @@ class AuthManager
         $password = $this->securityUtil->generateHash($password);
 
         // get current time
-        $time = new \DateTime();
+        $time = new DateTime();
 
         // get ip address
         $ip_address = $this->visitorInfoUtil->getIP();
@@ -161,7 +163,7 @@ class AuthManager
                     message: 'new registration user: ' . $username,
                     level: LogManager::LEVEL_CRITICAL
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to register new user: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -320,7 +322,7 @@ class AuthManager
                     message: 'login user: ' . $username,
                     level: LogManager::LEVEL_CRITICAL
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to login user: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -352,14 +354,14 @@ class AuthManager
         }
 
         // update user data
-        $repo->setLastLoginTime(new \DateTime())
+        $repo->setLastLoginTime(new DateTime())
             ->setIpAddress($this->visitorInfoUtil->getIP() ?? 'Unknown')
             ->setUserAgent($this->visitorInfoUtil->getUserAgent() ?? 'Unknown');
 
         // flush updated user data
         try {
             $this->entityManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to update user data: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -515,7 +517,7 @@ class AuthManager
                     message: 'user: ' . $username . ' password reset is success',
                     level: LogManager::LEVEL_CRITICAL
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to reset user password: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -560,7 +562,7 @@ class AuthManager
             // flush data
             try {
                 $this->entityManager->flush();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $state = [
                     'status' => false,
                     'message' => $e->getMessage()

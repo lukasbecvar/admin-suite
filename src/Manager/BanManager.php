@@ -2,6 +2,8 @@
 
 namespace App\Manager;
 
+use DateTime;
+use Exception;
 use App\Entity\Banned;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +43,8 @@ class BanManager
      * @param int $userId The id of the user to ban
      * @param string $reason The reason for banning the user
      *
+     * @throws Exception If an error occurs while banning the user
+     *
      * @return void
      */
     public function banUser(int $userId, string $reason = 'no-reason'): void
@@ -54,7 +58,7 @@ class BanManager
         $banned = new Banned();
         $banned->setReason($reason)
             ->setStatus('active')
-            ->setTime(new \DateTime())
+            ->setTime(new DateTime())
             ->setBannedById($this->authManager->getLoggedUserId())
             ->setBannedUserId($userId);
 
@@ -62,7 +66,7 @@ class BanManager
         try {
             $this->entityManager->persist($banned);
             $this->entityManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to ban user: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -142,7 +146,7 @@ class BanManager
                 $banned->setStatus('inactive');
 
                 $this->entityManager->flush();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to unban user: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR

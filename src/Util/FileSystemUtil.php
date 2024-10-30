@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use Exception;
 use SplFileInfo;
 use App\Manager\LogManager;
 use App\Manager\ErrorManager;
@@ -29,6 +30,8 @@ class FileSystemUtil
      * Returns a list of files and directories in the specified path
      *
      * @param string $path The path to list files and directories
+     *
+     * @throws Exception If an error occurs while listing the files
      *
      * @return array<array<mixed>> The list of files and directories
      */
@@ -66,7 +69,7 @@ class FileSystemUtil
                     'path' => $file->getRealPath(),
                 ];
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // handle the error
             $this->errorManager->handleError(
                 message: 'error listing files: ' . $e->getMessage(),
@@ -169,6 +172,8 @@ class FileSystemUtil
      *
      * @param string $path The path to the file
      *
+     * @throws Exception If an error occurs while getting the file content
+     *
      * @return string|null The file content or null if the file does not exist
      */
     public function getFileContent(string $path): ?string
@@ -213,7 +218,7 @@ class FileSystemUtil
 
             // return the file content
             return $fileContent;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // handle the error
             $this->errorManager->handleError(
                 message: 'error opening file: ' . $e->getMessage(),

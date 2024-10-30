@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use Exception;
 use App\Entity\User;
 use App\Util\AppUtil;
 use App\Util\SecurityUtil;
@@ -181,7 +182,7 @@ class UserManager
      * @param int $userId The id of the user to add the admin role
      * @param string $role The role to add
      *
-     * @throws \Exception If there is an error while adding the admin role
+     * @throws Exception If there is an error while adding the admin role
      *
      * @return void
      */
@@ -208,7 +209,7 @@ class UserManager
                     message: 'update role (' . $role . ') for user: ' . $repo->getUsername(),
                     level: LogManager::LEVEL_WARNING
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to grant admin permissions: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -242,7 +243,7 @@ class UserManager
      *
      * @param int $userId The id of the user to delete
      *
-     * @throws \Exception If there is an error while deleting the user
+     * @throws Exception If there is an error while deleting the user
      *
      * @return void
      */
@@ -264,7 +265,7 @@ class UserManager
                     message: 'user: ' . $repo->getUsername() . ' deleted',
                     level: LogManager::LEVEL_WARNING
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to delete user: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -279,7 +280,7 @@ class UserManager
      * @param int $userId The id of the user to update the username
      * @param string $newUsername The new username
      *
-     * @throws \Exception If there is an error while updating the username.
+     * @throws Exception If there is an error while updating the username.
      *
      * @return void
      */
@@ -306,7 +307,7 @@ class UserManager
                     message: 'update username (' . $newUsername . ') for user: ' . $oldUsername,
                     level: LogManager::LEVEL_INFO
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to update username: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -321,7 +322,7 @@ class UserManager
      * @param int $userId The id of the user to update the password
      * @param string $newPassword The new password
      *
-     * @throws \Exception If there is an error while updating the password.
+     * @throws Exception If there is an error while updating the password.
      *
      * @return void
      */
@@ -348,7 +349,7 @@ class UserManager
                     message: 'update password for user: ' . $repo->getUsername(),
                     level: LogManager::LEVEL_INFO
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to update password: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -363,7 +364,7 @@ class UserManager
      * @param int $userId The id of the user to update the profile picture
      * @param string $newProfilePicture The new profile picture
      *
-     * @throws \Exception If there is an error while updating the profile picture.
+     * @throws Exception If there is an error while updating the profile picture.
      *
      * @return void
      */
@@ -387,7 +388,7 @@ class UserManager
                     message: 'update profile picture for user: ' . $repo->getUsername(),
                     level: LogManager::LEVEL_INFO
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to update profile picture: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR

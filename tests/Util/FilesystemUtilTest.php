@@ -75,7 +75,7 @@ class FileSystemUtilTest extends TestCase
         $result = $this->fileSystemUtil->detectMediaType('/var/www/balbla.txt');
 
         // assert result is string
-        $this->assertIsString('non-mediafile');
+        $this->assertIsString($result);
     }
 
     /**

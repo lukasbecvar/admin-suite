@@ -2,6 +2,7 @@
 
 namespace App\Tests\Manager;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Manager\LogManager;
 use Doctrine\DBAL\Connection;
@@ -61,7 +62,7 @@ class DatabaseManagerTest extends TestCase
     public function testIsDatabaseDown(): void
     {
         // mock the executeQuery method to throw an exception
-        $this->connectionMock->method('executeQuery')->willThrowException(new \Exception());
+        $this->connectionMock->method('executeQuery')->willThrowException(new Exception());
 
         // assert that isDatabaseDown returns true
         $this->assertTrue($this->databaseManager->isDatabaseDown());

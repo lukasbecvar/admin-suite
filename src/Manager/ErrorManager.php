@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use Exception;
 use Twig\Environment;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -39,7 +40,7 @@ class ErrorManager
      *
      * @param string|int $code The error code
      *
-     * @throws \Exception If the error view does not exist
+     * @throws Exception If the error view does not exist
      *
      * @return string The error view
      */
@@ -47,7 +48,7 @@ class ErrorManager
     {
         try {
             return $this->twig->render('error/error-' . $code . '.twig');
-        } catch (\Exception) {
+        } catch (Exception) {
             return $this->twig->render('error/error-unknown.twig');
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Manager\ErrorManager;
 use App\Manager\NotificationsManager;
@@ -23,8 +24,11 @@ class PushNotificationsApiController extends AbstractController
     private ErrorManager $errorManager;
     private NotificationsManager $notificationsManager;
 
-    public function __construct(AppUtil $appUtil, ErrorManager $errorManager, NotificationsManager $notificationsManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        ErrorManager $errorManager,
+        NotificationsManager $notificationsManager
+    ) {
         $this->appUtil = $appUtil;
         $this->errorManager = $errorManager;
         $this->notificationsManager = $notificationsManager;
@@ -69,7 +73,7 @@ class PushNotificationsApiController extends AbstractController
                 'status' => 'success',
                 'vapid_public_key' => $vapidPublicKey
             ], JsonResponse::HTTP_OK);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse([
                 'status' => 'error',
                 'message' => $e->getMessage()
@@ -125,7 +129,7 @@ class PushNotificationsApiController extends AbstractController
                 'status' => 'success',
                 'message' => 'Subscription received'
             ], JsonResponse::HTTP_OK);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to subscribe push notifications: ' . $e->getMessage(),
                 code: JsonResponse::HTTP_INTERNAL_SERVER_ERROR

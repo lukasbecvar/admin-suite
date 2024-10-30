@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\LogRepository;
@@ -35,7 +36,7 @@ class Log
     private ?string $message = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $time = null;
+    private ?DateTimeInterface $time = null;
 
     #[ORM\Column(length: 255)]
     private ?string $user_agent = null;
@@ -113,9 +114,9 @@ class Log
     /**
      * Get the time of the log
      *
-     * @return \DateTimeInterface|null The time of the log or null if not found
+     * @return DateTimeInterface|null The time of the log or null if not found
      */
-    public function getTime(): ?\DateTimeInterface
+    public function getTime(): ?DateTimeInterface
     {
         return $this->time;
     }
@@ -123,11 +124,11 @@ class Log
     /**
      * Set the time of the log
      *
-     * @param \DateTimeInterface $time The time of the log
+     * @param DateTimeInterface $time The time of the log
      *
      * @return static The current object
      */
-    public function setTime(\DateTimeInterface $time): static
+    public function setTime(DateTimeInterface $time): static
     {
         $this->time = $time;
 

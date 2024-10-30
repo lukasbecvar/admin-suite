@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TodoRepository;
@@ -28,10 +29,10 @@ class Todo
     private ?string $todo_text = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $added_time = null;
+    private ?DateTimeInterface $added_time = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $completed_time = null;
+    private ?DateTimeInterface $completed_time = null;
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
@@ -76,9 +77,9 @@ class Todo
     /**
      * Get the added time of the todo
      *
-     * @return \DateTimeInterface|null The added time of the todo or null if not found
+     * @return DateTimeInterface|null The added time of the todo or null if not found
      */
-    public function getAddedTime(): ?\DateTimeInterface
+    public function getAddedTime(): ?DateTimeInterface
     {
         return $this->added_time;
     }
@@ -86,11 +87,11 @@ class Todo
     /**
      * Set the added time of the todo
      *
-     * @param \DateTimeInterface $added_time The added time of the todo
+     * @param DateTimeInterface $added_time The added time of the todo
      *
      * @return static The current object
      */
-    public function setAddedTime(\DateTimeInterface $added_time): static
+    public function setAddedTime(DateTimeInterface $added_time): static
     {
         $this->added_time = $added_time;
 
@@ -100,9 +101,9 @@ class Todo
     /**
      * Get the completed time of the todo
      *
-     * @return \DateTimeInterface|null The completed time of the todo or null if not found
+     * @return DateTimeInterface|null The completed time of the todo or null if not found
      */
-    public function getCompletedTime(): ?\DateTimeInterface
+    public function getCompletedTime(): ?DateTimeInterface
     {
         return $this->completed_time;
     }
@@ -110,11 +111,11 @@ class Todo
     /**
      * Set the completed time of the todo
      *
-     * @param \DateTimeInterface|null $completed_time The completed time of the todo
+     * @param DateTimeInterface|null $completed_time The completed time of the todo
      *
      * @return static The current object
      */
-    public function setCompletedTime(?\DateTimeInterface $completed_time): static
+    public function setCompletedTime(?DateTimeInterface $completed_time): static
     {
         $this->completed_time = $completed_time;
 

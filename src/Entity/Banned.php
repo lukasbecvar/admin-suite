@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BannedRepository;
@@ -32,7 +33,7 @@ class Banned
     private ?string $status = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $time = null;
+    private ?DateTimeInterface $time = null;
 
     #[ORM\Column]
     private ?int $banned_by_id = null;
@@ -99,9 +100,9 @@ class Banned
     /**
      * Get the time of the ban
      *
-     * @return \DateTimeInterface|null The time of the ban or null if not found
+     * @return DateTimeInterface|null The time of the ban or null if not found
      */
-    public function getTime(): ?\DateTimeInterface
+    public function getTime(): ?DateTimeInterface
     {
         return $this->time;
     }
@@ -109,11 +110,11 @@ class Banned
     /**
      * Set the time of the ban
      *
-     * @param \DateTimeInterface $time The time of the ban
+     * @param DateTimeInterface $time The time of the ban
      *
      * @return static The current object
      */
-    public function setTime(\DateTimeInterface $time): static
+    public function setTime(DateTimeInterface $time): static
     {
         $this->time = $time;
 

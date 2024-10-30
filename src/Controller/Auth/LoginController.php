@@ -2,6 +2,7 @@
 
 namespace App\Controller\Auth;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
@@ -77,7 +78,7 @@ class LoginController extends AbstractController
 
                     // redirect to the index page
                     return $this->redirectToRoute('app_index');
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     // handle login error
                     if ($this->appUtil->isDevMode()) {
                         $this->errorManager->handleError(

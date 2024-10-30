@@ -2,6 +2,7 @@
 
 namespace App\Command\Notifications;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Manager\NotificationsManager;
 use Symfony\Component\Console\Command\Command;
@@ -88,7 +89,7 @@ class SendNotificationCommand extends Command
             // return success status
             $io->success('Notification sent successfully.');
             return Command::SUCCESS;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->error('Error to send notification: ' . $e->getMessage());
             return Command::FAILURE;
         }

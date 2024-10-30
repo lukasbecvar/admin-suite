@@ -2,6 +2,7 @@
 
 namespace App\Command\User;
 
+use Exception;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use Symfony\Component\String\ByteString;
@@ -101,7 +102,7 @@ class UserRegisterCommand extends Command
             // return success message
             $io->success('New user registered username: ' . $username . ' with password: ' . $password);
             return Command::SUCCESS;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->error('error to register user: ' . $e->getMessage());
             return Command::FAILURE;
         }

@@ -253,11 +253,12 @@ class UserManagerTest extends TestCase
         $this->logManagerMock->expects($this->once())
             ->method('log')->with('user-manager', 'user: testUser deleted');
 
+        // call method
         $this->userManager->deleteUser(1);
     }
 
     /**
-     * Test update username.
+     * Test update username
      *
      * @return void
      */
@@ -276,16 +277,14 @@ class UserManagerTest extends TestCase
             ->method('findOneBy')->with(['id' => $userId])->willReturn($user);
 
         // configure logManagerMock
-        $this->logManagerMock->expects($this->once())
-            ->method('log')->with(
-                'account-settings',
-                'update username (' . $newUsername . ') for user: ' . $user->getUsername()
-            );
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            'account-settings',
+            'update username (' . $newUsername . ') for user: ' . $user->getUsername()
+        );
 
         // configure entityManagerMock
         $this->entityManagerMock
-            ->expects($this->once())
-            ->method('flush');
+            ->expects($this->once())->method('flush');
 
         // call the method under test
         $this->userManager->updateUsername($userId, $newUsername);
@@ -295,7 +294,7 @@ class UserManagerTest extends TestCase
     }
 
     /**
-     * Test update password.
+     * Test update password
      *
      * @return void
      */
@@ -318,11 +317,10 @@ class UserManagerTest extends TestCase
             ->method('generateHash')->with($newPassword)->willReturn('hashedPassword123');
 
         // configure logManagerMock
-        $this->logManagerMock->expects($this->once())
-            ->method('log')->with(
-                'account-settings',
-                'update password for user: ' . $user->getUsername()
-            );
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            'account-settings',
+            'update password for user: ' . $user->getUsername()
+        );
 
         // configure entityManagerMock
         $this->entityManagerMock->expects($this->once())->method('flush');
@@ -332,7 +330,7 @@ class UserManagerTest extends TestCase
     }
 
     /**
-     * Test update profile picture.
+     * Test update profile picture
      *
      * @return void
      */

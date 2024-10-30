@@ -2,6 +2,8 @@
 
 namespace App\Tests;
 
+use DateTime;
+use Exception;
 use App\Entity\User;
 use App\Manager\AuthManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,8 +35,8 @@ class CustomTestCase extends WebTestCase
         $mockUser->setRole('OWNER');
         $mockUser->setIpAddress('172.19.0.1');
         $mockUser->setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36');
-        $mockUser->setRegisterTime(new \DateTime());
-        $mockUser->setLastLoginTime(new \DateTime());
+        $mockUser->setRegisterTime(new DateTime());
+        $mockUser->setLastLoginTime(new DateTime());
         $mockUser->setToken('fba6eb31278954ce68feb303cbd34bfe');
         $mockUser->setProfilePic('default_pic');
 
@@ -59,6 +61,8 @@ class CustomTestCase extends WebTestCase
      *
      * @param EntityManagerInterface $entityManager The entity manager
      *
+     * @throws Exception If no users found in the database
+     *
      * @return int The user id
      */
     protected function getRandomUserId(EntityManagerInterface $entityManager): int
@@ -73,7 +77,7 @@ class CustomTestCase extends WebTestCase
 
         // check if no users found in the database
         if (count($userIds) === 0) {
-            throw new \Exception('No users found in the database.');
+            throw new Exception('No users found in the database.');
         }
 
         // return a random user id from the array of user ids

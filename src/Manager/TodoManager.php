@@ -2,6 +2,8 @@
 
 namespace App\Manager;
 
+use DateTime;
+use Exception;
 use App\Entity\Todo;
 use App\Util\SecurityUtil;
 use Doctrine\ORM\EntityManagerInterface;
@@ -92,9 +94,7 @@ class TodoManager
         }
 
         // get todo status
-        $status = $todo->getStatus();
-
-        return $status;
+        return $todo->getStatus();
     }
 
     /**
@@ -118,6 +118,8 @@ class TodoManager
      *
      * @param string $todoText The todo text
      *
+     * @throws Exception If an error occurs while creating the todo
+     *
      * @return void
      */
     public function createTodo(string $todoText): void
@@ -131,7 +133,7 @@ class TodoManager
         try {
             // set todo properties
             $todo->setTodoText($todoText)
-                ->setAddedTime(new \DateTime())
+                ->setAddedTime(new DateTime())
                 ->setCompletedTime(null)
                 ->setStatus('open')
                 ->setUserId($this->authManager->getLoggedUserId());
@@ -146,7 +148,7 @@ class TodoManager
                 message: 'new todo created',
                 level: LogManager::LEVEL_INFO
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to create todo: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -159,6 +161,8 @@ class TodoManager
      *
      * @param int $todoId The todo id
      * @param string $todoText The todo text
+     *
+     * @throws Exception If an error occurs while editing the todo
      *
      * @return void
      */
@@ -209,7 +213,7 @@ class TodoManager
                 message: 'todo edited',
                 level: LogManager::LEVEL_INFO
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to edit todo: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -221,6 +225,8 @@ class TodoManager
      * Close a todo
      *
      * @param int $todoId The todo id
+     *
+     * @throws Exception If an error occurs while closing the todo
      *
      * @return void
      */
@@ -248,7 +254,7 @@ class TodoManager
         try {
             // set the todo status to closed
             $todo->setStatus('closed');
-            $todo->setCompletedTime(new \DateTime());
+            $todo->setCompletedTime(new DateTime());
 
             // save the todo entity
             $this->entityManagerInterface->persist($todo);
@@ -260,7 +266,7 @@ class TodoManager
                 message: 'todo: ' . $todoId . ' closed',
                 level: LogManager::LEVEL_INFO
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to close todo: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -272,6 +278,8 @@ class TodoManager
      * Delete a todo
      *
      * @param int $todoId The todo id
+     *
+     * @throws Exception If an error occurs while deleting the todo
      *
      * @return void
      */
@@ -315,7 +323,7 @@ class TodoManager
                     level: LogManager::LEVEL_INFO
                 );
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to delete todo: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
