@@ -3,7 +3,7 @@
 <p align="center">
     <a href="https://github.com/lukasbecvar/admin-suite/blob/main/LICENSE" target="_blank">License</a> |
     <a href="https://becvar.xyz" target="_blank">Author</a>
-</p>
+</p> 
 
 ## Dashboard preview
 ![Dashboard](.github/assets/preview.png)
