@@ -160,7 +160,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Upgrade Required');
-        $this->assertSelectorTextContains('p', 'This website is not available for non https connections.');
+        $this->assertSelectorTextContains('p', 'This website is not available over non-HTTPS connections, or your browser does not support JavaScript.');
         $this->assertResponseStatusCodeSame(Response::HTTP_UPGRADE_REQUIRED);
     }
 
