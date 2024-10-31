@@ -13,7 +13,6 @@ Encore
     .addEntry('terminal-js', './assets/js/terminal.js')
     .addEntry('todo-manager-js', './assets/js/todo-manager.js')
     .addEntry('user-manager-js', './assets/js/user-manager.js')
-    .addEntry('code-highlight-js', './assets/js/code-highlight.js')
     .addEntry('sidebar-element-js', './assets/js/sidebar-element.js')
     .addEntry('loading-component-js', './assets/js/loading-component.js')
     .addEntry('database-table-browser-js', './assets/js/database-table-browser.js')

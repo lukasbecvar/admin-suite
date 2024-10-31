@@ -74,8 +74,6 @@ This project uses the following technologies
     * [Github](https://github.com/phpstan/phpstan)
 * Tailwind
     * [Website](https://tailwindcss.com)
-* HighlightJS
-    * [Website](https://highlightjs.org)
 * NPM / Webpack encore
     * [NPM](https://docs.npmjs.com)
     * [Encore](https://symfony.com/doc/current/frontend/encore/index.html)
