@@ -7,6 +7,7 @@ use App\Util\AppUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Manager\LogManager;
+use App\Util\FileSystemUtil;
 use App\Util\VisitorInfoUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
@@ -30,6 +31,7 @@ class LogManagerTest extends TestCase
     private SessionUtil & MockObject $sessionUtilMock;
     private LogRepository & MockObject $repositoryMock;
     private ErrorManager & MockObject $errorManagerMock;
+    private FileSystemUtil & MockObject $fileSystemUtilMock;
     private VisitorInfoUtil & MockObject $visitorInfoUtilMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
 
@@ -41,6 +43,7 @@ class LogManagerTest extends TestCase
         $this->sessionUtilMock = $this->createMock(SessionUtil::class);
         $this->repositoryMock = $this->createMock(LogRepository::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
+        $this->fileSystemUtilMock = $this->createMock(FileSystemUtil::class);
         $this->visitorInfoUtilMock = $this->createMock(VisitorInfoUtil::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
@@ -50,6 +53,7 @@ class LogManagerTest extends TestCase
             $this->cookieUtilMock,
             $this->sessionUtilMock,
             $this->errorManagerMock,
+            $this->fileSystemUtilMock,
             $this->visitorInfoUtilMock,
             $this->entityManagerMock
         );

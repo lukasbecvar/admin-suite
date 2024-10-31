@@ -9,9 +9,20 @@
     {% set directoryPath = parts|slice(0, parts|length - 1)|join('/') %}
     
     {# BACK BUTTON #}
-    <a href={{ path('app_file_system_browser', { 'path': directoryPath }) }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
+    {% set referer = app.request.get('referer') %}
+    {% if referer is empty %}
+        {% set backPath = path('app_file_system_browser', { 'path': directoryPath }) %}
+    {% elseif referer == 'log_manager_exception_files' %}
+        {% set backPath = path('app_manager_logs_exception_files') %}
+    {% elseif referer == 'log_manager_server_logs' %}
+        {% set backPath = path('app_manager_logs_system') %}
+    {% else %}
+        {% set backPath = path('app_file_system_browser', { 'path': directoryPath }) %}
+    {% endif %}
+    <a href="{{ backPath }}" class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
+
     <span class="mr-1 text-white">{{ currentPath|split('/')|last }}</span>
 </div>
 

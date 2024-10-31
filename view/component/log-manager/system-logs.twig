@@ -5,40 +5,24 @@
 <div class="bg-neutral-900">
     {# SUB-NAVIGATION #}
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
-        <a href={{ path(logContent == 'non-selected' ? 'app_manager_logs' : 'app_manager_logs_system') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to system logs">
+        <a href={{ path('app_manager_logs') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to system logs">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
-        {% if logFile == 'none' %}
-            <span class="mr-1 text-white">System logs</span>
-        {% else %}
-            <span class="mr-1 text-white">{{ logFile|e }}</span>
-        {% endif %}
+
+        <span class="mr-1 text-white">System logs</span>
     </div>
 
-    {% if logContent == 'non-selected' %}
-        {# LOG SELECT BOX #}
-        <div class="bg-neutral-900 text-white p-6">
-            <h3 class="text-2xl font-semibold text-white mb-4">Log Files</h3>
-            <ul class="space-y-2">
-                {% for logFile in logFiles %}
-                    <li>
-                        <a href={{ path('app_manager_logs_system', { file: logFile }) }} class="block p-3 bg-neutral-800 hover:bg-blue-600 break-words">{{ logFile }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% else %}
-        {# LOG OUTPUT BOX #}
-        <div class="bg-neutral-900 text-white component">
-            <div>
-                {% if logContent == null %}
-                    <h1 class="text-center mt-5 text-xl">Log file is empty</h1>
-                {% else %}
-                    <pre class="text-sm text-cyan overflow-auto"><code>{{ logContent|e }}</code></pre>
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
+    {# LOG SELECT BOX #}
+    <div class="bg-neutral-900 text-white p-6">
+        <h3 class="text-2xl font-semibold text-white mb-4">Log Files</h3>
+        <ul class="space-y-2">
+            {% for logFile in logFiles %}
+                <li>
+                    <a href={{ path('app_file_system_view', { path: logFile.path, referer: 'log_manager_server_logs' }) }} class="block p-3 bg-neutral-800 hover:bg-blue-600 break-words">{{ logFile.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 
 {# INIT CODE HIGHLIGHT #}

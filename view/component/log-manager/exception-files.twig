@@ -5,51 +5,31 @@
 <div class="bg-neutral-900">
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
-    <a href={{ path(exceptionContent == 'non-selected' ? 'app_manager_logs' : 'app_manager_logs_exception_files') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to exception files">
+    <a href={{ path('app_manager_logs') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to exception files">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
-    {% if logName == 'none' %}
-        <span class="mr-1 text-white">Exception files</span>
-    {% else %}
-        <a href={{ path('app_manager_logs_exception_delete', { file: logName }) }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Delete exception log">
-            <i class="fa fa-trash" aria-hidden="true"></i>
-        </a>
 
-        <span class="mr-1 text-white">{{ logName|e }}</span>
-    {% endif %}
+    <span class="mr-1 text-white">Exception files</span>
 </div>
 
-{% if exceptionContent == 'non-selected' %}
-    {# LOG SELECT BOX #}
-    <div class="bg-neutral-900 text-white p-6 component">
-        <ul class="space-y-2">
-            {# EXCEPTION FILES LIST #}
-            {% if exceptionFiles|length < 1 %}
-                <h1 class="text-center mt-5 text-xl">No exception files found</h1>
-            {% else %}
-                <h3 class="text-2xl font-semibold text-white mb-4">Exception Files</h3>
-                {% for exceptionFile in exceptionFiles %}
-                    <li class="flex justify-between items-center">
-                        <a href={{ path('app_manager_logs_exception_files', { file: exceptionFile.name }) }} class="block p-3 bg-neutral-800 hover:bg-blue-600 flex-grow">{{ exceptionFile.name }}</a>
-                        <a href={{ path('app_manager_logs_exception_delete', { file: exceptionFile.name }) }} class="block p-3 text-red-500 bg-neutral-800 ml-2 hover:text-red-700">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
-                        </a>
-                    </li>
-                {% endfor %}
-            {% endif %}
-        </ul>
-    </div>
-{% else %}
-    {# LOG OUTPUT BOX #}
-    <div class="bg-neutral-900 text-white component">
-        <div>
-            {% if exceptionContent is empty %}
-                <h1 class="text-center mt-5 text-xl">Exception file is empty</h1>
-            {% else %}
-                <pre class="text-sm text-cyan overflow-auto"><code>{{ exceptionContent|e }}</code></pre>
-            {% endif %}
-        </div>
-    {% endif %}
+{# LOG SELECT BOX #}
+<div class="bg-neutral-900 text-white p-6 component">
+    <ul class="space-y-2">
+        {# EXCEPTION FILES LIST #}
+        {% if exceptionFiles|length < 1 %}
+            <h1 class="text-center mt-5 text-xl">No exception files found</h1>
+        {% else %}
+            <h3 class="text-2xl font-semibold text-white mb-4">Exception Files</h3>
+            {% for exceptionFile in exceptionFiles %}
+                <li class="flex justify-between items-center">
+                    <a href={{ path('app_file_system_view', { path: exceptionFile.path, referer: 'log_manager_exception_files' }) }} class="block p-3 bg-neutral-800 hover:bg-blue-600 flex-grow">{{ exceptionFile.name }}</a>
+                    <a href={{ path('app_manager_logs_exception_delete', { file: exceptionFile.name }) }} class="block p-3 text-red-500 bg-neutral-800 ml-2 hover:text-red-700">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </a>
+                </li>
+            {% endfor %}
+        {% endif %}
+    </ul>
 </div>
 
 {# INIT CODE HIGHLIGHT #}

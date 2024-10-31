@@ -98,88 +98,38 @@ class LogsManagerController extends AbstractController
     /**
      * Renders the system logs table
      *
-     * @param Request $request The request object
-     *
      * @return Response The system log view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/logs/system', methods:['GET'], name: 'app_manager_logs_system')]
-    public function systemLogsTable(Request $request): Response
+    public function systemLogsTable(): Response
     {
-        // get selected log file from query parameter
-        $logFile = $request->query->get('file', 'none');
-
         // get log files from host system
         $logFiles = $this->logManager->getSystemLogs();
-
-        // deflaut log content value
-        $logContent = 'non-selected';
-
-        // check if a log file is selected to display its content
-        if ($logFile != 'none') {
-            $logContent = $this->logManager->getSystemLogContent($logFile);
-        }
 
         // render the system logs table
         return $this->render('component/log-manager/system-logs.twig', [
             // log files list
-            'logFiles' => $logFiles,
-
-            // current log file name
-            'logFile' => $logFile,
-
-            // log file content
-            'logContent' => $logContent
+            'logFiles' => $logFiles
         ]);
     }
 
     /**
      * Fetches and displays the contents of the exception log
      *
-     * @param Request $request The request object
-     *
      * @return Response The exception log view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/logs/exception/files', methods:['GET'], name: 'app_manager_logs_exception_files')]
-    public function exceptionFiles(Request $request): Response
+    public function exceptionFiles(): Response
     {
         // get exception files
         $exceptionFiles = $this->logManager->getExceptionFiles();
 
-        // get selected exception file from query parameter
-        $exceptionFile = (string) $request->query->get('file', 'none');
-
-        // deflaut exception file content value
-        $exceptionContent = 'non-selected';
-
-        // get exception file content
-        if ($exceptionFile !== 'none' && isset($exceptionFiles[$exceptionFile])) {
-            $fileInfo = $exceptionFiles[$exceptionFile];
-
-            // Ensure $fileInfo is an array and contains 'path'
-            if (is_array($fileInfo) && isset($fileInfo['path'])) {
-                $exceptionFilePath = $fileInfo['path'];
-
-                // check if exception file path is a string
-                if (is_string($exceptionFilePath) && file_exists($exceptionFilePath)) {
-                    $exceptionContent = file_get_contents($exceptionFilePath);
-                } else {
-                    $exceptionContent = 'exception file not found';
-                }
-            } else {
-                $exceptionContent = 'exception file info invalid';
-            }
-        }
-
         // render the exception files view
         return $this->render('component/log-manager/exception-files.twig', [
             // exception files
-            'exceptionFiles' => $exceptionFiles,
-
-            // log file content
-            'logName' => $exceptionFile,
-            'exceptionContent' => $exceptionContent
+            'exceptionFiles' => $exceptionFiles
         ]);
     }
 

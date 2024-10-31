@@ -2,6 +2,7 @@
 
 namespace App\Controller\Component;
 
+use App\Manager\LogManager;
 use App\Util\FileSystemUtil;
 use App\Annotation\Authorization;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,10 +20,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class FileSystemBrowserController extends AbstractController
 {
+    private LogManager $logManager;
     private FileSystemUtil $fileSystemUtil;
 
-    public function __construct(FileSystemUtil $fileSystemUtil)
+    public function __construct(LogManager $logManager, FileSystemUtil $fileSystemUtil)
     {
+        $this->logManager = $logManager;
         $this->fileSystemUtil = $fileSystemUtil;
     }
 
@@ -79,6 +82,13 @@ class FileSystemBrowserController extends AbstractController
         // get the resource content
         $resourceContent = $this->fileSystemUtil->getFileContent($path);
 
+        // log file access
+        $this->logManager->log(
+            name: 'file-browser',
+            message: 'File: ' . $path . ' was accessed',
+            level: LogManager::LEVEL_INFO
+        );
+
         // check if resource content is null
         if ($resourceContent == null) {
             return $this->json([
@@ -130,6 +140,13 @@ class FileSystemBrowserController extends AbstractController
             // get file content
             if ($mediaType == 'non-mediafile') {
                 $fileContent = $this->fileSystemUtil->getFileContent($path);
+
+                // log file access
+                $this->logManager->log(
+                    name: 'file-browser',
+                    message: 'File: ' . $path . ' was accessed',
+                    level: LogManager::LEVEL_INFO
+                );
             }
         }
 

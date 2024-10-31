@@ -3,8 +3,6 @@
 namespace App\Util;
 
 use Exception;
-use SplFileInfo;
-use App\Manager\LogManager;
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,12 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class FileSystemUtil
 {
-    private LogManager $logManager;
+    private AppUtil $appUtil;
     private ErrorManager $errorManager;
 
-    public function __construct(LogManager $logManager, ErrorManager $errorManager)
+    public function __construct(AppUtil $appUtil, ErrorManager $errorManager)
     {
-        $this->logManager = $logManager;
+        $this->appUtil = $appUtil;
         $this->errorManager = $errorManager;
     }
 
@@ -30,53 +28,75 @@ class FileSystemUtil
      * Returns a list of files and directories in the specified path
      *
      * @param string $path The path to list files and directories
+     * @param bool $recursive Spec for log manager (return all files resursive without directories)
      *
      * @throws Exception If an error occurs while listing the files
      *
      * @return array<array<mixed>> The list of files and directories
      */
-    public function getFilesList(string $path): array
+    public function getFilesList(string $path, bool $recursive = false): array
     {
+        // set default path if is empty
+        if (empty($path)) {
+            $path = '/';
+        }
+
         $files = [];
 
         try {
-            $finder = new \Symfony\Component\Finder\Finder();
-            $finder->in($path)->depth('== 0')->ignoreDotFiles(false)->ignoreVCS(false);
+            // execute find command
+            $type = $recursive ? '-type f' : '\\( -type f -o -type d \\)';
+            $depth = $recursive ? '' : '-mindepth 1 -maxdepth 1';
+            $command = "sudo find " . escapeshellarg($path) . " $depth $type -printf '%f;%s;%m;%y;%p\n' 2>&1";
+            $output = shell_exec($command);
 
-            // get file list as array
-            $list = iterator_to_array($finder, false);
+            // check if output is empty
+            if ($output == false || trim($output) === '') {
+                // return empty array if no files found
+                return $files;
+            }
 
-            // sort file list
-            usort($list, function (SplFileInfo $a, SplFileInfo $b) {
-                // sort directories first
-                if ($a->isDir() && !$b->isDir()) {
-                    return -1;
-                } elseif (!$a->isDir() && $b->isDir()) {
-                    return 1;
+            // split output to lines
+            $lines = explode("\n", trim($output));
+            foreach ($lines as $line) {
+                // skip empty lines
+                if (empty(trim($line))) {
+                    continue;
                 }
 
-                // sort by filename
-                return strcasecmp($a->getFilename(), $b->getFilename());
-            });
+                [$name, $size, $permissions, $type, $realPath] = explode(';', $line);
 
-            // loop through the files and directories
-            foreach ($list as $file) {
+                // exclude root and boot directories and original path
+                if ($realPath === '/' || $realPath === '/boot' || $realPath === realpath($path)) {
+                    continue;
+                }
+
                 $files[] = [
-                    'name' => str_replace('/', '', $file->getFilename()),
-                    'size' => $file->getSize(),
-                    'permissions' => substr(sprintf('%o', $file->getPerms()), -4),
-                    'isDir' => $file->isDir(),
-                    'path' => $file->getRealPath(),
+                    'name' => $name,
+                    'size' => (int)$size,
+                    'permissions' => $permissions,
+                    'isDir' => $type === 'd',
+                    'path' => $realPath,
                 ];
             }
+
+            // sort the list
+            usort($files, function ($a, $b) {
+                if ($a['isDir'] && !$b['isDir']) {
+                    return -1;
+                } elseif (!$a['isDir'] && $b['isDir']) {
+                    return 1;
+                }
+                return strcasecmp($a['name'], $b['name']);
+            });
         } catch (Exception $e) {
-            // handle the error
             $this->errorManager->handleError(
-                message: 'error listing files: ' . $e->getMessage(),
+                message: 'Error listing files: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 
+        // return the final list
         return $files;
     }
 
@@ -202,23 +222,17 @@ class FileSystemUtil
 
             // check file content is set
             if (!$fileContent) {
-                // handle the error
-                $this->errorManager->handleError(
-                    message: 'error opening file: ' . $path,
-                    code: Response::HTTP_INTERNAL_SERVER_ERROR
-                );
+                $fileContent = 'file is empty';
             }
-
-            // log file access
-            $this->logManager->log(
-                name: 'file-browser',
-                message: 'file ' . $path . ' accessed',
-                level: LogManager::LEVEL_INFO
-            );
 
             // return the file content
             return $fileContent;
         } catch (Exception $e) {
+            // return error to file view in non dev mode
+            if (!$this->appUtil->isDevMode()) {
+                return $e->getMessage();
+            }
+
             // handle the error
             $this->errorManager->handleError(
                 message: 'error opening file: ' . $e->getMessage(),

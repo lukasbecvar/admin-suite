@@ -2,15 +2,15 @@
 
 namespace App\Manager;
 
+use DateTime;
+use Exception;
 use App\Entity\Log;
 use App\Util\AppUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
+use App\Util\FileSystemUtil;
 use App\Util\VisitorInfoUtil;
-use DateTime;
-use Symfony\Component\Finder\Finder;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -32,6 +32,7 @@ class LogManager
     private CookieUtil $cookieUtil;
     private SessionUtil $sessionUtil;
     private ErrorManager $errorManager;
+    private FileSystemUtil $fileSystemUtil;
     private VisitorInfoUtil $visitorInfoUtil;
     private EntityManagerInterface $entityManager;
 
@@ -40,6 +41,7 @@ class LogManager
         CookieUtil $cookieUtil,
         SessionUtil $sessionUtil,
         ErrorManager $errorManager,
+        FileSystemUtil $fileSystemUtil,
         VisitorInfoUtil $visitorInfoUtil,
         EntityManagerInterface $entityManager
     ) {
@@ -48,6 +50,7 @@ class LogManager
         $this->sessionUtil = $sessionUtil;
         $this->errorManager = $errorManager;
         $this->entityManager = $entityManager;
+        $this->fileSystemUtil = $fileSystemUtil;
         $this->visitorInfoUtil = $visitorInfoUtil;
     }
 
@@ -361,37 +364,15 @@ class LogManager
      *
      * * @throws Exception If there is an error during file retrieval (e.g., file not found or permission issue)
      *
-     * @return array<string> An array of relative pathnames of log files found in the /var/log directory
+     * @return array<array<mixed>> An array of relative pathnames of log files found in the /var/log directory
      */
     public function getSystemLogs(): array
     {
         // system logs directory
         $systemLogsDirectory = $this->appUtil->getEnvValue('SYSTEM_LOGS_DIR');
 
-        // set permissions to 777 for system logs directory
-        shell_exec('sudo chmod -R 777 ' . $systemLogsDirectory);
-
-        // initialize Finder
-        $finder = new Finder();
-
-        // array to store log files
-        $logFiles = [];
-
-        try {
-            $finder->files()->in($systemLogsDirectory);
-            // iterate over found files
-            foreach ($finder as $file) {
-                // check if log is not archived
-                if (!str_ends_with($file->getRelativePathname(), '.xz')) {
-                    $logFiles[] = $file->getRelativePathname();
-                }
-            }
-        } catch (Exception $e) {
-            $this->errorManager->handleError(
-                message: 'error to get system logs: ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
+        // get log files list
+        $logFiles = $this->fileSystemUtil->getFilesList($systemLogsDirectory, true);
 
         // log action
         $this->log('log-manager', 'system logs viewed', self::LEVEL_NOTICE);
@@ -412,24 +393,8 @@ class LogManager
     {
         $log = null;
 
-        // check if file exists
-        $filePath = $this->appUtil->getEnvValue('SYSTEM_LOGS_DIR') . '/' . $logFile;
-        if (!file_exists($filePath)) {
-            $this->errorManager->handleError(
-                message: 'error to get log file: ' . $filePath . ' not found',
-                code: Response::HTTP_NOT_FOUND
-            );
-        }
-
-        try {
-            // get log file content
-            $log = file_get_contents($filePath);
-        } catch (Exception $e) {
-            $this->errorManager->handleError(
-                message: 'error to get log file: ' . $logFile . ', ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
+        // get log file content
+        $log = $this->fileSystemUtil->getFileContent($logFile);
 
         // log action
         $this->log(

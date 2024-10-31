@@ -2,7 +2,7 @@
 
 namespace App\Tests\Util;
 
-use App\Manager\LogManager;
+use App\Util\AppUtil;
 use App\Util\FileSystemUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
@@ -16,19 +16,19 @@ use PHPUnit\Framework\TestCase;
  */
 class FileSystemUtilTest extends TestCase
 {
-    private LogManager $logManager;
+    private AppUtil $appUtil;
     private ErrorManager $errorManager;
     private FileSystemUtil $fileSystemUtil;
 
     protected function setUp(): void
     {
         // mock dependencies
-        $this->logManager = $this->createMock(LogManager::class);
+        $this->appUtil = $this->createMock(AppUtil::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
 
         // create the filesystem util instance
         $this->fileSystemUtil = new FileSystemUtil(
-            $this->logManager,
+            $this->appUtil,
             $this->errorManager
         );
     }
