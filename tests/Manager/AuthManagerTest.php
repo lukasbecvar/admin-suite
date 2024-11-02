@@ -115,7 +115,7 @@ class AuthManagerTest extends TestCase
         $this->sessionUtilMock->method('getSessionValue')->willReturn('test_token');
 
         // mock the security util
-        $this->userManagerMock->method('getUserRepository')->willReturn(new User());
+        $this->userManagerMock->method('getUserByToken')->willReturn(new User());
 
         // get status
         $result = $this->authManager->isUserLogedin();
@@ -136,7 +136,7 @@ class AuthManagerTest extends TestCase
         $user->setPassword('hashed_password');
 
         // mock the security util
-        $this->userManagerMock->method('getUserRepository')->willReturn($user);
+        $this->userManagerMock->method('getUserByUsername')->willReturn($user);
 
         // mock the security util
         $this->securityUtilMock->method('verifyPassword')->willReturn(true);
@@ -158,10 +158,11 @@ class AuthManagerTest extends TestCase
         // mock the user
         $user = $this->createMock(User::class);
         $user->method('getToken')->willReturn('test_token');
-        $user->method('getId')->willReturn(123); // mock getId to return a valid ID
+        $user->method('getId')->willReturn(123);
 
-        // mock the user manager
-        $this->userManagerMock->method('getUserRepository')->willReturn($user);
+        // mock the user manager to return the user by username and token
+        $this->userManagerMock->method('getUserByUsername')->willReturn($user);
+        $this->userManagerMock->method('getUserByToken')->willReturn($user);
 
         // mock the session util
         $this->sessionUtilMock->expects($this->exactly(2))->method('setSession');
@@ -189,7 +190,7 @@ class AuthManagerTest extends TestCase
     {
         // mock the user manager
         $user = new User();
-        $this->userManagerMock->method('getUserRepository')->willReturn($user);
+        $this->userManagerMock->method('getUserByToken')->willReturn($user);
 
         // mock the visitor info util
         $this->visitorInfoUtilMock->method('getIP')->willReturn('127.0.0.1');
@@ -221,7 +222,7 @@ class AuthManagerTest extends TestCase
         $this->sessionUtilMock->method('getSessionValue')->willReturn('test_token');
 
         // mock the user manager
-        $this->userManagerMock->method('getUserRepository')->willReturn($user);
+        $this->userManagerMock->method('getUserByToken')->willReturn($user);
 
         // get user id
         $result = $this->authManager->getLoggedUserId();
@@ -242,7 +243,7 @@ class AuthManagerTest extends TestCase
         $this->sessionUtilMock->method('getSessionValue')->willReturn('test_token');
 
         // mock the user manager
-        $this->userManagerMock->method('getUserRepository')->willReturn(new User());
+        $this->userManagerMock->method('getUserByToken')->willReturn(new User());
 
         // get user token
         $result = $this->authManager->getLoggedUserToken();
@@ -264,7 +265,7 @@ class AuthManagerTest extends TestCase
         $this->sessionUtilMock->expects($this->once())->method('destroySession');
 
         // mock the user manager
-        $this->userManagerMock->method('getUserRepository')->willReturn(new User());
+        $this->userManagerMock->method('getUserByToken')->willReturn(new User());
 
         // mock the visitor info util
         $this->cookieUtilMock->expects($this->once())->method('unset');
@@ -285,14 +286,10 @@ class AuthManagerTest extends TestCase
     {
         // create a list of users
         $users = [new User(), new User()];
-
-        // mock the repository to return the list of users
-        $userRepoMock = $this->createMock(UserRepository::class);
-        $userRepoMock->method('findAll')->willReturn($users);
-        $this->entityManagerMock->method('getRepository')->willReturn($userRepoMock);
+        $this->userManagerMock->method('getAllUsersRepositories')->willReturn($users);
 
         // expect the flush method to be called twice (once for each user)
-        $this->entityManagerMock->expects($this->exactly(count($users)))->method('flush');
+        $this->entityManagerMock->expects($this->once())->method('flush');
 
         // call the method
         $result = $this->authManager->regenerateUsersTokens();
@@ -308,11 +305,6 @@ class AuthManagerTest extends TestCase
      */
     public function testGenerateUserToken(): void
     {
-        // mock the repository to return null (token not found)
-        $userRepoMock = $this->createMock(UserRepository::class);
-        $userRepoMock->method('findOneBy')->willReturn(null);
-        $this->entityManagerMock->method('getRepository')->willReturn($userRepoMock);
-
         // call the method
         $token = $this->authManager->generateUserToken();
 
@@ -353,19 +345,5 @@ class AuthManagerTest extends TestCase
 
         // assert the status is string
         $this->assertIsString($status);
-    }
-
-    /**
-     * Test getting online users
-     *
-     * @return void
-     */
-    public function testGetOnlineUsers(): void
-    {
-        // get online list
-        $result = $this->authManager->getOnlineUsers();
-
-        // assert result
-        $this->assertIsArray($result);
     }
 }

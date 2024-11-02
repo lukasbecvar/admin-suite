@@ -28,6 +28,7 @@ class TodoManagerTest extends TestCase
     private AuthManager & MockObject $authManagerMock;
     private SecurityUtil & MockObject $securityUtilMock;
     private ErrorManager & MockObject $errorManagerMock;
+    private TodoRepository & MockObject $todoRepositoryMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
 
     protected function setUp(): void
@@ -37,6 +38,7 @@ class TodoManagerTest extends TestCase
         $this->authManagerMock = $this->createMock(AuthManager::class);
         $this->securityUtilMock = $this->createMock(SecurityUtil::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
+        $this->todoRepositoryMock = $this->createMock(TodoRepository::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
         // initialize the TodoManager with the mocked dependencies
@@ -45,6 +47,7 @@ class TodoManagerTest extends TestCase
             $this->authManagerMock,
             $this->securityUtilMock,
             $this->errorManagerMock,
+            $this->todoRepositoryMock,
             $this->entityManagerMock
         );
     }
@@ -64,19 +67,14 @@ class TodoManagerTest extends TestCase
 
         // mock todo entity
         $todo = new Todo();
-        $todo
-            ->setTodoText('encrypted text')
+        $todo->setTodoText('encrypted text')
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
             ->setUserId($userId);
 
         // mock todo repository
-        $todoRepositoryMock = $this->createMock(TodoRepository::class);
-        $todoRepositoryMock->method('findBy')->willReturn([$todo]);
-
-        // mock entity manager
-        $this->entityManagerMock->method('getRepository')->willReturn($todoRepositoryMock);
+        $this->todoRepositoryMock->method('findByUserIdAndStatus')->willReturn([$todo]);
 
         // mock security util
         $this->securityUtilMock->method('decryptAes')->willReturn('decrypted text');
@@ -144,29 +142,27 @@ class TodoManagerTest extends TestCase
             ->setUserId($userId);
 
         // mock todo repository
-        $todoRepositoryMock = $this->createMock(TodoRepository::class);
-        $todoRepositoryMock->method('find')->willReturn($todo);
-
-        // mock entity manager
-        $this->entityManagerMock->method('getRepository')->willReturn($todoRepositoryMock);
+        $this->todoRepositoryMock->method('find')->willReturn($todo);
 
         // mock security util
         $this->securityUtilMock->method('encryptAes')->willReturn('encrypted updated text');
 
         // mock log manager
-        $this->logManagerMock->expects($this->once())
-            ->method('log')
-            ->with('todo-manager', 'todo edited', 4);
+        $this->logManagerMock->expects($this->once())->method('log')
+            ->with('todo-manager', 'todo edited', LogManager::LEVEL_INFO);
 
         // mock entity manager
-        $this->entityManagerMock->expects($this->once())
-            ->method('persist')
+        $this->entityManagerMock->expects($this->once())->method('persist')
             ->with($this->isInstanceOf(Todo::class));
         $this->entityManagerMock->expects($this->once())
             ->method('flush');
 
         // call method
         $this->todoManager->editTodo($todoId, $newText);
+
+        // assert that the todo's text was updated
+        $this->assertSame('encrypted updated text', $todo->getTodoText());
+        $this->assertNull($todo->getCompletedTime());
     }
 
     /**
@@ -191,16 +187,12 @@ class TodoManagerTest extends TestCase
             ->setUserId($userId);
 
         // mock todo repository
-        $todoRepositoryMock = $this->createMock(TodoRepository::class);
-        $todoRepositoryMock->method('find')->willReturn($todo);
-
-        // mock entity manager
-        $this->entityManagerMock->method('getRepository')->willReturn($todoRepositoryMock);
+        $this->todoRepositoryMock->method('find')->willReturn($todo);
 
         // mock log manager
         $this->logManagerMock->expects($this->once())
             ->method('log')
-            ->with('todo-manager', 'todo: 1 closed', 4);
+            ->with('todo-manager', 'todo: 1 closed', LogManager::LEVEL_INFO);
 
         // mock entity manager
         $this->entityManagerMock->expects($this->once())
@@ -211,5 +203,9 @@ class TodoManagerTest extends TestCase
 
         // call method
         $this->todoManager->closeTodo($todoId);
+
+        // assert the todo's status is now closed
+        $this->assertSame('closed', $todo->getStatus());
+        $this->assertInstanceOf(DateTime::class, $todo->getCompletedTime());
     }
 }

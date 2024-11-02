@@ -49,6 +49,7 @@ class UserManagerTest extends TestCase
             $this->logManagerMock,
             $this->securityUtilMock,
             $this->errorManagerMock,
+            $this->userRepositoryMock,
             $this->entityManagerMock
         );
     }
@@ -83,7 +84,7 @@ class UserManagerTest extends TestCase
         $this->userRepositoryMock->method('findOneBy')->willReturn($user);
 
         // call the method
-        $result = $this->userManager->getAllUsersRepository();
+        $result = $this->userManager->getAllUsersRepositories();
 
         // assert the result
         $this->assertIsArray($result);

@@ -11,6 +11,7 @@ use App\Manager\DatabaseManager;
 use Doctrine\ORM\EntityRepository;
 use App\Manager\NotificationsManager;
 use App\Entity\NotificationSubscriber;
+use App\Repository\NotificationSubscriberRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,8 +32,8 @@ class NotificationsManagerTest extends TestCase
     private DatabaseManager & MockObject $databaseManagerMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
 
-    /** @var EntityRepository<NotificationSubscriber> & MockObject */
-    private EntityRepository & MockObject $repositoryMock;
+    /** @var NotificationSubscriberRepository & MockObject */
+    private NotificationSubscriberRepository & MockObject $repositoryMock;
 
     /** @var NotificationsManager The tested class */
     private NotificationsManager $notificationsManager;
@@ -46,7 +47,7 @@ class NotificationsManagerTest extends TestCase
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->databaseManagerMock = $this->createMock(DatabaseManager::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $this->repositoryMock = $this->createMock(EntityRepository::class);
+        $this->repositoryMock = $this->createMock(NotificationSubscriberRepository::class);
 
         // create instance of NotificationsManager with mocked dependencies
         $this->notificationsManager = new NotificationsManager(
@@ -55,7 +56,8 @@ class NotificationsManagerTest extends TestCase
             $this->authManagerMock,
             $this->errorManagerMock,
             $this->databaseManagerMock,
-            $this->entityManagerMock
+            $this->entityManagerMock,
+            $this->repositoryMock
         );
     }
 
@@ -72,10 +74,7 @@ class NotificationsManagerTest extends TestCase
             new NotificationSubscriber(),
         ];
 
-        // mock entity manager and repository
-        $this->entityManagerMock->expects($this->once())->method('getRepository')
-            ->with(NotificationSubscriber::class)->willReturn($this->repositoryMock);
-
+        // mock repository
         $this->repositoryMock->expects($this->once())->method('findBy')->with(['status' => 'open'])
             ->willReturn($notificationsSubscribers);
 
@@ -96,10 +95,7 @@ class NotificationsManagerTest extends TestCase
         // mock notifications subscriber
         $notificationsSubscriber = new NotificationSubscriber();
 
-        // mock entity manager and repository
-        $this->entityManagerMock->expects($this->once())->method('getRepository')
-            ->with(NotificationSubscriber::class)->willReturn($this->repositoryMock);
-
+        // mock repository
         $this->repositoryMock->expects($this->once())->method('findOneBy')->with(['endpoint' => 'endpoint'])
             ->willReturn($notificationsSubscriber);
 
@@ -174,79 +170,16 @@ class NotificationsManagerTest extends TestCase
      */
     public function testUpdateNotificationsSubscriberStatus(): void
     {
-        $subscriberId = 1;
-        $newStatus = 'closed';
+        $subscriber = $this->createMock(NotificationSubscriber::class);
 
-        // mock notification subscriber
-        $notificationSubscriberMock = $this->createMock(NotificationSubscriber::class);
-        $notificationSubscriberMock->expects($this->once())->method('setStatus')->with($newStatus);
-
-        // mock entity repository
-        $entityRepositoryMock = $this->createMock(EntityRepository::class);
-        $entityRepositoryMock->expects($this->once())->method('find')
-            ->with($subscriberId)->willReturn($notificationSubscriberMock);
-
-        // mock entity manager to return the repository
-        $this->entityManagerMock->expects($this->once())->method('getRepository')
-            ->with(NotificationSubscriber::class)->willReturn($entityRepositoryMock);
+        // mock repository
+        $this->repositoryMock->method('find')->with(1)->willReturn($subscriber);
 
         // mock entity manager flush
         $this->entityManagerMock->expects($this->once())->method('flush');
 
-        // call method
-        $this->notificationsManager->updateNotificationsSubscriberStatus($subscriberId, $newStatus);
-    }
-
-    /**
-     * Test update notifications subscriber status not found
-     *
-     * @return void
-     */
-    public function testUpdateNotificationsSubscriberStatusNotFound(): void
-    {
-        $subscriberId = 1;
-        $newStatus = 'closed';
-
-        // mock entity repository
-        $entityRepositoryMock = $this->createMock(EntityRepository::class);
-        $entityRepositoryMock->expects($this->once())->method('find')->with($subscriberId)->willReturn(null);
-
-        // mock entity manager to return the repository
-        $this->entityManagerMock->expects($this->once())->method('getRepository')
-            ->with(NotificationSubscriber::class)->willReturn($entityRepositoryMock);
-
-        // mock error manager
-        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            'Notification subscriber id: ' . $subscriberId . ' not found',
-            Response::HTTP_NOT_FOUND
-        );
-
-        // call method
-        $this->notificationsManager->updateNotificationsSubscriberStatus($subscriberId, $newStatus);
-    }
-
-    /**
-     * Test update notifications subscriber status exception
-     *
-     * @return void
-     */
-    public function testUpdateNotificationsSubscriberStatusException(): void
-    {
-        $subscriberId = 1;
-        $newStatus = 'closed';
-
-        // mock exception scenario
-        $this->entityManagerMock->expects($this->once())->method('getRepository')
-            ->with(NotificationSubscriber::class)->willThrowException(new \Exception('Database error'));
-
-        // mock error manager for exception handling
-        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            $this->equalTo('error to update notifications subscriber status: Database error'),
-            $this->equalTo(Response::HTTP_INTERNAL_SERVER_ERROR)
-        );
-
-        // call method
-        $this->notificationsManager->updateNotificationsSubscriberStatus($subscriberId, $newStatus);
+        // call test method
+        $this->notificationsManager->updateNotificationsSubscriberStatus(1, 'closed');
     }
 
     /**

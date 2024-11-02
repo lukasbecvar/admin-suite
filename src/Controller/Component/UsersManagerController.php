@@ -85,7 +85,7 @@ class UsersManagerController extends AbstractController
         // get users data from database based on filter
         switch ($filter) {
             case 'online':
-                $usersData = $this->authManager->getOnlineUsers();
+                $usersData = $this->authManager->getOnlineUsersList();
                 break;
             case 'banned':
                 $usersData = $this->banManager->getBannedUsers();
@@ -145,7 +145,7 @@ class UsersManagerController extends AbstractController
         $onlineList = $this->authManager->getOnlineUsersList();
 
         // get user data from database
-        $userRepository = $this->userManager->getUserRepository(['id' => $userId]);
+        $userRepository = $this->userManager->getUserById($userId);
 
         // check if user found
         if ($userRepository == null) {

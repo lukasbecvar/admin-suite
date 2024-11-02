@@ -6,6 +6,7 @@ use DateTime;
 use Exception;
 use App\Entity\Todo;
 use App\Util\SecurityUtil;
+use App\Repository\TodoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,6 +23,7 @@ class TodoManager
     private AuthManager $authManager;
     private SecurityUtil $securityUtil;
     private ErrorManager $errorManager;
+    private TodoRepository $todoRepository;
     private EntityManagerInterface $entityManagerInterface;
 
     public function __construct(
@@ -29,12 +31,14 @@ class TodoManager
         AuthManager $authManager,
         SecurityUtil $securityUtil,
         ErrorManager $errorManager,
+        TodoRepository $todoRepository,
         EntityManagerInterface $entityManagerInterface
     ) {
         $this->logManager = $logManager;
         $this->authManager = $authManager;
         $this->securityUtil = $securityUtil;
         $this->errorManager = $errorManager;
+        $this->todoRepository = $todoRepository;
         $this->entityManagerInterface = $entityManagerInterface;
     }
 
@@ -49,13 +53,7 @@ class TodoManager
         $plainTodos = [];
 
         // get the todo list
-        $todos = $this->entityManagerInterface->getRepository(Todo::class)->findBy(
-            [
-                'user_id' => $this->authManager->getLoggedUserId(),
-                'status' => $filter
-            ],
-            ['id' => 'DESC']
-        );
+        $todos = $this->todoRepository->findByUserIdAndStatus($this->authManager->getLoggedUserId(), $filter);
 
         // decrypt the todo texts
         foreach ($todos as $todo) {
@@ -83,7 +81,7 @@ class TodoManager
     public function getTodoStatus(int $todoId): ?string
     {
         /** @var Todo $todo */
-        $todo = $this->entityManagerInterface->getRepository(Todo::class)->find($todoId);
+        $todo = $this->todoRepository->find($todoId);
 
         // check if todo found
         if ($todo == null) {
@@ -104,11 +102,10 @@ class TodoManager
      */
     public function getTodosCount(string $status = 'open'): int
     {
-        $count = $this->entityManagerInterface->getRepository(Todo::class)
-            ->count([
-                'user_id' => $this->authManager->getLoggedUserId(),
-                'status' => $status
-            ]);
+        $count = $this->todoRepository->count([
+            'user_id' => $this->authManager->getLoggedUserId(),
+            'status' => $status
+        ]);
 
         return $count;
     }
@@ -169,7 +166,7 @@ class TodoManager
     public function editTodo(int $todoId, string $todoText): void
     {
         /** @var Todo $todo */
-        $todo = $this->entityManagerInterface->getRepository(Todo::class)->find($todoId);
+        $todo = $this->todoRepository->find($todoId);
 
         // check if the todo is not null
         if ($todo === null) {
@@ -233,7 +230,7 @@ class TodoManager
     public function closeTodo(int $todoId): void
     {
         /** @var Todo $todo */
-        $todo = $this->entityManagerInterface->getRepository(Todo::class)->find($todoId);
+        $todo = $this->todoRepository->find($todoId);
 
         // check if the todo is not null
         if ($todo === null) {
@@ -287,7 +284,7 @@ class TodoManager
     {
         try {
             // get the todo entity
-            $todo = $this->entityManagerInterface->getRepository(Todo::class)->find($todoId);
+            $todo = $this->todoRepository->find($todoId);
 
             // check if the todo entity is found
             if ($todo == null) {

@@ -43,7 +43,7 @@ class UserListCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         /** @var \App\Entity\User $users */
-        $users = $this->userManager->getAllUsersRepository();
+        $users = $this->userManager->getAllUsersRepositories();
 
         // check if user list is empty
         if ($this->userManager->isUsersEmpty()) {

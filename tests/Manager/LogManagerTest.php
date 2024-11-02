@@ -13,6 +13,7 @@ use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\LogRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -53,6 +54,7 @@ class LogManagerTest extends TestCase
             $this->cookieUtilMock,
             $this->sessionUtilMock,
             $this->errorManagerMock,
+            $this->repositoryMock,
             $this->fileSystemUtilMock,
             $this->visitorInfoUtilMock,
             $this->entityManagerMock
@@ -257,11 +259,6 @@ class LogManagerTest extends TestCase
      */
     public function testGetLogs(): void
     {
-        $log1 = new Log();
-
-        // mock repository to return logs with 'UNREADED' status
-        $this->repositoryMock->method('findBy')->with(['status' => 'unread'])->willReturn([$log1]);
-
         // call get logs method
         $logs = $this->logManager->getLogsWhereStatus();
 
@@ -285,11 +282,6 @@ class LogManagerTest extends TestCase
 
         $logs = [$mockLog1, $mockLog2];
 
-        // mock entity manager
-        $this->entityManagerMock->expects($this->once())
-            ->method('getRepository')
-            ->willReturn($this->repositoryMock);
-
         // mock repository
         $this->repositoryMock->expects($this->once())->method('findBy')
             ->with(['status' => 'UNREADED'])->willReturn($logs);
@@ -311,20 +303,21 @@ class LogManagerTest extends TestCase
         $logId = 1;
         $newStatus = 'READED';
 
-        // mock log entity
+        // mock Log entity
         $logMock = $this->createMock(Log::class);
         $logMock->expects($this->once())->method('setStatus')->with($newStatus);
 
-        // mock repository
-        $repositoryMock = $this->createMock(LogRepository::class);
-        $repositoryMock->expects($this->once())->method('find')->with($logId)->willReturn($logMock);
+        // mock LogRepository to return the log entity
+        $this->repositoryMock->expects($this->once())
+            ->method('find')
+            ->with($logId)
+            ->willReturn($logMock);
 
-        // mock entity manager
+        // mock EntityManager flush
         $this->entityManagerMock->expects($this->once())
-            ->method('getRepository')->with(Log::class)->willReturn($repositoryMock);
-        $this->entityManagerMock->expects($this->once())->method('flush');
+            ->method('flush');
 
-        // call method
+        // call the method
         $this->logManager->updateLogStatusById($logId, $newStatus);
     }
 
@@ -333,32 +326,33 @@ class LogManagerTest extends TestCase
      *
      * @return void
      */
-    public function testUpdateLogStatusByIdFlushException(): void
+    public function testUpdateLogStatusByIdFlushError(): void
     {
         $logId = 1;
         $newStatus = 'READED';
 
-        // mock log entity
+        // mock Log entity
         $logMock = $this->createMock(Log::class);
         $logMock->expects($this->once())->method('setStatus')->with($newStatus);
 
-        // mock repository
-        $repositoryMock = $this->createMock(LogRepository::class);
-        $repositoryMock->expects($this->once())->method('find')->with($logId)->willReturn($logMock);
+        // mock LogRepository to return the log entity
+        $this->repositoryMock->expects($this->once())
+            ->method('find')
+            ->with($logId)
+            ->willReturn($logMock);
 
-        // mock entity manager
+        // simulate an Exception on flush
         $this->entityManagerMock->expects($this->once())
-        ->method('getRepository')->with(Log::class)->willReturn($repositoryMock);
-        $this->entityManagerMock->expects($this->once())
-            ->method('flush')->willThrowException(new \Exception('Test Exception'));
+            ->method('flush')
+            ->willThrowException(new Exception('Database error'));
 
-        // mock error manager
+        // mock ErrorManager handleError for flush failure
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            'error to update log status: Test Exception',
+            'error to update log status: Database error',
             Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
-        // call method
+        // call the method
         $this->logManager->updateLogStatusById($logId, $newStatus);
     }
 }

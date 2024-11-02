@@ -11,6 +11,7 @@ use Minishlink\WebPush\Subscription;
 use App\Entity\NotificationSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use App\Repository\NotificationSubscriberRepository;
 
 /**
  * Class NotificationsManager
@@ -27,6 +28,7 @@ class NotificationsManager
     private ErrorManager $errorManager;
     private DatabaseManager $databaseManager;
     private EntityManagerInterface $entityManager;
+    private NotificationSubscriberRepository $notificationSubscriberRepository;
 
     public function __construct(
         AppUtil $appUtil,
@@ -34,7 +36,8 @@ class NotificationsManager
         AuthManager $authManager,
         ErrorManager $errorManager,
         DatabaseManager $databaseManager,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        NotificationSubscriberRepository $notificationSubscriberRepository
     ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
@@ -42,6 +45,7 @@ class NotificationsManager
         $this->errorManager = $errorManager;
         $this->entityManager = $entityManager;
         $this->databaseManager = $databaseManager;
+        $this->notificationSubscriberRepository = $notificationSubscriberRepository;
     }
 
     /**
@@ -53,7 +57,7 @@ class NotificationsManager
      */
     public function getNotificationsSubscribers(string $status = 'open'): ?array
     {
-        return $this->entityManager->getRepository(NotificationSubscriber::class)->findBy([
+        return $this->notificationSubscriberRepository->findBy([
             'status' => $status
         ]);
     }
@@ -68,7 +72,7 @@ class NotificationsManager
     public function getSubscriberIdByEndpoint(string $endpoint): ?int
     {
         // get subscriber by endpoint
-        $usbscriber = $this->entityManager->getRepository(NotificationSubscriber::class)->findOneBy([
+        $usbscriber = $this->notificationSubscriberRepository->findOneBy([
             'endpoint' => $endpoint
         ]);
 
@@ -175,7 +179,7 @@ class NotificationsManager
     public function updateNotificationsSubscriberStatus(int $id, string $status): void
     {
         try {
-            $notificationSubscriber = $this->entityManager->getRepository(NotificationSubscriber::class)->find($id);
+            $notificationSubscriber = $this->notificationSubscriberRepository->find($id);
 
             // check if subscriber found
             if ($notificationSubscriber == null) {

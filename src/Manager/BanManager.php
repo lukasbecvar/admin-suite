@@ -5,6 +5,7 @@ namespace App\Manager;
 use DateTime;
 use Exception;
 use App\Entity\Banned;
+use App\Repository\BannedRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,6 +22,7 @@ class BanManager
     private UserManager $userManager;
     private AuthManager $authManager;
     private ErrorManager $errorManager;
+    private BannedRepository $bannedRepository;
     private EntityManagerInterface $entityManager;
 
     public function __construct(
@@ -28,6 +30,7 @@ class BanManager
         UserManager $userManager,
         AuthManager $authManager,
         ErrorManager $errorManager,
+        BannedRepository $bannedRepository,
         EntityManagerInterface $entityManager
     ) {
         $this->logManager = $logManager;
@@ -35,6 +38,7 @@ class BanManager
         $this->authManager = $authManager;
         $this->errorManager = $errorManager;
         $this->entityManager = $entityManager;
+        $this->bannedRepository = $bannedRepository;
     }
 
     /**
@@ -82,18 +86,6 @@ class BanManager
     }
 
     /**
-     * Get banned user repository
-     *
-     * @param array<mixed> $search An array of search parameters
-     *
-     * @return Banned|null The banned user repository, or null if ban does not exist
-     */
-    public function getBanRepository(array $search): ?Banned
-    {
-        return $this->entityManager->getRepository(Banned::class)->findOneBy($search);
-    }
-
-    /**
      * Check if user is banned
      *
      * @param int $userId The id of the user
@@ -103,7 +95,7 @@ class BanManager
     public function isUserBanned(int $userId): bool
     {
         // check if user is banned
-        return $this->getBanRepository(['banned_user_id' => $userId, 'status' => 'active']) != null;
+        return $this->bannedRepository->isBanned($userId);
     }
 
     /**
@@ -115,12 +107,9 @@ class BanManager
      */
     public function getBanReason(int $userId): ?string
     {
-        // get banned repository
-        $banned = $this->getBanRepository(['banned_user_id' => $userId, 'status' => 'active']);
-
         // check if banned repository exists
-        if ($banned != null) {
-            return $banned->getReason();
+        if ($this->bannedRepository->isBanned($userId)) {
+            return $this->bannedRepository->getBanReason($userId);
         }
 
         return null;
@@ -135,15 +124,12 @@ class BanManager
      */
     public function unBanUser(int $userId): void
     {
-        // get banned repository
-        $banned = $this->getBanRepository(['banned_user_id' => $userId, 'status' => 'active']);
-
         // check if banned repository exists
-        if ($banned != null) {
+        if ($this->bannedRepository->isBanned($userId)) {
             // unban user
             try {
                 // set banned status to inactive
-                $banned->setStatus('inactive');
+                $this->bannedRepository->updateBanStatus($userId, 'inactive');
 
                 $this->entityManager->flush();
             } catch (Exception $e) {
@@ -165,14 +151,14 @@ class BanManager
     /**
      * Get banned users list
      *
-     * @return array<mixed> The list of banned users
+     * @return array<\App\Entity\User> The list of banned users
      */
     public function getBannedUsers(): array
     {
         $banned = [];
 
         /** @var \App\Entity\User $users all users list */
-        $users = $this->userManager->getAllUsersRepository();
+        $users = $this->userManager->getAllUsersRepositories();
 
         // check if $users is iterable
         if (is_iterable($users)) {

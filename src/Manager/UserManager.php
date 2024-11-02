@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use Exception;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Util\AppUtil;
 use App\Util\SecurityUtil;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,6 +23,7 @@ class UserManager
     private LogManager $logManager;
     private SecurityUtil $securityUtil;
     private ErrorManager $errorManager;
+    private UserRepository $userRepository;
     private EntityManagerInterface $entityManager;
 
     public function __construct(
@@ -29,6 +31,7 @@ class UserManager
         LogManager $logManager,
         SecurityUtil $securityUtil,
         ErrorManager $errorManager,
+        UserRepository $userRepository,
         EntityManagerInterface $entityManager
     ) {
         $this->appUtil = $appUtil;
@@ -36,6 +39,7 @@ class UserManager
         $this->errorManager = $errorManager;
         $this->securityUtil = $securityUtil;
         $this->entityManager = $entityManager;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -48,17 +52,53 @@ class UserManager
     public function getUserRepository(array $search): ?User
     {
         // get user repo
-        return $this->entityManager->getRepository(User::class)->findOneBy($search);
+        return $this->userRepository->findOneBy($search);
     }
 
     /**
      * Retrieve all users from the repository
      *
-     * @return array<mixed> The user object if found, null otherwise
+     * @return array<User> The user object if found, null otherwise
      */
-    public function getAllUsersRepository(): ?array
+    public function getAllUsersRepositories(): array
     {
-        return $this->entityManager->getRepository(User::class)->findAll();
+        return $this->userRepository->findAll();
+    }
+
+    /**
+     * Retrieve a user from the repository by username
+     *
+     * @param string $username The username of the user to retrieve
+     *
+     * @return User|null The user object if found, null otherwise
+     */
+    public function getUserByUsername(string $username): ?User
+    {
+        return $this->userRepository->findOneBy(['username' => $username]);
+    }
+
+    /**
+     * Retrieve a user from the repository by ID
+     *
+     * @param int $userId The ID of the user to retrieve
+     *
+     * @return User|null The user object if found, null otherwise
+     */
+    public function getUserById(int $userId): ?User
+    {
+        return $this->userRepository->find($userId);
+    }
+
+    /**
+     * Retrieve a user from the repository by token
+     *
+     * @param string $token The token of the user to retrieve
+     *
+     * @return User|null The user object if found, null otherwise
+     */
+    public function getUserByToken(string $token): ?User
+    {
+        return $this->userRepository->findOneBy(['token' => $token]);
     }
 
     /**
@@ -68,7 +108,7 @@ class UserManager
      */
     public function getUsersCount(): ?int
     {
-        return $this->entityManager->getRepository(User::class)->count([]);
+        return $this->userRepository->count([]);
     }
 
     /**
@@ -87,7 +127,7 @@ class UserManager
         $offset = ($page - 1) * $perPage;
 
         // get user repo
-        return $this->entityManager->getRepository(User::class)->findBy(
+        return $this->userRepository->findBy(
             criteria: [],
             orderBy: null,
             limit: $perPage,
@@ -225,7 +265,7 @@ class UserManager
      */
     public function isUsersEmpty(): bool
     {
-        $repository = $this->entityManager->getRepository(User::class);
+        $repository = $this->userRepository;
 
         // get users count
         $count = $repository->createQueryBuilder('p')->select('COUNT(p.id)')->getQuery()->getSingleScalarResult();

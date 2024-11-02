@@ -9,6 +9,7 @@ use App\Util\ServerUtil;
 use App\Entity\MonitoringStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use App\Repository\MonitoringStatusRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -28,6 +29,7 @@ class MonitoringManager
     private ServiceManager $serviceManager;
     private NotificationsManager $notificationsManager;
     private EntityManagerInterface $entityManagerInterface;
+    private MonitoringStatusRepository $monitoringStatusRepository;
 
     public function __construct(
         AppUtil $appUtil,
@@ -37,7 +39,8 @@ class MonitoringManager
         ErrorManager $errorManager,
         ServiceManager $serviceManager,
         NotificationsManager $notificationsManager,
-        EntityManagerInterface $entityManagerInterface
+        EntityManagerInterface $entityManagerInterface,
+        MonitoringStatusRepository $monitoringStatusRepository
     ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
@@ -47,6 +50,7 @@ class MonitoringManager
         $this->serviceManager = $serviceManager;
         $this->notificationsManager = $notificationsManager;
         $this->entityManagerInterface = $entityManagerInterface;
+        $this->monitoringStatusRepository = $monitoringStatusRepository;
     }
 
     /**
@@ -61,7 +65,7 @@ class MonitoringManager
     public function getMonitoringStatusRepository(array $search): ?MonitoringStatus
     {
         try {
-            return $this->entityManagerInterface->getRepository(MonitoringStatus::class)->findOneBy($search);
+            return $this->monitoringStatusRepository->findOneBy($search);
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get service monitoring repository: ' . $e->getMessage(),
@@ -84,7 +88,7 @@ class MonitoringManager
     public function setMonitoringStatus(string $serviceName, string $message, string $status): void
     {
         // get service monitoring repository
-        $MonitoringStatus = $this->getMonitoringStatusRepository(['service_name' => $serviceName]);
+        $MonitoringStatus = $this->monitoringStatusRepository->findOneBy(['service_name' => $serviceName]);
 
         // check if service monitoring repository is found
         if ($MonitoringStatus == null) {
@@ -136,7 +140,7 @@ class MonitoringManager
     {
         try {
             /** @var \App\Entity\MonitoringStatus $repo the monitored service repository */
-            $repo = $this->getMonitoringStatusRepository(['service_name' => $serviceName]);
+            $repo = $this->monitoringStatusRepository->findOneBy(['service_name' => $serviceName]);
 
             // check if repository is found
             if ($repo != null) {

@@ -49,9 +49,6 @@ class MonitoringManagerTest extends TestCase
         $this->repositoryMock = $this->createMock(MonitoringStatusRepository::class);
         $this->notificationsManagerMock = $this->createMock(NotificationsManager::class);
 
-        // mock entity manager
-        $this->entityManagerMock->method('getRepository')->willReturn($this->repositoryMock);
-
         // create the monitoring manager instance
         $this->monitoringManager = new MonitoringManager(
             $this->appUtilMock,
@@ -61,7 +58,8 @@ class MonitoringManagerTest extends TestCase
             $this->errorManagerMock,
             $this->serviceManagerMock,
             $this->notificationsManagerMock,
-            $this->entityManagerMock
+            $this->entityManagerMock,
+            $this->repositoryMock
         );
     }
 
@@ -73,17 +71,17 @@ class MonitoringManagerTest extends TestCase
     public function testGetMonitoringStatusRepository(): void
     {
         $search = ['service_name' => 'test_service'];
-        $MonitoringStatus = new MonitoringStatus();
+        $monitoringStatus = new MonitoringStatus();
 
         // mock repository
         $this->repositoryMock->expects($this->once())
-            ->method('findOneBy')->with($search)->willReturn($MonitoringStatus);
+            ->method('findOneBy')->with($search)->willReturn($monitoringStatus);
 
         // call method
         $result = $this->monitoringManager->getMonitoringStatusRepository($search);
 
         // assert result
-        $this->assertSame($MonitoringStatus, $result);
+        $this->assertSame($monitoringStatus, $result);
     }
 
     /**

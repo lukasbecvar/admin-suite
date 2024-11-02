@@ -10,6 +10,7 @@ use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Util\FileSystemUtil;
 use App\Util\VisitorInfoUtil;
+use App\Repository\LogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,6 +33,7 @@ class LogManager
     private CookieUtil $cookieUtil;
     private SessionUtil $sessionUtil;
     private ErrorManager $errorManager;
+    private LogRepository $logRepository;
     private FileSystemUtil $fileSystemUtil;
     private VisitorInfoUtil $visitorInfoUtil;
     private EntityManagerInterface $entityManager;
@@ -41,6 +43,7 @@ class LogManager
         CookieUtil $cookieUtil,
         SessionUtil $sessionUtil,
         ErrorManager $errorManager,
+        LogRepository $logRepository,
         FileSystemUtil $fileSystemUtil,
         VisitorInfoUtil $visitorInfoUtil,
         EntityManagerInterface $entityManager
@@ -49,6 +52,7 @@ class LogManager
         $this->cookieUtil = $cookieUtil;
         $this->sessionUtil = $sessionUtil;
         $this->errorManager = $errorManager;
+        $this->logRepository = $logRepository;
         $this->entityManager = $entityManager;
         $this->fileSystemUtil = $fileSystemUtil;
         $this->visitorInfoUtil = $visitorInfoUtil;
@@ -196,17 +200,15 @@ class LogManager
      */
     public function getLogsCountWhereStatus(string $status = 'all', int $userId = 0): int
     {
-        $repository = $this->entityManager->getRepository(Log::class);
-
         // get all logs or by status
         if ($status == 'all') {
             if ($userId != 0) {
-                $count = $repository->count(['user_id' => $userId]);
+                $count = $this->logRepository->count(['user_id' => $userId]);
             } else {
-                $count = $repository->count();
+                $count = $this->logRepository->count();
             }
         } else {
-            $count = $repository->count(['status' => $status]);
+            $count = $this->logRepository->count(['status' => $status]);
         }
 
         // return logs count
@@ -220,9 +222,7 @@ class LogManager
      */
     public function getAuthLogsCount(): int
     {
-        $repository = $this->entityManager->getRepository(Log::class);
-
-        return $repository->count(
+        return $this->logRepository->count(
             ['name' => 'authenticator', 'status' => 'UNREADED']
         );
     }
@@ -245,20 +245,18 @@ class LogManager
         // get page limitter
         $perPage = (int) $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
 
-        $repository = $this->entityManager->getRepository(Log::class);
-
         // calculate offset
         $offset = ($page - 1) * $perPage;
 
         // get all logs or by status
         if ($status == 'all') {
             if ($userId != 0) {
-                $logs = $repository->findBy(['user_id' => $userId], null, $perPage, $offset);
+                $logs = $this->logRepository->findBy(['user_id' => $userId], null, $perPage, $offset);
             } else {
-                $logs = $repository->findBy([], null, $perPage, $offset);
+                $logs = $this->logRepository->findBy([], null, $perPage, $offset);
             }
         } else {
-            $logs = $repository->findBy(['status' => $status], ['id' => 'DESC'], $perPage, $offset);
+            $logs = $this->logRepository->findBy(['status' => $status], ['id' => 'DESC'], $perPage, $offset);
         }
 
         // log action
@@ -276,9 +274,7 @@ class LogManager
      */
     public function getMonitoringLogs(int $limit): ?array
     {
-        $repository = $this->entityManager->getRepository(Log::class);
-
-        return $repository->findBy(['name' => 'monitoring'], ['id' => 'DESC'], $limit);
+        return $this->logRepository->findBy(['name' => 'monitoring'], ['id' => 'DESC'], $limit);
     }
 
     /**
@@ -296,10 +292,8 @@ class LogManager
      */
     public function updateLogStatusById(int $id, string $newStatus): void
     {
-        $repository = $this->entityManager->getRepository(Log::class);
-
         /** @var \App\Entity\Log $log */
-        $log = $repository->find($id);
+        $log = $this->logRepository->find($id);
 
         // check if log found
         if (!$log) {
@@ -336,10 +330,8 @@ class LogManager
      */
     public function setAllLogsToReaded(): void
     {
-        $repository = $this->entityManager->getRepository(Log::class);
-
         /** @var \App\Entity\Log $logs */
-        $logs = $repository->findBy(['status' => 'UNREADED']);
+        $logs = $this->logRepository->findBy(['status' => 'UNREADED']);
 
         if (is_iterable($logs)) {
             // set all logs to readed status

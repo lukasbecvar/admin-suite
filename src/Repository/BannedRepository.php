@@ -21,4 +21,60 @@ class BannedRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Banned::class);
     }
+
+    /**
+     * Check if a user is banned
+     *
+     * @param int $bannedUserId The ID of the banned user
+     *
+     * @return bool True if the user is banned
+     */
+    public function isBanned(int $bannedUserId): bool
+    {
+        $ban = $this->findOneBy([
+            'banned_user_id' => $bannedUserId,
+            'status' => 'active'
+        ]);
+
+        return $ban !== null;
+    }
+
+    /**
+     * Get the reason of a banned user
+     *
+     * @param int $bannedUserId The ID of the banned user
+     *
+     * @return string|null The reason of the banned user
+     */
+    public function getBanReason(int $bannedUserId): ?string
+    {
+        $ban = $this->findOneBy([
+            'banned_user_id' => $bannedUserId,
+            'status' => 'active'
+        ]);
+
+        return $ban ? $ban->getReason() : null;
+    }
+
+    /**
+     * Update the status of a banned user
+     *
+     * @param int $bannedUserId The ID of the banned user
+     * @param string $newStatus The new status of the banned user
+     *
+     * @return void
+     */
+    public function updateBanStatus(int $bannedUserId, string $newStatus): void
+    {
+        $ban = $this->findOneBy([
+            'banned_user_id' => $bannedUserId,
+            'status' => 'active'
+        ]);
+
+        // update ban status
+        if ($ban) {
+            $ban->setStatus($newStatus);
+            $this->getEntityManager()->flush();
+        }
+    }
 }

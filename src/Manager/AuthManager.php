@@ -137,7 +137,7 @@ class AuthManager
         }
 
         // check if user exist
-        if ($this->userManager->getUserRepository(['username' => $username]) == null) {
+        if ($this->userManager->getUserByUsername($username) == null) {
             try {
                 // init user entity
                 $user = new User();
@@ -184,12 +184,19 @@ class AuthManager
             return null;
         }
 
-        // get logged user repository
-        $repository = $this->userManager->getUserRepository([
-            'token' => $this->sessionUtil->getSessionValue('user-token')
-        ]);
+        // get logged user token
+        $token = $this->sessionUtil->getSessionValue('user-token');
 
-        return $repository;
+        // check if token is string
+        if (!is_string($token)) {
+            $this->errorManager->handleError(
+                message: 'error to get logged user token: token is not a string',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // get logged user repository
+        return $this->userManager->getUserByToken($token);
     }
 
     /**
@@ -235,8 +242,16 @@ class AuthManager
         // get login token form session
         $loginToken = $this->sessionUtil->getSessionValue('user-token');
 
+        // check if login token is string
+        if (!is_string($loginToken)) {
+            $this->errorManager->handleError(
+                message: 'error to check if user is logged in: login token is not a string',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
         // check if token exist in database
-        if ($this->userManager->getUserRepository(['token' => $loginToken]) != null) {
+        if ($this->userManager->getUserByToken($loginToken) != null) {
             return true;
         }
 
@@ -253,13 +268,13 @@ class AuthManager
      */
     public function canLogin(string $username, string $password): bool
     {
-        // get user repo
-        $repo = $this->userManager->getUserRepository(['username' => $username]);
+        // get user
+        $user = $this->userManager->getUserByUsername($username);
 
         // check if user exist
-        if ($repo != null) {
+        if ($user != null) {
             // check if password is correct
-            if ($this->securityUtil->verifyPassword($password, (string) $repo->getPassword())) {
+            if ($this->securityUtil->verifyPassword($password, (string) $user->getPassword())) {
                 return true;
             }
         } else {
@@ -284,20 +299,20 @@ class AuthManager
      */
     public function login(string $username, bool $remember): void
     {
-        // get user repository
-        $repo = $this->userManager->getUserRepository(['username' => $username]);
+        // get user
+        $user = $this->userManager->getUserByUsername($username);
 
         // check if user exist
-        if ($repo != null) {
+        if ($user != null) {
             // get user token
-            $token = (string) $repo->getToken();
+            $token = (string) $user->getToken();
 
             try {
                 // set user token session
                 $this->sessionUtil->setSession('user-token', $token);
 
                 // save user identifier in session
-                $this->sessionUtil->setSession('user-identifier', (string) $repo->getId());
+                $this->sessionUtil->setSession('user-identifier', (string) $user->getId());
 
                 // set user token cookie
                 if ($remember) {
@@ -342,11 +357,11 @@ class AuthManager
      */
     public function updateDataOnLogin(string $token): void
     {
-        // get user repository
-        $repo = $this->userManager->getUserRepository(['token' => $token]);
+        // get user
+        $user = $this->userManager->getUserByToken($token);
 
-        // check if repo found
-        if ($repo == null) {
+        // check if user found
+        if ($user == null) {
             $this->errorManager->handleError(
                 message: 'error to update user data: user not found',
                 code: Response::HTTP_NOT_FOUND
@@ -354,7 +369,7 @@ class AuthManager
         }
 
         // update user data
-        $repo->setLastLoginTime(new DateTime())
+        $user->setLastLoginTime(new DateTime())
             ->setIpAddress($this->visitorInfoUtil->getIP() ?? 'Unknown')
             ->setUserAgent($this->visitorInfoUtil->getUserAgent() ?? 'Unknown');
 
@@ -383,8 +398,16 @@ class AuthManager
             // get user token
             $token = $this->getLoggedUserToken();
 
-            // get user repository
-            $user = $this->userManager->getUserRepository(['token' => $token]);
+            // check if token is string
+            if (!is_string($token)) {
+                $this->errorManager->handleError(
+                    message: 'error to get logged user id: token is not a string',
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+
+            // get user by token
+            $user = $this->userManager->getUserByToken($token);
 
             // check if user exist
             if ($user != null) {
@@ -399,9 +422,9 @@ class AuthManager
     /**
      * Get the login token for the current user session
      *
-     * @return mixed The login token or null if not found or invalid.
+     * @return string|null The login token or null if not found or invalid.
      */
-    public function getLoggedUserToken(): mixed
+    public function getLoggedUserToken(): string|null
     {
         // check if session exist
         if (!$this->sessionUtil->checkSession('user-token')) {
@@ -411,8 +434,16 @@ class AuthManager
         // get login token form session
         $loginToken = $this->sessionUtil->getSessionValue('user-token');
 
+        // check if login token is string
+        if (!is_string($loginToken)) {
+            $this->errorManager->handleError(
+                message: 'error to get logged user token: login token is not a string',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
         // check if token exist in database
-        if ($this->userManager->getUserRepository(['token' => $loginToken]) != null) {
+        if ($this->userManager->getUserByToken($loginToken) != null) {
             return $loginToken;
         }
 
@@ -426,19 +457,28 @@ class AuthManager
      */
     public function getLoggedUsername(): ?string
     {
-        $userRepo = $this->userManager->getUserRepository([
-            'token' => $this->getLoggedUserToken()
-        ]);
+        // get logged user token
+        $token = $this->getLoggedUserToken();
+
+        // check if token is string
+        if (!is_string($token)) {
+            $this->errorManager->handleError(
+                message: 'error to get logged user token: token is not a string',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        $user = $this->userManager->getUserByToken($token);
 
         // check if user exist
-        if ($userRepo == null) {
+        if ($user == null) {
             $this->errorManager->handleError(
                 message: 'error to get logged user username',
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 
-        return $userRepo->getUsername();
+        return $user->getUsername();
     }
 
     /**
@@ -450,12 +490,21 @@ class AuthManager
     {
         // check if user logged in
         if ($this->isUserLogedin()) {
-            // init user
-            $user = $this->userManager->getUserRepository([
-                'token' => $this->getLoggedUserToken()
-            ]);
+            // get logged user token
+            $token = $this->getLoggedUserToken();
 
-            // check if repo found
+            // check if token is string
+            if (!is_string($token)) {
+                $this->errorManager->handleError(
+                    message: 'error to logout user: token is not a string',
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+
+            // get user
+            $user = $this->userManager->getUserByToken($token);
+
+            // check if user found
             if ($user == null) {
                 $this->errorManager->handleError(
                     message: 'error to update user data: user not found',
@@ -488,9 +537,7 @@ class AuthManager
     public function resetUserPassword(string $username): ?string
     {
         /** @var \App\Entity\User $user */
-        $user = $this->userManager->getUserRepository([
-            'username' => $username
-        ]);
+        $user = $this->userManager->getUserByUsername($username);
 
         // check if user exist
         if ($user != null) {
@@ -548,26 +595,26 @@ class AuthManager
             'message' => null
         ];
 
-        // get all users in database
-        $userRepo = $this->entityManager->getRepository(User::class)->findAll();
+        /** @var \App\Entity\User[] $userRepositories */
+        $userRepositories = $this->userManager->getAllUsersRepositories();
 
         // regenerate all users tokens
-        foreach ($userRepo as $user) {
+        foreach ($userRepositories as $user) {
             // regenerate new token
             $newToken = $this->generateUserToken();
 
             // set new token
             $user->setToken($newToken);
+        }
 
-            // flush data
-            try {
-                $this->entityManager->flush();
-            } catch (Exception $e) {
-                $state = [
-                    'status' => false,
-                    'message' => $e->getMessage()
-                ];
-            }
+        // flush changes to database
+        try {
+            $this->entityManager->flush();
+        } catch (Exception $e) {
+            $state = [
+                'status' => false,
+                'message' => $e->getMessage()
+            ];
         }
 
         // log action
@@ -591,11 +638,8 @@ class AuthManager
         // generate user token
         $token = ByteString::fromRandom(32)->toString();
 
-        // get users repository
-        $userRepo = $this->entityManager->getRepository(User::class);
-
         // check if user token is not already used
-        if ($userRepo->findOneBy(['token' => $token]) != null) {
+        if ($this->userManager->getUserByToken($token) != null) {
             $this->generateUserToken();
         }
 
@@ -624,21 +668,22 @@ class AuthManager
     {
         $onlineVisitors = [];
 
-        // get all users list
-        $users = $this->userManager->getAllUsersRepository();
+        /** @var \App\Entity\User[] $users */
+        $users = $this->userManager->getAllUsersRepositories();
 
-        // Check if $users is iterable
+        // check if $users is iterable
         if (!is_iterable($users)) {
-            // handle the case where $users is not iterable.
             return $onlineVisitors;
         }
 
         // check all users status
         foreach ($users as $user) {
-            // check if $user is an object with getId() method
-            if (is_object($user) && method_exists($user, 'getId')) {
+            $userId = $user->getId();
+
+            // check if id is not null
+            if ($userId != null) {
                 // get visitor status
-                $status = $this->getUserStatus($user->getId());
+                $status = $this->getUserStatus($userId);
 
                 // check visitor status
                 if ($status == 'online') {
@@ -676,39 +721,5 @@ class AuthManager
         }
 
         return 'offline';
-    }
-
-    /**
-     * Get online users list
-     *
-     * @return array<mixed> The list of online users
-     */
-    public function getOnlineUsers(): array
-    {
-        $onlineVisitors = [];
-
-        // get all users list
-        $users = $this->userManager->getAllUsersRepository();
-
-        // check if $users is iterable
-        if (!is_iterable($users)) {
-            return $onlineVisitors;
-        }
-
-        // check all users status
-        foreach ($users as $user) {
-            // check if $user is an object with getId() method
-            if (is_object($user) && method_exists($user, 'getId')) {
-                // get visitor status
-                $status = $this->getUserStatus($user->getId());
-
-                // check visitor status
-                if ($status == 'online') {
-                    array_push($onlineVisitors, $user);
-                }
-            }
-        }
-
-        return $onlineVisitors;
     }
 }

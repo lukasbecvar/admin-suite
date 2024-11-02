@@ -71,28 +71,32 @@ class UserUpdateRoleCommand extends Command
             $io->error('Role cannot be empty.');
             return Command::FAILURE;
         }
+        if (!is_string($username)) {
+            $io->error('Invalid username provided.');
+            return Command::FAILURE;
+        }
         if (!is_string($newRole)) {
             $io->error('Invalid role provided.');
             return Command::FAILURE;
         }
 
-        // get user repo
-        $userRepository = $this->userManager->getUserRepository(['username' => $username]);
+        // get user object by username
+        $user = $this->userManager->getUserByUsername($username);
 
         // check if username is used
-        if ($userRepository == null) {
+        if ($user == null) {
             $io->error('Error username: ' . $username . ' does not exist.');
             return Command::FAILURE;
         }
 
         // check is id valid
-        if ($userRepository->getId() == null) {
+        if ($user->getId() == null) {
             $io->error('Error user id not found.');
             return Command::FAILURE;
         }
 
         // get current role
-        $currentRole = $this->userManager->getUserRoleById($userRepository->getId());
+        $currentRole = $this->userManager->getUserRoleById($user->getId());
 
         // convert role to uppercase
         $newRole = strtoupper($newRole);
@@ -105,7 +109,7 @@ class UserUpdateRoleCommand extends Command
 
         // update role
         try {
-            $this->userManager->updateUserRole($userRepository->getId(), $newRole);
+            $this->userManager->updateUserRole($user->getId(), $newRole);
 
             // success message
             $io->success('Role updated successfully.');
