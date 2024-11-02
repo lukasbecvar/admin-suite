@@ -53,12 +53,12 @@ class RequirementsCheckCommand extends Command
         }
 
         // exception files config file exist check
-        if (file_exists(__DIR__ . '/../../exception-files.json')) {
-            $io->success('exception files config file found in /exception-files.json');
-        } elseif (file_exists(__DIR__ . '/../../config/suite/exception-files.json')) {
-            $io->success('exception files config file found in /config/suite/exception-files.json');
+        if (file_exists(__DIR__ . '/../../exceptions-monitoring.json')) {
+            $io->success('exception files config file found in /exceptions-monitoring.json');
+        } elseif (file_exists(__DIR__ . '/../../config/suite/exceptions-monitoring.json')) {
+            $io->success('exception files config file found in /config/suite/exceptions-monitoring.json');
         } else {
-            $io->error('exception-files.json config file not found');
+            $io->error('exceptions-monitoring.json config file not found');
         }
 
         // package requirements config file exist check
@@ -71,12 +71,12 @@ class RequirementsCheckCommand extends Command
         }
 
         // services config file exist check
-        if (file_exists(__DIR__ . '/../../services.json')) {
-            $io->success('services config file found in /services.json');
-        } elseif (file_exists(__DIR__ . '/../../config/suite/services.json')) {
-            $io->success('services config file found in /config/suite/services.json');
+        if (file_exists(__DIR__ . '/../../services-monitoring.json')) {
+            $io->success('services config file found in /services-monitoring.json');
+        } elseif (file_exists(__DIR__ . '/../../config/suite/services-monitoring.json')) {
+            $io->success('services config file found in /config/suite/services-monitoring.json');
         } else {
-            $io->error('services.json config file not found');
+            $io->error('services-monitoring.json config file not found');
         }
 
         // terminal aliases config file exist check

@@ -295,12 +295,19 @@ class ServerUtil
             }
         }
 
-        // check php extension
-        if (extension_loaded($serviceName)) {
-            return true;
-        }
-
         return false;
+    }
+
+    /**
+     * Checks if a PHP extension is installed
+     *
+     * @param string $extension The name of the PHP extension
+     *
+     * @return bool True if the PHP extension is installed, false otherwise
+     */
+    public function isPhpExtensionInstalled(string $extension): bool
+    {
+        return extension_loaded($extension);
     }
 
     /**
@@ -310,20 +317,53 @@ class ServerUtil
      * and checks if each application is installed. It returns an array of applications
      * that are not found on the system
      *
+     * @throws Exception If an error occurs while loading the package-requirements.json file
+     *
      * @return array<string> List of applications that are not installed
      */
     public function getNotInstalledRequirements(): array
     {
         $notFoundApps = [];
 
-        /** @var array<string> $appList get list of required apps */
+        /** @var array<array<string>> $appList get list of required apps */
         $appList = $this->appUtil->loadConfig('package-requirements.json');
 
-        if (is_iterable($appList)) {
-            // check if app is installed
-            foreach ($appList as $app) {
+        /** @var array<string> $systemPackages list of system packages */
+        $systemPackages = $appList['system-packages'] ?? null;
+
+        /** @var array<string> $phpExtensions list of php extensions */
+        $phpExtensions = $appList['php-extensions'] ?? null;
+
+        // check if system packages list is null
+        if (is_null($systemPackages)) {
+            $this->errorManager->handleError(
+                message: 'error to get not installed requirements: system-packages list is null',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // check if php extensions list is null
+        if (is_null($phpExtensions)) {
+            $this->errorManager->handleError(
+                message: 'error to get not installed requirements: php-extensions list is null',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // check if app is installed
+        if ($systemPackages != null) {
+            foreach ($systemPackages as $app) {
                 if (!$this->isServiceInstalled($app)) {
                     array_push($notFoundApps, $app);
+                }
+            }
+        }
+
+        // check if php extension is installed
+        if ($phpExtensions != null) {
+            foreach ($phpExtensions as $extension) {
+                if (!$this->isPhpExtensionInstalled($extension)) {
+                    array_push($notFoundApps, 'php-' . $extension);
                 }
             }
         }

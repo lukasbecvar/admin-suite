@@ -33,13 +33,13 @@ class ServiceManager
     }
 
     /**
-     * Gets the services list from the services.json file
+     * Gets the services list from the services-monitoring.json file
      *
      * @return array<mixed>>|null The services list, null
      */
     public function getServicesList(): ?array
     {
-        return $this->appUtil->loadConfig('services.json');
+        return $this->appUtil->loadConfig('services-monitoring.json');
     }
 
     /**

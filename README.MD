@@ -27,18 +27,18 @@ Installation is very simple like any other PHP project.
 
 ## Configuration
 * You can edit the config files directly in config/suite but it is better to create your own in the project root because these files will be loaded primarily and ignored by git when using the pull for update with scripts/upgrade.sh
-* Configure your package-requitements.json & services.json in root file (for example use config/suite files)
+* Configure your package-requitements.json & services-monitoring.json in root file (for example use config/suite files)
 * Create systemd or screen service for monitoring process (console command infinite loop) ([systemd-config](https://github.com/lukasbecvar/admin-suite/blob/main/.docker/configs/monitoring-systemd.service))
 
 ## Exception monitoring
-In config exception-files.json it is possible to set paths to exception files and track exceptions from your applications via log manager
+In config exceptions-monitoring.json it is possible to set paths to exception files and track exceptions from your applications via log manager
 
 ## External log API
 * ``/api/external/log`` - POST (data: name, message, level)
 * The external log API is used for retrieving logs from external services. External API log is in the .env configuration file.
 
 ## Monitoring
-Monitoring is ensured by a console command (infinite loop) ``console app:process:monitoring``. This command needs to be run as a service, and the monitored services should be defined in the services file in the root of the project, which is considered the primary source, or directly in config/suite/services.json. it is necessary to set the monitoring interval and the SMTP server in the environment variables for sending alerts. The status and monitoring data can then be viewed on the web dashboard. 
+Monitoring is ensured by a console command (infinite loop) ``console app:process:monitoring``. This command needs to be run as a service, and the monitored services should be defined in the services file in the root of the project, which is considered the primary source, or directly in config/suite/services-monitoring.json. it is necessary to set the monitoring interval and the SMTP server in the environment variables for sending alerts. The status and monitoring data can then be viewed on the web dashboard. 
 
 ## Authentication
 Authentication uses a completely custom user system with only a username and password, and all users are managed by the application administrator. Only the first user can use the registration to create the first user in the database. The login using a standard PHP session and a cookie for the 'remember me'.

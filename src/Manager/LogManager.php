@@ -420,7 +420,7 @@ class LogManager
 
         try {
             /** @var array<string,array<string,string>> $exceptionFiles list of exception files */
-            $exceptionFiles = $this->appUtil->loadConfig('exception-files.json');
+            $exceptionFiles = $this->appUtil->loadConfig('exceptions-monitoring.json');
 
             if (!is_array($exceptionFiles)) {
                 $this->errorManager->handleError(
