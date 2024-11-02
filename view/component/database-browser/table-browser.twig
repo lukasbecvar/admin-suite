@@ -16,6 +16,22 @@
     <span class="mr-1 text-white">{{ tableName|e }}</span>
 </div>
 
+{# PATH BREADCRUMB PANEL #}
+<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb-panel flex items-center">
+    <i class="fas fa-angle-double-right text-xl text-white"></i>
+    
+    {# DATABASE MANAGER MAIN COMPONENT LINK #}
+    <a href={{ path('app_manager_database') }} class="text-white font-bold px-1 py-1 rounded mr-2 breadcrumb-link">databases</a>
+    
+    {# CURRENT DATABASE LINK #}
+    <div class="text-white text-2xl font-bold ml-1">/</div>
+    <a href={{ path('app_manager_database', {'database': databaseName}) }} class="text-white font-bold px-1 py-1 rounded mr-2 breadcrumb-link">{{ databaseName|e }}</a>
+
+    {# CURRENT TABLE LINK #}
+    <div class="text-white text-2xl font-bold ml-1">/</div>
+    <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="text-white font-bold px-1 py-1 rounded mr-2 breadcrumb-link">{{ tableName|e }}</a>
+</div>
+
 {# TABLE DATA #}
 <div class="database-browser component">
     <div class="mx-auto">

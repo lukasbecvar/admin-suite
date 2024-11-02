@@ -1,4 +1,5 @@
-/* main app style */
+/* main app styles index */
+
 /* top navigation */
 .nav-bar {
 	position: fixed;
@@ -84,6 +85,20 @@
 .sub-navigation a:hover {
     color: #24d3ff;
     border: 1px solid #24d3ff;
+}
+
+.breadcrumb-panel {
+	font-size: 18px;
+}
+
+.breadcrumb-panel .breadcrumb-link {
+	border: none !important;
+	color: rgb(96, 165, 250) !important;
+}
+
+.breadcrumb-panel .breadcrumb-link:hover {
+	text-decoration: underline;
+	color: rgb(147, 185, 231) !important;
 }
 
 /* users-manager component */
