@@ -20,6 +20,11 @@
             <p class="text-yellow-400">New logs found you can see it <a href={{ path('app_manager_logs') }} class="link">here</a></p>
         {% endif %}
 
+        {# MONITORING TIME CACHE EXPIRED ALERT #}
+        {% if diagnosticData.isLastMonitoringTimeCached == false %}
+            <p class="text-red-400">Monitroing time is expired, maybe process is stuck, please check it.</p>
+        {% endif %}
+
         {# NOT INSTALLED REQUIREMENTS ALERT #}
         {% if diagnosticData.notInstalledRequirements|length > 0 %}
             <p class="text-red-400">Not found requirements: {{ diagnosticData.notInstalledRequirements|join(', ')|e }}.</p>

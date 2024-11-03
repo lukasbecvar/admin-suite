@@ -3,6 +3,7 @@
 namespace App\Controller\Component;
 
 use App\Util\AppUtil;
+use App\Util\CacheUtil;
 use App\Manager\LogManager;
 use App\Manager\ServiceManager;
 use App\Annotation\Authorization;
@@ -20,15 +21,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class MonitoringManagerController extends AbstractController
 {
     private AppUtil $appUtil;
+    private CacheUtil $cacheUtil;
     private LogManager $logManager;
     private ServiceManager $serviceManager;
 
     public function __construct(
         AppUtil $appUtil,
+        CacheUtil $cacheUtil,
         LogManager $logManager,
         ServiceManager $serviceManager
     ) {
         $this->appUtil = $appUtil;
+        $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
         $this->serviceManager = $serviceManager;
     }
@@ -50,12 +54,21 @@ class MonitoringManagerController extends AbstractController
         // get monitoring logs
         $monitoringLogs = $this->logManager->getMonitoringLogs($pageLimit);
 
+        // default last monitoring time
+        $lastMonitoringTime = null;
+
+        if ($this->cacheUtil->isCatched('last-monitoring-time')) {
+            // get last monitoring time
+            $lastMonitoringTime = $this->cacheUtil->getValue('last-monitoring-time');
+        }
+
         // return view
         return $this->render('component/monitoring-manager/monitoring-dashboard.twig', [
             // monitoring data
             'services' => $services,
             'monitoringLogs' => $monitoringLogs,
             'serviceManager' => $this->serviceManager,
+            'lastMonitoringTime' => $lastMonitoringTime
         ]);
     }
 

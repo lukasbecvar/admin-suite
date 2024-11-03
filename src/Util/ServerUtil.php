@@ -4,6 +4,7 @@ namespace App\Util;
 
 use Exception;
 use App\Manager\ErrorManager;
+use App\Manager\ServiceManager;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -16,12 +17,16 @@ use Symfony\Component\HttpFoundation\Response;
 class ServerUtil
 {
     private AppUtil $appUtil;
+    private CacheUtil $cacheUtil;
     private ErrorManager $errorManager;
+    private ServiceManager $serviceManager;
 
-    public function __construct(AppUtil $appUtil, ErrorManager $errorManager)
+    public function __construct(AppUtil $appUtil, CacheUtil $cacheUtil, ErrorManager $errorManager, ServiceManager $serviceManager)
     {
         $this->appUtil = $appUtil;
+        $this->cacheUtil = $cacheUtil;
         $this->errorManager = $errorManager;
+        $this->serviceManager = $serviceManager;
     }
 
     /**
@@ -459,13 +464,19 @@ class ServerUtil
     {
         // get diagnostic data
         $isSSL = $this->appUtil->isSsl();
-        $isDevMode = $this->appUtil->isDevMode();
         $cpuUsage = $this->getCpuUsage();
         $webUsername = $this->getWebUsername();
         $isWebUserSudo = $this->isWebUserSudo();
+        $isDevMode = $this->appUtil->isDevMode();
         $ramUsage = $this->getRamUsagePercentage();
         $driveSpace = $this->getDriveUsagePercentage();
         $notInstalledRequirements = $this->getNotInstalledRequirements();
+
+        // check if last monitoring cached is expired (only if monitoring service is running)
+        $isLastMonitoringTimeCached = true;
+        if ($this->serviceManager->isServiceRunning('monitoring')) {
+            $isLastMonitoringTimeCached = $this->cacheUtil->isCatched('last-monitoring-time');
+        }
 
         return [
             'isSSL' => $isSSL,
@@ -475,7 +486,8 @@ class ServerUtil
             'driveSpace' => $driveSpace,
             'webUsername' => $webUsername,
             'isWebUserSudo' => $isWebUserSudo,
-            'notInstalledRequirements' => $notInstalledRequirements
+            'notInstalledRequirements' => $notInstalledRequirements,
+            'isLastMonitoringTimeCached' => $isLastMonitoringTimeCached
         ];
     }
 }

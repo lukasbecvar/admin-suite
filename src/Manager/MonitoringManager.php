@@ -5,6 +5,7 @@ namespace App\Manager;
 use DateTime;
 use Exception;
 use App\Util\AppUtil;
+use App\Util\CacheUtil;
 use App\Util\ServerUtil;
 use App\Entity\MonitoringStatus;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,6 +23,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class MonitoringManager
 {
     private AppUtil $appUtil;
+    private CacheUtil $cacheUtil;
     private LogManager $logManager;
     private ServerUtil $serverUtil;
     private EmailManager $emailManager;
@@ -33,6 +35,7 @@ class MonitoringManager
 
     public function __construct(
         AppUtil $appUtil,
+        CacheUtil $cacheUtil,
         LogManager $logManager,
         ServerUtil $serverUtil,
         EmailManager $emailManager,
@@ -43,6 +46,7 @@ class MonitoringManager
         MonitoringStatusRepository $monitoringStatusRepository
     ) {
         $this->appUtil = $appUtil;
+        $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
         $this->serverUtil = $serverUtil;
         $this->emailManager = $emailManager;
@@ -396,5 +400,11 @@ class MonitoringManager
         } else {
             $io->error('error to iterate services list');
         }
+
+        // calculate last monitoring time expiration
+        $lastMonitoringTimeExpiration = (intval($this->appUtil->getEnvValue('MONITORING_INTERVAL')) * 60) * 2;
+
+        // set last monitoring time to cache
+        $this->cacheUtil->setValue('last-monitoring-time', new DateTime(), $lastMonitoringTimeExpiration);
     }
 }

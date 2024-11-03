@@ -14,7 +14,13 @@
         <a href={{ path('app_manager_monitoring_config') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="View services config">
             <i class="fa fa-cog" aria-hidden="true"></i>
         </a>
-        <span class="mr-1 text-white">Monitoring</span>
+
+        {# COMPONENT TITLE #}
+        {% if lastMonitoringTime != null %}
+            <span class="mr-1 text-white">Last check time <span class="text-green-400">{{ lastMonitoringTime.get()|date('H:i:s') }}</span></span>
+        {% else %}
+            <span class="mr-1 text-white">Monitoring</span>
+        {% endif %}
     </div>
 
     {# SERVICES STATUS LOG #}

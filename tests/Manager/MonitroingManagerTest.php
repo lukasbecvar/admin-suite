@@ -15,6 +15,7 @@ use App\Manager\NotificationsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use App\Repository\MonitoringStatusRepository;
+use App\Util\CacheUtil;
 
 /**
  * Class MonitoringManagerTest
@@ -28,6 +29,7 @@ class MonitoringManagerTest extends TestCase
     private AppUtil & MockObject $appUtilMock;
     private LogManager & MockObject $logManager;
     private MonitoringManager $monitoringManager;
+    private CacheUtil & MockObject $cacheUtilMock;
     private ServerUtil & MockObject $serverUtilMock;
     private EmailManager & MockObject $emailManagerMock;
     private ErrorManager & MockObject $errorManagerMock;
@@ -41,6 +43,7 @@ class MonitoringManagerTest extends TestCase
         // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->logManager = $this->createMock(LogManager::class);
+        $this->cacheUtilMock = $this->createMock(CacheUtil::class);
         $this->serverUtilMock = $this->createMock(ServerUtil::class);
         $this->emailManagerMock = $this->createMock(EmailManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
@@ -52,6 +55,7 @@ class MonitoringManagerTest extends TestCase
         // create the monitoring manager instance
         $this->monitoringManager = new MonitoringManager(
             $this->appUtilMock,
+            $this->cacheUtilMock,
             $this->logManager,
             $this->serverUtilMock,
             $this->emailManagerMock,
