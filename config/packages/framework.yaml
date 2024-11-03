@@ -1,6 +1,6 @@
 framework:
     secret: '%env(APP_SECRET)%'
-    session: true
+    trusted_hosts: '%env(TRUSTED_HOSTS)%'
 
 when@test:
     framework:
