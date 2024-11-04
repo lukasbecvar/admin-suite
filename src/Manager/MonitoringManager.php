@@ -256,7 +256,7 @@ class MonitoringManager
             }
 
             // cache cpu usage status
-            $this->cacheUtil->setValue('critical-cpu-usage', 'critical', ($monitoringInterval * 60) + ($monitoringInterval * 30));
+            $this->cacheUtil->setValue('critical-cpu-usage', 'critical', ($monitoringInterval + ($monitoringInterval / 2)));
 
             // log status to console output
             $io->writeln(
@@ -285,7 +285,7 @@ class MonitoringManager
             }
 
             // cache ram usage status
-            $this->cacheUtil->setValue('critical-ram-usage', 'critical', ($monitoringInterval * 60) + ($monitoringInterval * 30));
+            $this->cacheUtil->setValue('critical-ram-usage', 'critical', ($monitoringInterval + ($monitoringInterval / 2)));
 
             $io->writeln(
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>ram usage is too high</fg=red>'
@@ -313,7 +313,7 @@ class MonitoringManager
             }
 
             // cache storage usage status
-            $this->cacheUtil->setValue('critical-storage-usage', 'critical', ($monitoringInterval * 60) + ($monitoringInterval * 30));
+            $this->cacheUtil->setValue('critical-storage-usage', 'critical', ($monitoringInterval + ($monitoringInterval / 2)));
 
             $io->writeln(
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>storage space on the disk is not enough</fg=red>'
@@ -370,7 +370,7 @@ class MonitoringManager
                     }
 
                     // cache not running status
-                    $this->cacheUtil->setValue($service['service_name'] . '-not-running', 'critical', ($monitoringInterval * 60) + ($monitoringInterval * 30));
+                    $this->cacheUtil->setValue($service['service_name'] . '-not-running', 'critical', ($monitoringInterval + ($monitoringInterval / 2)));
 
                     $io->writeln(
                         '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not running</fg=red>'
@@ -400,7 +400,7 @@ class MonitoringManager
                         }
 
                         // cache not running status
-                        $this->cacheUtil->setValue($service['service_name'] . '-not-accepting-code', 'critical', ($monitoringInterval * 60) + ($monitoringInterval * 30));
+                        $this->cacheUtil->setValue($service['service_name'] . '-not-accepting-code', 'critical', ($monitoringInterval + ($monitoringInterval / 2)));
 
                         $io->writeln(
                             '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not accepting any of the codes ' . $acceptCodesStr . ' (response code: ' . $serviceStatus['responseCode'] . ')</fg=red>'
@@ -417,7 +417,7 @@ class MonitoringManager
                         }
 
                         // cache not responding status
-                        $this->cacheUtil->setValue($service['service_name'] . '-not-responding', 'critical', ($monitoringInterval * 60) + ($monitoringInterval * 30));
+                        $this->cacheUtil->setValue($service['service_name'] . '-not-responding', 'critical', ($monitoringInterval + ($monitoringInterval / 2)));
 
                         $io->writeln(
                             '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . ' ms</fg=red>'
