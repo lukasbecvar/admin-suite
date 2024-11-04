@@ -22,7 +22,7 @@
                         <p><span class="font-semibold">Service Name:</span> {{ service.service_name|e }}</p>
                         <p><span class="font-semibold">Display Name:</span> {{ service.display_name|e }}</p>
                         <p><span class="font-semibold">Type:</span> {{ service.type|e }}</p>
-                        <p><span class="font-semibold">Enable:</span> {{ service.enable|e ? 'Yes' : 'No' }}</p>
+                        <p><span class="font-semibold">Display:</span> {{ service.display|e ? 'Yes' : 'No' }}</p>
                     </div>
                 </div>
             {% elseif service.type == 'http' %}
@@ -32,10 +32,10 @@
                         <p><span class="font-semibold">Service Name:</span> {{ service.service_name|e }}</p>
                         <p><span class="font-semibold">Display Name:</span> {{ service.display_name|e }}</p>
                         <p><span class="font-semibold">URL:</span> <a href={{ service.url|e }} class="text-blue-400 hover:underline">{{ service.url|e }}</a></p>
-                        <p><span class="font-semibold">Accept Code:</span> {{ service.accept_code|e }}</p>
+                        <p><span class="font-semibold">Accept Codes:</span> {{ service.accept_codes|join(', ') }}</p>
                         <p><span class="font-semibold">Max Response Time:</span> {{ service.max_response_time|e }}</p>
                         <p><span class="font-semibold">Type:</span> {{ service.type|e }}</p>
-                        <p><span class="font-semibold">Enable:</span> {{ service.enable|e ? 'Yes' : 'No' }}</p>
+                        <p><span class="font-semibold">Display:</span> {{ service.display|e ? 'Yes' : 'No' }}</p>
                     </div>
                 </div>
             {% endif %}

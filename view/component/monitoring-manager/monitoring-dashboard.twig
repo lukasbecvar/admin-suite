@@ -68,7 +68,7 @@
 
                 {# SERVICES LIST #}
                 {% for service in services %}
-                    {% if service.enable %}
+                    {% if service.display %}
                         {% if service.type == 'systemd' %}
                             
                             {# SERVICE STATUS #}
@@ -108,7 +108,7 @@
 
                 {# SERVICES LIST #}
                 {% for service in services %}
-                    {% if service.enable %}
+                    {% if service.display %}
                         {% if service.type == 'http' %}
                             
                             {# SERVICE STATUS #}
