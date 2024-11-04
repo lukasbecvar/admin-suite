@@ -184,7 +184,7 @@ class MonitoringManager
             );
 
             // send monitoring status notification
-            $this->notificationsManager->sendNotification('monitoring ' . $serviceName, '[' . date('Y-m-d H:i:s') . ']: ' . $message);
+            $this->notificationsManager->sendNotification('monitoring ' . $serviceName, '[' . date('H:i') . ']: ' . $message);
 
             // log status chnage
             $this->logManager->log(
@@ -216,7 +216,7 @@ class MonitoringManager
                 message: 'Mysql server is down'
             );
             // send push notification
-            $this->notificationsManager->sendNotification('monitoring', 'Mysql server is down');
+            $this->notificationsManager->sendNotification('monitoring', '[' . date('H:i') . ']: Mysql server is down');
         }
 
         // print database is down message
