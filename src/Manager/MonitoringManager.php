@@ -184,7 +184,7 @@ class MonitoringManager
             );
 
             // send monitoring status notification
-            $this->notificationsManager->sendNotification('monitoring ' . $serviceName, $message . ' at ' . date('H:i:s Y-m-d'));
+            $this->notificationsManager->sendNotification('monitoring ' . $serviceName, '[' . date('Y-m-d H:i:s') . ']: ' . $message);
 
             // log status chnage
             $this->logManager->log(

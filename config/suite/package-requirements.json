@@ -3,7 +3,7 @@
         "Zend OPcache",
         "pdo_mysql",
         "openssl",
-        "php-curl",
+        "curl",
         "intl",
         "pdo",
         "gmp",

@@ -292,11 +292,9 @@ class ServerUtil
         }
 
         // check dpkg package
-        if ($serviceName != 'curl') {
-            foreach ($installedPackages as $package) {
-                if (stripos($package, $serviceName) !== false) {
-                    return true;
-                }
+        foreach ($installedPackages as $package) {
+            if (stripos($package, $serviceName) !== false) {
+                return true;
             }
         }
 
