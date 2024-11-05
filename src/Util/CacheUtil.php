@@ -4,7 +4,9 @@ namespace App\Util;
 
 use App\Manager\ErrorManager;
 use Exception;
+use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -55,9 +57,9 @@ class CacheUtil
      *
      * @throws Exception If an error occurs while retrieving the cache value
      *
-     * @return object|null The cached value associated with the key, or null if not found
+     * @return CacheItemInterface The cached value associated with the key, or null if not found
      */
-    public function getValue(string $key): ?object
+    public function getValue(string $key): CacheItemInterface
     {
         try {
             return $this->cacheItemPoolInterface->getItem($key);
