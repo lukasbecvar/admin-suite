@@ -174,8 +174,6 @@ class MonitoringManager
         // get monitoring status
         $lastStatus = $this->getMonitoringStatus($serviceName);
 
-        dump($serviceName . ' - ' .  $currentStatus);
-
         // check if status changed
         if ($lastStatus != $currentStatus) {
             // send monitoring status email
