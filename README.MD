@@ -43,6 +43,9 @@ Monitoring is ensured by a console command (infinite loop) ``console app:process
 ## Authentication
 Authentication uses a completely custom user system with only a username and password, and all users are managed by the application administrator. Only the first user can use the registration to create the first user in the database. The login using a standard PHP session and a cookie for the 'remember me'.
 
+## Push notifications
+If you enable push notifications in the environment config, make sure to allow notifications in the browser when loading the admin page. Additionally, if you delete subscribers or VAPID keys, you’ll need to reset notification permissions in the browser.
+
 ## Requirements
 * OS Linux
 * PHP 8.3

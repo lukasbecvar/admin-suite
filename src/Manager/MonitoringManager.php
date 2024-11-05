@@ -171,6 +171,20 @@ class MonitoringManager
      */
     public function handleMonitoringStatus(string $serviceName, string $currentStatus, string $message): void
     {
+        // get monitoring interval
+        $monitoringInterval = (int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60;
+
+        // check if monitoring status is not changed (if is status same multiple times)
+        if ($this->cacheUtil->getValue('monitoring-status-' . $serviceName)->get() != $currentStatus) {
+            // store current status in cache
+            $this->cacheUtil->setValue(
+                'monitoring-status-' . $serviceName,
+                $currentStatus,
+                ($monitoringInterval + ($monitoringInterval / 2))
+            );
+            return;
+        }
+
         // get monitoring status
         $lastStatus = $this->getMonitoringStatus($serviceName);
 
@@ -245,36 +259,22 @@ class MonitoringManager
 
         // monitor cpu usage
         if ($this->serverUtil->getCpuUsage() > 98) {
-            // check if status is critical multiple times
-            if ($this->cacheUtil->isCatched('critical-cpu-usage') && $this->cacheUtil->getValue('critical-cpu-usage')->get() == 'critical') {
-                $this->handleMonitoringStatus(
-                    serviceName: 'system-cpu-usage',
-                    currentStatus: 'critical',
-                    message: 'cpu usage is too high'
-                );
-            }
-
-            // cache cpu usage status
-            $this->cacheUtil->setValue('critical-cpu-usage', 'critical', ($monitoringInterval + ($monitoringInterval / 2)));
-
-            // log status to console output
+            // handle cpu usage status
+            $this->handleMonitoringStatus(
+                serviceName: 'system-cpu-usage',
+                currentStatus: 'critical',
+                message: 'cpu usage is too high'
+            );
             $io->writeln(
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>cpu usage is too high</fg=red>'
             );
         } else {
-            // check if status is normal multiple times
-            if ($this->cacheUtil->isCatched('critical-cpu-usage') && $this->cacheUtil->getValue('critical-cpu-usage')->get() == 'normal') {
-                $this->handleMonitoringStatus(
-                    serviceName: 'system-cpu-usage',
-                    currentStatus: 'normal',
-                    message: 'cpu usage is normal'
-                );
-            }
-
-            // cache cpu usage status
-            $this->cacheUtil->setValue('critical-cpu-usage', 'normal', ($monitoringInterval + ($monitoringInterval / 2)));
-
-            // log status to console output
+            // handle cpu usage status
+            $this->handleMonitoringStatus(
+                serviceName: 'system-cpu-usage',
+                currentStatus: 'normal',
+                message: 'cpu usage is normal'
+            );
             $io->writeln(
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>cpu usage is normal</fg=green>'
             );
@@ -282,36 +282,22 @@ class MonitoringManager
 
         // monitor ram usage
         if ($this->serverUtil->getRamUsagePercentage() > 98) {
-            // check if status is critical multiple times
-            if ($this->cacheUtil->isCatched('critical-ram-usage') && $this->cacheUtil->getValue('critical-ram-usage')->get() == 'critical') {
-                $this->handleMonitoringStatus(
-                    serviceName: 'system-ram-usage',
-                    currentStatus: 'critical',
-                    message: 'ram usage is too high'
-                );
-            }
-
-            // cache ram usage status
-            $this->cacheUtil->setValue('critical-ram-usage', 'critical', ($monitoringInterval + ($monitoringInterval / 2)));
-
-            // log status to console output
+            // handle ram usage status
+            $this->handleMonitoringStatus(
+                serviceName: 'system-ram-usage',
+                currentStatus: 'critical',
+                message: 'ram usage is too high'
+            );
             $io->writeln(
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>ram usage is too high</fg=red>'
             );
         } else {
-            // check if status is normal multiple times
-            if ($this->cacheUtil->isCatched('critical-ram-usage') && $this->cacheUtil->getValue('critical-ram-usage')->get() == 'normal') {
-                $this->handleMonitoringStatus(
-                    serviceName: 'system-ram-usage',
-                    currentStatus: 'normal',
-                    message: 'ram usage is normal'
-                );
-            }
-
-            // cache ram usage status
-            $this->cacheUtil->setValue('critical-ram-usage', 'normal', ($monitoringInterval + ($monitoringInterval / 2)));
-
-            // log status to console output
+            // handle ram usage status
+            $this->handleMonitoringStatus(
+                serviceName: 'system-ram-usage',
+                currentStatus: 'normal',
+                message: 'ram usage is normal'
+            );
             $io->writeln(
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>ram usage is normal</fg=green>'
             );
@@ -319,36 +305,22 @@ class MonitoringManager
 
         // monitor storage usage
         if ($this->serverUtil->getDriveUsagePercentage() > 98) {
-            // check if status is critical multiple times
-            if ($this->cacheUtil->isCatched('critical-storage-usage') && $this->cacheUtil->getValue('critical-storage-usage')->get() == 'critical') {
-                $this->handleMonitoringStatus(
-                    serviceName: 'system-storage-usage',
-                    currentStatus: 'critical',
-                    message: 'storage space on the disk is not enough'
-                );
-            }
-
-            // cache storage usage status
-            $this->cacheUtil->setValue('critical-storage-usage', 'critical', ($monitoringInterval + ($monitoringInterval / 2)));
-
-            // log status to console output
+            // handle storage usage status
+            $this->handleMonitoringStatus(
+                serviceName: 'system-storage-usage',
+                currentStatus: 'critical',
+                message: 'storage space on the disk is not enough'
+            );
             $io->writeln(
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>storage space on the disk is not enough</fg=red>'
             );
         } else {
-            // check if status is normal multiple times
-            if ($this->cacheUtil->isCatched('critical-storage-usage') && $this->cacheUtil->getValue('critical-storage-usage')->get() == 'normal') {
-                $this->handleMonitoringStatus(
-                    serviceName: 'system-storage-usage',
-                    currentStatus: 'normal',
-                    message: 'storage space is normal'
-                );
-            }
-
-            // cache storage usage status
-            $this->cacheUtil->setValue('critical-storage-usage', 'normal', ($monitoringInterval + ($monitoringInterval / 2)));
-
-            // log status to console output
+            // handle storage usage status
+            $this->handleMonitoringStatus(
+                serviceName: 'system-storage-usage',
+                currentStatus: 'normal',
+                message: 'storage space is normal'
+            );
             $io->writeln(
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>storage space is normal</fg=green>'
             );
@@ -376,36 +348,22 @@ class MonitoringManager
             if ($service['type'] == 'systemd') {
                 // check running state
                 if ($this->serviceManager->isServiceRunning($service['service_name'])) {
-                    // check if status is normal multiple times
-                    if ($this->cacheUtil->isCatched($service['service_name'] . 'running-status') && $this->cacheUtil->getValue($service['service_name'] . 'running-status')->get() == 'normal') {
-                        $this->handleMonitoringStatus(
-                            serviceName: $service['service_name'],
-                            currentStatus: 'running',
-                            message:$service['display_name'] . ' is running'
-                        );
-                    }
-
-                    // cache not running status
-                    $this->cacheUtil->setValue($service['service_name'] . 'running-status', 'normal', ($monitoringInterval + ($monitoringInterval / 2)));
-
-                    // log status to console output
+                    // handle service running status
+                    $this->handleMonitoringStatus(
+                        serviceName: $service['service_name'],
+                        currentStatus: 'running',
+                        message:$service['display_name'] . ' is running'
+                    );
                     $io->writeln(
                         '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>' . $service['display_name'] . ' is running</fg=green>'
                     );
                 } else {
-                    // check if status is critical multiple times
-                    if ($this->cacheUtil->isCatched($service['service_name'] . 'running-status') && $this->cacheUtil->getValue($service['service_name'] . 'running-status')->get() == 'critical') {
-                        $this->handleMonitoringStatus(
-                            serviceName: $service['service_name'],
-                            currentStatus: 'not-running',
-                            message: $service['display_name'] . ' is not running'
-                        );
-                    }
-
-                    // cache not running status
-                    $this->cacheUtil->setValue($service['service_name'] . 'running-status', 'critical', ($monitoringInterval + ($monitoringInterval / 2)));
-
-                    // log status to console output
+                    // handle service running status
+                    $this->handleMonitoringStatus(
+                        serviceName: $service['service_name'],
+                        currentStatus: 'not-running',
+                        message: $service['display_name'] . ' is not running'
+                    );
                     $io->writeln(
                         '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not running</fg=red>'
                     );
@@ -424,56 +382,35 @@ class MonitoringManager
                         // split accept codes to string
                         $acceptCodesStr = implode(', ', $service['accept_codes']);
 
-                        // check if status is critical multiple times
-                        if ($this->cacheUtil->isCatched($service['service_name'] . '-online-status') && $this->cacheUtil->getValue($service['service_name'] . '-online-status')->get() == 'critical') {
-                            $this->handleMonitoringStatus(
-                                serviceName: $service['service_name'],
-                                currentStatus: 'not-accepting-code',
-                                message: $service['display_name'] . ' is not accepting any of the codes ' . $acceptCodesStr . ' (response code: ' . $serviceStatus['responseCode'] . ')'
-                            );
-                        }
-
-                        // cache service status
-                        $this->cacheUtil->setValue($service['service_name'] . '-online-status', 'critical', ($monitoringInterval + ($monitoringInterval / 2)));
-
-                        // log status to console output
+                        // handle http service status
+                        $this->handleMonitoringStatus(
+                            serviceName: $service['service_name'],
+                            currentStatus: 'not-accepting-code',
+                            message: $service['display_name'] . ' is not accepting any of the codes ' . $acceptCodesStr . ' (response code: ' . $serviceStatus['responseCode'] . ')'
+                        );
                         $io->writeln(
                             '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not accepting any of the codes ' . $acceptCodesStr . ' (response code: ' . $serviceStatus['responseCode'] . ')</fg=red>'
                         );
                     // check service response time
                     } elseif ($serviceStatus['responseTime'] > $service['max_response_time']) {
-                        // check if status is critical multiple times
-                        if ($this->cacheUtil->isCatched($service['service_name'] . '-online-status') && $this->cacheUtil->getValue($service['service_name'] . '-online-status')->get() == 'critical') {
-                            $this->handleMonitoringStatus(
-                                serviceName: $service['service_name'],
-                                currentStatus: 'not-responding',
-                                message: $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . 'ms'
-                            );
-                        }
-
-                        // cache service status
-                        $this->cacheUtil->setValue($service['service_name'] . '-online-status', 'critical', ($monitoringInterval + ($monitoringInterval / 2)));
-
-                        // log status to console output
+                        // handle http service status
+                        $this->handleMonitoringStatus(
+                            serviceName: $service['service_name'],
+                            currentStatus: 'not-responding',
+                            message: $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . 'ms'
+                        );
                         $io->writeln(
                             '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . ' ms</fg=red>'
                         );
 
                     // status ok
                     } else {
-                        // check if status is normal multiple times
-                        if ($this->cacheUtil->isCatched($service['service_name'] . '-online-status') && $this->cacheUtil->getValue($service['service_name'] . '-online-status')->get() == 'normal') {
-                            $this->handleMonitoringStatus(
-                                serviceName: $service['service_name'],
-                                currentStatus: 'online',
-                                message: $service['display_name'] . ' is online'
-                            );
-                        }
-
-                        // cache service status
-                        $this->cacheUtil->setValue($service['service_name'] . '-online-status', 'normal', ($monitoringInterval + ($monitoringInterval / 2)));
-
-                        // log status to console output
+                        // handle http service status
+                        $this->handleMonitoringStatus(
+                            serviceName: $service['service_name'],
+                            currentStatus: 'online',
+                            message: $service['display_name'] . ' is online'
+                        );
                         $io->writeln(
                             '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>' . $service['display_name'] . ' is online</fg=green>'
                         );
@@ -481,6 +418,7 @@ class MonitoringManager
 
                 // service is not online
                 } else {
+                    // handle http service offline status
                     $this->handleMonitoringStatus(
                         serviceName: $service['service_name'],
                         currentStatus: 'not-online',
