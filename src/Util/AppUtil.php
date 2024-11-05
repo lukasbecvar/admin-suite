@@ -120,9 +120,9 @@ class AppUtil
     public function getHasherConfig(): array
     {
         return [
-            'memory_cost' => (int) $_ENV['MEMORY_COST'],
-            'time_cost' => (int) $_ENV['TIME_COST'],
-            'threads' => (int) $_ENV['THREADS']
+            'memory_cost' => (int) $this->getEnvValue('MEMORY_COST'),
+            'time_cost' => (int) $this->getEnvValue('TIME_COST'),
+            'threads' => (int) $this->getEnvValue('THREADS')
         ];
     }
 

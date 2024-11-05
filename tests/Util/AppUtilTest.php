@@ -35,6 +35,20 @@ class AppUtilTest extends TestCase
     }
 
     /**
+     * Test get app version
+     *
+     * @return void
+     */
+    public function testGetAppRootDir(): void
+    {
+        // get all root dir
+        $result = $this->appUtil->getAppRootDir();
+
+        // assert result
+        $this->assertIsString($result);
+    }
+
+    /**
      * Test check is SSL
      *
      * @return void
