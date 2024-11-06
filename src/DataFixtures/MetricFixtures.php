@@ -1,0 +1,55 @@
+<?php
+
+namespace App\DataFixtures;
+
+use DateTime;
+use DateInterval;
+use App\Entity\Metric;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+
+/**
+ * Class MetricFixtures
+ *
+ * The testing metrics data fixtures
+ *
+ * @package App\DataFixtures
+ */
+class MetricFixtures extends Fixture
+{
+    /**
+     * Load the metrics fixtures
+     *
+     * @param ObjectManager $manager The entity manager
+     *
+     * @return void
+     */
+    public function load(ObjectManager $manager): void
+    {
+        $metrics = ['cpu_usage', 'ram_usage', 'storage_usage'];
+        $interval = new DateInterval('PT5M'); // metrics interval
+        $startDate = new DateTime('-1 week'); // history start
+        $endDate = new DateTime(); // current time
+
+        $currentDate = clone $startDate;
+
+        // create the metrics history
+        while ($currentDate <= $endDate) {
+            foreach ($metrics as $name) {
+                $metric = new Metric();
+                $metric->setName($name);
+                $metric->setValue((string) random_int(10, 100)); // random value
+                $metric->setTime(clone $currentDate);
+
+                // persist the metric
+                $manager->persist($metric);
+            }
+
+            // increase time interval by 5 minutes
+            $currentDate->add($interval);
+        }
+
+        // flush data to database
+        $manager->flush();
+    }
+}

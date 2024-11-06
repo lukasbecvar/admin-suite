@@ -3,19 +3,20 @@
 namespace App\Tests\Manager;
 
 use App\Util\AppUtil;
+use App\Util\CacheUtil;
 use App\Util\ServerUtil;
 use App\Manager\LogManager;
 use App\Manager\EmailManager;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Manager\ServiceManager;
+use App\Manager\MetricsManager;
 use App\Entity\MonitoringStatus;
 use App\Manager\MonitoringManager;
 use App\Manager\NotificationsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use App\Repository\MonitoringStatusRepository;
-use App\Util\CacheUtil;
 
 /**
  * Class MonitoringManagerTest
@@ -33,6 +34,7 @@ class MonitoringManagerTest extends TestCase
     private ServerUtil & MockObject $serverUtilMock;
     private EmailManager & MockObject $emailManagerMock;
     private ErrorManager & MockObject $errorManagerMock;
+    private MetricsManager & MockObject $metricsManagerMock;
     private ServiceManager & MockObject $serviceManagerMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
     private MonitoringStatusRepository & MockObject $repositoryMock;
@@ -47,6 +49,7 @@ class MonitoringManagerTest extends TestCase
         $this->serverUtilMock = $this->createMock(ServerUtil::class);
         $this->emailManagerMock = $this->createMock(EmailManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
+        $this->metricsManagerMock = $this->createMock(MetricsManager::class);
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $this->repositoryMock = $this->createMock(MonitoringStatusRepository::class);
@@ -60,6 +63,7 @@ class MonitoringManagerTest extends TestCase
             $this->serverUtilMock,
             $this->emailManagerMock,
             $this->errorManagerMock,
+            $this->metricsManagerMock,
             $this->serviceManagerMock,
             $this->notificationsManagerMock,
             $this->entityManagerMock,

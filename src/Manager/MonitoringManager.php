@@ -28,6 +28,7 @@ class MonitoringManager
     private ServerUtil $serverUtil;
     private EmailManager $emailManager;
     private ErrorManager $errorManager;
+    private MetricsManager $metricsManager;
     private ServiceManager $serviceManager;
     private NotificationsManager $notificationsManager;
     private EntityManagerInterface $entityManagerInterface;
@@ -40,6 +41,7 @@ class MonitoringManager
         ServerUtil $serverUtil,
         EmailManager $emailManager,
         ErrorManager $errorManager,
+        MetricsManager $metricsManager,
         ServiceManager $serviceManager,
         NotificationsManager $notificationsManager,
         EntityManagerInterface $entityManagerInterface,
@@ -51,6 +53,7 @@ class MonitoringManager
         $this->serverUtil = $serverUtil;
         $this->emailManager = $emailManager;
         $this->errorManager = $errorManager;
+        $this->metricsManager = $metricsManager;
         $this->serviceManager = $serviceManager;
         $this->notificationsManager = $notificationsManager;
         $this->entityManagerInterface = $entityManagerInterface;
@@ -257,8 +260,13 @@ class MonitoringManager
         // get monitoring interval
         $monitoringInterval = (int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60;
 
+        // get metrics
+        $cpuUsage = $this->serverUtil->getCpuUsage();
+        $ramUsage = $this->serverUtil->getRamUsagePercentage();
+        $storageUsage = (int) $this->serverUtil->getDriveUsagePercentage();
+
         // monitor cpu usage
-        if ($this->serverUtil->getCpuUsage() > 98) {
+        if ($cpuUsage > 98) {
             // handle cpu usage status
             $this->handleMonitoringStatus(
                 serviceName: 'system-cpu-usage',
@@ -281,7 +289,7 @@ class MonitoringManager
         }
 
         // monitor ram usage
-        if ($this->serverUtil->getRamUsagePercentage() > 98) {
+        if ($ramUsage > 98) {
             // handle ram usage status
             $this->handleMonitoringStatus(
                 serviceName: 'system-ram-usage',
@@ -304,7 +312,7 @@ class MonitoringManager
         }
 
         // monitor storage usage
-        if ($this->serverUtil->getDriveUsagePercentage() > 98) {
+        if ($storageUsage > 98) {
             // handle storage usage status
             $this->handleMonitoringStatus(
                 serviceName: 'system-storage-usage',
@@ -430,6 +438,9 @@ class MonitoringManager
                 }
             }
         }
+
+        // save metrics to database
+        $this->metricsManager->saveMetrics($cpuUsage, $ramUsage, $storageUsage);
 
         // calculate last monitoring time expiration
         $lastMonitoringTimeExpiration = (intval($monitoringInterval) * 60) * 2;

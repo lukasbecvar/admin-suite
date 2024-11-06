@@ -92,6 +92,9 @@ class NonAuthRedirectTest extends WebTestCase
             '/terminal',
             '/api/system/terminal'
         ],
+        'metrics' => [
+            '/metrics/dashboard'
+        ]
     ];
 
     /**

@@ -27,6 +27,7 @@ class TodoRepository extends ServiceEntityRepository
      *
      * @param int $userId
      * @param string $status
+     *
      * @return Todo[] Returns an array of Todo objects
      */
     public function findByUserIdAndStatus(int $userId, string $status): array
