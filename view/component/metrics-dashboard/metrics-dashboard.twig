@@ -1,71 +1,109 @@
 {% extends 'common/layout.twig' %}
 
+{# METRICS-DASHBOARD COMPONENT #}
 {% block component %}
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
     <a href={{ path('app_manager_logs') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to log browser">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
-    <span class="mr-1 text-white">Metrics dashboard</span>
+
+    {# METRICS TIME PERIOD SELECTOR #}
+    <span class="mr-1"></span>
+    <span class="time-period-select">
+        <label for="time-period">Time period:</label>
+        <select id="time-period" onchange="updateTimePeriod()">
+            <option value="all_time">All time</option>
+            <option value="last_30_min" selected>Last 30 min</option>
+            <option value="last_24_hours">Last 24 hours</option>
+            <option value="last_week">Last week</option>
+            <option value="last_month">Last month</option>
+            <option value="last_year">Last year</option>
+        </select>
+
+        <script>
+            // update time period in url
+            function updateTimePeriod() {
+                const select = document.getElementById('time-period');
+                const selectedValue = select.value;
+                window.location.search = `?time_period=${selectedValue}`;
+            }
+
+            // select selecton value from url
+            function setSelectedValue() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const timePeriod = urlParams.get('time_period');
+                const select = document.getElementById('time-period');
+
+                // set selected value
+                if (timePeriod) {
+                    select.value = timePeriod;
+                }
+            }
+
+            // init select value
+            window.onload = setSelectedValue;
+        </script>
+    </span>
 </div>
 
-{# METRICS-CHARTS COMPONENT #}
-<div class="p-2 space-y-2">
+{# METRICS-CHARTS #}
+<div class="p-2 space-y-2 metrics-component">
     {# CPU USAGE #}
     <div class="flex flex-col md:flex-row gap-2">
-        <div class="flex-4 p-0 border border-gray-600 shadow-lg card-color rounded relative" style="min-height: 300px;">
+        <div class="flex-4 p-0 border border-gray-600 shadow-lg card-color rounded relative chart-container">
             <div class="text-white font-bold text-l mb-1 border-b border-gray-600 p-2">
                 CPU Usage (current)
             </div>
-            <div id="cpu-usage-radial" style="width: 100%; height: 250px;"></div>
-            <div id="cpu-usage-percentage" class="absolute text-white text-3xl font-bold" style="top: 45%; left: 50%; transform: translateX(-50%);">
+            <div id="cpu-usage-radial"></div>
+            <div id="cpu-usage-percentage" class="absolute text-white text-5xl font-bold percentage">
                 {{ data.cpu.current }}%
             </div>
         </div>
 
-        <div class="flex-1 p-0 border border-gray-600 shadow-lg card-color rounded relative" style="height: 300px;">
+        <div class="flex-1 p-0 border border-gray-600 shadow-lg card-color rounded relative chart-container">
             <div class="text-white font-bold text-l mb-1 border-b border-gray-600 p-2">
                 CPU Usage (history)
             </div>
-            <div id="cpu-usage-line" style="width: 100%; height: 100%;"></div>
+            <div id="cpu-usage-line"></div>
         </div>
     </div>
 
     {# RAM USAGE #}
     <div class="flex flex-col md:flex-row gap-2">
-        <div class="flex-4 p-0 border border-gray-600 shadow-lg card-color rounded relative" style="min-height: 300px;">
+        <div class="flex-4 p-0 border border-gray-600 shadow-lg card-color rounded relative chart-container">
             <div class="text-white font-bold text-l mb-1 border-b border-gray-600 p-2">
                 RAM Usage (current)
             </div>
-            <div id="ram-usage-radial" style="width: 100%; height: 100%;"></div>
-            <div id="ram-usage-percentage" class="absolute text-white text-3xl font-bold" style="top: 45%; left: 50%; transform: translateX(-50%);">
+            <div id="ram-usage-radial"></div>
+            <div id="ram-usage-percentage" class="absolute text-white text-5xl font-bold percentage">
                 {{ data.ram.current }}%
             </div>
         </div>
-        <div class="flex-1 p-0 border border-gray-600 shadow-lg card-color rounded relative" style="height: 300px;">
+        <div class="flex-1 p-0 border border-gray-600 shadow-lg card-color rounded relative chart-container">
             <div class="text-white font-bold text-l mb-1 border-b border-gray-600 p-2">
                 RAM Usage (history)
             </div>
-            <div id="ram-usage-line" style="width: 100%; height: 100%;"></div>
+            <div id="ram-usage-line"></div>
         </div>
     </div>
 
     {# STORAGE USAGE #}
     <div class="flex flex-col md:flex-row gap-2">
-        <div class="flex-4 p-0 border border-gray-600 shadow-lg card-color rounded relative" style="min-height: 300px;">
+        <div class="flex-4 p-0 border border-gray-600 shadow-lg card-color rounded relative chart-container">
             <div class="text-white font-bold text-l mb-1 border-b border-gray-600 p-2">
                 Storage Usage (current)
             </div>
-            <div id="storage-usage-radial" style="width: 100%; height: 100%;"></div>
-            <div id="storage-usage-percentage" class="absolute text-white text-3xl font-bold" style="top: 45%; left: 50%; transform: translateX(-50%);">
+            <div id="storage-usage-radial"></div>
+            <div id="storage-usage-percentage" class="absolute text-white text-5xl font-bold percentage">
                 {{ data.storage.current }}%
             </div>
         </div>
-        <div class="flex-1 p-0 border border-gray-600 shadow-lg card-color rounded relative" style="height: 300px;">
+        <div class="flex-1 p-0 border border-gray-600 shadow-lg card-color rounded relative chart-container">
             <div class="text-white font-bold text-l mb-1 border-b border-gray-600 p-2">
                 Storage Usage (history)
             </div>
-            <div id="storage-usage-line" style="width: 100%; height: 100%;"></div>
+            <div id="storage-usage-line"></div>
         </div>
     </div>
 </div>
@@ -91,5 +129,4 @@
 
 {# INCLUDE CHARTS SCRIPT #}
 {{ encore_entry_script_tags('metrics-charts-js') }}
-
 {% endblock %}

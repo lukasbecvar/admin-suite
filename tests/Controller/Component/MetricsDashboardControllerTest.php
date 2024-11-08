@@ -36,7 +36,6 @@ class MetricsDashboardControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Metrics dashboard');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

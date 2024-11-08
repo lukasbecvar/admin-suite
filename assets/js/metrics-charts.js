@@ -1,12 +1,12 @@
 /** metrics component graph charts functionality */
-const ApexCharts = require('apexcharts');
+const ApexCharts = require('apexcharts')
 
 // overload color highlight function
 function getColor(percentage) {
-    return percentage > 80 ? '#e74c3c' : '#28a745';
+    return percentage > 80 ? '#f73925' : '#19bf3f'
 }
 function getBorderColor(percentage) {
-    return percentage > 80 ? '#c0392b' : '#27ae60';
+    return percentage > 80 ? '#f73925' : '#19bf3f'
 }
 
 // CPU radial graph
@@ -14,24 +14,29 @@ var optionsCpuRadial = {
     series: [window.metricsData.cpu.current],
     chart: {
         type: 'radialBar',
-        height: '250px',
+        height: '100%',
+        width: '100%',
         background: '#1d1d1d',
+        padding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+        },
     },
     plotOptions: {
         radialBar: {
+            offsetY: -25,
             hollow: {
-                size: '50%',
+                size: '60%',
             },
             track: {
-                background: '#555555',
+                background: '#636363',
                 strokeWidth: '100%',
             },
             dataLabels: {
                 show: false,
             },
-            startAngle: -90,
-            endAngle: 90,
-            strokeWidth: 20,
             stroke: {
                 width: 8,
                 colors: [getBorderColor(window.metricsData.cpu.current)]
@@ -46,11 +51,11 @@ var optionsCpuRadial = {
     legend: {
         show: false,
     },
-};
-var chartCpuRadial = new ApexCharts(document.querySelector("#cpu-usage-radial"), optionsCpuRadial);
-chartCpuRadial.render();
+}
+var chartCpuRadial = new ApexCharts(document.querySelector("#cpu-usage-radial"), optionsCpuRadial)
+chartCpuRadial.render()
 
-// CPU line graph (historical data)
+// CPU area graph (historical data)
 var optionsCpuLine = {
     series: [{
         name: 'CPU Usage',
@@ -81,41 +86,47 @@ var optionsCpuLine = {
     },
     xaxis: {
         categories: window.metricsData.categories,
+        tickAmount: Math.floor(window.metricsData.categories.length / 2)
     },
     colors: ['#28a745'],
     theme: {
         mode: 'dark',
     },
-};
-var chartCpuLine = new ApexCharts(document.querySelector("#cpu-usage-line"), optionsCpuLine);
-chartCpuLine.render();
+}
+var chartCpuLine = new ApexCharts(document.querySelector("#cpu-usage-line"), optionsCpuLine)
+chartCpuLine.render()
 
 // RAM radial graph
 var optionsRamRadial = {
     series: [window.metricsData.ram.current],
     chart: {
         type: 'radialBar',
-        height: '250px',
+        height: '100%',
+        width: '100%',
         background: '#1d1d1d',
+        padding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+        },
     },
     plotOptions: {
         radialBar: {
+            offsetY: -25,
             hollow: {
-                size: '50%',
+                size: '60%',
             },
             track: {
-                background: '#555555',
+                background: '#636363',
                 strokeWidth: '100%',
             },
             dataLabels: {
                 show: false,
             },
-            startAngle: -90,
-            endAngle: 90,
-            strokeWidth: 20,
             stroke: {
                 width: 8,
-                colors: [getBorderColor(window.metricsData.ram.current)]
+                colors: [getBorderColor(window.metricsData.cpu.current)]
             },
         },
     },
@@ -127,11 +138,11 @@ var optionsRamRadial = {
     legend: {
         show: false,
     },
-};
-var chartRamRadial = new ApexCharts(document.querySelector("#ram-usage-radial"), optionsRamRadial);
-chartRamRadial.render();
+}
+var chartRamRadial = new ApexCharts(document.querySelector("#ram-usage-radial"), optionsRamRadial)
+chartRamRadial.render()
 
-// RAM line graph (historical data)
+// RAM area graph (historical data)
 var optionsRamLine = {
     series: [{
         name: 'RAM Usage',
@@ -162,41 +173,47 @@ var optionsRamLine = {
     },
     xaxis: {
         categories: window.metricsData.categories,
+        tickAmount: Math.floor(window.metricsData.categories.length / 2)
     },
     colors: ['#20c997'],
     theme: {
         mode: 'dark',
     },
-};
-var chartRamLine = new ApexCharts(document.querySelector("#ram-usage-line"), optionsRamLine);
-chartRamLine.render();
+}
+var chartRamLine = new ApexCharts(document.querySelector("#ram-usage-line"), optionsRamLine)
+chartRamLine.render()
 
 // Storage radial graph
 var optionsStorageRadial = {
     series: [window.metricsData.storage.current],
     chart: {
         type: 'radialBar',
-        height: '250px',
+        height: '100%',
+        width: '100%',
         background: '#1d1d1d',
+        padding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+        },
     },
     plotOptions: {
         radialBar: {
+            offsetY: -25,
             hollow: {
-                size: '50%',
+                size: '60%',
             },
             track: {
-                background: '#555555',
+                background: '#636363',
                 strokeWidth: '100%',
             },
             dataLabels: {
                 show: false,
             },
-            startAngle: -90,
-            endAngle: 90,
-            strokeWidth: 20,
             stroke: {
                 width: 8,
-                colors: [getBorderColor(window.metricsData.storage.current)]
+                colors: [getBorderColor(window.metricsData.cpu.current)]
             },
         },
     },
@@ -208,11 +225,11 @@ var optionsStorageRadial = {
     legend: {
         show: false,
     },
-};
-var chartStorageRadial = new ApexCharts(document.querySelector("#storage-usage-radial"), optionsStorageRadial);
-chartStorageRadial.render();
+}
+var chartStorageRadial = new ApexCharts(document.querySelector("#storage-usage-radial"), optionsStorageRadial)
+chartStorageRadial.render()
 
-// Storage line graph (historical data)
+// Storage area graph (historical data)
 var optionsStorageLine = {
     series: [{
         name: 'Storage Usage',
@@ -243,11 +260,12 @@ var optionsStorageLine = {
     },
     xaxis: {
         categories: window.metricsData.categories,
+        tickAmount: Math.floor(window.metricsData.categories.length / 2)
     },
     colors: ['#007bff'],
     theme: {
         mode: 'dark',
     },
-};
-var chartStorageLine = new ApexCharts(document.querySelector("#storage-usage-line"), optionsStorageLine);
-chartStorageLine.render();
+}
+var chartStorageLine = new ApexCharts(document.querySelector("#storage-usage-line"), optionsStorageLine)
+chartStorageLine.render()
