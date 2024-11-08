@@ -17,6 +17,7 @@ Encore
     .addEntry('loading-component-js', './assets/js/loading-component.js')
     .addEntry('database-table-browser-js', './assets/js/database-table-browser.js')
     .addEntry('notification-subscriberr-js', './assets/js/notification-subscriber.js')
+    .addEntry('metrics-charts-js', './assets/js/metrics-charts.js')
 
     // copy static assets
     .copyFiles(

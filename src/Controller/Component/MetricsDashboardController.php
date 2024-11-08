@@ -23,6 +23,32 @@ class MetricsDashboardController extends AbstractController
     #[Route('/metrics/dashboard', methods:['GET'], name: 'app_metrics_dashboard')]
     public function metricsDashboard(): Response
     {
-        return $this->render('component/metrics-dashboard/metrics-dashboard.twig');
+        // testing data
+        $data = [
+            'categories' => ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00'],
+            'cpu' => [
+                'data' => [10, 20, 15, 30, 25, 40, 0],
+                'color' => '#28a745',
+                'borderColor' => '#27ae60',
+                'current' => 99
+            ],
+            'ram' => [
+                'data' => [20, 30, 40, 50, 60, 70, 80],
+                'color' => '#20c997',
+                'borderColor' => '#1abc9c',
+                'current' => 60
+            ],
+            'storage' => [
+                'data' => [10, 56, 18, 20, 25, 30, 50],
+                'color' => '#007bff',
+                'borderColor' => '#0056b3',
+                'current' => 85
+            ]
+        ];
+
+        // return component view with metrics page
+        return $this->render('component/metrics-dashboard/metrics-dashboard.twig', [
+            'data' => $data,
+        ]);
     }
 }
