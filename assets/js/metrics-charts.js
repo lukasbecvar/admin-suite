@@ -92,6 +92,16 @@ var optionsCpuLine = {
     theme: {
         mode: 'dark',
     },
+    noData: {
+        text: 'No Data Available',
+        align: 'center',
+        verticalAlign: 'middle',
+        style: {
+            color: '#fff',
+            fontSize: '16px',
+            fontFamily: 'Arial'
+        }
+    }
 }
 var chartCpuLine = new ApexCharts(document.querySelector("#cpu-usage-line"), optionsCpuLine)
 chartCpuLine.render()
@@ -179,6 +189,16 @@ var optionsRamLine = {
     theme: {
         mode: 'dark',
     },
+    noData: {
+        text: 'No Data Available',
+        align: 'center',
+        verticalAlign: 'middle',
+        style: {
+            color: '#fff',
+            fontSize: '16px',
+            fontFamily: 'Arial'
+        }
+    }
 }
 var chartRamLine = new ApexCharts(document.querySelector("#ram-usage-line"), optionsRamLine)
 chartRamLine.render()
@@ -266,6 +286,16 @@ var optionsStorageLine = {
     theme: {
         mode: 'dark',
     },
+    noData: {
+        text: 'No Data Available',
+        align: 'center',
+        verticalAlign: 'middle',
+        style: {
+            color: '#fff',
+            fontSize: '16px',
+            fontFamily: 'Arial'
+        }
+    }
 }
 var chartStorageLine = new ApexCharts(document.querySelector("#storage-usage-line"), optionsStorageLine)
 chartStorageLine.render()

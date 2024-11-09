@@ -27,8 +27,8 @@ class MetricFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $metrics = ['cpu_usage', 'ram_usage', 'storage_usage'];
-        $interval = new DateInterval('PT5M'); // metrics interval
-        $startDate = new DateTime('-1 week'); // history start
+        $interval = new DateInterval('PT1H'); // metrics interval
+        $startDate = new DateTime('-1 month'); // history limit
         $endDate = new DateTime(); // current time
 
         $currentDate = clone $startDate;
