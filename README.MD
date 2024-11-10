@@ -40,6 +40,9 @@ In config exceptions-monitoring.json it is possible to set paths to exception fi
 ## Monitoring
 Monitoring is ensured by a console command (infinite loop) ``console app:process:monitoring``. This command needs to be run as a service, and the monitored services should be defined in the services file in the root of the project, which is considered the primary source, or directly in config/suite/services-monitoring.json. it is necessary to set the monitoring interval and the SMTP server in the environment variables for sending alerts. The status and monitoring data can then be viewed on the web dashboard. 
 
+## Metrics
+The metrics component stores data during the monitoring process, so its function requires the monitoring process to be running. The metrics store average usage values for CPU, RAM, and storage during the interval set in ``.env`` as ``METRICS_SAVE_INTERVALg``.
+
 ## Authentication
 Authentication uses a completely custom user system with only a username and password, and all users are managed by the application administrator. Only the first user can use the registration to create the first user in the database. The login using a standard PHP session and a cookie for the 'remember me'.
 
