@@ -14,6 +14,8 @@ use App\Repository\MetricRepository;
  * @package App\Entity
  */
 #[ORM\Table(name: 'metrics')]
+#[ORM\Index(name: 'metrics_name_idx', columns: ['name'])]
+#[ORM\Index(name: 'metrics_time_idx', columns: ['time'])]
 #[ORM\Entity(repositoryClass: MetricRepository::class)]
 class Metric
 {

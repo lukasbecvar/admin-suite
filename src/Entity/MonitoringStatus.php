@@ -15,8 +15,8 @@ use App\Repository\MonitoringStatusRepository;
  * @package App\Entity
  */
 #[ORM\Table(name: 'monitoring_status')]
-#[ORM\Index(name: 'logs_status_idx', columns: ['status'])]
-#[ORM\Index(name: 'logs_service_name_idx', columns: ['service_name'])]
+#[ORM\Index(name: 'monitoring_status_status_idx', columns: ['status'])]
+#[ORM\Index(name: 'monitoring_status_service_name_idx', columns: ['service_name'])]
 #[ORM\Entity(repositoryClass: MonitoringStatusRepository::class)]
 class MonitoringStatus
 {

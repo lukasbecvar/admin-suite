@@ -4,7 +4,9 @@ namespace App\Tests\Manager;
 
 use DateTime;
 use Exception;
+use App\Util\AppUtil;
 use App\Entity\Metric;
+use App\Util\CacheUtil;
 use App\Util\ServerUtil;
 use App\Manager\ErrorManager;
 use App\Manager\MetricsManager;
@@ -25,6 +27,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class MetricsManagerTest extends TestCase
 {
     private MetricsManager $metricsManager;
+    private AppUtil & MockObject $appUtilMock;
+    private CacheUtil & MockObject $cacheUtilMock;
     private ServerUtil & MockObject $serverUtilMock;
     private ErrorManager & MockObject $errorManagerMock;
     private MetricRepository & MockObject $metricRepositoryMock;
@@ -33,6 +37,8 @@ class MetricsManagerTest extends TestCase
     protected function setUp(): void
     {
         // mock dependencies
+        $this->appUtilMock = $this->createMock(AppUtil::class);
+        $this->cacheUtilMock = $this->createMock(CacheUtil::class);
         $this->serverUtilMock = $this->createMock(ServerUtil::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->metricRepositoryMock = $this->createMock(MetricRepository::class);
@@ -40,6 +46,8 @@ class MetricsManagerTest extends TestCase
 
         // instantiate manager with mocked dependencies
         $this->metricsManager = new MetricsManager(
+            $this->appUtilMock,
+            $this->cacheUtilMock,
             $this->serverUtilMock,
             $this->errorManagerMock,
             $this->metricRepositoryMock,
@@ -142,45 +150,44 @@ class MetricsManagerTest extends TestCase
     }
 
     /**
-     * Test saveMetrics for last_24_hours period
+     * Test save metrics success
      *
      * @return void
      */
-    public function testSaveMetricsSuccess(): void
+    public function testSaveMetricSuccess(): void
     {
-        // create mock data for saving
-        $cpuUsage = 50.5;
-        $ramUsage = 75;
-        $storageUsage = 60;
+        $metricName = 'cpu_usage';
+        $value = '50.5';
 
-        // mock persist and flush calls
-        $this->entityManagerMock->expects($this->exactly(3))->method('persist')
-            ->with($this->isInstanceOf(Metric::class));
-        $this->entityManagerMock->expects($this->once())->method('flush')
-            ->willReturn(true);
+        // mock entity manager
+        $this->entityManagerMock->expects($this->once())->method('persist')->with($this->isInstanceOf(Metric::class));
+        $this->entityManagerMock->expects($this->once())->method('flush');
 
         // call tested method
-        $this->metricsManager->saveMetrics($cpuUsage, $ramUsage, $storageUsage);
+        $this->metricsManager->saveMetric($metricName, $value);
     }
 
     /**
-     * Test saveMetrics handles flush exception
+     * Test save metric failure
      *
      * @return void
      */
-    public function testSaveMetricsException(): void
+    public function testSaveMetricFailure(): void
     {
-        // simulate an error during the flush
-        $this->entityManagerMock->expects($this->once())->method('flush')
-            ->willThrowException(new Exception('Database error'));
+        $metricName = 'cpu_usage';
+        $value = '50.5';
 
-        // expect error handling to be called
+        // mock entity manager
+        $this->entityManagerMock->expects($this->once())->method('persist')->with($this->isInstanceOf(Metric::class));
+        $this->entityManagerMock->expects($this->once())->method('flush')->willThrowException(new Exception('Database error'));
+
+        // expect error handling
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            $this->stringContains('error to flush metrics:'),
+            $this->stringContains('error to save metric: Database error'),
             $this->equalTo(Response::HTTP_INTERNAL_SERVER_ERROR)
         );
 
         // call tested method
-        $this->metricsManager->saveMetrics(50.5, 75, 60);
+        $this->metricsManager->saveMetric($metricName, $value);
     }
 }

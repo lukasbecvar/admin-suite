@@ -15,8 +15,8 @@ use App\Repository\NotificationSubscriberRepository;
  * @package App\Entity
  */
 #[ORM\Table(name: 'notifications_subscribers')]
-#[ORM\Index(name: 'status_idx', columns: ['status'])]
-#[ORM\Index(name: 'user_id_idx', columns: ['user_id'])]
+#[ORM\Index(name: 'notifications_subscribers_status_idx', columns: ['status'])]
+#[ORM\Index(name: 'notifications_subscribers_user_id_idx', columns: ['user_id'])]
 #[ORM\Entity(repositoryClass: NotificationSubscriberRepository::class)]
 class NotificationSubscriber
 {

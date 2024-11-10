@@ -9,7 +9,7 @@ function getBorderColor(percentage) {
     return percentage > 80 ? '#f73925' : '#19bf3f'
 }
 
-// CPU radial graph
+// CPU usage radial graph
 var optionsCpuRadial = {
     series: [window.metricsData.cpu.current],
     chart: {
@@ -55,7 +55,7 @@ var optionsCpuRadial = {
 var chartCpuRadial = new ApexCharts(document.querySelector("#cpu-usage-radial"), optionsCpuRadial)
 chartCpuRadial.render()
 
-// CPU area graph (historical data)
+// CPU usage area graph (historical data)
 var optionsCpuLine = {
     series: [{
         name: 'CPU Usage',
@@ -88,6 +88,13 @@ var optionsCpuLine = {
         categories: window.metricsData.categories,
         tickAmount: Math.floor(window.metricsData.categories.length / 2)
     },
+    yaxis: {
+        labels: {
+            formatter: function (value) {
+                return value + '%';
+            }
+        }
+    },
     colors: ['#28a745'],
     theme: {
         mode: 'dark',
@@ -106,7 +113,7 @@ var optionsCpuLine = {
 var chartCpuLine = new ApexCharts(document.querySelector("#cpu-usage-line"), optionsCpuLine)
 chartCpuLine.render()
 
-// RAM radial graph
+// RAM usage radial graph
 var optionsRamRadial = {
     series: [window.metricsData.ram.current],
     chart: {
@@ -152,7 +159,7 @@ var optionsRamRadial = {
 var chartRamRadial = new ApexCharts(document.querySelector("#ram-usage-radial"), optionsRamRadial)
 chartRamRadial.render()
 
-// RAM area graph (historical data)
+// RAM usage area graph (historical data)
 var optionsRamLine = {
     series: [{
         name: 'RAM Usage',
@@ -185,6 +192,13 @@ var optionsRamLine = {
         categories: window.metricsData.categories,
         tickAmount: Math.floor(window.metricsData.categories.length / 2)
     },
+    yaxis: {
+        labels: {
+            formatter: function (value) {
+                return value + '%';
+            }
+        }
+    },
     colors: ['#20c997'],
     theme: {
         mode: 'dark',
@@ -203,7 +217,7 @@ var optionsRamLine = {
 var chartRamLine = new ApexCharts(document.querySelector("#ram-usage-line"), optionsRamLine)
 chartRamLine.render()
 
-// Storage radial graph
+// Storage usage radial graph
 var optionsStorageRadial = {
     series: [window.metricsData.storage.current],
     chart: {
@@ -249,7 +263,7 @@ var optionsStorageRadial = {
 var chartStorageRadial = new ApexCharts(document.querySelector("#storage-usage-radial"), optionsStorageRadial)
 chartStorageRadial.render()
 
-// Storage area graph (historical data)
+// Storage usage area graph (historical data)
 var optionsStorageLine = {
     series: [{
         name: 'Storage Usage',
@@ -281,6 +295,13 @@ var optionsStorageLine = {
     xaxis: {
         categories: window.metricsData.categories,
         tickAmount: Math.floor(window.metricsData.categories.length / 2)
+    },
+    yaxis: {
+        labels: {
+            formatter: function (value) {
+                return value + '%';
+            }
+        }
     },
     colors: ['#007bff'],
     theme: {

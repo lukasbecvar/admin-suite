@@ -440,7 +440,7 @@ class MonitoringManager
         }
 
         // save metrics to database
-        $this->metricsManager->saveMetrics($cpuUsage, $ramUsage, $storageUsage);
+        $this->metricsManager->saveUsageMetrics($cpuUsage, $ramUsage, $storageUsage);
 
         // calculate last monitoring time expiration
         $lastMonitoringTimeExpiration = (intval($monitoringInterval) * 60) * 2;

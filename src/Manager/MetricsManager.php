@@ -4,7 +4,9 @@ namespace App\Manager;
 
 use DateTime;
 use Exception;
+use App\Util\AppUtil;
 use App\Entity\Metric;
+use App\Util\CacheUtil;
 use App\Util\ServerUtil;
 use App\Repository\MetricRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,17 +21,23 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class MetricsManager
 {
+    private AppUtil $appUtil;
+    private CacheUtil $cacheUtil;
     private ServerUtil $serverUtil;
     private ErrorManager $errorManager;
     private MetricRepository $metricRepository;
     private EntityManagerInterface $entityManagerInterface;
 
     public function __construct(
+        AppUtil $appUtil,
+        CacheUtil $cacheUtil,
         ServerUtil $serverUtil,
         ErrorManager $errorManager,
         MetricRepository $metricRepository,
         EntityManagerInterface $entityManagerInterface
     ) {
+        $this->appUtil = $appUtil;
+        $this->cacheUtil = $cacheUtil;
         $this->serverUtil = $serverUtil;
         $this->errorManager = $errorManager;
         $this->metricRepository = $metricRepository;
@@ -64,7 +72,7 @@ class MetricsManager
         }
 
         // get current usages
-        $cpuUsageCurrent = $this->serverUtil->getCpuUsage();
+        $cpuUsageCurrent = (int) $this->serverUtil->getCpuUsage();
         $ramUsageCurrent = $this->serverUtil->getRamUsagePercentage();
         $storageUsageCurrent = $this->serverUtil->getDriveUsagePercentage();
 
@@ -121,47 +129,98 @@ class MetricsManager
     }
 
     /**
-     * Save metrics
+     * Save metric
      *
-     * @param float $cpuUsage The cpu usage
-     * @param int $ramUsage The ram usage
-     * @param int $storageUsage The storage usage
+     * @param string $metricName The metric name
+     * @param string $value The metric value
      *
      * @return void
      */
-    public function saveMetrics(float $cpuUsage, int $ramUsage, int $storageUsage): void
+    public function saveMetric(string $metricName, string $value): void
     {
-        // save cpu usage
-        $cpuUsageMetric = new Metric();
-        $cpuUsageMetric->setName('cpu_usage')
-            ->setValue(strval($cpuUsage))
+        // set metric object
+        $metric = new Metric();
+        $metric->setName($metricName)
+            ->setValue($value)
             ->setTime(new DateTime());
 
-        // save ram usage
-        $ramUsageMetric = new Metric();
-        $ramUsageMetric->setName('ram_usage')
-            ->setValue(strval($ramUsage))
-            ->setTime(new DateTime());
+        // persist metric
+        $this->entityManagerInterface->persist($metric);
 
-        // save storage usage
-        $storageUsageMetric = new Metric();
-        $storageUsageMetric->setName('storage_usage')
-            ->setValue(strval($storageUsage))
-            ->setTime(new DateTime());
-
-        // persist metrics
-        $this->entityManagerInterface->persist($cpuUsageMetric);
-        $this->entityManagerInterface->persist($ramUsageMetric);
-        $this->entityManagerInterface->persist($storageUsageMetric);
-
-        // flush changes to database
         try {
             $this->entityManagerInterface->flush();
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                message: 'error to flush metrics: ' . $e->getMessage(),
+                message: 'error to save metric: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
+        }
+    }
+
+    /**
+     * Save usage metrics
+     *
+     * @param float $cpuUsage The CPU usage
+     * @param int $ramUsage The RAM usage
+     * @param int $storageUsage The storage usage
+     *
+     * @return void
+     */
+    public function saveUsageMetrics(float $cpuUsage, int $ramUsage, int $storageUsage): void
+    {
+        // get monitoring interval
+        $monitoringInterval = (int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60;
+        $metricsSaveInterval = (int) $this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL') * 60;
+
+        // calculate cache expiration
+        $cacheExpiration = $monitoringInterval * 2;
+
+        // define cache keys
+        $cpuKey = 'metrics_cpu_usage_sum';
+        $ramKey = 'metrics_ram_usage_sum';
+        $storageKey = 'metrics_storage_usage_sum';
+        $countKey = 'metrics_metric_count';
+        $lastSaveKey = 'metrics_last_save_time';
+
+        // get current sums and counts
+        $cpuSum = $this->cacheUtil->getValue($cpuKey)->get() ?? 0;
+        $ramSum = $this->cacheUtil->getValue($ramKey)->get() ?? 0;
+        $storageSum = $this->cacheUtil->getValue($storageKey)->get() ?? 0;
+        $count = $this->cacheUtil->getValue($countKey)->get() ?? 0;
+
+        // calculate new sums
+        $cpuSum += $cpuUsage;
+        $ramSum += $ramUsage;
+        $storageSum += $storageUsage;
+        $count++;
+
+        // save updated values to cache
+        $this->cacheUtil->setValue($cpuKey, $cpuSum, $cacheExpiration);
+        $this->cacheUtil->setValue($ramKey, $ramSum, $cacheExpiration);
+        $this->cacheUtil->setValue($storageKey, $storageSum, $cacheExpiration);
+        $this->cacheUtil->setValue($countKey, $count, $cacheExpiration);
+
+        // if it's more than metrics save interval, save averages and reset values
+        if (!$this->cacheUtil->isCatched($lastSaveKey)) {
+            $averageCpu = $cpuSum / $count;
+            $averageRam = $ramSum / $count;
+            $averageStorage = $storageSum / $count;
+
+            // save averages to DB
+            $this->saveMetric('cpu_usage', (string) $averageCpu);
+            $this->saveMetric('ram_usage', (string) $averageRam);
+            $this->saveMetric('storage_usage', (string) $averageStorage);
+
+            // reset sums and counts
+            $this->cacheUtil->setValue($cpuKey, 0, $cacheExpiration);
+            $this->cacheUtil->setValue($ramKey, 0, $cacheExpiration);
+            $this->cacheUtil->setValue($storageKey, 0, $cacheExpiration);
+            $this->cacheUtil->setValue($countKey, 0, $cacheExpiration);
+        }
+
+        // set last save time if not catched (disable next save)
+        if (!$this->cacheUtil->isCatched($lastSaveKey)) {
+            $this->cacheUtil->setValue($lastSaveKey, time(), $metricsSaveInterval);
         }
     }
 }
