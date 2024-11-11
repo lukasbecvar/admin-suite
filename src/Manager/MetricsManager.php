@@ -202,9 +202,9 @@ class MetricsManager
 
         // if it's more than metrics save interval, save averages and reset values
         if (!$this->cacheUtil->isCatched($lastSaveKey)) {
-            $averageCpu = $cpuSum / $count;
-            $averageRam = $ramSum / $count;
-            $averageStorage = $storageSum / $count;
+            $averageCpu = round($cpuSum / $count, 1);
+            $averageRam = round($ramSum / $count, 1);
+            $averageStorage = round($storageSum / $count, 1);
 
             // save averages to DB
             $this->saveMetric('cpu_usage', (string) $averageCpu);

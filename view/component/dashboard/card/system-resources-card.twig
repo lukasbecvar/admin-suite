@@ -1,5 +1,8 @@
 <div class="card-color border border-gray-600 shadow-lg rounded w-full">
-    <div class="px-3 py-2 border-b border-gray-600 font-extrabold text-white text-sm">System Resources</div>
+    <div class="px-3 py-2 border-b border-gray-600 text-white font-bold text-sm flex items-center justify-between">
+        <span>System Resources</span>
+        <a href={{ path('app_metrics_dashboard') }} class="text-indigo-400 hover:text-indigo-300 text-xs" title="Go to metrics view">View All</a>
+    </div>
     <div class="p-4">
         <p class="text-white mb-1">CPU: {{ diagnosticData.cpuUsage|e }}%</p>
         <div class="progress-bar">
