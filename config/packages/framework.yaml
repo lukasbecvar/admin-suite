@@ -1,9 +1,23 @@
 framework:
     secret: '%env(APP_SECRET)%'
     trusted_hosts: '%env(TRUSTED_HOSTS)%'
+    session: true
+
+    # csrf protection
+    csrf_protection: true
+    form:
+        csrf_protection:
+            enabled: true
+            field_name: 'csrf_token'
 
 when@test:
     framework:
+        # csrf protection (disabled in test)
+        csrf_protection: false
+        form:
+            csrf_protection:
+                enabled: false
+                
         test: true
         session:
             storage_factory_id: session.storage.factory.mock_file

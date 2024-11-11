@@ -4,6 +4,7 @@ namespace App\Util;
 
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class SessionUtil
@@ -14,11 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SessionUtil
 {
+    private RequestStack $requestStack;
     private SecurityUtil $securityUtil;
     private ErrorManager $errorManager;
 
-    public function __construct(SecurityUtil $securityUtil, ErrorManager $errorManager)
+    public function __construct(RequestStack $requestStack, SecurityUtil $securityUtil, ErrorManager $errorManager)
     {
+        $this->requestStack = $requestStack;
         $this->securityUtil = $securityUtil;
         $this->errorManager = $errorManager;
     }
@@ -30,8 +33,8 @@ class SessionUtil
      */
     public function startSession(): void
     {
-        if (session_status() == PHP_SESSION_NONE && (!headers_sent())) {
-            session_start();
+        if (!$this->requestStack->getSession()->isStarted()) {
+            $this->requestStack->getSession()->start();
         }
     }
 
@@ -42,9 +45,8 @@ class SessionUtil
      */
     public function destroySession(): void
     {
-        $this->startSession();
-        if (session_status() == PHP_SESSION_ACTIVE) {
-            session_destroy();
+        if ($this->requestStack->getSession()->isStarted()) {
+            $this->requestStack->getSession()->invalidate();
         }
     }
 
@@ -57,12 +59,11 @@ class SessionUtil
      */
     public function checkSession(string $sessionName): bool
     {
-        $this->startSession();
-        return isset($_SESSION[$sessionName]);
+        return $this->requestStack->getSession()->has($sessionName);
     }
 
     /**
-     * Set a session value
+     * Set a session value.
      *
      * @param string $sessionName The name of the session
      * @param string $sessionValue The value to set for the session
@@ -72,28 +73,30 @@ class SessionUtil
     public function setSession(string $sessionName, string $sessionValue): void
     {
         $this->startSession();
-        $_SESSION[$sessionName] = $this->securityUtil->encryptAes($sessionValue);
+        $this->requestStack->getSession()->set($sessionName, $this->securityUtil->encryptAes($sessionValue));
     }
 
     /**
-     * Get a value from the session
+     * Get the decrypted value of a session
      *
-     * @param string $sessionName The session key
-     * @param mixed $default The default value to return if the key does not exist
+     * @param string $sessionName The name of the session
      *
-     * @return mixed The session value or default if key does not exist
+     * @return mixed The decrypted session value
      */
     public function getSessionValue(string $sessionName, mixed $default = null): mixed
     {
         $this->startSession();
 
+        /** @var string $value */
+        $value = $this->requestStack->getSession()->get($sessionName);
+
         // check if session exist
-        if (!isset($_SESSION[$sessionName])) {
+        if (!isset($value)) {
             return $default;
         }
 
         // decrypt session value
-        $value = $this->securityUtil->decryptAes($_SESSION[$sessionName]);
+        $value = $this->securityUtil->decryptAes($value);
 
         // check if session data is decrypted
         if ($value === null) {

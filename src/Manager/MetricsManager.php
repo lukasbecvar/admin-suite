@@ -72,9 +72,16 @@ class MetricsManager
         }
 
         // get current usages
-        $cpuUsageCurrent = (int) $this->serverUtil->getCpuUsage();
+        $cpuUsageCurrent = $this->serverUtil->getCpuUsage();
         $ramUsageCurrent = $this->serverUtil->getRamUsagePercentage();
         $storageUsageCurrent = $this->serverUtil->getDriveUsagePercentage();
+
+        // format cpu usage value
+        if (str_starts_with((string) $cpuUsageCurrent, '0.')) {
+            $cpuUsageCurrent = round($cpuUsageCurrent, 1);
+        } else {
+            $cpuUsageCurrent = intval($cpuUsageCurrent);
+        }
 
         if (in_array($timePeriod, ['last_week', 'last_month', 'all_time'])) {
             // fill categories and cpu usage data (average aggregated)
