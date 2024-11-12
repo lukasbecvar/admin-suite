@@ -1,6 +1,6 @@
 framework:
     secret: '%env(APP_SECRET)%'
-    trusted_hosts: '%env(TRUSTED_HOSTS)%'
+    trusted_hosts: '%env(APP_TRUSTED_DOMAIN_NAME)%'
     session: true
 
     # csrf protection
