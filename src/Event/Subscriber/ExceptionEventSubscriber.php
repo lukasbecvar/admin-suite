@@ -4,10 +4,12 @@ namespace App\Event\Subscriber;
 
 use App\Util\AppUtil;
 use Psr\Log\LoggerInterface;
+use App\Manager\ErrorManager;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ExceptionEventSubscriber
@@ -20,11 +22,13 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
 {
     private AppUtil $appUtil;
     private LoggerInterface $logger;
+    private ErrorManager $errorManager;
 
-    public function __construct(AppUtil $appUtil, LoggerInterface $logger)
+    public function __construct(AppUtil $appUtil, LoggerInterface $logger, ErrorManager $errorManager)
     {
         $this->logger = $logger;
         $this->appUtil = $appUtil;
+        $this->errorManager = $errorManager;
     }
 
     /**
@@ -53,6 +57,16 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
 
         // get the error message
         $message = $exception->getMessage();
+
+        // handle untrusted host exception
+        if (str_contains($message, 'Untrusted Host') || str_contains($message, 'Invalid host')) {
+            if (!$this->appUtil->isDevMode()) {
+                $content = $this->errorManager->getErrorView('400');
+                $response = new Response($content, Response::HTTP_SERVICE_UNAVAILABLE);
+                $event->setResponse($response);
+                return;
+            }
+        }
 
         // define default exception code
         $statusCode = 500;
