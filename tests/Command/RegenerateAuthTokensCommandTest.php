@@ -4,58 +4,53 @@ namespace App\Tests\Command;
 
 use App\Manager\AuthManager;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Application;
 use App\Command\RegenerateAuthTokensCommand;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Class RegenerateAuthTokensCommandTest
  *
- * Test the RegenerateAuthTokensCommand class
+ * Test execute auth tokens regenerate command
  *
  * @package App\Tests\Command
  */
 class RegenerateAuthTokensCommandTest extends TestCase
 {
     private CommandTester $commandTester;
+    private RegenerateAuthTokensCommand $command;
     private AuthManager & MockObject $authManager;
 
     protected function setUp(): void
     {
-        // mock AuthManager
+        // mock dependencies
         $this->authManager = $this->createMock(AuthManager::class);
 
-        // set up the expected method calls and their return values
-        $this->authManager->expects($this->once())->method('regenerateUsersTokens')
-            ->willReturn(['status' => true]);
-
-        // create the command
-        $command = new RegenerateAuthTokensCommand($this->authManager);
-
-        // create an application and add the command
-        $application = new Application();
-        $application->add($command);
-
-        // create a command tester
-        $command = $application->find('app:auth:tokens:regenerate');
-        $this->commandTester = new CommandTester($command);
+        // initialize the command
+        $this->command = new RegenerateAuthTokensCommand($this->authManager);
+        $this->commandTester = new CommandTester($this->command);
     }
 
     /**
-     * Test the execute method
+     * Test execute auth tokens regenerate command
      *
      * @return void
      */
     public function testRegenerateAuthTokensCommand(): void
     {
-        // execute the command
-        $this->commandTester->execute([]);
+        // mock regenerate tokens method status
+        $this->authManager->expects($this->once())->method('regenerateUsersTokens')
+            ->willReturn(['status' => true]);
 
-        // get output
+        // execute the command
+        $exitCode = $this->commandTester->execute([]);
+
+        // get command output
         $output = $this->commandTester->getDisplay();
 
-        // assert the output
+        // assert result
+        $this->assertSame(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('All tokens is regenerated', $output);
     }
 }

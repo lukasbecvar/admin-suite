@@ -6,7 +6,6 @@ use Exception;
 use App\Entity\User;
 use App\Manager\UserManager;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Application;
 use App\Command\User\UserUpdateRoleCommand;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Command\Command;
@@ -15,13 +14,14 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class UserUpdateRoleCommandTest
  *
- * Test the user update role command
+ * Test execute user update role command
  *
  * @package App\Tests\Command
  */
 class UserUpdateRoleCommandTest extends TestCase
 {
     private CommandTester $commandTester;
+    private UserUpdateRoleCommand $command;
     private UserManager & MockObject $userManager;
 
     protected function setUp(): void
@@ -29,102 +29,88 @@ class UserUpdateRoleCommandTest extends TestCase
         // mock dependencies
         $this->userManager = $this->createMock(UserManager::class);
 
-        // create command tester instance
-        $this->commandTester = $this->createCommandTester();
+        // initialize the command
+        $this->command = new UserUpdateRoleCommand($this->userManager);
+        $this->commandTester = new CommandTester($this->command);
     }
 
     /**
-     * Create command tester
-     *
-     * @return CommandTester
-     */
-    private function createCommandTester(): CommandTester
-    {
-        $command = new UserUpdateRoleCommand($this->userManager);
-        $application = new Application();
-        $application->add($command);
-        $command = $application->find('app:user:update:role');
-
-        return new CommandTester($command);
-    }
-
-    /**
-     * Test execute method with empty username
+     * Test execute user update role command with empty username
      *
      * @return void
      */
     public function testExecuteWithEmptyUsername(): void
     {
         // execute command
-        $this->commandTester->execute(['username' => '', 'role' => 'ADMIN']);
+        $exitCode = $this->commandTester->execute(['username' => '', 'role' => 'ADMIN']);
 
-        // get output
+        // get command output
         $output = $this->commandTester->getDisplay();
 
-        // assert output contains
+        // assert result
+        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Username cannot be empty.', $output);
-        $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
     }
 
     /**
-     * Test execute method with empty role
+     * Test execute user update role command with empty role
      *
      * @return void
      */
     public function testExecuteWithEmptyRole(): void
     {
         // execute command
-        $this->commandTester->execute(['username' => 'testuser', 'role' => '']);
+        $exitCode = $this->commandTester->execute(['username' => 'testuser', 'role' => '']);
 
-        // get output
+        // get command output
         $output = $this->commandTester->getDisplay();
 
-        // assert output contains
+        // assert result
+        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Role cannot be empty.', $output);
-        $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
     }
 
     /**
-     * Test execute method with invalid role
+     * Test execute user update role command with invalid role
      *
      * @return void
      */
     public function testExecuteWithInvalidRole(): void
     {
         // execute command
-        $this->commandTester->execute(['username' => 'testuser', 'role' => 123]);
+        $exitCode = $this->commandTester->execute(['username' => 'testuser', 'role' => 123]);
 
-        // get output
+        // get command output
         $output = $this->commandTester->getDisplay();
 
-        // assert output contains
+        // assert result
+        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Invalid role provided.', $output);
-        $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
     }
 
     /**
-     * Test execute method with non existing username
+     * Test execute user update role command with non existing username
      *
      * @return void
      */
     public function testExecuteWithNonExistingUsername(): void
     {
-        // mock repo
+        // mock user manager
         $this->userManager->method('getUserByUsername')->willReturn(null);
 
         // execute command
-        $this->commandTester->execute(['username' => 'testuser', 'role' => 'ADMIN']);
+        $exitCode = $this->commandTester->execute(['username' => 'testuser', 'role' => 'ADMIN']);
 
-        // get output
+        // get command output
         $output = $this->commandTester->getDisplay();
 
-        // assert output contains
+        // assert result
+        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Error username: testuser does not exist.', $output);
-        $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
     }
 
     /**
-     * Test execute method with same role
+     * Test execute user update role command with same role is already assigned
      *
      * @return void
      */
@@ -134,33 +120,33 @@ class UserUpdateRoleCommandTest extends TestCase
         $user = $this->createMock(User::class);
         $user->method('getId')->willReturn(1);
 
-        // mock methods
+        // mock user manager
         $this->userManager->method('getUserByUsername')->willReturn($user);
         $this->userManager->method('getUserRoleById')->willReturn('ADMIN');
 
         // execute command
-        $this->commandTester->execute(['username' => 'testuser', 'role' => 'ADMIN']);
+        $exitCode = $this->commandTester->execute(['username' => 'testuser', 'role' => 'ADMIN']);
 
-        // get output
+        // get command output
         $output = $this->commandTester->getDisplay();
 
-        // assert output contains
+        // assert result
+        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Error role: ADMIN is already assigned to user: testuser', $output);
-        $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
     }
 
     /**
-     * Test execute method with exception during role update
+     * Test execute user update role command with exception during role update
      *
      * @return void
      */
     public function testExecuteWithExceptionDuringRoleUpdate(): void
     {
-        // create user mock
+        // mock user
         $user = $this->createMock(User::class);
         $user->method('getId')->willReturn(1);
 
-        // mock methods
+        // mock user manager
         $this->userManager->method('getUserByUsername')->willReturn($user);
         $this->userManager->method('getUserRoleById')->willReturn('USER');
         $this->userManager->method('updateUserRole')->will($this->throwException(
@@ -168,39 +154,39 @@ class UserUpdateRoleCommandTest extends TestCase
         ));
 
         // execute command
-        $this->commandTester->execute(['username' => 'testuser', 'role' => 'ADMIN']);
+        $exitCode = $this->commandTester->execute(['username' => 'testuser', 'role' => 'ADMIN']);
 
-        // get output
+        // get command output
         $output = $this->commandTester->getDisplay();
 
-        // assert output contains
+        // assert result
+        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Error updating role: Some error', $output);
-        $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
     }
 
     /**
-     * Test execute with successful role update
+     * Test execute user update role command with successful role update
      *
      * @return void
      */
     public function testExecuteSuccessfulRoleUpdate(): void
     {
-        // create user mock
+        // mock user
         $user = $this->createMock(User::class);
         $user->method('getId')->willReturn(1);
 
-        // mock methods
+        // mock user manager
         $this->userManager->method('getUserByUsername')->willReturn($user);
         $this->userManager->method('getUserRoleById')->willReturn('USER');
 
         // execute command
-        $this->commandTester->execute(['username' => 'testuser', 'role' => 'ADMIN']);
+        $exitCode = $this->commandTester->execute(['username' => 'testuser', 'role' => 'ADMIN']);
 
-        // get output
+        // get command output
         $output = $this->commandTester->getDisplay();
 
-        // assert output contains
+        // assert result
+        $this->assertSame(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('Role updated successfully.', $output);
-        $this->assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
     }
 }

@@ -2,14 +2,13 @@
 
 namespace App\Tests\Command;
 
+use DateTime;
+use App\Entity\Log;
 use App\Manager\LogManager;
 use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
 use PHPUnit\Framework\TestCase;
 use App\Command\LogReaderCommand;
-use App\Entity\Log;
-use DateTime;
-use Symfony\Component\Console\Application;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -17,12 +16,13 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class LogReaderCommandTest
  *
- * Test the log reader command
+ * Test execute log reader command
  *
  * @package App\Tests\Command
  */
 class LogReaderCommandTest extends TestCase
 {
+    private LogReaderCommand $command;
     private CommandTester $commandTester;
     private LogManager & MockObject $logManager;
     private UserManager & MockObject $userManager;
@@ -35,47 +35,43 @@ class LogReaderCommandTest extends TestCase
         $this->userManager = $this->createMock(UserManager::class);
         $this->visitorInfoUtil = $this->createMock(VisitorInfoUtil::class);
 
-        $command = new LogReaderCommand(
+        // create command instance
+        $this->command = new LogReaderCommand(
             $this->logManager,
             $this->userManager,
             $this->visitorInfoUtil
         );
 
-        // get application instance and add command
-        $application = new Application();
-        $application->add($command);
-        $command = $application->find('app:log:reader');
-
         // create command tester instance
-        $this->commandTester = new CommandTester($command);
+        $this->commandTester = new CommandTester($this->command);
     }
 
     /**
-     * Test execute with invalid status
+     * Test execute command with invalid status
      *
      * @return void
      */
     public function testExecuteWithInvalidStatus(): void
     {
         // execute command with empty status
-        $this->commandTester->execute(['status' => '']);
+        $exitCode = $this->commandTester->execute(['status' => '']);
 
-        // get output
+        // get command output
         $output = $this->commandTester->getDisplay();
 
-        // assert output
+        // assert result
+        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('status cannot be empty.', $output);
-        $this->assertEquals(Command::FAILURE, $this->commandTester->getStatusCode());
     }
 
     /**
-     * Test execute with valid status
+     * Test execute command with valid status
      *
      * @return void
      */
     public function testExecuteWithValidStatus(): void
     {
-        // mock data
+        // mock log object
         $log = $this->createMock(Log::class);
         $log->method('getId')->willReturn(1);
         $log->method('getName')->willReturn('Log name');
@@ -97,18 +93,18 @@ class LogReaderCommandTest extends TestCase
         $this->visitorInfoUtil->method('getOs')->willReturn('OS');
 
         // execute command
-        $this->commandTester->execute(['status' => 'all']);
+        $exitCode = $this->commandTester->execute(['status' => 'all']);
 
-        // get output
+        // get command output
         $output = $this->commandTester->getDisplay();
 
-        // assert output
+        // assert result
+        $this->assertEquals(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('Log name', $output);
         $this->assertStringContainsString('Log message', $output);
         $this->assertStringContainsString('Browser', $output);
         $this->assertStringContainsString('OS', $output);
         $this->assertStringContainsString('127.0.0.1', $output);
         $this->assertStringContainsString('Test User', $output);
-        $this->assertEquals(Command::SUCCESS, $this->commandTester->getStatusCode());
     }
 }

@@ -6,7 +6,6 @@ use App\Util\ServerUtil;
 use PHPUnit\Framework\TestCase;
 use App\Manager\DatabaseManager;
 use App\Command\RequirementsCheckCommand;
-use Symfony\Component\Console\Application;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -14,13 +13,14 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class RequirementsCheckCommandTest
  *
- * Test the requirements check command
+ * Test execute requirements check command
  *
  * @package App\Tests\Command
  */
 class RequirementsCheckCommandTest extends TestCase
 {
     private CommandTester $commandTester;
+    private RequirementsCheckCommand $command;
     private ServerUtil & MockObject $serverUtil;
     private DatabaseManager & MockObject $databaseManager;
 
@@ -31,28 +31,25 @@ class RequirementsCheckCommandTest extends TestCase
         $this->databaseManager = $this->createMock(DatabaseManager::class);
 
         // create the command
-        $command = new RequirementsCheckCommand($this->serverUtil, $this->databaseManager);
-
-        // create an application and add the command
-        $application = new Application();
-        $application->add($command);
-
-        // create a command tester
-        $command = $application->find('app:check:requirements');
-        $this->commandTester = new CommandTester($command);
+        $this->command = new RequirementsCheckCommand($this->serverUtil, $this->databaseManager);
+        $this->commandTester = new CommandTester($this->command);
     }
 
     /**
-     * Test the requirements check command
+     * Test execute requirements check command
      *
      * @return void
      */
     public function testRequirementsCheckCommand(): void
     {
         // execute the command
-        $this->commandTester->execute([]);
+        $exitCode = $this->commandTester->execute([]);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
 
         // assert the output
-        $this->assertEquals(Command::SUCCESS, $this->commandTester->getStatusCode());
+        $this->assertEquals(Command::SUCCESS, $exitCode);
+        $this->assertStringContainsString('Database connected successfully', $output);
     }
 }

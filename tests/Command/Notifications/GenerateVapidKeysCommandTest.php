@@ -2,6 +2,7 @@
 
 namespace App\Tests\Command\Notifications;
 
+use Exception;
 use App\Util\AppUtil;
 use PHPUnit\Framework\TestCase;
 use App\Manager\NotificationsManager;
@@ -13,12 +14,13 @@ use App\Command\Notifications\GenerateVapidKeysCommand;
 /**
  * Class GenerateVapidKeysCommandTest
  *
- * Test the generate vapid keys command class
+ * Test execute the generate vapid keys command
  *
  * @package App\Tests\Command\Notifications
  */
 class GenerateVapidKeysCommandTest extends TestCase
 {
+    private CommandTester $commandTester;
     private AppUtil & MockObject $appUtil;
     private GenerateVapidKeysCommand $command;
     private NotificationsManager & MockObject $notificationsManager;
@@ -26,84 +28,113 @@ class GenerateVapidKeysCommandTest extends TestCase
     protected function setUp(): void
     {
         // mock the dependencies
-        $this->notificationsManager = $this->createMock(NotificationsManager::class);
         $this->appUtil = $this->createMock(AppUtil::class);
+        $this->notificationsManager = $this->createMock(NotificationsManager::class);
 
         // initialize the command instance
         $this->command = new GenerateVapidKeysCommand($this->appUtil, $this->notificationsManager);
+        $this->commandTester = new CommandTester($this->command);
     }
 
     /**
-     * Test execute method when notifications are disabled
+     * Test execute command when notifications are disabled
      *
      * @return void
      */
-    public function testExecuteWhenNotificationsDisabled(): void
+    public function testPushNotificationsDisabled(): void
     {
-        // mock the return value for PUSH_NOTIFICATIONS_ENABLED
+        // mock environment value PUSH_NOTIFICATIONS_ENABLED
         $this->appUtil->method('getEnvValue')->willReturn('false');
 
-        // create a CommandTester for the command
-        $commandTester = new CommandTester($this->command);
-        $commandTester->setInputs(['no']); // simulating user input for confirmation
+        // execute command
+        $exitCode = $this->commandTester->execute([]);
 
-        // execute the command
-        $commandTester->execute([]);
+        // get command output
+        $commandOutput = $this->commandTester->getDisplay();
 
-        // assert the output
-        $this->assertStringContainsString('Push notifiations is disabled', $commandTester->getDisplay());
-        $this->assertEquals(Command::FAILURE, $commandTester->getStatusCode());
+        // assert result
+        $this->assertSame(Command::FAILURE, $exitCode);
+        $this->assertStringContainsString('Push notifiations is disabled', $commandOutput);
     }
 
     /**
-     * Test execute method when notifications are enabled
+     * Test execute command when regeneration is cancelled
      *
      * @return void
      */
-    public function testExecuteWhenRegeneratingVapidKeys(): void
+    public function testCancelRegenerateVapidKeys(): void
     {
-        // mock the return value for PUSH_NOTIFICATIONS_ENABLED
+        // mock environment value PUSH_NOTIFICATIONS_ENABLED
         $this->appUtil->method('getEnvValue')->willReturn('true');
 
-        // mock the regenerateVapidKeys method
-        $this->notificationsManager->method('regenerateVapidKeys')->willReturn([
-            'publicKey' => 'testPublicKey',
-            'privateKey' => 'testPrivateKey'
-        ]);
+        // simulate user confirmation input
+        $this->commandTester->setInputs(['no']);
 
-        // create a CommandTester for the command
-        $commandTester = new CommandTester($this->command);
-        $commandTester->setInputs(['yes']); // simulating user input for confirmation
+        // execute command
+        $exitCode = $this->commandTester->execute([]);
 
-        // execute the command
-        $commandTester->execute([]);
+        // get command output
+        $commandOutput = $this->commandTester->getDisplay();
 
-        // assert the output
-        $this->assertStringContainsString('VAPID keys generated successfully.', $commandTester->getDisplay());
-        $this->assertStringContainsString('Public Key: testPublicKey', $commandTester->getDisplay());
-        $this->assertStringContainsString('Private Key: testPrivateKey', $commandTester->getDisplay());
-        $this->assertEquals(Command::SUCCESS, $commandTester->getStatusCode());
+        // assert result
+        $this->assertSame(Command::SUCCESS, $exitCode);
+        $this->assertStringContainsString('VAPID keys regeneration was cancelled.', $commandOutput);
     }
 
     /**
-     * Test execute method when regeneration is cancelled
+     * Test execute command when response is success
      *
      * @return void
      */
-    public function testExecuteWhenRegenerationCancelled(): void
+    public function testRegenerateVapidKeysSuccess(): void
     {
-        // mock the return value for PUSH_NOTIFICATIONS_ENABLED
+        // mock environment value PUSH_NOTIFICATIONS_ENABLED
         $this->appUtil->method('getEnvValue')->willReturn('true');
 
-        // create a CommandTester for the command
-        $commandTester = new CommandTester($this->command);
-        $commandTester->setInputs(['no']); // simulating user input for confirmation
+        // mock regeneration method
+        $this->notificationsManager->method('regenerateVapidKeys')
+            ->willReturn(['publicKey' => 'test_public_key', 'privateKey' => 'test_private_key']);
 
-        // execute the command
-        $commandTester->execute([]);
+        // simulate user confirmation input
+        $this->commandTester->setInputs(['yes']);
 
-        // assert the output
-        $this->assertStringContainsString('VAPID keys regeneration was cancelled.', $commandTester->getDisplay());
-        $this->assertEquals(Command::SUCCESS, $commandTester->getStatusCode());
+        // execute command
+        $exitCode = $this->commandTester->execute([]);
+
+        // get command output
+        $commandOutput = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertSame(Command::SUCCESS, $exitCode);
+        $this->assertStringContainsString('VAPID keys generated successfully.', $commandOutput);
+        $this->assertStringContainsString('Public Key: test_public_key', $commandOutput);
+        $this->assertStringContainsString('Private Key: test_private_key', $commandOutput);
+    }
+
+    /**
+     * Test execute command when response is exception
+     *
+     * @return void
+     */
+    public function testRegenerateVapidKeysException(): void
+    {
+        // mock environment value PUSH_NOTIFICATIONS_ENABLED
+        $this->appUtil->method('getEnvValue')->willReturn('true');
+
+        // mock regenerate method
+        $this->notificationsManager->method('regenerateVapidKeys')->willThrowException(new Exception('Simulated error'));
+
+        // simulate user confirmation input
+        $this->commandTester->setInputs(['yes']);
+
+        // execute command
+        $exitCode = $this->commandTester->execute([]);
+
+        // get command output
+        $commandOutput = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertSame(Command::FAILURE, $exitCode);
+        $this->assertStringContainsString('Error to generate VAPID keys: Simulated error', $commandOutput);
     }
 }
