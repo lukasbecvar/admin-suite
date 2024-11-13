@@ -13,7 +13,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class UserRegisterCommandTest
  *
- * Test execute user register command
+ * Test cases for execute user register command
  *
  * @package App\Tests\Command
  */

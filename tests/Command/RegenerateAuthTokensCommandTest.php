@@ -12,7 +12,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class RegenerateAuthTokensCommandTest
  *
- * Test execute auth tokens regenerate command
+ * Test cases for execute auth tokens regenerate command
  *
  * @package App\Tests\Command
  */

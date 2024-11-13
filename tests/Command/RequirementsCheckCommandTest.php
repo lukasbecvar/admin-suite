@@ -13,7 +13,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class RequirementsCheckCommandTest
  *
- * Test execute requirements check command
+ * Test cases for execute requirements check command
  *
  * @package App\Tests\Command
  */

@@ -16,7 +16,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class LogReaderCommandTest
  *
- * Test execute log reader command
+ * Test cases for execute log reader command
  *
  * @package App\Tests\Command
  */

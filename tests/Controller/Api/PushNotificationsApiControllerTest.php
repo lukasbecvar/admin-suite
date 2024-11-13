@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class PushNotificationsApiControllerTest
  *
- * Test for push notifications API
+ * Test cases for notifications API controller endpoints
  *
  * @package App\Tests\Controller\Api
  */
@@ -24,13 +24,16 @@ class PushNotificationsApiControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the get enabled status
+     * Test get request for push notifications enabled status with status is false
      *
      * @return void
      */
     public function testGetPushNotificationsEnabledStatus(): void
     {
+        // simulate push notifications enabled
         $_ENV['PUSH_NOTIFICATIONS_ENABLED'] = 'false';
+
+        // make get request to the endpoint
         $this->client->request('GET', '/api/notifications/enabled');
 
         // get response content
@@ -45,19 +48,22 @@ class PushNotificationsApiControllerTest extends CustomTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSame('success', $responseData['status']);
         $this->assertSame('false', $responseData['enabled']);
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
-     * Test the get enabled status with push notifications enabled
+     * Test get request for push notifications public key get when push notifications is disabled
      *
      * @return void
      */
     public function testGetPublicKeyWithPushNotificationsDisabled(): void
     {
+        // simulate push notifications disabled
         $_ENV['PUSH_NOTIFICATIONS_ENABLED'] = 'false';
+
+        // make get request to the endpoint
         $this->client->request('GET', '/api/notifications/public-key');
 
         // get response content
@@ -72,19 +78,22 @@ class PushNotificationsApiControllerTest extends CustomTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         $this->assertSame('disabled', $responseData['status']);
         $this->assertSame('Push notifications is disabled', $responseData['message']);
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     /**
-     * Test the get vapid keys
+     * Test get request for push notifications public key get
      *
      * @return void
      */
     public function testGetPublicKeyWithPushNotificationsEnabled(): void
     {
+        // simulate push notifications enabled
         $_ENV['PUSH_NOTIFICATIONS_ENABLED'] = 'true';
+
+        // make get request to the endpoint
         $this->client->request('GET', '/api/notifications/public-key');
 
         // get response content
@@ -99,19 +108,22 @@ class PushNotificationsApiControllerTest extends CustomTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSame('success', $responseData['status']);
         $this->assertNotEmpty($responseData['vapid_public_key']);
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
-     * Test the subscriber with push notifications disabled
+     * Test request for subscribing to push notidications with push notifications disabled
      *
      * @return void
      */
     public function testSubscriberWithPushNotificationsDisabled(): void
     {
+        // simulate push notifications disabled
         $_ENV['PUSH_NOTIFICATIONS_ENABLED'] = 'false';
+
+        // make post request to the endpoint
         $this->client->request('POST', '/api/notifications/subscribe', [
             'endpoint' => 'https://chromeapi.test',
             'keys' => [
@@ -132,18 +144,19 @@ class PushNotificationsApiControllerTest extends CustomTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         $this->assertSame('disabled', $responseData['status']);
         $this->assertSame('Push notifications is disabled', $responseData['message']);
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     /**
-     * Test the subscribe endpoint with push notifications enabled
+     * Test request for subscribing to push notifications
      *
      * @return void
      */
     public function testSubscriberWithPushNotificationsEnabled(): void
     {
+        // simulate push notifications enabled
         $_ENV['PUSH_NOTIFICATIONS_ENABLED'] = 'true';
 
         // subscriber input data
@@ -175,8 +188,8 @@ class PushNotificationsApiControllerTest extends CustomTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSame('success', $responseData['status']);
         $this->assertSame('Subscription received', $responseData['message']);
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

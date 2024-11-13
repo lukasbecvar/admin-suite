@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class RegisterControllerTest
  *
- * Test the register controller
+ * Test cases for admin page controller actions
  *
  * @package App\Tests\Controller\Auth
  */
@@ -22,54 +22,41 @@ class RegisterControllerTest extends WebTestCase
     {
         $this->client = static::createClient();
         $this->client->disableReboot();
-    }
 
-    /**
-     * Set mock user manager
-     *
-     * @return void
-     */
-    private function setMockUserManager(): void
-    {
+        // mock user manager (enable user registration component)
         $mockUserManager = $this->createMock(UserManager::class);
         $mockUserManager->method('isUsersEmpty')->willReturn(true);
         $this->client->getContainer()->set(UserManager::class, $mockUserManager);
     }
 
     /**
-     * Test register page rendering
+     * Test render register page
      *
      * @return void
      */
     public function testRegisterPageRendering(): void
     {
-        // set mock user manager
-        $this->setMockUserManager();
-
-        // request register page
+        // request to register page
         $this->client->request('GET', '/register');
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Register');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
         $this->assertSelectorExists('input[name="registration_form[password][first]"]');
         $this->assertSelectorExists('input[name="registration_form[password][second]"]');
         $this->assertSelectorTextContains('button', 'Register');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
-     * Test submit form with invalid length
+     * Test submit register form with invalid credentials length
      *
      * @return void
      */
     public function testSubmitFormWithInvalidLength(): void
     {
-        // set mock user manager
-        $this->setMockUserManager();
-
-        // request register page
+        // request to register page
         $this->client->request('GET', '/register');
 
         // submit form
@@ -80,6 +67,7 @@ class RegisterControllerTest extends WebTestCase
         ]);
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Register');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
@@ -88,20 +76,16 @@ class RegisterControllerTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Register');
         $this->assertSelectorTextContains('li:contains("Your username should be at least 3 characters")', 'Your username should be at least 3 characters');
         $this->assertSelectorTextContains('li:contains("Your password should be at least 8 characters")', 'Your password should be at least 8 characters');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
-     * Test submit form with not match passwords
+     * Test submit register form with not match passwords
      *
      * @return void
      */
     public function testSubmitWithNotMatchPasswords(): void
     {
-        // set mock user manager
-        $this->setMockUserManager();
-
-        // request register page
+        // request to register page
         $this->client->request('GET', '/register');
 
         // submit form
@@ -112,6 +96,7 @@ class RegisterControllerTest extends WebTestCase
         ]);
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Register');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
@@ -119,20 +104,16 @@ class RegisterControllerTest extends WebTestCase
         $this->assertSelectorExists('input[name="registration_form[password][second]"]');
         $this->assertSelectorTextContains('button', 'Register');
         $this->assertSelectorTextContains('li:contains("The values do not match.")', 'The values do not match.');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
-     * Test submit form with empty credentials
+     * Test submit register form with empty credentials
      *
      * @return void
      */
     public function testSubmitWithEmptyCredentials(): void
     {
-        // set mock user manager
-        $this->setMockUserManager();
-
-        // request register page
+        // request to register page
         $this->client->request('GET', '/register');
 
         // submit form
@@ -143,6 +124,7 @@ class RegisterControllerTest extends WebTestCase
         ]);
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Register');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
@@ -151,20 +133,16 @@ class RegisterControllerTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Register');
         $this->assertSelectorTextContains('li:contains("Please enter a username")', 'Please enter a username');
         $this->assertSelectorTextContains('li:contains("Please enter a password")', 'Please enter a password');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
-     * Test submit form with valid credentials
+     * Test submit register form with valid credentials
      *
      * @return void
      */
     public function testSubmitFormValid(): void
     {
-        // set mock user manager
-        $this->setMockUserManager();
-
-        // request register page
+        // request to register page
         $this->client->request('GET', '/register');
 
         // submit form

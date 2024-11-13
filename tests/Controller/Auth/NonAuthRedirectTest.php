@@ -9,14 +9,18 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class NonAuthRedirectTest
  *
- * Non-auth redirect authenticator test
- * Test all admin routes in the default state when the user is not logged in
+ * Test reidrect non-authenticated users to login page for admin page routes
  *
  * @package App\Tests\Controller\Auth
  */
 class NonAuthRedirectTest extends WebTestCase
 {
     private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
 
     /**
      * Auth required routes list
@@ -98,7 +102,7 @@ class NonAuthRedirectTest extends WebTestCase
     ];
 
     /**
-     * Auth required routes list
+     * Admin routes list provider
      *
      * @return array<array<string>>
      */
@@ -113,13 +117,8 @@ class NonAuthRedirectTest extends WebTestCase
         return $urls;
     }
 
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-    }
-
     /**
-     * Test non-authenticated admin redirect
+     * Test non-authenticated requests redirect
      *
      * @dataProvider provideAdminUrls
      *

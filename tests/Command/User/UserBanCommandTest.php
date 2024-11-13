@@ -14,7 +14,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class UserBanCommandTest
  *
- * Test execute the ban user command
+ * Test cases for execute the ban user command
  *
  * @package App\Tests\Command\User
  */

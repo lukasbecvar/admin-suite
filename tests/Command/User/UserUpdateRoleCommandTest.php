@@ -14,7 +14,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class UserUpdateRoleCommandTest
  *
- * Test execute user update role command
+ * Test cases for execute user update role command
  *
  * @package App\Tests\Command
  */

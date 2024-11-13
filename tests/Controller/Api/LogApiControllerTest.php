@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller\Api;
 
+use App\Exception\AppErrorException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -9,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class LogApiControllerTest
  *
- * Test the external log API
+ * Test cases the external log API controller endpoint
  *
  * @package App\Tests\Controller
  */
@@ -23,12 +24,27 @@ class LogApiControllerTest extends WebTestCase
     }
 
     /**
-     * Test the external log without token
+     * Test the external log request with invalid method
      *
      * @return void
      */
-    public function testExternalLogWithoutToken(): void
+    public function testExternalLogRequestWithInvalidMethod(): void
     {
+        // expect exception
+        $this->expectException(AppErrorException::class);
+
+        // make GET request to the external log endpoint
+        $this->client->request('GET', '/api/external/log');
+    }
+
+    /**
+     * Test the external log request without token
+     *
+     * @return void
+     */
+    public function testExternalLogRequestWithoutToken(): void
+    {
+        // make request to the external log endpoint
         $this->client->request('POST', '/api/external/log');
 
         // get response content
@@ -43,17 +59,18 @@ class LogApiControllerTest extends WebTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
-        $this->assertEquals('Access token is not set', $responseData['error']);
         $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        $this->assertEquals('Access token is not set', $responseData['error']);
     }
 
     /**
-     * Test the external log with invalid token
+     * Test the external log request with invalid token
      *
      * @return void
      */
-    public function testExternalLogWithInvalidToken(): void
+    public function testExternalLogRequestWithInvalidToken(): void
     {
+        // make request to the external log endpoint
         $this->client->request('POST', '/api/external/log', [
             'token' => 'invalid'
         ]);
@@ -70,17 +87,18 @@ class LogApiControllerTest extends WebTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
-        $this->assertEquals('Access token is invalid', $responseData['error']);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        $this->assertEquals('Access token is invalid', $responseData['error']);
     }
 
     /**
-     * Test the external log without parameters
+     * Test the external log request without parameters
      *
      * @return void
      */
-    public function testExternalLogWithoutParameters(): void
+    public function testExternalLogRequestWithoutParameters(): void
     {
+        // make request to the external log endpoint
         $this->client->request('POST', '/api/external/log', [
             'token' => $_ENV['EXTERNAL_API_LOG_TOKEN']
         ]);
@@ -97,17 +115,18 @@ class LogApiControllerTest extends WebTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
-        $this->assertEquals('Parameters name, message and level are required', $responseData['error']);
         $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        $this->assertEquals('Parameters name, message and level are required', $responseData['error']);
     }
 
     /**
-     * Test the external log with valid parameters
+     * Test the external log request with valid parameters
      *
      * @return void
      */
-    public function testExternalLogWithValidParameters(): void
+    public function testExternalLogRequestWithValidParameters(): void
     {
+        // make request to the external log endpoint
         $this->client->request('POST', '/api/external/log', [
             'token' => $_ENV['EXTERNAL_API_LOG_TOKEN'],
             'name' => 'external-log',

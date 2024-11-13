@@ -13,7 +13,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class UserPasswordResetCommandTest
  *
- * Test execute user password reset command
+ * Test cases for execute user password reset command
  *
  * @package App\Tests\Command\User
  */

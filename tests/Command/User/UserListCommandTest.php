@@ -15,7 +15,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class UserListCommandTest
  *
- * Test execute user list command
+ * Test cases for execute user list command
  *
  * @package App\Tests\Command\User
  */

@@ -14,7 +14,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class UserDeleteCommandTest
  *
- * Test execute the command to delete a user
+ * Test cases for execute the command to delete a user
  *
  * @package App\Tests\Command\User
  */

@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class LoginControllerTest
  *
- * Test the login controller
+ * Test cases for login page auth controller actions
  *
  * @package App\Tests\Controller\Auth
 */
@@ -29,26 +29,28 @@ class LoginControllerTest extends WebTestCase
      */
     public function testLoginPageRendering(): void
     {
+        // request for load login page
         $this->client->request('GET', '/login');
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Login');
         $this->assertSelectorExists('form[name="login_form"]');
         $this->assertSelectorExists('input[name="login_form[username]"]');
         $this->assertSelectorExists('input[name="login_form[password]"]');
         $this->assertSelectorExists('input[name="login_form[remember]"]');
         $this->assertSelectorTextContains('button', 'Login');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
-     * Test login with valid credentials
+     * Test submit login form with empty credentials
      *
      * @return void
      */
     public function testLoginWithEmptyCredentials(): void
     {
-        $crawler = $this->client->request('GET', '/login');
+        // request for load login page
+        $crawler = $this->client->request('POST', '/login');
 
         // get the form
         $form = $crawler->selectButton('Login')->form();
@@ -57,6 +59,7 @@ class LoginControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Login');
         $this->assertSelectorExists('form[name="login_form"]');
         $this->assertSelectorExists('input[name="login_form[username]"]');
@@ -65,22 +68,22 @@ class LoginControllerTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Login');
         $this->assertSelectorTextContains('li:contains("Please enter a username")', 'Please enter a username');
         $this->assertSelectorTextContains('li:contains("Please enter a password")', 'Please enter a password');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
-     * Test invalid login
+     * Test submit login form with invalid credentials
      *
      * @return void
      */
     public function testInvalidLogin(): void
     {
+        // request for load login page
         $crawler = $this->client->request('GET', '/login');
 
         // get the form
         $form = $crawler->selectButton('Login')->form();
 
-        // fill in the form fields with invalid data
+        // fill form with invalid credentials
         $form['login_form[username]'] = 'invalid_username';
         $form['login_form[password]'] = 'invalid_password';
 
@@ -88,6 +91,7 @@ class LoginControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Login');
         $this->assertSelectorExists('form[name="login_form"]');
         $this->assertSelectorExists('input[name="login_form[username]"]');
@@ -95,22 +99,22 @@ class LoginControllerTest extends WebTestCase
         $this->assertSelectorExists('input[name="login_form[remember]"]');
         $this->assertSelectorTextContains('button', 'Login');
         $this->assertSelectorTextContains('.bg-red-700', 'Invalid username or password.');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
-     * Test valid login
+     * Test submit login form with valid credentials
      *
      * @return void
      */
     public function testValidLoginSubmit(): void
     {
+        // request for load login page
         $crawler = $this->client->request('POST', '/login');
 
         // get the form
         $form = $crawler->selectButton('Login')->form();
 
-        // fill in the form fields with valid data
+        // fill form with valid credentials
         $form['login_form[username]'] = 'test';
         $form['login_form[password]'] = 'test';
 
@@ -118,7 +122,7 @@ class LoginControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
-        $this->assertResponseRedirects('/');
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+        $this->assertResponseRedirects('/');
     }
 }

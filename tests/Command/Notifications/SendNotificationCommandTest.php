@@ -13,7 +13,7 @@ use App\Command\Notifications\SendNotificationCommand;
 /**
  * Class SendNotificationCommandTest
  *
- * Test execute the send notification command
+ * Test cases for execute the send notification command
  *
  * @package App\Tests\Command\Notifications
  */

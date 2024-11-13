@@ -14,7 +14,7 @@ use App\Command\Notifications\GenerateVapidKeysCommand;
 /**
  * Class GenerateVapidKeysCommandTest
  *
- * Test execute the generate vapid keys command
+ * Test cases for execute the generate vapid keys command
  *
  * @package App\Tests\Command\Notifications
  */

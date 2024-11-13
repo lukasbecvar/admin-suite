@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class TerminalApiControllerTest
  *
- * This test verifies that the terminal API works correctly
+ * Test cases for terminal API controller endpoint
  *
  * @package App\Tests\Controller\Api
  */
@@ -25,12 +25,13 @@ class TerminalApiControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the terminal API returns the expected response when the command is empty
+     * Test request for terminal command execute with empty command
      *
      * @return void
      */
     public function testExecuteTerminalCommandWithEmptyCommand(): void
     {
+        // make request to the endpoint
         $this->client->request('POST', '/api/system/terminal');
 
         // get response content
@@ -42,17 +43,18 @@ class TerminalApiControllerTest extends CustomTestCase
         }
 
         // assert response
-        $this->assertSame('command data is empty!', $responseContent);
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertSame('command data is empty!', $responseContent);
     }
 
     /**
-     * Tests that the terminal API returns the success response
+     * Test request for terminal command execute with success response
      *
      * @return void
      */
     public function testExecuteTerminalCommandSuccessfully(): void
     {
+        // make request to the endpoint
         $this->client->request('POST', '/api/system/terminal', [
             'command' => 'ls'
         ]);
@@ -66,7 +68,7 @@ class TerminalApiControllerTest extends CustomTestCase
         }
 
         // assert response
-        $this->assertNotSame('command data is empty!', $responseContent);
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertNotSame('command data is empty!', $responseContent);
     }
 }
