@@ -53,8 +53,8 @@ class UserDeleteCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Error username: ' . $username . ' not exist!', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -73,8 +73,8 @@ class UserDeleteCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Invalid username provided.', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -105,8 +105,8 @@ class UserDeleteCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Process error: Some error occurred', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -135,7 +135,7 @@ class UserDeleteCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('User: ' . $username . ' has been deleted!', $output);
+        $this->assertEquals(Command::SUCCESS, $exitCode);
     }
 }

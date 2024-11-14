@@ -59,8 +59,8 @@ class LogApiControllerTest extends WebTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         $this->assertEquals('Access token is not set', $responseData['error']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -87,8 +87,8 @@ class LogApiControllerTest extends WebTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         $this->assertEquals('Access token is invalid', $responseData['error']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -115,8 +115,8 @@ class LogApiControllerTest extends WebTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         $this->assertEquals('Parameters name, message and level are required', $responseData['error']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
     /**

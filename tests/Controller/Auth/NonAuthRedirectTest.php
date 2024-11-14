@@ -126,12 +126,12 @@ class NonAuthRedirectTest extends WebTestCase
      *
      * @return void
      */
-    public function testNonAuthAdminRedirect(string $url): void
+    public function testNonAuthRedirect(string $url): void
     {
         $this->client->request('GET', $url);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
         $this->assertTrue($this->client->getResponse()->isRedirect('/login'));
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 }

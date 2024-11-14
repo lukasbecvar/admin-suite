@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class DashboardControllerTest
  *
- * Test the dashboard page
+ * Test for dashboard component
  *
  * @package App\Tests\Controller\Component
  */
@@ -26,17 +26,18 @@ class DashboardControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the dashboard page
+     * Test load dashboard page
      *
      * @return void
      */
-    public function testLoadDashboard(): void
+    public function testLoadDashboardPage(): void
     {
         $this->client->request('GET', '/dashboard');
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('button[id="menu-toggle"]');
+        $this->assertSelectorExists('a[title="Logout user"]');
         $this->assertSelectorExists('a[href="/logout"]');
         $this->assertSelectorExists('aside[id="sidebar"]');
         $this->assertSelectorExists('img[alt="profile picture"]');
@@ -45,8 +46,11 @@ class DashboardControllerTest extends CustomTestCase
         $this->assertSelectorExists('a[href="/dashboard"]');
         $this->assertSelectorExists('a[href="/manager/logs"]');
         $this->assertSelectorExists('a[href="/manager/database"]');
+        $this->assertSelectorExists('a[href="/metrics/dashboard"]');
         $this->assertSelectorExists('a[href="/manager/monitoring"]');
         $this->assertSelectorExists('a[href="/diagnostic"]');
+        $this->assertSelectorExists('a[href="/filesystem"]');
+        $this->assertSelectorExists('a[href="/terminal"]');
         $this->assertSelectorExists('a[href="/manager/todo"]');
         $this->assertSelectorExists('a[href="/manager/users"]');
         $this->assertSelectorExists('a[href="/account/settings"]');

@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class DatabaseBrowserControllerTest
  *
- * This test verifies that the database browser page loads correctly and displays the expected content
+ * Test cases for database browser component
  *
  * @package App\Tests\Controller\Component
  */
@@ -27,11 +27,11 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the database list page loads successfully
+     * Test load databases list page
      *
      * @return void
      */
-    public function testLoadDatabaseList(): void
+    public function testLoadDatabasesListPage(): void
     {
         $this->client->request('GET', '/manager/database');
 
@@ -46,11 +46,11 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the tables list page loads successfully
+     * Test load tables list page
      *
      * @return void
      */
-    public function testLoadTablesList(): void
+    public function testLoadTablesListPage(): void
     {
         $this->client->request('GET', '/manager/database', [
             'database' => $_ENV['DATABASE_NAME']
@@ -66,11 +66,11 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the tables list page when database
+     * Test load tables list page when database not found
      *
      * @return void
      */
-    public function testLoadTablesListNotFoundDatabase(): void
+    public function testLoadTablesListWhenDatabaseNotFound(): void
     {
         $this->client->request('GET', '/manager/database', [
             'database' => 'blblablanonexistdatabaseokokcsmuckmuckxoxo'
@@ -83,11 +83,11 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the table browser page loads successfully
+     * Test load table browser page
      *
      * @return void
      */
-    public function testLoadTableBrowser(): void
+    public function testLoadTableBrowserPage(): void
     {
         $this->client->request('GET', '/manager/database/table', [
             'database' => $_ENV['DATABASE_NAME'],
@@ -110,7 +110,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the row add form loads successfully
+     * Test load row add form
      *
      * @return void
      */
@@ -138,11 +138,11 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Test submit row add form with invalid type
+     * Test submit row add form with invalid type field
      *
      * @return void
      */
-    public function testSubmitRowAddFormInvalidType(): void
+    public function testSubmitRowAddFormInvalidTypeField(): void
     {
         $this->client->request('POST', '/manager/database/add', [
             'database' => $_ENV['DATABASE_NAME'],
@@ -178,11 +178,11 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Test submit row add form with empty value
+     * Test submit row add form with empty value field
      *
      * @return void
      */
-    public function testSubmitRowAddFormEmptyValue(): void
+    public function testSubmitRowAddFormWithEmptyValue(): void
     {
         $this->client->request('POST', '/manager/database/add', [
             'database' => $_ENV['DATABASE_NAME'],
@@ -218,11 +218,11 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Test successful row add form submission
+     * Test submit row add form with success response
      *
      * @return void
      */
-    public function testSubmitRowAddFormValid(): void
+    public function testSubmitRowAddFormWithSuccessResponse(): void
     {
         $this->client->request('POST', '/manager/database/add', [
             'database' => $_ENV['DATABASE_NAME'],
@@ -246,7 +246,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Test successful row delete form submission
+     * Test successful row delete request
      *
      * @return void
      */
@@ -263,7 +263,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the table truncate confirmation page loads successfully
+     * Test load table truncate confirmation page
      *
      * @return void
      */
@@ -283,7 +283,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Test successful table truncate form submission
+     * Test submit table truncate confirmation
      *
      * @return void
      */
@@ -299,6 +299,11 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 
+    /**
+     * Test load row edit form
+     *
+     * @return void
+     */
     public function testLoadRowEditForm(): void
     {
         $this->client->request('GET', '/manager/database/edit', [
@@ -323,11 +328,11 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Test submit edit form with empty value
+     * Test submit edit form with empty value field
      *
      * @return void
      */
-    public function testSubmitEditFormWithEmptyValue(): void
+    public function testSubmitEditFormWithEmptyValueField(): void
     {
         $this->client->request('POST', '/manager/database/edit', [
             'database' => $_ENV['DATABASE_NAME'],
@@ -363,11 +368,11 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Test successful row edit form submission
+     * Test submit row edit form with success response
      *
      * @return void
      */
-    public function testSubmitRowEditFormValid(): void
+    public function testSubmitRowEditFormWithSuccessResponse(): void
     {
         $this->client->request('POST', '/manager/database/edit', [
             'database' => $_ENV['DATABASE_NAME'],
@@ -391,7 +396,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the database dump page loads successfully
+     * Test load database dump page
      *
      * @return void
      */
@@ -412,7 +417,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the database dump page loads successfully
+     * Test load database dump page when select not found
      *
      * @return void
      */
@@ -429,7 +434,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the database console page loads successfully
+     * Test load database console page
      *
      * @return void
      */

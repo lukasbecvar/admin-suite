@@ -49,8 +49,8 @@ class UserPasswordResetCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Username cannot be empty.', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -73,8 +73,8 @@ class UserPasswordResetCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Error username: ' . $username . ' does not exist!', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -100,7 +100,7 @@ class UserPasswordResetCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('new password is', $output);
+        $this->assertEquals(Command::SUCCESS, $exitCode);
     }
 }

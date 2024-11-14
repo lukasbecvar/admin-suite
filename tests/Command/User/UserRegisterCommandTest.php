@@ -40,7 +40,7 @@ class UserRegisterCommandTest extends TestCase
      *
      * @return void
      */
-    public function testEmptyUsername(): void
+    public function testExecuteWithEmptyUsername(): void
     {
         // execute command with empty username
         $exitCode = $this->commandTester->execute(['username' => '']);
@@ -49,8 +49,8 @@ class UserRegisterCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Username cannot be empty.', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -58,7 +58,7 @@ class UserRegisterCommandTest extends TestCase
      *
      * @return void
      */
-    public function testUsernameAlreadyExists(): void
+    public function testExecuteWithUsernameAlreadyExists(): void
     {
         // mock user manager
         $this->userManager->method('checkIfUserExist')->willReturn(true);
@@ -70,8 +70,8 @@ class UserRegisterCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Error username: testuser is already used!', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -79,7 +79,7 @@ class UserRegisterCommandTest extends TestCase
      *
      * @return void
      */
-    public function testRegisterUserSuccess(): void
+    public function testExeciuteWithRegisterUserSuccess(): void
     {
         // mock auth manager
         $this->authManager->expects($this->once())->method('registerUser')->with('newuser');
@@ -91,7 +91,7 @@ class UserRegisterCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertSame(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('New user registered username: newuser', $output);
+        $this->assertSame(Command::SUCCESS, $exitCode);
     }
 }

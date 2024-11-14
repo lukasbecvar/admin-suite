@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class TerminalApiControllerTest
  *
- * This test verifies that the terminal page loads correctly and displays the expected content
+ * Test for terminal page component
  *
  * @package App\Tests\Controller\Component
  */
@@ -26,7 +26,7 @@ class TerminalControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the terminal page loads successfully
+     * Test load terminal page
      *
      * @return void
      */
@@ -37,6 +37,7 @@ class TerminalControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'Terminal');
+        $this->assertSelectorExists('input[id="command"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

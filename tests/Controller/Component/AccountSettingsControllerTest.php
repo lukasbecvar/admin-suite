@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class AccountSettingsControllerTest
  *
- * Test the account-settings controller
+ * Test cases for account settings component
  *
  * @package App\Tests\Controller\Component
  */
@@ -27,11 +27,33 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the account-settings load
+     * Test submit profile picture change form with empty image file
      *
      * @return void
      */
-    public function testLoadAccountSettingsTable(): void
+    public function testSubmitProfilePictureChangeFormWithEmptyImage(): void
+    {
+        $this->client->request('POST', '/account/settings/change/picture', [
+            'profile_pic_change_form' => [
+                'profile-pic' => ''
+            ]
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('h2:contains("Change picture")');
+        $this->assertSelectorExists('input[name="profile_pic_change_form[profile-pic]"]');
+        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertSelectorTextContains('li:contains("Please add picture file.")', 'Please add picture file.');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test load account settings table
+     *
+     * @return void
+     */
+    public function testSettingsTable(): void
     {
         $this->client->request('GET', '/account/settings');
 
@@ -46,11 +68,11 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the username change form load
+     * Test load username change form
      *
      * @return void
      */
-    public function testLoadAccountSettingsUsernameChangeForm(): void
+    public function testLoadUsernameChangeForm(): void
     {
         $this->client->request('GET', '/account/settings/change/username');
 
@@ -63,11 +85,11 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the username change with empty username
+     * Test submit change username with empty username
      *
      * @return void
      */
-    public function testSubmitAccountSettingsChangeUsernameWithEmptyUsername(): void
+    public function testSubmitChangeUsernameFormWithEmptyUsername(): void
     {
         // make request
         $this->client->request('POST', '/account/settings/change/username', [
@@ -86,11 +108,11 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the username change with low length username
+     * Test submit change username form with username length is low
      *
      * @return void
      */
-    public function testSubmitAccountSettingsChangeUsernameLowLength(): void
+    public function testSubmitChangeUsernameFormWithLowLength(): void
     {
         // make request
         $this->client->request('POST', '/account/settings/change/username', [
@@ -109,11 +131,11 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the username change with higher length username
+     * Test submit change username form with username length is higher
      *
      * @return void
      */
-    public function testSubmitAccountSettingsChangeUsernameHigherLength(): void
+    public function testSubmitChangeFormWithUsernameHigherLength(): void
     {
         // make request
         $this->client->request('POST', '/account/settings/change/username', [
@@ -133,11 +155,11 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the username change with valid username
+     * Test submit username change form with success response
      *
      * @return void
      */
-    public function testSubmitAccountSettingsChangeValid(): void
+    public function testSubmitChangeUsernameFormSuccess(): void
     {
         // make request
         $this->client->request('POST', '/account/settings/change/username', [
@@ -147,15 +169,16 @@ class AccountSettingsControllerTest extends CustomTestCase
         ]);
 
         // assert response
+        $this->assertResponseRedirects('/account/settings');
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 
     /**
-     * Test the password change form load
+     * Test load profile picture change form
      *
      * @return void
      */
-    public function testLoadAccountSettingsProfilePictureChangeForm(): void
+    public function testLoadProfilePictureChangeForm(): void
     {
         $this->client->request('GET', '/account/settings/change/picture');
 
@@ -168,34 +191,11 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the profile picture change with empty image
+     * Test load pasword change form
      *
      * @return void
      */
-    public function testSubmitAccountSettingsProfilePictureChangeFormWithEmptyImage(): void
-    {
-        // make request
-        $this->client->request('POST', '/account/settings/change/picture', [
-            'profile_pic_change_form' => [
-                'profile-pic' => ''
-            ]
-        ]);
-
-        // assert response
-        $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change picture")');
-        $this->assertSelectorExists('input[name="profile_pic_change_form[profile-pic]"]');
-        $this->assertSelectorExists('button:contains("Change")');
-        $this->assertSelectorTextContains('li:contains("Please add picture file.")', 'Please add picture file.');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    }
-
-    /**
-     * Test the password change form load
-     *
-     * @return void
-     */
-    public function testLoadAccountSettingsPasswordChangeForm(): void
+    public function testLoadPasswordChangeForm(): void
     {
         $this->client->request('GET', '/account/settings/change/password');
 
@@ -209,13 +209,12 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change with empty inputs
+     * Test submit password change form with empty password
      *
      * @return void
      */
-    public function testSubmitAccountSettingsPasswordChangeFormWithEmptyInputs(): void
+    public function testSubmitPasswordChangeFormWithEmptyPassword(): void
     {
-        // make request
         $this->client->request('POST', '/account/settings/change/password', [
             'password_change_form' => [
                 'password' => [
@@ -236,13 +235,12 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change with low length inputs
+     * Test the password change with low length password
      *
      * @return void
      */
-    public function testSubmitAccountSettingsPasswordChangeFormWithLowLengthInputs(): void
+    public function testSubmitPasswordChangeFormWithLowLengthPassword(): void
     {
-        // make request
         $this->client->request('POST', '/account/settings/change/password', [
             'password_change_form' => [
                 'password' => [
@@ -263,13 +261,12 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change with higher length inputs
+     * Test submit password change form with higher length password
      *
      * @return void
      */
-    public function testSubmitAccountSettingsPasswordChangeFormWithHigherLengthInputs(): void
+    public function testSubmitPasswordChangeFormWithHigherLengthPassword(): void
     {
-        // make request
         $this->client->request('POST', '/account/settings/change/password', [
             'password_change_form' => [
                 'password' => [
@@ -290,13 +287,12 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change with not matched passwords
+     * Test submit password change form with not matched passwords
      *
      * @return void
      */
-    public function testSubmitAccountSettingsPasswordChangeFormWithNotMatchedPasswords(): void
+    public function testSubmitPasswordChangeFormWithNotMatchedPasswords(): void
     {
-        // make request
         $this->client->request('POST', '/account/settings/change/password', [
             'password_change_form' => [
                 'password' => [
@@ -317,13 +313,12 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change with valid inputs
+     * Test submit password change form success
      *
      * @return void
      */
-    public function testSubmitAccountSettingsPasswordChangeFormValid(): void
+    public function testSubmitPasswordChangeFormSuccess(): void
     {
-        // make request
         $this->client->request('POST', '/account/settings/change/password', [
             'password_change_form' => [
                 'password' => [

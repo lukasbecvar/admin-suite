@@ -56,8 +56,8 @@ class UserBanCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Error username: nonexistentuser not exist!', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -90,8 +90,8 @@ class UserBanCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('User: banneduser unbanned', $output);
+        $this->assertEquals(Command::SUCCESS, $exitCode);
     }
 
     /**
@@ -124,8 +124,8 @@ class UserBanCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('User: notbanneduser banned', $output);
+        $this->assertEquals(Command::SUCCESS, $exitCode);
     }
 
     /**
@@ -142,8 +142,8 @@ class UserBanCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Username cannot be empty.', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -160,7 +160,7 @@ class UserBanCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Invalid username provided.', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
     }
 }

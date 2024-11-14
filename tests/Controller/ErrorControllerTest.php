@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class ErrorControllerTest
  *
- * Test the error controller
+ * Test cases for error controller
  *
  * @package App\Tests\Controller
  */

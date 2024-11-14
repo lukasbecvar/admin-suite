@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class AntiLogControllerTest
  *
- * Test the anti-log controller
+ * Test cases for anti log component
  *
  * @package App\Tests\Controller
  */
@@ -23,7 +23,7 @@ class AntiLogControllerTest extends CustomTestCase
     }
 
     /**
-     * Test if the anti-log page is accessible
+     * Test set anti log with user not logged in
      *
      * @return void
      */
@@ -37,7 +37,7 @@ class AntiLogControllerTest extends CustomTestCase
     }
 
     /**
-     * Test if the anti-log page is accessible
+     * Test enable anti log
      *
      * @return void
      */

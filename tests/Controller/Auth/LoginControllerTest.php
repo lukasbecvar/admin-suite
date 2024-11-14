@@ -23,23 +23,22 @@ class LoginControllerTest extends WebTestCase
     }
 
     /**
-     * Test login page rendering
+     * Test render login page
      *
      * @return void
      */
-    public function testLoginPageRendering(): void
+    public function testRenderLoginPage(): void
     {
-        // request for load login page
         $this->client->request('GET', '/login');
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Login');
         $this->assertSelectorExists('form[name="login_form"]');
         $this->assertSelectorExists('input[name="login_form[username]"]');
         $this->assertSelectorExists('input[name="login_form[password]"]');
         $this->assertSelectorExists('input[name="login_form[remember]"]');
         $this->assertSelectorTextContains('button', 'Login');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
@@ -47,9 +46,8 @@ class LoginControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testLoginWithEmptyCredentials(): void
+    public function testSubmitLoginFormWithEmptyCredentials(): void
     {
-        // request for load login page
         $crawler = $this->client->request('POST', '/login');
 
         // get the form
@@ -59,7 +57,6 @@ class LoginControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Login');
         $this->assertSelectorExists('form[name="login_form"]');
         $this->assertSelectorExists('input[name="login_form[username]"]');
@@ -68,6 +65,7 @@ class LoginControllerTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Login');
         $this->assertSelectorTextContains('li:contains("Please enter a username")', 'Please enter a username');
         $this->assertSelectorTextContains('li:contains("Please enter a password")', 'Please enter a password');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
@@ -75,9 +73,8 @@ class LoginControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testInvalidLogin(): void
+    public function testSubmitLoginFormWithInvalidCredentials(): void
     {
-        // request for load login page
         $crawler = $this->client->request('GET', '/login');
 
         // get the form
@@ -91,7 +88,6 @@ class LoginControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Login');
         $this->assertSelectorExists('form[name="login_form"]');
         $this->assertSelectorExists('input[name="login_form[username]"]');
@@ -99,6 +95,67 @@ class LoginControllerTest extends WebTestCase
         $this->assertSelectorExists('input[name="login_form[remember]"]');
         $this->assertSelectorTextContains('button', 'Login');
         $this->assertSelectorTextContains('.bg-red-700', 'Invalid username or password.');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test submit login form with wrong password
+     *
+     * @return void
+     */
+    public function testSubmitLoginFormWithWrongPassword(): void
+    {
+        $crawler = $this->client->request('POST', '/login');
+
+        // get the form
+        $form = $crawler->selectButton('Login')->form();
+
+        // fill form with valid credentials
+        $form['login_form[username]'] = 'test';
+        $form['login_form[password]'] = 'fewfewfewfwfewf';
+
+        // submit the form
+        $this->client->submit($form);
+
+        // assert response
+        $this->assertSelectorTextContains('h2', 'Login');
+        $this->assertSelectorExists('form[name="login_form"]');
+        $this->assertSelectorExists('input[name="login_form[username]"]');
+        $this->assertSelectorExists('input[name="login_form[password]"]');
+        $this->assertSelectorExists('input[name="login_form[remember]"]');
+        $this->assertSelectorTextContains('button', 'Login');
+        $this->assertSelectorTextContains('.bg-red-700', 'Invalid username or password.');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test submit login formwith wrong username
+     *
+     * @return void
+     */
+    public function testSubmitLoginFormWithWrongUsername(): void
+    {
+        $crawler = $this->client->request('POST', '/login');
+
+        // get the form
+        $form = $crawler->selectButton('Login')->form();
+
+        // fill form with valid credentials
+        $form['login_form[username]'] = 'fwewfwfwfewfewf';
+        $form['login_form[password]'] = 'test';
+
+        // submit the form
+        $this->client->submit($form);
+
+        // assert response
+        $this->assertSelectorTextContains('h2', 'Login');
+        $this->assertSelectorExists('form[name="login_form"]');
+        $this->assertSelectorExists('input[name="login_form[username]"]');
+        $this->assertSelectorExists('input[name="login_form[password]"]');
+        $this->assertSelectorExists('input[name="login_form[remember]"]');
+        $this->assertSelectorTextContains('button', 'Login');
+        $this->assertSelectorTextContains('.bg-red-700', 'Invalid username or password.');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
@@ -106,9 +163,8 @@ class LoginControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testValidLoginSubmit(): void
+    public function testSubmitLoginFormWithValidCredentials(): void
     {
-        // request for load login page
         $crawler = $this->client->request('POST', '/login');
 
         // get the form
@@ -122,7 +178,7 @@ class LoginControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
         $this->assertResponseRedirects('/');
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 }

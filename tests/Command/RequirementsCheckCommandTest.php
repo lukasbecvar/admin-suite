@@ -40,7 +40,7 @@ class RequirementsCheckCommandTest extends TestCase
      *
      * @return void
      */
-    public function testRequirementsCheckCommand(): void
+    public function testExecuteRequirementsCheckCommand(): void
     {
         // execute the command
         $exitCode = $this->commandTester->execute([]);
@@ -49,7 +49,7 @@ class RequirementsCheckCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert the output
-        $this->assertEquals(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('Database connected successfully', $output);
+        $this->assertEquals(Command::SUCCESS, $exitCode);
     }
 }

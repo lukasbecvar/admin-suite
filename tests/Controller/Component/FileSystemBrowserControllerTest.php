@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class FileSystemBrowserControllerTest
  *
- * Test for file system browser controller
+ * Test cases for file system browser component
  *
  * @package App\Tests\Controller\Component
  */
@@ -37,6 +37,9 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'Filesystem');
+        $this->assertSelectorExists('a[title="Back to dashboard"]');
+        $this->assertSelectorTextContains('body', 'Path');
+        $this->assertSelectorExists('a[href="/filesystem?path=/"]');
         $this->assertSelectorTextContains('body', 'Name');
         $this->assertSelectorTextContains('body', 'Size');
         $this->assertSelectorTextContains('body', 'Permissions');
@@ -56,6 +59,10 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'Filesystem');
         $this->assertSelectorTextContains('body', 'os-release');
+        $this->assertSelectorExists('a[title="Back to previous page"]');
+        $this->assertSelectorTextContains('body', 'Path');
+        $this->assertSelectorExists('a[href="/filesystem?path=/usr/lib"]');
+        $this->assertSelectorExists('pre');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

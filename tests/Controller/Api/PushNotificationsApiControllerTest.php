@@ -48,9 +48,9 @@ class PushNotificationsApiControllerTest extends CustomTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSame('success', $responseData['status']);
         $this->assertSame('false', $responseData['enabled']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
@@ -78,9 +78,9 @@ class PushNotificationsApiControllerTest extends CustomTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         $this->assertSame('disabled', $responseData['status']);
         $this->assertSame('Push notifications is disabled', $responseData['message']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     /**
@@ -108,9 +108,9 @@ class PushNotificationsApiControllerTest extends CustomTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSame('success', $responseData['status']);
         $this->assertNotEmpty($responseData['vapid_public_key']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
@@ -144,9 +144,9 @@ class PushNotificationsApiControllerTest extends CustomTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         $this->assertSame('disabled', $responseData['status']);
         $this->assertSame('Push notifications is disabled', $responseData['message']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     /**
@@ -188,8 +188,8 @@ class PushNotificationsApiControllerTest extends CustomTestCase
         $responseData = json_decode($responseContent, true);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSame('success', $responseData['status']);
         $this->assertSame('Subscription received', $responseData['message']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

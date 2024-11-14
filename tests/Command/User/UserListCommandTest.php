@@ -72,7 +72,6 @@ class UserListCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert output contains expected data
-        $this->assertSame(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('Username', $output);
         $this->assertStringContainsString('user1', $output);
         $this->assertStringContainsString('ROLE_USER', $output);
@@ -81,5 +80,6 @@ class UserListCommandTest extends TestCase
         $this->assertStringContainsString('Unknown OS', $output);
         $this->assertStringContainsString('2023-01-01 12:00:00', $output);
         $this->assertStringContainsString('2023-01-02 10:00:00', $output);
+        $this->assertSame(Command::SUCCESS, $exitCode);
     }
 }

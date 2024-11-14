@@ -49,8 +49,8 @@ class SendNotificationCommandTest extends TestCase
         $commandOutput = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Message cannot be empty.', $commandOutput);
+        $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -67,8 +67,8 @@ class SendNotificationCommandTest extends TestCase
         $commandOutput = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Invalid message provided.', $commandOutput);
+        $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -88,8 +88,8 @@ class SendNotificationCommandTest extends TestCase
         $commandOutput = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Push notifiations is disabled', $commandOutput);
+        $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -115,7 +115,7 @@ class SendNotificationCommandTest extends TestCase
         $commandOutput = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('Notification sent successfully.', $commandOutput);
+        $this->assertEquals(Command::SUCCESS, $exitCode);
     }
 }

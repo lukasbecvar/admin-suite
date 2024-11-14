@@ -6,10 +6,12 @@ use App\Tests\CustomTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
+use function Symfony\Component\String\b;
+
 /**
  * Class LogsManagerControllerTest
  *
- * Test cases for the LogsManagerController actions
+ * Test cases for the logs manager component
  *
  * @package App\Tests\Controller\Component
  */
@@ -26,7 +28,7 @@ class LogsManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test case for loading the logs table page
+     * Test load logs table page
      *
      * @return void
      */
@@ -53,7 +55,7 @@ class LogsManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test case for loading the exception files page
+     * Test load exception files page
      *
      * @return void
      */
@@ -63,6 +65,22 @@ class LogsManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Exception files');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test load server logs page
+     *
+     * @return void
+     */
+    public function testLoadServerLogsFiles(): void
+    {
+        $this->client->request('GET', '/manager/logs/system');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'System logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

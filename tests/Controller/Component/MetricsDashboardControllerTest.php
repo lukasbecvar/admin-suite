@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class MetricsDashboardControllerTest
  *
- * Test cases for the MetricsDashboardController actions
+ * Test cases for the metrics dashboard component
  *
  * @package App\Tests\Controller\Component
  */
@@ -26,7 +26,7 @@ class MetricsDashboardControllerTest extends CustomTestCase
     }
 
     /**
-     * Test case for loading the metrics dashboard page
+     * Test load metrics dashboard page
      *
      * @return void
      */
@@ -36,6 +36,13 @@ class MetricsDashboardControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[title="Back to dashboard"]');
+        $this->assertSelectorTextContains('body', 'CPU Usage (current)');
+        $this->assertSelectorTextContains('body', 'CPU Usage (history)');
+        $this->assertSelectorTextContains('body', 'RAM Usage (current)');
+        $this->assertSelectorTextContains('body', 'RAM Usage (history)');
+        $this->assertSelectorTextContains('body', 'Storage Usage (current)');
+        $this->assertSelectorTextContains('body', 'Storage Usage (history)');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

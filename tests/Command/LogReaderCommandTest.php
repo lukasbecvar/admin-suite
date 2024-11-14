@@ -60,8 +60,8 @@ class LogReaderCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('status cannot be empty.', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -99,12 +99,12 @@ class LogReaderCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertEquals(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('Log name', $output);
         $this->assertStringContainsString('Log message', $output);
         $this->assertStringContainsString('Browser', $output);
         $this->assertStringContainsString('OS', $output);
         $this->assertStringContainsString('127.0.0.1', $output);
         $this->assertStringContainsString('Test User', $output);
+        $this->assertEquals(Command::SUCCESS, $exitCode);
     }
 }

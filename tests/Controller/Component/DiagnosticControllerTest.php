@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class DiagnosticControllerTest
  *
- * This test verifies that the diagnostic page loads correctly and displays the expected content
+ * Test for diagnostic dashboard component
  *
  * @package App\Tests\Controller\Component
  */
@@ -26,16 +26,17 @@ class DiagnosticControllerTest extends CustomTestCase
     }
 
     /**
-     * Tests that the diagnostic page loads successfully and contains the expected content
+     * Test load diagnostic dashboard page
      *
      * @return void
      */
-    public function testLoadDiagnosticPage(): void
+    public function testLoadDiagnosticDashboardPage(): void
     {
         $this->client->request('GET', '/diagnostic');
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Diagnostics');
         $this->assertSelectorTextContains('body', 'Website diagnostics');
         $this->assertSelectorTextContains('body', 'System diagnostics');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);

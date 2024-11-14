@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class ActionRunnerControllerTest
  *
- * Test the action runner controller
+ * Test cases for action runner component
  *
  * @package App\Tests\Controller
  */
@@ -23,7 +23,7 @@ class ActionRunnerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test if the service action runner component with not logged in response
+     * Test request service action runner with not logged in response
      *
      * @return void
      */
@@ -37,7 +37,7 @@ class ActionRunnerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test if the service action runner component with success response
+     * Test submit service action runner with success response
      *
      * @return void
      */

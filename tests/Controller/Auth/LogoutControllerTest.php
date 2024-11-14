@@ -27,19 +27,19 @@ class LogoutControllerTest extends WebTestCase
         $client->request('GET', '/logout');
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
         $this->assertResponseRedirects('/login');
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
 
         // follow redirect
         $client->followRedirect();
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Login');
         $this->assertSelectorExists('form[name="login_form"]');
         $this->assertSelectorExists('input[name="login_form[username]"]');
         $this->assertSelectorExists('input[name="login_form[password]"]');
         $this->assertSelectorExists('input[name="login_form[remember]"]');
         $this->assertSelectorTextContains('button', 'Login');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

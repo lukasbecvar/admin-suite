@@ -37,7 +37,7 @@ class RegenerateAuthTokensCommandTest extends TestCase
      *
      * @return void
      */
-    public function testRegenerateAuthTokensCommand(): void
+    public function testExecureRegenerateAuthTokensCommand(): void
     {
         // mock regenerate tokens method status
         $this->authManager->expects($this->once())->method('regenerateUsersTokens')
@@ -50,7 +50,7 @@ class RegenerateAuthTokensCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertSame(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('All tokens is regenerated', $output);
+        $this->assertSame(Command::SUCCESS, $exitCode);
     }
 }

@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class MonitoringManagerControllerTest
  *
- * Test cases for the MonitoringManagerController actions
+ * Test for monitoring dashboard component
  *
  * @package App\Tests\Controller\Component
  */
@@ -26,7 +26,7 @@ class MonitoringManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test case for loading the monitoring manager page
+     * Test load monitoring dashboard page
      *
      * @return void
      */
@@ -42,7 +42,7 @@ class MonitoringManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test case for loading the monitoring config page
+     * Test load monitoring config page
      *
      * @return void
      */

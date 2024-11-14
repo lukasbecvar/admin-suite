@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class TodoManagerControllerTest
  *
- * Test the todo manager component
+ * Test for todo manager component
  *
  * @package App\Tests\Controller\Component
  */
@@ -26,11 +26,11 @@ class TodoManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the todo manager load
+     * Test load todo manager page
      *
      * @return void
      */
-    public function testTodoListLoad(): void
+    public function testLoadTodoManagerPage(): void
     {
         $this->client->request('GET', '/manager/todo');
 
@@ -42,13 +42,30 @@ class TodoManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the todo item add with empty text
+     * Test load completed todos page
      *
      * @return void
      */
-    public function testTodoItemAddEmptyText(): void
+    public function testLoadCompletedTodosPage(): void
     {
-        // make request
+        $this->client->request('GET', '/manager/todo', [
+            'filter' => 'closed'
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Todo list');
+        $this->assertSelectorNotExists('input[name="create_todo_form[todo_text]"]');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test submit todo add form with empty todo text
+     *
+     * @return void
+     */
+    public function testSubmitTodoAddFormWithEmptyText(): void
+    {
         $this->client->request('POST', '/manager/todo', [
             'create_todo_form' => [
                 'todo_text' => ''
@@ -56,18 +73,20 @@ class TodoManagerControllerTest extends CustomTestCase
         ]);
 
         // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Todo list');
         $this->assertSelectorTextContains('body', 'Please enter a todo text');
+        $this->assertSelectorExists('input[name="create_todo_form[todo_text]"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
-     * Test the todo item add with long text
+     * Test submit todo add form with todo text longer than maximum
      *
      * @return void
      */
-    public function testTodoItemAddLongText(): void
+    public function testSubmitTodoAddFormWithTodoTextLongerThanMaximum(): void
     {
-        // make request
         $this->client->request('POST', '/manager/todo', [
             'create_todo_form' => [
                 'todo_text' => '
@@ -101,18 +120,19 @@ class TodoManagerControllerTest extends CustomTestCase
         ]);
 
         // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Todo list');
         $this->assertSelectorTextContains('body', 'Your todo text cannot be longer than 512 characters');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
-     * Test the todo item add
+     * Test submit todo add form with success response
      *
      * @return void
      */
-    public function testTodoItemAdd(): void
+    public function testSubmitTodoAddFormWithSuccessResponse(): void
     {
-        // make request
         $this->client->request('POST', '/manager/todo', [
             'create_todo_form' => [
                 'todo_text' => 'todo text'

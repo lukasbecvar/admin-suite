@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class UsersManagerControllerTest
  *
- * Test the users-manager component
+ * Test for users manager component
  *
  * @package App\Tests\Controller\Component
  */
@@ -34,11 +34,11 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager load
+     * Test load users manager page
      *
      * @return void
      */
-    public function testUserManagerLoad(): void
+    public function testLoadUsersManagerPage(): void
     {
         $this->client->request('GET', '/manager/users');
 
@@ -59,11 +59,11 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager profile view load
+     * Test load profile view page
      *
      * @return void
      */
-    public function testProfileViewLoad(): void
+    public function testLoadProfileViewPage(): void
     {
         $this->client->request('GET', '/manager/users/profile', [
             'id' => $this->getRandomUserId($this->entityManager)
@@ -76,11 +76,11 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager register load
+     * Test load user register page
      *
      * @return void
      */
-    public function testUserManagerRegisterLoad(): void
+    public function testLoadUserRegisterPage(): void
     {
         $this->client->request('GET', '/manager/users/register');
 
@@ -95,13 +95,12 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager register submit with empty inputs
+     * Test submit user register form with empty inputs
      *
      * @return void
      */
-    public function testUserManagerRegisterSubmitEmptyInputs(): void
+    public function testUserManagerRegisterSubmitWithEmptyInputs(): void
     {
-        // make request
         $this->client->request('POST', '/manager/users/register', [
             'registration_form' => [
                 'username' => '',
@@ -125,13 +124,12 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager register submit with invalid inputs length
+     * Test submit user register form with invalid inputs length
      *
      * @return void
      */
-    public function testUserManagerRegisterSubmitInvalidLength(): void
+    public function testUserManagerRegisterSubmitWithInvalidLength(): void
     {
-        // make request
         $this->client->request('POST', '/manager/users/register', [
             'registration_form' => [
                 'username' => 'a',
@@ -155,13 +153,12 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager register submit with not matching passwords
+     * Test submit user register form with not matching passwords
      *
      * @return void
      */
-    public function testUserManagerRegisterSubmitNotMatchingPasswords(): void
+    public function testUserManagerRegisterSubmitWithNotMatchingPasswords(): void
     {
-        // make request
         $this->client->request('POST', '/manager/users/register', [
             'registration_form' => [
                 'username' => 'valid-testing-username',
@@ -184,13 +181,12 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager register submit valid
+     * Test submit user register form with success response
      *
      * @return void
      */
-    public function testUserManagerRegisterSubmitValid(): void
+    public function testUserManagerRegisterSubmitWithSuccessResponse(): void
     {
-        // make request
         $this->client->request('POST', '/manager/users/register', [
             'registration_form' => [
                 'username' => ByteString::fromRandom(10)->toByteString(),
@@ -206,17 +202,16 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager update submit with empty id
+     * Test update user role submit with empty id
      *
      * @return void
      */
-    public function testUserManagerUpdateUserRoleEmptyId(): void
+    public function testUserManagerUpdateUserRoleWithEmptyId(): void
     {
         // Set the expected exception
         $this->expectException(AppErrorException::class);
         $this->expectExceptionMessage('invalid request user "id" parameter not found in query');
 
-        // make request
         $this->client->request('POST', '/manager/users/role/update', [
             'id' => '',
             'role' => ''
@@ -224,17 +219,16 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager update submit with empty role
+     * Test update user role submit with empty role
      *
      * @return void
      */
-    public function testUserManagerUpdateUserRoleEmptyRole(): void
+    public function testUserManagerUpdateUserRoleWithEmptyRole(): void
     {
         // Set the expected exception
         $this->expectException(AppErrorException::class);
         $this->expectExceptionMessage('invalid request user "role" parameter not found in query');
 
-        // make request
         $this->client->request('POST', '/manager/users/role/update', [
             'id' => 1,
             'role' => ''
@@ -242,17 +236,16 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager update submit with invalid id
+     * Test update user role submit with invalid id
      *
      * @return void
      */
-    public function testUserManagerUpdateUserRoleInvalidId(): void
+    public function testUserManagerUpdateUserRoleWithInvalidId(): void
     {
         // Set the expected exception
         $this->expectException(AppErrorException::class);
         $this->expectExceptionMessage('invalid request user "id" parameter not found in database');
 
-        // make request
         $this->client->request('POST', '/manager/users/role/update', [
             'id' => 13383838383,
             'role' => 'admin'
@@ -260,34 +253,32 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the users-manager delete submit with invalid id
+     * Test delete user submit with empty id
      *
      * @return void
      */
-    public function testUserManagerUserDeleteEmptyId(): void
+    public function testUserManagerUserDeleteWithEmptyId(): void
     {
         // Set the expected exception
         $this->expectException(AppErrorException::class);
         $this->expectExceptionMessage('invalid request user "id" parameter not found in query');
 
-        // make request
         $this->client->request('GET', '/manager/users/delete', [
             'id' => ''
         ]);
     }
 
     /**
-     * Test the users-manager delete submit with invalid id
+     * Test delete user submit with invalid id
      *
      * @return void
      */
-    public function testUserManagerUserDeleteInvalidId(): void
+    public function testUserManagerUserDeleteWithInvalidId(): void
     {
         // Set the expected exception
         $this->expectException(AppErrorException::class);
         $this->expectExceptionMessage('invalid request user "id" parameter not found in database');
 
-        // make request
         $this->client->request('GET', '/manager/users/delete', [
             'id' => 1323232323232
         ]);

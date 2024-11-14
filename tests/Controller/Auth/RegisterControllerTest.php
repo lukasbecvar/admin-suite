@@ -34,19 +34,19 @@ class RegisterControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testRegisterPageRendering(): void
+    public function testRenderRegisterPage(): void
     {
         // request to register page
         $this->client->request('GET', '/register');
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Register');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
         $this->assertSelectorExists('input[name="registration_form[password][first]"]');
         $this->assertSelectorExists('input[name="registration_form[password][second]"]');
         $this->assertSelectorTextContains('button', 'Register');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
@@ -54,7 +54,7 @@ class RegisterControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testSubmitFormWithInvalidLength(): void
+    public function testSubmitRegisterFormWithInvalidLength(): void
     {
         // request to register page
         $this->client->request('GET', '/register');
@@ -67,7 +67,6 @@ class RegisterControllerTest extends WebTestCase
         ]);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Register');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
@@ -76,6 +75,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Register');
         $this->assertSelectorTextContains('li:contains("Your username should be at least 3 characters")', 'Your username should be at least 3 characters');
         $this->assertSelectorTextContains('li:contains("Your password should be at least 8 characters")', 'Your password should be at least 8 characters');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
@@ -83,7 +83,7 @@ class RegisterControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testSubmitWithNotMatchPasswords(): void
+    public function testSubmitRegisterFormWithNotMatchPasswords(): void
     {
         // request to register page
         $this->client->request('GET', '/register');
@@ -96,7 +96,6 @@ class RegisterControllerTest extends WebTestCase
         ]);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Register');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
@@ -104,6 +103,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertSelectorExists('input[name="registration_form[password][second]"]');
         $this->assertSelectorTextContains('button', 'Register');
         $this->assertSelectorTextContains('li:contains("The values do not match.")', 'The values do not match.');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
@@ -111,7 +111,7 @@ class RegisterControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testSubmitWithEmptyCredentials(): void
+    public function testSubmitRegisterFormWithEmptyCredentials(): void
     {
         // request to register page
         $this->client->request('GET', '/register');
@@ -124,7 +124,6 @@ class RegisterControllerTest extends WebTestCase
         ]);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorTextContains('h2', 'Register');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
@@ -133,6 +132,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Register');
         $this->assertSelectorTextContains('li:contains("Please enter a username")', 'Please enter a username');
         $this->assertSelectorTextContains('li:contains("Please enter a password")', 'Please enter a password');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
@@ -140,7 +140,7 @@ class RegisterControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testSubmitFormValid(): void
+    public function testSubmitRegisterFormWithSuccessResponse(): void
     {
         // request to register page
         $this->client->request('GET', '/register');

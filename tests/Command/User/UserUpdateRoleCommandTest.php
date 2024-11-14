@@ -48,8 +48,8 @@ class UserUpdateRoleCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Username cannot be empty.', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -66,8 +66,8 @@ class UserUpdateRoleCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Role cannot be empty.', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -84,8 +84,8 @@ class UserUpdateRoleCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Invalid role provided.', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -105,8 +105,8 @@ class UserUpdateRoleCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Error username: testuser does not exist.', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -114,7 +114,7 @@ class UserUpdateRoleCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithSameRole(): void
+    public function testExecuteWithRoleAlreadyAssigned(): void
     {
         // create user mock
         $user = $this->createMock(User::class);
@@ -131,8 +131,8 @@ class UserUpdateRoleCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Error role: ADMIN is already assigned to user: testuser', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -160,8 +160,8 @@ class UserUpdateRoleCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('Error updating role: Some error', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -186,7 +186,7 @@ class UserUpdateRoleCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertSame(Command::SUCCESS, $exitCode);
         $this->assertStringContainsString('Role updated successfully.', $output);
+        $this->assertSame(Command::SUCCESS, $exitCode);
     }
 }
