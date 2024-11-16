@@ -2,6 +2,8 @@
 
 namespace App\Tests\Event\Subscriber;
 
+use Exception;
+use Throwable;
 use App\Util\AppUtil;
 use Psr\Log\LoggerInterface;
 use App\Manager\ErrorManager;
@@ -17,80 +19,179 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 /**
  * Class ExceptionEventSubscriberTest
  *
- * Test the exception event subscriber
+ * Test cases for the exception event subscriber
  *
  * @package App\Tests\Event\Subscriber
  */
 class ExceptionEventSubscriberTest extends TestCase
 {
-    private AppUtil & MockObject $appUtil;
-    private LoggerInterface & MockObject $logger;
+    private AppUtil & MockObject $appUtilMock;
     private ExceptionEventSubscriber $subscriber;
-    private ErrorManager & MockObject $errorManager;
+    private LoggerInterface & MockObject $loggerMock;
+    private ErrorManager & MockObject $errorManagerMock;
 
     protected function setUp(): void
     {
         // mock dependencies
-        $this->appUtil = $this->createMock(AppUtil::class);
-        $this->appUtil->method('getYamlConfig')->willReturn([
-            'monolog' => [
-                'handlers' => [
-                    'filtered' => [
-                        'excluded_http_codes' => [404, 405, 429, 503]
-                    ]
-                ]
-            ]
-        ]);
+        $this->appUtilMock = $this->createMock(AppUtil::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->errorManagerMock = $this->createMock(ErrorManager::class);
 
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->errorManager = $this->createMock(ErrorManager::class);
-
-        // create instance of the ExceptionEventSubscriber
-        $this->subscriber = new ExceptionEventSubscriber($this->appUtil, $this->logger, $this->errorManager);
+        // create exception event subscriber instance
+        $this->subscriber = new ExceptionEventSubscriber($this->appUtilMock, $this->loggerMock, $this->errorManagerMock);
     }
 
     /**
-     * Test log error for non excluded http code
+     * Create an exception event
+     *
+     * @param Throwable $exception The exception
+     *
+     * @return ExceptionEvent The exception event
+     */
+    public function createExceptionEvent(Throwable $exception): ExceptionEvent
+    {
+        /** @var HttpKernelInterface $kernelMock */
+        $kernelMock = $this->createMock(HttpKernelInterface::class);
+
+        /** @var Request $requestMock */
+        $requestMock = $this->createMock(Request::class);
+
+        // return exception event
+        return new ExceptionEvent($kernelMock, $requestMock, HttpKernelInterface::MAIN_REQUEST, $exception);
+    }
+
+    /**
+     * Test untrusted host exception in non dev mode
      *
      * @return void
      */
-    public function testOnKernelExceptionLogsErrorForNonExcludedHttpCode(): void
+    public function testUntrustedHostExceptionInNonDevMode(): void
     {
-        // expect that logger->error() will be called once
-        $this->logger->expects($this->once())->method('error')->with('Test Exception Message');
+        // mock dev mode disabled
+        $this->appUtilMock->method('isDevMode')->willReturn(false);
 
-        // create instance of HttpException
-        $exception = new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'Test Exception Message');
+        // mock error view
+        $this->errorManagerMock->method('getErrorView')->with('400')->willReturn('Error content');
 
-        /** @var HttpKernelInterface & MockObject $kernel */
-        $kernel = $this->createMock(HttpKernelInterface::class);
-        /** @var Request & MockObject $request */
-        $request = $this->createMock(Request::class);
-        $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $exception);
+        // create exception event
+        $event = $this->createExceptionEvent(new Exception('Untrusted Host detected'));
 
-        // call the onKernelException method
+        // create & call exception event subscriber
+        $this->subscriber->onKernelException($event);
+
+        // get response
+        $response = $event->getResponse();
+
+        // assert response
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals('Error content', $response->getContent());
+        $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
+    }
+
+    /**
+     * Test untrusted host exception in dev mode
+     *
+     * @return void
+     */
+    public function testUntrustedHostExceptionInDevMode(): void
+    {
+        // mock dev mode enabled
+        $this->appUtilMock->method('isDevMode')->willReturn(true);
+
+        // create exception event
+        $event = $this->createExceptionEvent(new Exception('Untrusted Host detected'));
+
+        // expect exception
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Untrusted Host detected');
+
+        // create & call exception event subscriber
         $this->subscriber->onKernelException($event);
     }
 
     /**
-     * Test does not log error for excluded http code
+     * Test http exception excluded from logging
      *
      * @return void
      */
-    public function testOnKernelExceptionDoesNotLogExcludedHttpCode(): void
+    public function testHttpExceptionExcludedFromLogging(): void
     {
-        // expect that logger->error() will NOT be called
-        $this->logger->expects($this->never())->method('error');
+        // mock excluded http codes
+        $this->appUtilMock->method('getYamlConfig')->with('packages/monolog.yaml')->willReturn([
+            'monolog' => [
+                'handlers' => [
+                    'filtered' => [
+                        'excluded_http_codes' => [404],
+                    ],
+                ],
+            ],
+        ]);
 
-        // create instance of HttpException
-        $exception = new HttpException(Response::HTTP_NOT_FOUND, 'Test Exception Message');
-        /** @var HttpKernelInterface & MockObject $kernel */
-        $kernel = $this->createMock(HttpKernelInterface::class);
-        /** @var Request & MockObject $request */
-        $request = $this->createMock(Request::class);
-        $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $exception);
+        // create exception event
+        $event = $this->createExceptionEvent(new HttpException(Response::HTTP_NOT_FOUND, 'Not Found'));
 
-        // call the onKernelException method
+        // expect logger not to be called
+        $this->loggerMock->expects($this->never())->method('error');
+
+        // create & call exception event subscriber
+        $this->subscriber->onKernelException($event);
+    }
+
+    /**
+     * Test http exception logged
+     *
+     * @return void
+     */
+    public function testHttpExceptionLogged(): void
+    {
+        // mock excluded http codes
+        $this->appUtilMock->method('getYamlConfig')->with('packages/monolog.yaml')->willReturn([
+            'monolog' => [
+                'handlers' => [
+                    'filtered' => [
+                        'excluded_http_codes' => [404],
+                    ],
+                ],
+            ],
+        ]);
+
+        // create exception event
+        $event = $this->createExceptionEvent(
+            new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        );
+
+        // expect logger to be called
+        $this->loggerMock->expects($this->once())->method('error')->with('Internal Server Error');
+
+        // create & call exception event subscriber
+        $this->subscriber->onKernelException($event);
+    }
+
+    /**
+     * Test non http exception logged
+     *
+     * @return void
+     */
+    public function testNonHttpExceptionLogged(): void
+    {
+        // mock excluded http codes
+        $this->appUtilMock->method('getYamlConfig')->with('packages/monolog.yaml')->willReturn([
+            'monolog' => [
+                'handlers' => [
+                    'filtered' => [
+                        'excluded_http_codes' => [],
+                    ],
+                ],
+            ],
+        ]);
+
+        // create exception event
+        $event = $this->createExceptionEvent(new Exception('Generic Exception'));
+
+        // expect logger to be called
+        $this->loggerMock->expects($this->once())->method('error')->with('Generic Exception');
+
+        // create & call exception event subscriber
         $this->subscriber->onKernelException($event);
     }
 }

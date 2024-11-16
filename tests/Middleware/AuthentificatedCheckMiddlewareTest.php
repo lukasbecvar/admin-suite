@@ -54,7 +54,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
     }
 
     /**
-     * Test already logged in user
+     * Test user already logged in user
      *
      * @return void
      */
@@ -66,7 +66,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
         // mock the url generator
         $event = $this->createRequestEvent('/admin');
 
-        // call the method under test
+        // call middleware tested method
         $this->middleware->onKernelRequest($event);
 
         // assert the result
@@ -86,7 +86,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
         // create request event
         $event = $this->createRequestEvent('/login');
 
-        // call the method under test
+        // call middleware tested method
         $this->middleware->onKernelRequest($event);
 
         // assert the result
@@ -106,7 +106,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
         // create request event
         $event = $this->createRequestEvent('/register');
 
-        // call the method under test
+        // call middleware tested method
         $this->middleware->onKernelRequest($event);
 
         // assert the result
@@ -126,7 +126,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
         // create request event
         $event = $this->createRequestEvent('/');
 
-        // call the method under test
+        // call middleware tested method
         $this->middleware->onKernelRequest($event);
 
         // assert the result
@@ -146,7 +146,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
         // create request event
         $event = $this->createRequestEvent('/error');
 
-        // call the method under test
+        // call middleware tested method
         $this->middleware->onKernelRequest($event);
 
         // assert the result
@@ -166,7 +166,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
         // create request event
         $event = $this->createRequestEvent('/_profiler');
 
-        // call the method under test
+        // call middleware tested method
         $this->middleware->onKernelRequest($event);
 
         // assert the result
@@ -190,7 +190,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
         // create request event
         $event = $this->createRequestEvent('/dashboard');
 
-        // call the method under test
+        // call middleware tested method
         $this->middleware->onKernelRequest($event);
 
         // assert the result

@@ -66,7 +66,7 @@ class AuthorizationMiddlewareTest extends TestCase
         // mock Twig response
         $this->twig->method('render')->willReturn('Forbidden content');
 
-        // execute the middleware
+        // call middleware tested method
         $this->authorizationMiddleware->onKernelRequest($event);
     }
 
@@ -89,7 +89,7 @@ class AuthorizationMiddlewareTest extends TestCase
         // mock AuthManager responses
         $this->authManager->method('isLoggedInUserAdmin')->willReturn(true);
 
-        // execute the middleware
+        // call middleware tested method
         $this->authorizationMiddleware->onKernelRequest($event);
 
         // assert that no response is set, indicating access is allowed
@@ -97,7 +97,7 @@ class AuthorizationMiddlewareTest extends TestCase
     }
 
     /**
-     * test that no authorization annotation defaults to user
+     * test that no authorization annotation
      *
      * @return void
      */
@@ -115,7 +115,7 @@ class AuthorizationMiddlewareTest extends TestCase
         // mock AuthManager responses
         $this->authManager->method('isLoggedInUserAdmin')->willReturn(false);
 
-        // execute the middleware
+        // call middleware tested method
         $this->authorizationMiddleware->onKernelRequest($event);
 
         // assert that no response is set, indicating access is allowed

@@ -17,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Class BanManagerTest
  *
- * Test the BanManager class
+ * Test cases for ban manager
  *
  * @package App\Tests\Manager
  */
@@ -41,7 +41,7 @@ class BanManagerTest extends TestCase
         $this->banRepositoryMock = $this->createMock(BannedRepository::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
-        // entity manager mock
+        // ban repository mock
         $this->entityManagerMock->method('getRepository')->willReturn($this->banRepositoryMock);
 
         // create the ban manager instance
@@ -56,52 +56,57 @@ class BanManagerTest extends TestCase
     }
 
     /**
-     * Test ban user method
+     * Test ban user
      *
      * @return void
      */
     public function testBanUser(): void
     {
-        // mock User entity
         $userId = 1;
         $reason = 'test reason';
         $loggedUserId = 2;
         $loggedUsername = 'admin';
 
-        // mock User entity
+        // mock user entity
         $userMock = $this->createMock(User::class);
         $userMock->method('getUsername')->willReturn($loggedUsername);
 
-        // mock auth manager
+        // mock get logged user repository
         $this->authManagerMock->method('getLoggedUserId')->willReturn($loggedUserId);
         $this->authManagerMock->method('getLoggedUserRepository')->willReturn($userMock);
 
-        // repository mock
+        // mock ban repository
         $this->banRepositoryMock->method('findOneBy')
             ->with(['banned_user_id' => $userId, 'status' => 'active'])->willReturn(null);
 
-        // log manager mock
+        // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
             'ban-manager',
             'user: ' . $userId . ' has been banned'
         );
 
-        // call the method
+        // call tested method
         $this->banManager->banUser($userId, $reason);
     }
 
     /**
-     * Test is user banned
+     * Test check is user banned
      *
      * @return void
      */
     public function testIsUserBanned(): void
     {
-        // get banned status
-        $status = $this->banManager->isUserBanned(1);
+        $userId = 1;
 
-        // assert status
-        $this->assertIsBool($status);
+        // mock ban status
+        $this->banRepositoryMock->expects($this->once())->method('isBanned')
+            ->with($userId)->willReturn(true);
+
+        // call tested method
+        $result = $this->banManager->isUserBanned($userId);
+
+        // assert result
+        $this->assertTrue($result);
     }
 
     /**
@@ -111,26 +116,25 @@ class BanManagerTest extends TestCase
      */
     public function testGetBanReason(): void
     {
-        // test user
         $userId = 1;
         $reason = 'test reason';
 
-        // mockování repository
-        $this->banRepositoryMock->method('isBanned')
-            ->with($userId)
+        // mock ban status
+        $this->banRepositoryMock->method('isBanned')->with($userId)
             ->willReturn(true);
 
-        // mockování metody getBanReason tak, aby vracela důvod banu (string)
-        $this->banRepositoryMock->method('getBanReason')
-            ->with($userId)
-            ->willReturn($reason); // zde vracíme string místo celého objektu
+        // mock get ban reason
+        $this->banRepositoryMock->method('getBanReason')->with($userId)
+            ->willReturn($reason);
 
-        // assert reason
-        $this->assertEquals($reason, $this->banRepositoryMock->getBanReason($userId));
+        // call tested method
+        $result = $this->banManager->getBanReason($userId);
+
+        $this->assertEquals($reason, $result);
     }
 
     /**
-     * Test unban user method
+     * Test unban user
      *
      * @return void
      */
@@ -145,31 +149,29 @@ class BanManagerTest extends TestCase
         $banned->setBannedUserId($userId);
         $banned->setStatus('active');
 
-        // mock user
+        // mock user entity object
         $userMock = $this->createMock(User::class);
         $userMock->method('getUsername')->willReturn($loggedUsername);
 
-        // mock auth manager
+        // mock get logged user repository
         $this->authManagerMock->method('getLoggedUserId')->willReturn($loggedUserId);
         $this->authManagerMock->method('getLoggedUserRepository')->willReturn($userMock);
 
-        // mock ban repository
-        $this->banRepositoryMock->method('isBanned')
-            ->with($userId)
+        // mock ban status
+        $this->banRepositoryMock->method('isBanned')->with($userId)
             ->willReturn(true);
 
         // assert that updateBanStatus is called with 'inactive'
-        $this->banRepositoryMock->expects($this->once())
-            ->method('updateBanStatus')
+        $this->banRepositoryMock->expects($this->once())->method('updateBanStatus')
             ->with($userId, 'inactive');
 
-        // assert that log is called
+        // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
             'ban-manager',
             'user: ' . $userId . ' is unbanned'
         );
 
-        // call the method
+        // call tested method
         $this->banManager->unBanUser($userId);
     }
 
@@ -183,7 +185,7 @@ class BanManagerTest extends TestCase
         // call the method
         $banList = $this->banManager->getBannedUsers();
 
-        // assert the result type
+        // assert result type
         $this->assertIsArray($banList);
     }
 
@@ -194,9 +196,16 @@ class BanManagerTest extends TestCase
      */
     public function testGetBannedCount(): void
     {
-        $output = $this->banManager->getBannedCount();
+        $bannedCount = 5;
 
-        // assert output
-        $this->assertIsInt($output);
+        // expect ban repository call
+        $this->banRepositoryMock->expects($this->once())->method('count')
+            ->with(['status' => 'active'])->willReturn($bannedCount);
+
+        // call tested method
+        $result = $this->banManager->getBannedCount();
+
+        // assert result
+        $this->assertEquals($bannedCount, $result);
     }
 }

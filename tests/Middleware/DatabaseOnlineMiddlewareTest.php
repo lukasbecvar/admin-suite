@@ -2,6 +2,7 @@
 
 namespace App\Tests\Middleware;
 
+use Exception;
 use App\Util\AppUtil;
 use Psr\Log\LoggerInterface;
 use App\Manager\ErrorManager;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 class DatabaseOnlineMiddlewareTest extends TestCase
 {
     private AppUtil & MockObject $appUtilMock;
+    private DatabaseOnlineMiddleware $middleware;
     private Connection & MockObject $connectionMock;
     private LoggerInterface & MockObject $loggerMock;
     private ErrorManager & MockObject $errorManagerMock;
@@ -38,6 +40,14 @@ class DatabaseOnlineMiddlewareTest extends TestCase
         $this->connectionMock = $this->createMock(Connection::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
+
+        // create the middleware instance
+        $this->middleware = new DatabaseOnlineMiddleware(
+            $this->appUtilMock,
+            $this->connectionMock,
+            $this->loggerMock,
+            $this->errorManagerMock
+        );
     }
 
     /**
@@ -47,14 +57,6 @@ class DatabaseOnlineMiddlewareTest extends TestCase
      */
     public function testRequestWithSuccessfulDatabaseConnection(): void
     {
-        // create the middleware instance
-        $middleware = new DatabaseOnlineMiddleware(
-            $this->appUtilMock,
-            $this->connectionMock,
-            $this->loggerMock,
-            $this->errorManagerMock
-        );
-
         // mock request event
         /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
@@ -66,7 +68,7 @@ class DatabaseOnlineMiddlewareTest extends TestCase
         $event->expects($this->never())->method('setResponse');
 
         // execute the middleware
-        $middleware->onKernelRequest($event);
+        $this->middleware->onKernelRequest($event);
     }
 
     /**
@@ -76,33 +78,24 @@ class DatabaseOnlineMiddlewareTest extends TestCase
      */
     public function testRequestWithFailedDatabaseConnection(): void
     {
-        // create the middleware instance
-        $middleware = new DatabaseOnlineMiddleware(
-            $this->appUtilMock,
-            $this->connectionMock,
-            $this->loggerMock,
-            $this->errorManagerMock
-        );
-
         // mock request event
         /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
 
         // mock the database connection
         $this->connectionMock->expects($this->once())
-            ->method('executeQuery')->willThrowException(new \Exception('Database connection failed'));
+            ->method('executeQuery')->willThrowException(new Exception('Database connection failed'));
 
         // mock the error manager
         $this->errorManagerMock->expects($this->once())
             ->method('getErrorView')->with(Response::HTTP_INTERNAL_SERVER_ERROR)->willReturn('Internal Server Error Content');
 
         // mock the response
-        $event->expects($this->once())
-            ->method('setResponse')->with($this->callback(function ($response) {
-                return $response instanceof Response && $response->getStatusCode() === Response::HTTP_INTERNAL_SERVER_ERROR && $response->getContent() === 'Internal Server Error Content';
-            }));
+        $event->expects($this->once())->method('setResponse')->with($this->callback(function ($response) {
+            return $response instanceof Response && $response->getStatusCode() === Response::HTTP_INTERNAL_SERVER_ERROR && $response->getContent() === 'Internal Server Error Content';
+        }));
 
         // execute the middleware
-        $middleware->onKernelRequest($event);
+        $this->middleware->onKernelRequest($event);
     }
 }

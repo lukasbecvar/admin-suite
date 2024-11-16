@@ -10,7 +10,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Class CookieUtilTest
  *
- * Test the CookieUtil class
+ * Test cases for CookieUtil class
  *
  * @package App\Tests\Util
  */
@@ -66,8 +66,10 @@ class CookieUtilTest extends TestCase
      */
     public function testIsCookieSet(): void
     {
+        // call tested method
         $bool = $this->cookieUtil->isCookieSet('test_cookie');
 
+        // assert response
         $this->assertIsBool($bool);
     }
 

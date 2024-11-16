@@ -63,6 +63,7 @@ class LinkifyExtensionTest extends TestCase
      */
     public function testGetFilters(): void
     {
+        // call tested method
         $filters = $this->linkifyExtension->getFilters();
 
         // assert result
@@ -80,6 +81,10 @@ class LinkifyExtensionTest extends TestCase
      */
     public function testLinkifyText(string $input, string $expected): void
     {
-        $this->assertEquals($expected, $this->linkifyExtension->linkifyText($input));
+        // call tested method
+        $result = $this->linkifyExtension->linkifyText($input);
+
+        // assert result
+        $this->assertEquals($expected, $result);
     }
 }

@@ -56,7 +56,7 @@ class AutoLoginMiddlewareTest extends TestCase
         // mock the url generator
         $this->cookieUtilMock->expects($this->never())->method('get');
 
-        // call the middleware method
+        // call middleware tested method
         $this->middleware->onKernelRequest();
     }
 
@@ -76,7 +76,7 @@ class AutoLoginMiddlewareTest extends TestCase
         // mock the cookie util
         $this->cookieUtilMock->expects($this->never())->method('get');
 
-        // call the middleware method
+        // call middleware tested method
         $this->middleware->onKernelRequest();
     }
 
@@ -108,7 +108,7 @@ class AutoLoginMiddlewareTest extends TestCase
         // mock the session util
         $this->authManagerMock->expects($this->once())->method('login')->with('testuser', true);
 
-        // call the middleware method
+        // call middleware tested method
         $this->middleware->onKernelRequest();
     }
 
@@ -140,7 +140,7 @@ class AutoLoginMiddlewareTest extends TestCase
         // mock the session util
         $this->sessionUtilMock->expects($this->once())->method('destroySession');
 
-        // call the middleware method
+        // call middleware tested method
         $this->middleware->onKernelRequest();
     }
 }

@@ -67,7 +67,6 @@ The complete stack for development is in Docker Compose, including PHP, Node, an
 Contributions are welcome! Please fork this repository and submit pull requests for any features, bug fixes, or enhancements. If you have any questions or need help, feel free to open an issue or contact me directly.
 
 ## Todo list
-- [ ] Tests recode
 - [ ] Complete redesign
 - [ ] Complete refactor
 

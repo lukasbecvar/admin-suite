@@ -2,6 +2,7 @@
 
 namespace App\Tests\Manager;
 
+use Exception;
 use App\Entity\Log;
 use App\Util\AppUtil;
 use App\Util\CookieUtil;
@@ -13,14 +14,13 @@ use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\LogRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class LogManagerTest
  *
- * Test the log manager
+ * Test cases for log manager
  *
  * @package App\Tests\Manager
  */
@@ -62,39 +62,43 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test success save log
+     * Test save log success
      *
      * @return void
      */
     public function testLogSuccess(): void
     {
-        // mock dependencies
+        // mock get log config
         $this->appUtilMock->method('isDatabaseLoggingEnabled')->willReturn(true);
         $this->appUtilMock->method('getEnvValue')->with('LOG_LEVEL')->willReturn('4');
+
+        // mock get visitor info
         $this->visitorInfoUtilMock->method('getIP')->willReturn('127.0.0.1');
         $this->visitorInfoUtilMock->method('getUserAgent')->willReturn('UnitTestAgent');
+
+        // mock user identifier getter
         $this->sessionUtilMock->method('getSessionValue')->with('user-identifier', 0)->willReturn(1);
 
         // expect process method to be called
         $this->entityManagerMock->expects($this->once())->method('persist');
         $this->entityManagerMock->expects($this->once())->method('flush');
 
-        // testing method call
+        // call tested method
         $this->logManager->log('TestLog', 'This is a test log message.', LogManager::LEVEL_INFO);
     }
 
     /**
-     * Test log connection refused
+     * Test save log with connection refused message
      *
      * @return void
      */
     public function testLogConnectionRefused(): void
     {
-        // mock dependencies
+        // expect persist and flush not to be called
         $this->entityManagerMock->expects($this->never())->method('persist');
         $this->entityManagerMock->expects($this->never())->method('flush');
 
-        // testing method call
+        // call tested method
         $this->logManager->log('TestLog', 'Connection refused', LogManager::LEVEL_CRITICAL);
     }
 
@@ -105,45 +109,49 @@ class LogManagerTest extends TestCase
      */
     public function testLogLevelTooLow(): void
     {
-        // mock dependencies
+        // mock get log config
         $this->appUtilMock->method('isDatabaseLoggingEnabled')->willReturn(true);
         $this->appUtilMock->method('getEnvValue')->with('LOG_LEVEL')->willReturn('2');
 
-        // expect process method to be called
+        // expect persist and flush not to be called
         $this->entityManagerMock->expects($this->never())->method('persist');
         $this->entityManagerMock->expects($this->never())->method('flush');
 
-        // testing method call
+        // call tested method
         $this->logManager->log('TestLog', 'This is a test log message.', LogManager::LEVEL_INFO);
     }
 
     /**
-     * Test log database error
+     * Test save log with database error
      *
      * @return void
      */
     public function testLogDatabaseError(): void
     {
-        // mock dependencies
+        // mock get log config
         $this->appUtilMock->method('isDatabaseLoggingEnabled')->willReturn(true);
         $this->appUtilMock->method('getEnvValue')->with('LOG_LEVEL')->willReturn('4');
+
+        // mock get visitor info
         $this->visitorInfoUtilMock->method('getIP')->willReturn('127.0.0.1');
         $this->visitorInfoUtilMock->method('getUserAgent')->willReturn('UnitTestAgent');
+
+        // mock user identifier getter
         $this->sessionUtilMock->method('getSessionValue')->with('user-identifier', 0)->willReturn(1);
 
-        // expect process method to be called
+        // expect process method call
         $this->entityManagerMock->expects($this->once())->method('persist');
         $this->entityManagerMock->method('flush')->will($this->throwException(
-            new \Exception('Database error')
+            new Exception('Database error')
         ));
 
-        // mock error manager
+        // expect error handler call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
             $this->stringContains('log-error: Database error'),
             Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
-        // testing method call
+        // call tested method
         $this->logManager->log('TestLog', 'This is a test log message.', LogManager::LEVEL_INFO);
     }
 
@@ -154,13 +162,14 @@ class LogManagerTest extends TestCase
      */
     public function testSetAntiLog(): void
     {
+        // mock get token from config
         $this->appUtilMock->method('getEnvValue')->willReturn('test-token');
 
-        // expect set method to be called
+        // expect set cookie call
         $this->cookieUtilMock->expects($this->once())->method('set')
             ->with('anti-log', 'test-token', $this->greaterThan(time()));
 
-        // call the setAntiLog method
+        // call tested method
         $this->logManager->setAntiLog();
     }
 
@@ -174,7 +183,7 @@ class LogManagerTest extends TestCase
         // expect unset method to be called
         $this->cookieUtilMock->expects($this->once())->method('unset')->with('anti-log');
 
-        // call the unSetAntiLog method
+        // call tested method
         $this->logManager->unSetAntiLog();
     }
 
@@ -192,8 +201,11 @@ class LogManagerTest extends TestCase
         // mock app util
         $this->appUtilMock->method('getEnvValue')->willReturn('test-token');
 
-        // call the isAntiLogEnabled method and assert true
-        $this->assertTrue($this->logManager->isAntiLogEnabled());
+        // call tested method
+        $result = $this->logManager->isAntiLogEnabled();
+
+        // assert result
+        $this->assertTrue($result);
     }
 
     /**
@@ -206,12 +218,15 @@ class LogManagerTest extends TestCase
         // mock cookie util
         $this->cookieUtilMock->method('isCookieSet')->willReturn(false);
 
-        // call the isAntiLogEnabled method and assert false
-        $this->assertFalse($this->logManager->isAntiLogEnabled());
+        // call tested method
+        $result = $this->logManager->isAntiLogEnabled();
+
+        // assert result
+        $this->assertFalse($result);
     }
 
     /**
-     * Test isAntiLogEnabled when token is invalid
+     * Test check if anti-log is enabled when token is invalid
      *
      * @return void
      */
@@ -224,8 +239,11 @@ class LogManagerTest extends TestCase
         // mock app util
         $this->appUtilMock->method('getEnvValue')->willReturn('test-token');
 
-        // call the isAntiLogEnabled method and assert false
-        $this->assertFalse($this->logManager->isAntiLogEnabled());
+        // call tested method
+        $result = $this->logManager->isAntiLogEnabled();
+
+        // assert result
+        $this->assertFalse($result);
     }
 
     /**
@@ -235,9 +253,14 @@ class LogManagerTest extends TestCase
      */
     public function testGetLogsCount(): void
     {
-        $count = $this->logManager->getLogsCountWhereStatus();
+        // expect count method to be called
+        $this->repositoryMock->expects($this->once())->method('count');
 
-        $this->assertIsInt($count);
+        // call tested method
+        $result = $this->logManager->getLogsCountWhereStatus();
+
+        // assert result
+        $this->assertIsInt($result);
     }
 
     /**
@@ -247,9 +270,15 @@ class LogManagerTest extends TestCase
      */
     public function testGetAuthLogsCount(): void
     {
-        $count = $this->logManager->getAuthLogsCount();
+        // expect count method to be called
+        $this->repositoryMock->expects($this->once())->method('count')
+            ->with(['name' => 'authenticator', 'status' => 'UNREADED']);
 
-        $this->assertIsInt($count);
+        // call tested method
+        $result = $this->logManager->getAuthLogsCount();
+
+        // assert result
+        $this->assertIsInt($result);
     }
 
     /**
@@ -259,11 +288,32 @@ class LogManagerTest extends TestCase
      */
     public function testGetLogs(): void
     {
-        // call get logs method
-        $logs = $this->logManager->getLogsWhereStatus();
+        // expect findBy method to be called
+        $this->repositoryMock->expects($this->once())->method('findBy');
 
-        // assert method response
-        $this->assertIsArray($logs);
+        // call tested method
+        $result = $this->logManager->getLogsWhereStatus();
+
+        // assert result
+        $this->assertIsArray($result);
+    }
+
+    /**
+     * Test get monitoring logs
+     *
+     * @return void
+     */
+    public function testGetMonitoringLogs(): void
+    {
+        // expect findBy method to be called
+        $this->repositoryMock->expects($this->once())->method('findBy')
+            ->with(['name' => 'monitoring']);
+
+        // call tested method
+        $result = $this->logManager->getMonitoringLogs(10);
+
+        // assert result
+        $this->assertIsArray($result);
     }
 
     /**
@@ -273,28 +323,19 @@ class LogManagerTest extends TestCase
      */
     public function testSetAllLogsToReaded(): void
     {
-        // mock repository to return logs with 'UNREADED' status
-        $mockLog1 = new Log();
-        $mockLog1->setStatus('UNREADED');
-
-        $mockLog2 = new Log();
-        $mockLog2->setStatus('UNREADED');
-
-        $logs = [$mockLog1, $mockLog2];
-
-        // mock repository
+        // expect findBy method to be called
         $this->repositoryMock->expects($this->once())->method('findBy')
-            ->with(['status' => 'UNREADED'])->willReturn($logs);
+            ->with(['status' => 'UNREADED']);
 
         // expect flush to be called once
         $this->entityManagerMock->expects($this->once())->method('flush');
 
-        // call the method under test
+        // call tested method
         $this->logManager->setAllLogsToReaded();
     }
 
     /**
-     * Test updateLogStatusById when log is found and status is updated
+     * Test update log status by ID when log is found and status is updated
      *
      * @return void
      */
@@ -307,22 +348,20 @@ class LogManagerTest extends TestCase
         $logMock = $this->createMock(Log::class);
         $logMock->expects($this->once())->method('setStatus')->with($newStatus);
 
-        // mock LogRepository to return the log entity
-        $this->repositoryMock->expects($this->once())
-            ->method('find')
+        // expect find method to be called
+        $this->repositoryMock->expects($this->once())->method('find')
             ->with($logId)
             ->willReturn($logMock);
 
-        // mock EntityManager flush
-        $this->entityManagerMock->expects($this->once())
-            ->method('flush');
+        // expect flush method to be called
+        $this->entityManagerMock->expects($this->once())->method('flush');
 
-        // call the method
+        // call tested method
         $this->logManager->updateLogStatusById($logId, $newStatus);
     }
 
     /**
-     * Test updateLogStatusById when an exception is thrown during flush
+     * Test update log status by ID when an exception is thrown during flush
      *
      * @return void
      */
@@ -335,24 +374,57 @@ class LogManagerTest extends TestCase
         $logMock = $this->createMock(Log::class);
         $logMock->expects($this->once())->method('setStatus')->with($newStatus);
 
-        // mock LogRepository to return the log entity
-        $this->repositoryMock->expects($this->once())
-            ->method('find')
+        // expect find method to be called
+        $this->repositoryMock->expects($this->once())->method('find')
             ->with($logId)
             ->willReturn($logMock);
 
-        // simulate an Exception on flush
-        $this->entityManagerMock->expects($this->once())
-            ->method('flush')
+        // simulate an exception on flush
+        $this->entityManagerMock->expects($this->once())->method('flush')
             ->willThrowException(new Exception('Database error'));
 
-        // mock ErrorManager handleError for flush failure
+        // expect error handler call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
             'error to update log status: Database error',
             Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
-        // call the method
+        // call tested method
         $this->logManager->updateLogStatusById($logId, $newStatus);
+    }
+
+    /**
+     * Test get system logs
+     *
+     * @return void
+     */
+    public function testGetSystemLogs(): void
+    {
+        // expect file system call
+        $this->fileSystemUtilMock->expects($this->once())->method('getFilesList');
+
+        // call tested method
+        $result = $this->logManager->getSystemLogs();
+
+        // assert result
+        $this->assertIsArray($result);
+    }
+
+    /**
+     * Test get exception files
+     *
+     * @return void
+     */
+    public function testGetExceptionFiles(): void
+    {
+        // expect load config call
+        $this->appUtilMock->expects($this->once())->method('loadConfig')
+            ->with('exceptions-monitoring.json');
+
+        // call tested method
+        $result = $this->logManager->getExceptionFiles();
+
+        // assert result
+        $this->assertIsArray($result);
     }
 }

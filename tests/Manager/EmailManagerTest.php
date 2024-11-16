@@ -14,22 +14,18 @@ use Symfony\Component\Mailer\Exception\TransportException;
 /**
  * Class EmailManagerTest
  *
- * Test the email manager
+ * Test cases for email manager
  *
  * @package App\Tests\Manager
  */
 class EmailManagerTest extends TestCase
 {
+    private EmailManager $emailManager;
     private LogManager & MockObject $logManagerMock;
     private MailerInterface & MockObject $mailerMock;
     private ErrorManager & MockObject $errorManagerMock;
     private DatabaseManager & MockObject $databaseManager;
 
-    /**
-     * Sets up the mock objects before each test
-     *
-     * @return void
-     */
     protected function setUp(): void
     {
         // mock dependencies
@@ -37,6 +33,14 @@ class EmailManagerTest extends TestCase
         $this->mailerMock = $this->createMock(MailerInterface::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->databaseManager = $this->createMock(DatabaseManager::class);
+
+        // create email manager instance
+        $this->emailManager = new EmailManager(
+            $this->logManagerMock,
+            $this->mailerMock,
+            $this->errorManagerMock,
+            $this->databaseManager
+        );
     }
 
     /**
@@ -58,20 +62,35 @@ class EmailManagerTest extends TestCase
             'time' => date('Y-m-d H:i:s')
         ];
 
-        // mock log manager
+        // expect log manager call
         $this->logManagerMock->expects($this->never())->method('log');
+
+        // expect mailer call
         $this->mailerMock->expects($this->never())->method('send');
 
-        // create email manager
-        $emailManager = new EmailManager(
-            $this->logManagerMock,
-            $this->mailerMock,
-            $this->errorManagerMock,
-            $this->databaseManager
-        );
+        // call tested method
+        $this->emailManager->sendEmail($recipient, $subject, $context);
+    }
 
-        // call method
-        $emailManager->sendEmail($recipient, $subject, $context);
+    /**
+     * Test send email with enabled mailer
+     *
+     * @return void
+     */
+    public function testSendEmailWithMailerEnabled(): void
+    {
+        // simulate mailer enabled
+        $_ENV['MAILER_ENABLED'] = 'true';
+
+        // expect handle error not be called
+        $this->errorManagerMock->expects($this->never())->method('handleError');
+
+        // expect mailer send call
+        $this->mailerMock->expects($this->once())
+            ->method('send');
+
+        // call tested method
+        $this->emailManager->sendEmail('recipient@example.com', 'Test Subject', ['key' => 'value']);
     }
 
     /**
@@ -93,24 +112,18 @@ class EmailManagerTest extends TestCase
             'time' => date('Y-m-d H:i:s')
         ];
 
-        // mock log manager
+        // expect log manager call
         $this->logManagerMock->expects($this->never())->method('log');
+
+        // mock send method with exception throw
         $this->mailerMock->expects($this->once())->method('send')->willThrowException(
             new TransportException()
         );
 
-        // mock error manager
+        // expect error manager call
         $this->errorManagerMock->expects($this->once())->method('handleError');
 
-        // create email manager
-        $emailManager = new EmailManager(
-            $this->logManagerMock,
-            $this->mailerMock,
-            $this->errorManagerMock,
-            $this->databaseManager
-        );
-
-        // call method
-        $emailManager->sendEmail($recipient, $subject, $context);
+        // call tested method
+        $this->emailManager->sendEmail($recipient, $subject, $context);
     }
 }

@@ -8,18 +8,16 @@ use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Manager\DatabaseManager;
-use Doctrine\ORM\EntityRepository;
 use App\Manager\NotificationsManager;
 use App\Entity\NotificationSubscriber;
-use App\Repository\NotificationSubscriberRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Component\HttpFoundation\Response;
+use App\Repository\NotificationSubscriberRepository;
 
 /**
  * Class NotificationsManagerTest
  *
- * This for the notifications manager class
+ * Test cases for notification manager
  *
  * @package App\Tests\Manager
  */
@@ -28,15 +26,11 @@ class NotificationsManagerTest extends TestCase
     private AppUtil & MockObject $appUtilMock;
     private LogManager & MockObject $logManagerMock;
     private AuthManager & MockObject $authManagerMock;
+    private NotificationsManager $notificationsManager;
     private ErrorManager & MockObject $errorManagerMock;
     private DatabaseManager & MockObject $databaseManagerMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
-
-    /** @var NotificationSubscriberRepository & MockObject */
     private NotificationSubscriberRepository & MockObject $repositoryMock;
-
-    /** @var NotificationsManager The tested class */
-    private NotificationsManager $notificationsManager;
 
     protected function setUp(): void
     {
@@ -74,11 +68,11 @@ class NotificationsManagerTest extends TestCase
             new NotificationSubscriber(),
         ];
 
-        // mock repository
+        // expect findBy method call
         $this->repositoryMock->expects($this->once())->method('findBy')->with(['status' => 'open'])
             ->willReturn($notificationsSubscribers);
 
-        // call method
+        // call tested method
         $result = $this->notificationsManager->getNotificationsSubscribers('open');
 
         // check result
@@ -95,11 +89,11 @@ class NotificationsManagerTest extends TestCase
         // mock notifications subscriber
         $notificationsSubscriber = new NotificationSubscriber();
 
-        // mock repository
+        // expect findOneBy method call
         $this->repositoryMock->expects($this->once())->method('findOneBy')->with(['endpoint' => 'endpoint'])
             ->willReturn($notificationsSubscriber);
 
-        // call method
+        // call tested method
         $result = $this->notificationsManager->getSubscriberIdByEndpoint('endpoint');
 
         // check result
@@ -113,17 +107,17 @@ class NotificationsManagerTest extends TestCase
      */
     public function testRegenerateVapidKeys(): void
     {
-        // mock database manager
+        // expect tableTruncate method call
         $this->databaseManagerMock->expects($this->once())->method('tableTruncate')
             ->with($this->appUtilMock->getEnvValue('DATABASE_NAME'), 'notifications_subscribers');
 
-        // mock log manager
+        // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->withConsecutive(
             ['notifications-manager', 'generate vapid keys', LogManager::LEVEL_CRITICAL],
             ['notifications', 'Subscribe push notifications', LogManager::LEVEL_INFO]
         );
 
-        // call method
+        // call tested method
         $result = $this->notificationsManager->regenerateVapidKeys();
 
         // check result
@@ -139,23 +133,23 @@ class NotificationsManagerTest extends TestCase
     {
         // mock user id
         $userId = 1;
-        $this->authManagerMock->expects($this->once())
-            ->method('getLoggedUserId')
-            ->willReturn($userId);
 
-        // mock entity manager
+        // expect getLoggedUserId method call
+        $this->authManagerMock->expects($this->once())->method('getLoggedUserId')->willReturn($userId);
+
+        // expect flush and persist methods to be called
         $this->entityManagerMock->expects($this->once())->method('flush');
         $this->entityManagerMock->expects($this->once())->method('persist')
             ->with($this->isInstanceOf(NotificationSubscriber::class));
 
-        // mock log manager
+        // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
             $this->equalTo('notifications'),
             $this->equalTo('Subscribe push notifications'),
             $this->equalTo(LogManager::LEVEL_INFO)
         );
 
-        // call method
+        // call tested method
         $this->notificationsManager->subscribePushNotifications(
             'test-endpoint',
             'test-publicKey',
@@ -175,10 +169,10 @@ class NotificationsManagerTest extends TestCase
         // mock repository
         $this->repositoryMock->method('find')->with(1)->willReturn($subscriber);
 
-        // mock entity manager flush
+        // expect flush method to be called
         $this->entityManagerMock->expects($this->once())->method('flush');
 
-        // call test method
+        // call tested method
         $this->notificationsManager->updateNotificationsSubscriberStatus(1, 'closed');
     }
 
@@ -189,11 +183,11 @@ class NotificationsManagerTest extends TestCase
      */
     public function testSendNotificationWithDisabledPushNotifications(): void
     {
-        // mock app util to return false for push notifications
+        // mock app util to return false for push notifications enabled status
         $this->appUtilMock->expects($this->once())->method('getEnvValue')
             ->with('PUSH_NOTIFICATIONS_ENABLED')->willReturn('false');
 
-        // call method
+        // call tested method
         $this->notificationsManager->sendNotification('Test Title', 'Test Message', null);
     }
 }

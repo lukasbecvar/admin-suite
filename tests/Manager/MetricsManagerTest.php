@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 /**
  * Class MetricsManagerTest
  *
- * Test for metrics manager class
+ * Test cases for metrics manager
  *
  * @package App\Tests\Manager
  */
@@ -44,7 +44,7 @@ class MetricsManagerTest extends TestCase
         $this->metricRepositoryMock = $this->createMock(MetricRepository::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
-        // instantiate manager with mocked dependencies
+        // init metrics manager instance
         $this->metricsManager = new MetricsManager(
             $this->appUtilMock,
             $this->cacheUtilMock,
@@ -56,7 +56,7 @@ class MetricsManagerTest extends TestCase
     }
 
     /**
-     * Test getMetrics for last_24_hours period
+     * Test get metrics for last_24_hours period
      *
      * @return void
      */
@@ -127,7 +127,7 @@ class MetricsManagerTest extends TestCase
     }
 
     /**
-     * Test handleError on getMetrics
+     * Test get metrics with exception result
      *
      * @return void
      */
@@ -159,7 +159,7 @@ class MetricsManagerTest extends TestCase
         $metricName = 'cpu_usage';
         $value = '50.5';
 
-        // mock entity manager
+        // expect persist and flush methods to be called
         $this->entityManagerMock->expects($this->once())->method('persist')->with($this->isInstanceOf(Metric::class));
         $this->entityManagerMock->expects($this->once())->method('flush');
 

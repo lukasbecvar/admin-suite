@@ -25,6 +25,7 @@ class BannedCheckMiddlewareTest extends TestCase
 {
     private AppUtil & MockObject $appUtil;
     private Environment & MockObject $twig;
+    private BannedCheckMiddleware $middleware;
     private LogManager & MockObject $logManager;
     private BanManager & MockObject $banManager;
     private AuthManager & MockObject $authManager;
@@ -42,6 +43,15 @@ class BannedCheckMiddlewareTest extends TestCase
         $this->logManager = $this->createMock(LogManager::class);
         $this->banManager = $this->createMock(BanManager::class);
         $this->authManager = $this->createMock(AuthManager::class);
+
+        // create the middleware instance
+        $this->middleware = new BannedCheckMiddleware(
+            $this->appUtil,
+            $this->twig,
+            $this->logManager,
+            $this->banManager,
+            $this->authManager
+        );
     }
 
     /**
@@ -68,17 +78,9 @@ class BannedCheckMiddlewareTest extends TestCase
             'admin_contact' => 'admin@example.com'
         ])->willReturn('Rendered Template');
 
-        // create the middleware instance
-        $middleware = new BannedCheckMiddleware(
-            $this->appUtil,
-            $this->twig,
-            $this->logManager,
-            $this->banManager,
-            $this->authManager
-        );
-
         // mock request event
         $request = new Request();
+
         /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
@@ -91,7 +93,7 @@ class BannedCheckMiddlewareTest extends TestCase
             }));
 
         // execute the middleware
-        $middleware->onKernelRequest($event);
+        $this->middleware->onKernelRequest($event);
     }
 
     /**
@@ -108,17 +110,9 @@ class BannedCheckMiddlewareTest extends TestCase
         // mock the ban manager
         $this->banManager->method('isUserBanned')->with(1)->willReturn(false);
 
-        // create the middleware instance
-        $middleware = new BannedCheckMiddleware(
-            $this->appUtil,
-            $this->twig,
-            $this->logManager,
-            $this->banManager,
-            $this->authManager
-        );
-
         // mock request event
         $request = new Request();
+
         /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
@@ -127,6 +121,6 @@ class BannedCheckMiddlewareTest extends TestCase
         $event->expects($this->never())->method('setResponse');
 
         // execute the middleware
-        $middleware->onKernelRequest($event);
+        $this->middleware->onKernelRequest($event);
     }
 }

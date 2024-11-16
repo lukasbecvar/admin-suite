@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 /**
  * Class ErrorManagerTest
  *
- * Test the error manager
+ * Test cases for error manager
  *
  * @package App\Tests\Manager
  */
@@ -26,12 +26,12 @@ class ErrorManagerTest extends TestCase
         // create the twig mock
         $this->twigMock = $this->createMock(Environment::class);
 
-        // create the error manager
+        // create the error manager instance
         $this->errorManager = new ErrorManager($this->twigMock);
     }
 
     /**
-     * Test error handling
+     * Test handle error exception
      *
      * @return void
      */
@@ -42,7 +42,26 @@ class ErrorManagerTest extends TestCase
         $this->expectExceptionMessage('Page not found');
         $this->expectExceptionCode(Response::HTTP_NOT_FOUND);
 
-        // call handle the error
+        // call tested method
         $this->errorManager->handleError('Page not found', Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * Test get error view
+     *
+     * @return void
+     */
+    public function testGetErrorView(): void
+    {
+        // expect the error view
+        $this->twigMock->expects($this->once())->method('render')
+            ->with('error/error-404.twig')
+            ->willReturn('error view');
+
+        // call tested method
+        $result = $this->errorManager->getErrorView(Response::HTTP_NOT_FOUND);
+
+        // assert result
+        $this->assertEquals('error view', $result);
     }
 }

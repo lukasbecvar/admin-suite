@@ -59,7 +59,33 @@ class AssetsCheckMiddlewareTest extends TestCase
                     && $response->getContent() === 'Error: build resources not found, please contact service administrator & report this bug on email: ' . ($_ENV['ADMIN_CONTACT'] ?? 'unknown');
             }));
 
-        // call the method under test
+        // call middleware tested method
+        $this->middleware->onKernelRequest($eventMock);
+    }
+
+    /**
+     * Test handle request without error response
+     *
+     * @return void
+     */
+    public function testRequestWithoutErrorResponse(): void
+    {
+        /** @var RequestEvent&MockObject $eventMock */
+        $eventMock = $this->createMock(RequestEvent::class);
+
+        // set up expectations for the mock objects
+        $this->appUtilMock->expects($this->once())
+            ->method('isAssetsExist')->willReturn(true);
+
+        // mock the logger error method
+        $this->loggerMock->expects($this->never())
+            ->method('error');
+
+        // mock the setResponse method
+        $eventMock->expects($this->never())
+            ->method('setResponse');
+
+        // call middleware tested method
         $this->middleware->onKernelRequest($eventMock);
     }
 }

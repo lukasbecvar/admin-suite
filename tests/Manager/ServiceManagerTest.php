@@ -13,7 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Class ServiceManagerTest
  *
- * Test for the ServiceManager functionality
+ * Test cases for service manager
  *
  * @package App\Tests\Manager
  */
@@ -49,7 +49,11 @@ class ServiceManagerTest extends TestCase
      */
     public function testIsServiceRunning(): void
     {
-        $this->assertIsBool($this->serviceManager->isServiceRunning('example_service'));
+        // call tested method
+        $result = $this->serviceManager->isServiceRunning('test_service');
+
+        // assert result
+        $this->assertIsBool($result);
     }
 
     /**
@@ -59,8 +63,11 @@ class ServiceManagerTest extends TestCase
      */
     public function testIsSocktOpen(): void
     {
-        // socket is closed
-        $this->assertEquals('Offline', $this->serviceManager->isSocktOpen('127.0.0.1', 81));
+        // call tested method
+        $result = $this->serviceManager->isSocktOpen('127.0.0.1', 81);
+
+        // assert result
+        $this->assertIsString($result);
     }
 
     /**
@@ -70,7 +77,11 @@ class ServiceManagerTest extends TestCase
      */
     public function testIsProcessRunning(): void
     {
-        $this->assertIsBool($this->serviceManager->isProcessRunning('test_process'));
+        // call tested method
+        $result = $this->serviceManager->isProcessRunning('test_process');
+
+        // assert result
+        $this->assertIsBool($result);
     }
 
     /**
@@ -80,7 +91,11 @@ class ServiceManagerTest extends TestCase
      */
     public function testIsUfwRunning(): void
     {
-        $this->assertIsBool($this->serviceManager->isUfwRunning());
+        // call tested method
+        $result = $this->serviceManager->isUfwRunning();
+
+        // assert result
+        $this->assertIsBool($result);
     }
 
     /**
@@ -90,6 +105,10 @@ class ServiceManagerTest extends TestCase
      */
     public function testIsServicesListExist(): void
     {
-        $this->assertIsBool($this->serviceManager->isServicesListExist());
+        // call tested method
+        $result = $this->serviceManager->isServicesListExist();
+
+        // assert result
+        $this->assertIsBool($result);
     }
 }

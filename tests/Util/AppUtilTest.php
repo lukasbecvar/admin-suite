@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 /**
  * Class AppUtilTest
  *
- * Test the app util
+ * Test cases for app util
  *
  * @package App\Tests\Util
  */
@@ -149,20 +149,6 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test calculate max pages
-     *
-     * @return void
-     */
-    public function testCalculateMaxPages(): void
-    {
-        // calculate max pages
-        $maxPages = (int) $this->appUtil->calculateMaxPages(100, 10);
-
-        // check if max pages is valid
-        $this->assertSame($maxPages, 10);
-    }
-
-    /**
      * Test get hasher config
      *
      * @return void
@@ -196,5 +182,33 @@ class AppUtilTest extends TestCase
 
         // assert that the config is correct
         $this->assertSame($expectedConfig, $this->appUtil->getHasherConfig());
+    }
+
+    /**
+     * Test load config file
+     *
+     * @return void
+     */
+    public function testLoadConfig(): void
+    {
+        // expect getJson method call
+        $this->jsonUtilMock->expects($this->once())->method('getJson');
+
+        // call tested method
+        $this->appUtil->loadConfig('services-monitoring.json');
+    }
+
+    /**
+     * Test calculate max pages
+     *
+     * @return void
+     */
+    public function testCalculateMaxPages(): void
+    {
+        // calculate max pages
+        $maxPages = (int) $this->appUtil->calculateMaxPages(100, 10);
+
+        // check if max pages is valid
+        $this->assertSame($maxPages, 10);
     }
 }

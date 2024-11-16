@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class CacheUtilTest
  *
- * Test the cache util
+ * Test cases for cache util
  *
  * @package App\Tests\Util
  */
@@ -50,8 +50,11 @@ class CacheUtilTest extends TestCase
         $this->cacheItemPoolMock->expects($this->once())->method('getItem')->with($key)->willReturn($cacheItemMock);
         $cacheItemMock->expects($this->once())->method('isHit')->willReturn(true);
 
-        // assert that the method returns true
-        $this->assertTrue($this->cacheUtil->isCatched($key));
+        // call tested method
+        $result = $this->cacheUtil->isCatched($key);
+
+        // assert result
+        $this->assertTrue($result);
     }
 
     /**
@@ -68,8 +71,11 @@ class CacheUtilTest extends TestCase
         $cacheItemMock = $this->createMock(CacheItemInterface::class);
         $this->cacheItemPoolMock->expects($this->once())->method('getItem')->with($key)->willReturn($cacheItemMock);
 
-        // assert that the method returns the cache item
-        $this->assertSame($cacheItemMock, $this->cacheUtil->getValue($key));
+        // call tested method
+        $result = $this->cacheUtil->getValue($key);
+
+        // assert result
+        $this->assertSame($cacheItemMock, $result);
     }
 
     /**
@@ -93,7 +99,7 @@ class CacheUtilTest extends TestCase
         $cacheItemMock->expects($this->once())->method('set')->with($value);
         $cacheItemMock->expects($this->once())->method('expiresAfter')->with($expiration);
 
-        // call the method
+        // call tested method
         $this->cacheUtil->setValue($key, $value, $expiration);
     }
 
@@ -110,7 +116,7 @@ class CacheUtilTest extends TestCase
         // set cache item mock expectations
         $this->cacheItemPoolMock->expects($this->once())->method('deleteItem')->with($key);
 
-        // call the method
+        // call tested method
         $this->cacheUtil->deleteValue($key);
     }
 
@@ -135,7 +141,7 @@ class CacheUtilTest extends TestCase
         $this->errorManagerMock->expects($this->once())->method('handleError')
             ->with('error to store cache value: Test exception', Response::HTTP_INTERNAL_SERVER_ERROR);
 
-        // call the method
+        // call tested method
         $this->cacheUtil->setValue($key, $value, $expiration);
     }
 
@@ -158,7 +164,7 @@ class CacheUtilTest extends TestCase
         $this->errorManagerMock->expects($this->once())->method('handleError')
             ->with('error to delete cache value: Test exception', Response::HTTP_INTERNAL_SERVER_ERROR);
 
-        // call the method
+        // call tested method
         $this->cacheUtil->deleteValue($key);
     }
 }

@@ -16,7 +16,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Class UserManagerTest
  *
- * Test the user manager
+ * Test cases for user manager
  *
  * @package App\Tests\Manager
  */
@@ -43,7 +43,7 @@ class UserManagerTest extends TestCase
         // mock user repository
         $this->entityManagerMock->method('getRepository')->willReturn($this->userRepositoryMock);
 
-        // create the user manager instance
+        // create user manager instance
         $this->userManager = new UserManager(
             $this->appUtilMock,
             $this->logManagerMock,
@@ -65,10 +65,10 @@ class UserManagerTest extends TestCase
         $user = new User();
         $this->userRepositoryMock->method('findOneBy')->willReturn($user);
 
-        // call the method
+        // call tested method
         $result = $this->userManager->getUserRepository(['username' => 'test']);
 
-        // assert the result
+        // assert result
         $this->assertInstanceOf(User::class, $result);
     }
 
@@ -83,33 +83,51 @@ class UserManagerTest extends TestCase
         $user = new User();
         $this->userRepositoryMock->method('findOneBy')->willReturn($user);
 
-        // call the method
+        // call tested method
         $result = $this->userManager->getAllUsersRepositories();
 
-        // assert the result
-        $this->assertIsArray($result);
-    }
-
-    /**
-     * Test get user by page
-     *
-     * @return void
-     */
-    public function testGetUsersByPage(): void
-    {
-        // mock user repository
-        $user = new User();
-        $this->userRepositoryMock->method('findBy')->willReturn([$user]);
-
-        // call the method
-        $result = $this->userManager->getUsersByPage(1);
-
-        // assert the result
+        // assert result
         $this->assertIsArray($result);
     }
 
     /**
      * Test get user by id
+     *
+     * @return void
+     */
+    public function testGetUserById(): void
+    {
+        // expect find method call
+        $this->userRepositoryMock->expects($this->once())->method('find')->with(1)
+            ->willReturn($this->createMock(User::class));
+
+        // call tested method
+        $result = $this->userManager->getUserById(1);
+
+        // assert result
+        $this->assertInstanceOf(User::class, $result);
+    }
+
+    /**
+     * Test get user by token
+     *
+     * @return void
+     */
+    public function testGetUserByToken(): void
+    {
+        // expect find method call
+        $this->userRepositoryMock->expects($this->once())->method('findOneBy')->with(['token' => 'test'])
+            ->willReturn($this->createMock(User::class));
+
+        // call tested method
+        $result = $this->userManager->getUserByToken('test');
+
+        // assert result
+        $this->assertInstanceOf(User::class, $result);
+    }
+
+    /**
+     * Test get users count
      *
      * @return void
      */
@@ -123,14 +141,32 @@ class UserManagerTest extends TestCase
     }
 
     /**
+     * Test get user by page
+     *
+     * @return void
+     */
+    public function testGetUsersByPage(): void
+    {
+        // expect findBy method call
+        $this->userRepositoryMock->expects($this->once())->method('findBy');
+
+        // call the method
+        $result = $this->userManager->getUsersByPage(1);
+
+        // assert the result
+        $this->assertIsArray($result);
+    }
+
+    /**
      * Test check if user exist
      *
      * @return void
      */
     public function testCheckIfUserExist(): void
     {
-        // mock user repository
-        $this->userRepositoryMock->method('findOneBy')->willReturn(new User());
+        // expect findOneBy method call
+        $this->userRepositoryMock->expects($this->once())->method('findOneBy')->with(['username' => 'test'])
+            ->willReturn($this->createMock(User::class));
 
         // call the method
         $result = $this->userManager->checkIfUserExist('test');

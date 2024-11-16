@@ -20,6 +20,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class MaintenanceMiddlewareTest extends TestCase
 {
+    private MaintenanceMiddleware $middleware;
     private AppUtil & MockObject $appUtilMock;
     private LoggerInterface & MockObject $loggerMock;
     private ErrorManager & MockObject $errorManagerMock;
@@ -35,6 +36,13 @@ class MaintenanceMiddlewareTest extends TestCase
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
+
+        // create the middleware instance
+        $this->middleware = new MaintenanceMiddleware(
+            $this->appUtilMock,
+            $this->errorManagerMock,
+            $this->loggerMock
+        );
     }
 
     /**
@@ -46,13 +54,6 @@ class MaintenanceMiddlewareTest extends TestCase
     {
         // mock the app util
         $this->appUtilMock->expects($this->once())->method('isMaintenance')->willReturn(true);
-
-        // create the middleware instance
-        $middleware = new MaintenanceMiddleware(
-            $this->appUtilMock,
-            $this->errorManagerMock,
-            $this->loggerMock
-        );
 
         // mock request event
         /** @var RequestEvent & MockObject $event */
@@ -74,7 +75,7 @@ class MaintenanceMiddlewareTest extends TestCase
             }));
 
         // execute the middleware
-        $middleware->onKernelRequest($event);
+        $this->middleware->onKernelRequest($event);
     }
 
     /**
@@ -87,13 +88,6 @@ class MaintenanceMiddlewareTest extends TestCase
         // mock the app util
         $this->appUtilMock->expects($this->once())->method('isMaintenance')->willReturn(false);
 
-        // create the middleware instance
-        $middleware = new MaintenanceMiddleware(
-            $this->appUtilMock,
-            $this->errorManagerMock,
-            $this->loggerMock
-        );
-
         // mock request event
         /** @var RequestEvent & MockObject $event */
         $event = $this->createMock(RequestEvent::class);
@@ -105,6 +99,6 @@ class MaintenanceMiddlewareTest extends TestCase
         $event->expects($this->never())->method('setResponse');
 
         // execute the middleware
-        $middleware->onKernelRequest($event);
+        $this->middleware->onKernelRequest($event);
     }
 }
