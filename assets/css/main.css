@@ -11,15 +11,7 @@ body {
 }
 
 main {
-	margin-top: 25px; 
-}
-
-input {
-	outline: none;
-}
-
-.bg-neutral-850 {
-	background-color: rgb(30, 30, 30) !important;
+	margin-top: 28px; 
 }
 
 .link {
@@ -31,17 +23,13 @@ input {
 	text-decoration: underline;
 }
 
-.card-color {
-	background-color: #1d1d1d;
-}
-
 #main-content {
 	position: relative;
 	margin-left: 0; 
 	transition: margin-left 0.2s ease; 
 	display: flex;
 	flex-direction: column;
-	height: calc(100vh - 25px);
+	height: calc(100vh - 28px);
 }
 
 #main-content.active {
@@ -70,6 +58,23 @@ input {
 	margin-right: 10px !important;
 }
 
+/* custom colors */
+.bg-neutral-850 {
+	background-color: rgb(30, 30, 30) !important;
+}
+
+.bg-neutral-880 {
+	background-color: rgb(26, 26, 26) !important;
+}
+
+.bg-red-750 {
+	background-color: rgb(161, 27, 27) !important;
+}
+
+.card-color {
+	background-color: #1d1d1d;
+}
+
 .background-dark {
     background: rgb(20, 20, 20) !important;
 }
@@ -90,6 +95,7 @@ input {
 }
 
 .auth-form-input {
+	outline: none !important;
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	background: rgba(255, 255, 255, 0.041);
 	text-align: left;
@@ -100,31 +106,14 @@ input {
 	transition: all 0.3s ease;
 	width: 100%;
     margin-top: 6px;
-    margin-bottom: 1px;
-    border-radius: 4px;
+    margin-bottom: 5px;
+    border-radius: 0.375rem;
 	text-align: center;
 }
 
 .auth-form-input:focus {
 	color: white;
-	border-color: #63b3ed;
-	box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-}
-
-.auth-form-input:-webkit-autofill, 
-.auth-form-input:-webkit-autofill:hover, 
-.auth-form-input:-webkit-autofill:focus 
-.auth-form-input:-moz-autofill, 
-.auth-form-input:-moz-autofill:hover, 
-.auth-form-input:-moz-autofill-preview, 
-.auth-form-input:-moz-autofill:focus {
-	border: 1px solid rgba(230, 230, 230, 0.24) !important;
-	-webkit-text-fill-color: white !important;
-	background-color: rgba(255, 255, 255, 0.062) !important;
-	-webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.062) inset !important;
-	transition: background-color 5000s ease-in-out 0s !important;
-	filter: none !important;
-	box-shadow: 0 0 0 100px #8f88 inset !important;
+	border-color: rgb(37 99 235);
 }
 
 .auth-form-input:focus {
@@ -152,6 +141,22 @@ input {
 	transition: background-color 5000s ease-in-out 0s;
 }
 
+.auth-form-input:-webkit-autofill, 
+.auth-form-input:-webkit-autofill:hover, 
+.auth-form-input:-webkit-autofill:focus 
+.auth-form-input:-moz-autofill, 
+.auth-form-input:-moz-autofill:hover, 
+.auth-form-input:-moz-autofill-preview, 
+.auth-form-input:-moz-autofill:focus {
+	border: 1px solid rgba(230, 230, 230, 0.24) !important;
+	-webkit-text-fill-color: white !important;
+	background-color: rgba(255, 255, 255, 0.062) !important;
+	-webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.062) inset !important;
+	transition: background-color 5000s ease-in-out 0s !important;
+	filter: none !important;
+	box-shadow: 0 0 0 100px #8f88 inset !important;
+}
+
 .auth-component .rememberme-checkbox {
 	border: 2px solid rgba(255, 255, 255, 0.24);
 	background: rgba(180, 38, 38, 0.062) !important;
@@ -167,7 +172,7 @@ input {
 	width: 100%;
 	z-index: 1000;
 	background-color: #161616;
-	height: 25px;
+	height: 28px;
 }
 
 .nav-bar #menu-toggle {
@@ -191,8 +196,7 @@ input {
 /* sidebar element */
 #sidebar {
 	position: fixed;
-	top: 25px; 
-	height: calc(100% - 25px); 
+	height: calc(100% - 28px); 
 	overflow-y: auto; 
 	background-color: #161616;
 	z-index: 999; 
@@ -321,8 +325,8 @@ input {
 
 /* dashboard component */
 .dashbard-component .progress-bar {
-	border-radius: 10px;
-	border: 1px solid rgb(161, 161, 161);
+	border-radius: 5.3px;
+	border: 0.8px solid rgb(165, 165, 165);
     width: 100%;
     height: 15px;
     background-color: #272727;
@@ -331,7 +335,7 @@ input {
 
 .dashbard-component .progress {
     height: 100%;
-    background-color: rgb(18, 163, 163);
+    background-color: rgb(1, 124, 124);
     width: 0%;
     transition: width 0.2s ease;
 }
@@ -462,9 +466,6 @@ input {
 	#main-content.active {
 		display: none;
 	}
-	.m-w-95 {
-		max-width: 95%;
-	}
 	.phone-none {
 		display: none;
 	}
@@ -505,6 +506,20 @@ input {
 		width: 100%;
 		flex-grow: 1;
 		overflow-y: auto; 
+	}
+}
+
+/* fix component width on small devices */
+@media screen and (max-width: 460px) { 
+	.m-w-95 {
+		max-width: 95%;
+	}
+}
+
+/* disable margin top on small devices */
+@media screen and (max-width: 320px) { 
+	.phone-mt-disable {
+		margin-top: 0px !important;
 	}
 }
 

@@ -1,20 +1,20 @@
-<div class="card-color border border-gray-600 shadow-lg rounded w-full">
-    <div class="px-3 py-2 border-b border-gray-600 text-white font-bold text-sm flex items-center justify-between">
+<div class="card-color border border-neutral-600 shadow-lg rounded w-full">
+    <div class="px-3 py-2 border-b border-neutral-600 text-white font-bold text-sm flex items-center justify-between">
         <span>System Resources</span>
         <a href={{ path('app_metrics_dashboard') }} class="text-indigo-400 hover:text-indigo-300 text-xs" title="Go to metrics view">View All</a>
     </div>
     <div class="p-4">
         <p class="text-white mb-1">CPU: {{ diagnosticData.cpuUsage|e }}%</p>
         <div class="progress-bar">
-            <div class="progress rounded-md" style="width: {{ diagnosticData.cpuUsage|e }}%;"></div>
+            <div class="progress rounded" style="width: {{ diagnosticData.cpuUsage|e }}%;"></div>
         </div>
         <p class="text-white mb-1">RAM: ({{ ramUsage.used|e }}G / {{ diagnosticData.ramUsage|e }}%)</p>
         <div class="progress-bar">
-            <div class="progress rounded-md" style="width: {{ diagnosticData.ramUsage|e }}%;"></div>
+            <div class="progress rounded" style="width: {{ diagnosticData.ramUsage|e }}%;"></div>
         </div>
         <p class="text-white mb-1">STORAGE: ({{ storageUsage|e }}G / {{ diagnosticData.driveSpace|e }}%)</p>
         <div class="progress-bar">
-            <div class="progress rounded-md" style="width: {{ diagnosticData.driveSpace|e }}%;"></div>
+            <div class="progress rounded" style="width: {{ diagnosticData.driveSpace|e }}%;"></div>
         </div>
     </div>
 </div>

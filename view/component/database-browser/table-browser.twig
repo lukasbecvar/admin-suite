@@ -4,13 +4,13 @@
 {% block component %}
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb p-4">
-    <a href={{ path('app_manager_database', {'database': databaseName}) }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to database browser">
+    <a href={{ path('app_manager_database', {'database': databaseName}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to database browser">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
-    <a href={{ path('app_manager_database_add', {'database': databaseName, 'table': tableName}) }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Add new record to table">
+    <a href={{ path('app_manager_database_add', {'database': databaseName, 'table': tableName}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Add new record to table">
         <i class="fa fa-plus" aria-hidden="true"></i>
     </a>
-    <a href={{ path('app_manager_database_truncate', {'database': databaseName, 'table': tableName}) }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Drop all records from table">
+    <a href={{ path('app_manager_database_truncate', {'database': databaseName, 'table': tableName}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Drop all records from table">
         <i class="fa fa-trash" aria-hidden="true"></i>
     </a>
     <span class="mr-1 text-white">{{ tableName|e }}</span>
@@ -41,7 +41,7 @@
                     No records found
                 </p>
             {% else %}
-                <table class="min-w-full bg-neutral-900 text-white border-b border-neutral-700">
+                <table class="min-w-full bg-neutral-880 text-white border-b border-neutral-700">
                     <thead>
                         <tr>
                             {# TABLE HEADER #}

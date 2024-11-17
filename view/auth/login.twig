@@ -3,13 +3,13 @@
 {# USER LOGIN COMPONENT #}
 {% block body %}
 <div class="auth-component flex justify-center items-center h-screen">
-    <div class="max-w-md w-full bg-gray-800 shadow-lg px-3 py-4 mb-4 border border-gray-700 rounded background-dark opacity-95 m-w-95">
+    <div class="mt-5 max-w-md w-full bg-gray-800 shadow-lg px-4 py-5 mb-4 border border-neutral-700 rounded-md background-dark opacity-95 m-w-95">
         <h2 class="text-2xl mb-4 text-center text-white">Login</h2>
         
         {# EMPTY USER LIST ALERT BOX (FIRST USER REGISTER) #}
         {% if isUsersEmpty %}
-            <div class="bg-red-700 text-white p-3 mb-4 rounded text-center">
-                <p>Users table is empty Register now <a href={{ path('app_auth_register') }} class="text-blue-400 font-bold hover:text-blue-500">here</a></p>
+            <div class="bg-red-750 text-white p-3 mb-4 rounded text-center">
+                <p>Users table is empty Register now <a href={{ path('app_auth_register') }} class="text-blue-500 font-bold hover:text-blue-400">here</a></p>
             </div>
         {% endif %}
 
@@ -20,7 +20,7 @@
 
         {# ERROR MESSAGE BOX #}
         {% for message in app.flashes('error') %}
-            <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message|e  }}</div>
+            <div class="bg-red-750 text-white p-3 mb-3 rounded text-center">{{ message|e  }}</div>
         {% endfor %}
 
         {# LOGIN FORM #}
@@ -37,7 +37,7 @@
             </div>
 
             {# FORM SUBMIT BUTTON #}
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Login</button>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Login</button>
         {{ form_end(loginForm) }}
     </div>
 </div>

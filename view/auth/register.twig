@@ -3,7 +3,7 @@
 {# USER REGISTER COMPONENT #}
 {% block body %}
 <div class="auth-component flex justify-center items-center h-screen">
-    <div class="max-w-md w-full bg-gray-800 shadow-lg px-3 py-4 mb-4 border border-gray-700 rounded background-dark opacity-95 m-w-95">
+    <div class="mt-5 max-w-md w-full bg-gray-800 shadow-lg px-4 py-5 mb-4 border border-neutral-700 rounded background-dark opacity-95 m-w-95">
         <h2 class="text-2xl mb-2 text-center text-white">Register</h2>
 
         {# SUCCESS MESSAGE BOX #}
@@ -13,7 +13,7 @@
 
         {# ERROR MESSAGE BOX #}
         {% for message in app.flashes('error') %}
-            <div class="bg-red-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
+            <div class="bg-red-750 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
         {% endfor %}
 
         {# REGISTER FORM #}
@@ -25,9 +25,9 @@
             {{ form_row(registrationForm.password.second, {'attr': {'class': 'auth-form-input', 'placeholder': 'Confirm Password'}}) }}
 
             {# FORM SUBMIT BUTTON #}
-            <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Register</button>
+            <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Register</button>
         {{ form_end(registrationForm) }}
-        <p class="text-white">You can login <a class="text-blue-400 font-bold hover:text-blue-500" href={{ path('app_auth_login') }}>here</a></p>
+        <p class="text-white ml-1">You can login <a class="text-blue-400 font-bold hover:text-blue-500" href={{ path('app_auth_login') }}>here</a></p>
     </div>
 </div>
 {% endblock %}

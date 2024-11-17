@@ -6,7 +6,7 @@
     {# SUB-NAVIGATION #}
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
         {# BACK BUTTON #}
-        <a href={{ path('app_manager_monitoring') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to monitoring dashboard">
+        <a href={{ path('app_manager_monitoring') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to monitoring dashboard">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
         <span class="mr-1 text-white">Services config</span>
@@ -16,8 +16,8 @@
     <div class="text-white p-2">
         {% for service in services %}
             {% if service.type == 'systemd' %}
-                <div class="mb-2 bg-gray-800 shadow-md border border-gray-600 card-color rounded">
-                    <h2 class="px-2 py-2 border-b border-gray-600 text-white font-bold">{{ service.display_name|e }}</h2>
+                <div class="mb-2 bg-gray-800 shadow-md border border-neutral-600 card-color rounded">
+                    <h2 class="px-2 py-2 border-b border-neutral-600 text-white font-bold">{{ service.display_name|e }}</h2>
                     <div class="grid grid-cols-2 gap-2 p-2">
                         <p><span class="font-semibold">Service Name:</span> {{ service.service_name|e }}</p>
                         <p><span class="font-semibold">Display Name:</span> {{ service.display_name|e }}</p>
@@ -26,8 +26,8 @@
                     </div>
                 </div>
             {% elseif service.type == 'http' %}
-                <div class="mb-2 bg-gray-800 shadow-md border border-gray-600 card-color rounded">
-                    <h2 class="px-2 py-2 border-b border-gray-600 text-white font-bold">{{ service.display_name|e }}</h2>
+                <div class="mb-2 bg-gray-800 shadow-md border border-neutral-600 card-color rounded">
+                    <h2 class="px-2 py-2 border-b border-neutral-600 text-white font-bold">{{ service.display_name|e }}</h2>
                     <div class="grid grid-cols-2 gap-2 p-2">
                         <p><span class="font-semibold">Service Name:</span> {{ service.service_name|e }}</p>
                         <p><span class="font-semibold">Display Name:</span> {{ service.display_name|e }}</p>

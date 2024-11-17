@@ -6,16 +6,16 @@
     {# SUB-NAVIGATION #}
     <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation flex-none">
         {# BACK BUTTON #}
-        <a href={{ path('app_dashboard') }} class="border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
+        <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
         {# STATUS FILTER LINK #}
         {% if filter == 'closed' %}            
-            <a href={{ path('app_todo_manager', {'filter': 'open'}) }} class="ml-1 border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="View open todos">
+            <a href={{ path('app_todo_manager', {'filter': 'open'}) }} class="ml-1 border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="View open todos">
                 <i class="fa fa-tasks" aria-hidden="true"></i>
             </a>
         {% else %}
-            <a href={{ path('app_todo_manager', {'filter': 'closed'}) }} class="ml-1 border border-gray-600 font-bold px-1 py-0 rounded mr-2 text-white" title="View closed todos">
+            <a href={{ path('app_todo_manager', {'filter': 'closed'}) }} class="ml-1 border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="View closed todos">
                 <i class="fa fa-check" aria-hidden="true"></i>
             </a>
         {% endif %}
@@ -66,7 +66,7 @@
 <div id="editPopup" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden">
     <div class="bg-neutral-900 rounded p-6 border border-neutral-700 w-full max-w-xl">
         <h2 class="text-lg font-bold mb-4 text-white">Edit Todo</h2>
-        <textarea id="editTodoInput" class="bg-neutral-800 text-white w-full p-3 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" placeholder="New todo text" maxlength="512" rows="4"></textarea>
+        <textarea id="editTodoInput" class="bg-neutral-800 text-white w-full p-3 border border-neutral-600 rounded focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" placeholder="New todo text" maxlength="512" rows="4"></textarea>
         <div class="flex justify-end mt-4 space-x-2">
             <button id="cancelEditButton" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500">Cancel</button>
             <button id="confirmEditButton" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500">Save</button>
