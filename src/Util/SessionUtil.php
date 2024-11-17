@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use Exception;
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -85,12 +86,18 @@ class SessionUtil
      */
     public function getSessionValue(string $sessionName, mixed $default = null): mixed
     {
-        $this->startSession();
+        $value = null;
 
-        /** @var string $value */
-        $value = $this->requestStack->getSession()->get($sessionName);
+        try {
+            // start session
+            $this->startSession();
 
-        // check if session exist
+            /** @var string $value */
+            $value = $this->requestStack->getSession()->get($sessionName);
+        } catch (Exception) {
+        }
+
+        // check if session value get
         if (!isset($value)) {
             return $default;
         }
@@ -107,6 +114,7 @@ class SessionUtil
             );
         }
 
+        // return decrypted session value
         return $value;
     }
 }
