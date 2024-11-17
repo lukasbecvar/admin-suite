@@ -8,16 +8,9 @@
 /* fontawesome */
 @import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 
-/* loading component */
-@import './loading.css';
-
 /* main app style */
-@import './global.css';
 @import './main.css';
 
 /* others styles */
-@import './auth.css';
+@import './loading.css';
 @import './scrollbar.css';
-
-/* code highlight theme */
-@import './vscode-theme.css';
