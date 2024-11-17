@@ -65,7 +65,7 @@ class ServerUtil
 
         // check if sys_getloadavg() returned an array and has at least one value
         if (!is_array($loads) || count($loads) < 1) {
-            return $load; // return default value if load average is unavailable
+            return $load;
         }
 
         // get number of CPU cores
@@ -85,7 +85,7 @@ class ServerUtil
             $load = round(min($loads[0] / $coreNums * 100, 100), 2);
         }
 
-        return $load;
+        return max($load, 0.1);
     }
 
     /**
