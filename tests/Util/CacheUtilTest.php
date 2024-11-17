@@ -79,7 +79,7 @@ class CacheUtilTest extends TestCase
     }
 
     /**
-     * Test set value in cache
+     * Test save value to cache storage
      *
      * @return void
      */
@@ -91,13 +91,38 @@ class CacheUtilTest extends TestCase
         $expiration = 3600;
         $cacheItemMock = $this->createMock(CacheItemInterface::class);
 
-        // set cache item mock expectations
+        // mock cache item
         $this->cacheItemPoolMock->expects($this->once())->method('getItem')->with($key)->willReturn($cacheItemMock);
         $this->cacheItemPoolMock->expects($this->once())->method('save')->with($cacheItemMock);
 
-        // set cache item mock expectations
+        // expect method calls
         $cacheItemMock->expects($this->once())->method('set')->with($value);
         $cacheItemMock->expects($this->once())->method('expiresAfter')->with($expiration);
+
+        // call tested method
+        $this->cacheUtil->setValue($key, $value, $expiration);
+    }
+
+    /**
+     * Test set cache value with exception
+     *
+     * @return void
+     */
+    public function testSetValueWithException(): void
+    {
+        // testing cache item data
+        $key = 'test_key';
+        $value = 'test_value';
+        $expiration = 3600;
+
+        // set cache item mock expectations
+        $this->cacheItemPoolMock->expects($this->once())->method('getItem')->with($key)->willThrowException(
+            new Exception('Test exception')
+        );
+
+        // set error manager mock expectations
+        $this->errorManagerMock->expects($this->once())->method('handleError')
+            ->with('error to store cache value: Test exception', Response::HTTP_INTERNAL_SERVER_ERROR);
 
         // call tested method
         $this->cacheUtil->setValue($key, $value, $expiration);
@@ -121,32 +146,7 @@ class CacheUtilTest extends TestCase
     }
 
     /**
-     * Test the setValue exception
-     *
-     * @return void
-     */
-    public function testSetValueException(): void
-    {
-        // testing cache item data
-        $key = 'test_key';
-        $value = 'test_value';
-        $expiration = 3600;
-
-        // set cache item mock expectations
-        $this->cacheItemPoolMock->expects($this->once())->method('getItem')->with($key)->willThrowException(
-            new Exception('Test exception')
-        );
-
-        // set error manager mock expectations
-        $this->errorManagerMock->expects($this->once())->method('handleError')
-            ->with('error to store cache value: Test exception', Response::HTTP_INTERNAL_SERVER_ERROR);
-
-        // call tested method
-        $this->cacheUtil->setValue($key, $value, $expiration);
-    }
-
-    /**
-     * Test the deleteValue exception
+     * Test delete value from cache with exception
      *
      * @return void
      */

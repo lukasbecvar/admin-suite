@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 /**
  * Class JsonUtilTest
  *
- * Test cases for JsonUtil
+ * Test cases for json util
  *
  * @package Tests\Unit\Util
  */
@@ -32,7 +32,7 @@ class JsonUtilTest extends TestCase
     }
 
     /**
-     * Test getJson method with different targets
+     * Test get json with different targets
      *
      * @return void
      */
@@ -54,7 +54,7 @@ class JsonUtilTest extends TestCase
     }
 
     /**
-     * Test getJson method with different targets
+     * Test get json with different targets
      *
      * @return void
      */
@@ -71,7 +71,7 @@ class JsonUtilTest extends TestCase
     }
 
     /**
-     * Test getJson method with different targets
+     * Test get json with different targets
      *
      * @return void
      */

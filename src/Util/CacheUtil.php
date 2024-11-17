@@ -2,11 +2,10 @@
 
 namespace App\Util;
 
-use App\Manager\ErrorManager;
 use Exception;
+use App\Manager\ErrorManager;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

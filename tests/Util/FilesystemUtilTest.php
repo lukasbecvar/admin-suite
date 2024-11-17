@@ -34,13 +34,13 @@ class FileSystemUtilTest extends TestCase
     }
 
     /**
-     * Test the getFilesList method
+     * Test get file list
      *
      * @return void
      */
-    public function testGetFilesListSuccess(): void
+    public function testGetFilesList(): void
     {
-        // get the list of files
+        // call tested method
         $list = $this->fileSystemUtil->getFilesList('/');
 
         // check result array
@@ -53,12 +53,13 @@ class FileSystemUtilTest extends TestCase
     }
 
     /**
-     * Test the isFileExecutable method
+     * Test check if file is executable
      *
      * @return void
      */
-    public function testIsFileExecutableSuccess(): void
+    public function testIsFileExecutable(): void
     {
+        // call tested method
         $result = $this->fileSystemUtil->isFileExecutable('/var/www/balbla.txt');
 
         // assert result is bool
@@ -66,12 +67,13 @@ class FileSystemUtilTest extends TestCase
     }
 
     /**
-     * Test the detectMediaType method
+     * Test detect media type
      *
      * @return void
      */
-    public function testDetectMediaTypeSuccess(): void
+    public function testDetectMediaType(): void
     {
+        // call tested method
         $result = $this->fileSystemUtil->detectMediaType('/var/www/balbla.txt');
 
         // assert result is string
@@ -79,12 +81,13 @@ class FileSystemUtilTest extends TestCase
     }
 
     /**
-     * Test the getFileContent method
+     * Test get file content
      *
      * @return void
      */
-    public function testGetFileContentSuccess(): void
+    public function testGetFileContent(): void
     {
+        // call tested method
         $result = $this->fileSystemUtil->getFileContent('/usr/lib/os-release');
 
         // assert result is string

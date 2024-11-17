@@ -13,7 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Class ServerUtilTest
  *
- * Test cases for ServerUtil
+ * Test cases for server util
  *
  * @package Tests\Unit\Util
  */
@@ -49,12 +49,12 @@ class ServerUtilTest extends TestCase
      */
     public function testGetHostUptime(): void
     {
-        // call the method being tested
-        $hostUptime = $this->serverUtil->getHostUptime();
+        // call tested method
+        $result = $this->serverUtil->getHostUptime();
 
-        // assert that the result is a non-empty string
-        $this->assertIsString($hostUptime);
-        $this->assertNotEmpty($hostUptime);
+        // assert result
+        $this->assertIsString($result);
+        $this->assertNotEmpty($result);
     }
 
     /**
@@ -64,13 +64,13 @@ class ServerUtilTest extends TestCase
      */
     public function testGetCpuUsage(): void
     {
-        // call the method being tested
-        $cpuUsage = $this->serverUtil->getCpuUsage();
+        // call tested method
+        $result = $this->serverUtil->getCpuUsage();
 
-        // assert that the result is a float between 0 and 100
-        $this->assertIsFloat($cpuUsage);
-        $this->assertGreaterThanOrEqual(0, $cpuUsage);
-        $this->assertLessThanOrEqual(100, $cpuUsage);
+        // assert result
+        $this->assertIsFloat($result);
+        $this->assertGreaterThanOrEqual(0, $result);
+        $this->assertLessThanOrEqual(100, $result);
     }
 
     /**
@@ -80,7 +80,7 @@ class ServerUtilTest extends TestCase
      */
     public function testGetRamUsage(): void
     {
-        // call the method being tested
+        // call tested method
         $ramUsage = $this->serverUtil->getRamUsage();
 
         // assert that the result is an array with keys 'used', 'free', and 'total'
@@ -97,7 +97,7 @@ class ServerUtilTest extends TestCase
      */
     public function testGetRamUsagePercentage(): void
     {
-        // call the method being tested
+        // call tested method
         $ramUsagePercentage = $this->serverUtil->getRamUsagePercentage();
 
         // assert that the result is an integer between 0 and 100
@@ -113,7 +113,7 @@ class ServerUtilTest extends TestCase
      */
     public function testGetSoftwareInfo(): void
     {
-        // call the method being tested
+        // call tested method
         $softwareInfo = $this->serverUtil->getSystemInfo();
 
         // assert that the result is an array with keys 'packages' and 'distro'
@@ -127,7 +127,7 @@ class ServerUtilTest extends TestCase
      */
     public function testIsWebUserSudo(): void
     {
-        // call the method being tested
+        // call tested method
         $isSudo = $this->serverUtil->isWebUserSudo();
 
         // assert that the result is a boolean value
@@ -141,7 +141,7 @@ class ServerUtilTest extends TestCase
      */
     public function testGetDriveUsagePercentage(): void
     {
-        // call the method being tested
+        // call tested method
         $driveUsagePercentage = $this->serverUtil->getDriveUsagePercentage();
 
         // assert that the result is a string
@@ -155,7 +155,7 @@ class ServerUtilTest extends TestCase
      */
     public function testGetStorageUsage(): void
     {
-        // call the method being tested
+        // call tested method
         $storageUsage = $this->serverUtil->getStorageUsage();
 
         // assert that the result is an integer
@@ -169,7 +169,7 @@ class ServerUtilTest extends TestCase
      */
     public function testIsSystemLinux(): void
     {
-        // call the method being tested
+        // call tested method
         $isLinux = $this->serverUtil->isSystemLinux();
 
         // assert that the result is a boolean value
@@ -183,7 +183,7 @@ class ServerUtilTest extends TestCase
      */
     public function testGetProcessList(): void
     {
-        // call the method being tested
+        // call tested method
         $processList = $this->serverUtil->getProcessList();
 
         // assert that the result is an array
@@ -197,7 +197,7 @@ class ServerUtilTest extends TestCase
      */
     public function testGetDiagnosticData(): void
     {
-        // get diagnostic data
+        // call tested method
         $diagnosticData = $this->serverUtil->getDiagnosticData();
 
         // assert that the result is an array

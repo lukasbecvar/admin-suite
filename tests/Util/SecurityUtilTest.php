@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 /**
  * Class SecurityUtilTest
  *
- * Test the security util
+ * Test cases for security util
  *
  * @package App\Tests\Util
  */
@@ -44,8 +44,11 @@ class SecurityUtilTest extends TestCase
         $input = '<script>alert("XSS");</script>';
         $expectedOutput = '&lt;script&gt;alert(&quot;XSS&quot;);&lt;/script&gt;';
 
-        // assert that the output is escaped
-        $this->assertEquals($expectedOutput, $this->securityUtil->escapeString($input));
+        // call the method
+        $result = $this->securityUtil->escapeString($input);
+
+        // assert result
+        $this->assertEquals($expectedOutput, $result);
     }
 
     /**
@@ -58,12 +61,15 @@ class SecurityUtilTest extends TestCase
         $input = 'Hello, World!';
         $expectedOutput = 'Hello, World!';
 
-        // assert that the output is not escaped
-        $this->assertEquals($expectedOutput, $this->securityUtil->escapeString($input));
+        // call the method
+        $result = $this->securityUtil->escapeString($input);
+
+        // assert result
+        $this->assertEquals($expectedOutput, $result);
     }
 
     /**
-     * Tests generating an Argon2 hash for a password
+     * Test generating an Argon2 hash for a password
      *
      * @return void
      */
@@ -82,7 +88,7 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Tests verifying a password using an Argon2 hash
+     * Test verifying a password using an Argon2 hash
      *
      * @return void
      */
@@ -91,12 +97,15 @@ class SecurityUtilTest extends TestCase
         $password = 'testPassword123';
         $hash = $this->securityUtil->generateHash($password);
 
-        // verify the password with the correct hash
-        $this->assertTrue($this->securityUtil->verifyPassword('testPassword123', $hash));
+        // call the method
+        $result = $this->securityUtil->verifyPassword($password, $hash);
+
+        // assert result
+        $this->assertTrue($result);
     }
 
     /**
-     * Tests verifying an invalid password using an Argon2 hash
+     * Test verifying an invalid password using an Argon2 hash
      *
      * @return void
      */
@@ -105,21 +114,27 @@ class SecurityUtilTest extends TestCase
         $password = 'testPassword123';
         $hash = $this->securityUtil->generateHash($password);
 
-        // verify the password with an incorrect hash
-        $this->assertFalse($this->securityUtil->verifyPassword('wrongPassword123', $hash));
+        // call the method
+        $result = $this->securityUtil->verifyPassword('wrongPassword123', $hash);
+
+        // assert result
+        $this->assertFalse($result);
     }
 
     /**
-     * Test encryptAes method
+     * Test encrypt aes
      *
      * @return void
      */
     public function testEncryptAes(): void
     {
+        // encrypt string to aes
         $encryptedData = $this->securityUtil->encryptAes('test value');
+
+        // decrypt aes to string
         $decryptedData = $this->securityUtil->decryptAes($encryptedData);
 
-        // assert
+        // assert that the decrypted data is the same as the original data
         $this->assertSame('test value', $decryptedData);
     }
 }

@@ -64,6 +64,7 @@ class FileSystemUtil
                     continue;
                 }
 
+                // split output to variables
                 [$name, $size, $permissions, $type, $realPath] = explode(';', $line);
 
                 // exclude root and boot directories and original path

@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 /**
  * Class SessionUtilTest
  *
- * Test the session management util
+ * Test cases for session management util
  *
  * @package App\Tests\Util
  */

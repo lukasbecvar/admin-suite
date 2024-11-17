@@ -63,7 +63,7 @@ class SessionUtil
     }
 
     /**
-     * Set a session value.
+     * Set a session value
      *
      * @param string $sessionName The name of the session
      * @param string $sessionValue The value to set for the session

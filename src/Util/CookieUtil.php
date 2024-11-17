@@ -2,7 +2,6 @@
 
 namespace App\Util;
 
-use Exception;
 use App\Util\SecurityUtil;
 
 /**
@@ -63,37 +62,22 @@ class CookieUtil
     }
 
     /**
-     * Unset (delete) the specified cookie
+     * Unset (delete) cookie by name
      *
      * @param string $name The name of the cookie
-     *
-     * @throws Exception If the URI is invalid
+     * @param string $path The path of the cookie (default: '/')
+     * @param string $domain The domain of the cookie (default: current host)
      *
      * @return void
      */
-    public function unset(string $name): void
+    public function unset(string $name, string $path = '/', string $domain = null): void
     {
         if (!headers_sent()) {
-            $host = $_SERVER['HTTP_HOST'];
-            $domain = explode(':', $host)[0];
-            $uri = $_SERVER['REQUEST_URI'];
-            $uri = rtrim(explode('?', $uri)[0], '/');
+            // use the current host as the default domain if not provided
+            $domain = $domain ?? $_SERVER['HTTP_HOST'];
 
-            if ($uri && !filter_var('file://' . $uri, FILTER_VALIDATE_URL)) {
-                throw new Exception('invalid uri: ' . $uri);
-            }
-
-            $parts = explode('/', $uri);
-            $cookiePath = '';
-
-            // unset the cookie for each part of the URI.
-            foreach ($parts as $part) {
-                $cookiePath = '/' . ltrim($cookiePath . '/' . $part, '//');
-                setcookie($name, '', 1, $cookiePath);
-                do {
-                    setcookie($name, '', 1, $cookiePath, $domain);
-                } while (strpos($domain, '.') !== false && $domain = substr($domain, 1 + strpos($domain, '.')));
-            }
+            // set the cookie with an expiration time in the past
+            setcookie($name, '', time() - 3600, $path, $domain);
         }
     }
 }
