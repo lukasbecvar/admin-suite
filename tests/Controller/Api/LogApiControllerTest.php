@@ -44,7 +44,6 @@ class LogApiControllerTest extends WebTestCase
      */
     public function testExternalLogRequestWithoutToken(): void
     {
-        // make request to the external log endpoint
         $this->client->request('POST', '/api/external/log');
 
         // get response content
@@ -70,7 +69,6 @@ class LogApiControllerTest extends WebTestCase
      */
     public function testExternalLogRequestWithInvalidToken(): void
     {
-        // make request to the external log endpoint
         $this->client->request('POST', '/api/external/log', [
             'token' => 'invalid'
         ]);
@@ -98,7 +96,6 @@ class LogApiControllerTest extends WebTestCase
      */
     public function testExternalLogRequestWithoutParameters(): void
     {
-        // make request to the external log endpoint
         $this->client->request('POST', '/api/external/log', [
             'token' => $_ENV['EXTERNAL_API_LOG_TOKEN']
         ]);
@@ -126,7 +123,6 @@ class LogApiControllerTest extends WebTestCase
      */
     public function testExternalLogRequestWithValidParameters(): void
     {
-        // make request to the external log endpoint
         $this->client->request('POST', '/api/external/log', [
             'token' => $_ENV['EXTERNAL_API_LOG_TOKEN'],
             'name' => 'external-log',

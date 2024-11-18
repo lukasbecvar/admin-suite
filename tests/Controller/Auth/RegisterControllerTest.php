@@ -3,6 +3,7 @@
 namespace App\Tests\Controller\Auth;
 
 use App\Manager\UserManager;
+use Symfony\Component\String\ByteString;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -36,7 +37,6 @@ class RegisterControllerTest extends WebTestCase
      */
     public function testRenderRegisterPage(): void
     {
-        // request to register page
         $this->client->request('GET', '/register');
 
         // assert response
@@ -56,15 +56,18 @@ class RegisterControllerTest extends WebTestCase
      */
     public function testSubmitRegisterFormWithInvalidLength(): void
     {
-        // request to register page
-        $this->client->request('GET', '/register');
+        $crawler = $this->client->request('GET', '/register');
 
-        // submit form
-        $this->client->submitForm('Register', [
-            'registration_form[username]' => 'a',
-            'registration_form[password][first]' => 'a',
-            'registration_form[password][second]' => 'a'
-        ]);
+        // get the form
+        $form = $crawler->selectButton('Register')->form();
+
+        // fill form inputs
+        $form['registration_form[username]'] = 'a';
+        $form['registration_form[password][first]'] = 'a';
+        $form['registration_form[password][second]'] = 'a';
+
+        // submit the form
+        $this->client->submit($form);
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Register');
@@ -85,15 +88,18 @@ class RegisterControllerTest extends WebTestCase
      */
     public function testSubmitRegisterFormWithNotMatchPasswords(): void
     {
-        // request to register page
-        $this->client->request('GET', '/register');
+        $crawler = $this->client->request('GET', '/register');
 
-        // submit form
-        $this->client->submitForm('Register', [
-            'registration_form[username]' => 'valid-testing-username',
-            'registration_form[password][first]' => 'passwordookokok',
-            'registration_form[password][second]' => 'passwordookokok1'
-        ]);
+        // get the form
+        $form = $crawler->selectButton('Register')->form();
+
+        // fill form inputs
+        $form['registration_form[username]'] = 'valid-testing-username';
+        $form['registration_form[password][first]'] = 'passwordookokok';
+        $form['registration_form[password][second]'] = 'passwordookokok1';
+
+        // submit the form
+        $this->client->submit($form);
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Register');
@@ -113,15 +119,18 @@ class RegisterControllerTest extends WebTestCase
      */
     public function testSubmitRegisterFormWithEmptyCredentials(): void
     {
-        // request to register page
-        $this->client->request('GET', '/register');
+        $crawler = $this->client->request('GET', '/register');
 
-        // submit form
-        $this->client->submitForm('Register', [
-            'registration_form[username]' => '',
-            'registration_form[password][first]' => '',
-            'registration_form[password][second]' => ''
-        ]);
+        // get the form
+        $form = $crawler->selectButton('Register')->form();
+
+        // fill form inputs
+        $form['registration_form[username]'] = '';
+        $form['registration_form[password][first]'] = '';
+        $form['registration_form[password][second]'] = '';
+
+        // submit the form
+        $this->client->submit($form);
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Register');
@@ -142,15 +151,18 @@ class RegisterControllerTest extends WebTestCase
      */
     public function testSubmitRegisterFormWithSuccessResponse(): void
     {
-        // request to register page
-        $this->client->request('GET', '/register');
+        $crawler = $this->client->request('GET', '/register');
 
-        // submit form
-        $this->client->submitForm('Register', [
-            'registration_form[username]' => 'WFEWFEWFEWFWWEF',
-            'registration_form[password][first]' => 'testtest',
-            'registration_form[password][second]' => 'testtest'
-        ]);
+        // get the form
+        $form = $crawler->selectButton('Register')->form();
+
+        // fill form with valid credentials
+        $form['registration_form[username]'] = ByteString::fromRandom(10)->toString();
+        $form['registration_form[password][first]'] = 'testtest';
+        $form['registration_form[password][second]'] = 'testtest';
+
+        // submit the form
+        $this->client->submit($form);
 
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);

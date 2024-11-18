@@ -80,7 +80,7 @@ class LoginControllerTest extends WebTestCase
         // get the form
         $form = $crawler->selectButton('Login')->form();
 
-        // fill form with invalid credentials
+        // fill form inputs
         $form['login_form[username]'] = 'invalid_username';
         $form['login_form[password]'] = 'invalid_password';
 
@@ -110,7 +110,7 @@ class LoginControllerTest extends WebTestCase
         // get the form
         $form = $crawler->selectButton('Login')->form();
 
-        // fill form with valid credentials
+        // fill form inputs
         $form['login_form[username]'] = 'test';
         $form['login_form[password]'] = 'fewfewfewfwfewf';
 
@@ -140,7 +140,7 @@ class LoginControllerTest extends WebTestCase
         // get the form
         $form = $crawler->selectButton('Login')->form();
 
-        // fill form with valid credentials
+        // fill form inputs
         $form['login_form[username]'] = 'fwewfwfwfewfewf';
         $form['login_form[password]'] = 'test';
 
@@ -170,7 +170,7 @@ class LoginControllerTest extends WebTestCase
         // get the form
         $form = $crawler->selectButton('Login')->form();
 
-        // fill form with valid credentials
+        // fill form inputs
         $form['login_form[username]'] = 'test';
         $form['login_form[password]'] = 'test';
 

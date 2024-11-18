@@ -27,6 +27,42 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
+     * Test load account settings table
+     *
+     * @return void
+     */
+    public function testSettingsTable(): void
+    {
+        $this->client->request('GET', '/account/settings');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('h2:contains("Account Settings")');
+        $this->assertSelectorExists('div:contains("Username")');
+        $this->assertSelectorExists('div:contains("Password")');
+        $this->assertSelectorExists('div:contains("Profile Image")');
+        $this->assertSelectorExists('a:contains("Change")');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test load profile picture change form
+     *
+     * @return void
+     */
+    public function testLoadProfilePictureChangeForm(): void
+    {
+        $this->client->request('GET', '/account/settings/change/picture');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('h2:contains("Change picture")');
+        $this->assertSelectorExists('input[name="profile_pic_change_form[profile-pic]"]');
+        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
      * Test submit profile picture change form with empty image file
      *
      * @return void
@@ -45,25 +81,6 @@ class AccountSettingsControllerTest extends CustomTestCase
         $this->assertSelectorExists('input[name="profile_pic_change_form[profile-pic]"]');
         $this->assertSelectorExists('button:contains("Change")');
         $this->assertSelectorTextContains('li:contains("Please add picture file.")', 'Please add picture file.');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    }
-
-    /**
-     * Test load account settings table
-     *
-     * @return void
-     */
-    public function testSettingsTable(): void
-    {
-        $this->client->request('GET', '/account/settings');
-
-        // assert response
-        $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Account Settings")');
-        $this->assertSelectorExists('div:contains("Username")');
-        $this->assertSelectorExists('div:contains("Password")');
-        $this->assertSelectorExists('div:contains("Profile Image")');
-        $this->assertSelectorExists('a:contains("Change")');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -91,7 +108,6 @@ class AccountSettingsControllerTest extends CustomTestCase
      */
     public function testSubmitChangeUsernameFormWithEmptyUsername(): void
     {
-        // make request
         $this->client->request('POST', '/account/settings/change/username', [
             'username_change_form' => [
                 'username' => ''
@@ -114,7 +130,6 @@ class AccountSettingsControllerTest extends CustomTestCase
      */
     public function testSubmitChangeUsernameFormWithLowLength(): void
     {
-        // make request
         $this->client->request('POST', '/account/settings/change/username', [
             'username_change_form' => [
                 'username' => '1'
@@ -137,7 +152,6 @@ class AccountSettingsControllerTest extends CustomTestCase
      */
     public function testSubmitChangeFormWithUsernameHigherLength(): void
     {
-        // make request
         $this->client->request('POST', '/account/settings/change/username', [
             'username_change_form' => [
                 'username' => 'asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf'
@@ -161,7 +175,6 @@ class AccountSettingsControllerTest extends CustomTestCase
      */
     public function testSubmitChangeUsernameFormSuccess(): void
     {
-        // make request
         $this->client->request('POST', '/account/settings/change/username', [
             'username_change_form' => [
                 'username' => ByteString::fromRandom(10)->toByteString()
@@ -171,23 +184,6 @@ class AccountSettingsControllerTest extends CustomTestCase
         // assert response
         $this->assertResponseRedirects('/account/settings');
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
-    }
-
-    /**
-     * Test load profile picture change form
-     *
-     * @return void
-     */
-    public function testLoadProfilePictureChangeForm(): void
-    {
-        $this->client->request('GET', '/account/settings/change/picture');
-
-        // assert response
-        $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change picture")');
-        $this->assertSelectorExists('input[name="profile_pic_change_form[profile-pic]"]');
-        $this->assertSelectorExists('button:contains("Change")');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
