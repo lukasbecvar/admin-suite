@@ -1,4 +1,4 @@
-# deploy app to the production server
+# deploy app to production server
 name: Deploy
 
 on:
@@ -7,14 +7,15 @@ on:
 
 jobs:
   deploy:
+    name: Deploy to production
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # deploy to the server using SSH
-    - name: Deploy to server
+    # deploy app with ssh action
+    - name: Deploy with SSH
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -22,9 +23,9 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
 
-        # run upgrade script on the server 
+        # run upgrade script on server 
         script: |
-          # go to the project directory
+          # go to project directory
           cd /services/website/admin-suite
 
           # enable maintenance mode
@@ -37,26 +38,26 @@ jobs:
           # clear cache & packages
           sudo sh scripts/clear.sh
                             
-          # pull the latest changes
+          # pull latest changes
           git pull
 
-          # set the environment to production
+          # select production environment
           sed -i 's/^\(APP_ENV=\)dev/\1prod/' .env
 
-          # install dependencies
+          # install backend dependencies
           composer install --no-interaction --no-progress --no-suggest
 
-          # install node-modules frontend packages
+          # install frontend dependencies
           npm install --loglevel=error
 
-          # build assets
+          # build frontend assets
           npm run build
 
           # run database migration
           php bin/console doctrine:database:create --if-not-exists
           php bin/console doctrine:migrations:migrate --no-interaction
 
-          # fix storage permissions
+          # set storage permissions
           sudo chmod -R 777 var/
           sudo chown -R www-data:www-data var/
 
@@ -66,6 +67,3 @@ jobs:
 
           # disable maintenance mode
           php bin/console app:toggle:maintenance
-
-          # make initial request for reload OPcache
-          curl -X GET https://admin.becvar.xyz

@@ -2,21 +2,22 @@
 document.addEventListener("DOMContentLoaded", function() {
     // function for checking if notifications are enabled on backend
     async function checkNotificationsEnabled() {
-        const response = await fetch('/api/notifications/enabled');
-        const data = await response.json();
+        const response = await fetch('/api/notifications/enabled')
+        const data = await response.json()
 
+        // check if request was successful
         if (data.status === 'success' && data.enabled == 'true') {
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
-    // function for subscribing to push notifications
+    // subscribe user to push notifications
     async function subscribeUser() {
-        const notificationsEnabled = await checkNotificationsEnabled();
+        const notificationsEnabled = await checkNotificationsEnabled()
         // check if notifications future enabled
         if (!notificationsEnabled) {
-            return;
+            return
         }
 
         // check if notifications are allowed
@@ -64,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // function for subscribe notifications
+    // send subscription to server
     async function sendSubscriptionToServer(subscription) {
         const response = await fetch('/api/notifications/subscribe', {
             method: 'POST',
@@ -80,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // function for converting Base64 URL to Uint8Array
+    // convert Base64 URL to Uint8Array
     function urlBase64ToUint8Array(base64String) {
         const padding = '='.repeat((4 - base64String.length % 4) % 4)
         const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')

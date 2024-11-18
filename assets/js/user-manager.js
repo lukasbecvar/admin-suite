@@ -1,25 +1,25 @@
 /* users manager component (handle delete, role update, ban, unban popup) */
 document.addEventListener('DOMContentLoaded', function() {
     // elements related to delete functionality
-    var deleteButtons = document.querySelectorAll('.delete-button')
     var popupOverlay = document.getElementById('popup-overlay')
-    var confirmButton = document.getElementById('confirm-button')
     var cancelButton = document.getElementById('cancel-button')
+    var confirmButton = document.getElementById('confirm-button')
+    var deleteButtons = document.querySelectorAll('.delete-button')
     var deleteUrl = ''
 
     // elements related to role update functionality
+    var roleUpdateForm = document.getElementById('role-update-form')
     var roleUpdateButtons = document.querySelectorAll('.role-update-button')
     var roleUpdatePopupOverlay = document.getElementById('role-update-popup-overlay')
     var roleUpdateCancelButton = document.getElementById('role-update-cancel-button')
     var roleUpdateSubmitButton = document.getElementById('role-update-submit-button')
-    var roleUpdateForm = document.getElementById('role-update-form')
 
     // elements related to ban functionality
     var banButtons = document.querySelectorAll('.ban-button')
-    var banPopupOverlay = document.getElementById('ban-popup-overlay')
-    var banConfirmButton = document.getElementById('ban-confirm-button')
-    var banCancelButton = document.getElementById('ban-cancel-button')
     var banReasonInput = document.getElementById('ban-reason')
+    var banPopupOverlay = document.getElementById('ban-popup-overlay')
+    var banCancelButton = document.getElementById('ban-cancel-button')
+    var banConfirmButton = document.getElementById('ban-confirm-button')
     var banUrl = ''
 
     // show the ban confirmation popup
@@ -53,8 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // elements related to unban functionality
     var unbanButtons = document.querySelectorAll('.unban-button')
     var unbanPopupOverlay = document.getElementById('unban-popup-overlay')
-    var unbanConfirmButton = document.getElementById('unban-confirm-button')
     var unbanCancelButton = document.getElementById('unban-cancel-button')
+    var unbanConfirmButton = document.getElementById('unban-confirm-button')
     var unbanUrl = ''
 
     // show the unban confirmation popup
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var newRole = document.getElementById('new-role').value.trim()
         if (newRole === currentRole) {
             event.preventDefault() // prevent form submission
-            document.getElementById('role-error-message').classList.remove('hidden');
+            document.getElementById('role-error-message').classList.remove('hidden')
         }
     })
 

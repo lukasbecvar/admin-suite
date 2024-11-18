@@ -1,16 +1,14 @@
 framework:
     secret: '%env(APP_SECRET)%'
-    
-    # trusted domains list (get from env)
     trusted_hosts: '%env(TRUSTED_HOSTS)%'
 
-    # session handling config
+    # session config
     session:
         enabled: true
         handler_id: 'session.handler.native_file'
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
 
-    # cross site request protection
+    # cross-site request protection
     csrf_protection: true
     form:
         csrf_protection:
@@ -19,12 +17,14 @@ framework:
 
 when@test:
     framework:
-        # csrf protection (disabled in test)
+        test: true
+        
+        # cross-site request protection (disabled in test)
         csrf_protection: false
         form:
             csrf_protection:
                 enabled: false
-                
-        test: true
+
+        # test session
         session:
             storage_factory_id: session.storage.factory.mock_file

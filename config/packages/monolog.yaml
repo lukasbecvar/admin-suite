@@ -7,7 +7,7 @@ monolog:
             level: error
             channels: ['!event']
 
-        # exclude specific http codes from the exception log
+        # exclude specific http codes from exception log
         filtered:
             type: fingers_crossed
             action_level: error
@@ -17,7 +17,6 @@ monolog:
 when@dev:
     monolog:
         handlers:
-            # debug dev log handler
             main:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"

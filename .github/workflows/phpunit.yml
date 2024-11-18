@@ -1,4 +1,4 @@
-# run unit tests with PHPUnit
+# run application tests with phpunit
 name: PHPUnit Tests
 
 on:
@@ -12,7 +12,7 @@ jobs:
     name: Run PHPUnit
     runs-on: ubuntu-latest
 
-    # setup mysql service
+    # define mysql service
     services:
       mysql:
         image: mysql:latest
@@ -26,37 +26,37 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # setup PHP
+      # setup php interpreter
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
           extensions: mbstring, intl, pdo_mysql, pdo, zip
 
-      # install dependencies
-      - name: Install dependencies
+      # composer install
+      - name: Install backend dependencies
         run: composer install --no-interaction --no-progress --no-suggest
       
-      # install node-modules
-      - name: Install node-modules
+      # node-modules install
+      - name: Install frontend dependencies
         run: npm install --loglevel=error
 
-      # build assets
+      # build frontend assets
       - name: Build assets
         run: npm run build
 
-      # create database
+      # create test database
       - name: Create database
         run: php bin/console doctrine:database:create --if-not-exists --env=test
 
-      # migrate database
+      # migrate database to latest version
       - name: Migrate database
         run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
         
-      # load testing data
-      - name: Load fixtures
+      # load testing datafixtures
+      - name: Load db datafixtures
         run: php bin/console doctrine:fixtures:load --no-interaction --env=test
 
-      # run PHPUnit tests
-      - name: Run PHPUnit tests
+      # phpunit process
+      - name: Run PHPUnit
         run: php ./bin/phpunit

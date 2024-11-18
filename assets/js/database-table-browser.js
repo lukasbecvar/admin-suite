@@ -1,17 +1,17 @@
 /* database table reader component functionality */
 document.addEventListener('DOMContentLoaded', function() {
+    let deleteUrl = ''
+
     // select popup elements
     const popup = document.getElementById('textPopup')
     const popupText = document.getElementById('popupText')
     const closePopupButton = document.getElementById('closePopupButton')
-    
+
     // delete confirmation popup elements
     const deletePopup = document.getElementById('deletePopup')
-    const confirmDeleteButton = document.getElementById('confirmDeleteButton')
     const cancelDeleteButton = document.getElementById('cancelDeleteButton')
+    const confirmDeleteButton = document.getElementById('confirmDeleteButton')
     
-    let deleteUrl = ''
-
     // get raw string from escaped data
     function decodeInput(input) {
         const e = document.createElement('div')

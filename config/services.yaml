@@ -1,15 +1,12 @@
 services:
-    # default configuration for services in *this* file
     _defaults:
-        autowire: true      # automatically injects dependencies in your services.
-        autoconfigure: true # automatically registers your services as commands, event subscribers, etc.
+        autowire: true      # automatically injects dependencies
+        autoconfigure: true # automatically register services
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
+    # define autowiring services for App namespace
     App\:
         resource: '../src/'
         exclude:
-            - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
 
@@ -32,65 +29,66 @@ services:
             $todoManager: '@App\Manager\TodoManager'
         tags: [ 'twig.extension' ]
 
-    # error handeling controller for app exception
+    # error handeling system
     # --------------------------------------------------------------------------------- #
-    Symfony\Component\HttpKernel\EventListener\ErrorListener:
-        arguments:
-            $controller: 'App\Controller\ErrorController::show'
-
     # exception event subscriber
     App\Event\Subscriber\ExceptionEventSubscriber:
         tags:
             - { name: kernel.event_subscriber }
 
-    # app middlewares
+    # error handeling controller for exception
+    Symfony\Component\HttpKernel\EventListener\ErrorListener:
+        arguments:
+            $controller: 'App\Controller\ErrorController::show'
+
+    # request middlewares
     # --------------------------------------------------------------------------------- #
-    # resource build check middleware
+    # check if assets is builded
     App\Middleware\AssetsCheckMiddleware:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 10 }
 
-    # linux check middleware
+    # check if app is running on linux
     App\Middleware\LinuxCheckMiddleware:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 9 }
 
-    # escape request data
+    # escape request data (for security)
     App\Middleware\EscapeRequestDataMiddleware:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 8 }
 
-    # database online checker middleware
+    # check if database is online
     App\Middleware\DatabaseOnlineMiddleware:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 7 }
 
-    # security check middleware
+    # check security rules
     App\Middleware\SecurityCheckMiddleware:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 6 }
 
-    # handle maintenance mode middleware
+    # handle maintenance mode
     App\Middleware\MaintenanceMiddleware:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 5 }
 
-    # handle auto-login middleware for remember me
+    # auto-login middleware for remember me feature
     App\Middleware\AutoLoginMiddleware:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 4 }
 
-    # check if user is authentificated middleware
-    App\Middleware\AuthentificatedCheckMiddleware:
+    # check if user is banned
+    App\Middleware\BannedCheckMiddleware:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 3 }
 
-    # user permissions authorization check middleware
+    # check if user is authentificated to access component
+    App\Middleware\AuthentificatedCheckMiddleware:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 2 }
+
+    # check if user has permission to access component
     App\Middleware\AuthorizationMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 2 }
-
-    # user banned check middleware
-    App\Middleware\BannedCheckMiddleware:
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, priority: 1 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 1 }

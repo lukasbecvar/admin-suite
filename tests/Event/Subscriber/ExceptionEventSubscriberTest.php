@@ -6,7 +6,6 @@ use Exception;
 use Throwable;
 use App\Util\AppUtil;
 use Psr\Log\LoggerInterface;
-use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,17 +27,15 @@ class ExceptionEventSubscriberTest extends TestCase
     private AppUtil & MockObject $appUtilMock;
     private ExceptionEventSubscriber $subscriber;
     private LoggerInterface & MockObject $loggerMock;
-    private ErrorManager & MockObject $errorManagerMock;
 
     protected function setUp(): void
     {
         // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
-        $this->errorManagerMock = $this->createMock(ErrorManager::class);
 
         // create exception event subscriber instance
-        $this->subscriber = new ExceptionEventSubscriber($this->appUtilMock, $this->loggerMock, $this->errorManagerMock);
+        $this->subscriber = new ExceptionEventSubscriber($this->appUtilMock, $this->loggerMock);
     }
 
     /**
@@ -58,55 +55,6 @@ class ExceptionEventSubscriberTest extends TestCase
 
         // return exception event
         return new ExceptionEvent($kernelMock, $requestMock, HttpKernelInterface::MAIN_REQUEST, $exception);
-    }
-
-    /**
-     * Test untrusted host exception in non dev mode
-     *
-     * @return void
-     */
-    public function testUntrustedHostExceptionInNonDevMode(): void
-    {
-        // mock dev mode disabled
-        $this->appUtilMock->method('isDevMode')->willReturn(false);
-
-        // mock error view
-        $this->errorManagerMock->method('getErrorView')->with('400')->willReturn('Error content');
-
-        // create exception event
-        $event = $this->createExceptionEvent(new Exception('Untrusted Host detected'));
-
-        // create & call exception event subscriber
-        $this->subscriber->onKernelException($event);
-
-        // get response
-        $response = $event->getResponse();
-
-        // assert response
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals('Error content', $response->getContent());
-        $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
-    }
-
-    /**
-     * Test untrusted host exception in dev mode
-     *
-     * @return void
-     */
-    public function testUntrustedHostExceptionInDevMode(): void
-    {
-        // mock dev mode enabled
-        $this->appUtilMock->method('isDevMode')->willReturn(true);
-
-        // create exception event
-        $event = $this->createExceptionEvent(new Exception('Untrusted Host detected'));
-
-        // expect exception
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Untrusted Host detected');
-
-        // create & call exception event subscriber
-        $this->subscriber->onKernelException($event);
     }
 
     /**

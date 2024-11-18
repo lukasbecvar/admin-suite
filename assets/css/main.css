@@ -6,30 +6,21 @@
 }
 
 body {
-	background-color: #161616;
 	scroll-behavior: smooth;
+	background-color: #161616;
 }
 
 main {
 	margin-top: 28px; 
 }
 
-.link {
-	color: rgb(49, 114, 255);
-}
-
-.link:hover {
-	color: rgb(24, 132, 255);
-	text-decoration: underline;
-}
-
 #main-content {
-	position: relative;
-	margin-left: 0; 
-	transition: margin-left 0.2s ease; 
 	display: flex;
+	margin-left: 0; 
+	position: relative;
 	flex-direction: column;
 	height: calc(100vh - 28px);
+	transition: margin-left 0.2s ease; 
 }
 
 #main-content.active {
@@ -41,7 +32,7 @@ main {
 	overflow-y: auto; 
 }
 
-/* custom paddings and margins */
+/* common styles */
 .ml-05 {
 	margin-left: 1.8px !important;
 }
@@ -58,7 +49,6 @@ main {
 	margin-right: 10px !important;
 }
 
-/* custom colors */
 .bg-neutral-850 {
 	background-color: rgb(30, 30, 30) !important;
 }
@@ -79,36 +69,45 @@ main {
     background: rgb(20, 20, 20) !important;
 }
 
+.link {
+	color: rgb(49, 114, 255);
+}
+
+.link:hover {
+	color: rgb(24, 132, 255);
+	text-decoration: underline;
+}
+
 /* auth component style */
 .auth-component::before {
-    content: '';
-    position: fixed;
-    top: 0;
+	top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('../images/background.jpg');
+    z-index: -1;
+    content: '';
+    position: fixed;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-    z-index: -1;
+    background-image: url('../images/background.jpg');
 }
 
 .auth-form-input {
-	outline: none !important;
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	background: rgba(255, 255, 255, 0.041);
-	text-align: left;
-	font-family: 'Inter', sans-serif;
-	font-size: 16px;
-	padding: 8px 12px;
-	color: white;
-	transition: all 0.3s ease;
 	width: 100%;
+	color: white;
+	font-size: 16px;
     margin-top: 6px;
+	text-align: left;
+	padding: 8px 12px;
     margin-bottom: 5px;
-    border-radius: 0.375rem;
 	text-align: center;
+    border-radius: 0.375rem;
+	outline: none !important;
+	transition: all 0.3s ease;
+	font-family: 'Inter', sans-serif;
+	background: rgba(255, 255, 255, 0.041);
+	border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .auth-form-input:focus {
@@ -136,9 +135,9 @@ main {
 .form .auth-form-input:-webkit-autofill:hover, 
 .form .auth-form-input:-webkit-autofill:focus {
 	border: 1px solid rgba(230, 230, 230, 0.24);
+	transition: background-color 5000s ease-in-out 0s;
 	-webkit-text-fill-color: white;
 	-webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset;
-	transition: background-color 5000s ease-in-out 0s;
 }
 
 .auth-form-input:-webkit-autofill, 
@@ -148,41 +147,41 @@ main {
 .auth-form-input:-moz-autofill:hover, 
 .auth-form-input:-moz-autofill-preview, 
 .auth-form-input:-moz-autofill:focus {
-	border: 1px solid rgba(230, 230, 230, 0.24) !important;
-	-webkit-text-fill-color: white !important;
-	background-color: rgba(255, 255, 255, 0.062) !important;
-	-webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.062) inset !important;
-	transition: background-color 5000s ease-in-out 0s !important;
 	filter: none !important;
 	box-shadow: 0 0 0 100px #8f88 inset !important;
+	border: 1px solid rgba(230, 230, 230, 0.24) !important;
+	background-color: rgba(255, 255, 255, 0.062) !important;
+	transition: background-color 5000s ease-in-out 0s !important;
+	-webkit-text-fill-color: white !important;
+	-webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.062) inset !important;
 }
 
 .auth-component .rememberme-checkbox {
-	border: 2px solid rgba(255, 255, 255, 0.24);
-	background: rgba(180, 38, 38, 0.062) !important;
-	position: relative;
 	width: 25px;
 	height: 20px;
+	position: relative;
+	border: 2px solid rgba(255, 255, 255, 0.24);
+	background: rgba(180, 38, 38, 0.062) !important;
 }
 
 /* top navigation */
 .nav-bar {
-	position: fixed;
 	top: 0;
 	width: 100%;
-	z-index: 1000;
-	background-color: #161616;
 	height: 28px;
+	z-index: 1000;
+	position: fixed;
+	background-color: #161616;
 }
 
 .nav-bar #menu-toggle {
-	font-size: 22px !important;
 	margin-bottom: 3px;
+	font-size: 22px !important;
 }
 
 .nav-bar .logout-link {
-	font-size: 22px !important;
 	margin-bottom: 3px;
+	font-size: 22px !important;
 }
 
 .nav-bar .menu-text {
@@ -195,14 +194,14 @@ main {
 
 /* sidebar element */
 #sidebar {
-	position: fixed;
-	height: calc(100% - 28px); 
-	overflow-y: auto; 
-	background-color: #161616;
 	z-index: 999; 
 	width: 180px;
-	transition: transform 0.2s ease;
+	position: fixed;
+	overflow-y: auto; 
+	height: calc(100% - 28px); 
+	background-color: #161616;
 	transform: translateX(-100%);
+	transition: transform 0.2s ease;
 }
 
 #sidebar ul {
@@ -210,11 +209,11 @@ main {
 }
 
 #sidebar .profile-image {
-	border-radius: 5px;
-    width: 70px;
+	width: 70px;
     height: 70px;
+	overflow: hidden;
+	border-radius: 5px;
     margin-bottom: 3px !important;
-    overflow: hidden;
 }
 
 #sidebar.active {
@@ -226,8 +225,8 @@ main {
 }
 
 #sidebar a:hover {
-	background-color: rgba(87, 87, 87, 0.397);
 	color: #79d5ec;
+	background-color: rgba(87, 87, 87, 0.397);
 }
 
 /* sub navigation */
@@ -276,9 +275,9 @@ main {
 
 /* users-manager component */
 .users-manager .delete-button {
+	font-size: 15px;
 	font-weight: 400;
 	color: rgb(255, 70, 70);
-	font-size: 15px;
 }
 
 .users-manager .delete-button:hover {
@@ -286,9 +285,9 @@ main {
 }
 
 .users-manager .ban-button, .unban-button {
+	font-size: 15px;
 	font-weight: 400;
 	color: rgb(255, 255, 31);
-	font-size: 15px;
 }
 
 .users-manager .ban-button:hover, .unban-button:hover {
@@ -325,19 +324,19 @@ main {
 
 /* dashboard component */
 .dashbard-component .progress-bar {
-	border-radius: 5.3px;
-	border: 0.8px solid rgb(165, 165, 165);
     width: 100%;
-    height: 15px;
-    background-color: #272727;
+	height: 15px;
     margin-bottom: 10px;
+	border-radius: 5.3px;
+    background-color: #272727;
+	border: 0.8px solid rgb(165, 165, 165);
 }
 
 .dashbard-component .progress {
+	width: 0%;
     height: 100%;
-    background-color: rgb(1, 124, 124);
-    width: 0%;
     transition: width 0.2s ease;
+    background-color: rgb(1, 124, 124);
 }
 
 .dashbard-component .card-text {
@@ -349,8 +348,8 @@ main {
 }
 
 .dashbard-component .card-rederer:hover {
-	color: rgb(52, 116, 255) !important;
 	text-decoration: underline;
+	color: rgb(52, 116, 255) !important;
 }
 
 /* todo manager component */
@@ -365,8 +364,8 @@ main {
 
 /* database browser component */
 .database-browser .database-link {
-	color: rgb(96, 165, 250);
 	font-weight: bold;
+	color: rgb(96, 165, 250);
 }
 
 .database-browser .database-link:hover {
@@ -378,43 +377,43 @@ main {
 }
 
 .add-row-input {
+	width: 90%;
 	margin-top: 20px;
 	margin-bottom: 20px;
-	width: 90%;
 	overflow-y: auto; 
 }
 
 /** terminal component */
 .terminal-component {
-    background-color: rgb(12, 12, 12);
-    padding: 3px;
-    font-family: monospace !important;
-    font-size: 16px !important;
+	padding: 3px;
     position: relative;
+    font-size: 16px !important;
+    font-family: monospace !important;
+    background-color: rgb(12, 12, 12);
 }
 
 .terminal-component #terminal {
     width: 100%;
     height: 100%;
-    color: white;
     display: flex;
-    flex-direction: column;
+    color: white;
     overflow-y: auto;
     padding-bottom: 5px;
+    flex-direction: column;
 }
 
 .terminal-component #output-container {
+	flex-grow: 1;
     color: white;
-    flex-grow: 1;
     padding-top: 0px !important;
 }
 
 .terminal-component #command-container {
+    bottom: 0;
     display: flex;
+    position: sticky;
     align-items: center;
     padding-top: 0px !important;
-    position: sticky;
-    bottom: 0;
     background-color: rgb(12, 12, 12);
 }
 
@@ -428,7 +427,7 @@ main {
 
 .terminal-component #prompt-line {
     white-space: nowrap;
-    color: #6262ff;
+	color: #6262ff;
 }
 
 .terminal-component .last-command {
@@ -437,11 +436,11 @@ main {
 
 .terminal-component #command {
     width: 100%;
-    background-color: transparent;
+    color: white;
+    margin-left: 5px;
     border: none !important;
     outline: none !important;
-    margin-left: 5px;
-    color: white;
+    background-color: transparent;
 }
 
 .metrics-component .chart-container {
@@ -470,12 +469,12 @@ main {
 		display: none;
 	}
 	.nav-bar {
-		position: fixed;
 		top: 0;
 		width: 100%;
-		z-index: 1000;
-		background-color: #161616;
 		height: 30px;
+		z-index: 1000;
+		position: fixed;
+		background-color: #161616;
 	}
 	#sidebar {
 		top: 30px;
@@ -486,25 +485,25 @@ main {
 		font-size: 20px !important;
 	}
 	#sidebar ul li span {
-		padding-bottom: 3px !important;
 		padding-top: 3px !important;
+		padding-bottom: 3px !important;
 	}
 	.nav-bar #menu-toggle {
-		font-size: 25px !important;
 		margin-bottom: 0px;
+		font-size: 25px !important;
 	}
 	.nav-bar .logout-link {
-		font-size: 25px !important;
 		margin-bottom: 0px;
+		font-size: 25px !important;
 	}
 	.database-console {
 		margin: 0px;
 	}
 	.add-row-input {
-		margin-top: 0;
-		margin-bottom: 0;
 		width: 100%;
 		flex-grow: 1;
+		margin-top: 0;
+		margin-bottom: 0;
 		overflow-y: auto; 
 	}
 }

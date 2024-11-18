@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentTodoId = null
 
     // get page elements
-    const editButtons = document.querySelectorAll('.fa-edit')
     const editPopup = document.getElementById('editPopup')
+    const editButtons = document.querySelectorAll('.fa-edit')
     const editTodoInput = document.getElementById('editTodoInput')
     const cancelEditButton = document.getElementById('cancelEditButton')
     const confirmEditButton = document.getElementById('confirmEditButton')
@@ -60,12 +60,12 @@ document.addEventListener('DOMContentLoaded', function () {
         link.addEventListener('click', function (event) {
             // prevent multiple clicks
             if (link.getAttribute('data-clicked') === 'true') {
-                event.preventDefault();
-                return;
+                event.preventDefault()
+                return
             }
 
             // mark link as clicked
-            link.setAttribute('data-clicked', 'true');
-        });
-    });
+            link.setAttribute('data-clicked', 'true')
+        })
+    })
 })

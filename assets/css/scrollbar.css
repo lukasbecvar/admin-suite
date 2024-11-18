@@ -13,9 +13,9 @@
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #444952;
 	-webkit-transition: all 0.2s ease;
 	transition: all 0.2s ease;
+	background: #444952;
 	min-height: 80px;
 } 
 

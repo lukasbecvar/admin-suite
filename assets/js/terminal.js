@@ -1,10 +1,10 @@
 /** terminal component functionality */
 document.addEventListener("DOMContentLoaded", function() {
     // get html element list
-    const commandContainer = document.getElementById('command-container')
-    const terminal = document.getElementById('output-container')
-    const commandInput = document.getElementById('command')
     const pathElement = document.getElementById('path')
+    const commandInput = document.getElementById('command')
+    const terminal = document.getElementById('output-container')
+    const commandContainer = document.getElementById('command-container')
 
     // current working directory
     let currentPath = ''

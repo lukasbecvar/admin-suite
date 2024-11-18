@@ -1,10 +1,10 @@
-# use basic apache with php_mod image
+# define base php-apache image
 FROM php:8.3-apache
 
-# set default apache working directory
+# set container working directory
 WORKDIR /var/www
 
-# update packages and install dependencies and extension libraries
+# install required packages
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libicu-dev \
