@@ -1,14 +1,9 @@
 #!/bin/bash
 
-# define colors
-yellow_echo () { echo "\033[33m\033[1m$1\033[0m"; }
-
-# clear console output
+# clear console history
 clear
 
-yellow_echo "Starting tests..."
-
-# run tests
+# run tests process
 docker-compose run --no-deps php bash -c "
     php bin/console doctrine:database:drop --env=test --force &&
     php bin/console doctrine:database:create --if-not-exists --env=test &&

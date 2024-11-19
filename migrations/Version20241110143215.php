@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 /**
- * Class Version20241110143215 migration
+ * Class Version20241110143215
  * 
  * The database schema migration
  * 
@@ -17,19 +17,19 @@ use Doctrine\Migrations\AbstractMigration;
 final class Version20241110143215 extends AbstractMigration
 {
     /**
-     * Get the description of the migration
+     * Get the migration description
      *
      * @return string The description of the migration
      */
     public function getDescription(): string
     {
-        return 'The database schema';
+        return 'Base database migration';
     }
 
     /**
      * Execute the migration
      *
-     * @param Schema $schema The Doctrine schema
+     * @param Schema $schema The representation of a database schema
      *
      * @return void
      */
@@ -47,7 +47,7 @@ final class Version20241110143215 extends AbstractMigration
     /**
      * Undo the migration
      *
-     * @param Schema $schema The Doctrine schema
+     * @param Schema $schema The representation of a database schema
      *
      * @return void
      */

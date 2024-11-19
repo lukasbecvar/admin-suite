@@ -1,4 +1,4 @@
-/** event for displaying push notifications */
+/** web push notifications api listener */
 self.addEventListener('push', function(event) {
     const data = event.data.json();
     const options = {
