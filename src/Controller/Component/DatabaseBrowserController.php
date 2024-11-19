@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class DatabaseBrowserController
  *
- * This controller is responsible for rendering the database browser page
+ * Controller for database browser component
  *
  * @package App\Controller\Component
  */
@@ -25,22 +25,19 @@ class DatabaseBrowserController extends AbstractController
     private ErrorManager $errorManager;
     private DatabaseManager $databaseManager;
 
-    public function __construct(
-        AppUtil $appUtil,
-        ErrorManager $errorManager,
-        DatabaseManager $databaseManager
-    ) {
+    public function __construct(AppUtil $appUtil, ErrorManager $errorManager, DatabaseManager $databaseManager)
+    {
         $this->appUtil = $appUtil;
         $this->errorManager = $errorManager;
         $this->databaseManager = $databaseManager;
     }
 
     /**
-     * Renders the database browser page
+     * Render database select page
      *
      * @param Request $request The request object
      *
-     * @return Response The rendered database browser page
+     * @return Response The database select page view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/database', methods:['GET'], name: 'app_manager_database')]
@@ -51,22 +48,20 @@ class DatabaseBrowserController extends AbstractController
 
         // check if database name set
         if ($databaseName == '') {
-            // get the list of databases
+            // get database list
             $databases = $this->databaseManager->getDatabasesList();
 
-            // disable table browsing
+            // disable table browser
             $tables = null;
         } else {
-            // get the list of databases
             $databases = null;
 
-            // disable table browsing
+            // get database tables list
             $tables = $this->databaseManager->getTablesList($databaseName);
         }
 
-        // render the database browser page
+        // render render database browser page view
         return $this->render('component/database-browser/database-browser.twig', [
-            // database browser data
             'tables' => $tables,
             'databases' => $databases,
             'databaseName' => $databaseName
@@ -74,11 +69,11 @@ class DatabaseBrowserController extends AbstractController
     }
 
     /**
-     * Renders the table data browser page
+     * Render table data browser page
      *
      * @param Request $request The request object
      *
-     * @return Response The rendered table data browser page
+     * @return Response The table data browser page view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/database/table', methods:['GET'], name: 'app_manager_database_table_browser')]
@@ -97,16 +92,16 @@ class DatabaseBrowserController extends AbstractController
             );
         }
 
-        // get page limiter
+        // get limit per page
         $limitPerPage = $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
 
-        // get the data from the table
+        // get data from the table
         $tableData = $this->databaseManager->getTableData($databaseName, $tableName, $page);
 
-        // get the number of rows in the table
+        // get number of rows in the table
         $tableDataCount = $this->databaseManager->getTableRowCount($databaseName, $tableName);
 
-        // render the table browser page
+        // render table browser page view
         return $this->render('component/database-browser/table-browser.twig', [
             // filter data
             'currentPage' => $page,
@@ -121,11 +116,11 @@ class DatabaseBrowserController extends AbstractController
     }
 
     /**
-     * Renders the add row form for a specific table in a specific database
+     * Render add row form page
      *
      * @param Request $request The request object
      *
-     * @return Response The rendered add row form
+     * @return Response The add row form page view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/database/add', methods: ['GET', 'POST'], name: 'app_manager_database_add')]
@@ -154,7 +149,7 @@ class DatabaseBrowserController extends AbstractController
         // get columns to generate form
         $columns = $this->databaseManager->getColumnsList($databaseName, $tableName);
 
-        // prepare form data
+        // prepare form data variables
         $errors = [];
         $formData = [];
 
@@ -163,7 +158,7 @@ class DatabaseBrowserController extends AbstractController
             /** @var array<mixed> $formData */
             $formData = $request->request->all();
 
-            // form data validation
+            // column data validation
             foreach ($columns as $column) {
                 /** @var string $columnName */
                 $columnName = $column['COLUMN_NAME'];
@@ -201,7 +196,7 @@ class DatabaseBrowserController extends AbstractController
                 $rowId = $formData['id'];
             }
 
-            // check if record already exists
+            // check if record id already exists
             if ($rowId != 0) {
                 if ($this->databaseManager->doesRecordExist($databaseName, $tableName, $rowId)) {
                     $errors[] = 'Record with ID ' . $rowId . ' already exists.';
@@ -213,7 +208,7 @@ class DatabaseBrowserController extends AbstractController
                 // add row to table
                 $this->databaseManager->addRowToTable($formData, $databaseName, $tableName);
 
-                // get the last page number
+                // get last page number
                 $lastPageNumber = $this->databaseManager->getLastPageNumber($databaseName, $tableName);
 
                 // redirect to table browser
@@ -225,7 +220,7 @@ class DatabaseBrowserController extends AbstractController
             }
         }
 
-        // render the add row form
+        // render add row form view
         return $this->render('component/database-browser/form/add-row.twig', [
             // filter data
             'tableName' => $tableName,
@@ -239,11 +234,11 @@ class DatabaseBrowserController extends AbstractController
     }
 
     /**
-     * Renders the edit row form for a specific table in a specific database
+     * Render edit row form page
      *
      * @param Request $request The request object
      *
-     * @return Response The rendered edit row form
+     * @return Response The edit row form page view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/database/edit', methods: ['GET', 'POST'], name: 'app_manager_database_edit')]
@@ -301,7 +296,7 @@ class DatabaseBrowserController extends AbstractController
             /** @var array<mixed> $formData */
             $formData = $request->request->all();
 
-            // form data validation
+            // column data validation
             foreach ($columns as $column) {
                 /** @var string $columnName */
                 $columnName = $column['COLUMN_NAME'];
@@ -350,7 +345,7 @@ class DatabaseBrowserController extends AbstractController
             }
         }
 
-        // render the edit row form
+        // render edit row form view
         return $this->render('component/database-browser/form/edit-row.twig', [
             // filter data
             'id' => $id,
@@ -366,7 +361,7 @@ class DatabaseBrowserController extends AbstractController
     }
 
     /**
-     * Renders the delete row form for a specific table in a specific database
+     * Handle database record delete
      *
      * @param Request $request The request object
      *
@@ -406,10 +401,10 @@ class DatabaseBrowserController extends AbstractController
             );
         }
 
-        // delete row from table
+        // delete record from table
         $this->databaseManager->deleteRowById($databaseName, $tableName, $id);
 
-        // redirect to table browser
+        // redirect to table browser page
         return $this->redirectToRoute('app_manager_database_table_browser', [
             'page' => $page,
             'table' => $tableName,
@@ -418,11 +413,11 @@ class DatabaseBrowserController extends AbstractController
     }
 
     /**
-     * Renders the truncate table form for a specific table in a specific database
+     * Render truncate table form page
      *
      * @param Request $request The request object
      *
-     * @return Response The rendered truncate table form
+     * @return Response The truncate table form page view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/database/truncate', methods: ['GET'], name: 'app_manager_database_truncate')]
@@ -436,7 +431,6 @@ class DatabaseBrowserController extends AbstractController
         // check confirmation
         if ($confirm !== 'yes') {
             return $this->render('component/database-browser/form/truncate-confirmation.twig', [
-                // confirmation data
                 'databaseName' => $databaseName,
                 'tableName' => $tableName
             ]);
@@ -474,7 +468,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The rendered database dump page
+     * @return Response The database dump page view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/database/dump', methods: ['GET'], name: 'app_manager_database_dump')]
@@ -490,8 +484,8 @@ class DatabaseBrowserController extends AbstractController
             // get databases list
             $databases = $this->databaseManager->getDatabasesList();
 
+            // render database dump page view
             return $this->render('component/database-browser/database-dump.twig', [
-                // database dump data
                 'databases' => $databases,
             ]);
         }
@@ -522,23 +516,23 @@ class DatabaseBrowserController extends AbstractController
         // get database dump
         $databaseDump = $this->databaseManager->getDatabaseDump($databaseName, $plain);
 
-        // return the database dump
+        // return database dump file
         return new Response(
             content: $databaseDump,
             status: Response::HTTP_OK,
             headers:[
                 'Content-Type' => 'application/sql',
-                'Content-Disposition' => 'attachment; filename="' . $databaseName . '_dump.sql' . '"',
+                'Content-Disposition' => 'attachment; filename="' . $databaseName . '_dump.sql' . '"'
             ]
         );
     }
 
     /**
-     * Renders the database console page
+     * Render database console page
      *
      * @param Request $request The request object
      *
-     * @return Response The rendered database console page
+     * @return Response The database console page view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/database/console', methods: ['GET', 'POST'], name: 'app_manager_database_console')]
@@ -560,8 +554,8 @@ class DatabaseBrowserController extends AbstractController
             $output = $this->databaseManager->executeQuery($query);
         }
 
+        // render database console page view
         return $this->render('component/database-browser/database-console.twig', [
-            // query console form
             'output' => $output,
             'queryForm' => $queryForm->createView()
         ]);

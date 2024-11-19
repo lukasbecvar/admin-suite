@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class LogoutController
  *
- * The controller responsible for handling the user logout functionality
+ * Controller for user logout component
  *
  * @package App\Controller\Auth
  */
@@ -27,7 +27,7 @@ class LogoutController extends AbstractController
     }
 
     /**
-     * Handle the user logout component
+     * Handle user logout
      *
      * @return Response The redirect response
      */

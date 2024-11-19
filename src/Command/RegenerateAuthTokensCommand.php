@@ -28,22 +28,22 @@ class RegenerateAuthTokensCommand extends Command
     }
 
     /**
-     * Executes the command to regenerate all users authentication tokens
+     * Execute command to regenerate all users authentication tokens
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @return int The exit code of the command.
+     * @return int The status code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI ip address
+        // fix get CLI visitor info
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
-        // regenerate all tokens and get state
+        // regenerate all tokens and get status
         $regenerateState = $this->authManager->regenerateUsersTokens();
 
         // check if regeneration is success

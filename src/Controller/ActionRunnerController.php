@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class ActionRunnerController
  *
- * The controller for the action runner component
+ * Controller for action runner component
  *
  * @package App\Controller
  */
@@ -24,18 +24,15 @@ class ActionRunnerController extends AbstractController
     private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
 
-    public function __construct(
-        AuthManager $authManager,
-        ErrorManager $errorManager,
-        ServiceManager $serviceManager
-    ) {
+    public function __construct(AuthManager $authManager, ErrorManager $errorManager, ServiceManager $serviceManager)
+    {
         $this->authManager = $authManager;
         $this->errorManager = $errorManager;
         $this->serviceManager = $serviceManager;
     }
 
     /**
-     * Handle the service action runner component
+     * Handle service action runner component
      *
      * @param Request $request The request object
      *

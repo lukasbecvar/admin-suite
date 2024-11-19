@@ -20,7 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class CreateTodoFormType extends AbstractType
 {
     /**
-     * Builds the todo creation form
+     * Build todo creation form
      *
      * @param FormBuilderInterface $builder
      *
@@ -49,7 +49,7 @@ class CreateTodoFormType extends AbstractType
     }
 
     /**
-     * Configures the options for the todo creation form
+     * Configure options for the todo creation form
      *
      * @param OptionsResolver $resolver
      *

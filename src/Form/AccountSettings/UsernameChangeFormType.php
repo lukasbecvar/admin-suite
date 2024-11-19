@@ -45,7 +45,7 @@ class UsernameChangeFormType extends AbstractType
     }
 
     /**
-     * Configure the options
+     * Configure options
      *
      * @param OptionsResolver $resolver The options resolver
      *

@@ -10,14 +10,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class TerminalController
  *
- * This controller is responsible for rendering the terminal page
+ * Controller for terminal component
  *
  * @package App\Controller\Component
  */
 class TerminalController extends AbstractController
 {
     /**
-     * Renders the terminal page
+     * Render terminal component page
      *
      * @return Response The terminal page view
      */
@@ -25,7 +25,7 @@ class TerminalController extends AbstractController
     #[Route('/terminal', methods:['GET'], name: 'app_terminal')]
     public function terminalPage(): Response
     {
-        // return terminal view
+        // return terminal component page view
         return $this->render('component/terminal/terminal.twig');
     }
 }

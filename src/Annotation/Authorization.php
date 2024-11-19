@@ -7,7 +7,7 @@ use Attribute;
 /**
  * Class Authorization
  *
- * Annotation for authorization middleware
+ * Controller method annotation for authorization middleware
  *
  * @package App\Annotation
  */

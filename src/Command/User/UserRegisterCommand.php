@@ -34,7 +34,7 @@ class UserRegisterCommand extends Command
     }
 
     /**
-     * Configures the command arguments
+     * Configure command arguments
      *
      * @return void
      */
@@ -44,7 +44,7 @@ class UserRegisterCommand extends Command
     }
 
     /**
-     * Executes the command to register a new user
+     * Execute command to register a new user
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
@@ -55,40 +55,40 @@ class UserRegisterCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI ip address
+        // fix get CLI visitor info
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
-        // get input arguments
+        // get input username argument
         $username = $input->getArgument('username');
 
-        // check if username is empty
+        // check is username empty
         if (empty($username)) {
-            $io->error('Username cannot be empty.');
+            $io->error('Username cannot be empty');
             return Command::FAILURE;
         }
 
-        // check username type
+        // check username input type
         if (!is_string($username)) {
-            $io->error('Invalid username provided.');
+            $io->error('Invalid username provided');
             return Command::FAILURE;
         }
 
-        // check username length
+        // check username input length
         if (strlen($username) < 3 || strlen($username) > 155) {
-            $io->error('Username must be between 3 and 155 characters.');
+            $io->error('Username must be between 3 and 155 characters');
             return Command::FAILURE;
         }
 
         // check if username is blocked
         if ($this->authManager->isUsernameBlocked($username)) {
-            $io->error('Error username: ' . $username . ' is blocked!');
+            $io->error('Error username: ' . $username . ' is blocked');
             return Command::FAILURE;
         }
 
         // check if username is used
         if ($this->userManager->checkIfUserExist($username)) {
-            $io->error('Error username: ' . $username . ' is already used!');
+            $io->error('Error username: ' . $username . ' is already used');
             return Command::FAILURE;
         }
 

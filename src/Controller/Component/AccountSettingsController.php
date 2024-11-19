@@ -45,7 +45,7 @@ class AccountSettingsController extends AbstractController
     /**
      * Render the account settings page
      *
-     * @return Response The default account settings page
+     * @return Response The account settings table view
      */
     #[Route('/account/settings', methods:['GET'], name: 'app_account_settings_table')]
     public function accountSettingsTable(): Response
@@ -55,20 +55,20 @@ class AccountSettingsController extends AbstractController
     }
 
     /**
-     * Render the change profile picture form
+     * Render change profile picture form
      *
      * @param Request $request The request object
      *
-     * @return Response The response view with the change profile picture form
+     * @return Response The response profile picture change form
      */
     #[Route('/account/settings/change/picture', methods:['GET', 'POST'], name: 'app_account_settings_change_picture')]
     public function accountSettingsChangePicture(Request $request): Response
     {
-        // create the profile picture change form
+        // create profile picture change form
         $form = $this->createForm(ProfilePicChangeFormType::class);
         $form->handleRequest($request);
 
-        // check if the form is submitted and valid
+        // check if form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
             // get image data
             $image = $form->get('profile-pic')->getData();
@@ -103,7 +103,7 @@ class AccountSettingsController extends AbstractController
                             newProfilePicture: $imageCode
                         );
 
-                        // redirect back to the account settings page
+                        // redirect back to the account settings table page
                         return $this->redirectToRoute('app_account_settings_table');
                     } catch (Exception $e) {
                         // handle change profile picture error
@@ -120,28 +120,27 @@ class AccountSettingsController extends AbstractController
             }
         }
 
-        // render the change profile picture form
+        // render change profile picture form view
         return $this->render('component/account-settings/form/change-picture-form.twig', [
-            // profile picture change form
             'profilePicChangeForm' => $form->createView()
         ]);
     }
 
     /**
-     * Render the change username form
+     * Render change username form
      *
      * @param Request $request The request object
      *
-     * @return Response The response view with the change username form
+     * @return Response The response with username change form
      */
     #[Route('/account/settings/change/username', methods:['GET', 'POST'], name: 'app_account_settings_change_username')]
     public function accountSettingsChangeUsername(Request $request): Response
     {
-        // create the username change form
+        // create username change form
         $form = $this->createForm(UsernameChangeFormType::class);
         $form->handleRequest($request);
 
-        // check if the form is submitted and valid
+        // check if form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var \App\Entity\User $data form input data */
             $data = $form->getData();
@@ -149,25 +148,25 @@ class AccountSettingsController extends AbstractController
             // get new username
             $username = $data->getUsername();
 
-            // check if the new username is empty
+            // check if new username is empty
             if ($username == null) {
                 $this->errorManager->handleError(
                     message: 'error to get username from request data',
                     code: Response::HTTP_BAD_REQUEST
                 );
             } else {
-                // check if the username is already taken
+                // check if username is already taken
                 if ($this->userManager->checkIfUserExist($username)) {
                     $this->addFlash('error', 'Username is already taken.');
                 } else {
-                    // change the username
                     try {
+                        // update username
                         $this->userManager->updateUsername(
                             userId: $this->authManager->getLoggedUserId(),
                             newUsername: $username
                         );
 
-                        // redirect back to the account settings page
+                        // redirect back to  account settings table page
                         return $this->redirectToRoute('app_account_settings_table');
                     } catch (Exception $e) {
                         // handle change username error
@@ -184,50 +183,49 @@ class AccountSettingsController extends AbstractController
             }
         }
 
-        // render the change username form
+        // render change username form view
         return $this->render('component/account-settings/form/chnage-username-form.twig', [
-            // username change form
             'usernameChangeForm' => $form->createView()
         ]);
     }
 
     /**
-     * Render the change password form
+     * Render change password form
      *
      * @param Request $request The request object
      *
-     * @return Response The response view with the change password form
+     * @return Response The response with password change form view
      */
     #[Route('/account/settings/change/password', methods:['GET', 'POST'], name: 'app_account_settings_change_password')]
     public function accountSettingsChangePassword(Request $request): Response
     {
-        // create the password change form
+        // create password change form
         $form = $this->createForm(PasswordChangeForm::class);
         $form->handleRequest($request);
 
-        // check if the form is submitted and valid
+        // check if form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var \App\Entity\User $data form input data */
             $data = $form->getData();
 
-            // get new password
+            // get password
             $password = $data->getPassword();
 
-            // check if the new password is empty
+            // check if new password is empty
             if ($password == null) {
                 $this->errorManager->handleError(
                     message: 'error to get password from request data',
                     code: Response::HTTP_BAD_REQUEST
                 );
             } else {
-                // change the password
                 try {
+                    // update password
                     $this->userManager->updatePassword(
                         userId: $this->authManager->getLoggedUserId(),
                         newPassword: $password
                     );
 
-                    // redirect back to the account settings page
+                    // redirect back to account settings tablepage
                     return $this->redirectToRoute('app_account_settings_table');
                 } catch (Exception $e) {
                     // handle change password error
@@ -243,9 +241,8 @@ class AccountSettingsController extends AbstractController
             }
         }
 
-        // render the change password form
+        // render password change page view
         return $this->render('component/account-settings/form/change-password-form.twig', [
-            // password change form
             'passwordChangeForm' => $form->createView()
         ]);
     }

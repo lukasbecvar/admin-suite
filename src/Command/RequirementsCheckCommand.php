@@ -31,12 +31,12 @@ class RequirementsCheckCommand extends Command
     }
 
     /**
-     * Executes the command to check app requirements and configuration
+     * Execute command to check app requirements and configuration
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @return int The exit code of the command
+     * @return int The status code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -47,7 +47,7 @@ class RequirementsCheckCommand extends Command
 
         // check if all requirements are installed
         if (empty($notInstalledRequirements)) {
-            $io->success('All requirements are installed.');
+            $io->success('All requirements are installed');
         } else {
             $io->error('The following requirements are not installed: ' . implode(', ', $notInstalledRequirements));
         }

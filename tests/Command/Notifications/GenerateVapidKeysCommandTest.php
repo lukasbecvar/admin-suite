@@ -77,7 +77,7 @@ class GenerateVapidKeysCommandTest extends TestCase
         $commandOutput = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('VAPID keys regeneration was cancelled.', $commandOutput);
+        $this->assertStringContainsString('VAPID keys regeneration was cancelled', $commandOutput);
         $this->assertSame(Command::SUCCESS, $exitCode);
     }
 
@@ -105,7 +105,7 @@ class GenerateVapidKeysCommandTest extends TestCase
         $commandOutput = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('VAPID keys generated successfully.', $commandOutput);
+        $this->assertStringContainsString('VAPID keys generated successfully', $commandOutput);
         $this->assertStringContainsString('Public Key: test_public_key', $commandOutput);
         $this->assertStringContainsString('Private Key: test_private_key', $commandOutput);
         $this->assertSame(Command::SUCCESS, $exitCode);

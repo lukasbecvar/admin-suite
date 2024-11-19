@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class FileSystemBrowserController
  *
- * This class is responsible for handling file system browser related operations
+ * Controller for file system component
  *
  * @package App\Controller\Component
  */
@@ -30,7 +30,7 @@ class FileSystemBrowserController extends AbstractController
     }
 
     /**
-     * Returns a list of files and directories in the specified path
+     * Render filesystem browser page
      *
      * @param Request $request The request object
      *
@@ -40,35 +40,34 @@ class FileSystemBrowserController extends AbstractController
     #[Route('/filesystem', methods:['GET'], name: 'app_file_system_browser')]
     public function filesystemList(Request $request): Response
     {
-        // get current page from request query params
+        // get filesystem path
         $path = (string) $request->query->get('path', '/');
 
         // get filesystem list
         $filesystemList = $this->fileSystemUtil->getFilesList($path);
 
-        // render the file browser list
+        // render filesystem list view
         return $this->render('component/file-system/file-system-browser.twig', [
-            // file browser data
             'currentPath' => $path,
             'filesystemList' => $filesystemList
         ]);
     }
 
     /**
-     * Returns the contents of media files
+     * Handle get media file resource
      *
      * @param Request $request The request object
      *
-     * @return Response The file browser view response
+     * @return Response The file resource content
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/filesystem/get/resource', methods:['GET'], name: 'app_file_system_get_resource')]
     public function filesystemGetResource(Request $request): Response
     {
-        // get the resource path
+        // get resource file path
         $path = (string) $request->query->get('path', '/');
 
-        // get the media type of the file
+        // get media file type
         $mediaType = $this->fileSystemUtil->detectMediaType($path);
 
         // check if the resource is a media file
@@ -79,7 +78,7 @@ class FileSystemBrowserController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        // get the resource content
+        // get resource content
         $resourceContent = $this->fileSystemUtil->getFileContent($path);
 
         // log file access
@@ -97,23 +96,24 @@ class FileSystemBrowserController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        // create a StreamedResponse file content
+        // create a streamed response file content
         $response = new StreamedResponse(function () use ($resourceContent) {
             echo $resourceContent;
         });
 
-        // set headers
+        // set response headers
         $response->headers->set('Content-Type', $mediaType);
         $response->headers->set('Content-Disposition', 'inline; filename="' . $path . '"');
         $response->headers->set('Cache-Control', 'public, max-age=3600');
         $response->headers->set('Accept-Ranges', 'bytes');
         $response->headers->set('Content-Length', (string) strlen($resourceContent));
 
+        // return file content response
         return $response;
     }
 
     /**
-     * Returns the contents of a file
+     * Render file view component
      *
      * @param Request $request The request object
      *
@@ -123,12 +123,12 @@ class FileSystemBrowserController extends AbstractController
     #[Route('/filesystem/view', methods:['GET'], name: 'app_file_system_view')]
     public function filesystemView(Request $request): Response
     {
-        // get the browsing path
+        // get browsing path
         $path = (string) $request->query->get('path', '/');
 
         // default file content value
-        $fileContent = null;
         $mediaType = null;
+        $fileContent = null;
 
         // check if file is executable
         if ($this->fileSystemUtil->isFileExecutable($path)) {
@@ -150,9 +150,8 @@ class FileSystemBrowserController extends AbstractController
             }
         }
 
-        // render the file browser view
+        // render file browser page view
         return $this->render('component/file-system/file-system-view.twig', [
-            // file browser data
             'currentPath' => $path,
             'mediaType' => $mediaType,
             'fileContent' => $fileContent

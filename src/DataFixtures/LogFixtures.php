@@ -18,7 +18,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 class LogFixtures extends Fixture
 {
     /**
-     * Load the log fixtures
+     * Load log fixtures
      *
      * @param ObjectManager $manager The entity manager
      *
@@ -32,7 +32,7 @@ class LogFixtures extends Fixture
         for ($i = 0; $i < 100; $i++) {
             $log = new Log();
 
-            // set the log properties
+            // set log properties
             $log->setName($faker->word)
                 ->setMessage($faker->sentence)
                 ->setTime($faker->dateTimeThisYear)
@@ -42,7 +42,7 @@ class LogFixtures extends Fixture
                 ->setLevel(LogManager::LEVEL_CRITICAL)
                 ->setUserId(1);
 
-            // save the log
+            // persist log
             $manager->persist($log);
         }
 

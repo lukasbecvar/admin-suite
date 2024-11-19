@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class LogApiController
  *
- * The controller for the external log API
+ * Controller for external log API
  *
  * @package App\Controller\Api
  */
@@ -32,12 +32,12 @@ class LogApiController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return JsonResponse The JSON response with the output
+     * @return JsonResponse The JSON response with status
      */
     #[Route('/api/external/log', methods:['POST'], name: 'app_api_external_log')]
     public function externalLog(Request $request): JsonResponse
     {
-        // get access token
+        // get access token from request parameter
         $accessToken = (string) $request->query->get('token');
 
         // check if token is set
@@ -47,29 +47,29 @@ class LogApiController extends AbstractController
             ], JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        // get api token
+        // get api token for authentication
         $apiToken = $this->appUtil->getEnvValue('EXTERNAL_API_LOG_TOKEN');
 
-        // check if token is valid
+        // check is token matches with auth token
         if ($accessToken != $apiToken) {
             return $this->json([
                 'error' => 'Access token is invalid'
             ], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        // get log data
+        // get log data from request parameters
         $name = (string) $request->query->get('name');
         $message = (string) $request->query->get('message');
         $level = (int) $request->query->get('level');
 
-        // check if parameters are set
+        // check parameters are set
         if (empty($name) || empty($message) || empty($level)) {
             return $this->json([
                 'error' => 'Parameters name, message and level are required'
             ], JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        // log the message
+        // save log to database
         $this->logManager->log($name, $message, $level);
 
         // return success message

@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class MetricsDashboardController
  *
- * Controller for the metrics dashboard component
+ * Controller for metrics dashboard component
  *
  * @package App\Controller\Component
  */
@@ -25,7 +25,7 @@ class MetricsDashboardController extends AbstractController
     }
 
     /**
-     * Handle the metrics dashboard page view
+     * Render metrics dashboard page
      *
      * @param Request $request The request object
      *
@@ -40,7 +40,7 @@ class MetricsDashboardController extends AbstractController
         // get metrics data
         $data = $this->metricsManager->getMetrics($timePeriod);
 
-        // return component view with metrics page
+        // return metrics dashboard view
         return $this->render('component/metrics-dashboard/metrics-dashboard.twig', [
             'data' => $data
         ]);

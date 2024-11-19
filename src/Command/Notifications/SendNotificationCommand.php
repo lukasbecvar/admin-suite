@@ -33,7 +33,7 @@ class SendNotificationCommand extends Command
     }
 
     /**
-     * Configures the command arguments
+     * Configures command arguments
      *
      * @return void
      */
@@ -43,7 +43,7 @@ class SendNotificationCommand extends Command
     }
 
     /**
-     * Executes the command to send notification to all subscribers
+     * Execute command to send notification to all subscribers
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
@@ -54,26 +54,26 @@ class SendNotificationCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI ip address
+        // fix get CLI visitor info
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
         // get message from input argument
         $message = $input->getArgument('message');
 
-        // check if message is empty
+        // check input notification message is empty
         if (empty($message)) {
-            $io->error('Message cannot be empty.');
+            $io->error('Message cannot be empty');
             return Command::FAILURE;
         }
 
-        // check message type
+        // check message input type
         if (!is_string($message)) {
-            $io->error('Invalid message provided.');
+            $io->error('Invalid message type provided');
             return Command::FAILURE;
         }
 
-        // check if push notifications is enabled
+        // check is push notifications is enabled
         if ($this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_ENABLED') != 'true') {
             $io->error('Push notifiations is disabled');
             return Command::FAILURE;

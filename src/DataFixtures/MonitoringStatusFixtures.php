@@ -17,7 +17,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 class MonitoringStatusFixtures extends Fixture
 {
     /**
-     * Load data fixtures with the passed EntityManager
+     * Load monioring status fixtures
      *
      * @param ObjectManager $manager
      *
@@ -35,6 +35,7 @@ class MonitoringStatusFixtures extends Fixture
             ['becvar-site', 'Becvar site is online', 'online', '2024-07-08 16:12:28'],
         ];
 
+        // create monitoring status
         foreach ($data as [$serviceName, $message, $status, $lastUpdateTime]) {
             $MonitoringStatus = new MonitoringStatus();
 
@@ -48,7 +49,7 @@ class MonitoringStatusFixtures extends Fixture
             $manager->persist($MonitoringStatus);
         }
 
-        // flush data
+        // flush data to database
         $manager->flush();
     }
 }

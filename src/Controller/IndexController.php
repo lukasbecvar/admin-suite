@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class IndexController
  *
- * The controller for the index component
+ * Controller for index component
  *
  * @package App\Controller
  */
@@ -24,7 +24,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * Handle the index component
+     * Handle index component
      *
      * @return Response The redirect response to the main dashboard or login component
      */

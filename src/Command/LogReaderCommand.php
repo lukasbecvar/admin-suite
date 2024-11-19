@@ -26,11 +26,8 @@ class LogReaderCommand extends Command
     private UserManager $userManager;
     private VisitorInfoUtil $visitorInfoUtil;
 
-    public function __construct(
-        LogManager $logManager,
-        UserManager $userManager,
-        VisitorInfoUtil $visitorInfoUtil
-    ) {
+    public function __construct(LogManager $logManager, UserManager $userManager, VisitorInfoUtil $visitorInfoUtil)
+    {
         $this->logManager = $logManager;
         $this->userManager = $userManager;
         $this->visitorInfoUtil = $visitorInfoUtil;
@@ -38,7 +35,7 @@ class LogReaderCommand extends Command
     }
 
     /**
-     * Configures the command arguments
+     * Configure command arguments
      *
      * @return void
      */
@@ -48,33 +45,33 @@ class LogReaderCommand extends Command
     }
 
     /**
-     * Executes the command to get logs by status
+     * Execute command to get logs by status
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @return int The exit code of the command
+     * @return int The status code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI ip address
+        // fix get CLI visitor info
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
-        // get input arguments
+        // get input status argument
         $status = $input->getArgument('status');
 
         // check if status is empty
         if (empty($status)) {
-            $io->error('status cannot be empty.');
+            $io->error('status cannot be empty');
             return Command::FAILURE;
         }
 
-        // check status type
+        // check status input type
         if (!is_string($status)) {
-            $io->error('Invalid status provided.');
+            $io->error('Invalid status provided');
             return Command::FAILURE;
         }
 
@@ -86,7 +83,7 @@ class LogReaderCommand extends Command
 
         // check if $logs is iterable
         if (!is_iterable($logs)) {
-            $io->error('Failed to retrieve logs.');
+            $io->error('Failed to retrieve logs');
             return Command::FAILURE;
         }
 
@@ -109,18 +106,9 @@ class LogReaderCommand extends Command
             ];
         }
 
-        // render the table
+        // render logs table
         $io->table(
-            headers: [
-                '#',
-                'Name',
-                'Message',
-                'time',
-                'Browser',
-                'OS',
-                'Ip Address',
-                'User'
-            ],
+            headers: ['#', 'Name', 'Message', 'time', 'Browser', 'OS', 'Ip Address', 'User'],
             rows: $data
         );
 

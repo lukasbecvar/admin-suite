@@ -21,7 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 class PasswordChangeForm extends AbstractType
 {
     /**
-     * Builds the password update form
+     * Build password update form
      *
      * @param FormBuilderInterface $builder The form builder
      * @param array<string> $options The form options
@@ -50,7 +50,7 @@ class PasswordChangeForm extends AbstractType
     }
 
     /**
-     * Configures the options for the registration form
+     * Configure options for registration form
      *
      * @param OptionsResolver $resolver The options resolver
      *

@@ -17,7 +17,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 class BannedFixtures extends Fixture
 {
     /**
-     * Load the banned fixtures
+     * Load banned fixtures
      *
      * @param ObjectManager $manager The entity manager
      *
@@ -37,7 +37,7 @@ class BannedFixtures extends Fixture
             'Terms of service violation'
         ];
 
-        // create the banned users
+        // create banned users
         foreach ($bannedUserIds as $userId) {
             $banned = new Banned();
             $banned->setBannedUserId($userId)
@@ -46,7 +46,7 @@ class BannedFixtures extends Fixture
                 ->setTime(new DateTime())
                 ->setBannedById(1);
 
-            // persist the banned user
+            // persist banned user
             $manager->persist($banned);
         }
 

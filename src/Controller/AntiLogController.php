@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class AntiLogController
  *
- * The controller for the anti log component
+ * Controller for anti log component
  *
  * @package App\Controller
  */
@@ -29,7 +29,7 @@ class AntiLogController extends AbstractController
     }
 
     /**
-     * Handle the anti log component
+     * Handle anti log component
      *
      * @param Request $request The request object
      *

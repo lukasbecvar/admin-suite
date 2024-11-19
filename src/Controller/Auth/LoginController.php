@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class LoginController
  *
- * The controller responsible for handling the user login functionality
+ * Controller for login component
  *
  * @package App\Controller\Auth
  */
@@ -40,7 +40,7 @@ class LoginController extends AbstractController
     }
 
     /**
-     * Handle the user login component
+     * Handle user login component
      *
      * @param Request $request The request object
      *
@@ -54,29 +54,29 @@ class LoginController extends AbstractController
             return $this->redirectToRoute('app_index');
         }
 
-        // create the registration form
+        // create registration form
         $form = $this->createForm(LoginFormType::class);
         $form->handleRequest($request);
 
-        // check if the form is submitted and valid
+        // check if form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var \App\Entity\User $data get the form data */
             $data = $form->getData();
 
-            // get the username and password
+            // get username and password
             $username = (string) $data->getUsername();
             $password = (string) $data->getPassword();
 
-            // get the remember me option status
+            // get remember me option status
             $remember = (bool) $form->get('remember')->getData();
 
-            // check user credentials
+            // check user credentials (if user can login)
             if ($this->authManager->canLogin($username, $password)) {
                 try {
-                    // login the user
+                    // login user
                     $this->authManager->login($username, $remember);
 
-                    // redirect to the index page
+                    // redirect to app index page
                     return $this->redirectToRoute('app_index');
                 } catch (Exception $e) {
                     // handle login error
@@ -94,7 +94,7 @@ class LoginController extends AbstractController
             }
         }
 
-        // render the login component view
+        // render login page view
         return $this->render('auth/login.twig', [
             'isUsersEmpty' => $this->userManager->isUsersEmpty(),
             'loginForm' => $form->createView()

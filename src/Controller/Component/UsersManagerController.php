@@ -19,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class UsersManagerController
  *
- * The controller handle users manager component
+ * Controller for users manager component
  *
  * @package App\Controller
  */
@@ -49,7 +49,7 @@ class UsersManagerController extends AbstractController
     }
 
     /**
-     * Handle the users manager component
+     * Render users manager table component page
      *
      * @param Request $request The request object
      *
@@ -121,11 +121,11 @@ class UsersManagerController extends AbstractController
     }
 
     /**
-     * Handle the users manager profile viewer component
+     * Render user profile component page
      *
      * @param Request $request The request object
      *
-     * @return Response The users manager profile view
+     * @return Response The user profile view
      */
     #[Route('/manager/users/profile', methods:['GET'], name: 'app_manager_users_profile')]
     public function userProfile(Request $request): Response
@@ -155,7 +155,7 @@ class UsersManagerController extends AbstractController
             );
         }
 
-        // render profile view
+        // render user profile view
         return $this->render('component/users-manager/user-profile.twig', [
             // visitor info util instance
             'banManager' => $this->banManager,
@@ -170,11 +170,11 @@ class UsersManagerController extends AbstractController
     }
 
     /**
-     * Handle the users manager register component
+     * Render user registration component page
      *
      * @param Request $request The request object
      *
-     * @return Response The users manager register view
+     * @return Response The user register form view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/users/register', methods:['GET', 'POST'], name: 'app_manager_users_register')]
@@ -186,16 +186,16 @@ class UsersManagerController extends AbstractController
         // get total users count from database
         $usersCount = $this->userManager->getUsersCount();
 
-        // create the registration form
+        // create registration form
         $form = $this->createForm(RegistrationFormType::class);
         $form->handleRequest($request);
 
-        // check if the form is submitted and valid
+        // check if form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var \App\Entity\User $data get the form data */
             $data = $form->getData();
 
-            // get the username and password
+            // get username and password
             $username = (string) $data->getUsername();
             $password = (string) $data->getPassword();
 
@@ -204,10 +204,10 @@ class UsersManagerController extends AbstractController
                 $this->addFlash('error', 'Username is already taken.');
             } else {
                 try {
-                    // register the user
+                    // register user
                     $this->authManager->registerUser($username, $password);
 
-                    // redirect back to the users table page
+                    // redirect back to users table page
                     return $this->redirectToRoute('app_manager_users', [
                         'page' => $this->appUtil->calculateMaxPages($usersCount, $pageLimit)
                     ]);
@@ -226,17 +226,16 @@ class UsersManagerController extends AbstractController
 
         // render users manager register form view
         return $this->render('component/users-manager/form/user-register-form.twig', [
-            // registration form
             'registrationForm' => $form->createView()
         ]);
     }
 
     /**
-     * Handle the users manager update role component
+     * Handle user role update functionality
      *
      * @param Request $request The request object
      *
-     * @return Response The users manager table redirect
+     * @return Response Redirect to users table page
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/users/role/update', methods:['POST'], name: 'app_manager_users_role_update')]
@@ -289,21 +288,21 @@ class UsersManagerController extends AbstractController
             );
         }
 
-        // update the user role
+        // update user role
         $this->userManager->updateUserRole($userId, $newRole);
 
-        // redirect back to the users table page
+        // redirect back to users table page
         return $this->redirectToRoute('app_manager_users', [
             'page' => $page
         ]);
     }
 
     /**
-     * Handle the users manager delete component
+     * Handle user deletion functionality
      *
      * @param Request $request The request object
      *
-     * @return Response The users manager redirect
+     * @return Response The redirect back to users table page
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/users/delete', methods:['GET'], name: 'app_manager_users_delete')]
@@ -331,26 +330,26 @@ class UsersManagerController extends AbstractController
             );
         }
 
-        // delete the user
+        // delete user
         $this->userManager->deleteUser((int) $userId);
 
-        // unban the user if user is banned
+        // unban user if user is banned
         if ($this->banManager->isUserBanned((int) $userId)) {
             $this->banManager->unbanUser((int) $userId);
         }
 
-        // redirect back to the users table page
+        // redirect back to users table page
         return $this->redirectToRoute('app_manager_users', [
             'page' => $refererPage
         ]);
     }
 
     /**
-     * Handle the users manager ban component
+     * Handle user ban functionality
      *
      * @param Request $request The request object
      *
-     * @return Response The users manager redirect
+     * @return Response The redirect back to users table page
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/users/ban', methods:['GET'], name: 'app_manager_users_ban')]
@@ -416,7 +415,7 @@ class UsersManagerController extends AbstractController
             $this->banManager->unbanUser($userId);
         }
 
-        // redirect back to the users table page
+        // redirect back to users table page
         return $this->redirectToRoute('app_manager_users', [
             'page' => $page
         ]);

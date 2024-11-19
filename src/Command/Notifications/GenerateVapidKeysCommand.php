@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class GenerateVapidKeysCommand
  *
- * The command to generate VAPID keys for web push notifications
+ * Command to generate VAPID keys for push notifications
  *
  * @package App\Command
  */
@@ -32,7 +32,7 @@ class GenerateVapidKeysCommand extends Command
     }
 
     /**
-     * Execute the command to generate VAPID keys for web push notifications
+     * Execute command to generate VAPID keys for push notifications
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
@@ -43,7 +43,7 @@ class GenerateVapidKeysCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI ip address
+        // fix get CLI visitor info
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
@@ -55,12 +55,12 @@ class GenerateVapidKeysCommand extends Command
 
         // confirmation before regenerating VAPID keys
         if (!$io->confirm('Do you really want to regenerate the VAPID keys? This will replace the existing ones.', false)) {
-            $io->warning('VAPID keys regeneration was cancelled.');
+            $io->warning('VAPID keys regeneration was cancelled');
             return Command::SUCCESS;
         }
 
         try {
-            // regenerate VAPID keys
+            // regenerate VAPID keys and get them
             $vapidKeys = $this->notificationsManager->regenerateVapidKeys();
 
             // print new VAPID keys

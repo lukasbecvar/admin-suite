@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class DashboardController
  *
- * Controller for the dashboard component
+ * Controller for dashboard component
  *
  * @package App\Controller
  */
@@ -45,27 +45,27 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * Handle the dashboard page view
+     * Render dashboard page
      *
-     * @return Response The dashboard view
+     * @return Response The dashboard page view
      */
     #[Route('/dashboard', methods:['GET'], name: 'app_dashboard')]
     public function dashboard(): Response
     {
         // get warning data
-        $diagnosticData = $this->serverUtil->getDiagnosticData();
         $antiLogStatus = $this->logManager->isAntiLogEnabled();
+        $diagnosticData = $this->serverUtil->getDiagnosticData();
 
         // get host system info
         $ramUsage = $this->serverUtil->getRamUsage();
-        $storageUsage = $this->serverUtil->getStorageUsage();
         $hostUptime = $this->serverUtil->getHostUptime();
+        $storageUsage = $this->serverUtil->getStorageUsage();
         $hostSystemInfo = $this->serverUtil->getSystemInfo();
 
-        // get process list
+        // get running process list
         $processList = $this->serverUtil->getProcessList();
 
-        // service manager
+        // get services list
         $services = $this->serviceManager->getServicesList();
 
         // get logs count
@@ -74,7 +74,7 @@ class DashboardController extends AbstractController
         $readedLogsCount = $this->logManager->getLogsCountWhereStatus('READED');
         $unreadedLogsCount = $this->logManager->getLogsCountWhereStatus('UNREADED');
 
-        // get users count
+        // get user stats count
         $onlineUsersCount = count($this->authManager->getOnlineUsersList());
         $bannedUsersCount = $this->banManager->getBannedCount();
         $usersCount = $this->userManager->getUsersCount();
@@ -82,7 +82,7 @@ class DashboardController extends AbstractController
         // get exception files
         $exceptionFiles = $this->logManager->getExceptionFiles();
 
-        // return dashboard view
+        // return dashboard page view
         return $this->render('component/dashboard/dashboard.twig', [
             // warning data
             'antiLogStatus' => $antiLogStatus,
@@ -91,16 +91,16 @@ class DashboardController extends AbstractController
 
             // host system info
             'ramUsage' => $ramUsage,
-            'storageUsage' => $storageUsage,
             'hostUptime' => $hostUptime,
+            'storageUsage' => $storageUsage,
             'hostSystemInfo' => $hostSystemInfo,
 
             // process list
             'processList' => $processList,
 
             // service manager
-            'serviceManager' => $this->serviceManager,
             'services' => $services,
+            'serviceManager' => $this->serviceManager,
 
             // logs count
             'allLogsCount' => $allLogsCount,

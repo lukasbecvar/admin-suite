@@ -32,7 +32,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Returns an array of event names this subscriber wants to listen to
+     * Return array of event names subscriber
      *
      * @return array<string> The event names to listen to
      */
@@ -52,16 +52,16 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
      */
     public function onKernelException(ExceptionEvent $event): void
     {
-        // get the exception
+        // get exception
         $exception = $event->getThrowable();
 
-        // get the error message
+        // get error message
         $message = $exception->getMessage();
 
         // define default exception code
         $statusCode = 500;
 
-        // check if the object is valid exception
+        // check if object is valid exception
         if ($exception instanceof HttpException) {
             // get exception status code
             $statusCode = $exception->getStatusCode();
@@ -75,7 +75,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
 
         // check if code is excluded from logging
         if (!in_array($statusCode, $excludedHttpCodes)) {
-            // log the error message to exception log
+            // log error message to exception log
             $this->logger->error($message);
         }
 

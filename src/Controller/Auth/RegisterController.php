@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class RegisterController
  *
- * Controller responsible for handling the user registration functionality
+ * Controller for register component
  *
  * @package App\Controller\Auth
  */
@@ -40,7 +40,7 @@ class RegisterController extends AbstractController
     }
 
     /**
-     * Handle the registration component
+     * Handle registration component
      *
      * @param Request $request The request object
      *
@@ -59,16 +59,16 @@ class RegisterController extends AbstractController
             return $this->redirectToRoute('app_auth_login');
         }
 
-        // create the registration form
+        // create registration form
         $form = $this->createForm(RegistrationFormType::class);
         $form->handleRequest($request);
 
-        // check if the form is submitted and valid
+        // check if form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var \App\Entity\User $data get the form data */
             $data = $form->getData();
 
-            // get the username and password
+            // get username and password
             $username = (string) $data->getUsername();
             $password = (string) $data->getPassword();
 
@@ -79,13 +79,13 @@ class RegisterController extends AbstractController
                 $this->addFlash('error', 'Username: ' . $username . ' is blocked.');
             } else {
                 try {
-                    // register the new user
+                    // register new user
                     $this->authManager->registerUser($username, $password);
 
                     // auto login after registration
                     $this->authManager->login($username, false);
 
-                    // redirect to the login page
+                    // redirect to dashboard page
                     return $this->redirectToRoute('app_dashboard');
                 } catch (Exception $e) {
                     // handle register error
@@ -101,7 +101,7 @@ class RegisterController extends AbstractController
             }
         }
 
-        // render the registration component view
+        // render registration page view
         return $this->render('auth/register.twig', [
             'registrationForm' => $form->createView()
         ]);

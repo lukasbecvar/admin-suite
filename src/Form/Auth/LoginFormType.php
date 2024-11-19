@@ -21,7 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 class LoginFormType extends AbstractType
 {
     /**
-     * Build the auth login form
+     * Build auth login form
      *
      * @param FormBuilderInterface $builder The form builder
      * @param array<string> $options The form options
@@ -51,7 +51,7 @@ class LoginFormType extends AbstractType
     }
 
     /**
-     * Configure the options
+     * Configure options
      *
      * @param OptionsResolver $resolver The options resolver
      *

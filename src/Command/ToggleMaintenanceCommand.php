@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class ToggleMaintenanceCommand
  *
- * The command to enable/disable maintenance mode
+ * Command to enable/disable maintenance mode
  *
  * @package App\Command
  */
@@ -29,14 +29,14 @@ class ToggleMaintenanceCommand extends Command
     }
 
     /**
-     * Execute the maintenance mode toggle command
+     * Execute maintenance mode toggle command
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
      * @throws Exception If an error occurs while toggling the maintenance mode
      *
-     * @return int The command exit code
+     * @return int The status code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

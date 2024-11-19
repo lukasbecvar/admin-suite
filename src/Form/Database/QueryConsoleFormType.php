@@ -18,7 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class QueryConsoleFormType extends AbstractType
 {
     /**
-     * Builds the query console form
+     * Build query console form
      *
      * @param FormBuilderInterface $builder The form builder
      * @param array<string> $options The form options

@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class ErrorController
  *
- * The controller for handling errors
+ * Controller for error handling
  *
  * @package App\Controller
  */
@@ -35,7 +35,7 @@ class ErrorController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The error view
+     * @return Response The error page view
      */
     #[Route('/error', methods: ['GET'], name: 'app_error_by_code')]
     public function errorHandle(Request $request): Response
@@ -66,13 +66,13 @@ class ErrorController extends AbstractController
     }
 
     /**
-     * Show the error page by exception
+     * Show error page by exception
      *
      * @param Throwable $exception The exception object
      *
      * @throws AppErrorException The exception object
      *
-     * @return Response The error view
+     * @return Response The error page view
      */
     public function show(Throwable $exception): Response
     {

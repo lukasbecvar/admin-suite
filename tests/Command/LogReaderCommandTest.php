@@ -60,7 +60,7 @@ class LogReaderCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('status cannot be empty.', $output);
+        $this->assertStringContainsString('status cannot be empty', $output);
         $this->assertEquals(Command::FAILURE, $exitCode);
     }
 

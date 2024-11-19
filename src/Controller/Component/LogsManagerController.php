@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class LogsManagerController
  *
- * Controller to manage or display logs
+ * Controller for log manager component
  *
  * @package App\Controller\Component
  */
@@ -43,7 +43,7 @@ class LogsManagerController extends AbstractController
     }
 
     /**
-     * Display the logs table view
+     * Render logs table page
      *
      * @param Request $request The request object
      *
@@ -96,7 +96,7 @@ class LogsManagerController extends AbstractController
     }
 
     /**
-     * Renders the system logs table
+     * Render system logs list page
      *
      * @return Response The system log view
      */
@@ -107,15 +107,14 @@ class LogsManagerController extends AbstractController
         // get log files from host system
         $logFiles = $this->logManager->getSystemLogs();
 
-        // render the system logs table
+        // render system logs list view
         return $this->render('component/log-manager/system-logs.twig', [
-            // log files list
             'logFiles' => $logFiles
         ]);
     }
 
     /**
-     * Fetches and displays the contents of the exception log
+     * Render exception files list page
      *
      * @return Response The exception log view
      */
@@ -126,15 +125,14 @@ class LogsManagerController extends AbstractController
         // get exception files
         $exceptionFiles = $this->logManager->getExceptionFiles();
 
-        // render the exception files view
+        // render exception files list view
         return $this->render('component/log-manager/exception-files.twig', [
-            // exception files
             'exceptionFiles' => $exceptionFiles
         ]);
     }
 
     /**
-     * Delete exception file
+     * Handle exception file delete
      *
      * @param Request $request The request object
      *
@@ -152,16 +150,16 @@ class LogsManagerController extends AbstractController
             $this->logManager->deleteExceptionFile($exceptionFile);
         }
 
-        // redirect back to the exception files page
+        // redirect back to exception files page
         return $this->redirectToRoute('app_manager_logs_exception_files');
     }
 
     /**
-     * Sets logs to 'READED'
+     * Handle logs set to 'READED'
      *
      * @param Request $request The request object
      *
-     * @return Response Redirects to the dashboard page after setting logs to 'READED'
+     * @return Response Redirects to the dashboard page after update logs status to 'READED'
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/logs/set/readed', methods:['GET'], name: 'app_manager_logs_set_readed')]
@@ -191,7 +189,7 @@ class LogsManagerController extends AbstractController
         // set log status to readed
         $this->logManager->updateLogStatusById($id, 'READED');
 
-        // redirect back to the logs table page
+        // redirect back to logs table page view
         return $this->redirectToRoute('app_manager_logs', [
             'page' => $page,
             'filter' => $filter,

@@ -47,7 +47,7 @@ class TerminalApiController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response Command output response
+     * @return Response The command output
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/api/system/terminal', methods: ['POST'], name: 'api_terminal')]
@@ -58,7 +58,7 @@ class TerminalApiController extends AbstractController
 
         // set default working dir
         if ($this->sessionUtil->checkSession('terminal-dir')) {
-            /** @var string $currentDir get curret working directory */
+            /** @var string $currentDir get current working directory */
             $currentDir = $this->sessionUtil->getSessionValue('terminal-dir');
 
             // check if directory exist
@@ -71,15 +71,15 @@ class TerminalApiController extends AbstractController
             chdir('/');
         }
 
-        // get executed command
+        // get command from request parameter
         $command = (string) $request->request->get('command');
 
         // check if command empty
         if (empty($command)) {
-            return new Response('command data is empty!', Response::HTTP_OK);
+            return new Response('command data is empty', Response::HTTP_OK);
         }
 
-        // escape command
+        // security escape command
         $command = $this->securityUtil->escapeString($command);
 
         // load terminal config files
@@ -95,7 +95,7 @@ class TerminalApiController extends AbstractController
         foreach ($blockedCommands as $blockedCommand) {
             /** @var string $blockedCommand */
             if (str_starts_with($command ?? '', $blockedCommand) || str_starts_with($command ?? '', 'sudo ' . $blockedCommand)) {
-                return new Response('command: ' . $command . ' is not allowed!', Response::HTTP_OK);
+                return new Response('command: ' . $command . ' is not allowed', Response::HTTP_OK);
             }
         }
 
@@ -107,9 +107,8 @@ class TerminalApiController extends AbstractController
             }
         }
 
-        // check if command is empty
         if (!$command) {
-            return new Response('command data is empty!', Response::HTTP_OK);
+            return new Response('command data is empty', Response::HTTP_OK);
         }
 
         // get cwd (system get)
@@ -164,13 +163,13 @@ class TerminalApiController extends AbstractController
                 level: LogManager::LEVEL_WARNING
             );
 
-            // get output
+            // get command output
             $output = implode("\n", $output);
 
-            // escape output
+            // security escape output
             $output = $this->securityUtil->escapeString($output);
 
-            // return output
+            // return command output
             return new Response($output, Response::HTTP_OK);
         }
     }

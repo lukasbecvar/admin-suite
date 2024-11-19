@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 class ProfilePicChangeFormType extends AbstractType
 {
     /**
-     * Builds the profile picture change form
+     * Build profile picture change form
      *
      * @param FormBuilderInterface $builder The form builder
      * @param array<string> $options The options for building the form
@@ -29,28 +29,28 @@ class ProfilePicChangeFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('profile-pic', FileType::class, [
-            'label' => false,
-            'multiple' => false,
-            'mapped' => false,
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please add picture file.',
-                ])
-            ],
-            'attr' => [
-                'class' => 'file-input-control profile-pic-change',
-                'placeholder' => 'Profile picture',
-                'accept' => 'image/*',
-                'image_property' => 'image'
-            ],
-            'translation_domain' => false
-        ])
+            ->add('profile-pic', FileType::class, [
+                'label' => false,
+                'multiple' => false,
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please add picture file.',
+                    ])
+                ],
+                'attr' => [
+                    'class' => 'file-input-control profile-pic-change',
+                    'placeholder' => 'Profile picture',
+                    'accept' => 'image/*',
+                    'image_property' => 'image'
+                ],
+                'translation_domain' => false
+            ])
         ;
     }
 
     /**
-     * Configures the options for this form
+     * Configure options for this form
      *
      * @param OptionsResolver $resolver The resolver for the form options
      *

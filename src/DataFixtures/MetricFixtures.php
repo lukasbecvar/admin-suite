@@ -18,7 +18,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 class MetricFixtures extends Fixture
 {
     /**
-     * Load the metrics fixtures
+     * Load metrics fixtures
      *
      * @param ObjectManager $manager The entity manager
      *
@@ -38,14 +38,14 @@ class MetricFixtures extends Fixture
             foreach ($metrics as $name) {
                 $metric = new Metric();
                 $metric->setName($name);
-                $metric->setValue((string) random_int(10, 100)); // random value
+                $metric->setValue((string) random_int(10, 100));
                 $metric->setTime(clone $currentDate);
 
-                // persist the metric
+                // persist metric
                 $manager->persist($metric);
             }
 
-            // increase time interval by 5 minutes
+            // increase time interval
             $currentDate->add($interval);
         }
 

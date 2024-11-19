@@ -33,7 +33,7 @@ class UserPasswordResetCommand extends Command
     }
 
     /**
-     * Configures the command and arguments
+     * Configure command and arguments
      *
      * @return void
      */
@@ -43,44 +43,44 @@ class UserPasswordResetCommand extends Command
     }
 
     /**
-     * Executes the user password reset command
+     * Execute user password reset command
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @return int The exit code of the command
+     * @return int The status code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI ip address
+        // fix get CLI visitor info
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
-        // get input arguments
+        // get input username argument
         $username = $input->getArgument('username');
 
-        // check if username is empty
+        // check is username empty
         if (empty($username)) {
-            $io->error('Username cannot be empty.');
+            $io->error('Username cannot be empty');
             return Command::FAILURE;
         }
 
-        // check username type
+        // check username input type
         if (!is_string($username)) {
-            $io->error('Invalid username provided.');
+            $io->error('Invalid username provided');
             return Command::FAILURE;
         }
 
         // check if username is used
         if (!$this->userManager->checkIfUserExist($username)) {
-            $io->error('Error username: ' . $username . ' does not exist!');
+            $io->error('Error username: ' . $username . ' does not exist');
             return Command::FAILURE;
         }
 
-        // reset user password
         try {
+            // reset user password and get them
             $newPassword = $this->authManager->resetUserPassword($username);
 
             // display success message

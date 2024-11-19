@@ -25,7 +25,7 @@ class TodoFixtures extends Fixture
     }
 
     /**
-     * Load the todo fixtures
+     * Load todo fixtures
      *
      * @param ObjectManager $manager
      *
@@ -49,7 +49,7 @@ class TodoFixtures extends Fixture
             $manager->persist($todo);
         }
 
-        // flush the data to the database
+        // flush data to the database
         $manager->flush();
     }
 }

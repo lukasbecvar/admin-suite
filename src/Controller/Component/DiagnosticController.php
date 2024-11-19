@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class DiagnosticController
  *
- * This controller is responsible for rendering the diagnostic page
+ * Controller for diagnostic component
  *
  * @package App\Controller\Component
  */
@@ -24,7 +24,7 @@ class DiagnosticController extends AbstractController
     }
 
     /**
-     * Renders the diagnostic page
+     * Render diagnostic page
      *
      * @return Response The diagnostic page view
      */
@@ -34,9 +34,8 @@ class DiagnosticController extends AbstractController
         // get diagnostic data
         $diagnosticData = $this->serverUtil->getDiagnosticData();
 
-        // return diagnostic view
+        // return diagnostic page view
         return $this->render('component/diagnostic/diagnostics-page.twig', [
-            // diagnostic data
             'diagnosticData' => $diagnosticData
         ]);
     }

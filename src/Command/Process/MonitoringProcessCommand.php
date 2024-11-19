@@ -25,11 +25,8 @@ class MonitoringProcessCommand extends Command
     private DatabaseManager $databaseManager;
     private MonitoringManager $monitoringManager;
 
-    public function __construct(
-        AppUtil $appUtil,
-        DatabaseManager $databaseManager,
-        MonitoringManager $monitoringManager
-    ) {
+    public function __construct(AppUtil $appUtil, DatabaseManager $databaseManager, MonitoringManager $monitoringManager)
+    {
         $this->appUtil = $appUtil;
         $this->databaseManager = $databaseManager;
         $this->monitoringManager = $monitoringManager;
@@ -37,37 +34,37 @@ class MonitoringProcessCommand extends Command
     }
 
     /**
-     * Executes the command to monitoring services process
+     * Execute command to monitoring services process
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @return int The exit code of the command
+     * @return int The status code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // set up environment for CLI
+        // fix get CLI visitor info
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
-        // handle monitoring
+        // start monitoring process
         $this->monitor($io);
 
         return Command::SUCCESS;
     }
 
     /**
-     * Monitor the services
+     * Monitoring process infinite loop
      *
-     * @param SymfonyStyle $io The io interface
+     * @param SymfonyStyle $io The command io interface
      *
      * @return void
      */
     private function monitor(SymfonyStyle $io): void
     {
-        // wait to database to be up
+        // wait to database online
         while ($this->databaseManager->isDatabaseDown()) {
             $io->writeln('<fg=yellow>Waiting to ensure that the database is up...</>');
             sleep(10);
@@ -82,21 +79,21 @@ class MonitoringProcessCommand extends Command
             if ($this->databaseManager->isDatabaseDown()) {
                 // check if database down handled before
                 if (!$dbDownFlag) {
-                    // handle database down situation
+                    // handle database down status
                     $this->monitoringManager->handleDatabaseDown($io, $dbDownFlag);
                     $dbDownFlag = true;
                 }
 
-                // sleep to ensure that the database is up
+                // sleep to ensure that database is online
                 $io->writeln('<fg=yellow>Waiting to ensure that the database is up...</>');
                 sleep(10);
             } else {
                 if ($dbDownFlag) {
-                    // reset the flag if the database is back up
+                    // reset flag if the database is back up
                     $dbDownFlag = false;
                 }
 
-                // initialize monitoring process
+                // init monitoring process
                 $this->monitoringManager->monitorInit($io);
 
                 // sleep for the monitoring interval

@@ -25,7 +25,7 @@ class UserFixtures extends Fixture
     }
 
     /**
-     * Load the user fixtures
+     * Load user fixtures
      *
      * @param ObjectManager $manager
      *
@@ -33,10 +33,10 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        // create the owner user
+        // create owner user
         $user = new User();
 
-        // generate a hash for the password
+        // generate hash for password
         $hash = $this->securityUtil->generateHash('test');
 
         // set owner user data
@@ -50,7 +50,7 @@ class UserFixtures extends Fixture
             ->setToken(md5(random_bytes(32)))
             ->setProfilePic('default_pic');
 
-        // persist the owner user
+        // persist owner user
         $manager->persist($user);
 
         // testing roles
@@ -61,7 +61,7 @@ class UserFixtures extends Fixture
             // get current time
             $time = new DateTime();
 
-            // create the test user
+            // create test user
             $user = new User();
 
             // set user data
@@ -75,11 +75,11 @@ class UserFixtures extends Fixture
                 ->setToken(md5(random_bytes(32)))
                 ->setProfilePic('default_pic');
 
-            // persist the user
+            // persist user
             $manager->persist($user);
         }
 
-        // flush the data to the database
+        // flush data to the database
         $manager->flush();
     }
 }

@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class MonitoringManagerController
  *
- * Handles the the monitoring manager page
+ * Controller for monitoring manager component
  *
  * @package App\Controller\Component
  */
@@ -38,9 +38,9 @@ class MonitoringManagerController extends AbstractController
     }
 
     /**
-     * Renders the monitoring dashboard page
+     * Render the monitoring dashboard page
      *
-     * @return Response The rendered monitoring manager page view
+     * @return Response The monitoring dashboard view
      */
     #[Route('/manager/monitoring', methods:['GET'], name: 'app_manager_monitoring')]
     public function monitoring(): Response
@@ -57,14 +57,14 @@ class MonitoringManagerController extends AbstractController
         // default last monitoring time
         $lastMonitoringTime = null;
 
+        // check if last monitoring time is cached
         if ($this->cacheUtil->isCatched('last-monitoring-time')) {
             // get last monitoring time
             $lastMonitoringTime = $this->cacheUtil->getValue('last-monitoring-time');
         }
 
-        // return view
+        // return monitoring dashboard page view
         return $this->render('component/monitoring-manager/monitoring-dashboard.twig', [
-            // monitoring data
             'services' => $services,
             'monitoringLogs' => $monitoringLogs,
             'serviceManager' => $this->serviceManager,
@@ -73,9 +73,9 @@ class MonitoringManagerController extends AbstractController
     }
 
     /**
-     * Renders the monitored services config page
+     * Render the monitoring config page
      *
-     * @return Response The rendered monitoring config page view
+     * @return Response The monitoring service config view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/monitoring/config', methods:['GET'], name: 'app_manager_monitoring_config')]
@@ -84,10 +84,9 @@ class MonitoringManagerController extends AbstractController
         // get services list
         $services = $this->serviceManager->getServicesList();
 
-        // return view
+        // return monitoring config page view
         return $this->render('component/monitoring-manager/monitoring-config.twig', [
-            // services config data
-            'services' => $services,
+            'services' => $services
         ]);
     }
 }

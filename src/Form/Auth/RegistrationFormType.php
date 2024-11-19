@@ -22,7 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 class RegistrationFormType extends AbstractType
 {
     /**
-     * Builds the registration form
+     * Build registration form
      *
      * @param FormBuilderInterface $builder
      * @param array<string> $options
@@ -63,7 +63,7 @@ class RegistrationFormType extends AbstractType
     }
 
     /**
-     * Configures the options for the registration form
+     * Configure options for the registration form
      *
      * @param OptionsResolver $resolver
      *

@@ -31,12 +31,12 @@ class UserListCommand extends Command
     }
 
     /**
-     * Executes the command to list all users in database
+     * Execute command to list all users in database
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @return int The exit code of the command
+     * @return int The status code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -47,13 +47,13 @@ class UserListCommand extends Command
 
         // check if user list is empty
         if ($this->userManager->isUsersEmpty()) {
-            $io->success('User list is empty.');
+            $io->success('User list is empty');
             return Command::SUCCESS;
         }
 
-        // check if $users is iterable
+        // check is $users iterable
         if (!is_iterable($users)) {
-            $io->error('Failed to retrieve users.');
+            $io->error('Failed to retrieve users');
             return Command::FAILURE;
         }
 
@@ -72,18 +72,9 @@ class UserListCommand extends Command
             ];
         }
 
-        // render the table
+        // render user list table
         $io->table(
-            headers: [
-                '#',
-                'Username',
-                'Role',
-                'Ip address',
-                'Browser',
-                'OS',
-                'Register time',
-                'Last login'
-            ],
+            headers: ['#', 'Username', 'Role', 'Ip address', 'Browser', 'OS', 'Register time', 'Last login'],
             rows: $data
         );
 

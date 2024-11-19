@@ -49,7 +49,7 @@ class UserRegisterCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Username cannot be empty.', $output);
+        $this->assertStringContainsString('Username cannot be empty', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 
@@ -70,7 +70,7 @@ class UserRegisterCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Error username: testuser is already used!', $output);
+        $this->assertStringContainsString('Error username: testuser is already used', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 
