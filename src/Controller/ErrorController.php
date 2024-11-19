@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Throwable;
 use App\Util\AppUtil;
 use App\Manager\ErrorManager;
 use App\Exception\AppErrorException;
@@ -67,13 +68,13 @@ class ErrorController extends AbstractController
     /**
      * Show the error page by exception
      *
-     * @param \Throwable $exception The exception object
+     * @param Throwable $exception The exception object
      *
      * @throws AppErrorException The exception object
      *
      * @return Response The error view
      */
-    public function show(\Throwable $exception): Response
+    public function show(Throwable $exception): Response
     {
         // get exception code
         $statusCode = $exception instanceof HttpException
@@ -81,7 +82,7 @@ class ErrorController extends AbstractController
 
         // handle errors in dev mode
         if ($this->appUtil->isDevMode()) {
-            throw new AppErrorException($statusCode, $exception->getMessage());
+            throw new AppErrorException($statusCode, $exception->getMessage(), $exception);
         }
 
         // return error view
