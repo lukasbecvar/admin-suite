@@ -7,6 +7,7 @@ use Throwable;
 use App\Util\AppUtil;
 use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\TestCase;
+use App\Controller\ErrorController;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,25 +28,27 @@ class ExceptionEventSubscriberTest extends TestCase
     private AppUtil & MockObject $appUtilMock;
     private ExceptionEventSubscriber $subscriber;
     private LoggerInterface & MockObject $loggerMock;
+    private ErrorController & MockObject $errorController;
 
     protected function setUp(): void
     {
         // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->errorController = $this->createMock(ErrorController::class);
 
         // create exception event subscriber instance
-        $this->subscriber = new ExceptionEventSubscriber($this->appUtilMock, $this->loggerMock);
+        $this->subscriber = new ExceptionEventSubscriber($this->appUtilMock, $this->loggerMock, $this->errorController);
     }
 
     /**
-     * Create an exception event
+     * Create exception event
      *
      * @param Throwable $exception The exception
      *
      * @return ExceptionEvent The exception event
      */
-    public function createExceptionEvent(Throwable $exception): ExceptionEvent
+    private function createExceptionEvent(Throwable $exception): ExceptionEvent
     {
         /** @var HttpKernelInterface $kernelMock */
         $kernelMock = $this->createMock(HttpKernelInterface::class);

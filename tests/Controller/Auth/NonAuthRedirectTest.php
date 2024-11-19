@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class NonAuthRedirectTest
  *
- * Test reidrect non-authenticated users to login page for admin page routes
+ * Test redirect non-authenticated users to login page for admin page routes
  *
  * @package App\Tests\Controller\Auth
  */
@@ -25,110 +25,109 @@ class NonAuthRedirectTest extends WebTestCase
     /**
      * Auth required routes list
      *
-     * @return array<array<string>>
+     * @return array<array<string,string>>
      */
     private const ROUTES = [
         'api' => [
-            '/api/system/terminal',
-            '/api/notifications/enabled',
-            '/api/notifications/subscribe',
-            '/api/notifications/public-key'
+            ['method' => 'POST', 'url' => '/api/system/terminal'],
+            ['method' => 'GET', 'url' => '/api/notifications/enabled'],
+            ['method' => 'POST', 'url' => '/api/notifications/subscribe'],
+            ['method' => 'GET', 'url' => '/api/notifications/public-key']
         ],
         'anti_log' => [
-            '/13378/antilog'
+            ['method' => 'GET', 'url' => '/13378/antilog']
         ],
         'admin_dashboard' => [
-            '/admin',
-            '/dashboard'
+            ['method' => 'GET', 'url' => '/dashboard']
         ],
         'user_manager' => [
-            '/manager/users',
-            '/manager/users/ban',
-            '/manager/users/delete',
-            '/manager/users/register',
-            '/manager/users/role/update'
+            ['method' => 'GET', 'url' => '/manager/users'],
+            ['method' => 'GET', 'url' => '/manager/users/ban'],
+            ['method' => 'GET', 'url' => '/manager/users/delete'],
+            ['method' => 'GET', 'url' => '/manager/users/register'],
+            ['method' => 'POST', 'url' => '/manager/users/role/update']
         ],
         'account_settings' => [
-            '/account/settings',
-            '/manager/users/profile',
-            '/account/settings/change/picture',
-            '/account/settings/change/username',
-            '/account/settings/change/password'
+            ['method' => 'GET', 'url' => '/account/settings'],
+            ['method' => 'GET', 'url' => '/manager/users/profile'],
+            ['method' => 'GET', 'url' => '/account/settings/change/picture'],
+            ['method' => 'GET', 'url' => '/account/settings/change/username'],
+            ['method' => 'GET', 'url' => '/account/settings/change/password']
         ],
         'logs_manager' => [
-            '/manager/logs',
-            '/manager/logs/system',
-            '/manager/logs/set/readed',
-            '/manager/logs/exception/files'
+            ['method' => 'GET', 'url' => '/manager/logs'],
+            ['method' => 'GET', 'url' => '/manager/logs/system'],
+            ['method' => 'GET', 'url' => '/manager/logs/set/readed'],
+            ['method' => 'GET', 'url' => '/manager/logs/exception/files']
         ],
         'diagnostic' => [
-            '/diagnostic'
+            ['method' => 'GET', 'url' => '/diagnostic']
         ],
         'action_runner' => [
-            '/service/action/runner'
+            ['method' => 'GET', 'url' => '/service/action/runner']
         ],
         'monitoring_manager' => [
-            '/manager/monitoring',
-            '/manager/monitoring/config'
+            ['method' => 'GET', 'url' => '/manager/monitoring'],
+            ['method' => 'GET', 'url' => '/manager/monitoring/config']
         ],
         'todo_manager' => [
-            '/manager/todo',
-            '/manager/todo/edit',
-            '/manager/todo/close',
-            '/manager/todo/delete'
+            ['method' => 'GET', 'url' => '/manager/todo'],
+            ['method' => 'GET', 'url' => '/manager/todo/edit'],
+            ['method' => 'GET', 'url' => '/manager/todo/close'],
+            ['method' => 'GET', 'url' => '/manager/todo/delete']
         ],
         'database_manager' => [
-            '/manager/database',
-            '/manager/database/add',
-            '/manager/database/edit',
-            '/manager/database/dump',
-            '/manager/database/table',
-            '/manager/database/delete',
-            '/manager/database/console',
-            '/manager/database/truncate'
+            ['method' => 'GET', 'url' => '/manager/database'],
+            ['method' => 'GET', 'url' => '/manager/database/add'],
+            ['method' => 'GET', 'url' => '/manager/database/edit'],
+            ['method' => 'GET', 'url' => '/manager/database/dump'],
+            ['method' => 'GET', 'url' => '/manager/database/table'],
+            ['method' => 'GET', 'url' => '/manager/database/delete'],
+            ['method' => 'GET', 'url' => '/manager/database/console'],
+            ['method' => 'GET', 'url' => '/manager/database/truncate']
         ],
         'file_browser' => [
-            '/filesystem',
-            '/filesystem/view',
-            '/filesystem/get/resource'
+            ['method' => 'GET', 'url' => '/filesystem'],
+            ['method' => 'GET', 'url' => '/filesystem/view'],
+            ['method' => 'GET', 'url' => '/filesystem/get/resource']
         ],
         'terminal' => [
-            '/terminal',
-            '/api/system/terminal'
+            ['method' => 'GET', 'url' => '/terminal']
         ],
         'metrics' => [
-            '/metrics/dashboard'
+            ['method' => 'GET', 'url' => '/metrics/dashboard']
         ]
     ];
 
     /**
      * Admin routes list provider
      *
-     * @return array<array<string>>
+     * @return array<int,array<int,string>>
      */
     protected function provideAdminUrls(): array
     {
         $urls = [];
         foreach (self::ROUTES as $category => $routes) {
             foreach ($routes as $route) {
-                $urls[] = [$route];
+                $urls[] = [$route['method'], $route['url']];
             }
         }
         return $urls;
     }
 
     /**
-     * Test non-authenticated requests redirect
+     * Test non-authenticated requests redirect to login
      *
      * @dataProvider provideAdminUrls
      *
+     * @param string $method The HTTP method
      * @param string $url The admin route URL
      *
      * @return void
      */
-    public function testNonAuthRedirect(string $url): void
+    public function testNonAuthRedirect(string $method, string $url): void
     {
-        $this->client->request('GET', $url);
+        $this->client->request($method, $url);
 
         // assert response
         $this->assertTrue($this->client->getResponse()->isRedirect('/login'));
