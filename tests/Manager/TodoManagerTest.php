@@ -218,10 +218,7 @@ class TodoManagerTest extends TestCase
         $this->logManagerMock->expects($this->once())->method('log')
             ->with('todo-manager', 'todo: 1 closed', LogManager::LEVEL_INFO);
 
-        // expect persist and flush methods to be called
-        $this->entityManagerMock->expects($this->once())
-            ->method('persist')
-            ->with($this->isInstanceOf(Todo::class));
+        // expect flush call
         $this->entityManagerMock->expects($this->once())
             ->method('flush');
 

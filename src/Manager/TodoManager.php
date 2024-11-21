@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class TodoManager
  *
- * Manager for todo entity operations
+ * The manager for todo component functionality
  *
  * @package App\Manager
  */
@@ -49,13 +49,13 @@ class TodoManager
      */
     public function getTodos(string $filter = 'open'): array
     {
-        // init the plain todo list
+        // init plain todo list
         $plainTodos = [];
 
-        // get the todo list
+        // get todo list
         $todos = $this->todoRepository->findByUserIdAndStatus($this->authManager->getLoggedUserId(), $filter);
 
-        // decrypt the todo texts
+        // decrypt todo texts
         foreach ($todos as $todo) {
             $plainTodos[] = [
                 'id' => $todo->getId(),
@@ -67,7 +67,7 @@ class TodoManager
             ];
         }
 
-        // return the plain todo list
+        // return todo list
         return $plainTodos;
     }
 
@@ -96,7 +96,7 @@ class TodoManager
     }
 
     /**
-     * Get the number of todos
+     * Get number of todos
      *
      * @return int The number of todos
      */
@@ -115,51 +115,49 @@ class TodoManager
      *
      * @param string $todoText The todo text
      *
-     * @throws Exception If an error occurs while creating the todo
+     * @throws Exception Error to persis or flush todo to database
      *
      * @return void
      */
     public function createTodo(string $todoText): void
     {
-        // create the todo entity
-        $todo = new Todo();
-
         // encrypt the todo text
         $todoText = $this->securityUtil->encryptAes($todoText);
 
-        try {
-            // set todo properties
-            $todo->setTodoText($todoText)
-                ->setAddedTime(new DateTime())
-                ->setCompletedTime(null)
-                ->setStatus('open')
-                ->setUserId($this->authManager->getLoggedUserId());
+        // create new todo entity
+        $todo = new Todo();
+        $todo->setTodoText($todoText)
+            ->setAddedTime(new DateTime())
+            ->setCompletedTime(null)
+            ->setStatus('open')
+            ->setUserId($this->authManager->getLoggedUserId());
 
-            // save the todo entity
+        try {
+            // save todo entity
             $this->entityManagerInterface->persist($todo);
             $this->entityManagerInterface->flush();
-
-            // log the todo creation
-            $this->logManager->log(
-                name: 'todo-manager',
-                message: 'new todo created',
-                level: LogManager::LEVEL_INFO
-            );
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to create todo: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+
+        // log todo create event
+        $this->logManager->log(
+            name: 'todo-manager',
+            message: 'new todo created',
+            level: LogManager::LEVEL_INFO
+        );
     }
 
     /**
-     * Edit a todo
+     * Edit todo text
      *
      * @param int $todoId The todo id
      * @param string $todoText The todo text
      *
-     * @throws Exception If an error occurs while editing the todo
+     * @throws Exception Error to update todo entity
      *
      * @return void
      */
@@ -168,7 +166,7 @@ class TodoManager
         /** @var Todo $todo */
         $todo = $this->todoRepository->find($todoId);
 
-        // check if the todo is not null
+        // check if todo is not null
         if ($todo === null) {
             $this->errorManager->handleError(
                 message: 'todo: ' . $todoId . ' not found',
@@ -176,7 +174,7 @@ class TodoManager
             );
         }
 
-        // check if the user is the owner of the todo
+        // check if user is owner of the todo
         if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
             $this->errorManager->handleError(
                 message: 'you are not the owner of the todo: ' . $todoId,
@@ -184,7 +182,7 @@ class TodoManager
             );
         }
 
-        // check if the todo is closed
+        // check if todo is closed
         if ($todo->getStatus() !== 'open') {
             $this->errorManager->handleError(
                 message: 'todo: ' . $todoId . ' is closed',
@@ -192,7 +190,7 @@ class TodoManager
             );
         }
 
-        // encrypt the todo text
+        // encrypt todo text
         $todoText = $this->securityUtil->encryptAes($todoText);
 
         try {
@@ -200,30 +198,30 @@ class TodoManager
             $todo->setTodoText($todoText);
             $todo->setCompletedTime(null);
 
-            // save the todo entity
+            // save todo entity
             $this->entityManagerInterface->persist($todo);
             $this->entityManagerInterface->flush();
-
-            // log the todo creation
-            $this->logManager->log(
-                name: 'todo-manager',
-                message: 'todo edited',
-                level: LogManager::LEVEL_INFO
-            );
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to edit todo: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+
+        // log todo edit event
+        $this->logManager->log(
+            name: 'todo-manager',
+            message: 'todo edited',
+            level: LogManager::LEVEL_INFO
+        );
     }
 
     /**
-     * Close a todo
+     * Close todo by id
      *
      * @param int $todoId The todo id
      *
-     * @throws Exception If an error occurs while closing the todo
+     * @throws Exception Error to flush changes to database
      *
      * @return void
      */
@@ -232,7 +230,7 @@ class TodoManager
         /** @var Todo $todo */
         $todo = $this->todoRepository->find($todoId);
 
-        // check if the todo is not null
+        // check if todo is not null
         if ($todo === null) {
             $this->errorManager->handleError(
                 message: 'todo: ' . $todoId . ' not found',
@@ -240,7 +238,7 @@ class TodoManager
             );
         }
 
-        // check if the user is the owner of the todo
+        // check if user is owner of todo
         if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
             $this->errorManager->handleError(
                 message: 'you are not the owner of the todo: ' . $todoId,
@@ -249,30 +247,29 @@ class TodoManager
         }
 
         try {
-            // set the todo status to closed
+            // set todo status to closed
             $todo->setStatus('closed');
             $todo->setCompletedTime(new DateTime());
 
-            // save the todo entity
-            $this->entityManagerInterface->persist($todo);
+            // flush todo entity
             $this->entityManagerInterface->flush();
-
-            // log the todo creation
-            $this->logManager->log(
-                name: 'todo-manager',
-                message: 'todo: ' . $todoId . ' closed',
-                level: LogManager::LEVEL_INFO
-            );
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to close todo: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+
+        // log todo close event
+        $this->logManager->log(
+            name: 'todo-manager',
+            message: 'todo: ' . $todoId . ' closed',
+            level: LogManager::LEVEL_INFO
+        );
     }
 
     /**
-     * Delete a todo
+     * Delete todo by id
      *
      * @param int $todoId The todo id
      *
@@ -283,17 +280,17 @@ class TodoManager
     public function deleteTodo(int $todoId): void
     {
         try {
-            // get the todo entity
+            // get todo
             $todo = $this->todoRepository->find($todoId);
 
-            // check if the todo entity is found
+            // check if todo entity is found
             if ($todo == null) {
                 $this->errorManager->handleError(
                     message: 'todo not found',
                     code: Response::HTTP_NOT_FOUND
                 );
             } else {
-                // check if the user is the owner of the todo
+                // check if user is owner of todo
                 if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
                     $this->errorManager->handleError(
                         message: 'you are not the owner of the todo: ' . $todoId,
@@ -301,7 +298,7 @@ class TodoManager
                     );
                 }
 
-                // check if the todo is closed
+                // check if todo is closed
                 if ($todo->getStatus() != 'closed') {
                     $this->errorManager->handleError(
                         message: 'todo: ' . $todoId . ' is not closed',
@@ -309,16 +306,9 @@ class TodoManager
                     );
                 }
 
-                // delete the todo entity
+                // delete todo entity
                 $this->entityManagerInterface->remove($todo);
                 $this->entityManagerInterface->flush();
-
-                // log the todo deletion
-                $this->logManager->log(
-                    name: 'todo-manager',
-                    message: 'todo deleted',
-                    level: LogManager::LEVEL_INFO
-                );
             }
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -326,5 +316,12 @@ class TodoManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+
+        // log todo delete event
+        $this->logManager->log(
+            name: 'todo-manager',
+            message: 'todo deleted',
+            level: LogManager::LEVEL_INFO
+        );
     }
 }
