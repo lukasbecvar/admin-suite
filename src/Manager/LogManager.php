@@ -17,13 +17,13 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class LogManager
  *
- * The manager for logging
+ * The manager for log system functionality
  *
  * @package App\Manager
  */
 class LogManager
 {
-    // log levels constants
+    // log levels definitions
     public const LEVEL_CRITICAL = 1;
     public const LEVEL_WARNING = 2;
     public const LEVEL_NOTICE = 3;
@@ -59,13 +59,13 @@ class LogManager
     }
 
     /**
-     * Log a message to the database
+     * Log message to the database
      *
      * @param string $name The log name
      * @param string $message The log message
      * @param int $level The log level
      *
-     * @throws Exception If the log entity cannot be persisted
+     * @throws Exception Error to persist or flush log to database
      *
      * @return void
      */
@@ -76,7 +76,7 @@ class LogManager
             return;
         }
 
-        // check if log blocking is enabled
+        // check if anti-log is enabled
         if ($this->isAntiLogEnabled()) {
             return;
         }
@@ -95,7 +95,7 @@ class LogManager
         $ipAddress = $this->visitorInfoUtil->getIP();
         $userAgent = (string) $this->visitorInfoUtil->getUserAgent();
 
-        // check if the ip address is null
+        // check if the visitor ip address is unknown
         if ($ipAddress == null) {
             $ipAddress = 'Unknown';
         }
@@ -103,7 +103,7 @@ class LogManager
         // init log entity
         $log = new Log();
 
-        // set the log properties
+        // set log properties
         $log->setName($name)
             ->setMessage($message)
             ->setStatus('UNREADED')
@@ -121,6 +121,7 @@ class LogManager
         }
 
         try {
+            // persist and flush log to database
             $this->entityManager->persist($log);
             $this->entityManager->flush();
         } catch (Exception $e) {
@@ -132,16 +133,16 @@ class LogManager
     }
 
     /**
-     * Set the anti-log cookie
+     * Set anti-log cookie
      *
      * @return void
      */
     public function setAntiLog(): void
     {
-        // log action
+        // log anti-log enable event
         $this->log('anti-log', 'anti-log enabled', self::LEVEL_WARNING);
 
-        // set the anti-log cookie
+        // set anti-log cookie
         $this->cookieUtil->set(
             name: 'anti-log',
             value: $this->appUtil->getEnvValue('ANTI_LOG_TOKEN'),
@@ -150,16 +151,16 @@ class LogManager
     }
 
     /**
-     * Unset the anti-log cookie
+     * Unset anti-log cookie
      *
      * @return void
      */
     public function unSetAntiLog(): void
     {
-        // log action
+        // log anti-log disable event
         $this->log('anti-log', 'anti-log disabled', self::LEVEL_WARNING);
 
-        // unset the anti-log cookie
+        // unset anti-log cookie
         $this->cookieUtil->unset('anti-log');
     }
 
@@ -170,7 +171,7 @@ class LogManager
      */
     public function isAntiLogEnabled(): bool
     {
-        // check if anti-log is seted
+        // check if anti-log is set
         if (!$this->cookieUtil->isCookieSet('anti-log')) {
             return false;
         }
@@ -187,11 +188,11 @@ class LogManager
     }
 
     /**
-     * Get the count of logs based on their status
+     * Get count of logs based on their status
      *
      * This method retrieves the count of logs from the repository based on the specified status
      * If the status is 'all', it counts all logs. Otherwise, it counts logs
-     * matching the given status.
+     * matching the given status
      *
      * @param string $status The status of the logs to count. Defaults to 'all'
      * @param int $userId The user id for get all count logs
@@ -200,7 +201,7 @@ class LogManager
      */
     public function getLogsCountWhereStatus(string $status = 'all', int $userId = 0): int
     {
-        // get all logs or by status
+        // get logs count
         if ($status == 'all') {
             if ($userId != 0) {
                 $count = $this->logRepository->count(['user_id' => $userId]);
@@ -211,20 +212,21 @@ class LogManager
             $count = $this->logRepository->count(['status' => $status]);
         }
 
-        // return logs count
         return $count;
     }
 
     /**
-     * Get the count of auth logs
+     * Get count of auth logs
      *
      * @return int The count of auth logs
      */
     public function getAuthLogsCount(): int
     {
-        return $this->logRepository->count(
+        $count = $this->logRepository->count(
             ['name' => 'authenticator', 'status' => 'UNREADED']
         );
+
+        return $count;
     }
 
     /**
@@ -232,7 +234,7 @@ class LogManager
      *
      * This method retrieves logs from the repository based on the specified status
      * If the status is 'all', it retrieves all logs. Otherwise, it fetches logs
-     * matching the given status. It also logs this action.
+     * matching the given status.
      *
      * @param string $status The status of the logs to retrieve. Defaults to 'all'
      * @param int $userId The user id for get all logs
@@ -248,7 +250,7 @@ class LogManager
         // calculate offset
         $offset = ($page - 1) * $perPage;
 
-        // get all logs or by status
+        // get logs list
         if ($status == 'all') {
             if ($userId != 0) {
                 $logs = $this->logRepository->findBy(['user_id' => $userId], null, $perPage, $offset);
@@ -259,7 +261,7 @@ class LogManager
             $logs = $this->logRepository->findBy(['status' => $status], ['id' => 'DESC'], $perPage, $offset);
         }
 
-        // log action
+        // log logs viewed event
         $this->log('log-manager', strtolower($status) . ' logs viewed', self::LEVEL_NOTICE);
 
         return $logs;
@@ -278,17 +280,14 @@ class LogManager
     }
 
     /**
-     * Update the status of a log entry by its ID
-     *
-     * This method retrieves a log entry by its ID, updates its status to the specified new status
-     * and persists the change to the database. If the log entry is not found, it handles the error
+     * Update status of a log by ID
      *
      * @param int $id The ID of the log entry to update
      * @param string $newStatus The new status to set for the log entry
      *
      * @return void
      *
-     * @throws Exception If there is an error during the update process
+     * @throws Exception Error to update log status
      */
     public function updateLogStatusById(int $id, string $newStatus): void
     {
@@ -324,7 +323,7 @@ class LogManager
      * This method fetches logs with status 'UNREADED' using getLogsWhereStatus()
      * updates their status to 'READED', and flushes the changes to the database
      *
-     * @throws Exception If there is an error while updating the log statuses
+     * @throws Exception Error to flush update to database
      *
      * @return void
      */
@@ -352,9 +351,9 @@ class LogManager
     }
 
     /**
-     * Retrieves a list of system log files
+     * Retrieves list of system log files
      *
-     * * @throws Exception If there is an error during file retrieval (e.g., file not found or permission issue)
+     * @throws Exception If there is an error during file retrieval (e.g., file not found or permission issue)
      *
      * @return array<array<mixed>> An array of relative pathnames of log files found in the /var/log directory
      */
@@ -366,7 +365,7 @@ class LogManager
         // get log files list
         $logFiles = $this->fileSystemUtil->getFilesList($systemLogsDirectory, true);
 
-        // log action
+        // log system logs viewed event
         $this->log('log-manager', 'system logs viewed', self::LEVEL_NOTICE);
 
         // return log files
@@ -377,6 +376,7 @@ class LogManager
      * Retrieves the content of a specific system log file
      *
      * @param string $logFile The relative pathname of the log file to retrieve
+     *
      * @throws Exception If there is an error during file retrieval (e.g., file not found or permission issue)
      *
      * @return mixed The content of the log file, or null if the file does not exist
@@ -388,7 +388,7 @@ class LogManager
         // get log file content
         $log = $this->fileSystemUtil->getFileContent($logFile);
 
-        // log action
+        // log system log content viewed event
         $this->log(
             name: 'log-manager',
             message: 'system log: ' . $logFile . ' viewed',
@@ -414,6 +414,7 @@ class LogManager
             /** @var array<string,array<string,string>> $exceptionFiles list of exception files */
             $exceptionFiles = $this->appUtil->loadConfig('exceptions-monitoring.json');
 
+            // check if exception files config is array
             if (!is_array($exceptionFiles)) {
                 $this->errorManager->handleError(
                     message: 'error to get exception files: exception files config is not an array',
@@ -461,7 +462,7 @@ class LogManager
                     // unlink exception file
                     unlink($exceptionFile);
 
-                    // log action
+                    // log exception file deleted event
                     $this->log(
                         name: 'log-manager',
                         message: 'exception file deleted: ' . $exceptionFile,

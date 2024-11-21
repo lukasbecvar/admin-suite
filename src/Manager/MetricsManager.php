@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class MetricsManager
  *
- * The manager for methods with metrics database
+ * The manager for metrics system functionality
  *
  * @package App\Manager
  */
@@ -117,8 +117,8 @@ class MetricsManager
             }
         }
 
-        // retrun metrics data
-        return [
+        // build metrics data
+        $metricsData = [
             'categories' => $categories,
             'cpu' => [
                 'data' => $cpuData,
@@ -133,28 +133,34 @@ class MetricsManager
                 'current' => $storageUsageCurrent
             ]
         ];
+
+        // return metrics data
+        return $metricsData;
     }
 
     /**
-     * Save metric
+     * Save metric value
      *
      * @param string $metricName The metric name
      * @param string $value The metric value
+     *
+     * @throws Exception Error to flush metric to database
      *
      * @return void
      */
     public function saveMetric(string $metricName, string $value): void
     {
-        // set metric object
+        // create metric entity
         $metric = new Metric();
         $metric->setName($metricName)
             ->setValue($value)
             ->setTime(new DateTime());
 
-        // persist metric
+        // persist metric entity
         $this->entityManagerInterface->persist($metric);
 
         try {
+            // flush metric to database
             $this->entityManagerInterface->flush();
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -218,7 +224,7 @@ class MetricsManager
             $this->saveMetric('ram_usage', (string) $averageRam);
             $this->saveMetric('storage_usage', (string) $averageStorage);
 
-            // reset sums and counts
+            // reset metrics cache
             $this->cacheUtil->setValue($cpuKey, 0, $cacheExpiration);
             $this->cacheUtil->setValue($ramKey, 0, $cacheExpiration);
             $this->cacheUtil->setValue($storageKey, 0, $cacheExpiration);
