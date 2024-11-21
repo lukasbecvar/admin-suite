@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Class EscapeRequestDataMiddlewareTest
  *
- * Test cases for EscapeRequestDataMiddleware class
+ * Test cases for escape request data middleware
  *
  * @package App\Tests\Middleware
  */

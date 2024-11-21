@@ -12,6 +12,13 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
+/**
+ * Class LinuxCheckMiddlewareTest
+ *
+ * Test cases for linux check middleware
+ *
+ * @package App\Tests\Middleware
+ */
 class LinuxCheckMiddlewareTest extends TestCase
 {
     private LinuxCheckMiddleware $middleware;

@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class AuthorizationMiddlewareTest
  *
- * Tests for the AuthorizationMiddleware class
+ * Tests for the authorization middleware
  *
  * @package App\Tests\Middleware
  */

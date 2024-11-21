@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class LinkifyExtensionTest
  *
- * Test cases for LinkifyExtension class
+ * Test cases for linkify twig extension
  *
  * @package App\Tests\Twig
  */
@@ -24,7 +24,7 @@ class LinkifyExtensionTest extends TestCase
     /**
      * Link data provider
      *
-     * @return array<int, array<int, string>> The link data
+     * @return array<int,array<int,string>> The link data
      */
     public function provideLinkifyTextData(): array
     {

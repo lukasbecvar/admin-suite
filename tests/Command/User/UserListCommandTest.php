@@ -59,7 +59,7 @@ class UserListCommandTest extends TestCase
     }
 
     /**
-     * Test the execution of the UserListCommand
+     * Test execute user list command
      *
      * @return void
      */

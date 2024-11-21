@@ -6,8 +6,6 @@ use App\Tests\CustomTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
-use function Symfony\Component\String\b;
-
 /**
  * Class LogsManagerControllerTest
  *
