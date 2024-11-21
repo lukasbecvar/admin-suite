@@ -250,15 +250,6 @@ main {
     border: 1px solid #24d3ff;
 }
 
-.sub-navigation .time-period-select {
-	color: #ffffff;
-}
-
-.sub-navigation .time-period-select select {
-	background-color: #161616;
-	border: 1px solid rgb(173, 173, 173);
-} 
-
 .breadcrumb-panel {
 	font-size: 18px;
 }
