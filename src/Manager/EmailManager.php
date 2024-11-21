@@ -10,7 +10,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 /**
  * Class EmailManager
  *
- * The manager for handling emails
+ * The manager for sending emails
  *
  * @package App\Manager
  */
@@ -34,7 +34,7 @@ class EmailManager
     }
 
     /**
-     * Send a default email with a subject and message
+     * Send default email with subject and message
      *
      * @param string $recipient The recipient email
      * @param string $subject The email subject
@@ -52,7 +52,7 @@ class EmailManager
     }
 
     /**
-     * Send a monitoring status email
+     * Send monitoring status email
      *
      * @param string $recipient The recipient email
      * @param string $serviceName The service name
@@ -70,14 +70,14 @@ class EmailManager
     }
 
     /**
-     * Send an email with a template and context data
+     * Send email with template and context data
      *
      * @param string $recipient The recipient email
      * @param string $subject The email subject
      * @param array<mixed> $context The email context
      * @param string $template The email template
      *
-     * @throws TransportExceptionInterface If the email sending fails
+     * @throws TransportExceptionInterface If email sending fails
      *
      * @return void
      */
@@ -88,7 +88,7 @@ class EmailManager
             return;
         }
 
-        // build email message
+        // build email template
         $email = (new TemplatedEmail())
             ->from($_ENV['MAILER_USERNAME'])
             ->to($recipient)
@@ -100,7 +100,7 @@ class EmailManager
             // send email
             $this->mailer->send($email);
 
-            // log email sending
+            // log email sending event
             if (!$this->databaseManager->isDatabaseDown()) {
                 if ($subject != 'monitoring status') {
                     $this->logManager->log(
