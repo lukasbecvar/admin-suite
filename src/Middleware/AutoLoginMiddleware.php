@@ -11,7 +11,7 @@ use App\Manager\UserManager;
 /**
  * Class AutoLoginMiddleware
  *
- * This middleware for automatic login for remember me functionality
+ * Middleware for auto login for remember me functionality
  *
  * @package App\Middleware
  */
@@ -62,7 +62,7 @@ class AutoLoginMiddleware
                     // get username to login
                     $username = $user->getUsername();
 
-                    // auto login user
+                    // login user
                     $this->authManager->login((string) $username, true);
                 } else {
                     $this->cookieUtil->unset('user-token');

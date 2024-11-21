@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class AssetsCheckMiddleware
  *
- * The middleware for checking assets storage
+ * Middleware for checking assets storage
  *
  * @package App\Middleware
  */
@@ -26,7 +26,7 @@ class AssetsCheckMiddleware
     }
 
     /**
-     * Handle the assets check
+     * Check if assets storage exist
      *
      * @param RequestEvent $event The request event
      *
@@ -34,17 +34,18 @@ class AssetsCheckMiddleware
      */
     public function onKernelRequest(RequestEvent $event): void
     {
+        // check if assets storage exist
         if (!$this->appUtil->isAssetsExist()) {
-            // log error
+            // log error message to exception log
             $this->logger->error('build resources not found');
 
-            // build the response
+            // build error response
             $response = new Response(
                 content: 'Error: build resources not found, please contact service administrator & report this bug on email: ' . $_ENV['ADMIN_CONTACT'],
                 status: Response::HTTP_INTERNAL_SERVER_ERROR
             );
 
-            // set the response
+            // set response
             $event->setResponse($response);
         }
     }

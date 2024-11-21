@@ -76,8 +76,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 3 }
 
-    # check if user is authentificated to access component
-    App\Middleware\AuthentificatedCheckMiddleware:
+    # check if user is authenticated
+    App\Middleware\AuthenticatedCheckMiddleware:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 2 }
 

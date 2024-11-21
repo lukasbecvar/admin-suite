@@ -6,23 +6,23 @@ use App\Manager\AuthManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
-use App\Middleware\AuthentificatedCheckMiddleware;
+use App\Middleware\AuthenticatedCheckMiddleware;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Class AuthentificatedCheckMiddlewareTest
+ * Class AuthenticatedCheckMiddlewareTest
  *
  * Test the authentificated middleware
  *
  * @package App\Tests\Middleware
  */
-class AuthentificatedCheckMiddlewareTest extends TestCase
+class AuthenticatedCheckMiddlewareTest extends TestCase
 {
     private AuthManager & MockObject $authManagerMock;
-    private AuthentificatedCheckMiddleware $middleware;
+    private AuthenticatedCheckMiddleware $middleware;
     private UrlGeneratorInterface & MockObject $urlGeneratorMock;
 
     protected function setUp(): void
@@ -32,7 +32,7 @@ class AuthentificatedCheckMiddlewareTest extends TestCase
         $this->urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
 
         // create the middleware instance
-        $this->middleware = new AuthentificatedCheckMiddleware(
+        $this->middleware = new AuthenticatedCheckMiddleware(
             $this->authManagerMock,
             $this->urlGeneratorMock
         );

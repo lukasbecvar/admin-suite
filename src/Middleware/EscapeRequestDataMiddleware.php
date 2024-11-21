@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Class EscapeRequestDataMiddleware
  *
- * Middleware to escape request data for security issues
+ * Middleware for escape request data (for security)
  *
  * @package App\Service\Middleware
  */
@@ -25,9 +25,9 @@ class EscapeRequestDataMiddleware
     }
 
     /**
-     * Handles the escaping of request data
+     * Handle request data escaping
      *
-     * @param RequestEvent $event The event triggered on kernel request
+     * @param RequestEvent $event The request event
      *
      * @return void
      */
@@ -40,16 +40,16 @@ class EscapeRequestDataMiddleware
             return;
         }
 
-        // get form data for all request methods
-        $formData = $request->query->all() + $request->request->all();
+        // get form data
+        $requestData = $request->query->all() + $request->request->all();
 
         // escape all inputs
-        array_walk_recursive($formData, function (&$value) {
+        array_walk_recursive($requestData, function (&$value) {
             $value = $this->securityUtil->escapeString($value);
         });
 
-        // update request data with escaped form data
-        $request->query->replace($formData);
-        $request->request->replace($formData);
+        // replace request data with escaped data
+        $request->query->replace($requestData);
+        $request->request->replace($requestData);
     }
 }

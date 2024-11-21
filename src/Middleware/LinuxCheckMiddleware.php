@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class LinuxCheckMiddleware
  *
- * The middleware for checking the linux system
+ * Middleware for check if website is running on linux server
  *
  * @package App\Middleware
  */
@@ -36,7 +36,7 @@ class LinuxCheckMiddleware
     }
 
     /**
-     * Handle the linux system check
+     * Check if system is linux
      *
      * @param RequestEvent $event The request event
      *
@@ -56,7 +56,7 @@ class LinuxCheckMiddleware
                 $this->logger->error('this system can only be used on linux');
             }
 
-            // render the maintenance template
+            // return error response
             $content = $this->errorManager->getErrorView(Response::HTTP_NOT_IMPLEMENTED);
             $response = new Response($content, Response::HTTP_NOT_IMPLEMENTED);
             $event->setResponse($response);

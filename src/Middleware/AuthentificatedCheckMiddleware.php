@@ -8,13 +8,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Class AuthentificatedCheckMiddleware
+ * Class AuthenticatedCheckMiddleware
  *
  * Middleware for checking authentication status before accessing admin routes
  *
  * @package App\Middleware
  */
-class AuthentificatedCheckMiddleware
+class AuthenticatedCheckMiddleware
 {
     private AuthManager $authManager;
     private UrlGeneratorInterface $urlGenerator;
@@ -26,7 +26,7 @@ class AuthentificatedCheckMiddleware
     }
 
     /**
-     * Handles login redirect for non-authenticated users
+     * Check if user is loggedin
      *
      * @param RequestEvent $event The request event
      *
@@ -37,7 +37,7 @@ class AuthentificatedCheckMiddleware
         $request = $event->getRequest();
         $pathInfo = $request->getPathInfo();
 
-        // check if path info is a string and not login or register page
+        // check if pathInfo is excluded from authentication check
         if (
             is_string($pathInfo) &&
             $pathInfo !== '/api/external/log' &&

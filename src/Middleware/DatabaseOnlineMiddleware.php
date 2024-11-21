@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class DatabaseOnlineMiddleware
  *
- * The middleware for checking the database connection
+ * Middleware for checking the database connection
  *
  * @package App\Middleware
  */
@@ -37,11 +37,11 @@ class DatabaseOnlineMiddleware
     }
 
     /**
-     * Handle the database connection check
+     * Check database connection status
      *
      * @param RequestEvent $event The request event
      *
-     * @throws Exception If the database connection fails
+     * @throws Exception Database connection error
      *
      * @return void
      */
@@ -61,7 +61,7 @@ class DatabaseOnlineMiddleware
                 $this->logger->error('database connection error: ' . $e->getMessage());
             }
 
-            // render the internal error template
+            // return error response
             $content = $this->errorManager->getErrorView(Response::HTTP_INTERNAL_SERVER_ERROR);
             $response = new Response($content, Response::HTTP_INTERNAL_SERVER_ERROR);
             $event->setResponse($response);

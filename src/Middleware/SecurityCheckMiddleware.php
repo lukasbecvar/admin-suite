@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class SecurityCheckMiddleware
  *
- * The middleware for checking the security
+ * Middleware for checking the security rules
  *
  * @package App\Middleware
  */
@@ -19,16 +19,14 @@ class SecurityCheckMiddleware
     private AppUtil $appUtil;
     private ErrorManager $errorManager;
 
-    public function __construct(
-        AppUtil $appUtil,
-        ErrorManager $errorManager
-    ) {
+    public function __construct(AppUtil $appUtil, ErrorManager $errorManager)
+    {
         $this->appUtil = $appUtil;
         $this->errorManager = $errorManager;
     }
 
     /**
-     * Handle the security check (SSL only check)
+     * Handle the security rules check
      *
      * @param RequestEvent $event The request event
      *
@@ -36,7 +34,7 @@ class SecurityCheckMiddleware
      */
     public function onKernelRequest(RequestEvent $event): void
     {
-        // check if SSL check enabled
+        // check if SSL only enabled
         if ($this->appUtil->isSSLOnly() && !$this->appUtil->isSsl()) {
             // handle debug mode exception
             if ($this->appUtil->isDevMode()) {
@@ -46,7 +44,7 @@ class SecurityCheckMiddleware
                 );
             }
 
-            // render the maintenance template
+            // return error response
             $content = $this->errorManager->getErrorView(Response::HTTP_UPGRADE_REQUIRED);
             $response = new Response($content, Response::HTTP_UPGRADE_REQUIRED);
             $event->setResponse($response);

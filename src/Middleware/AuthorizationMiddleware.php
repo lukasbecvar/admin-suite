@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class AuthorizationMiddleware
  *
- * The middleware for checking the user authorization
+ * Middleware for checking the user authorization
  *
  * @package App\Middleware
  */
@@ -28,7 +28,7 @@ class AuthorizationMiddleware
     }
 
     /**
-     * Handle the user authorization check
+     * Check if user have permission to access the page
      *
      * @param RequestEvent $event The request event
      *
@@ -41,15 +41,15 @@ class AuthorizationMiddleware
         /** @var string $controller controller class path */
         $controller = $request->attributes->get('_controller');
 
-        // split the controller string into the class and method
+        // split controller string into the class and method
         list($controllerClass, $methodName) = explode('::', $controller);
 
-        // check if the method exists in the controller class
+        // check if method exists in the controller class
         if (!method_exists($controllerClass, $methodName)) {
             return;
         }
 
-        // get the reflection method object
+        // get reflection method object
         $reflectionMethod = new ReflectionMethod($controllerClass, $methodName);
 
         // get authorization attribute from method annotation
@@ -66,10 +66,8 @@ class AuthorizationMiddleware
 
         // check if user have permission to access the page
         if ($authorizationRequired == 'ADMIN' && !$this->authManager->isLoggedInUserAdmin()) {
-            // render the maintenance template
+            // return no permissions page
             $content = $this->twig->render('component/no-permissions.twig');
-
-            // set the response
             $response = new Response($content, Response::HTTP_FORBIDDEN);
             $event->setResponse($response);
         }
