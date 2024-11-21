@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class BanManager
  *
- * The BanManager is responsible for managing user ban system
+ * User ban system functionality
  *
  * @package App\Manager
  */
@@ -42,12 +42,12 @@ class BanManager
     }
 
     /**
-     * Ban a user
+     * Ban user
      *
-     * @param int $userId The id of the user to ban
-     * @param string $reason The reason for banning the user
+     * @param int $userId The id of user to ban
+     * @param string $reason The ban reason
      *
-     * @throws Exception If an error occurs while banning the user
+     * @throws Exception Error flush ban to database
      *
      * @return void
      */
@@ -55,10 +55,13 @@ class BanManager
     {
         // check if user is already banned
         if ($this->isUserBanned($userId)) {
-            return;
+            $this->errorManager->handleError(
+                message: 'user is already banned',
+                code: Response::HTTP_BAD_REQUEST
+            );
         }
 
-        // set banned data
+        // create banned entity
         $banned = new Banned();
         $banned->setReason($reason)
             ->setStatus('active')
@@ -77,7 +80,7 @@ class BanManager
             );
         }
 
-        // log action
+        // log ban event
         $this->logManager->log(
             name: 'ban-manager',
             message: 'user: ' . $userId . ' has been banned',
@@ -88,9 +91,9 @@ class BanManager
     /**
      * Check if user is banned
      *
-     * @param int $userId The id of the user
+     * @param int $userId The id of user
      *
-     * @return bool The banned status of the user
+     * @return bool The banned status of user
      */
     public function isUserBanned(int $userId): bool
     {
@@ -101,36 +104,43 @@ class BanManager
     /**
      * Get ban reason
      *
-     * @param int $userId The id of the user
+     * @param int $userId The id of user
      *
-     * @return string|null The reason for banning the user, or null if the user
+     * @return string|null The ban reason, or null if user is not banned
      */
     public function getBanReason(int $userId): ?string
     {
-        // check if banned repository exists
+        // check if banned repository exists (is user banned)
         if ($this->bannedRepository->isBanned($userId)) {
-            return $this->bannedRepository->getBanReason($userId);
+            // get ban reason
+            $banReason = $this->bannedRepository->getBanReason($userId);
+
+            // return ban reason
+            return $banReason;
         }
 
         return null;
     }
 
     /**
-     * Unban a user
+     * Unban user
      *
-     * @param int $userId The id of the user to unban
+     * @param int $userId The id of user to unban
+     *
+     * @throws Exception Error flush unban to database
      *
      * @return void
      */
     public function unBanUser(int $userId): void
     {
-        // check if banned repository exists
+        // check if banned repository exists (is user banned)
         if ($this->bannedRepository->isBanned($userId)) {
             // unban user
             try {
                 // set banned status to inactive
                 $this->bannedRepository->updateBanStatus($userId, 'inactive');
 
+                // flush changes to database
                 $this->entityManager->flush();
             } catch (Exception $e) {
                 $this->errorManager->handleError(
@@ -139,7 +149,7 @@ class BanManager
                 );
             }
 
-            // log action
+            // log unban event
             $this->logManager->log(
                 name: 'ban-manager',
                 message: 'user: ' . $userId . ' is unbanned',
@@ -174,7 +184,7 @@ class BanManager
     }
 
     /**
-     * Get the count of banned users
+     * Get count of banned users
      *
      * @return int The count of banned users
      */
