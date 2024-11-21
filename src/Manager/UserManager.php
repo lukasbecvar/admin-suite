@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class UserManager
  *
- * Contains methods to manage user data
+ * The manager for user system functionality
  *
  * @package App\Manager
  */
@@ -43,7 +43,7 @@ class UserManager
     }
 
     /**
-     * Retrieve a user from the repository based on search criteria
+     * Get user from the repository by search criteria
      *
      * @param array<mixed> $search The search criteria
      *
@@ -56,7 +56,7 @@ class UserManager
     }
 
     /**
-     * Retrieve all users from the repository
+     * Get all users from the repository
      *
      * @return array<User> The user object if found, null otherwise
      */
@@ -66,9 +66,9 @@ class UserManager
     }
 
     /**
-     * Retrieve a user from the repository by username
+     * Get user from the repository by username
      *
-     * @param string $username The username of the user to retrieve
+     * @param string $username The username of user to retrieve
      *
      * @return User|null The user object if found, null otherwise
      */
@@ -78,7 +78,7 @@ class UserManager
     }
 
     /**
-     * Retrieve a user from the repository by ID
+     * Get user from the repository by ID
      *
      * @param int $userId The ID of the user to retrieve
      *
@@ -90,7 +90,7 @@ class UserManager
     }
 
     /**
-     * Retrieve a user from the repository by token
+     * Get user from the repository by token
      *
      * @param string $token The token of the user to retrieve
      *
@@ -102,7 +102,7 @@ class UserManager
     }
 
     /**
-     * Retrieve all users count from the repository
+     * Get all users count from the repository
      *
      * @return int|null The user object if found, null otherwise
      */
@@ -112,7 +112,7 @@ class UserManager
     }
 
     /**
-     * Retrieve all users from the repository by page
+     * Get all users from the repository by page
      *
      * @param int $page The users list page number
      *
@@ -136,7 +136,7 @@ class UserManager
     }
 
     /**
-     * Check if a user exists
+     * Check if user exists
      *
      * @param string $username The username to check
      *
@@ -148,7 +148,7 @@ class UserManager
     }
 
     /**
-     * Check if a user exists by ID
+     * Get if user exists by ID
      *
      * @param int $userId The id of the user to check
      *
@@ -160,9 +160,9 @@ class UserManager
     }
 
     /**
-     * Get the username of a user
+     * Get username by ID
      *
-     * @param int $userId The id of the user to get the username
+     * @param int $userId The id of user to get username
      *
      * @return string The username of the user
      */
@@ -179,9 +179,9 @@ class UserManager
     }
 
     /**
-     * Get the role of a user
+     * Get user role by ID
      *
-     * @param int $userId The id of the user to get the role
+     * @param int $userId The user ID
      *
      * @return string The role of the user
      */
@@ -198,7 +198,7 @@ class UserManager
     }
 
     /**
-     * Checks if the specified user has the admin role
+     * Check if specified user is admin
      *
      * @param int $userId The id of the user to check the admin role
      *
@@ -217,12 +217,12 @@ class UserManager
     }
 
     /**
-     * Update the role of a user
+     * Update user role
      *
      * @param int $userId The id of the user to add the admin role
      * @param string $role The role to add
      *
-     * @throws Exception If there is an error while adding the admin role
+     * @throws Exception Error to flush updated user data to database
      *
      * @return void
      */
@@ -242,26 +242,26 @@ class UserManager
 
                 // flush updated user data
                 $this->entityManager->flush();
-
-                // log action
-                $this->logManager->log(
-                    name: 'user-manager',
-                    message: 'update role (' . $role . ') for user: ' . $repo->getUsername(),
-                    level: LogManager::LEVEL_WARNING
-                );
             } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to grant admin permissions: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
+
+            // log role update event
+            $this->logManager->log(
+                name: 'user-manager',
+                message: 'update role (' . $role . ') for user: ' . $repo->getUsername(),
+                level: LogManager::LEVEL_WARNING
+            );
         }
     }
 
     /**
-     * Checks if the user repository is empty
+     * Check if user repository is empty
      *
-     * @return bool True if the user repository is empty, false otherwise
+     * @return bool True if user repository is empty, false otherwise
      */
     public function isUsersEmpty(): bool
     {
@@ -279,11 +279,11 @@ class UserManager
     }
 
     /**
-     * Delete a user
+     * Delete user by ID
      *
-     * @param int $userId The id of the user to delete
+     * @param int $userId The user ID
      *
-     * @throws Exception If there is an error while deleting the user
+     * @throws Exception Error to remove user from database
      *
      * @return void
      */
@@ -298,29 +298,29 @@ class UserManager
                 // delete user
                 $this->entityManager->remove($repo);
                 $this->entityManager->flush();
-
-                // log action
-                $this->logManager->log(
-                    name: 'user-manager',
-                    message: 'user: ' . $repo->getUsername() . ' deleted',
-                    level: LogManager::LEVEL_WARNING
-                );
             } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to delete user: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
+
+            // log user delete event
+            $this->logManager->log(
+                name: 'user-manager',
+                message: 'user: ' . $repo->getUsername() . ' deleted',
+                level: LogManager::LEVEL_WARNING
+            );
         }
     }
 
     /**
-     * Update the user username
+     * Update user username
      *
-     * @param int $userId The id of the user to update the username
+     * @param int $userId The user ID
      * @param string $newUsername The new username
      *
-     * @throws Exception If there is an error while updating the username.
+     * @throws Exception Error to flush updated user data to database
      *
      * @return void
      */
@@ -340,29 +340,29 @@ class UserManager
 
                 // flush updated user data
                 $this->entityManager->flush();
-
-                // log action
-                $this->logManager->log(
-                    name: 'account-settings',
-                    message: 'update username (' . $newUsername . ') for user: ' . $oldUsername,
-                    level: LogManager::LEVEL_INFO
-                );
             } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to update username: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
+
+            // log username update event
+            $this->logManager->log(
+                name: 'account-settings',
+                message: 'update username (' . $newUsername . ') for user: ' . $oldUsername,
+                level: LogManager::LEVEL_INFO
+            );
         }
     }
 
     /**
-     * Update the user password
+     * Update user password
      *
-     * @param int $userId The id of the user to update the password
+     * @param int $userId The user ID
      * @param string $newPassword The new password
      *
-     * @throws Exception If there is an error while updating the password.
+     * @throws Exception Error to flush updated user data to database
      *
      * @return void
      */
@@ -382,29 +382,29 @@ class UserManager
 
                 // flush updated user data
                 $this->entityManager->flush();
-
-                // log action
-                $this->logManager->log(
-                    name: 'account-settings',
-                    message: 'update password for user: ' . $repo->getUsername(),
-                    level: LogManager::LEVEL_INFO
-                );
             } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to update password: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
+
+            // log password update event
+            $this->logManager->log(
+                name: 'account-settings',
+                message: 'update password for user: ' . $repo->getUsername(),
+                level: LogManager::LEVEL_INFO
+            );
         }
     }
 
     /**
-     * Update the user profile picture
+     * Update user profile picture
      *
-     * @param int $userId The id of the user to update the profile picture
-     * @param string $newProfilePicture The new profile picture
+     * @param int $userId The user ID
+     * @param string $newProfilePicture The new profile picture (base64 encoded)
      *
-     * @throws Exception If there is an error while updating the profile picture.
+     * @throws Exception If there is an error while updating the profile picture
      *
      * @return void
      */
@@ -421,19 +421,19 @@ class UserManager
 
                 // flush updated user data
                 $this->entityManager->flush();
-
-                // log action
-                $this->logManager->log(
-                    name: 'account-settings',
-                    message: 'update profile picture for user: ' . $repo->getUsername(),
-                    level: LogManager::LEVEL_INFO
-                );
             } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to update profile picture: ' . $e->getMessage(),
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
+
+            // log profile picture update event
+            $this->logManager->log(
+                name: 'account-settings',
+                message: 'update profile picture for user: ' . $repo->getUsername(),
+                level: LogManager::LEVEL_INFO
+            );
         }
     }
 }
