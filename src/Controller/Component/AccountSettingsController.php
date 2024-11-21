@@ -59,6 +59,8 @@ class AccountSettingsController extends AbstractController
      *
      * @param Request $request The request object
      *
+     * @throws Exception Error to change profile picture
+     *
      * @return Response The response profile picture change form
      */
     #[Route('/account/settings/change/picture', methods:['GET', 'POST'], name: 'app_account_settings_change_picture')]
@@ -131,6 +133,8 @@ class AccountSettingsController extends AbstractController
      *
      * @param Request $request The request object
      *
+     * @throws Exception Error to change username
+     *
      * @return Response The response with username change form
      */
     #[Route('/account/settings/change/username', methods:['GET', 'POST'], name: 'app_account_settings_change_username')]
@@ -193,6 +197,8 @@ class AccountSettingsController extends AbstractController
      * Render change password form
      *
      * @param Request $request The request object
+     *
+     * @throws Exception Error to change password
      *
      * @return Response The response with password change form view
      */

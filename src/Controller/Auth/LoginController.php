@@ -44,6 +44,8 @@ class LoginController extends AbstractController
      *
      * @param Request $request The request object
      *
+     * @throws Exception Error to user login process
+     *
      * @return Response The login view or redirect
      */
     #[Route('/login', methods:['GET', 'POST'], name: 'app_auth_login')]

@@ -44,6 +44,8 @@ class RegisterController extends AbstractController
      *
      * @param Request $request The request object
      *
+     * @throws Exception Error to register process
+     *
      * @return Response The registration view or redirect
      */
     #[Route('/register', methods:['GET', 'POST'], name: 'app_auth_register')]

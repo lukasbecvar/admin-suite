@@ -64,7 +64,7 @@ class AuthManager
     }
 
     /**
-     * Check if a username is blocked
+     * Check is username is blocked
      *
      * @param string $username The username to check
      *
@@ -72,33 +72,33 @@ class AuthManager
      */
     public function isUsernameBlocked(string $username): bool
     {
-        // get blocked usernames config file
+        // get blocked usernames array from config file
         $blockedUsernames = $this->appUtil->loadConfig('blocked-usernames.json');
 
-        // check if blocked usernames config file found
+        // check is blocked usernames array found
         if ($blockedUsernames == null) {
             return false;
         }
 
-        // check if username is blocked
+        // check is username is blocked
         $result = in_array($username, $blockedUsernames);
 
         return $result;
     }
 
     /**
-     * Register a new user to database
+     * Register new user to database
      *
      * @param string $username The username of the new user
      * @param string $password The password of the new user
      *
-     * @throws \Exception If there is an error while registering the new user
+     * @throws Exception New user flush to database failed
      *
      * @return void
      */
     public function registerUser(string $username, string $password): void
     {
-        // check if username is system
+        // check is username is blocked
         if ($this->isUsernameBlocked($username)) {
             $this->errorManager->handleError(
                 'error to register new user: username is system',
@@ -106,85 +106,85 @@ class AuthManager
             );
         }
 
-        // check if user already exist
+        // check if user already exist in database
         if ($this->userManager->checkIfUserExist($username)) {
-            return;
+            $this->errorManager->handleError(
+                'error to register new user: username already exist',
+                Response::HTTP_FORBIDDEN
+            );
         }
 
-        // generate entity token
+        // generate user auth token
         $token = $this->generateUserToken();
 
-        // hash password
+        // hash user password
         $password = $this->securityUtil->generateHash($password);
 
         // get current time
         $time = new DateTime();
 
-        // get ip address
+        // get user ip address
         $ip_address = $this->visitorInfoUtil->getIP();
 
-        // get user agent
+        // get user browser agent
         $user_agent = $this->visitorInfoUtil->getUserAgent();
 
-        // check if ip address is null
+        // check if ip address is unknown
         if ($ip_address == null) {
             $ip_address = 'Unknown';
         }
 
-        // check if ip address is null
+        // check if user agent is unknown
         if ($user_agent == null) {
             $user_agent = 'Unknown';
         }
 
-        // check if user exist
-        if ($this->userManager->getUserByUsername($username) == null) {
-            try {
-                // init user entity
-                $user = new User();
+        // init user entity
+        $user = new User();
 
-                // set user properties
-                $user->setUsername($username)
-                    ->setPassword($password)
-                    ->setRole('USER')
-                    ->setIpAddress($ip_address)
-                    ->setUserAgent($user_agent)
-                    ->setToken($token)
-                    ->setProfilePic('default_pic')
-                    ->setRegisterTime($time)
-                    ->setLastLoginTime($time);
+        // set new user properties
+        $user->setUsername($username)
+            ->setPassword($password)
+            ->setRole('USER')
+            ->setIpAddress($ip_address)
+            ->setUserAgent($user_agent)
+            ->setToken($token)
+            ->setProfilePic('default_pic')
+            ->setRegisterTime($time)
+            ->setLastLoginTime($time);
 
-                // flush user to database
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
+        try {
+            // persist and flush user to database
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
 
-                // log action
-                $this->logManager->log(
-                    name: 'authenticator',
-                    message: 'new registration user: ' . $username,
-                    level: LogManager::LEVEL_CRITICAL
-                );
-            } catch (Exception $e) {
-                $this->errorManager->handleError(
-                    message: 'error to register new user: ' . $e->getMessage(),
-                    code: Response::HTTP_INTERNAL_SERVER_ERROR
-                );
-            }
+            // log user registration event
+            $this->logManager->log(
+                name: 'authenticator',
+                message: 'new registration user: ' . $username,
+                level: LogManager::LEVEL_CRITICAL
+            );
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to register new user: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
     /**
-     * Get current user logged user repository
+     * Get current logged user repository
      *
      * @return User|null The user object if found, null otherwise
      */
     public function getLoggedUserRepository(): ?User
     {
-        // check if user logged in
+        // check is user logged in
         if (!$this->isUserLogedin()) {
             return null;
         }
 
-        // get logged user token
+        // get logged user token from session
         $token = $this->sessionUtil->getSessionValue('user-token');
 
         // check if token is string
@@ -195,31 +195,31 @@ class AuthManager
             );
         }
 
-        // get logged user repository
+        // get user repository by auth token
         return $this->userManager->getUserByToken($token);
     }
 
     /**
-     * Check if current logged user is admin
+     * Check is current logged user is admin
      *
      * @return bool The is user admin or not
      */
     public function isLoggedInUserAdmin(): bool
     {
-        // check if user logged in
+        // check is user logged in
         if (!$this->isUserLogedin()) {
             return false;
         }
 
-        // get logged user
+        // get logged user repository
         $user = $this->getLoggedUserRepository();
 
-        // check if user exist
+        // check is user exist
         if ($user == null) {
             return false;
         }
 
-        // check if user is admin
+        // check is user is admin
         if ($this->userManager->isUserAdmin((int) $user->getId())) {
             return true;
         }
@@ -228,7 +228,7 @@ class AuthManager
     }
 
     /**
-     * Check if user is logged in
+     * Check is user logged in
      *
      * @return bool The user is logged in or not
      */
@@ -239,10 +239,10 @@ class AuthManager
             return false;
         }
 
-        // get login token form session
+        // get login auth token form session
         $loginToken = $this->sessionUtil->getSessionValue('user-token');
 
-        // check if login token is string
+        // check is login token is string
         if (!is_string($loginToken)) {
             $this->errorManager->handleError(
                 message: 'error to check if user is logged in: login token is not a string',
@@ -250,7 +250,7 @@ class AuthManager
             );
         }
 
-        // check if token exist in database
+        // check is user token exist in database
         if ($this->userManager->getUserByToken($loginToken) != null) {
             return true;
         }
@@ -264,11 +264,11 @@ class AuthManager
      * @param string $username The username of the user
      * @param string $password The password of the user
      *
-     * @return bool True if the user can login, otherwise false
+     * @return bool True if user can login, otherwise false
      */
     public function canLogin(string $username, string $password): bool
     {
-        // get user
+        // get user repository
         $user = $this->userManager->getUserByUsername($username);
 
         // check if user exist
@@ -277,50 +277,59 @@ class AuthManager
             if ($this->securityUtil->verifyPassword($password, (string) $user->getPassword())) {
                 return true;
             }
-        } else {
-            // log invalid credentials
-            $this->logManager->log(
-                name: 'authenticator',
-                message: 'invalid login user: ' . $username . ':' . $password,
-                level: LogManager::LEVEL_CRITICAL
-            );
         }
+
+        // log invalid credentials
+        $this->logManager->log(
+            name: 'authenticator',
+            message: 'invalid login user: ' . $username . ':' . $password,
+            level: LogManager::LEVEL_CRITICAL
+        );
 
         return false;
     }
 
     /**
-     * Login a user to the system
+     * Login user to the system
      *
      * @param string $username The username of the user
      * @param bool $remember Whether to remember the user
+     *
+     * @throws Exception Login process error
      *
      * @return void
      */
     public function login(string $username, bool $remember): void
     {
-        // get user
+        // get user repository
         $user = $this->userManager->getUserByUsername($username);
 
         // check if user exist
         if ($user != null) {
-            // get user token
+            // get user auth token
             $token = (string) $user->getToken();
 
             try {
-                // set user token session
+                // set user auth token to session storage
                 $this->sessionUtil->setSession('user-token', $token);
 
                 // save user identifier in session
                 $this->sessionUtil->setSession('user-identifier', (string) $user->getId());
 
-                // set user token cookie
+                // set user token cookie for auto login on browser restart
                 if ($remember) {
                     $this->cookieUtil->set('user-token', $token, time() + (60 * 60 * 24 * 7 * 365));
                 }
 
-                // update user data
+                // update user login time and ip address
                 $this->updateDataOnLogin($token);
+
+                // log user login event
+                $this->logManager->log(
+                    name: 'authenticator',
+                    message: 'login user: ' . $username,
+                    level: LogManager::LEVEL_CRITICAL
+                );
 
                 // send email alert
                 if (!$this->logManager->isAntiLogEnabled()) {
@@ -330,13 +339,6 @@ class AuthManager
                         message: 'User ' . $username . ' has logged to admin-suite dashboard, login log has been saved in database.'
                     );
                 }
-
-                // log action
-                $this->logManager->log(
-                    name: 'authenticator',
-                    message: 'login user: ' . $username,
-                    level: LogManager::LEVEL_CRITICAL
-                );
             } catch (Exception $e) {
                 $this->errorManager->handleError(
                     message: 'error to login user: ' . $e->getMessage(),
@@ -349,15 +351,15 @@ class AuthManager
     /**
      * Update user data on login
      *
-     * @param string $token The token of the user
+     * @param string $token The user token
      *
-     * @throws \Exception If there is an error while updating the user data
+     * @throws Exception User data update flush to database failed
      *
      * @return void
      */
     public function updateDataOnLogin(string $token): void
     {
-        // get user
+        // get user repository
         $user = $this->userManager->getUserByToken($token);
 
         // check if user found
@@ -373,8 +375,8 @@ class AuthManager
             ->setIpAddress($this->visitorInfoUtil->getIP() ?? 'Unknown')
             ->setUserAgent($this->visitorInfoUtil->getUserAgent() ?? 'Unknown');
 
-        // flush updated user data
         try {
+            // flush updated user data
             $this->entityManager->flush();
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -385,17 +387,17 @@ class AuthManager
     }
 
     /**
-     * Get the id of the logged user
+     * Get current logged user id
      *
-     * @return int The id of the logged in user
+     * @return int The id of logged in user
      */
     public function getLoggedUserId(): int
     {
         $userId = 0;
 
-        // check if user logged in
+        // check if user is logged in
         if ($this->isUserLogedin()) {
-            // get user token
+            // get user auth token
             $token = $this->getLoggedUserToken();
 
             // check if token is string
@@ -420,9 +422,9 @@ class AuthManager
     }
 
     /**
-     * Get the login token for the current user session
+     * Get current logged user token
      *
-     * @return string|null The login token or null if not found or invalid.
+     * @return string|null The login token or null if not found or invalid
      */
     public function getLoggedUserToken(): string|null
     {
@@ -431,10 +433,10 @@ class AuthManager
             return null;
         }
 
-        // get login token form session
+        // get auth token from session storage
         $loginToken = $this->sessionUtil->getSessionValue('user-token');
 
-        // check if login token is string
+        // check if token is string
         if (!is_string($loginToken)) {
             $this->errorManager->handleError(
                 message: 'error to get logged user token: login token is not a string',
@@ -451,13 +453,13 @@ class AuthManager
     }
 
     /**
-     * Get the username of the logged user
+     * Get current logged user username
      *
-     * @return string|null The username of the logged user or null if not found or invalid.
+     * @return string|null The username of the logged user or null if not found or invalid
      */
     public function getLoggedUsername(): ?string
     {
-        // get logged user token
+        // get current logged user token
         $token = $this->getLoggedUserToken();
 
         // check if token is string
@@ -468,6 +470,7 @@ class AuthManager
             );
         }
 
+        // get user repository by auth token
         $user = $this->userManager->getUserByToken($token);
 
         // check if user exist
@@ -478,17 +481,20 @@ class AuthManager
             );
         }
 
-        return $user->getUsername();
+        // get user username
+        $username = $user->getUsername();
+
+        return $username;
     }
 
     /**
-     * User logout action
+     * Logout user action
      *
      * @return void
      */
     public function logout(): void
     {
-        // check if user logged in
+        // check is user logged in
         if ($this->isUserLogedin()) {
             // get logged user token
             $token = $this->getLoggedUserToken();
@@ -501,7 +507,7 @@ class AuthManager
                 );
             }
 
-            // get user
+            // get user repository by auth token
             $user = $this->userManager->getUserByToken($token);
 
             // check if user found
@@ -512,7 +518,7 @@ class AuthManager
                 );
             }
 
-            // log logout event
+            // log user logout event
             $this->logManager->log(
                 name: 'authenticator',
                 message: 'logout user: ' . $user->getUsername(),
@@ -528,9 +534,11 @@ class AuthManager
     }
 
     /**
-     * Reset user password
+     * Reset the user password
      *
-     * @param string $username The username of the user
+     * @param string $username The username to password reset
+     *
+     * @throws Exception Password reset process error
      *
      * @return string|null The new password or null on error
      */
@@ -542,23 +550,23 @@ class AuthManager
         // check if user exist
         if ($user != null) {
             try {
-                // generate new password
+                // generate new user password
                 $newPassword = ByteString::fromRandom(32)->toString();
 
-                // hash new password
+                // hash new user password
                 $newPasswordHash = $this->securityUtil->generateHash($newPassword);
 
-                // genetate new token
+                // genetate new auth token
                 $newToken = $this->generateUserToken();
 
-                // set new password
+                // set new password and auth token
                 $user->setPassword($newPasswordHash);
                 $user->setToken($newToken);
 
                 // flush update to database
                 $this->entityManager->flush();
 
-                // log password reset
+                // log password reset event
                 $this->logManager->log(
                     name: 'authenticator',
                     message: 'user: ' . $username . ' password reset is success',
@@ -571,21 +579,21 @@ class AuthManager
                 );
             }
 
-            // return new password
+            // return new user password
             return $newPassword;
         }
 
-        // return non existing user
+        // default return (non existing user)
         return null;
     }
 
     /**
      * Regenerate tokens for all users in the database
      *
-     * This method regenerates tokens for all users in the database, ensuring uniqueness for each token
+     * @throws Exception Error to flush new user tokens to database
      *
-     * @return array<bool|null|string> An array containing the status of the operation and any relevant message
-     * - The 'status' key indicates whether the operation was successful (true) or not (false)
+     * @return array<bool|null|string> An array containing the status of operation
+     * - The 'status' key indicates if the operation was successful (true) or not (false)
      * - The 'message' key contains any relevant error message if the operation failed, otherwise it is null
      */
     public function regenerateUsersTokens(): array
@@ -600,15 +608,15 @@ class AuthManager
 
         // regenerate all users tokens
         foreach ($userRepositories as $user) {
-            // regenerate new token
+            // generate new auth token
             $newToken = $this->generateUserToken();
 
-            // set new token
+            // set new user token
             $user->setToken($newToken);
         }
 
-        // flush changes to database
         try {
+            // flush changes to database
             $this->entityManager->flush();
         } catch (Exception $e) {
             $state = [
@@ -617,31 +625,28 @@ class AuthManager
             ];
         }
 
-        // log action
+        // log regenerate all users tokens event
         $this->logManager->log(
             name: 'authenticator',
             message: 'regenerate all users tokens',
             level: LogManager::LEVEL_WARNING
         );
 
-        // return process state output
+        // return process status output
         return $state;
     }
 
     /**
-     * Generate a unique token for a user
+     * Generate aunique 32 characters length auth token for a user
      *
      * @return string The generated user token
      */
     public function generateUserToken(): string
     {
-        // generate user token
-        $token = ByteString::fromRandom(32)->toString();
-
-        // check if user token is not already used
-        if ($this->userManager->getUserByToken($token) != null) {
-            $this->generateUserToken();
-        }
+        do {
+            // generate user token
+            $token = ByteString::fromRandom(32)->toString();
+        } while ($this->userManager->getUserByToken($token) != null);
 
         return $token;
     }
@@ -649,7 +654,7 @@ class AuthManager
     /**
      * Store online user id in cache
      *
-     * @param int $userId The id of the user to store
+     * @param int $userId The id of user to store
      *
      * @return void
      */
@@ -696,22 +701,22 @@ class AuthManager
     }
 
     /**
-     * Get user status
+     * Get user online status
      *
      * @param int $userId The id of the user
      *
-     * @return string The status of the user
+     * @return string The user online status
      */
     public function getUserStatus(int $userId): string
     {
         $userCacheKey = 'online_user_' . $userId;
 
-        // get the cache item
+        // get user status form cache
         $cacheItem = $this->cacheUtil->getValue($userCacheKey);
 
-        // check if cache item exists and is not expired
+        // check if item is cache item object
         if ($cacheItem instanceof CacheItemInterface) {
-            // retrieve the value from the cache item
+            // get value from cache item
             $status = $cacheItem->get();
 
             // check if status found

@@ -45,6 +45,8 @@ class PushNotificationsApiController extends AbstractController
     /**
      * Get VAPID public key
      *
+     * @throws Exception Error to get VAPID public key
+     *
      * @return JsonResponse The public key response
      */
     #[Route('/api/notifications/public-key', methods: ['GET'], name: 'api_notifications_get_vapid_public_key')]
@@ -83,6 +85,8 @@ class PushNotificationsApiController extends AbstractController
      * API for subscribe to push notifications
      *
      * @param Request $request The request object
+     *
+     * @throws Exception Error subscribe to push notifications
      *
      * @return JsonResponse The response with the status of the subscription
      */

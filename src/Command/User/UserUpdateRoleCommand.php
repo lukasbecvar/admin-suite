@@ -46,7 +46,7 @@ class UserUpdateRoleCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @throws \Exception If an error occurs
+     * @throws Exception Error to update user role
      *
      * @return int The status code
      */

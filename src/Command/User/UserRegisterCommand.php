@@ -49,6 +49,8 @@ class UserRegisterCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
+     * @throws Exception Error to register user
+     *
      * @return int The status code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int

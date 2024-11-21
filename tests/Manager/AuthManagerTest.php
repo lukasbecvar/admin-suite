@@ -148,12 +148,22 @@ class AuthManagerTest extends TestCase
         // mock user already exists
         $this->userManagerMock->method('checkIfUserExist')->willReturn(true);
 
+        // mock handleError to throw exception
+        $this->errorManagerMock
+            ->method('handleError')
+            ->willThrowException(new Exception('error to register new user: username already exist'));
+
         // expect entity manager not to be called
         $this->entityManagerMock->expects($this->never())->method('persist');
+
+        // expect exception to be thrown
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('error to register new user: username already exist');
 
         // call test method
         $this->authManager->registerUser('existingUser', 'password');
     }
+
 
     /**
      * Test register user with successful registration

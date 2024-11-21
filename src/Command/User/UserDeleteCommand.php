@@ -45,7 +45,7 @@ class UserDeleteCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @throws \Exception If an error occurs while executing the command
+     * @throws Exception Error delete user
      *
      * @return int The status code
      */

@@ -48,6 +48,8 @@ class UserPasswordResetCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
+     * @throws Exception Error to reset user password
+     *
      * @return int The status code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
