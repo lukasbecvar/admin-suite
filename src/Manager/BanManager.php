@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class BanManager
  *
- * User ban system functionality
+ * The manager for user ban system functionality
  *
  * @package App\Manager
  */

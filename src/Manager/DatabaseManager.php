@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class DatabaseManager
  *
- * The manager for database connection
+ * The manager for database operations
  *
  * @package App\Manager
  */
@@ -63,9 +63,9 @@ class DatabaseManager
     }
 
     /**
-     * Get the list of databases
+     * Get list of databases
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Database list get error
      *
      * @return array<int,array<string,mixed>> The list of databases
      */
@@ -81,18 +81,19 @@ class DatabaseManager
             foreach ($databases as $db) {
                 $dbName = $db['Database'];
 
-                // get the number of tables
+                // get number of tables
                 $sqlTables = "SELECT COUNT(*) as table_count FROM information_schema.tables WHERE table_schema = :dbName";
                 $stmtTables = $this->connection->executeQuery($sqlTables, ['dbName' => $dbName]);
                 $tableCount = $stmtTables->fetchOne();
 
-                // get the size of the database
+                // get size of the database
                 $sqlSize = "SELECT SUM(data_length + index_length) / 1024 / 1024 as size_mb 
                             FROM information_schema.tables 
                             WHERE table_schema = :dbName";
                 $stmtSize = $this->connection->executeQuery($sqlSize, ['dbName' => $dbName]);
                 $sizeMb = $stmtSize->fetchOne();
 
+                // add database info to list
                 $databaseInfo[] = [
                     'name' => $dbName,
                     'table_count' => $tableCount,
@@ -100,7 +101,7 @@ class DatabaseManager
                 ];
             }
 
-            // log the action
+            // log database list get event
             $this->logManager->log(
                 name: 'database-manager',
                 message: 'get databases list',
@@ -121,7 +122,7 @@ class DatabaseManager
      *
      * @param string $dbName The name of the database
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error chacking database exists
      *
      * @return bool True if the database exists, false otherwise
      */
@@ -143,11 +144,11 @@ class DatabaseManager
     }
 
     /**
-     * Get the list of tables in a database
+     * Get list of tables in a database
      *
      * @param string $dbName The database name
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error getting tables list
      *
      * @return array<int,array<string,mixed>>|null The list of tables
      */
@@ -190,7 +191,7 @@ class DatabaseManager
                 $tablesWithRows[] = $table;
             }
 
-            // log the action
+            // log tables list get event
             $this->logManager->log(
                 name: 'database-manager',
                 message: 'get tables list',
@@ -212,7 +213,7 @@ class DatabaseManager
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error checking table exists
      *
      * @return bool True if the table exists, false otherwise
      */
@@ -240,21 +241,23 @@ class DatabaseManager
     }
 
     /**
-     * Get the number of rows in a specific table in a specific database
+     * Get number of rows in a specific table in a specific database
      *
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error getting table records count
      *
      * @return int The number of rows in the table
      */
     public function getTableRowCount(string $dbName, string $tableName): int
     {
+        // check if table exists
         if (!$this->isTableExists($dbName, $tableName)) {
             return 0;
         }
 
+        // select count query
         $sql = "SELECT COUNT(*) FROM {$dbName}.{$tableName}";
 
         try {
@@ -285,12 +288,13 @@ class DatabaseManager
      * @param string $tableName The name of the table
      * @param int $page The page number (1-based index)
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error getting table data
      *
-     * @return array<mixed> The data from the table for the specified page
+     * @return array<mixed> Data from the table for the specified page
      */
     public function getTableData(string $dbName, string $tableName, int $page = 1): ?array
     {
+        // check if table exists
         if (!$this->isTableExists($dbName, $tableName)) {
             $this->errorManager->handleError(
                 message: 'table. ' . $tableName . ' not found in database: ' . $dbName,
@@ -298,13 +302,13 @@ class DatabaseManager
             );
         }
 
-        // get the number of rows in the table
+        // get number of rows in the table
         $pageLimit = (int) $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
 
-        // calculate the offset for pagination
+        // calculate offset for pagination
         $offset = ($page - 1) * $pageLimit;
 
-        // ensure the offset is non-negative
+        // ensure offset is non-negative
         $offset = max($offset, 0);
 
         // build the SQL query
@@ -319,7 +323,7 @@ class DatabaseManager
                 'pageSize' => \Doctrine\DBAL\ParameterType::INTEGER
             ]);
 
-            // log the action
+            // log table data get event
             $this->logManager->log(
                 name: 'database-manager',
                 message: 'get table: ' . $tableName . ' data',
@@ -336,17 +340,18 @@ class DatabaseManager
     }
 
     /**
-     * Get the last page number for a specific table in a specific database
+     * Get last page number for a specific table in a specific database
      *
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error getting last page number
      *
      * @return int The last page number
      */
     public function getLastPageNumber(string $dbName, string $tableName): int
     {
+        // check if table exists
         if (!$this->isTableExists($dbName, $tableName)) {
             $this->errorManager->handleError(
                 message: 'table ' . $tableName . ' not found in database: ' . $dbName,
@@ -354,26 +359,30 @@ class DatabaseManager
             );
         }
 
-        // get the number of rows in the table
+        // get number of rows in the table
         $pageLimit = (int) $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
 
-        // build the SQL query to get the total number of rows
+        // build SQL query to get the total number of rows
         $sql = "SELECT COUNT(*) AS total_rows FROM {$dbName}.{$tableName}";
 
         try {
             $stmt = $this->connection->executeQuery($sql);
             $result = $stmt->fetchAssociative();
 
+            // check if result found
             if (!$result || !isset($result['total_rows'])) {
-                throw new RuntimeException('Failed to retrieve the total row count.');
+                $this->errorManager->handleError(
+                    message: 'error retrieving the total row count',
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                );
             }
 
             $totalRows = $result['total_rows'];
 
-            // calculate the total number of pages
+            // calculate total number of pages
             $totalPages = (int) ceil($totalRows / $pageLimit);
 
-            // return the last page number
+            // return last page number
             return max($totalPages, 1);
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -384,17 +393,18 @@ class DatabaseManager
     }
 
     /**
-     * Get the list of columns in a specific table in a specific database
+     * Get list of columns in a specific table in a specific database
      *
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error getting columns list
      *
      * @return array<int,array<string,mixed>> The list of columns
      */
     public function getColumnsList(string $dbName, string $tableName): array
     {
+        // select columns query
         $sql = "SELECT 
                     COLUMN_NAME, 
                     COLUMN_TYPE, 
@@ -407,11 +417,16 @@ class DatabaseManager
                 ORDER BY ORDINAL_POSITION";
 
         try {
+            // execute select columns query
             $stmt = $this->connection->executeQuery($sql, [
                 'dbName' => $dbName,
                 'tableName' => $tableName,
             ]);
+
+            // get columns list
             $columns = $stmt->fetchAllAssociative();
+
+            // return columns list
             return $columns;
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -428,19 +443,23 @@ class DatabaseManager
      * @param string $tableName The name of the table
      * @param int $id The ID of the row to retrieve
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error getting row by ID
      *
      * @return array<mixed>|null The row data or null if not found
      */
     public function getRowById(string $databaseName, string $tableName, int $id): ?array
     {
+        // select row query
         $sql = 'SELECT * FROM ' . $databaseName . '.' . $tableName . ' WHERE id = :id';
 
         try {
+            // execute select row query
             $stmt = $this->connection->executeQuery($sql, ['id' => $id]);
+
+            // get row data
             $row = $stmt->fetchAssociative();
 
-            // check if the row exists
+            // check if row exists
             if (!$row) {
                 $this->errorManager->handleError(
                     message: 'error retrieving row id: ' . $id . ' in table: ' . $tableName . ' in database: ' . $databaseName . ' row not found',
@@ -458,18 +477,19 @@ class DatabaseManager
     }
 
     /**
-     * Check if a record with the given ID exists in the specified table and database.
+     * Check if a record with the given ID exists in the specified table and database
      *
-     * @param string $databaseName The name of the database.
-     * @param string $tableName The name of the table.
-     * @param int|string $id The ID to check for.
+     * @param string $databaseName The name of the database
+     * @param string $tableName The name of the table
+     * @param int|string $id The ID to check for
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error checking record
      *
-     * @return bool True if the record exists, false otherwise.
+     * @return bool True if the record exists, false otherwise
      */
     public function doesRecordExist(string $databaseName, string $tableName, $id): bool
     {
+        // select count query
         $sql = sprintf(
             "SELECT COUNT(*) AS count FROM %s.%s WHERE id = :id",
             $this->connection->quoteIdentifier($databaseName),
@@ -496,7 +516,7 @@ class DatabaseManager
      * @param string $databaseName The name of the database
      * @param string $tableName The name of the table
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error executing add row query to database
      *
      * @return void
      */
@@ -517,10 +537,10 @@ class DatabaseManager
                 implode(',', $placeholders)
             );
 
-            // execute the query
+            // execute query
             $this->connection->executeQuery($sql, $formData);
 
-            // log the action
+            // log add row event
             $this->logManager->log(
                 name: 'database-manager',
                 message: 'add row to table: ' . $tableName,
@@ -535,14 +555,14 @@ class DatabaseManager
     }
 
     /**
-     * Update a row in a specific table in a specific database
+     * Update row in a specific table in a specific database
      *
      * @param array<mixed> $formData The submitted form data
      * @param string $databaseName The name of the database
      * @param string $tableName The name of the table
      * @param int $id The ID of the row to update
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error updating row
      *
      * @return void
      */
@@ -552,11 +572,11 @@ class DatabaseManager
         unset($formData['database'], $formData['table'], $formData['page']);
 
         try {
-            // Create the list of column placeholders for the update query
+            // create the list of column placeholders for the update query
             $columnsList = array_keys($formData);
             $setClause = implode(', ', array_map(fn($column) => "$column = :$column", $columnsList));
 
-            // Build the SQL query for updating the row
+            // build the SQL query for updating the row
             $sql = sprintf(
                 'UPDATE %s.%s SET %s WHERE id = :id',
                 $databaseName,
@@ -564,32 +584,32 @@ class DatabaseManager
                 $setClause
             );
 
-            // Execute the query with the data
+            // execute query with the data
             $formData['id'] = $id;
             $this->connection->executeQuery($sql, $formData);
 
-            // Log the update action
+            // log update row event
             $this->logManager->log(
                 name: 'database-manager',
-                message: "Updated row with ID: $id in table: $tableName in database: $databaseName",
+                message: 'updated row with ID: ' . $id . ' in table: ' . $tableName . ' in database: ' . $databaseName,
                 level: LogManager::LEVEL_NOTICE
             );
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                message: "Error updating row: " . $e->getMessage() . " in table: $tableName in database: $databaseName",
+                message: 'error updating row: ' . $e->getMessage() . ' in table: ' . $tableName . ' in database: ' . $databaseName,
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
 
     /**
-     * Delete a row from a specific table in a specific database
+     * Delete row from a specific table in a specific database
      *
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      * @param int $id The ID of the row to delete
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error deleting row
      *
      * @return bool True if the row was deleted successfully, false otherwise
      */
@@ -604,7 +624,7 @@ class DatabaseManager
                 'id' => $id
             ]);
 
-            // log the event
+            // log delete row event
             $this->logManager->log(
                 name: 'database-manager',
                 message: "deleted row with ID: $id from table: $tableName in database: $dbName",
@@ -621,23 +641,25 @@ class DatabaseManager
     }
 
     /**
-     * Truncate a table in a specific database
+     * Truncate table in a specific database
      *
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error truncating table
      *
      * @return void
      */
     public function tableTruncate(string $dbName, string $tableName): void
     {
+        // truncate table query
         $sql = 'TRUNCATE TABLE ' . $dbName . '.' . $tableName;
 
         try {
+            // execute truncate table query
             $this->connection->executeStatement($sql);
 
-            // log the event
+            // log truncate table event
             $this->logManager->log(
                 name: 'database-manager',
                 message: "truncated table: $tableName in database: $dbName",
@@ -657,23 +679,18 @@ class DatabaseManager
      * @param string $dbName The name of the database
      * @param bool $plain Whether to return the dump in plain text format
      *
-     * @throws Exception If an error occurs while executing the query
+     * @throws Exception Error getting database dump
      *
      * @return string The database dump
      */
     public function getDatabaseDump(string $dbName, bool $plain = false): string
     {
+        // get tables list
         $tables = $this->connection->fetchAllAssociative('SHOW TABLES FROM ' . $this->connection->quoteIdentifier($dbName));
 
-        $dump = '';
-
-        // dump header
-        $dump .= '-- Database: ' . $dbName . " dumped at: " . date('Y-m-d H:i:s') . " with admin-suite\n\n";
-
-        // set character
+        // build database dump header
+        $dump = '-- Database: ' . $dbName . " dumped at: " . date('Y-m-d H:i:s') . " with admin-suite\n\n";
         $dump .= 'SET NAMES utf8mb4;' . "\n\n";
-
-        // drop and create database
         $dump .= 'DROP DATABASE IF EXISTS ' . $dbName . ";\n";
         $dump .= 'CREATE DATABASE ' . $dbName . ";\n";
         $dump .= 'USE ' . $dbName . ";\n\n";
@@ -713,7 +730,7 @@ class DatabaseManager
                 }
             }
 
-            // log the action
+            // log database dump event
             $this->logManager->log(
                 name: 'database-manager',
                 message: 'get database dump',
@@ -730,11 +747,11 @@ class DatabaseManager
     }
 
     /**
-     * Execute a query
+     * Execute database query
      *
      * @param string $query The query to execute
      *
-     * @return string The output of the query
+     * @return string The query output
      */
     public function executeQuery(string $query): string
     {
@@ -750,15 +767,16 @@ class DatabaseManager
 
             // execute multiple queries
             $result = '';
-            $queries = $this->splitQueries($query); // split the query
+            $queries = $this->splitQueries($query); // split query
 
+            // execute all split queries
             foreach ($queries as $q) {
                 $q = trim($q);
                 if (!empty($q)) {
-                    // execute the query
+                    // execute query
                     $stmt = $pdo->query($q);
 
-                    // check statement
+                    // check if query executed
                     if ($stmt == false) {
                         $this->errorManager->handleError(
                             message: 'error executing query statement: ' . $q,
@@ -766,10 +784,10 @@ class DatabaseManager
                         );
                     }
 
-                    // fetch all results
+                    // fetch result
                     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                    // format results as a string
+                    // format result
                     if ($data) {
                         foreach ($data as $row) {
                             $result .= implode("\t", $row) . "\n";
@@ -783,7 +801,7 @@ class DatabaseManager
                 $result = 'Query executed successfully';
             }
 
-            // log the action
+            // log execute query event
             $this->logManager->log(
                 name: 'database-manager',
                 message: 'Executed query',
@@ -792,7 +810,7 @@ class DatabaseManager
 
             return $result;
         } catch (PDOException $e) {
-            // return the error message
+            // return error message
             return $e->getMessage();
         }
     }
@@ -830,7 +848,6 @@ class DatabaseManager
             $currentQuery .= $char;
         }
 
-        // add the last query if exists
         if (!empty($currentQuery)) {
             $queries[] = $currentQuery;
         }

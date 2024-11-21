@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class AuthManager
  *
- * User authentication and authorization functionality
+ * The manager for user authentication and authorization functionality
  *
  * @package App\Manager
  */
