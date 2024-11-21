@@ -16,7 +16,7 @@ use App\Repository\NotificationSubscriberRepository;
 /**
  * Class NotificationsManager
  *
- * The NotificationsManager class is responsible for managing notifications functionality
+ * The manager for notifications functionality
  *
  * @package App\Manager
  */
@@ -46,6 +46,19 @@ class NotificationsManager
         $this->entityManager = $entityManager;
         $this->databaseManager = $databaseManager;
         $this->notificationSubscriberRepository = $notificationSubscriberRepository;
+    }
+
+    /**
+     * Check if push notifications is enabled
+     *
+     * @return bool
+     */
+    public function checkIsPushNotificationsEnabled(): bool
+    {
+        if ($this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_ENABLED') == 'true') {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -93,6 +106,14 @@ class NotificationsManager
      */
     public function regenerateVapidKeys(): array
     {
+        // check if push notifications is enabled
+        if (!$this->checkIsPushNotificationsEnabled()) {
+            $this->errorManager->handleError(
+                message: 'Push notifications are disabled',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
         try {
             // generate VAPID keys
             $vapidKeys = VAPID::createVapidKeys();
@@ -101,10 +122,10 @@ class NotificationsManager
             $this->appUtil->updateEnvValue('PUSH_NOTIFICATIONS_VAPID_PUBLIC_KEY', $vapidKeys['publicKey']);
             $this->appUtil->updateEnvValue('PUSH_NOTIFICATIONS_VAPID_PRIVATE_KEY', $vapidKeys['privateKey']);
 
-            // truncate notifications_subscribers table
+            // truncate notofications subscribers table
             $this->databaseManager->tableTruncate($this->appUtil->getEnvValue('DATABASE_NAME'), 'notifications_subscribers');
 
-            // log action
+            // log generate vapid keys event
             $this->logManager->log(
                 name: 'notifications-manager',
                 message: 'generate vapid keys',
@@ -137,33 +158,32 @@ class NotificationsManager
         // get subscriber user id
         $userId = $this->authManager->getLoggedUserId();
 
+        // create subscriber entity
+        $notoficationSubscriber = new NotificationSubscriber();
+        $notoficationSubscriber->setEndpoint($endpoint)
+            ->setPublicKey($publicKey)
+            ->setAuthToken($authToken)
+            ->setSubscribedTime(new DateTime())
+            ->setStatus('open')
+            ->setUserId($userId);
+
         try {
-            $notoficationSubscriber = new NotificationSubscriber();
-
-            // set subscriber data
-            $notoficationSubscriber->setEndpoint($endpoint)
-                ->setPublicKey($publicKey)
-                ->setAuthToken($authToken)
-                ->setSubscribedTime(new DateTime())
-                ->setStatus('open')
-                ->setUserId($userId);
-
             // save subscriber to database
             $this->entityManager->persist($notoficationSubscriber);
             $this->entityManager->flush();
-
-            // log action
-            $this->logManager->log(
-                name: 'notifications',
-                message: 'Subscribe push notifications',
-                level: LogManager::LEVEL_INFO
-            );
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to subscribe push notifications: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+
+        // log subscribe notification event
+        $this->logManager->log(
+            name: 'notifications',
+            message: 'Subscribe push notifications',
+            level: LogManager::LEVEL_INFO
+        );
     }
 
     /**
@@ -179,6 +199,7 @@ class NotificationsManager
     public function updateNotificationsSubscriberStatus(int $id, string $status): void
     {
         try {
+            // get notification subscriber
             $notificationSubscriber = $this->notificationSubscriberRepository->find($id);
 
             // check if subscriber found
@@ -212,7 +233,7 @@ class NotificationsManager
     public function sendNotification(string $title, string $message, array $recivers = null): void
     {
         // check if push notifications is enabled
-        if ($this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_ENABLED') != 'true') {
+        if (!$this->checkIsPushNotificationsEnabled()) {
             return;
         }
 
@@ -255,7 +276,7 @@ class NotificationsManager
                 }
             }
 
-            // flush the notifications to send them in batch
+            // flush notifications to send
             foreach ($webPush->flush() as $report) {
                 /** @var \Minishlink\WebPush\MessageSentReport $report */
                 $endpoint = $report->getRequest()->getUri()->__toString();
