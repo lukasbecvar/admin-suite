@@ -1,7 +1,7 @@
 {
     "name": "admin-suite",
     "version": "2.0",
-    "description": "Solution for Linux server with custom services administration and monitoring",
+    "description": "Solution for Linux server with services administration and monitoring",
     "main": "webpack.config.js",
     "author": "Lukáš Bečvář",
     "license": "MIT",

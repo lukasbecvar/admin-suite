@@ -2,7 +2,7 @@
 
 {# MAIN ADMIN COMPONENT LAYOUT #}
 {% block body %}
-    {# REDIRECT TO ERROR IF JAVASCRIPT IS DISABLED #}
+    {# REDIRECT TO ERROR PAGE IF JAVASCRIPT IS DISABLED #}
     <noscript>
         <meta http-equiv="refresh" content="0; URL='{{ path('app_error_by_code', {code: '426'}) }}'" />
     </noscript>

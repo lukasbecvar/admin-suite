@@ -64,7 +64,6 @@ Encore
             }
         };
     })
-
     .configureBabelPresetEnv((config) => {
         config.useBuiltIns = 'usage';
         config.corejs = '3.23';
