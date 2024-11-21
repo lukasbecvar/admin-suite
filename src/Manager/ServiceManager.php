@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class ServiceManager
  *
- * Service manager provides all services methods (start, stop, status, etc..)
+ * The manager for services command start, stop and restart functionality
  *
  * @package App\Manager
  */
@@ -33,7 +33,7 @@ class ServiceManager
     }
 
     /**
-     * Gets the services list from the services-monitoring.json file
+     * Get services list from the services-monitoring.json file
      *
      * @return array<mixed>>|null The services list, null
      */
@@ -43,7 +43,7 @@ class ServiceManager
     }
 
     /**
-     * Runs systemd action on a specified service
+     * Run systemd action on a specified service
      *
      * @param string $serviceName The name of the service
      * @param string $action The action to run on the service
@@ -53,43 +53,43 @@ class ServiceManager
     public function runSystemdAction(string $serviceName, string $action): void
     {
         // check if user logged in
-        if ($this->authManager->isUserLogedin()) {
-            $command = null;
-
-            // check if action is related to ufw
-            if ($serviceName == 'ufw') {
-                $command = 'sudo ufw ' . $action;
-            } else {
-                // build action
-                $command = 'sudo systemctl ' . $action . ' ' . $serviceName;
-            }
-
-            /** @var \App\Entity\User $user logged user */
-            $user = $this->authManager->getLoggedUserRepository();
-
-            // log action
-            $this->logManager->log(
-                name: 'action-runner',
-                message: $user->getUsername() . ' ' . $action . ' ' . $serviceName,
-                level: LogManager::LEVEL_WARNING
-            );
-
-            // executed final command
-            $this->executeCommand($command);
-        } else {
+        if (!$this->authManager->isUserLogedin()) {
             $this->errorManager->handleError(
                 'error action runner is only for authentificated users',
                 Response::HTTP_UNAUTHORIZED
             );
         }
+
+        $command = null;
+
+        // check if action is related to ufw
+        if ($serviceName == 'ufw') {
+            $command = 'sudo ufw ' . $action;
+        } else {
+            // build action command
+            $command = 'sudo systemctl ' . $action . ' ' . $serviceName;
+        }
+
+        /** @var \App\Entity\User $user logged user */
+        $user = $this->authManager->getLoggedUserRepository();
+
+        // log action-runner event
+        $this->logManager->log(
+            name: 'action-runner',
+            message: $user->getUsername() . ' ' . $action . ' ' . $serviceName,
+            level: LogManager::LEVEL_WARNING
+        );
+
+        // executed action command
+        $this->executeCommand($command);
     }
 
     /**
-     * Checks if a service is running
+     * Check if service is running
      *
      * @param string $service The name of the service
      *
-     * @throws Exception If an error occurs while checking the service status
+     * @throws Exception Error with systemctl command execution
      *
      * @return bool The service is running, false otherwise
      */
@@ -117,13 +117,13 @@ class ServiceManager
     }
 
     /**
-     * Checks if a socket is open
+     * Check if a socket is open
      *
      * @param string $ip The IP address
      * @param int $port The port number
      * @param int $timeout The maximal timeout in seconds
      *
-     * @throws Exception If an error occurs while checking the socket status
+     * @throws Exception Error with socket connection
      *
      * @return string Online if the socket is open, Offline otherwise
      */
@@ -154,11 +154,11 @@ class ServiceManager
     }
 
     /**
-     * Checks if a process is running
+     * Check if a process is running
      *
      * @param string $process The name of the process
      *
-     * @throws Exception If an error occurs while checking the process status
+     * @throws Exception Error with pgrep command execution
      *
      * @return bool The process is running, false otherwise
      */
@@ -182,9 +182,9 @@ class ServiceManager
     }
 
     /**
-     * Checks if UFW (Uncomplicated Firewall) is running
+     * Check if UFW (Uncomplicated Firewall) is running
      *
-     * @throws Exception If an error occurs while checking the UFW status
+     * @throws Exception Error with ufw status execution
      *
      * @return bool UFW is running, false otherwise
      */
@@ -212,7 +212,7 @@ class ServiceManager
     }
 
     /**
-     * Checks if the services list file exists
+     * Check if services list file exists
      *
      * @return bool The services list file exists, false otherwise
      */
@@ -227,11 +227,11 @@ class ServiceManager
     }
 
     /**
-     * Executes a command
+     * Execute command
      *
      * @param string $command The command to execute
      *
-     * @throws Exception If an error occurs while executing the command
+     * @throws Exception If an error occurs while executing command
      *
      * @return void
      */
@@ -248,7 +248,7 @@ class ServiceManager
     }
 
     /**
-     * Checks if a website is online
+     * Check if a website is online
      *
      * @param string $url The URL of the website
      *
@@ -266,7 +266,7 @@ class ServiceManager
             );
         }
 
-        // Set options
+        // set options
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_NOBODY, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
@@ -290,7 +290,7 @@ class ServiceManager
         // determine if the site is online
         $isOnline = ($httpCode >= Response::HTTP_OK);
 
-        // return an array with the results
+        // return array with results
         return [
             'isOnline' => $isOnline,
             'responseTime' => $responseTime,
