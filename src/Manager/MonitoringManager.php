@@ -16,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Class MonitoringManager
  *
- * The manager for methos associated with monitoring process
+ * The manager for monitoring component functionality
  *
  * @package App\Manager
  */
@@ -65,7 +65,7 @@ class MonitoringManager
      *
      * @param array<mixed> $search The search parameters
      *
-     * @throws Exception If an error occurs while retrieving the repository
+     * @throws Exception Error while retrieving the repository
      *
      * @return MonitoringStatus|null The service monitoring repository
      */
@@ -88,43 +88,37 @@ class MonitoringManager
      * @param string $message The message to set for the service
      * @param string $status The status to set for the service
      *
-     * @throws Exception If an error occurs while setting the status
+     * @throws Exception Error to flush monitoring status
      *
      * @return void
      */
     public function setMonitoringStatus(string $serviceName, string $message, string $status): void
     {
         // get service monitoring repository
-        $MonitoringStatus = $this->monitoringStatusRepository->findOneBy(['service_name' => $serviceName]);
+        $monitoringStatus = $this->monitoringStatusRepository->findOneBy(['service_name' => $serviceName]);
 
-        // check if service monitoring repository is found
-        if ($MonitoringStatus == null) {
-            $MonitoringStatus = new MonitoringStatus();
+        // create monitoring status (if not found)
+        if ($monitoringStatus == null) {
+            $monitoringStatus = new MonitoringStatus();
 
             // set monitored service properties
-            $MonitoringStatus->setServiceName($serviceName)
+            $monitoringStatus->setServiceName($serviceName)
                 ->setStatus($status)
                 ->setMessage('new service initialization')
                 ->setLastUpdateTime(new DateTime());
 
             // persist service monitoring
-            try {
-                $this->entityManagerInterface->persist($MonitoringStatus);
-            } catch (Exception $e) {
-                $this->errorManager->handleError(
-                    message: 'error to persist service monitoring: ' . $e->getMessage(),
-                    code: Response::HTTP_INTERNAL_SERVER_ERROR
-                );
-            }
+            $this->entityManagerInterface->persist($monitoringStatus);
+
+        // update service monitoring properties (if found)
         } else {
-            // update service monitoring properties
-            $MonitoringStatus->setMessage($message)
+            $monitoringStatus->setMessage($message)
                 ->setStatus($status)
                 ->setLastUpdateTime(new DateTime());
         }
 
-        // flush changes to database
         try {
+            // flush changes to database
             $this->entityManagerInterface->flush();
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -139,14 +133,14 @@ class MonitoringManager
      *
      * @param string $serviceName The name of the service
      *
-     * @throws Exception If an error occurs while retrieving the status
+     * @throws Exception Error to get monitoring status
      *
      * @return string|null The service monitoring status
      */
     public function getMonitoringStatus(string $serviceName): ?string
     {
         try {
-            /** @var \App\Entity\MonitoringStatus $repo the monitored service repository */
+            /** @var \App\Entity\MonitoringStatus $repo monitored service repository */
             $repo = $this->monitoringStatusRepository->findOneBy(['service_name' => $serviceName]);
 
             // check if repository is found
@@ -203,7 +197,7 @@ class MonitoringManager
             // send monitoring status notification
             $this->notificationsManager->sendNotification('monitoring ' . $serviceName, '[' . date('H:i') . ']: ' . $message);
 
-            // log status chnage
+            // log status chnage event
             $this->logManager->log(
                 name: 'monitoring',
                 message: $serviceName . ' status: ' . $currentStatus . ' msg: ' . $message,
@@ -232,8 +226,6 @@ class MonitoringManager
                 serviceName: 'Mysql',
                 message: 'Mysql server is down'
             );
-            // send push notification
-            $this->notificationsManager->sendNotification('monitoring', '[' . date('H:i') . ']: Mysql server is down');
         }
 
         // print database is down message
@@ -267,7 +259,6 @@ class MonitoringManager
 
         // monitor cpu usage
         if ($cpuUsage > 98) {
-            // handle cpu usage status
             $this->handleMonitoringStatus(
                 serviceName: 'system-cpu-usage',
                 currentStatus: 'critical',
@@ -277,7 +268,6 @@ class MonitoringManager
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>cpu usage is too high</fg=red>'
             );
         } else {
-            // handle cpu usage status
             $this->handleMonitoringStatus(
                 serviceName: 'system-cpu-usage',
                 currentStatus: 'normal',
@@ -290,7 +280,6 @@ class MonitoringManager
 
         // monitor ram usage
         if ($ramUsage > 98) {
-            // handle ram usage status
             $this->handleMonitoringStatus(
                 serviceName: 'system-ram-usage',
                 currentStatus: 'critical',
@@ -300,7 +289,6 @@ class MonitoringManager
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>ram usage is too high</fg=red>'
             );
         } else {
-            // handle ram usage status
             $this->handleMonitoringStatus(
                 serviceName: 'system-ram-usage',
                 currentStatus: 'normal',
@@ -313,7 +301,6 @@ class MonitoringManager
 
         // monitor storage usage
         if ($storageUsage > 98) {
-            // handle storage usage status
             $this->handleMonitoringStatus(
                 serviceName: 'system-storage-usage',
                 currentStatus: 'critical',
@@ -323,7 +310,6 @@ class MonitoringManager
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>storage space on the disk is not enough</fg=red>'
             );
         } else {
-            // handle storage usage status
             $this->handleMonitoringStatus(
                 serviceName: 'system-storage-usage',
                 currentStatus: 'normal',
@@ -343,6 +329,7 @@ class MonitoringManager
             return;
         }
 
+        // handle configured services status
         foreach ($services as $service) {
             // force retype service array (to avoid phpstan error)
             $service = (array) $service;
@@ -356,7 +343,6 @@ class MonitoringManager
             if ($service['type'] == 'systemd') {
                 // check running state
                 if ($this->serviceManager->isServiceRunning($service['service_name'])) {
-                    // handle service running status
                     $this->handleMonitoringStatus(
                         serviceName: $service['service_name'],
                         currentStatus: 'running',
@@ -366,7 +352,6 @@ class MonitoringManager
                         '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>' . $service['display_name'] . ' is running</fg=green>'
                     );
                 } else {
-                    // handle service running status
                     $this->handleMonitoringStatus(
                         serviceName: $service['service_name'],
                         currentStatus: 'not-running',
@@ -413,7 +398,6 @@ class MonitoringManager
 
                     // status ok
                     } else {
-                        // handle http service status
                         $this->handleMonitoringStatus(
                             serviceName: $service['service_name'],
                             currentStatus: 'online',
@@ -426,7 +410,6 @@ class MonitoringManager
 
                 // service is not online
                 } else {
-                    // handle http service offline status
                     $this->handleMonitoringStatus(
                         serviceName: $service['service_name'],
                         currentStatus: 'not-online',
