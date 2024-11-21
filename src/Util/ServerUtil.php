@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class ServerUtil
  *
- * Utility class for server information
+ * Util for server administration functionality
  *
  * @package App\Util
  */
@@ -21,8 +21,12 @@ class ServerUtil
     private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
 
-    public function __construct(AppUtil $appUtil, CacheUtil $cacheUtil, ErrorManager $errorManager, ServiceManager $serviceManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        CacheUtil $cacheUtil,
+        ErrorManager $errorManager,
+        ServiceManager $serviceManager
+    ) {
         $this->appUtil = $appUtil;
         $this->cacheUtil = $cacheUtil;
         $this->errorManager = $errorManager;
@@ -91,7 +95,7 @@ class ServerUtil
     /**
      * Get the RAM usage information
      *
-     * @return array<string, string> An array containing RAM usage information
+     * @return array<string,string> An array containing RAM usage information
      */
     public function getRamUsage(): array
     {
@@ -203,7 +207,7 @@ class ServerUtil
     }
 
     /**
-     * Check if the system is running Linux
+     * Check if the host system is linux
      *
      * @return bool True if the system is running Linux, false otherwise
      */
@@ -273,7 +277,7 @@ class ServerUtil
     }
 
     /**
-     * Checks if a service is or is php extension installed
+     * Check if a service is or is php extension installed
      *
      * @param string $serviceName The name of the service
      *
@@ -302,7 +306,7 @@ class ServerUtil
     }
 
     /**
-     * Checks if a PHP extension is installed
+     * Check if a PHP extension is installed
      *
      * @param string $extension The name of the PHP extension
      *
@@ -317,8 +321,7 @@ class ServerUtil
      * Get a list of required applications that are not installed
      *
      * This method reads a JSON file containing a list of required applications
-     * and checks if each application is installed. It returns an array of applications
-     * that are not found on the system
+     * and checks if each application is installed
      *
      * @throws Exception If an error occurs while loading the package-requirements.json file
      *

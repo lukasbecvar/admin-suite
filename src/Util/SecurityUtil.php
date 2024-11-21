@@ -5,7 +5,7 @@ namespace App\Util;
 /**
  * Class SecurityUtil
  *
- * The utility class for security
+ * Util for security related functionality
  *
  * @package App\Util
  */
@@ -19,7 +19,7 @@ class SecurityUtil
     }
 
     /**
-     * Escape the string
+     * Escape string
      *
      * @param string $string The string to escape
      *
@@ -92,7 +92,7 @@ class SecurityUtil
     }
 
     /**
-     * Decrypt an AES-encrypted string
+     * Decrypt AES-encrypted string
      *
      * @param string $encryptedData The base64-encoded encrypted string
      * @param string $method The encryption method (default: AES-128-CBC)

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class CacheUtil
  *
- * Manages caching operations using a cache item pool
+ * Util for manage the cache functionality
  *
  * @package App\Util
  */
@@ -29,7 +29,7 @@ class CacheUtil
     }
 
     /**
-     * Checks if a key exists in the cache
+     * Check if a key exists in the cache
      *
      * @param string $key The key to check in the cache
      *
@@ -71,10 +71,10 @@ class CacheUtil
     }
 
     /**
-     * Sets a value in the cache with the specified key and expiration time
+     * Set value in the cache with the specified key and expiration time
      *
      * @param string $key The key under which to store the value in the cache
-     * @param mixed $value The value to store in the cache.
+     * @param mixed $value The value to store in the cache
      * @param int $expiration The expiration time in seconds for the cached value
      *
      * @throws Exception If an error occurs while storing the cache value
@@ -100,7 +100,7 @@ class CacheUtil
     }
 
     /**
-     * Delete value from the cache using the specified key
+     * Delete value from cache using the specified key
      *
      * @param string $key The key of the value to delete from the cache
      *

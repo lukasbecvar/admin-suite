@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class JsonUtil
  *
- * JsonUtil provides functions for retrieving JSON data from a file or URL
+ * Util for get JSON data from a file or URL
  *
  * @package App\Util
  */

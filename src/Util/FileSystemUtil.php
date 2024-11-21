@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class FileSystemUtil
  *
- * This class is responsible for handling filesystem related operations
+ * Util for manipulate with the file system
  *
  * @package App\Util
  */
@@ -25,7 +25,7 @@ class FileSystemUtil
     }
 
     /**
-     * Returns a list of files and directories in the specified path
+     * Return list of files and directories in the specified path
      *
      * @param string $path The path to list files and directories
      * @param bool $recursive Spec for log manager (return all files resursive without directories)
@@ -102,7 +102,7 @@ class FileSystemUtil
     }
 
     /**
-     * Checks if the file is executable
+     * Check if the file is executable
      *
      * @param string $path The path to the file
      *
@@ -130,14 +130,14 @@ class FileSystemUtil
 
         // check file info is set
         if (!$fileInfo) {
-            // handle the error
+            // handle error
             $this->errorManager->handleError(
                 message: 'error get file info: ' . $path . ' file info detection failed',
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 
-        // check if the file type is supported
+        // check if file type is supported
         if (strpos($fileInfo, 'executable')) {
             return true;
         }
@@ -146,7 +146,7 @@ class FileSystemUtil
     }
 
     /**
-     * Detects the media type of a file
+     * Detect media type of a file
      *
      * @param string $path The path to the file
      *
@@ -189,7 +189,7 @@ class FileSystemUtil
     }
 
     /**
-     * Returns the contents of a file
+     * Get content of a file
      *
      * @param string $path The path to the file
      *
@@ -201,7 +201,7 @@ class FileSystemUtil
     {
         // check file exists
         if (!file_exists($path)) {
-            // handle the error
+            // handle error
             $this->errorManager->handleError(
                 message: 'error opening file: ' . $path . ' does not exist',
                 code: Response::HTTP_NOT_FOUND
@@ -211,14 +211,14 @@ class FileSystemUtil
         try {
             // check if path is directory
             if (is_dir($path) || is_link($path)) {
-                // handle the error
+                // handle error
                 $this->errorManager->handleError(
                     message: 'error opening file: ' . $path . ' is a directory or a link',
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
 
-            // get the file content
+            // get file content
             $fileContent = shell_exec('sudo cat ' . escapeshellarg($path));
 
             // check file content is set
@@ -226,7 +226,7 @@ class FileSystemUtil
                 $fileContent = 'file is empty';
             }
 
-            // return the file content
+            // return file content
             return $fileContent;
         } catch (Exception $e) {
             // return error to file view in non dev mode
@@ -234,7 +234,7 @@ class FileSystemUtil
                 return $e->getMessage();
             }
 
-            // handle the error
+            // handle error
             $this->errorManager->handleError(
                 message: 'error opening file: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR

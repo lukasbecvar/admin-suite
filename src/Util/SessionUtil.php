@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * Class SessionUtil
  *
- * SessionUtil provides session management functions
+ * Util for session management
  *
  * @package App\Util
  */
@@ -78,7 +78,7 @@ class SessionUtil
     }
 
     /**
-     * Get the decrypted value of a session
+     * Get the value of a session
      *
      * @param string $sessionName The name of the session
      *

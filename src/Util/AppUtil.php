@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 /**
  * Class AppUtil
  *
- * The utility class for the application
+ * The basic utilities class for the application
  *
  * @package App\Util
  */
@@ -24,7 +24,8 @@ class AppUtil
         $this->kernelInterface = $kernelInterface;
     }
 
-    /** Get the application root directory
+    /**
+     * Get the application root directory
      *
      * @return string The application root directory
      */
@@ -71,9 +72,9 @@ class AppUtil
     }
 
     /**
-     * Check if the application is in production mode
+     * Check if the SSL only is enabled
      *
-     * @return bool True if the application is in production mode, false otherwise
+     * @return bool True if the SSL only is enabled, false otherwise
      */
     public function isSSLOnly(): bool
     {
@@ -189,7 +190,7 @@ class AppUtil
      * @param string $key The environment variable key
      * @param string $value The environment variable value
      *
-     * @throws Exception If the environment file is not found or the environment variable is not found
+     * @throws Exception If the environment variable update fails
      */
     public function updateEnvValue(string $key, string $value): void
     {
