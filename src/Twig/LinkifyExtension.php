@@ -8,7 +8,7 @@ use Twig\Extension\AbstractExtension;
 /**
  * Class LinkifyExtension
  *
- * LinkifyExtension is a custom Twig extension for converting links in text to clickable HTML links
+ * Twig linkify extension for linkifying links in text
  *
  * @package App\Twig
  */
@@ -27,7 +27,7 @@ class LinkifyExtension extends AbstractExtension
     }
 
     /**
-     * Converts links in the given text to clickable HTML links
+     * Convert links in the given text to clickable HTML links
      *
      * @param string $text The input text
      *

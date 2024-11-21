@@ -5,7 +5,6 @@ namespace App\Manager;
 use PDO;
 use Exception;
 use PDOException;
-use RuntimeException;
 use App\Util\AppUtil;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Response;

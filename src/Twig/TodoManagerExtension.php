@@ -25,6 +25,8 @@ class TodoManagerExtension extends AbstractExtension
     /**
      * Get the twig functions
      *
+     * getTodosCount = getTodosCount in TodoManager
+     *
      * @return TwigFunction[] An array of TwigFunction objects
      */
     public function getFunctions(): array

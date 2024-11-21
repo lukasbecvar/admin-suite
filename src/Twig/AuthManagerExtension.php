@@ -23,7 +23,10 @@ class AuthManagerExtension extends AbstractExtension
     }
 
     /**
-     * Get the twig functions
+     * Get the twig functions from auth manager
+     *
+     * isAdmin = isLoggedInUserAdmin
+     * getUserData = getLoggedUserRepository
      *
      * @return TwigFunction[] An array of TwigFunction objects
      */

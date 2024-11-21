@@ -23,7 +23,7 @@ class TodoRepository extends ServiceEntityRepository
     }
 
     /**
-     * Finds todos by user ID and status.
+     * Find todos by user ID and status
      *
      * @param int $userId
      * @param string $status

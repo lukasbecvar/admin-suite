@@ -11,7 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 /**
  * Class MetricRepository
  *
- * Repository class for the Metric database entity
+ * Repository for the Metric database entity
  *
  * @extends ServiceEntityRepository<Metric>
  *

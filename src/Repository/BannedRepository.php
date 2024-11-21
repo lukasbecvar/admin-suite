@@ -9,7 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 /**
  * Class BannedRepository
  *
- * Repository for the Banned database entity
+ * Repository for Banned database entity
  *
  * @extends ServiceEntityRepository<Banned>
  *
@@ -23,9 +23,9 @@ class BannedRepository extends ServiceEntityRepository
     }
 
     /**
-     * Check if a user is banned
+     * Check if user is banned
      *
-     * @param int $bannedUserId The ID of the banned user
+     * @param int $bannedUserId The ID of user
      *
      * @return bool True if the user is banned
      */
@@ -57,7 +57,7 @@ class BannedRepository extends ServiceEntityRepository
     }
 
     /**
-     * Update the status of a banned user
+     * Update status of a banned user
      *
      * @param int $bannedUserId The ID of the banned user
      * @param string $newStatus The new status of the banned user
