@@ -8,9 +8,6 @@
 ## Dashboard preview
 ![Dashboard](.github/assets/preview.png)
 
-## Code base
-This project is based on the Symfony framework. The entire project is designed to require as few dependencies and additional software as possible for easy installation and maintenance.
-
 ## Primary use
 I created this project to manage my personal servers. I wanted a simple and easy-to-use solution that would allow me to monitor and manage my servers without relying on complex software or complicated setups. This project aims to manage single server instances, not clusters.
 
