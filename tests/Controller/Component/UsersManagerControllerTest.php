@@ -3,7 +3,6 @@
 namespace App\Tests\Controller\Component;
 
 use App\Tests\CustomTestCase;
-use App\Exception\AppErrorException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\String\ByteString;
 use Symfony\Component\HttpFoundation\Response;
@@ -208,14 +207,13 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testUserManagerUpdateUserRoleWithEmptyId(): void
     {
-        // Set the expected exception
-        $this->expectException(AppErrorException::class);
-        $this->expectExceptionMessage('invalid request user "id" parameter not found in query');
-
         $this->client->request('POST', '/manager/users/role/update', [
             'id' => '',
             'role' => ''
         ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -225,14 +223,13 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testUserManagerUpdateUserRoleWithEmptyRole(): void
     {
-        // Set the expected exception
-        $this->expectException(AppErrorException::class);
-        $this->expectExceptionMessage('invalid request user "role" parameter not found in query');
-
         $this->client->request('POST', '/manager/users/role/update', [
             'id' => 1,
             'role' => ''
         ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -242,14 +239,13 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testUserManagerUpdateUserRoleWithInvalidId(): void
     {
-        // Set the expected exception
-        $this->expectException(AppErrorException::class);
-        $this->expectExceptionMessage('invalid request user "id" parameter not found in database');
-
         $this->client->request('POST', '/manager/users/role/update', [
             'id' => 13383838383,
             'role' => 'admin'
         ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -259,13 +255,12 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testUserManagerUserDeleteWithEmptyId(): void
     {
-        // Set the expected exception
-        $this->expectException(AppErrorException::class);
-        $this->expectExceptionMessage('invalid request user "id" parameter not found in query');
-
         $this->client->request('GET', '/manager/users/delete', [
             'id' => ''
         ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -275,12 +270,11 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testUserManagerUserDeleteWithInvalidId(): void
     {
-        // Set the expected exception
-        $this->expectException(AppErrorException::class);
-        $this->expectExceptionMessage('invalid request user "id" parameter not found in database');
-
         $this->client->request('GET', '/manager/users/delete', [
             'id' => 1323232323232
         ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 }

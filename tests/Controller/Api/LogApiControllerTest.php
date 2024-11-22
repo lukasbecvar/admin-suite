@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller\Api;
 
-use App\Exception\AppErrorException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -30,11 +29,10 @@ class LogApiControllerTest extends WebTestCase
      */
     public function testExternalLogRequestWithInvalidMethod(): void
     {
-        // expect exception
-        $this->expectException(AppErrorException::class);
-
-        // make GET request to the external log endpoint
         $this->client->request('GET', '/api/external/log');
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_METHOD_NOT_ALLOWED);
     }
 
     /**
