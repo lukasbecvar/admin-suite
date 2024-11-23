@@ -48,7 +48,7 @@ If you enable push notifications in the environment config, make sure to allow n
 
 ## Requirements
 * OS Linux
-* PHP 8.3
+* PHP 8.4
 * MySQL 8
 * Mysql - PDO driver
 * PHP-OpenSSL extension
