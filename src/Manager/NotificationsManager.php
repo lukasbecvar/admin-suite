@@ -230,7 +230,7 @@ class NotificationsManager
      *
      * @return void
      */
-    public function sendNotification(string $title, string $message, array $recivers = null): void
+    public function sendNotification(string $title, string $message, ?array $recivers = null): void
     {
         // check if push notifications is enabled
         if (!$this->checkIsPushNotificationsEnabled()) {
