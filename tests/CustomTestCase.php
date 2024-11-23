@@ -13,14 +13,14 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class CustomTestCase
  *
- * Custom test case class
+ * Custom test case extending WebTestCase to provide additional methods
  *
  * @package App\Tests
  */
 class CustomTestCase extends WebTestCase
 {
     /**
-     * Simulate a user login
+     * Simulate user login
      *
      * @param KernelBrowser $client The KernelBrowser instance
      *
@@ -28,7 +28,7 @@ class CustomTestCase extends WebTestCase
      */
     public function simulateLogin(KernelBrowser $client): void
     {
-        // create a mock user
+        // create mock user
         $mockUser = new User();
         $mockUser->setUsername('test');
         $mockUser->setPassword('$argon2id$v=19$m=16384,t=6,p=4$Q0ZSLlBtVmZMR0JxdThGUg$MRBG4L4FyD853oBxOYs3+W3S9MNecP9kACc0zZuZR5k');
@@ -40,24 +40,24 @@ class CustomTestCase extends WebTestCase
         $mockUser->setToken('fba6eb31278954ce68feb303cbd34bfe');
         $mockUser->setProfilePic('default_pic');
 
-        // create a mock of AuthManager
+        // create mock AuthManager mock instance
         $authManager = $this->createMock(AuthManager::class);
 
-        // configure the mock to return true for isUserLogedin
+        // mock isUserLogedin to return true
         $authManager->method('isUserLogedin')->willReturn(true);
 
-        // configure the mock to return true for isUserLogedin
+        // mock isLoggedInUserAdmin to return true
         $authManager->method('isLoggedInUserAdmin')->willReturn(true);
 
-        // configure the mock to return the mock user for getLoggedUserRepository
+        // mock getLoggedUserRepository to return test mock user
         $authManager->method('getLoggedUserRepository')->willReturn($mockUser);
 
-        // replace the actual AuthManager service with the mock
-        $client->getContainer()->set('App\Manager\AuthManager', $authManager);
+        // set mock AuthManager instance to the container
+        $client->getContainer()->set(AuthManager::class, $authManager);
     }
 
     /**
-     * The get random user id from database
+     * Get random user id from database
      *
      * @param EntityManagerInterface $entityManager The entity manager
      *
