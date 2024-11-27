@@ -4,24 +4,24 @@
     </div>
     <div class="p-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            {# Uptime #}
+            {# HOST UPTIME #}
             <div class="flex flex-col">
                 <p class="text-gray-300 mb-1">Uptime</p>
                 <p class="text-white font-medium">{{ hostUptime|e }}</p>
             </div>
-            {# System #}
+            {# HOST SYSTEM #}
             <div class="flex flex-col">
                 <p class="text-gray-300 mb-1">System</p>
                 <p class="text-white font-medium">
                 {{ hostSystemInfo.operating_system|split('"')[1]|trim('" NAME')|e }}
             </p>
             </div>
-            {# Kernel #}
+            {# HOST KERNEL #}
             <div class="flex flex-col">
                 <p class="text-gray-300 mb-1">Kernel</p>
                 <p class="text-white font-medium">{{ hostSystemInfo.kernel_version|e }}</p>
             </div>
-            {# Architecture #}
+            {# HOST ARCHITECTURE #}
             <div class="flex flex-col">
                 <p class="text-gray-300 mb-1">Architecture</p>
                 <p class="text-white font-medium">{{ hostSystemInfo.kernel_arch|e }}</p>

@@ -47,15 +47,14 @@ If you enable push notifications in the environment config, make sure to allow n
 * The external log API is used for retrieving logs from external services. External API log is in the .env configuration file.
 
 ## Requirements
-* OS Linux
+* NPM package manager and assets build tool for encore build
+* Composer for managing PHP dependencies
 * PHP 8.4
-* MySQL 8
-* Mysql - PDO driver
+* MySQL 8 or higher
+* Mysql-PDO extension (db driver)
 * PHP-OpenSSL extension
 * PHP-Intl extension
 * PHP-Curl extension
-* Composer
-* NPM package manager and assets build tool for encore build
 
 ## Development environment
 The complete stack for development is in Docker Compose, including PHP, Node, and Composer. You just need to run the docker-start script to launch it.

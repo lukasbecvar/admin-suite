@@ -6,7 +6,7 @@
         <h1 class="text-5xl font-extrabold mb-4">Banned</h1>
         <p class="text-xl mb-4">
             {% if reason == 'no-reason' %}
-                You are banned.
+                You are banned
             {% else %}
                 You are banned, reason: <span class="text-red-500 font-semibold">{{ reason|e }}</span>
             {% endif %}

@@ -1,15 +1,15 @@
 # env files
 /.env.prod
 
-# bundles assets files
+# bundles assets
 /public/bundles/
 
 # cache files
 /var
 
 # composer files
-/composer.lock
 /vendor/
+/composer.lock
 
 # phpunit files
 .phpunit.result.cache
@@ -18,15 +18,15 @@
 /.phpcs-cache
 
 # npm files
-/public/assets/
 /node_modules/
+/public/assets/
 /package-lock.json
 
 # custom suite configs
 /blocked-usernames.json
-/exceptions-monitoring.json
-/package-requirements.json
 /services-monitoring.json
+/package-requirements.json
+/exceptions-monitoring.json
 
 # docker services files
 .docker/services

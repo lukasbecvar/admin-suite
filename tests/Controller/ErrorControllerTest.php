@@ -33,7 +33,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Page not found');
-        $this->assertSelectorTextContains('p', "The page you are looking for doesn't exist or has been moved.");
+        $this->assertSelectorTextContains('p', "The page you are looking for doesn't exist or has been moved");
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
@@ -49,7 +49,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Unknown error');
-        $this->assertSelectorTextContains('p', 'Please contact the service administrator.');
+        $this->assertSelectorTextContains('p', 'Please contact the service administrator');
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
@@ -65,7 +65,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Unknown error');
-        $this->assertSelectorTextContains('p', 'Please contact the service administrator.');
+        $this->assertSelectorTextContains('p', 'Please contact the service administrator');
         $this->assertResponseStatusCodeSame(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
@@ -80,7 +80,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Unknown error');
-        $this->assertSelectorTextContains('p', 'Please contact the service administrator.');
+        $this->assertSelectorTextContains('p', 'Please contact the service administrator');
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
@@ -96,7 +96,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Bad request error');
-        $this->assertSelectorTextContains('p', 'Please try again later or contact the administrator.');
+        $this->assertSelectorTextContains('p', 'Please try again later or contact the administrator');
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
@@ -112,7 +112,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Unauthorized');
-        $this->assertSelectorTextContains('p', 'You do not have permission to access this page.');
+        $this->assertSelectorTextContains('p', 'You do not have permission to access this page');
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
@@ -128,7 +128,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Forbidden');
-        $this->assertSelectorTextContains('p', 'You do not have permission to access this page.');
+        $this->assertSelectorTextContains('p', 'You do not have permission to access this page');
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
@@ -144,7 +144,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Page not found');
-        $this->assertSelectorTextContains('p', "The page you are looking for doesn't exist or has been moved.");
+        $this->assertSelectorTextContains('p', "The page you are looking for doesn't exist or has been moved");
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
@@ -160,7 +160,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Upgrade Required');
-        $this->assertSelectorTextContains('p', 'This website is not available over non-HTTPS connections, or your browser does not support JavaScript.');
+        $this->assertSelectorTextContains('p', 'This website is not available over non-HTTPS connections, or your browser does not support JavaScript');
         $this->assertResponseStatusCodeSame(Response::HTTP_UPGRADE_REQUIRED);
     }
 
@@ -175,7 +175,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Too Many Requests');
-        $this->assertSelectorTextContains('p', 'Please try to wait and try again later.');
+        $this->assertSelectorTextContains('p', 'Please try to wait and try again later');
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_TOO_MANY_REQUESTS);
     }
@@ -191,7 +191,7 @@ class ErrorControllerTest extends WebTestCase
 
         // assert response
         $this->assertSelectorTextContains('h2', 'Internal Server Error');
-        $this->assertSelectorTextContains('p', 'Unexpected server-side error.');
+        $this->assertSelectorTextContains('p', 'Unexpected server-side error');
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_INTERNAL_SERVER_ERROR);
     }

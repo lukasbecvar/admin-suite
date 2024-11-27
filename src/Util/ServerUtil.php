@@ -287,6 +287,14 @@ class ServerUtil
     {
         static $installedPackages = null;
 
+        // check if composer is installed
+        if ($serviceName == strtolower('composer')) {
+            $composerPath = shell_exec('which composer');
+            if ($composerPath != null) {
+                return true;
+            }
+        }
+
         // get the list of installed dpkg packages
         if ($installedPackages === null) {
             $output = shell_exec('dpkg -l');
