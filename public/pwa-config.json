@@ -1,0 +1,16 @@
+{
+    "name": "Admin Suite",
+    "short_name": "Admin",
+    "description": "Admin suite linux servers and app management dashboard",
+    "start_url": "/dashboard",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+        {
+            "src": "/assets/images/favicon.png",
+            "sizes": "64x64",
+            "type": "image/png"
+        }
+    ]
+}
