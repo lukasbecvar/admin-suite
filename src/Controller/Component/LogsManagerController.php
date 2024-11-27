@@ -150,6 +150,14 @@ class LogsManagerController extends AbstractController
             $this->logManager->deleteExceptionFile($exceptionFile);
         }
 
+        // get exception files list
+        $exceptionFiles = $this->logManager->getExceptionFiles();
+
+        // redirect to dashboard if exception files list is empty after deleting last exception file
+        if (empty($exceptionFiles) || $exceptionFiles == null) {
+            return $this->redirectToRoute('app_dashboard');
+        }
+
         // redirect back to exception files page
         return $this->redirectToRoute('app_manager_logs_exception_files');
     }
