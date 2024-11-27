@@ -1,11 +1,11 @@
 {
-    "name": "Admin Suite",
-    "short_name": "Admin",
-    "description": "Admin suite linux servers and app management dashboard",
+    "name": "Admin-suite server admin",
+    "short_name": "Admin-suite",
+    "description": "Solution for Linux server with services administration and monitoring",
     "start_url": "/dashboard",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#ffffff",
+    "background_color": "#383838",
+    "theme_color": "#383838",
     "icons": [
         {
             "src": "/assets/images/favicon.png",
