@@ -7,7 +7,7 @@
 
 body {
 	scroll-behavior: smooth;
-	background-color: #161616;
+	background-color: #101112;
 }
 
 main {
@@ -49,12 +49,28 @@ main {
 	margin-right: 10px !important;
 }
 
+.bg-neutral-810 {
+	background-color: #1e1f20 !important;
+}
+
+.bg-neutral-810:hover {
+	background-color: #2a2b2c !important;
+}
+
 .bg-neutral-850 {
-	background-color: rgb(30, 30, 30) !important;
+	background-color: #161718 !important;
 }
 
 .bg-neutral-880 {
-	background-color: #1a1a1a !important;
+	background-color: #151718 !important;
+}
+
+.bg-neutral-890 {
+	background-color: #101212 !important;
+}
+
+.bg-neutral-910 {
+	background-color: #101212 !important;
 }
 
 .bg-red-750 {
@@ -62,11 +78,11 @@ main {
 }
 
 .card-color {
-	background-color: #1d1d1d;
+	background-color: #151718;
 }
 
 .background-dark {
-    background: rgb(20, 20, 20) !important;
+    background: #151718 !important;
 }
 
 .link {
@@ -112,7 +128,7 @@ main {
 
 .auth-form-input:focus {
 	color: white;
-	border-color: rgb(37 99 235);
+	border-color: rgb(24, 132, 255);
 }
 
 .auth-form-input:focus {
@@ -171,7 +187,7 @@ main {
 	height: 28px;
 	z-index: 1000;
 	position: fixed;
-	background-color: #161616;
+	background-color: #101112;
 }
 
 .nav-bar #menu-toggle {
@@ -199,7 +215,7 @@ main {
 	position: fixed;
 	overflow-y: auto; 
 	height: calc(100% - 28px); 
-	background-color: #161616;
+	background-color: #101112;
 	transform: translateX(-100%);
 	transition: transform 0.2s ease;
 }
@@ -234,6 +250,7 @@ main {
 	padding: 3px;
     display: flex;
     justify-content: flex-start;
+	background-color: #101112 !important;
 }
 
 .sub-navigation > * {
@@ -319,15 +336,15 @@ main {
 	height: 15px;
     margin-bottom: 10px;
 	border-radius: 5.3px;
-    background-color: #272727;
-	border: 0.8px solid rgb(165, 165, 165);
+    background-color: #202020;
+	border: 0.8px solid #524d45;
 }
 
 .dashbard-component .progress {
 	width: 0%;
     height: 100%;
     transition: width 0.2s ease;
-    background-color: rgb(1, 124, 124);
+    background-color: #007a7a;
 }
 
 .dashbard-component .card-text {
@@ -465,7 +482,7 @@ main {
 		height: 30px;
 		z-index: 1000;
 		position: fixed;
-		background-color: #161616;
+		background-color: #101112;
 	}
 	#sidebar {
 		top: 30px;

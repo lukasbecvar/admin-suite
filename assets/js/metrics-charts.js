@@ -16,7 +16,7 @@ var optionsCpuRadial = {
         width: '100%',
         height: '100%',
         type: 'radialBar',
-        background: '#1d1d1d',
+        background: '#151718',
         padding: {
             top: 0,
             right: 0,
@@ -64,7 +64,7 @@ var optionsCpuLine = {
     chart: {
         height: 250,
         type: 'area',
-        background: '#1d1d1d',
+        background: '#151718',
         toolbar: {
             show: true,
             tools: {
@@ -120,7 +120,7 @@ var optionsRamRadial = {
         width: '100%',
         height: '100%',
         type: 'radialBar',
-        background: '#1d1d1d',
+        background: '#151718',
         padding: {
             top: 0,
             right: 0,
@@ -168,7 +168,7 @@ var optionsRamLine = {
     chart: {
         height: 250,
         type: 'area',
-        background: '#1d1d1d',
+        background: '#151718',
         toolbar: {
             show: true,
             tools: {
@@ -224,7 +224,7 @@ var optionsStorageRadial = {
         width: '100%',
         height: '100%',
         type: 'radialBar',
-        background: '#1d1d1d',
+        background: '#151718',
         padding: {
             top: 0,
             right: 0,
@@ -272,7 +272,7 @@ var optionsStorageLine = {
     chart: {
         height: 250,
         type: 'area',
-        background: '#1d1d1d',
+        background: '#151718',
         toolbar: {
             show: true,
             tools: {
