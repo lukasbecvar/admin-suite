@@ -2,6 +2,7 @@
 
 namespace App\Controller\Component;
 
+use DateTime;
 use App\Util\AppUtil;
 use App\Manager\ErrorManager;
 use App\Manager\DatabaseManager;
@@ -516,13 +517,16 @@ class DatabaseBrowserController extends AbstractController
         // get database dump
         $databaseDump = $this->databaseManager->getDatabaseDump($databaseName, $plain);
 
+        // get current time
+        $currentTime = new DateTime();
+
         // return database dump file
         return new Response(
             content: $databaseDump,
             status: Response::HTTP_OK,
             headers:[
                 'Content-Type' => 'application/sql',
-                'Content-Disposition' => 'attachment; filename="' . $databaseName . '_dump.sql' . '"'
+                'Content-Disposition' => 'attachment; filename="' . $databaseName . '_dump-' . $currentTime->format('Y.m.d-H.i') . '.sql' . '"'
             ]
         );
     }

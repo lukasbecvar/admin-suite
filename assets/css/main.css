@@ -65,6 +65,10 @@ main {
 	background-color: #151718 !important;
 }
 
+.bg-neutral-885 {
+	background-color: #121414 !important;
+}
+
 .bg-neutral-890 {
 	background-color: #101212 !important;
 }
@@ -476,6 +480,14 @@ main {
 	.phone-none {
 		display: none;
 	}
+	.disable-phone-border {
+		border: none !important;
+		border-radius: 0px !important;
+	}
+	.phone-mt-disable {
+		margin-top: 0px !important;
+		width: 100% !important;
+	}
 	.nav-bar {
 		top: 0;
 		width: 100%;
@@ -520,13 +532,6 @@ main {
 @media screen and (max-width: 460px) { 
 	.m-w-95 {
 		max-width: 95%;
-	}
-}
-
-/* disable margin top on small devices */
-@media screen and (max-width: 320px) { 
-	.phone-mt-disable {
-		margin-top: 0px !important;
 	}
 }
 
