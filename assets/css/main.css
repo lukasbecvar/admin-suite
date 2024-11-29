@@ -7,7 +7,7 @@
 
 body {
 	scroll-behavior: smooth;
-	background-color: #101112;
+	background-color: #0f1011;
 }
 
 main {
@@ -82,7 +82,7 @@ main {
 }
 
 .card-color {
-	background-color: #151718;
+	background-color: #131616;
 }
 
 .background-dark {
@@ -191,7 +191,7 @@ main {
 	height: 28px;
 	z-index: 1000;
 	position: fixed;
-	background-color: #101112;
+	background-color: #0f1011;
 }
 
 .nav-bar #menu-toggle {
@@ -219,7 +219,7 @@ main {
 	position: fixed;
 	overflow-y: auto; 
 	height: calc(100% - 28px); 
-	background-color: #101112;
+	background-color: #0f1011;
 	transform: translateX(-100%);
 	transition: transform 0.2s ease;
 }
@@ -254,7 +254,7 @@ main {
 	padding: 3px;
     display: flex;
     justify-content: flex-start;
-	background-color: #101112 !important;
+	background-color: #0f1011 !important;
 }
 
 .sub-navigation > * {
@@ -489,12 +489,7 @@ main {
 		width: 100% !important;
 	}
 	.nav-bar {
-		top: 0;
-		width: 100%;
 		height: 30px;
-		z-index: 1000;
-		position: fixed;
-		background-color: #101112;
 	}
 	#sidebar {
 		top: 30px;

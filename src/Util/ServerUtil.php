@@ -438,8 +438,13 @@ class ServerUtil
                 array_shift($lines);
 
                 foreach ($lines as $line) {
-                    /** @var array<string> $parts */
+                    /** @var list<string>|false $parts */
                     $parts = preg_split('/\s+/', $line);
+
+                    // check f parts is countable
+                    if (!is_countable($parts)) {
+                        continue;
+                    }
 
                     if (count($parts) > 10) {
                         $pid = $parts[1];

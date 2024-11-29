@@ -14,6 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
  *
  * The user profile picture change form
  *
+ * @extends AbstractType<User>
+ *
  * @package App\Form\AccountSettings
  */
 class ProfilePicChangeFormType extends AbstractType
@@ -21,7 +23,7 @@ class ProfilePicChangeFormType extends AbstractType
     /**
      * Build profile picture change form
      *
-     * @param FormBuilderInterface $builder The form builder
+     * @param FormBuilderInterface<User|null> $builder The form builder
      * @param array<string> $options The options for building the form
      *
      * @return void

@@ -15,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  *
  * The new todo creation form
  *
+ * @extends AbstractType<Todo>
+ *
  * @package App\Form\Todo
  */
 class CreateTodoFormType extends AbstractType
@@ -22,9 +24,8 @@ class CreateTodoFormType extends AbstractType
     /**
      * Build todo creation form
      *
-     * @param FormBuilderInterface $builder
-     *
-     * @param array<string> $options
+     * @param FormBuilderInterface<Todo|null> $builder
+     * @param array<string, mixed> $options
      *
      * @return void
      */

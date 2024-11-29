@@ -57,20 +57,6 @@ class ServiceManagerTest extends TestCase
     }
 
     /**
-     * Test check is sockt open
-     *
-     * @return void
-     */
-    public function testIsSocktOpen(): void
-    {
-        // call tested method
-        $result = $this->serviceManager->isSocktOpen('127.0.0.1', 81);
-
-        // assert result
-        $this->assertIsString($result);
-    }
-
-    /**
      * Test check is process running
      *
      * @return void

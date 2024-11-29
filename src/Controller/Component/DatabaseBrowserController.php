@@ -164,7 +164,7 @@ class DatabaseBrowserController extends AbstractController
                 /** @var string $columnName */
                 $columnName = $column['COLUMN_NAME'];
 
-                /** @var string $isNullable */
+                /** @var bool $isNullable */
                 $isNullable = $column['IS_NULLABLE'] === 'YES';
 
                 /** @var string $columnType */
@@ -177,7 +177,7 @@ class DatabaseBrowserController extends AbstractController
 
                 // check if value is valid for specific column types
                 if (!empty($formData[$columnName])) {
-                    /** @var string $value */
+                    /** @var non-falsy-string $value */
                     $value = $formData[$columnName];
                     if (strpos($columnType, 'int') !== false && !is_numeric($value)) {
                         $errors[] = 'The field ' . $columnName . ' must be a number.';
@@ -302,7 +302,7 @@ class DatabaseBrowserController extends AbstractController
                 /** @var string $columnName */
                 $columnName = $column['COLUMN_NAME'];
 
-                /** @var string $isNullable */
+                /** @var bool $isNullable */
                 $isNullable = $column['IS_NULLABLE'] === 'YES';
 
                 /** @var string $columnType */
@@ -315,7 +315,7 @@ class DatabaseBrowserController extends AbstractController
 
                 // check if value is valid for specific column types
                 if (!empty($formData[$columnName])) {
-                    /** @var string $value */
+                    /** @var non-falsy-string $value */
                     $value = $formData[$columnName];
                     if (strpos($columnType, 'int') !== false && !is_numeric($value)) {
                         $errors[] = 'The field ' . $columnName . ' must be a number.';

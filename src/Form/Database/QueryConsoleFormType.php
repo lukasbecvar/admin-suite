@@ -13,6 +13,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
  *
  * The database query console form
  *
+ * @extends AbstractType<string|null>
+ *
  * @package App\Form\Database
  */
 class QueryConsoleFormType extends AbstractType
@@ -20,7 +22,7 @@ class QueryConsoleFormType extends AbstractType
     /**
      * Build query console form
      *
-     * @param FormBuilderInterface $builder The form builder
+     * @param FormBuilderInterface<string|null> $builder The form builder
      * @param array<string> $options The form options
      *
      * @return void

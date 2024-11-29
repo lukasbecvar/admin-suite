@@ -329,7 +329,7 @@ class LogManager
      */
     public function setAllLogsToReaded(): void
     {
-        /** @var \App\Entity\Log $logs */
+        /** @var array<Log> $logs */
         $logs = $this->logRepository->findBy(['status' => 'UNREADED']);
 
         if (is_iterable($logs)) {

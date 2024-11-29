@@ -45,7 +45,7 @@ class TodoManager
     /**
      * Get all todos
      *
-     * @return array<mixed> The todo list
+     * @return array<array<mixed>> The todo list
      */
     public function getTodos(string $filter = 'open'): array
     {

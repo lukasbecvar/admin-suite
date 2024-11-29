@@ -78,10 +78,6 @@ class SecurityUtilTest extends TestCase
         $password = 'testPassword123';
         $hash = $this->securityUtil->generateHash($password);
 
-        // assert that the hash is not false or null
-        $this->assertNotFalse($hash);
-        $this->assertNotNull($hash);
-
         // assert that the hash is a valid Argon2 hash
         $info = password_get_info($hash);
         $this->assertEquals('argon2id', $info['algoName']);

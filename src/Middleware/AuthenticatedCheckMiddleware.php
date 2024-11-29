@@ -39,7 +39,6 @@ class AuthenticatedCheckMiddleware
 
         // check if pathInfo is excluded from authentication check
         if (
-            is_string($pathInfo) &&
             $pathInfo !== '/api/external/log' &&
             $pathInfo !== '/login' &&
             $pathInfo !== '/register' &&

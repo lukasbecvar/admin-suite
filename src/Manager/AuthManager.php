@@ -11,7 +11,6 @@ use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Util\SecurityUtil;
 use App\Util\VisitorInfoUtil;
-use Psr\Cache\CacheItemInterface;
 use Symfony\Component\String\ByteString;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -714,15 +713,12 @@ class AuthManager
         // get user status form cache
         $cacheItem = $this->cacheUtil->getValue($userCacheKey);
 
-        // check if item is cache item object
-        if ($cacheItem instanceof CacheItemInterface) {
-            // get value from cache item
-            $status = $cacheItem->get();
+        // get value from cache item
+        $status = $cacheItem->get();
 
-            // check if status found
-            if (is_string($status) && $status !== null && $status !== '') {
-                return $status;
-            }
+        // check if status found
+        if (is_string($status) && $status !== '') {
+            return $status;
         }
 
         return 'offline';

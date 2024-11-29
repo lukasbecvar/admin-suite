@@ -8,7 +8,7 @@
 ## Dashboard preview
 ![Dashboard](.github/assets/preview.png)
 
-## Primary use
+## Description
 I created this project to manage my personal servers. I wanted a simple and easy-to-use solution that would allow me to monitor and manage my servers without relying on complex software or complicated setups. This project aims to manage single server instances, not clusters.
 
 ## Installation
@@ -27,6 +27,9 @@ Installation is very simple like any other PHP project.
 * Configure your package-requitements.json & services-monitoring.json in root file (for example use config/suite files)
 * Create systemd or screen service for monitoring process (console command infinite loop) ([systemd-config](https://github.com/lukasbecvar/admin-suite/blob/main/.docker/configs/monitoring-systemd.service))
 
+## Authentication
+Authentication uses a completely custom user system with only a username and password, and all users are managed by the application administrator. Only the first user can use the registration to create the first user in the database. The login using a standard PHP session and a cookie for the 'remember me'.
+
 ## Exception monitoring
 In config exceptions-monitoring.json it is possible to set paths to exception files and track exceptions from your applications via log manager
 
@@ -35,9 +38,6 @@ Monitoring is ensured by a console command (infinite loop) ``console app:process
 
 ## Metrics
 The metrics component stores data during the monitoring process, so its function requires the monitoring process to be running. The metrics store average usage values for CPU, RAM, and storage during the interval set in ``.env`` as ``METRICS_SAVE_INTERVALg``.
-
-## Authentication
-Authentication uses a completely custom user system with only a username and password, and all users are managed by the application administrator. Only the first user can use the registration to create the first user in the database. The login using a standard PHP session and a cookie for the 'remember me'.
 
 ## Push notifications
 If you enable push notifications in the environment config, make sure to allow notifications in the browser when loading the admin page. Additionally, if you delete subscribers or VAPID keys, you’ll need to reset notification permissions in the browser.
@@ -70,8 +70,8 @@ This project uses the following technologies
     * [Website](https://symfony.com)
 * PHPUnit
     * [Github](https://github.com/sebastianbergmann/phpunit)
-* Sempro-PHPUnit-Pretty-Print
-    * [Github](https://github.com/sempro/phpunit-pretty-print)
+* Better PHPUnit CLI output
+    * [Github](https://github.com/robiningelbrecht/phpunit-pretty-print)
 * PHPStan
     * [Github](https://github.com/phpstan/phpstan)
 * Tailwind

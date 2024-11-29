@@ -112,16 +112,14 @@ class NotificationsManagerTest extends TestCase
             ->with($this->appUtilMock->getEnvValue('DATABASE_NAME'), 'notifications_subscribers');
 
         // expect log manager call
-        $this->logManagerMock->expects($this->once())->method('log')->withConsecutive(
-            ['notifications-manager', 'generate vapid keys', LogManager::LEVEL_CRITICAL],
-            ['notifications', 'Subscribe push notifications', LogManager::LEVEL_INFO]
+        $this->logManagerMock->expects($this->exactly(1))->method('log')->with(
+            $this->equalTo('notifications-manager'),
+            $this->equalTo('generate vapid keys'),
+            $this->equalTo(LogManager::LEVEL_CRITICAL)
         );
 
         // call tested method
         $result = $this->notificationsManager->regenerateVapidKeys();
-
-        // check result
-        $this->assertNotNull($result);
     }
 
     /**

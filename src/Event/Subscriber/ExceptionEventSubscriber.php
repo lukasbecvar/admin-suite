@@ -6,7 +6,6 @@ use App\Util\AppUtil;
 use Psr\Log\LoggerInterface;
 use App\Controller\ErrorController;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -81,8 +80,6 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
 
         // call error controller to generate response
         $response = $this->errorController->show($exception);
-        if ($response instanceof Response) {
-            $event->setResponse($response);
-        }
+        $event->setResponse($response);
     }
 }

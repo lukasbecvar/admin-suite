@@ -35,7 +35,7 @@ class ServiceManager
     /**
      * Get services list from the services-monitoring.json file
      *
-     * @return array<mixed>>|null The services list, null
+     * @return array<mixed>|null The services list, null
      */
     public function getServicesList(): ?array
     {
@@ -55,7 +55,7 @@ class ServiceManager
         // check if user logged in
         if (!$this->authManager->isUserLogedin()) {
             $this->errorManager->handleError(
-                'error action runner is only for authentificated users',
+                'error action runner is only for authenticated users',
                 Response::HTTP_UNAUTHORIZED
             );
         }

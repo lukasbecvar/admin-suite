@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller\Auth;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -104,7 +105,7 @@ class NonAuthRedirectTest extends WebTestCase
      *
      * @return array<int,array<int,string>>
      */
-    protected function provideAdminUrls(): array
+    public static function provideAdminUrls(): array
     {
         $urls = [];
         foreach (self::ROUTES as $category => $routes) {
@@ -118,13 +119,12 @@ class NonAuthRedirectTest extends WebTestCase
     /**
      * Test non-authenticated requests redirect to login
      *
-     * @dataProvider provideAdminUrls
-     *
      * @param string $method The HTTP method
      * @param string $url The admin route URL
      *
      * @return void
      */
+    #[DataProvider('provideAdminUrls')]
     public function testNonAuthRedirect(string $method, string $url): void
     {
         $this->client->request($method, $url);

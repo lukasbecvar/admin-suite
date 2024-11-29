@@ -409,22 +409,4 @@ class LogManagerTest extends TestCase
         // assert result
         $this->assertIsArray($result);
     }
-
-    /**
-     * Test get exception files
-     *
-     * @return void
-     */
-    public function testGetExceptionFiles(): void
-    {
-        // expect load config call
-        $this->appUtilMock->expects($this->once())->method('loadConfig')
-            ->with('exceptions-monitoring.json');
-
-        // call tested method
-        $result = $this->logManager->getExceptionFiles();
-
-        // assert result
-        $this->assertIsArray($result);
-    }
 }

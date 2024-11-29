@@ -78,7 +78,7 @@ class LogReaderCommand extends Command
         // set limit content per page to get all logs
         $_ENV['LIMIT_CONTENT_PER_PAGE'] = $this->logManager->getLogsCountWhereStatus() + 100;
 
-        /** @var \App\Entity\Log $logs */
+        /** @var array<\App\Entity\Log> $logs */
         $logs = $this->logManager->getLogsWhereStatus($status);
 
         // check if $logs is iterable
@@ -91,16 +91,20 @@ class LogReaderCommand extends Command
         $data = [];
         foreach ($logs as $log) {
             // get user name
-            $user = $this->userManager->getUsernameById($log->getUserId()) ?? 'Unknown user';
+            $user = $this->userManager->getUsernameById($log->getUserId() ?? 0) ?? 'Unknown user';
+
+            // get log time
+            $time = $log->getTime();
+            $fornmatedLoggedDateTime = $time ? $time->format('Y-m-d H:i:s') : 'Unknown';
 
             // build log data
             $data[] = [
                 $log->getId(),
                 $log->getName(),
                 $log->getMessage(),
-                $log->getTime()->format('Y-m-d H:i:s'),
-                $this->visitorInfoUtil->getBrowserShortify($log->getUserAgent()),
-                $this->visitorInfoUtil->getOs($log->getUserAgent()),
+                $fornmatedLoggedDateTime,
+                $this->visitorInfoUtil->getBrowserShortify($log->getUserAgent() ?? 'Unknown'),
+                $this->visitorInfoUtil->getOs($log->getUserAgent() ?? 'Unknown'),
                 $log->getIpAddress(),
                 $user
             ];

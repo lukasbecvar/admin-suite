@@ -167,14 +167,22 @@ class BanManager
     {
         $banned = [];
 
-        /** @var \App\Entity\User $users all users list */
+        /** @var array<\App\Entity\User> $users all users list */
         $users = $this->userManager->getAllUsersRepositories();
 
         // check if $users is iterable
         if (is_iterable($users)) {
             foreach ($users as $user) {
+                // get user id
+                $userId = $user->getId();
+
+                // check if user id is integer
+                if (!is_integer($userId)) {
+                    continue;
+                }
+
                 // check if user is banned
-                if ($this->isUserBanned($user->getId())) {
+                if ($this->isUserBanned($userId)) {
                     $banned[] = $user;
                 }
             }

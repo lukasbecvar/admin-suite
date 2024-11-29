@@ -15,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  *
  * The username change form
  *
+ * @extends AbstractType<User>
+ *
  * @package App\Form\AccountSettings
  */
 class UsernameChangeFormType extends AbstractType
@@ -22,7 +24,7 @@ class UsernameChangeFormType extends AbstractType
     /**
      * Build the form
      *
-     * @param FormBuilderInterface $builder The form builder
+     * @param FormBuilderInterface<User|null> $builder The form builder
      * @param array<string> $options The form options
      *
      * @return void

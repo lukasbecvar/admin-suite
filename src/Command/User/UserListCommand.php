@@ -42,7 +42,7 @@ class UserListCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        /** @var \App\Entity\User $users */
+        /** @var array<\App\Entity\User> $users */
         $users = $this->userManager->getAllUsersRepositories();
 
         // check if user list is empty
@@ -60,15 +60,21 @@ class UserListCommand extends Command
         // build data for table
         $data = [];
         foreach ($users as $user) {
+            // get time data
+            $registerTime = $user->getRegisterTime();
+            $lastLoginTime = $user->getLastLoginTime();
+            $registerTime = $registerTime ? $registerTime->format('Y-m-d H:i:s') : 'Unknown';
+            $lastLoginTime = $lastLoginTime ? $lastLoginTime->format('Y-m-d H:i:s') : 'Unknown';
+
             $data[] = [
                 $user->getId(),
                 $user->getUsername(),
                 $user->getRole(),
                 $user->getIpAddress(),
-                $this->visitorInfoUtil->getBrowserShortify($user->getUserAgent()),
-                $this->visitorInfoUtil->getOs($user->getUserAgent()),
-                $user->getRegisterTime()->format('Y-m-d H:i:s'),
-                $user->getLastLoginTime()->format('Y-m-d H:i:s')
+                $this->visitorInfoUtil->getBrowserShortify($user->getUserAgent() ?? 'Unknown'),
+                $this->visitorInfoUtil->getOs($user->getUserAgent() ?? 'Unknown'),
+                $registerTime,
+                $lastLoginTime
             ];
         }
 

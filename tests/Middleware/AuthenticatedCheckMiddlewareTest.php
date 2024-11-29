@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Class AuthenticatedCheckMiddlewareTest
  *
- * Test the authentificated middleware
+ * Test the Authenticated middleware
  *
  * @package App\Tests\Middleware
  */

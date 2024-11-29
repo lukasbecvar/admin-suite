@@ -29,14 +29,14 @@ class EscapeRequestDataMiddlewareTest extends TestCase
     {
         // mock SecurityUtil
         $this->securityUtil = $this->createMock(SecurityUtil::class);
-        $this->securityUtil->method('escapeString')->willReturnCallback(function ($value) {
+        $this->securityUtil->method('escapeString')->willReturnCallback(function (string $value) {
             return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5);
         });
 
         // mock RequestStack
         $this->requestStack = new RequestStack();
 
-        /** @var UrlGeneratorInterface $urlGeneratorInterface */
+        /** @var UrlGeneratorInterface&MockObject $urlGeneratorInterface */
         $urlGeneratorInterface = $this->createMock(UrlGeneratorInterface::class);
 
         // create middleware instance
@@ -62,7 +62,7 @@ class EscapeRequestDataMiddlewareTest extends TestCase
         $this->requestStack->push($request);
 
         // create a request event
-        /** @var HttpKernelInterface $kernel */
+        /** @var HttpKernelInterface&MockObject $kernel */
         $kernel = $this->createMock(HttpKernelInterface::class);
 
         /** @var Request $request */

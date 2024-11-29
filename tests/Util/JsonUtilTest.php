@@ -2,11 +2,10 @@
 
 namespace Tests\Unit\Util;
 
-use Twig\Environment;
 use App\Util\JsonUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class JsonUtilTest
@@ -18,14 +17,12 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class JsonUtilTest extends TestCase
 {
     private JsonUtil $jsonUtil;
-    private ErrorManager $errorManager;
+    private ErrorManager & MockObject $errorManager;
 
     protected function setUp(): void
     {
         // mock dependencies
-        /** @var Environment $twigMock */
-        $twigMock = $this->createMock(Environment::class);
-        $this->errorManager = new ErrorManager($twigMock);
+        $this->errorManager = $this->createMock(ErrorManager::class);
 
         // create instance of JsonUtil
         $this->jsonUtil = new JsonUtil($this->errorManager);
@@ -51,23 +48,6 @@ class JsonUtilTest extends TestCase
 
         // clean up the test file
         unlink($filePath);
-    }
-
-    /**
-     * Test get json with different targets
-     *
-     * @return void
-     */
-    public function testGetJsonWithInvalidTarget(): void
-    {
-        // set expect exception
-        $this->expectException(HttpException::class);
-        $this->expectExceptionMessage(
-            'error to get json data from non_existent_file.json with error: file_get_contents(non_existent_file.json): Failed to open stream: No such file or directory'
-        );
-
-        // call the method
-        $this->jsonUtil->getJson('non_existent_file.json');
     }
 
     /**

@@ -17,6 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
  *
  * The new user registration form
  *
+ * @extends AbstractType<User>
+ *
  * @package App\Form\Auth
  */
 class RegistrationFormType extends AbstractType
@@ -24,8 +26,8 @@ class RegistrationFormType extends AbstractType
     /**
      * Build registration form
      *
-     * @param FormBuilderInterface $builder
-     * @param array<string> $options
+     * @param FormBuilderInterface<User|null> $builder The form builder
+     * @param array<string> $options The form options
      *
      * @return void
      */

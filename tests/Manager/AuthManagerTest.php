@@ -211,7 +211,7 @@ class AuthManagerTest extends TestCase
         $this->securityUtilMock->method('generateHash')->willReturn('hashedPassword');
 
         // expect entity manager call
-        $this->entityManagerMock->expects($this->once())->method('persist')->with($this->callback(function ($user) {
+        $this->entityManagerMock->expects($this->once())->method('persist')->with($this->callback(function (User $user) {
             return $user->getIpAddress() === 'Unknown';
         }));
         $this->entityManagerMock->expects($this->once())->method('flush');
@@ -235,7 +235,7 @@ class AuthManagerTest extends TestCase
         $this->securityUtilMock->method('generateHash')->willReturn('hashedPassword');
 
         // expect entity manager call
-        $this->entityManagerMock->expects($this->once())->method('persist')->with($this->callback(function ($user) {
+        $this->entityManagerMock->expects($this->once())->method('persist')->with($this->callback(function (User $user) {
             return $user->getUserAgent() === 'Unknown';
         }));
         $this->entityManagerMock->expects($this->once())->method('flush');

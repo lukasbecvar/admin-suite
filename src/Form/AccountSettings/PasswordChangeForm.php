@@ -16,6 +16,8 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
  *
  * The user password change form
  *
+ * @extends AbstractType<User>
+ *
  * @package App\Form\AccountSettings
  */
 class PasswordChangeForm extends AbstractType
@@ -23,7 +25,7 @@ class PasswordChangeForm extends AbstractType
     /**
      * Build password update form
      *
-     * @param FormBuilderInterface $builder The form builder
+     * @param FormBuilderInterface<User|null> $builder The form builder
      * @param array<string> $options The form options
      *
      * @return void
