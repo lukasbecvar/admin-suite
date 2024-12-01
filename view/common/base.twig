@@ -6,7 +6,9 @@
     <meta content="Admin suite linux servers and app managment dashboard" name="description">
     <link rel="icon" href={{ asset('assets/images/favicon.png') }} type="image/x-icon"/>
     {# INCLUDE PWA CONFIG MANIFEST #}
-    <link rel="manifest" href={{ asset('pwa-config.json') }}>
+    {% if pwa_app_support == 'true' %}
+        <link rel="manifest" href={{ asset('pwa-config.json') }}>
+    {% endif %}
     {# REGISTER CSS ASSETS #}
     {{ encore_entry_link_tags('index-css') }}
     <title>Admin suite</title>

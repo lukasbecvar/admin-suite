@@ -1,3 +1,5 @@
 twig:
-    # twig templates path directory
+    # twig templates index path
     default_path: '%kernel.project_dir%/view'
+    globals:
+        pwa_app_support: '%pwa_app_support%'

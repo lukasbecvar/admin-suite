@@ -1,3 +1,6 @@
+parameters:
+    pwa_app_support: '%env(PWA_APP_SUPPORT)%'
+
 services:
     _defaults:
         autowire: true      # automatically injects dependencies
