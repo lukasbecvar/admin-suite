@@ -73,7 +73,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
         $excludedHttpCodes = $config['monolog']['handlers']['filtered']['excluded_http_codes'];
 
         // check if code is excluded from logging
-        if (!in_array($statusCode, $excludedHttpCodes)) {
+        if (!in_array($statusCode, $excludedHttpCodes) && !str_contains($message, 'Untrusted Host')) {
             // log error message to exception log
             $this->logger->error($message);
         }
