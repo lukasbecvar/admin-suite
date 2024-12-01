@@ -4,16 +4,22 @@
     </div>
     <div class="overflow-y-auto max-h-72">
         <table class="min-w-full divide-y divide-neutral-500 bg-neutral-910 text-white">
-            <thead>
+            <thead class="bg-neutral-900">
                 <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">PID</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">User</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Process</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-910 z-10">
+                        PID
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-910 z-10">
+                        User
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-910 z-10">
+                        Process
+                    </th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-neutral-500 bg-neutral-850">
                 {% for process in processList %}
-                    <tr class="hover:bg-neutral-700">
+                    <tr class="hover:bg-neutral-800">
                         <td class="px-4 py-2 whitespace-nowrap text-sm font-bold">{{ process.pid|e }}</td>
                         <td class="px-4 py-2 whitespace-nowrap text-sm">{{ process.user|e }}</td>
                         <td class="px-4 py-2 whitespace-nowrap text-sm">{{ process.process|e }}</td>

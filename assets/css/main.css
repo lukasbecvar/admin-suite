@@ -370,6 +370,19 @@ main {
 	background-color: rgb(23 23 23);;
 }
 
+.todo-manager .todo-list {
+    overflow-y: auto;
+	height: calc(100% - 5.2rem);
+}
+
+.todo-manager form {
+    position: fixed;
+	width: 100%;
+    bottom: 0;
+    z-index: 10;
+    background-color: #1f2937;
+}
+
 .todo-manager .add-todo-button {
 	height: 2.80rem !important;
 }

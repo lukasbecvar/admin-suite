@@ -22,13 +22,8 @@
         <span class="mr-1 text-white">Todo list</span>
     </div>
 
-    {# INCLIUDE CREATE TODO FORM #}
-    {% if filter == 'open' %}
-        {% include "component/todo-manager/form/create-todo-form.twig" %}
-    {% endif %}
-
     {# TODO LIST #}
-    <div class="flex-1 overflow-y-auto card-component p-0 px-2">
+    <div class="{{ filter == 'open' ? 'todo-list' : '' }} overflow-y-auto card-component p-0 px-2">
         <div class="divide-y divide-neutral-700">
 
             {# TODO LIST IS EMPTY INFORMATION #}
@@ -60,6 +55,11 @@
             {% endfor %}
         </div>
     </div>
+
+    {# INCLIUDE CREATE TODO FORM #}
+    {% if filter == 'open' %}
+        {% include "component/todo-manager/form/create-todo-form.twig" %}
+    {% endif %}
 </div>
 
 {# TODO EDIT POPUP OVERLAY #}
