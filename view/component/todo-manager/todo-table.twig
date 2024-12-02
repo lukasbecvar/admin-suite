@@ -58,7 +58,9 @@
 
     {# INCLIUDE CREATE TODO FORM #}
     {% if filter == 'open' %}
-        {% include "component/todo-manager/form/create-todo-form.twig" %}
+        <div class="flex">
+            {% include "component/todo-manager/form/create-todo-form.twig" %}
+        </div>
     {% endif %}
 </div>
 
