@@ -7,19 +7,10 @@
     colors="true" 
 >
     <php>
-        <!-- SERVER VARIABLES -->
         <server name="APP_ENV" value="test" force="true"/>
-        <server name="SYMFONY_DEBUG" value="0"/>
-        <server name="SHELL_VERBOSITY" value="-1"/>
-        <server name="SYMFONY_PHPUNIT_REMOVE" value=""/>
-        <server name="SYMFONY_PHPUNIT_VERSION" value="9.5"/>
-        
-        <!-- ENV VARIABLES -->
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled"/>
         <env name="KERNEL_CLASS" value="App\Kernel"/>
-        <env name="SYMFONY_DEBUG" value="0"/>
-        <env name="HTTP_USER_AGENT" value="test"/>
         <env name="REMOTE_ADDR" value="127.0.0.1"/>
+        <env name="HTTP_USER_AGENT" value="test"/>
     </php>
 
     <testsuites>
