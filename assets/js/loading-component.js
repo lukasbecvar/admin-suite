@@ -6,11 +6,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
 /* loading component for click on links */
 document.addEventListener("DOMContentLoaded", function () {
-    const loader = document.getElementById("loader-wrapper")
-    loader.style.display = "none"
     document.body.addEventListener("click", function (event) {
         const target = event.target.closest("a")
+        const loader = document.getElementById("loader-wrapper")
         if (target && target.href) {
+
+            // exclude links to internal blobs and data views
+            if (!target.href.includes("http") || target.href.includes("blob")) {
+                return
+            }
+
             event.preventDefault()
             loader.style.display = "flex"
             setTimeout(() => {

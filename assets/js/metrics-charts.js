@@ -68,7 +68,7 @@ var optionsCpuLine = {
         toolbar: {
             show: true,
             tools: {
-                pan: true,
+                pan: false,
                 reset: true,
                 zoomin: false,
                 zoomout: false,
@@ -172,7 +172,7 @@ var optionsRamLine = {
         toolbar: {
             show: true,
             tools: {
-                pan: true,
+                pan: false,
                 reset: true,
                 zoomin: false,
                 zoomout: false,
@@ -276,7 +276,7 @@ var optionsStorageLine = {
         toolbar: {
             show: true,
             tools: {
-                pan: true,
+                pan: false,
                 reset: true,
                 zoomin: false,
                 zoomout: false,
