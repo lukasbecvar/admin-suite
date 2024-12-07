@@ -89,6 +89,8 @@ var optionsCpuLine = {
         tickAmount: Math.floor(window.metricsData.categories.length / 2)
     },
     yaxis: {
+        min: 0,
+        max: 100,
         labels: {
             formatter: function (value) {
                 return value + '%'
@@ -193,6 +195,8 @@ var optionsRamLine = {
         tickAmount: Math.floor(window.metricsData.categories.length / 2)
     },
     yaxis: {
+        min: 0,
+        max: 100,
         labels: {
             formatter: function (value) {
                 return value + '%'
@@ -297,6 +301,8 @@ var optionsStorageLine = {
         tickAmount: Math.floor(window.metricsData.categories.length / 2)
     },
     yaxis: {
+        min: 0,
+        max: 100,
         labels: {
             formatter: function (value) {
                 return value + '%'
