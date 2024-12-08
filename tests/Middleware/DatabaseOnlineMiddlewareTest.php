@@ -28,11 +28,6 @@ class DatabaseOnlineMiddlewareTest extends TestCase
     private LoggerInterface & MockObject $loggerMock;
     private ErrorManager & MockObject $errorManagerMock;
 
-    /**
-     * Sets up the mock objects before each test
-     *
-     * @return void
-     */
     protected function setUp(): void
     {
         // mock dependencies
