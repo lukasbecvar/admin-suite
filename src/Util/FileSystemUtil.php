@@ -164,8 +164,8 @@ class FileSystemUtil
             return 'non-mediafile';
         }
 
-        // get file MIME type
-        $mimeType = mime_content_type($path);
+        // get MIME type using the file command
+        $mimeType = shell_exec("sudo file --mime-type -b " . escapeshellarg($path));
 
         // check if MIME type is detected
         if (!$mimeType) {
@@ -175,6 +175,9 @@ class FileSystemUtil
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+
+        // trim the output
+        $mimeType = trim($mimeType);
 
         // determine if file is an image, video, or audio
         if (str_starts_with($mimeType, 'image/')) {
@@ -187,6 +190,7 @@ class FileSystemUtil
 
         return 'non-mediafile';
     }
+
 
     /**
      * Get content of a file
