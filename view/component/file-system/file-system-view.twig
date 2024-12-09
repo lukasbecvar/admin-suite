@@ -26,7 +26,7 @@
 </div>
 
 {# FILESYSTEM BROWSER #}
-<div class="component">
+<div class="component card-color">
     {# FILESYSTEM PATH BREADCRUMB #}
     <div class="p-1 card-color border-b border-neutral-700 shadow flex items-center space-x-2">
         <span class="text-sm font-medium text-gray-300">Path:</span>
@@ -45,7 +45,7 @@
     </div>
 
     {# FILE CONTENT VIEW #}
-    <div class="card-color shadow-md overflow-auto">
+    <div class="card-color overflow-auto">
         {# RAW FILE CONTENT VIEW #}
         {% if mediaType == 'non-mediafile' or mediaType == null %}
             <pre class="text-sm text-cyan rounded overflow-auto p-1 text-green-400">{{ fileContent|e }}</pre>
