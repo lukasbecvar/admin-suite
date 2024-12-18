@@ -6,6 +6,6 @@
 
 # drop databases
 docker-compose run php bash -c "
-    php bin/console doctrine:database:drop --force &&
-    php bin/console doctrine:database:drop --env=test --force
+    php bin/console doctrine:database:drop --if-exists --force &&
+    php bin/console doctrine:database:drop --if-exists --env=test --force
 "

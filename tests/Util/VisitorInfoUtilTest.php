@@ -2,8 +2,10 @@
 
 namespace App\Tests\Util;
 
+use App\Util\SecurityUtil;
 use App\Util\VisitorInfoUtil;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class VisitorInfoUtilTest
@@ -15,11 +17,20 @@ use PHPUnit\Framework\TestCase;
 class VisitorInfoUtilTest extends TestCase
 {
     private VisitorInfoUtil $visitorInfoUtil;
+    private SecurityUtil & MockObject $securityUtilMock;
 
     protected function setUp(): void
     {
-        // create the visitor info util instance
-        $this->visitorInfoUtil = new VisitorInfoUtil();
+        // mock dependencies
+        $this->securityUtilMock = $this->createMock(SecurityUtil::class);
+
+        // mock escape string behavior
+        $this->securityUtilMock->method('escapeString')->willReturnCallback(function ($string) {
+            return htmlspecialchars($string, ENT_QUOTES | ENT_HTML5);
+        });
+
+        // create visitor info util instance
+        $this->visitorInfoUtil = new VisitorInfoUtil($this->securityUtilMock);
     }
 
     /**
