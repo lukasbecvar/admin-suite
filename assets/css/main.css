@@ -548,10 +548,6 @@ main {
 	.non-phone-only {
 		display: none;
 	}
-}
-
-/* disable mini mode on small devices */
-@media screen and (max-width: 200px) { 
 	.mini-disabled {
 		display: none;
 	}
