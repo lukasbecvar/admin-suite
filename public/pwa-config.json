@@ -1,5 +1,5 @@
 {
-    "name": "Admin-suite server admin",
+    "name": "Admin suite",
     "short_name": "Admin suite",
     "description": "Solution for Linux server with services administration and monitoring",
     "start_url": "/dashboard",

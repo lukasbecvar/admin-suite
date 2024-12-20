@@ -46,44 +46,44 @@
     <div class="p-6 bg-neutral-800">
         {# GO TO USER LOGS #}
         <div class="flex items-center mt-4">
-            <div class="text-gray-600 dark:text-gray-200">
+            <div class="text-white">
                 <i class="fas fa-list mr-2"></i>
                 <span>logs <a href={{ path('app_manager_logs', {'user_id': userRepository.getId, 'filter': 'all'}) }} class="profile-link text-blue-400">here</a></span>
             </div>
         </div>
         {# USER IP ADDRESS #}
         <div class="flex items-center mt-4">
-            <div class="text-gray-600 dark:text-gray-200">
+            <div class="text-white">
                 <i class="fas fa-address-book mr-2"></i>
                 <span>{{ userRepository.getIpAddress()|e }}</span>
             </div>
         </div>
         {# USER BROWSER #}
         <div class="flex items-center mt-4">
-            <div class="text-gray-600 dark:text-gray-200">
+            <div class="text-white">
                 <i class="fas fa-window-maximize mr-2"></i>
                 <span>{{ visitorInfoUtil.getBrowserShortify(userRepository.getUserAgent())|e }}</span>
             </div>
         </div>
         {# USER OS #}
         <div class="flex items-center mt-4">
-            <div class="text-gray-600 dark:text-gray-200">
+            <div class="text-white">
                 <i class="fas fa-tv mr-2"></i>
                 <span>{{ visitorInfoUtil.getOs(userRepository.getUserAgent())|e }}</span>
             </div>
         </div>
         {# USER REGISTERED TIME #}
-        <div class="mt-4 text-gray-600 dark:text-gray-200">
+        <div class="mt-4 text-white">
             <i class="fas fa-registered mr-2"></i>
             <span>Registered: {{ userRepository.getRegisterTime()|date('Y-m-d H:i:s')|e }}</span>
         </div>
         {# USER LAST LOGIN TIME #}
-        <div class="mt-2 text-gray-600 dark:text-gray-200">
+        <div class="mt-2 text-white">
             <i class="fas fa-clock mr-2"></i>
             <span>Last Login: {{ userRepository.getLastLoginTime()|date('Y-m-d H:i:s')|e }}</span>
         </div>
         {# USER BAN STATUS #}
-        <div class="mt-2 text-gray-600 dark:text-gray-200">
+        <div class="mt-2 text-white">
             <i class="fas fa-ban mr-2"></i>
             {% if banManager.isUserBanned(userRepository.getId()) %}
                 <span><span class="text-red-400">banned</span> for: {{ banManager.getBanReason(userRepository.getId()) }}</span>
