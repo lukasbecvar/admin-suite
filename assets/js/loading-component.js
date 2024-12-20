@@ -24,3 +24,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     })
 })
+
+// fix disable loading when user navigates step back in history
+document.addEventListener("DOMContentLoaded", function () {
+    window.addEventListener("pageshow", function(event) {
+        if (event.persisted) {
+            document.getElementById("loader-wrapper").style.display = "none"
+        }
+    })
+})
