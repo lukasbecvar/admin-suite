@@ -541,6 +541,9 @@ main {
 	.m-w-95 {
 		max-width: 95%;
 	}
+	.phone-none-1 {
+		display: none;
+	}
 }
 
 /* apply only on non mobile devices */ 

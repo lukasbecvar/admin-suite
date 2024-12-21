@@ -30,6 +30,9 @@
     {# CURRENT TABLE LINK #}
     <div class="text-white text-2xl font-bold ml-1 phone-none">/</div>
     <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="text-white font-bold px-1 py-1 rounded mr-2 breadcrumb-link phone-none">{{ tableName|e }}</a>
+
+    {# TABLE DATA COUNT #}
+    <div class="ml-auto text-white phone-none-1">{{ tableDataCount }} rows</div>
 </div>
 
 {# TABLE DATA #}
