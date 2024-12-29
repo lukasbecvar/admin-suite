@@ -7,7 +7,7 @@ Encore
     .setPublicPath('/assets')
 
     // register css
-    .addEntry('index-css', './assets/css/index.css')
+    .addEntry('index-css', './assets/css/index.scss')
 
     // register js
     .addEntry('terminal-js', './assets/js/terminal.js')
@@ -29,6 +29,7 @@ Encore
 
     // other webpack configs
     .splitEntryChunks()
+    .enableSassLoader()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
     .enableBuildNotifications()

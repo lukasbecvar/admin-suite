@@ -1,0 +1,16 @@
+/* css styles index */
+
+/* tailwindcss */
+@use '../../node_modules/tailwindcss/base' as *;
+@use '../../node_modules/tailwindcss/utilities' as *;
+@use '../../node_modules/tailwindcss/components' as *;
+
+/* fontawesome */
+@use '../../node_modules/@fortawesome/fontawesome-free/css/all' as *;
+
+/* main app style */
+@use './main' as *;
+
+/* others styles */
+@use './loading' as *;
+@use './scrollbar' as *;
