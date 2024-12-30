@@ -307,7 +307,7 @@ class MonitoringManager
                 message: 'storage space on the disk is not enough'
             );
             $io->writeln(
-                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>storage space on the disk is not enough (current: ' . $storageUsage . ')</fg=red>'
+                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>storage space on the disk is not enough (current: ' . $storageUsage . '%)</fg=red>'
             );
         } else {
             $this->handleMonitoringStatus(
@@ -316,7 +316,7 @@ class MonitoringManager
                 message: 'storage space is normal'
             );
             $io->writeln(
-                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>storage space is in normal range (current: ' . $storageUsage . ')</fg=green>'
+                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>storage space is in normal range (current: ' . $storageUsage . '%)</fg=green>'
             );
         }
 
