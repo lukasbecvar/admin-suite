@@ -265,7 +265,7 @@ class MonitoringManager
                 message: 'cpu usage is too high'
             );
             $io->writeln(
-                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>cpu usage is too high (current: ' . $cpuUsage . '%, max: 98%)</fg=red>'
+                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>cpu usage is too high (current: ' . $cpuUsage . '%)</fg=red>'
             );
         } else {
             $this->handleMonitoringStatus(
@@ -274,7 +274,7 @@ class MonitoringManager
                 message: 'cpu usage is normal'
             );
             $io->writeln(
-                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>cpu usage is in normal range (current: ' . $cpuUsage . '%, max: 98%)</fg=green>'
+                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>cpu usage is in normal range (current: ' . $cpuUsage . '%)</fg=green>'
             );
         }
 
@@ -286,7 +286,7 @@ class MonitoringManager
                 message: 'ram usage is too high'
             );
             $io->writeln(
-                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>ram usage is too high (current: ' . $ramUsage . '%, max: 98%)</fg=red>'
+                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>ram usage is too high (current: ' . $ramUsage . '%)</fg=red>'
             );
         } else {
             $this->handleMonitoringStatus(
@@ -295,7 +295,7 @@ class MonitoringManager
                 message: 'ram usage is normal'
             );
             $io->writeln(
-                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>ram usage is in normal range (current: ' . $ramUsage . '%, max: 98%)</fg=green>'
+                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>ram usage is in normal range (current: ' . $ramUsage . '%)</fg=green>'
             );
         }
 
@@ -307,7 +307,7 @@ class MonitoringManager
                 message: 'storage space on the disk is not enough'
             );
             $io->writeln(
-                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>storage space on the disk is not enough (current: ' . $storageUsage . '%, max: 98%)</fg=red>'
+                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>storage space on the disk is not enough (current: ' . $storageUsage . ')</fg=red>'
             );
         } else {
             $this->handleMonitoringStatus(
@@ -316,7 +316,7 @@ class MonitoringManager
                 message: 'storage space is normal'
             );
             $io->writeln(
-                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>storage space is in normal range (current: ' . $storageUsage . '%, max: 98%)</fg=green>'
+                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>storage space is in normal range (current: ' . $storageUsage . ')</fg=green>'
             );
         }
 
