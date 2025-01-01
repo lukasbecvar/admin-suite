@@ -259,7 +259,7 @@ class ServiceManager
         // initialize cURL session
         $ch = curl_init($url);
 
-        if ($ch == false) {
+        if ($ch === false) {
             $this->errorManager->handleError(
                 message: 'error to check website status: ' . $url,
                 code: Response::HTTP_INTERNAL_SERVER_ERROR

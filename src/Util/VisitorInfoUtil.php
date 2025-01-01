@@ -179,11 +179,9 @@ class VisitorInfoUtil
 
         // find os
         foreach ($osArray as $regex => $value) {
-            // check if os found
-            if ($regex != null && $userAgent != null) {
-                if (preg_match($regex, $userAgent)) {
-                    $os = $value;
-                }
+            if ($userAgent !== null && preg_match($regex, $userAgent)) {
+                $os = $value;
+                break;
             }
         }
 

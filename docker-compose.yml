@@ -9,7 +9,7 @@ services:
     # composer service for managing php dependencies
     composer:
         image: composer:latest
-        container_name: composer
+        container_name: admin_suite_composer
         working_dir: /app
         mem_limit: 1g
         volumes:
@@ -19,7 +19,7 @@ services:
     # node service for building assets
     node:
         image: node:latest
-        container_name: node
+        container_name: admin_suite_node
         working_dir: /app
         mem_limit: 2g
         volumes:

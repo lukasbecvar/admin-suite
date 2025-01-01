@@ -43,26 +43,20 @@ class ErrorController extends AbstractController
         // get error code
         $code = $request->query->get('code', '404');
 
-        // convert error code to string
-        $code = strval($code);
-
-        // get error code as integer
-        $code = intval($code);
-
-        // block handeling (maintenance, banned use only from app logic)
-        if ($code == 'maintenance' or $code == 'banned' or $code == null) {
+        // block handling for special cases
+        if ($code === 'maintenance' || $code === 'banned') {
             $code = 'unknown';
         }
 
-        // get response code
-        if (!is_int($code)) {
-            $responeCode = 500;
+        // convert to integer for response code
+        if (!is_numeric($code)) {
+            $responseCode = 500;
         } else {
-            $responeCode = intval($code);
+            $responseCode = intval($code);
         }
 
         // return error view
-        return new Response($this->errorManager->getErrorView($code), $responeCode);
+        return new Response($this->errorManager->getErrorView($code), $responseCode);
     }
 
     /**
