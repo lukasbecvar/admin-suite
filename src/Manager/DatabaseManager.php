@@ -7,6 +7,7 @@ use Exception;
 use PDOException;
 use App\Util\AppUtil;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -22,17 +23,20 @@ class DatabaseManager
     private LogManager $logManager;
     private Connection $connection;
     private ErrorManager $errorManager;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(
         AppUtil $appUtil,
         LogManager $logManager,
         Connection $connection,
-        ErrorManager $errorManager
+        ErrorManager $errorManager,
+        EntityManagerInterface $entityManager
     ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->connection = $connection;
         $this->errorManager = $errorManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -667,6 +671,55 @@ class DatabaseManager
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error truncating table: ' . $e->getMessage() . ' in database: ' . $dbName,
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Get entity table name
+     *
+     * @param string $entityClass The entity class
+     *
+     * @return string The entity table name
+     */
+    public function getEntityTableName(string $entityClass): string
+    {
+        if (!class_exists($entityClass)) {
+            $this->errorManager->handleError(
+                message: 'entity class not found: ' . $entityClass,
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        $metadata = $this->entityManager->getClassMetadata($entityClass);
+        return $metadata->getTableName();
+    }
+
+    /**
+     * Recalculate table IDs
+     *
+     * @param string $tableName The name of the table
+     *
+     * @throws Exception Error recalculating table IDs
+     *
+     * @return void
+     */
+    public function recalculateTableIds(string $tableName): void
+    {
+        try {
+            // recalculate ids
+            $this->connection->executeQuery('SET @new_id = 0;');
+            $this->connection->executeQuery('UPDATE ' . $tableName . ' SET id = (@new_id := @new_id + 1);');
+
+            // get max id
+            $maxId = $this->connection->fetchOne('SELECT MAX(id) FROM ' . $tableName . ';');
+
+            // set new auto increment value
+            $this->connection->executeQuery('ALTER TABLE ' . $tableName . ' AUTO_INCREMENT = ' . ($maxId + 1) . ';');
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error recalculating table IDs: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

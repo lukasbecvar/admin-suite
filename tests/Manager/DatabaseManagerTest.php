@@ -10,6 +10,7 @@ use Doctrine\DBAL\Connection;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Manager\DatabaseManager;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,6 +28,7 @@ class DatabaseManagerTest extends TestCase
     private LogManager & MockObject $logManagerMock;
     private Connection & MockObject $connectionMock;
     private ErrorManager & MockObject $errorManagerMock;
+    private EntityManagerInterface & MockObject $entityManagerMock;
 
     protected function setUp(): void
     {
@@ -35,13 +37,15 @@ class DatabaseManagerTest extends TestCase
         $this->connectionMock = $this->createMock(Connection::class);
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
+        $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
         // initialize the database manager instance
         $this->databaseManager = new DatabaseManager(
             $this->appUtilMock,
             $this->logManagerMock,
             $this->connectionMock,
-            $this->errorManagerMock
+            $this->errorManagerMock,
+            $this->entityManagerMock
         );
     }
 

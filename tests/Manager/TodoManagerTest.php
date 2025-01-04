@@ -10,6 +10,7 @@ use App\Manager\AuthManager;
 use App\Manager\TodoManager;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
+use App\Manager\DatabaseManager;
 use App\Repository\TodoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,6 +30,7 @@ class TodoManagerTest extends TestCase
     private SecurityUtil & MockObject $securityUtilMock;
     private ErrorManager & MockObject $errorManagerMock;
     private TodoRepository & MockObject $todoRepositoryMock;
+    private DatabaseManager & MockObject $databaseManagerMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
 
     protected function setUp(): void
@@ -39,6 +41,7 @@ class TodoManagerTest extends TestCase
         $this->securityUtilMock = $this->createMock(SecurityUtil::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->todoRepositoryMock = $this->createMock(TodoRepository::class);
+        $this->databaseManagerMock = $this->createMock(DatabaseManager::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
         // initialize the TodoManager with the mocked dependencies
@@ -48,6 +51,7 @@ class TodoManagerTest extends TestCase
             $this->securityUtilMock,
             $this->errorManagerMock,
             $this->todoRepositoryMock,
+            $this->databaseManagerMock,
             $this->entityManagerMock
         );
     }

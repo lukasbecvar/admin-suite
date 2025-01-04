@@ -24,6 +24,7 @@ class TodoManager
     private SecurityUtil $securityUtil;
     private ErrorManager $errorManager;
     private TodoRepository $todoRepository;
+    private DatabaseManager $databaseManager;
     private EntityManagerInterface $entityManagerInterface;
 
     public function __construct(
@@ -32,6 +33,7 @@ class TodoManager
         SecurityUtil $securityUtil,
         ErrorManager $errorManager,
         TodoRepository $todoRepository,
+        DatabaseManager $databaseManager,
         EntityManagerInterface $entityManagerInterface
     ) {
         $this->logManager = $logManager;
@@ -39,6 +41,7 @@ class TodoManager
         $this->securityUtil = $securityUtil;
         $this->errorManager = $errorManager;
         $this->todoRepository = $todoRepository;
+        $this->databaseManager = $databaseManager;
         $this->entityManagerInterface = $entityManagerInterface;
     }
 
@@ -309,6 +312,9 @@ class TodoManager
                 // delete todo entity
                 $this->entityManagerInterface->remove($todo);
                 $this->entityManagerInterface->flush();
+
+                // recalculate table IDs
+                $this->databaseManager->recalculateTableIds($this->databaseManager->getEntityTableName(Todo::class));
             }
         } catch (Exception $e) {
             $this->errorManager->handleError(
