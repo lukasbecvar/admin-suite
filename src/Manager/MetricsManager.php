@@ -117,6 +117,9 @@ class MetricsManager
             }
         }
 
+        // round times in categories
+        $categories = $this->appUtil->roundTimesInArray($categories);
+
         // build metrics data
         $metricsData = [
             'categories' => $categories,
