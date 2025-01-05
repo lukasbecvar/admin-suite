@@ -428,10 +428,10 @@ class MonitoringManager
                             } else {
                                 // collect all metrics
                                 foreach ($metrics as $name => $value) {
-                                    $this->metricsManager->saveServicesMetric(
+                                    $this->metricsManager->saveMetricWithCacheSummary(
                                         metricName: $name,
                                         value: $value,
-                                        type: $service['service_name']
+                                        serviceName: $service['service_name']
                                     );
                                 }
                             }
