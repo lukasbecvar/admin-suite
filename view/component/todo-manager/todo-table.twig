@@ -46,6 +46,9 @@
                                 <i class="fa fa-check" aria-hidden="true"></i>
                             </a>
                         {% else %}
+                            <a href={{ path('app_todo_manager_reopen', {'id': todo.id}) }} class="delete-link text-green-500 text-xl hover:text-green-200 focus:outline-none mr-0.5">
+                                <i class="fa fa-undo" aria-hidden="true"></i>
+                            </a>
                             <a href={{ path('app_todo_manager_delete', {'id': todo.id}) }} class="delete-link text-red-500 text-xl hover:text-red-200 focus:outline-none mr-0.5">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </a>

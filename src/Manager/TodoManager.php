@@ -272,6 +272,66 @@ class TodoManager
     }
 
     /**
+     * Reopen todo by id
+     *
+     * @param int $todoId The todo id
+     *
+     * @throws Exception Error to flush changes to database
+     *
+     * @return void
+     */
+    public function reopenTodo(int $todoId): void
+    {
+        /** @var Todo $todo */
+        $todo = $this->todoRepository->find($todoId);
+
+        // check if todo is not null
+        if ($todo === null) {
+            $this->errorManager->handleError(
+                message: 'todo: ' . $todoId . ' not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // check if user is owner of todo
+        if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
+            $this->errorManager->handleError(
+                message: 'you are not the owner of the todo: ' . $todoId,
+                code: Response::HTTP_FORBIDDEN
+            );
+        }
+
+        // check if todo is closed
+        if ($todo->getStatus() != 'closed') {
+            $this->errorManager->handleError(
+                message: 'todo: ' . $todoId . ' is not closed',
+                code: Response::HTTP_FORBIDDEN
+            );
+        }
+
+        try {
+            // set todo status to open
+            $todo->setStatus('open');
+            $todo->setCompletedTime(null);
+
+            // flush todo entity
+            $this->entityManagerInterface->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to reopen todo: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // log todo reopen event
+        $this->logManager->log(
+            name: 'todo-manager',
+            message: 'todo: ' . $todoId . ' reopened',
+            level: LogManager::LEVEL_INFO
+        );
+    }
+
+    /**
      * Delete todo by id
      *
      * @param int $todoId The todo id

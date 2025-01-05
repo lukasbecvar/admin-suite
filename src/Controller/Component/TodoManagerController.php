@@ -136,6 +136,34 @@ class TodoManagerController extends AbstractController
     }
 
     /**
+     * Handle todo reopen functionality
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The response todo manager component redirect
+     */
+    #[Route('/manager/todo/reopen', methods:['GET'], name: 'app_todo_manager_reopen')]
+    public function reopenTodo(Request $request): Response
+    {
+        // get todo id
+        $todoId = (int) $request->query->get('id');
+
+        // check if todo id is valid
+        if ($todoId == 0) {
+            $this->errorManager->handleError(
+                message: 'invalid todo id',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // reopen todo
+        $this->todoManager->reopenTodo($todoId);
+
+        // self redirect back to todo manager
+        return $this->redirectToRoute('app_todo_manager');
+    }
+
+    /**
      * Handle todo delete functionality
      *
      * @param Request $request The request object
