@@ -5,6 +5,7 @@ namespace App\Manager;
 use DateTime;
 use Exception;
 use App\Util\AppUtil;
+use App\Util\JsonUtil;
 use App\Util\CacheUtil;
 use App\Util\ServerUtil;
 use App\Entity\MonitoringStatus;
@@ -23,6 +24,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class MonitoringManager
 {
     private AppUtil $appUtil;
+    private JsonUtil $jsonUtil;
     private CacheUtil $cacheUtil;
     private LogManager $logManager;
     private ServerUtil $serverUtil;
@@ -36,6 +38,7 @@ class MonitoringManager
 
     public function __construct(
         AppUtil $appUtil,
+        JsonUtil $jsonUtil,
         CacheUtil $cacheUtil,
         LogManager $logManager,
         ServerUtil $serverUtil,
@@ -48,6 +51,7 @@ class MonitoringManager
         MonitoringStatusRepository $monitoringStatusRepository
     ) {
         $this->appUtil = $appUtil;
+        $this->jsonUtil = $jsonUtil;
         $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
         $this->serverUtil = $serverUtil;
@@ -406,6 +410,32 @@ class MonitoringManager
                         $io->writeln(
                             '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>' . $service['display_name'] . ' is online (response code: ' . $serviceStatus['responseCode'] . ', response time: ' . $serviceStatus['responseTime'] . 'ms)</>'
                         );
+
+                        // check if metrics should be collected
+                        if ($service['metrics_monitoring']['collect_metrics'] == 'true') {
+                            // get metrics from metrics collector
+                            $metrics = $this->jsonUtil->getJson($service['metrics_monitoring']['metrics_collector_url']);
+
+                            // check if metrics get is successful
+                            if ($metrics == null) {
+                                // handle error
+                                $errorMessage = 'error to get metrics from ' . $service['metrics_monitoring']['metrics_collector_url'];
+                                $io->error($errorMessage);
+                                $this->errorManager->logError(
+                                    message: $errorMessage,
+                                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                                );
+                            } else {
+                                // collect all metrics
+                                foreach ($metrics as $name => $value) {
+                                    $this->metricsManager->saveServicesMetric(
+                                        metricName: $name,
+                                        value: $value,
+                                        type: $service['service_name']
+                                    );
+                                }
+                            }
+                        }
                     }
 
                 // service is not online

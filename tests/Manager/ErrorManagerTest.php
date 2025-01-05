@@ -3,6 +3,7 @@
 namespace App\Tests\Manager;
 
 use Twig\Environment;
+use Psr\Log\LoggerInterface;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,14 +21,17 @@ class ErrorManagerTest extends TestCase
 {
     private ErrorManager $errorManager;
     private Environment & MockObject $twigMock;
+    private LoggerInterface & MockObject $loggerMock;
 
     protected function setUp(): void
     {
-        // create the twig mock
+        // mock dependencies
         $this->twigMock = $this->createMock(Environment::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         // create the error manager instance
-        $this->errorManager = new ErrorManager($this->twigMock);
+        $this->errorManager = new ErrorManager($this->twigMock, $this->loggerMock);
+        ;
     }
 
     /**
@@ -63,5 +67,20 @@ class ErrorManagerTest extends TestCase
 
         // assert result
         $this->assertEquals('error view', $result);
+    }
+
+    /**
+     * Test log error to exception log
+     *
+     * @return void
+     */
+    public function testLogError(): void
+    {
+        // expect the logger error
+        $this->loggerMock->expects($this->once())->method('error')
+            ->with('error message', ['code' => Response::HTTP_NOT_FOUND]);
+
+        // call tested method
+        $this->errorManager->logError('error message', Response::HTTP_NOT_FOUND);
     }
 }

@@ -28,15 +28,18 @@ class MetricRepository extends ServiceEntityRepository
      * Get metrics by name and time period
      *
      * @param string $name The name of the metric
-     * @param string $timePeriod The time period
+     * @param string $serviceName The service name of the metric
+     * @param string $timePeriod The time period for selecting metrics
      *
      * @return mixed The metrics data
      */
-    public function getMetricsByNameAndTimePeriod(string $name, string $timePeriod): mixed
+    public function getMetricsByNameAndTimePeriod(string $name, string $serviceName, string $timePeriod): mixed
     {
         $qb = $this->createQueryBuilder('m')
             ->where('m.name = :name')
-            ->setParameter('name', $name);
+            ->andWhere('m.service_name = :service_name')
+            ->setParameter('name', $name)
+            ->setParameter('service_name', $serviceName);
 
         // define time filter based on $timePeriod value
         switch ($timePeriod) {

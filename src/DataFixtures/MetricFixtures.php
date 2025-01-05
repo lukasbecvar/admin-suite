@@ -27,22 +27,25 @@ class MetricFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $metrics = ['cpu_usage', 'ram_usage', 'storage_usage'];
-        $interval = new DateInterval('PT1H'); // metrics interval
-        $startDate = new DateTime('-1 month'); // history limit
-        $endDate = new DateTime(); // current time
-
+        $serviceNames = ['host-system', 'becvar.xyz', 'nonlizard.xyz', 'code-paste'];
+        $interval = new DateInterval('PT5M'); // metrics interval
+        $startDate = new DateTime('-1 week'); // history limit
+        $endDate = new DateTime(); // end with current time
         $currentDate = clone $startDate;
 
         // create the metrics history
         while ($currentDate <= $endDate) {
-            foreach ($metrics as $name) {
-                $metric = new Metric();
-                $metric->setName($name);
-                $metric->setValue((string) random_int(10, 100));
-                $metric->setTime(clone $currentDate);
+            foreach ($serviceNames as $serviceName) {
+                foreach ($metrics as $name) {
+                    $metric = new Metric();
+                    $metric->setName($name)
+                        ->setValue((string) random_int(10, 100))
+                        ->setServiceName($serviceName)
+                        ->setTime(clone $currentDate);
 
-                // persist metric
-                $manager->persist($metric);
+                    // persist metric
+                    $manager->persist($metric);
+                }
             }
 
             // increase time interval
