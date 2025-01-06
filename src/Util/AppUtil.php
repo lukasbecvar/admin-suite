@@ -246,4 +246,33 @@ class AppUtil
             throw new Exception('Error to update environment variable: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Round times in array
+     *
+     * @param array<string> $values The array of values
+     *
+     * @return array<string> The array of rounded values
+     */
+    public function roundTimesInArray(array $values): array
+    {
+        return array_map(function (string $value) {
+            if (preg_match('/^\d{2}:\d{2}$/', $value)) {
+                [$hour, $minute] = explode(':', $value);
+                if ($minute >= 30) {
+                    $hour = (intval($hour) + 1) % 24;
+                }
+                return sprintf('%02d:00', $hour);
+            }
+            if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $value)) {
+                [$date, $time] = explode(' ', $value);
+                [$hour, $minute] = explode(':', $time);
+                if ($minute >= 30) {
+                    $hour = (intval($hour) + 1) % 24;
+                }
+                return sprintf('%s %02d:00', $date, $hour);
+            }
+            return $value;
+        }, $values);
+    }
 }

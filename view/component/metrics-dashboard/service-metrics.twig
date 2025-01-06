@@ -1,0 +1,75 @@
+{% extends 'common/layout.twig' %}
+
+{# METRICS-DASHBOARD COMPONENT #}
+{% block component %}
+{# SUB-NAVIGATION #}
+<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
+    <a href={{ path('app_metrics_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+    </a>
+
+    {# METRICS TIME PERIOD SELECTOR #}
+    <span class="mr-1"></span>
+    <span >
+        <label for="time-period">Time period:</label>
+        <select id="time-period" onchange="updateTimePeriod()" class="bg-neutral-800 text-white border border-neutral-600 rounded">
+            <option value="last_24_hours" selected>Last 24 hours</option>
+            <option value="last_week">Last week</option>
+            <option value="last_month">Last month</option>
+            <option value="all_time">All time</option>
+        </select>
+
+        <script>
+            // update time period in url
+            function updateTimePeriod() {
+                const select = document.getElementById('time-period');
+                const selectedValue = select.value;
+                const serviceName = "{{ serviceName|e('js') }}";
+                window.location.search = `?service_name=${serviceName}&time_period=${selectedValue}`;
+            }
+
+            // select selecton value from url
+            function setSelectedValue() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const timePeriod = urlParams.get('time_period');
+                const select = document.getElementById('time-period');
+
+                // set selected value
+                if (timePeriod) {
+                    select.value = timePeriod;
+                }
+            }
+
+            // init select value
+            window.onload = setSelectedValue;
+        </script>
+    </span>
+</div>
+
+
+{# METRICS-CHARTS #}
+{% if data['metrics']|length == 0 %}
+<p class="flex items-center justify-center mt-20 mb-20 text-2xl text-white font-bold">
+    No metrics found for service: {{ serviceName|e }}
+</p>
+{% else %}
+    <div class="p-2 space-y-2 metrics-component">
+        {% for metricName, metricData in data.metrics %}
+            <div class="flex flex-col md:flex-row gap-2">
+                <div class="flex-1 p-0 border border-neutral-600 shadow-lg card-color rounded relative chart-container">
+                    <div class="text-white font-bold text-l mb-1 border-b border-neutral-600 p-2">
+                        {{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}
+                    </div>
+                    <div id="{{ metricName }}-line"></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        window.metricsData = {{ { categories: data.categories, metrics: data.metrics } | json_encode | raw }};
+    </script>
+    {{ encore_entry_script_tags('service-metrics-charts-js') }}
+{% endif %}
+
+{% endblock %}

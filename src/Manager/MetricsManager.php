@@ -25,6 +25,7 @@ class MetricsManager
     private CacheUtil $cacheUtil;
     private ServerUtil $serverUtil;
     private ErrorManager $errorManager;
+    private ServiceManager $serviceManager;
     private MetricRepository $metricRepository;
     private EntityManagerInterface $entityManagerInterface;
 
@@ -33,6 +34,7 @@ class MetricsManager
         CacheUtil $cacheUtil,
         ServerUtil $serverUtil,
         ErrorManager $errorManager,
+        ServiceManager $serviceManager,
         MetricRepository $metricRepository,
         EntityManagerInterface $entityManagerInterface
     ) {
@@ -40,6 +42,7 @@ class MetricsManager
         $this->cacheUtil = $cacheUtil;
         $this->serverUtil = $serverUtil;
         $this->errorManager = $errorManager;
+        $this->serviceManager = $serviceManager;
         $this->metricRepository = $metricRepository;
         $this->entityManagerInterface = $entityManagerInterface;
     }
@@ -54,28 +57,55 @@ class MetricsManager
      */
     public function getServiceMetrics(string $serviceName, string $timePeriod = 'last_24_hours'): array
     {
+        // get monitored services list
+        $servicesList = $this->serviceManager->getServicesList();
+
+        // check if services list config data is loaded correctly
+        if ($servicesList == null) {
+            $this->errorManager->handleError(
+                message: 'error to get services list config data',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // check if service found in monitored services list
+        if ($serviceName != 'host-system' && !isset($servicesList[$serviceName])) {
+            $this->errorManager->handleError(
+                message: 'error service: ' . $serviceName . ' not found in monitored services list',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // check if service is configured to collect metrics
+        if ($serviceName != 'host-system' && !$servicesList[$serviceName]['metrics_monitoring']['collect_metrics']) {
+            $this->errorManager->handleError(
+                message: 'error to get metrics: service is not configured to collect metrics',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
         $metrics = [];
         $categories = [];
 
         // get metrics
         $metrics = $this->metricRepository->getMetricsByServiceName($serviceName, $timePeriod);
 
-        // format all values to 2 decimal places for each metric group
+        // format all values to 2 decimal places
         foreach ($metrics as $name => &$metricGroup) {
             foreach ($metricGroup as &$metric) {
                 $metric['value'] = round($metric['value'], 2);
-
-                // add timestamp to categories
-                $time = DateTime::createFromFormat('Y-m-d H:i:s', $metric['time']);
-                if ($time) {
-                    $categories[] = $time->format('H:i');
-                }
             }
         }
 
-        // remove duplicate timestamps in categories
-        $categories = array_unique($categories);
-        sort($categories);
+        // get categories from first metric group
+        foreach (reset($metrics) as $metric) {
+            $categories[] = $metric['time'];
+        }
+
+        // round times in categories array for hour rounding
+        if ($this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL') == '60') {
+            $categories = $this->appUtil->roundTimesInArray($categories);
+        }
 
         // return metrics data with categories
         return [
@@ -155,6 +185,11 @@ class MetricsManager
             foreach ($storageUsage as $metric) {
                 $storageData[] = (float) $metric->getValue();
             }
+        }
+
+        // round times in categories array for hour rounding
+        if ($this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL') == '60') {
+            $categories = $this->appUtil->roundTimesInArray($categories);
         }
 
         // build metrics data

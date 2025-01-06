@@ -125,6 +125,11 @@
                                             [<span class="text-red-500 font-bold">OFFLINE</span>]
                                         {% endif %}
                                     </span>
+                                    {% if service.metrics_monitoring.collect_metrics == true %}
+                                        <a href={{ path('app_metrics_service', {'service_name': service.service_name}) }} class="text-blue-500 hover:text-blue-300" title="View metrics">
+                                            <i class="fa fa-chart-line border-neutral-600 border p-1 rounded" aria-hidden="true"></i>
+                                        </a>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endif %}

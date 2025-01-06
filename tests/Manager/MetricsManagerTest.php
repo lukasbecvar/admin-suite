@@ -10,6 +10,7 @@ use App\Util\CacheUtil;
 use App\Util\ServerUtil;
 use App\Manager\ErrorManager;
 use App\Manager\MetricsManager;
+use App\Manager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\MetricRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,6 +32,7 @@ class MetricsManagerTest extends TestCase
     private CacheUtil & MockObject $cacheUtilMock;
     private ServerUtil & MockObject $serverUtilMock;
     private ErrorManager & MockObject $errorManagerMock;
+    private ServiceManager & MockObject $serviceManagerMock;
     private MetricRepository & MockObject $metricRepositoryMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
 
@@ -41,6 +43,7 @@ class MetricsManagerTest extends TestCase
         $this->cacheUtilMock = $this->createMock(CacheUtil::class);
         $this->serverUtilMock = $this->createMock(ServerUtil::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
+        $this->serviceManagerMock = $this->createMock(ServiceManager::class);
         $this->metricRepositoryMock = $this->createMock(MetricRepository::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
@@ -50,6 +53,7 @@ class MetricsManagerTest extends TestCase
             $this->cacheUtilMock,
             $this->serverUtilMock,
             $this->errorManagerMock,
+            $this->serviceManagerMock,
             $this->metricRepositoryMock,
             $this->entityManagerMock
         );

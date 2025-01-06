@@ -27,7 +27,7 @@ class MetricFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $metrics = ['cpu_usage', 'ram_usage', 'storage_usage'];
-        $serviceNames = ['host-system', 'becvar.xyz', 'nonlizard.xyz', 'code-paste'];
+        $serviceNames = ['host-system', 'becvar.xyz', 'nonlizard.xyz', 'paste.becvar.xyz'];
         $interval = new DateInterval('PT1H'); // metrics interval
         $startDate = new DateTime('-1 week'); // history limit
         $endDate = new DateTime(); // end with current time

@@ -121,7 +121,7 @@ class MetricRepository extends ServiceEntityRepository
             ->where('m.service_name = :service_name')
             ->setParameter('service_name', $serviceName);
 
-        // define time filter based on $timePeriod value
+        // define time filter based on time period
         switch ($timePeriod) {
             case 'last_24_hours':
                 $date = new DateTime('-24 hours');
@@ -140,30 +140,78 @@ class MetricRepository extends ServiceEntityRepository
 
         // add time filter only if $date is not null
         if ($date) {
-            $qb->andWhere('m.time >= :date')
-                ->setParameter('date', $date);
+            $qb->andWhere('m.time >= :date')->setParameter('date', $date);
         }
 
-        // order by time, from newest to oldest
+        // order by time, from oldest to newest
         $qb->orderBy('m.time', 'ASC');
 
         // get metrics
         $metrics = $qb->getQuery()->getResult();
 
-        // group metrics by name
+        // group metrics by name (for each metric name like cpu-usage, ram-usage)
         $groupedMetrics = [];
         foreach ($metrics as $metric) {
             $name = $metric->getName();
+            $time = $metric->getTime();
+
+            // get date key based on time period
+            if ($timePeriod === 'last_24_hours') {
+                $dateKey = $time->format('H:i');
+            } elseif ($timePeriod === 'last_week') {
+                $dateKey = $time->format('Y-m-d');
+            } elseif ($timePeriod === 'last_month') {
+                $dateKey = $time->format('m-d');
+            } elseif ($timePeriod === 'all_time') {
+                $dateKey = $time->format('Y-m');
+            } else {
+                $dateKey = $time->format('Y-m-d H:i');
+            }
+
+            // initialize metric data if not already set
             if (!isset($groupedMetrics[$name])) {
                 $groupedMetrics[$name] = [];
             }
-            $groupedMetrics[$name][] = [
-                'id' => $metric->getId(),
-                'value' => (float) $metric->getValue(),
-                'time' => $metric->getTime()->format('Y-m-d H:i:s'),
-            ];
+
+            // initialize date group if not already set
+            if (!isset($groupedMetrics[$name][$dateKey])) {
+                $groupedMetrics[$name][$dateKey] = ['total' => 0, 'count' => 0];
+            }
+
+            // aggregate the metric value
+            $groupedMetrics[$name][$dateKey]['total'] += (float) $metric->getValue();
+            $groupedMetrics[$name][$dateKey]['count']++;
         }
 
-        return $groupedMetrics;
+        // prepare final results with average values
+        $result = [];
+        foreach ($groupedMetrics as $metricName => $metricData) {
+            foreach ($metricData as $dateKey => $data) {
+                $result[$metricName][] = [
+                    'value' => round($data['total'] / $data['count'], 1),
+                    'time' => $dateKey
+                ];
+            }
+        }
+
+        // filter results based on time period to return only required number of values
+        if ($timePeriod === 'last_week') {
+            foreach ($result as $metricName => $metricValues) {
+                // return only 7 days history
+                $result[$metricName] = array_slice($metricValues, 0, 7);
+            }
+        } elseif ($timePeriod === 'last_month') {
+            foreach ($result as $metricName => $metricValues) {
+                // return only 31 days history
+                $result[$metricName] = array_slice($metricValues, 0, 31);
+            }
+        } elseif ($timePeriod === 'all_time') {
+            foreach ($result as $metricName => $metricValues) {
+                // return only monthly values for all time
+                $result[$metricName] = array_slice($metricValues, 0, count($metricValues));
+            }
+        }
+
+        return $result;
     }
 }
