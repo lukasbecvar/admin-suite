@@ -48,6 +48,7 @@ Example response from the Metric Collector URL:
   "ram_usage": 77,
   "storage_usage": 10,
 }
+```
 
 ## Push notifications
 If you enable push notifications in the environment config, make sure to allow notifications in the browser when loading the admin page. Additionally, if you delete subscribers or VAPID keys, you’ll need to reset notification permissions in the browser.
