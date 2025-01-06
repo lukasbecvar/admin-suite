@@ -106,4 +106,64 @@ class MetricRepository extends ServiceEntityRepository
 
         return $metrics;
     }
+
+    /**
+     * Get metrics by service name and time period
+     *
+     * @param string $serviceName The service name of the metric
+     * @param string $timePeriod The time period for selecting metrics
+     *
+     * @return array<mixed> The metrics data
+     */
+    public function getMetricsByServiceName(string $serviceName, string $timePeriod = 'last_24_hours'): array
+    {
+        $qb = $this->createQueryBuilder('m')
+            ->where('m.service_name = :service_name')
+            ->setParameter('service_name', $serviceName);
+
+        // define time filter based on $timePeriod value
+        switch ($timePeriod) {
+            case 'last_24_hours':
+                $date = new DateTime('-24 hours');
+                break;
+            case 'last_week':
+                $date = new DateTime('-7 days');
+                break;
+            case 'last_month':
+                $date = new DateTime('-30 days');
+                break;
+            case 'all_time':
+            default:
+                $date = null;
+                break;
+        }
+
+        // add time filter only if $date is not null
+        if ($date) {
+            $qb->andWhere('m.time >= :date')
+                ->setParameter('date', $date);
+        }
+
+        // order by time, from newest to oldest
+        $qb->orderBy('m.time', 'ASC');
+
+        // get metrics
+        $metrics = $qb->getQuery()->getResult();
+
+        // group metrics by name
+        $groupedMetrics = [];
+        foreach ($metrics as $metric) {
+            $name = $metric->getName();
+            if (!isset($groupedMetrics[$name])) {
+                $groupedMetrics[$name] = [];
+            }
+            $groupedMetrics[$name][] = [
+                'id' => $metric->getId(),
+                'value' => (float) $metric->getValue(),
+                'time' => $metric->getTime()->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        return $groupedMetrics;
+    }
 }

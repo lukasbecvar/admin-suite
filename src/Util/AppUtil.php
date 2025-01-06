@@ -246,40 +246,4 @@ class AppUtil
             throw new Exception('Error to update environment variable: ' . $e->getMessage());
         }
     }
-
-    /**
-     * Round times in array
-     *
-     * @param array<string> $values The array of values
-     *
-     * @return array<string> The array of rounded values
-     */
-    public function roundTimesInArray(array $values): array
-    {
-        // get metrics save interval for rounding calculation
-        $metricsSaveInterval = (int) $_ENV['METRICS_SAVE_INTERVAL'];
-        return array_map(function (string $value) use ($metricsSaveInterval) {
-            $roundTime = function (int $hour, int $minute) use ($metricsSaveInterval) {
-                if ($metricsSaveInterval <= 0) {
-                    return sprintf('%02d:%02d', $hour, $minute);
-                }
-                $roundedMinutes = ceil($minute / $metricsSaveInterval) * $metricsSaveInterval;
-                if ($roundedMinutes >= 60) {
-                    $hour = ($hour + 1) % 24;
-                    $roundedMinutes = 0;
-                }
-                return sprintf('%02d:%02d', $hour, $roundedMinutes);
-            };
-            if (preg_match('/^\d{2}:\d{2}$/', $value)) {
-                [$hour, $minute] = explode(':', $value);
-                return $roundTime((int) $hour, (int) $minute);
-            }
-            if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $value)) {
-                [$date, $time] = explode(' ', $value);
-                [$hour, $minute] = explode(':', $time);
-                return sprintf('%s %s', $date, $roundTime((int) $hour, (int) $minute));
-            }
-            return $value;
-        }, $values);
-    }
 }

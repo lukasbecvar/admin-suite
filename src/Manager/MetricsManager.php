@@ -45,6 +45,46 @@ class MetricsManager
     }
 
     /**
+     * Get metrics for service
+     *
+     * @param string $serviceName The service name
+     * @param string $timePeriod The time period
+     *
+     * @return array<string,mixed> The metrics data
+     */
+    public function getServiceMetrics(string $serviceName, string $timePeriod = 'last_24_hours'): array
+    {
+        $metrics = [];
+        $categories = [];
+
+        // get metrics
+        $metrics = $this->metricRepository->getMetricsByServiceName($serviceName, $timePeriod);
+
+        // format all values to 2 decimal places for each metric group
+        foreach ($metrics as $name => &$metricGroup) {
+            foreach ($metricGroup as &$metric) {
+                $metric['value'] = round($metric['value'], 2);
+
+                // add timestamp to categories
+                $time = DateTime::createFromFormat('Y-m-d H:i:s', $metric['time']);
+                if ($time) {
+                    $categories[] = $time->format('H:i');
+                }
+            }
+        }
+
+        // remove duplicate timestamps in categories
+        $categories = array_unique($categories);
+        sort($categories);
+
+        // return metrics data with categories
+        return [
+            'categories' => $categories,
+            'metrics' => $metrics
+        ];
+    }
+
+    /**
      * Get resource usage metrics
      *
      * @param string $timePeriod The time period
@@ -117,9 +157,6 @@ class MetricsManager
             }
         }
 
-        // round times in categories
-        $categories = $this->appUtil->roundTimesInArray($categories);
-
         // build metrics data
         $metricsData = [
             'categories' => $categories,
@@ -139,6 +176,22 @@ class MetricsManager
 
         // return metrics data
         return $metricsData;
+    }
+
+    /**
+     * Save host system resources usage metrics
+     *
+     * @param float $cpuUsage The CPU usage
+     * @param int $ramUsage The RAM usage
+     * @param int $storageUsage The storage usage
+     *
+     * @return void
+     */
+    public function saveUsageMetrics(float $cpuUsage, int $ramUsage, int $storageUsage): void
+    {
+        $this->saveMetricWithCacheSummary('cpu_usage', $cpuUsage, 'host-system');
+        $this->saveMetricWithCacheSummary('ram_usage', $ramUsage, 'host-system');
+        $this->saveMetricWithCacheSummary('storage_usage', $storageUsage, 'host-system');
     }
 
     /**
@@ -173,22 +226,6 @@ class MetricsManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-    }
-
-    /**
-     * Save host system resources usage metrics
-     *
-     * @param float $cpuUsage The CPU usage
-     * @param int $ramUsage The RAM usage
-     * @param int $storageUsage The storage usage
-     *
-     * @return void
-     */
-    public function saveUsageMetrics(float $cpuUsage, int $ramUsage, int $storageUsage): void
-    {
-        $this->saveMetricWithCacheSummary('cpu_usage', $cpuUsage, 'host-system');
-        $this->saveMetricWithCacheSummary('ram_usage', $ramUsage, 'host-system');
-        $this->saveMetricWithCacheSummary('storage_usage', $storageUsage, 'host-system');
     }
 
     /**

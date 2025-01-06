@@ -28,7 +28,7 @@ class MetricFixtures extends Fixture
     {
         $metrics = ['cpu_usage', 'ram_usage', 'storage_usage'];
         $serviceNames = ['host-system', 'becvar.xyz', 'nonlizard.xyz', 'code-paste'];
-        $interval = new DateInterval('PT5M'); // metrics interval
+        $interval = new DateInterval('PT1H'); // metrics interval
         $startDate = new DateTime('-1 week'); // history limit
         $endDate = new DateTime(); // end with current time
         $currentDate = clone $startDate;
