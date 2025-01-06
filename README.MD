@@ -40,7 +40,7 @@ Monitoring is ensured by a console command (infinite loop) ``console app:process
 The metrics component stores data during the monitoring process, so its function requires the monitoring process to be running. The metrics store average usage values for CPU, RAM, and storage during the interval set in ``.env`` as ``METRICS_SAVE_INTERVALg``.
 
 ## Metrics Collector for HTTP services
-The Metric Collector allows you to collect metrics from monitored HTTP web applications. You can enable the metric collector in the `services-monitoring.json` file ([services-monitoring.json](https://github.com/lukasbecvar/admin-suite/blob/main/config/suite/services-monitoring.json)) by setting `collect_metrics` to true and specifying the `metrics_collector_url`. The Metric Collector accepts a `key` (string) and a `value` (int|float).
+The Metric Collector allows you to collect metrics from monitored HTTP web applications. You can enable the metric collector in the `services-monitoring.json` file ([services-monitoring.json](https://github.com/lukasbecvar/admin-suite/blob/main/config/suite/services-monitoring.json)) by setting `collect_metrics` to true and specifying the `metrics_collector_url`. The Metric Collector accepts `key` (string) and `value` (int|float).
 Example response from the Metric Collector URL:
 ```json
 {
