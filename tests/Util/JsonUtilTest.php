@@ -3,9 +3,7 @@
 namespace Tests\Unit\Util;
 
 use App\Util\JsonUtil;
-use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class JsonUtilTest
@@ -17,15 +15,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 class JsonUtilTest extends TestCase
 {
     private JsonUtil $jsonUtil;
-    private ErrorManager & MockObject $errorManager;
 
     protected function setUp(): void
     {
-        // mock dependencies
-        $this->errorManager = $this->createMock(ErrorManager::class);
-
-        // create instance of JsonUtil
-        $this->jsonUtil = new JsonUtil($this->errorManager);
+        // create json util instance
+        $this->jsonUtil = new JsonUtil();
     }
 
     /**

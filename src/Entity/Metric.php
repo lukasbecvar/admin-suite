@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MetricRepository;
@@ -30,8 +31,11 @@ class Metric
     #[ORM\Column(length: 255)]
     private ?string $value = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $service_name = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $time = null;
+    private ?DateTimeInterface $time = null;
 
     /**
      * Get the id of the metric
@@ -92,11 +96,35 @@ class Metric
     }
 
     /**
+     * Get the service name of the metric
+     *
+     * @return string|null The service name of the metric or null if not found
+     */
+    public function getServiceName(): ?string
+    {
+        return $this->service_name;
+    }
+
+    /**
+     * Set the service name of the metric
+     *
+     * @param string $service_name The service name of the metric
+     *
+     * @return static The current object
+     */
+    public function setServiceName(string $service_name): static
+    {
+        $this->service_name = $service_name;
+
+        return $this;
+    }
+
+    /**
      * Get the time of the metric
      *
-     * @return \DateTimeInterface|null The time of the metric or null if not found
+     * @return DateTimeInterface|null The time of the metric or null if not found
      */
-    public function getTime(): ?\DateTimeInterface
+    public function getTime(): ?DateTimeInterface
     {
         return $this->time;
     }
@@ -104,11 +132,11 @@ class Metric
     /**
      * Set the time of the metric
      *
-     * @param \DateTimeInterface $time The time of the metric
+     * @param DateTimeInterface $time The time of the metric
      *
      * @return static The current object
      */
-    public function setTime(\DateTimeInterface $time): static
+    public function setTime(DateTimeInterface $time): static
     {
         $this->time = $time;
 

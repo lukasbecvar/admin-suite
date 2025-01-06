@@ -45,4 +45,22 @@ class MetricsDashboardControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'Storage Usage (history)');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
+
+    /**
+     * Test load service metrics page
+     *
+     * @return void
+     */
+    public function testLoadServiceMetricsPage(): void
+    {
+        $this->client->request('GET', '/metrics/service?service_name=host-system');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[title="Back to dashboard"]');
+        $this->assertSelectorTextContains('body', 'host-system - Cpu usage');
+        $this->assertSelectorTextContains('body', 'host-system - Ram usage');
+        $this->assertSelectorTextContains('body', 'host-system - Storage usage');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
 }

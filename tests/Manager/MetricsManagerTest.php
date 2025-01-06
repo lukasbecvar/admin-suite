@@ -10,6 +10,7 @@ use App\Util\CacheUtil;
 use App\Util\ServerUtil;
 use App\Manager\ErrorManager;
 use App\Manager\MetricsManager;
+use App\Manager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\MetricRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,6 +32,7 @@ class MetricsManagerTest extends TestCase
     private CacheUtil & MockObject $cacheUtilMock;
     private ServerUtil & MockObject $serverUtilMock;
     private ErrorManager & MockObject $errorManagerMock;
+    private ServiceManager & MockObject $serviceManagerMock;
     private MetricRepository & MockObject $metricRepositoryMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
 
@@ -41,6 +43,7 @@ class MetricsManagerTest extends TestCase
         $this->cacheUtilMock = $this->createMock(CacheUtil::class);
         $this->serverUtilMock = $this->createMock(ServerUtil::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
+        $this->serviceManagerMock = $this->createMock(ServiceManager::class);
         $this->metricRepositoryMock = $this->createMock(MetricRepository::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
@@ -50,17 +53,18 @@ class MetricsManagerTest extends TestCase
             $this->cacheUtilMock,
             $this->serverUtilMock,
             $this->errorManagerMock,
+            $this->serviceManagerMock,
             $this->metricRepositoryMock,
             $this->entityManagerMock
         );
     }
 
     /**
-     * Test get metrics for last_24_hours period
+     * Test get resource usage metrics success
      *
      * @return void
      */
-    public function testGetMetricsSuccess(): void
+    public function testGetResourceUsageMetricsSuccess(): void
     {
         // mock the MetricRepository to return objects instead of arrays for non-aggregate data
         $cpuMetric = $this->createMock(Metric::class);
@@ -112,7 +116,7 @@ class MetricsManagerTest extends TestCase
          *     storage: array{data: array<string>}
          * }
          */
-        $metrics = $this->metricsManager->getMetrics('last_24_hours');
+        $metrics = $this->metricsManager->getResourceUsageMetrics('last_24_hours');
 
         // assert the structure of returned data
         $this->assertArrayHasKey('categories', $metrics);
@@ -131,7 +135,7 @@ class MetricsManagerTest extends TestCase
      *
      * @return void
      */
-    public function testHandleErrorOnGetMetrics(): void
+    public function testHandleErrorOnGetResourceUsageMetrics(): void
     {
         // mock error handler to simulate an error
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
@@ -146,7 +150,7 @@ class MetricsManagerTest extends TestCase
         $this->expectException(HttpException::class);
 
         // call tested method
-        $this->metricsManager->getMetrics('last_24_hours');
+        $this->metricsManager->getResourceUsageMetrics('last_24_hours');
     }
 
     /**

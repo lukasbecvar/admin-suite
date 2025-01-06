@@ -42,7 +42,11 @@
         "max_response_time": 3000,
         "type": "http",
         "monitoring": true,
-        "display": true
+        "display": true,
+        "metrics_monitoring": {
+            "collect_metrics": false,
+            "metrics_collector_url": ""
+        }
     },
     "paste.becvar.xyz": {
         "service_name": "paste.becvar.xyz",
@@ -52,7 +56,11 @@
         "max_response_time": 3000,
         "type": "http",
         "monitoring": true,
-        "display": true
+        "display": true,
+        "metrics_monitoring": {
+            "collect_metrics": false,
+            "metrics_collector_url": ""
+        }
     },
     "nonlizard.xyz": {
         "service_name": "nonlizard.xyz",
@@ -62,6 +70,10 @@
         "max_response_time": 3000,
         "type": "http",
         "monitoring": true,
-        "display": true
+        "display": true,
+        "metrics_monitoring": {
+            "collect_metrics": false,
+            "metrics_collector_url": ""
+        }
     }
 }

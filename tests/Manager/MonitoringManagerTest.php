@@ -3,6 +3,7 @@
 namespace App\Tests\Manager;
 
 use App\Util\AppUtil;
+use App\Util\JsonUtil;
 use App\Util\CacheUtil;
 use App\Util\ServerUtil;
 use App\Manager\LogManager;
@@ -28,6 +29,7 @@ use App\Repository\MonitoringStatusRepository;
 class MonitoringManagerTest extends TestCase
 {
     private AppUtil & MockObject $appUtilMock;
+    private JsonUtil & MockObject $jsonUtilMock;
     private LogManager & MockObject $logManager;
     private MonitoringManager $monitoringManager;
     private CacheUtil & MockObject $cacheUtilMock;
@@ -44,6 +46,7 @@ class MonitoringManagerTest extends TestCase
     {
         // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
+        $this->jsonUtilMock = $this->createMock(JsonUtil::class);
         $this->logManager = $this->createMock(LogManager::class);
         $this->cacheUtilMock = $this->createMock(CacheUtil::class);
         $this->serverUtilMock = $this->createMock(ServerUtil::class);
@@ -58,6 +61,7 @@ class MonitoringManagerTest extends TestCase
         // create the monitoring manager instance
         $this->monitoringManager = new MonitoringManager(
             $this->appUtilMock,
+            $this->jsonUtilMock,
             $this->cacheUtilMock,
             $this->logManager,
             $this->serverUtilMock,

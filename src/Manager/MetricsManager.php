@@ -25,6 +25,7 @@ class MetricsManager
     private CacheUtil $cacheUtil;
     private ServerUtil $serverUtil;
     private ErrorManager $errorManager;
+    private ServiceManager $serviceManager;
     private MetricRepository $metricRepository;
     private EntityManagerInterface $entityManagerInterface;
 
@@ -33,6 +34,7 @@ class MetricsManager
         CacheUtil $cacheUtil,
         ServerUtil $serverUtil,
         ErrorManager $errorManager,
+        ServiceManager $serviceManager,
         MetricRepository $metricRepository,
         EntityManagerInterface $entityManagerInterface
     ) {
@@ -40,18 +42,88 @@ class MetricsManager
         $this->cacheUtil = $cacheUtil;
         $this->serverUtil = $serverUtil;
         $this->errorManager = $errorManager;
+        $this->serviceManager = $serviceManager;
         $this->metricRepository = $metricRepository;
         $this->entityManagerInterface = $entityManagerInterface;
     }
 
     /**
-     * Get metrics data
+     * Get metrics for service
+     *
+     * @param string $serviceName The service name
+     * @param string $timePeriod The time period
+     *
+     * @return array<string,mixed> The metrics data
+     */
+    public function getServiceMetrics(string $serviceName, string $timePeriod = 'last_24_hours'): array
+    {
+        // get monitored services list
+        $servicesList = $this->serviceManager->getServicesList();
+
+        // check if services list config data is loaded correctly
+        if ($servicesList == null) {
+            $this->errorManager->handleError(
+                message: 'error to get services list config data',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // check if service found in monitored services list
+        if ($serviceName != 'host-system' && !isset($servicesList[$serviceName])) {
+            $this->errorManager->handleError(
+                message: 'error service: ' . $serviceName . ' not found in monitored services list',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // check if service is configured to collect metrics
+        if ($serviceName != 'host-system' && !$servicesList[$serviceName]['metrics_monitoring']['collect_metrics']) {
+            $this->errorManager->handleError(
+                message: 'error to get metrics: service is not configured to collect metrics',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        $metrics = [];
+        $categories = [];
+
+        // get metrics
+        $metrics = $this->metricRepository->getMetricsByServiceName($serviceName, $timePeriod);
+
+        // format all values to 2 decimal places
+        foreach ($metrics as $name => &$metricGroup) {
+            foreach ($metricGroup as &$metric) {
+                $metric['value'] = round($metric['value'], 2);
+            }
+        }
+
+        // get categories from first metric group
+        if (!empty($metrics)) {
+            foreach (reset($metrics) as $metric) {
+                $categories[] = $metric['time'];
+            }
+        }
+
+        // round times in categories array for hour rounding
+        if ($this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL') == '60') {
+            $categories = $this->appUtil->roundTimesInArray($categories);
+        }
+
+        // return metrics data with categories
+        return [
+            'categories' => $categories,
+            'metrics' => $metrics
+        ];
+    }
+
+    /**
+     * Get resource usage metrics
      *
      * @param string $timePeriod The time period
      *
      * @return array<string,mixed> The metrics data
      */
-    public function getMetrics(string $timePeriod = 'last_24_hours'): array
+    public function getResourceUsageMetrics(string $timePeriod = 'last_24_hours'): array
     {
         $categories = [];
         $cpuData = [];
@@ -59,9 +131,9 @@ class MetricsManager
         $storageData = [];
 
         // get usage history metrics
-        $cpuUsage = $this->metricRepository->getMetricsByNameAndTimePeriod('cpu_usage', $timePeriod);
-        $ramUsage = $this->metricRepository->getMetricsByNameAndTimePeriod('ram_usage', $timePeriod);
-        $storageUsage = $this->metricRepository->getMetricsByNameAndTimePeriod('storage_usage', $timePeriod);
+        $cpuUsage = $this->metricRepository->getMetricsByNameAndTimePeriod('cpu_usage', 'host-system', $timePeriod);
+        $ramUsage = $this->metricRepository->getMetricsByNameAndTimePeriod('ram_usage', 'host-system', $timePeriod);
+        $storageUsage = $this->metricRepository->getMetricsByNameAndTimePeriod('storage_usage', 'host-system', $timePeriod);
 
         // check if metrics data is iterable
         if (!is_iterable($cpuUsage) || !is_iterable($ramUsage) || !is_iterable($storageUsage)) {
@@ -117,8 +189,10 @@ class MetricsManager
             }
         }
 
-        // round times in categories
-        $categories = $this->appUtil->roundTimesInArray($categories);
+        // round times in categories array for hour rounding
+        if ($this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL') == '60') {
+            $categories = $this->appUtil->roundTimesInArray($categories);
+        }
 
         // build metrics data
         $metricsData = [
@@ -142,21 +216,39 @@ class MetricsManager
     }
 
     /**
+     * Save host system resources usage metrics
+     *
+     * @param float $cpuUsage The CPU usage
+     * @param int $ramUsage The RAM usage
+     * @param int $storageUsage The storage usage
+     *
+     * @return void
+     */
+    public function saveUsageMetrics(float $cpuUsage, int $ramUsage, int $storageUsage): void
+    {
+        $this->saveMetricWithCacheSummary('cpu_usage', $cpuUsage, 'host-system');
+        $this->saveMetricWithCacheSummary('ram_usage', $ramUsage, 'host-system');
+        $this->saveMetricWithCacheSummary('storage_usage', $storageUsage, 'host-system');
+    }
+
+    /**
      * Save metric value
      *
      * @param string $metricName The metric name
      * @param string $value The metric value
+     * @param string $serviceName The metric service name
      *
      * @throws Exception Error to flush metric to database
      *
      * @return void
      */
-    public function saveMetric(string $metricName, string $value): void
+    public function saveMetric(string $metricName, string $value, string $serviceName = 'host-system'): void
     {
         // create metric entity
         $metric = new Metric();
         $metric->setName($metricName)
             ->setValue($value)
+            ->setServiceName($serviceName)
             ->setTime(new DateTime());
 
         // persist metric entity
@@ -174,15 +266,17 @@ class MetricsManager
     }
 
     /**
-     * Save usage metrics
+     * Save metric with cache summary
      *
-     * @param float $cpuUsage The CPU usage
-     * @param int $ramUsage The RAM usage
-     * @param int $storageUsage The storage usage
+     * Save metrics to cache storage and calculate summary metrics for save to real database (by metrics save interval)
+     *
+     * @param string $metricName The metric name
+     * @param int|float $value The metric value
+     * @param string $serviceName The metric service name
      *
      * @return void
      */
-    public function saveUsageMetrics(float $cpuUsage, int $ramUsage, int $storageUsage): void
+    public function saveMetricWithCacheSummary(string $metricName, int|float $value, string $serviceName = 'host-system'): void
     {
         // get monitoring interval
         $monitoringInterval = (int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60;
@@ -192,45 +286,31 @@ class MetricsManager
         $cacheExpiration = $monitoringInterval * 2;
 
         // define cache keys
-        $cpuKey = 'metrics_cpu_usage_sum';
-        $ramKey = 'metrics_ram_usage_sum';
-        $storageKey = 'metrics_storage_usage_sum';
-        $countKey = 'metrics_metric_count';
-        $lastSaveKey = 'metrics_last_save_time';
+        $metricKey = $metricName . '_' . $serviceName . '_sum';
+        $countKey = $metricName . '_' . $serviceName . '_count';
+        $lastSaveKey = $metricName . '_' . $serviceName . '_last_save_time';
 
         // get current sums and counts
-        $cpuSum = $this->cacheUtil->getValue($cpuKey)->get() ?? 0;
-        $ramSum = $this->cacheUtil->getValue($ramKey)->get() ?? 0;
-        $storageSum = $this->cacheUtil->getValue($storageKey)->get() ?? 0;
+        $metricSum = $this->cacheUtil->getValue($metricKey)->get() ?? 0;
         $count = $this->cacheUtil->getValue($countKey)->get() ?? 0;
 
         // calculate new sums
-        $cpuSum += $cpuUsage;
-        $ramSum += $ramUsage;
-        $storageSum += $storageUsage;
+        $metricSum += $value;
         $count++;
 
         // save updated values to cache
-        $this->cacheUtil->setValue($cpuKey, $cpuSum, $cacheExpiration);
-        $this->cacheUtil->setValue($ramKey, $ramSum, $cacheExpiration);
-        $this->cacheUtil->setValue($storageKey, $storageSum, $cacheExpiration);
+        $this->cacheUtil->setValue($metricKey, $metricSum, $cacheExpiration);
         $this->cacheUtil->setValue($countKey, $count, $cacheExpiration);
 
         // if it's more than metrics save interval, save averages and reset values
         if (!$this->cacheUtil->isCatched($lastSaveKey)) {
-            $averageCpu = round($cpuSum / $count, 1);
-            $averageRam = round($ramSum / $count, 1);
-            $averageStorage = round($storageSum / $count, 1);
+            $averageValue = round($metricSum / $count, 1);
 
             // save averages to DB
-            $this->saveMetric('cpu_usage', (string) $averageCpu);
-            $this->saveMetric('ram_usage', (string) $averageRam);
-            $this->saveMetric('storage_usage', (string) $averageStorage);
+            $this->saveMetric($metricName, (string) $averageValue, $serviceName);
 
             // reset metrics cache
-            $this->cacheUtil->setValue($cpuKey, 0, $cacheExpiration);
-            $this->cacheUtil->setValue($ramKey, 0, $cacheExpiration);
-            $this->cacheUtil->setValue($storageKey, 0, $cacheExpiration);
+            $this->cacheUtil->setValue($metricKey, 0, $cacheExpiration);
             $this->cacheUtil->setValue($countKey, 0, $cacheExpiration);
         }
 

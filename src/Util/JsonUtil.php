@@ -3,8 +3,6 @@
 namespace App\Util;
 
 use Exception;
-use App\Manager\ErrorManager;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class JsonUtil
@@ -15,13 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class JsonUtil
 {
-    private ErrorManager $errorManager;
-
-    public function __construct(ErrorManager $errorManager)
-    {
-        $this->errorManager = $errorManager;
-    }
-
     /**
      * Get JSON data from a file or URL
      *
@@ -55,11 +46,8 @@ class JsonUtil
 
             // decode & return json
             return (array) json_decode($data, true);
-        } catch (Exception $e) {
-            $this->errorManager->handleError(
-                message: 'error to get json data from ' . $target . ' with error: ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+        } catch (Exception) {
+            return null;
         }
     }
 }
