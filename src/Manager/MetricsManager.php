@@ -98,8 +98,10 @@ class MetricsManager
         }
 
         // get categories from first metric group
-        foreach (reset($metrics) as $metric) {
-            $categories[] = $metric['time'];
+        if (!empty($metrics)) {
+            foreach (reset($metrics) as $metric) {
+                $categories[] = $metric['time'];
+            }
         }
 
         // round times in categories array for hour rounding
