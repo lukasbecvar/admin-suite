@@ -63,7 +63,7 @@ class MetricsManager
         // check if services list config data is loaded correctly
         if ($servicesList == null) {
             $this->errorManager->handleError(
-                message: 'error to get services list config data',
+                message: 'error to get monitored services config',
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
@@ -80,7 +80,7 @@ class MetricsManager
         if ($serviceName != 'host-system' && !$servicesList[$serviceName]['metrics_monitoring']['collect_metrics']) {
             $this->errorManager->handleError(
                 message: 'error to get metrics: service is not configured to collect metrics',
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
+                code: Response::HTTP_FORBIDDEN
             );
         }
 
