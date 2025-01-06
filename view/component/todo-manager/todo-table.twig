@@ -35,7 +35,7 @@
             {% for todo in todos %}
                 <div class="flex items-center justify-between p-3 my-2 rounded bg-neutral-810 transition-colors duration-200" data-todo-id={{ todo.id }}>
                     <div class="flex-grow">
-                        <span class="text-white">{{ todo.todoText|linkify }}</span>
+                        <span class="text-white whitespace-pre-line">{{ todo.todoText|linkify }}</span>
                     </div>
                     <div class="flex space-x-2 ml-1">
                         {% if filter == 'open' %}
