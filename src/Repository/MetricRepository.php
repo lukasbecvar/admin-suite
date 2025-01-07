@@ -161,7 +161,7 @@ class MetricRepository extends ServiceEntityRepository
             } elseif ($timePeriod === 'last_week') {
                 $dateKey = $time->format('Y-m-d');
             } elseif ($timePeriod === 'last_month') {
-                $dateKey = $time->format('m-d');
+                $dateKey = $time->format('Y-m-d');
             } elseif ($timePeriod === 'all_time') {
                 $dateKey = $time->format('Y-m');
             } else {

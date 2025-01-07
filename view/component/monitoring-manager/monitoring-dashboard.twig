@@ -103,7 +103,12 @@
 
         {# SERVICES DASHBOARD CARD #}
         <div class="border border-neutral-600 shadow-lg overflow-hidden w-full max-h-50 card-color card-component rounded">
-            <div class="px-2 py-2 border-b border-neutral-600 text-white font-bold">HTTP services</div>
+            <div class="px-2 py-2 border-b border-neutral-600 text-white font-bold">
+                HTTP services
+                <a href={{ path('app_metrics_services_all') }} class="text-blue-500 hover:text-blue-300" title="View metrics">
+                    <i class="fa fa-chart-line border-neutral-600 border p-1 rounded" aria-hidden="true"></i>
+                </a>
+            </div>
             <div class="p-1 overflow-y-auto h-50">
 
                 {# SERVICES LIST #}
@@ -119,7 +124,7 @@
                                 <div class="flex items-center space-x-2">
                                     <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
                                     <span class="text-white ml-r">
-                                        {% if serviceStatus.responseCode == 200 %}
+                                        {% if serviceStatus.responseCode in service.accept_codes %}
                                             [<span class="text-green-500 font-bold">ONLINE</span>]
                                         {% else %}
                                             [<span class="text-red-500 font-bold">OFFLINE</span>]

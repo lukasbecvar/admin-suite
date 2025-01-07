@@ -65,8 +65,31 @@ class MetricsDashboardController extends AbstractController
 
         // return service metrics view
         return $this->render('component/metrics-dashboard/service-metrics.twig', [
-            'data' => $data,
-            'serviceName' => $serviceName
+            'serviceName' => $serviceName,
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * Render service metrics page for all services
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The service metrics view
+     */
+    #[Route('/metrics/service/all', methods:['GET'], name: 'app_metrics_services_all')]
+    public function serviceMetricsAll(Request $request): Response
+    {
+        // get time period
+        $timePeriod = (string) $request->query->get('time_period', 'last_24_hours');
+
+        // get metrics data
+        $data = $this->metricsManager->getAllServicesMetrics($timePeriod);
+
+        // return service metrics view
+        return $this->render('component/metrics-dashboard/service-metrics.twig', [
+            'serviceName' => 'all-services',
+            'data' => $data
         ]);
     }
 }

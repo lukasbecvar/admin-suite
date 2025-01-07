@@ -48,12 +48,43 @@ class MetricsManager
     }
 
     /**
+     * Get all services metrics
+     *
+     * @param string $timePeriod The time period
+     *
+     * @return array<string,mixed> The metrics data
+     */
+    public function getAllServicesMetrics(string $timePeriod = 'last_24_hours'): array
+    {
+        $servicesList = $this->serviceManager->getServicesList();
+
+        // check if services list config data is loaded correctly
+        if ($servicesList == null) {
+            $this->errorManager->handleError(
+                message: 'error to get monitored services config',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        $metrics = [];
+
+        // get all services with metrics collection enabled
+        foreach ($servicesList as $serviceName => $serviceConfig) {
+            if ($serviceConfig['type'] == 'http' && $serviceConfig['metrics_monitoring']['collect_metrics']) {
+                $metrics[$serviceName] = $this->getServiceMetrics($serviceName, $timePeriod);
+            }
+        }
+
+        return $metrics;
+    }
+
+    /**
      * Get metrics for service
      *
      * @param string $serviceName The service name
      * @param string $timePeriod The time period
      *
-     * @return array<string,mixed> The metrics data
+     * @return array<mixed> The metrics data
      */
     public function getServiceMetrics(string $serviceName, string $timePeriod = 'last_24_hours'): array
     {

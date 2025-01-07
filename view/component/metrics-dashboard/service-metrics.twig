@@ -4,7 +4,7 @@
 {% block component %}
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
-    <a href={{ path('app_metrics_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
+    <a href={{ path('app_manager_monitoring') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
 
@@ -48,28 +48,53 @@
 
 
 {# METRICS-CHARTS #}
-{% if data['metrics']|length == 0 %}
+{% if data is empty or (serviceName != 'all-services' and data['metrics'] is empty) %}
 <p class="flex items-center justify-center mt-20 mb-20 text-2xl text-white font-bold">
     No metrics found for service: {{ serviceName|e }}
 </p>
 {% else %}
-    <div class="p-2 space-y-2 metrics-component">
-        {% for metricName, metricData in data.metrics %}
-            <div class="flex flex-col md:flex-row gap-2">
-                <div class="flex-1 p-0 border border-neutral-600 shadow-lg card-color rounded relative chart-container">
-                    <div class="text-white font-bold text-l mb-1 border-b border-neutral-600 p-2">
-                        {{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}
+    {# RENDER METRICS CHARTS FOR SPECIFIC SERVICE #}
+    {% if serviceName != 'all-services' %}
+        <div class="p-2 space-y-2 metrics-component">
+            {% for metricName, metricData in data.metrics %}
+                <div class="flex flex-col md:flex-row gap-2">
+                    <div class="flex-1 p-0 border border-neutral-600 shadow-lg card-color rounded relative chart-container">
+                        <div class="text-white font-bold text-l mb-1 border-b border-neutral-600 p-2">
+                            {{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}
+                        </div>
+                        <div id="{{ (metricName ~ '-' ~ 'default')|replace({'.': '_', ' ': '_'}) }}-line"></div>
                     </div>
-                    <div id="{{ metricName }}-line"></div>
                 </div>
+            {% endfor %}
+        </div>
+        <script>
+            window.metricsData = {{ { categories: data.categories, metrics: data.metrics, serviceName: serviceName } | json_encode | raw }};
+        </script>
+    {% else %}
+        {# RENDER METRICS CHARTS FOR ALL SERVICES #}
+        {% for serviceName, serviceData in data %}
+            <div class="p-2 space-y-2 metrics-component">
+                {% for metricName, metricData in serviceData.metrics %}
+                    <div class="flex flex-col md:flex-row gap-2">                        
+                        <div class="flex-1 p-0 border border-neutral-600 shadow-lg card-color rounded relative chart-container">
+                            <div class="text-white font-bold text-l mb-1 border-b border-neutral-600 p-2">
+                                {{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}
+                            </div>
+                            <div id="{{ (metricName ~ '-' ~ serviceName)|replace({'.': '_', ' ': '_'}) }}-line"></div>
+                        </div>
+                    </div>
+                {%- endfor %}
             </div>
+            <script>
+                if (!window.metricsData) {
+                    window.metricsData = {};
+                }
+                window.metricsData["{{ serviceName|replace({'.': '_', ' ': '_'}) }}"] = {{ { categories: serviceData.categories, metrics: serviceData.metrics } | json_encode | raw }};
+            </script>
         {% endfor %}
-    </div>
-
-    <script>
-        window.metricsData = {{ { categories: data.categories, metrics: data.metrics } | json_encode | raw }};
-    </script>
-    {{ encore_entry_script_tags('service-metrics-charts-js') }}
+    {% endif %}
 {% endif %}
 
+{# INCLUDE CHARTS JS #}
+{{ encore_entry_script_tags('service-metrics-charts-js') }}
 {% endblock %}
