@@ -102,6 +102,9 @@ class DatabaseBrowserController extends AbstractController
         // get number of rows in the table
         $tableDataCount = $this->databaseManager->getTableRowCount($databaseName, $tableName);
 
+        // get last page number
+        $lastPageNumber = $this->databaseManager->getLastTablePage($tableName);
+
         // render table browser page view
         return $this->render('component/database-browser/table-browser.twig', [
             // filter data
@@ -109,10 +112,11 @@ class DatabaseBrowserController extends AbstractController
             'tableName' => $tableName,
             'databaseName' => $databaseName,
             'limitPerPage' => $limitPerPage,
+            'lastPageNumber' => $lastPageNumber,
 
             // table data
             'tableData' => $tableData,
-            'tableDataCount' => $tableDataCount
+            'tableDataCount' => $tableDataCount,
         ]);
     }
 

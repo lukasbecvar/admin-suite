@@ -110,13 +110,16 @@
                     {% set startPage = max(currentPage - 2, 1) %}
                     {% set endPage = min(currentPage + 2, totalPages) %}
                     
+                    {# LINK TO FIRST PAGE #}
                     <li>
-                        <a href={{ currentPage > 1 ? path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName, 'page': previousPage}) : '#' }}
+                        <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName, 'page': 1}) }}
                         class="block px-4 py-2 text-white {{ currentPage == 1 ? 'cursor-not-allowed opacity-50' : 'hover:bg-neutral-800' }}"
                         {% if currentPage == 1 %} onclick="return false;" {% endif %}>
-                            Previous
+                            First
                         </a>
                     </li>
+
+                    {# PAGE LINKS #}
                     {% for page in startPage..endPage %}
                         <li>
                             <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName, 'page': page}) }}
@@ -125,11 +128,13 @@
                             </a>
                         </li>
                     {% endfor %}
+
+                    {# LINK TO LAST PAGE #}
                     <li>
-                        <a href={{ currentPage < totalPages ? path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName, 'page': nextPage}) : '#' }}
+                        <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName, 'page': lastPageNumber}) }}
                         class="block px-4 py-2 text-white {{ currentPage == totalPages ? 'cursor-not-allowed opacity-50' : 'hover:bg-neutral-800' }}" 
-                        {% if currentPage == totalPages %} onclick="return false;" {% endif %}>
-                            Next
+                        {% if currentPage == lastPageNumber %} onclick="return false;" {% endif %}>
+                            Last
                         </a>
                     </li>
                 </ul>
