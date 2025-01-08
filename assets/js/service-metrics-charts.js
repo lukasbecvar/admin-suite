@@ -64,8 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     title: {
                         text: metricName.replace(/_/g, ' ').toUpperCase(),
                     },
-                    min: 0,
-                    max: Math.ceil(Math.max(...metricData.map(m => m.value))) + 5,
                     forceNiceScale: false
                 },
                 colors: [getColor(metricData[metricData.length - 1]?.value || 0, metricData)],
