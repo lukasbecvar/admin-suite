@@ -100,26 +100,26 @@ class ServerUtil
     public function getRamUsage(): array
     {
         $memoryRaw = file_get_contents('/proc/meminfo');
-        $memoryFree = 0;
         $memoryTotal = 0;
+        $memoryAvailable = 0;
 
         if ($memoryRaw !== false) {
             $lines = explode("\n", $memoryRaw);
             foreach ($lines as $line) {
                 if (str_contains($line, 'MemTotal:')) {
                     $memoryTotal = (float) filter_var($line, FILTER_SANITIZE_NUMBER_INT) / 1048576;
-                } elseif (str_contains($line, 'MemFree:')) {
-                    $memoryFree = (float) filter_var($line, FILTER_SANITIZE_NUMBER_INT) / 1048576;
+                } elseif (str_contains($line, 'MemAvailable:')) {
+                    $memoryAvailable = (float) filter_var($line, FILTER_SANITIZE_NUMBER_INT) / 1048576;
                 }
             }
         }
 
         // calculate memory usage
-        $memoryUsed = $memoryTotal - $memoryFree;
+        $memoryUsed = $memoryTotal - $memoryAvailable;
 
         return [
             'used'  => number_format($memoryUsed, 2),
-            'free'  => number_format($memoryFree, 2),
+            'free'  => number_format($memoryAvailable, 2),
             'total' => number_format($memoryTotal, 2)
         ];
     }

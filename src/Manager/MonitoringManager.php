@@ -428,11 +428,21 @@ class MonitoringManager
                             } else {
                                 // collect all metrics
                                 foreach ($metrics as $name => $value) {
-                                    $this->metricsManager->saveMetricWithCacheSummary(
-                                        metricName: $name,
-                                        value: $value,
-                                        serviceName: $service['service_name']
-                                    );
+                                    try {
+                                        $this->metricsManager->saveMetricWithCacheSummary(
+                                            metricName: $name,
+                                            value: $value,
+                                            serviceName: $service['service_name']
+                                        );
+                                        $io->writeln(
+                                            '[' . date('Y-m-d H:i:s') . '] <fg=green>monitoring:</fg=green> metric ' . $name . ' from service ' . $service['service_name'] . ' saved'
+                                        );
+                                    } catch (Exception $e) {
+                                        $this->errorManager->logError(
+                                            message: $e->getMessage(),
+                                            code: Response::HTTP_INTERNAL_SERVER_ERROR
+                                        );
+                                    }
                                 }
                             }
                         }
@@ -452,8 +462,18 @@ class MonitoringManager
             }
         }
 
-        // save metrics to database
-        $this->metricsManager->saveUsageMetrics($cpuUsage, $ramUsage, $storageUsage);
+        // save host usages metrics to database
+        try {
+            $this->metricsManager->saveUsageMetrics($cpuUsage, $ramUsage, $storageUsage);
+            $io->writeln(
+                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>host usages metrics saved</fg=green>'
+            );
+        } catch (Exception $e) {
+            $this->errorManager->logError(
+                message: $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
         // calculate last monitoring time expiration
         $lastMonitoringTimeExpiration = (intval($monitoringInterval) * 60) * 2;
