@@ -122,9 +122,9 @@ class MetricsManager
         $metrics = $this->metricRepository->getMetricsByServiceName($serviceName, $timePeriod);
 
         // format all values to 2 decimal places
-        foreach ($metrics as $name => &$metricGroup) {
-            foreach ($metricGroup as &$metric) {
-                $metric['value'] = round($metric['value'], 2);
+        foreach ($metrics as $name => $metricGroup) {
+            foreach ($metricGroup as $key => $metric) {
+                $metrics[$name][$key]['value'] = round($metric['value'], 2);
             }
         }
 
