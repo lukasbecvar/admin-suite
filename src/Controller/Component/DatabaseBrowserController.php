@@ -103,7 +103,7 @@ class DatabaseBrowserController extends AbstractController
         $tableDataCount = $this->databaseManager->getTableRowCount($databaseName, $tableName);
 
         // get last page number
-        $lastPageNumber = $this->databaseManager->getLastTablePage($tableName);
+        $lastPageNumber = $this->databaseManager->getLastTablePage($databaseName, $tableName);
 
         // render table browser page view
         return $this->render('component/database-browser/table-browser.twig', [

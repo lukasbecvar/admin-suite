@@ -699,12 +699,13 @@ class DatabaseManager
     /**
      * Get last page number for a table given a row limit per page
      *
+     * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      * @param int|null $limit The row limit per page (null for default value)
      *
      * @return int The last page number
      */
-    public function getLastTablePage(string $tableName, ?int $limit = null): int
+    public function getLastTablePage(string $dbName, string $tableName, ?int $limit = null): int
     {
         if ($limit == null) {
             $limit = (int) $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
@@ -715,7 +716,7 @@ class DatabaseManager
         $escapedTableName = $platform->quoteSingleIdentifier($tableName);
 
         // get total number of rows in table
-        $query = "SELECT COUNT(*) FROM $escapedTableName";
+        $query = "SELECT COUNT(*) FROM $dbName.$escapedTableName";
         $rowCount = $this->connection->fetchOne($query);
 
         // calculate last page number
