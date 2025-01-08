@@ -58,8 +58,8 @@
         "monitoring": true,
         "display": true,
         "metrics_monitoring": {
-            "collect_metrics": false,
-            "metrics_collector_url": ""
+            "collect_metrics": true,
+            "metrics_collector_url": "https://paste.becvar.xyz/metrics/export"
         }
     },
     "admin-suite": {
