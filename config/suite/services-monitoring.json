@@ -44,8 +44,8 @@
         "monitoring": true,
         "display": true,
         "metrics_monitoring": {
-            "collect_metrics": false,
-            "metrics_collector_url": ""
+            "collect_metrics": true,
+            "metrics_collector_url": "https://becvar.xyz/metrics/export"
         }
     },
     "paste.becvar.xyz": {
