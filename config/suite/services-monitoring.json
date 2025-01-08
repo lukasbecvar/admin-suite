@@ -50,7 +50,7 @@
     },
     "paste.becvar.xyz": {
         "service_name": "paste.becvar.xyz",
-        "display_name": "becvar paste",
+        "display_name": "code paste",
         "url": "https://paste.becvar.xyz",
         "accept_codes": [200],
         "max_response_time": 3000,
