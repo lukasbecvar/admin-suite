@@ -1,23 +1,25 @@
 /** metrics component graph functionality for service metrics */
 const ApexCharts = require('apexcharts')
 
-function getColor(value) {
-    return value > 80 ? '#f73925' : '#19bf3f'
-}
-
 document.addEventListener("DOMContentLoaded", () => {
+    // function for overload color highlight
+    function getColor(value, metricData) {
+        const maxMetricValue = Math.max(...metricData.map(m => m.value))
+        if (maxMetricValue > 100) { 
+            return '#19bf3f'
+        }
+        return value > 80 ? '#f73925' : '#19bf3f'
+    }
+
     if (!window.metricsData) {
         console.error("Metrics data not found in window.metricsData")
         return
     }
-    const services = typeof window.metricsData.categories === 'undefined' 
-        ? window.metricsData 
-        : { default: window.metricsData }
+    const services = typeof window.metricsData.categories === 'undefined' ? window.metricsData : { default: window.metricsData }
 
     // iterate over each service in metricsData
     Object.keys(services).forEach(serviceName => {
         const { categories, metrics } = services[serviceName]
-
         Object.keys(metrics).forEach(metricName => {
             const metricData = metrics[metricName]
             const elementId = `${metricName}-${serviceName}`.replace(/\./g, '_').replace(/ /g, '_')
@@ -52,25 +54,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 stroke: {
                     width: 3,
                     curve: 'straight',
-                    colors: [getColor(metricData[metricData.length - 1]?.value || 0)]
+                    colors: [getColor(metricData[metricData.length - 1]?.value || 0, metricData)]
                 },
                 xaxis: {
                     categories: categories,
                     tickAmount: Math.floor(categories.length / 2)
                 },
                 yaxis: {
-                    min: 0,
-                    max: 100,
-                    labels: {
-                        formatter: function (value) {
-                            return value + '%'
-                        }
-                    },
                     title: {
                         text: metricName.replace(/_/g, ' ').toUpperCase(),
-                    },
+                    }
                 },
-                colors: [getColor(metricData[metricData.length - 1]?.value || 0)],
+                colors: [getColor(metricData[metricData.length - 1]?.value || 0, metricData)],
                 theme: {
                     mode: 'dark',
                 },
