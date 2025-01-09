@@ -5,6 +5,7 @@ namespace App\Manager;
 use DateTime;
 use Exception;
 use App\Entity\Todo;
+use DateTimeInterface;
 use App\Util\SecurityUtil;
 use App\Repository\TodoRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TodoManager
 {
     private LogManager $logManager;
+    private UserManager $userManager;
     private AuthManager $authManager;
     private SecurityUtil $securityUtil;
     private ErrorManager $errorManager;
@@ -30,6 +32,7 @@ class TodoManager
     public function __construct(
         LogManager $logManager,
         AuthManager $authManager,
+        UserManager $userManager,
         SecurityUtil $securityUtil,
         ErrorManager $errorManager,
         TodoRepository $todoRepository,
@@ -38,6 +41,7 @@ class TodoManager
     ) {
         $this->logManager = $logManager;
         $this->authManager = $authManager;
+        $this->userManager = $userManager;
         $this->securityUtil = $securityUtil;
         $this->errorManager = $errorManager;
         $this->todoRepository = $todoRepository;
@@ -111,6 +115,56 @@ class TodoManager
         ]);
 
         return $count;
+    }
+
+    /**
+     * Get todo info
+     *
+     * @param int $todoId The id of the todo
+     *
+     * @return array<string,int|string|null> The todo info
+     */
+    public function getTodoInfo(int $todoId): array
+    {
+        /** @var Todo $todo */
+        $todo = $this->todoRepository->find($todoId);
+
+        // check if todo exists
+        if ($todo == null) {
+            $this->errorManager->handleError(
+                message: 'Todo id: ' . $todoId . ' does not exist',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // get todo data
+        $id = $todo->getId();
+        $owner = $todo->getUserId();
+        $status = $todo->getStatus();
+        $createdAt = $todo->getAddedTime();
+        $closedAt = $todo->getCompletedTime();
+
+        // check if ownerId set
+        if ($owner != null) {
+            $owner = $this->userManager->getUsernameById($owner);
+        }
+
+        // format datetimes
+        if ($createdAt instanceof DateTimeInterface) {
+            $createdAt = $createdAt->format('Y-m-d H:i:s');
+        }
+        if ($closedAt instanceof DateTimeInterface) {
+            $closedAt = $closedAt->format('Y-m-d H:i:s');
+        }
+
+        // return todo info
+        return [
+            'id' => $id,
+            'owner' => $owner ?? 'Unknown',
+            'status' => $status,
+            'created_at' => $createdAt ?? null,
+            'closed_at' => $closedAt ?? 'non-closed'
+        ];
     }
 
     /**

@@ -6,6 +6,7 @@ use DateTime;
 use App\Entity\Todo;
 use App\Util\SecurityUtil;
 use App\Manager\LogManager;
+use App\Manager\UserManager;
 use App\Manager\AuthManager;
 use App\Manager\TodoManager;
 use App\Manager\ErrorManager;
@@ -27,6 +28,7 @@ class TodoManagerTest extends TestCase
     private TodoManager $todoManager;
     private LogManager & MockObject $logManagerMock;
     private AuthManager & MockObject $authManagerMock;
+    private UserManager & MockObject $userManagerMock;
     private SecurityUtil & MockObject $securityUtilMock;
     private ErrorManager & MockObject $errorManagerMock;
     private TodoRepository & MockObject $todoRepositoryMock;
@@ -38,6 +40,7 @@ class TodoManagerTest extends TestCase
         // mock dependencies
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->authManagerMock = $this->createMock(AuthManager::class);
+        $this->userManagerMock = $this->createMock(UserManager::class);
         $this->securityUtilMock = $this->createMock(SecurityUtil::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->todoRepositoryMock = $this->createMock(TodoRepository::class);
@@ -48,6 +51,7 @@ class TodoManagerTest extends TestCase
         $this->todoManager = new TodoManager(
             $this->logManagerMock,
             $this->authManagerMock,
+            $this->userManagerMock,
             $this->securityUtilMock,
             $this->errorManagerMock,
             $this->todoRepositoryMock,
@@ -111,6 +115,11 @@ class TodoManagerTest extends TestCase
         $this->assertIsString($result);
     }
 
+    /**
+     * Test get todos count
+     *
+     * @return void
+     */
     public function testGetTodosCount(): void
     {
         // expect count method call

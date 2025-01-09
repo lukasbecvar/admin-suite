@@ -74,6 +74,7 @@ class NonAuthRedirectTest extends WebTestCase
         'todo_manager' => [
             ['method' => 'GET', 'url' => '/manager/todo'],
             ['method' => 'GET', 'url' => '/manager/todo/edit'],
+            ['method' => 'GET', 'url' => '/manager/todo/info'],
             ['method' => 'GET', 'url' => '/manager/todo/close'],
             ['method' => 'GET', 'url' => '/manager/todo/reopen'],
             ['method' => 'GET', 'url' => '/manager/todo/delete']

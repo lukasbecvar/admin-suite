@@ -5,6 +5,7 @@ namespace App\Tests\Controller\Component;
 use App\Tests\CustomTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class TodoManagerControllerTest
@@ -57,6 +58,27 @@ class TodoManagerControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'Todo list');
         $this->assertSelectorNotExists('input[name="create_todo_form[todo_text]"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test get todo info
+     *
+     * @return void
+     */
+    public function testGetTodoInfo(): void
+    {
+        $this->client->request('GET', '/manager/todo/info?id=1');
+
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
+
+        // assert response
+        $this->assertArrayHasKey('id', $responseData);
+        $this->assertArrayHasKey('owner', $responseData);
+        $this->assertArrayHasKey('status', $responseData);
+        $this->assertArrayHasKey('created_at', $responseData);
+        $this->assertArrayHasKey('closed_at', $responseData);
+        $this->assertResponseStatusCodeSame(JsonResponse::HTTP_OK);
     }
 
     /**

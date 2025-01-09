@@ -8,6 +8,7 @@ use App\Form\Todo\CreateTodoFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -68,6 +69,34 @@ class TodoManagerController extends AbstractController
             'todos' => $todos,
             'createTodoForm' => $form->createView()
         ]);
+    }
+
+    /**
+     * Get todo info
+     *
+     * @param Request $request The request object
+     *
+     * @return JsonResponse The todo info in json format
+     */
+    #[Route('/manager/todo/info', methods:['GET'], name: 'app_todo_manager_info')]
+    public function getTodoInfo(Request $request): JsonResponse
+    {
+        // get todo id
+        $todoId = (int) $request->query->get('id', '0');
+
+        // check if todo id is valid
+        if ($todoId == 0) {
+            $this->errorManager->handleError(
+                message: 'todo id is invalid or not set',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // get todo info
+        $todoInfo = $this->todoManager->getTodoInfo($todoId);
+
+        // return todo info in json format
+        return $this->json($todoInfo, Response::HTTP_OK);
     }
 
     /**
