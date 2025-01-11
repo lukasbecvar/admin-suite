@@ -429,14 +429,16 @@ class MonitoringManager
                                 // collect all metrics
                                 foreach ($metrics as $name => $value) {
                                     try {
-                                        $this->metricsManager->saveMetricWithCacheSummary(
+                                        $metricSaveStatus = $this->metricsManager->saveServiceMetric(
                                             metricName: $name,
                                             value: $value,
                                             serviceName: $service['service_name']
                                         );
-                                        $io->writeln(
-                                            '[' . date('Y-m-d H:i:s') . '] <fg=green>monitoring:</fg=green> metric ' . $name . ' from service ' . $service['service_name'] . ' saved'
-                                        );
+                                        if ($metricSaveStatus) {
+                                            $io->writeln(
+                                                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>metric ' . $name . ' from service ' . $service['service_name'] . ' saved</fg=green>'
+                                            );
+                                        }
                                     } catch (Exception $e) {
                                         $this->errorManager->logError(
                                             message: $e->getMessage(),

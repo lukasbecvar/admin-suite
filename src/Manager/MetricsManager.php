@@ -358,6 +358,36 @@ class MetricsManager
     }
 
     /**
+     * Save service metric to database (save raw metric value without average calculation with save interval limit)
+     *
+     * @param string $metricName The metric name
+     * @param int|float $value The metric value
+     * @param string $serviceName The metric service name
+     *
+     * @return bool True if metric saved, false if save skipped
+     */
+    public function saveServiceMetric(string $metricName, int|float $value, string $serviceName = 'host-system'): bool
+    {
+        $metricsSaveInterval = (int) $this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL') * 60;
+        $lastSaveKey = $metricName . '_' . $serviceName . '_last_save_time';
+
+        // check if last save time is catched
+        if ($this->cacheUtil->isCatched($lastSaveKey)) {
+            return false;
+        }
+
+        // save metric to database
+        $this->saveMetric($metricName, (string) $value, $serviceName);
+
+        // set last save time if not catched (disable next save)
+        if (!$this->cacheUtil->isCatched($lastSaveKey)) {
+            $this->cacheUtil->setValue($lastSaveKey, time(), $metricsSaveInterval);
+        }
+
+        return true;
+    }
+
+    /**
      * Delete metrics from database
      *
      * @param string $metricName The metric name
