@@ -2,6 +2,8 @@
 
 namespace App\Controller\Component;
 
+use Exception;
+use App\Manager\ErrorManager;
 use App\Manager\MetricsManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,10 +19,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class MetricsDashboardController extends AbstractController
 {
+    private ErrorManager $errorManager;
     private MetricsManager $metricsManager;
 
-    public function __construct(MetricsManager $metricsManager)
+    public function __construct(ErrorManager $errorManager, MetricsManager $metricsManager)
     {
+        $this->errorManager = $errorManager;
         $this->metricsManager = $metricsManager;
     }
 
@@ -90,6 +94,59 @@ class MetricsDashboardController extends AbstractController
         return $this->render('component/metrics-dashboard/service-metrics.twig', [
             'serviceName' => 'all-services',
             'data' => $data
+        ]);
+    }
+
+    /**
+     * Delete metrics from database
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The service metrics view
+     */
+    #[Route('/metrics/delete', methods:['GET'], name: 'app_metrics_delete')]
+    public function deleteMetrics(Request $request): Response
+    {
+        // get metric name and service name
+        $metricName = (string) $request->request->get('metric_name');
+        $serviceName = (string) $request->request->get('service_name');
+        $confirm = (string) $request->request->get('confirm', 'none');
+
+        // check if parameters are valid
+        if (empty($metricName) || empty($serviceName)) {
+            $this->errorManager->handleError(
+                message: 'Parameters: metric_name and service_name are required',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($confirm == 'none') {
+            return $this->render('component/metrics-dashboard/delete-metric-confirmation.twig', [
+                'metricName' => $metricName,
+                'serviceName' => $serviceName
+            ]);
+        }
+
+        // check if user confirmed the action
+        if ($confirm == 'no') {
+            return $this->redirectToRoute('app_metrics_service', [
+                'service_name' => $serviceName
+            ]);
+        }
+
+        // delete metric
+        try {
+            $this->metricsManager->deleteMetric($metricName, $serviceName);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'Error deleting metric: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // return back to service metrics page
+        return $this->redirectToRoute('app_metrics_service', [
+            'service_name' => $serviceName
         ]);
     }
 }

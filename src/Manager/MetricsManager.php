@@ -26,6 +26,7 @@ class MetricsManager
     private ServerUtil $serverUtil;
     private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
+    private DatabaseManager $databaseManager;
     private MetricRepository $metricRepository;
     private EntityManagerInterface $entityManagerInterface;
 
@@ -35,6 +36,7 @@ class MetricsManager
         ServerUtil $serverUtil,
         ErrorManager $errorManager,
         ServiceManager $serviceManager,
+        DatabaseManager $databaseManager,
         MetricRepository $metricRepository,
         EntityManagerInterface $entityManagerInterface
     ) {
@@ -43,6 +45,7 @@ class MetricsManager
         $this->serverUtil = $serverUtil;
         $this->errorManager = $errorManager;
         $this->serviceManager = $serviceManager;
+        $this->databaseManager = $databaseManager;
         $this->metricRepository = $metricRepository;
         $this->entityManagerInterface = $entityManagerInterface;
     }
@@ -349,5 +352,47 @@ class MetricsManager
         if (!$this->cacheUtil->isCatched($lastSaveKey)) {
             $this->cacheUtil->setValue($lastSaveKey, time(), $metricsSaveInterval);
         }
+    }
+
+    /**
+     * Delete metrics from database
+     *
+     * @param string $metricName The metric name
+     * @param string $serviceName The metric service name
+     *
+     * @throws Exception Error to delete metric from database
+     *
+     * @return void
+     */
+    public function deleteMetric(string $metricName, string $serviceName = 'host-system'): void
+    {
+        // get metric entity
+        $metrics = $this->metricRepository->findMetricsByNameAndService($metricName, $serviceName);
+
+        // check if metric found
+        if ($metrics == null) {
+            $this->errorManager->handleError(
+                message: 'error to delete metric: ' . $metricName . ' - ' . $serviceName . ' not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // delete all metric entities
+        foreach ($metrics as $metricEntity) {
+            $this->entityManagerInterface->remove($metricEntity);
+        }
+
+        // delete metric data
+        try {
+            $this->entityManagerInterface->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to delete metric: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // recalculate metrics database ids
+        $this->databaseManager->recalculateTableIds($this->databaseManager->getEntityTableName(Metric::class));
     }
 }

@@ -25,6 +25,26 @@ class MetricRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find metrics by name and service
+     *
+     * @param string $metricName The metric name
+     * @param string $serviceName The service name
+     *
+     * @return Metric[] The metrics
+     */
+    public function findMetricsByNameAndService(string $metricName, string $serviceName): array
+    {
+        $qb = $this->createQueryBuilder('m');
+        return $qb
+            ->where('m.name = :name')
+            ->andWhere('m.service_name = :serviceName')
+            ->setParameter('name', $metricName)
+            ->setParameter('serviceName', $serviceName)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Get metrics by name and time period
      *
      * @param string $name The name of the metric
