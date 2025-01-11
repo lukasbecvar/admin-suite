@@ -32,8 +32,8 @@ jobs:
           php bin/console app:toggle:maintenance
 
           # stop admin-suite services
-          sudo systemctl stop apache2
           sudo systemctl stop admin-suite-monitoring
+          sudo systemctl stop apache2
 
           # clear cache & packages
           sudo sh scripts/clear.sh
