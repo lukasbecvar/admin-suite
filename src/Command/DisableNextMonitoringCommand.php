@@ -78,11 +78,6 @@ class DisableNextMonitoringCommand extends Command
 
             // disable monitoring for all services
             foreach ($services as $service) {
-                // check if monitoring is disabled
-                if ($service['monitoring'] == false) {
-                    continue;
-                }
-
                 // disable next monitoring for service
                 $this->monitoringManager->disableNextMonitoring($service['service_name'], $time);
             }
