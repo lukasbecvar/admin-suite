@@ -24,6 +24,7 @@ class MetricsManager
     private AppUtil $appUtil;
     private CacheUtil $cacheUtil;
     private ServerUtil $serverUtil;
+    private LogManager $logManager;
     private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
     private DatabaseManager $databaseManager;
@@ -34,6 +35,7 @@ class MetricsManager
         AppUtil $appUtil,
         CacheUtil $cacheUtil,
         ServerUtil $serverUtil,
+        LogManager $logManager,
         ErrorManager $errorManager,
         ServiceManager $serviceManager,
         DatabaseManager $databaseManager,
@@ -43,6 +45,7 @@ class MetricsManager
         $this->appUtil = $appUtil;
         $this->cacheUtil = $cacheUtil;
         $this->serverUtil = $serverUtil;
+        $this->logManager = $logManager;
         $this->errorManager = $errorManager;
         $this->serviceManager = $serviceManager;
         $this->databaseManager = $databaseManager;
@@ -391,6 +394,13 @@ class MetricsManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+
+        // log delete metric event
+        $this->logManager->log(
+            name: 'metrics-manager',
+            message: 'deleted metric: ' . $metricName . ' - ' . $serviceName,
+            level: LogManager::LEVEL_WARNING
+        );
 
         // recalculate metrics database ids
         $this->databaseManager->recalculateTableIds($this->databaseManager->getEntityTableName(Metric::class));

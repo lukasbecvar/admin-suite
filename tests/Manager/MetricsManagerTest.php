@@ -8,6 +8,7 @@ use App\Util\AppUtil;
 use App\Entity\Metric;
 use App\Util\CacheUtil;
 use App\Util\ServerUtil;
+use App\Manager\LogManager;
 use App\Manager\ErrorManager;
 use App\Manager\MetricsManager;
 use App\Manager\ServiceManager;
@@ -32,6 +33,7 @@ class MetricsManagerTest extends TestCase
     private AppUtil & MockObject $appUtilMock;
     private CacheUtil & MockObject $cacheUtilMock;
     private ServerUtil & MockObject $serverUtilMock;
+    private LogManager & MockObject $logManagerMock;
     private ErrorManager & MockObject $errorManagerMock;
     private ServiceManager & MockObject $serviceManagerMock;
     private DatabaseManager & MockObject $databaseManagerMock;
@@ -44,6 +46,7 @@ class MetricsManagerTest extends TestCase
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->cacheUtilMock = $this->createMock(CacheUtil::class);
         $this->serverUtilMock = $this->createMock(ServerUtil::class);
+        $this->logManagerMock = $this->createMock(LogManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
         $this->databaseManagerMock = $this->createMock(DatabaseManager::class);
@@ -55,6 +58,7 @@ class MetricsManagerTest extends TestCase
             $this->appUtilMock,
             $this->cacheUtilMock,
             $this->serverUtilMock,
+            $this->logManagerMock,
             $this->errorManagerMock,
             $this->serviceManagerMock,
             $this->databaseManagerMock,
@@ -197,5 +201,36 @@ class MetricsManagerTest extends TestCase
 
         // call tested method
         $this->metricsManager->saveMetric($metricName, $value);
+    }
+
+    /**
+     * Test delete metric
+     *
+     * @return void
+     */
+    public function testDeleteMetric(): void
+    {
+        // mock metrics repository
+        $metricName = 'test_metric';
+        $serviceName = 'test_service';
+        $metricEntityMock = $this->createMock(Metric::class);
+        $this->metricRepositoryMock->expects($this->once())->method('findMetricsByNameAndService')
+            ->with($metricName, $serviceName)->willReturn([$metricEntityMock]);
+
+        // expect flush call
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // expect log call
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            $this->equalTo('metrics-manager'),
+            $this->stringContains('deleted metric: ' . $metricName . ' - ' . $serviceName),
+            $this->equalTo(LogManager::LEVEL_WARNING)
+        );
+
+        // expect recalculate table ids call
+        $this->databaseManagerMock->expects($this->once())->method('recalculateTableIds');
+
+        // call tested method
+        $this->metricsManager->deleteMetric($metricName, $serviceName);
     }
 }
