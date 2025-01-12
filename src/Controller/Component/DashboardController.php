@@ -61,6 +61,7 @@ class DashboardController extends AbstractController
         $hostUptime = $this->serverUtil->getHostUptime();
         $storageUsage = $this->serverUtil->getStorageUsage();
         $hostSystemInfo = $this->serverUtil->getSystemInfo();
+        $systemInstallInfo = $this->serverUtil->getSystemInstallInfo();
 
         // get running process list
         $processList = $this->serverUtil->getProcessList();
@@ -94,6 +95,7 @@ class DashboardController extends AbstractController
             'hostUptime' => $hostUptime,
             'storageUsage' => $storageUsage,
             'hostSystemInfo' => $hostSystemInfo,
+            'systemInstallInfo' => $systemInstallInfo,
 
             // process list
             'processList' => $processList,

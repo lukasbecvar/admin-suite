@@ -277,6 +277,33 @@ class ServerUtil
     }
 
     /**
+     * Get system installation date
+     *
+     * @return string The system installation date
+     */
+    public function getSystemInstallInfo(): string
+    {
+        $rootDir = '/';
+        $stat = stat($rootDir);
+
+        // check if stats get returned
+        if (!$stat) {
+            return "Unable to retrieve installation date.";
+        }
+
+        // get root directory creation date
+        $installTime = $stat['ctime'];
+        $installDate = date('Y-m-d', $installTime);
+
+        // get days after installation
+        $currentTime = time();
+        $daysAgo = floor(($currentTime - $installTime) / (60 * 60 * 24));
+
+        // format and return output
+        return $installDate . " (" . $daysAgo . " days ago)";
+    }
+
+    /**
      * Check if a service is or is php extension installed
      *
      * @param string $serviceName The name of the service

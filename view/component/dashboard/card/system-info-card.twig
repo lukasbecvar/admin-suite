@@ -2,8 +2,8 @@
     <div class="px-3 py-2 border-b border-neutral-600 text-white font-bold text-sm">
         System Information
     </div>
-    <div class="p-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <div class="p-3 pl-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-1">
             {# HOST UPTIME #}
             <div class="flex flex-col">
                 <p class="text-gray-300 mb-1">Uptime</p>
@@ -13,8 +13,8 @@
             <div class="flex flex-col">
                 <p class="text-gray-300 mb-1">System</p>
                 <p class="text-white font-medium">
-                {{ hostSystemInfo.operating_system|split('"')[1]|trim('" NAME')|e }}
-            </p>
+                    {{ hostSystemInfo.operating_system|split('"')[1]|trim('" NAME')|e }}
+                </p>
             </div>
             {# HOST KERNEL #}
             <div class="flex flex-col">
@@ -25,6 +25,11 @@
             <div class="flex flex-col">
                 <p class="text-gray-300 mb-1">Architecture</p>
                 <p class="text-white font-medium">{{ hostSystemInfo.kernel_arch|e }}</p>
+            </div>
+            {# INSTALLATION TIME #}
+            <div class="flex flex-col">
+                <p class="text-gray-300 mb-1">Installation time</p>
+                <p class="text-white font-medium">{{ systemInstallInfo|e }}</p>
             </div>
         </div>
     </div>
