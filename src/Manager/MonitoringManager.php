@@ -237,21 +237,6 @@ class MonitoringManager
     }
 
     /**
-     * Disable next monitoring for a service
-     *
-     * This method is used to disable next monitoring for a service after amount of time
-     *
-     * @param string $serviceName The name of the service
-     * @param int $minutes The number of minutes to disable next monitoring
-     *
-     * @return void
-     */
-    public function disableNextMonitoring(string $serviceName, int $minutes): void
-    {
-        $this->cacheUtil->setValue('monitoring-disabler-' . $serviceName, 'disabled', $minutes * 60);
-    }
-
-    /**
      * Init monitoring process (called from monitoring process command)
      *
      * @param SymfonyStyle $io The io interface
@@ -266,14 +251,6 @@ class MonitoringManager
                 message: 'error to init monitoring process: this method can be called only from cli',
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-        }
-
-        // check if monitoring is disabled
-        if ($this->cacheUtil->isCatched('monitoring-disabler-monitor-job')) {
-            $io->writeln(
-                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=yellow>monitoring skipped for complete monitoring job</>'
-            );
-            return;
         }
 
         // get monitoring interval
@@ -360,14 +337,6 @@ class MonitoringManager
         foreach ($services as $service) {
             // force retype service array (to avoid phpstan error)
             $service = (array) $service;
-
-            // check if monitoring is disabled
-            if ($this->cacheUtil->isCatched('monitoring-disabler-' . $service['service_name'])) {
-                $io->writeln(
-                    '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=yellow>monitoring skipped for service: ' . $service['service_name'] . '</fg=yellow>'
-                );
-                continue;
-            }
 
             // check if service is enabled
             if ($service['monitoring'] == false) {
