@@ -268,6 +268,14 @@ class MonitoringManager
             );
         }
 
+        // check if monitoring is disabled
+        if ($this->cacheUtil->isCatched('monitoring-disabler-complete-monitoring-job')) {
+            $io->writeln(
+                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=yellow>monitoring skipped for complete monitoring job</>'
+            );
+            return;
+        }
+
         // get monitoring interval
         $monitoringInterval = (int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60;
 

@@ -4,7 +4,6 @@ namespace App\Tests\Command;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use App\Manager\ServiceManager;
 use App\Manager\MonitoringManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use App\Command\DisableNextMonitoringCommand;
@@ -22,17 +21,15 @@ class DisableNextMonitoringCommandTest extends TestCase
 {
     private CommandTester $commandTester;
     private DisableNextMonitoringCommand $command;
-    private ServiceManager & MockObject $serviceManagerMock;
     private MonitoringManager & MockObject $monitoringManagerMock;
 
     protected function setUp(): void
     {
         // mock dependencies
-        $this->serviceManagerMock = $this->createMock(ServiceManager::class);
         $this->monitoringManagerMock = $this->createMock(MonitoringManager::class);
 
         // initialize command instance
-        $this->command = new DisableNextMonitoringCommand($this->serviceManagerMock, $this->monitoringManagerMock);
+        $this->command = new DisableNextMonitoringCommand($this->monitoringManagerMock);
         $this->commandTester = new CommandTester($this->command);
     }
 
@@ -43,22 +40,9 @@ class DisableNextMonitoringCommandTest extends TestCase
      */
     public function testExecuteSuccessful(): void
     {
-        // mock services list
-        $services = [
-            ['service_name' => 'service1', 'monitoring' => true],
-            ['service_name' => 'service2', 'monitoring' => true],
-        ];
-        $this->serviceManagerMock->method('getServicesList')->willReturn($services);
-        $this->monitoringManagerMock->expects($this->exactly(2))->method('disableNextMonitoring')->willReturnCallback(function ($serviceName, $time) {
-            static $callIndex = 0;
-            $expectedCalls = [
-                ['service1', 10],
-                ['service2', 10],
-            ];
-            $this->assertSame($expectedCalls[$callIndex][0], $serviceName);
-            $this->assertSame($expectedCalls[$callIndex][1], $time);
-            $callIndex++;
-        });
+        // expect disable next monitoring method to be called
+        $this->monitoringManagerMock->expects($this->once())->method('disableNextMonitoring')
+            ->with('complete-monitoring-job', 10);
 
         // execute command
         $exitCode = $this->commandTester->execute(['time' => 10]);
@@ -67,28 +51,8 @@ class DisableNextMonitoringCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert response
-        $this->assertStringContainsString('next monitoring disabled for all services (for next 10 minutes)', $output);
+        $this->assertStringContainsString('Next monitoring disabled (time: 10 minutes)', $output);
         $this->assertSame(Command::SUCCESS, $exitCode);
-    }
-
-    /**
-     * Test execute when services list is not iterable
-     *
-     * @return void
-     */
-    public function testExecuteWithInvalidServicesList(): void
-    {
-        $this->serviceManagerMock->method('getServicesList')->willReturn(null);
-
-        // execute command
-        $exitCode = $this->commandTester->execute(['time' => 10]);
-
-        // get command output
-        $output = $this->commandTester->getDisplay();
-
-        // assert response
-        $this->assertStringContainsString('error to get services list', $output);
-        $this->assertSame(Command::FAILURE, $exitCode);
     }
 
     /**
@@ -98,14 +62,9 @@ class DisableNextMonitoringCommandTest extends TestCase
      */
     public function testExecuteWithException(): void
     {
-        // mock services list
-        $this->serviceManagerMock->method('getServicesList')->willReturn([
-            ['service_name' => 'service1', 'monitoring' => true]
-        ]);
-
-        // mock disable next monitoring method
-        $this->monitoringManagerMock->method('disableNextMonitoring')
-            ->willThrowException(new Exception('Unexpected error'));
+        // mock exception
+        $this->monitoringManagerMock->expects($this->once())->method('disableNextMonitoring')
+            ->with('complete-monitoring-job', 10)->willThrowException(new Exception('Unexpected error'));
 
         // execute command
         $exitCode = $this->commandTester->execute(['time' => 10]);
@@ -114,7 +73,7 @@ class DisableNextMonitoringCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert response
-        $this->assertStringContainsString('Error to disable next monitoring: Unexpected error', $output);
+        $this->assertStringContainsString('Error to disable monitoring process: Unexpected error', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 }
