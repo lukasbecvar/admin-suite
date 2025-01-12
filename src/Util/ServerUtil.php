@@ -277,30 +277,36 @@ class ServerUtil
     }
 
     /**
-     * Get system installation date
+     * Get system installation date using shell_exec
      *
      * @return string The system installation date
      */
     public function getSystemInstallInfo(): string
     {
-        $rootDir = '/';
-        $stat = stat($rootDir);
+        $command = "sudo tune2fs -l $(df / | tail -1 | awk '{print $1}') | grep 'Filesystem created'";
+        $output = shell_exec($command);
 
-        // check if stats get returned
-        if (!$stat) {
+        // check if output is empty
+        if (!$output) {
             return "Unable to retrieve installation date.";
         }
 
-        // get root directory creation date
-        $installTime = $stat['ctime'];
-        $installDate = date('Y-m-d', $installTime);
+        // get installation date from output
+        if (preg_match('/Filesystem created:\s*(.+)/', $output, $matches)) {
+            $installDate = strtotime($matches[1]);
+            if (!$installDate) {
+                return "Unable to parse installation date.";
+            }
+            $formattedDate = date('Y-m-d', $installDate);
 
-        // get days after installation
-        $currentTime = time();
-        $daysAgo = floor(($currentTime - $installTime) / (60 * 60 * 24));
+            // calculate days ago
+            $currentTime = time();
+            $daysAgo = floor(($currentTime - $installDate) / (60 * 60 * 24));
 
-        // format and return output
-        return $installDate . " (" . $daysAgo . " days ago)";
+            return $formattedDate . " (" . $daysAgo . " days ago)";
+        }
+
+        return "Installation date not found in command output.";
     }
 
     /**
