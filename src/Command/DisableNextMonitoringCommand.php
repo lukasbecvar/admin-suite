@@ -59,7 +59,7 @@ class DisableNextMonitoringCommand extends Command
         $time = (int) $input->getArgument('time');
 
         try {
-            $this->monitoringManager->disableNextMonitoring('complete-monitoring-job', $time);
+            $this->monitoringManager->disableNextMonitoring('monitor-job', $time);
             $io->success('Next monitoring disabled (time: ' . $time . ' minutes)');
             return Command::SUCCESS;
         } catch (Exception $e) {

@@ -42,7 +42,7 @@ class DisableNextMonitoringCommandTest extends TestCase
     {
         // expect disable next monitoring method to be called
         $this->monitoringManagerMock->expects($this->once())->method('disableNextMonitoring')
-            ->with('complete-monitoring-job', 10);
+            ->with('monitor-job', 10);
 
         // execute command
         $exitCode = $this->commandTester->execute(['time' => 10]);
@@ -64,7 +64,7 @@ class DisableNextMonitoringCommandTest extends TestCase
     {
         // mock exception
         $this->monitoringManagerMock->expects($this->once())->method('disableNextMonitoring')
-            ->with('complete-monitoring-job', 10)->willThrowException(new Exception('Unexpected error'));
+            ->with('monitor-job', 10)->willThrowException(new Exception('Unexpected error'));
 
         // execute command
         $exitCode = $this->commandTester->execute(['time' => 10]);

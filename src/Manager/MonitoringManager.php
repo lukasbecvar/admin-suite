@@ -248,7 +248,7 @@ class MonitoringManager
      */
     public function disableNextMonitoring(string $serviceName, int $minutes): void
     {
-        $this->cacheUtil->setValue('monitoring-disabler-' . $serviceName, false, $minutes * 60);
+        $this->cacheUtil->setValue('monitoring-disabler-' . $serviceName, 'disabled', $minutes * 60);
     }
 
     /**
@@ -269,7 +269,7 @@ class MonitoringManager
         }
 
         // check if monitoring is disabled
-        if ($this->cacheUtil->isCatched('monitoring-disabler-complete-monitoring-job')) {
+        if ($this->cacheUtil->isCatched('monitoring-disabler-monitor-job')) {
             $io->writeln(
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=yellow>monitoring skipped for complete monitoring job</>'
             );
