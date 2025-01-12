@@ -44,6 +44,7 @@ class MonitoringStatusFixtures extends Fixture
                 ->setMessage($message)
                 ->setStatus($status)
                 ->setDownTime(0)
+                ->setSlaTimeframe('2025-01')
                 ->setLastUpdateTime(new DateTime($lastUpdateTime));
 
             // persist data

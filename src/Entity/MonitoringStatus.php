@@ -37,6 +37,9 @@ class MonitoringStatus
     #[ORM\Column(length: 255)]
     private ?int $down_time = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $sla_timeframe = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $last_update_time = null;
 
@@ -156,6 +159,30 @@ class MonitoringStatus
     public function increaseDownTime(int $minutes): void
     {
         $this->down_time += $minutes;
+    }
+
+    /**
+     * Get the SLA timeframe of the service
+     *
+     * @return string|null The SLA timeframe of the service or null if not found
+     */
+    public function getSlaTimeframe(): ?string
+    {
+        return $this->sla_timeframe;
+    }
+
+    /**
+     * Set the SLA timeframe of the service
+     *
+     * @param string $sla_timeframe The SLA timeframe of the service
+     *
+     * @return static The current object
+     */
+    public function setSlaTimeframe(string $sla_timeframe): static
+    {
+        $this->sla_timeframe = $sla_timeframe;
+
+        return $this;
     }
 
     /**

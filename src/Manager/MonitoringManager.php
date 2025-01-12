@@ -110,6 +110,7 @@ class MonitoringManager
                 ->setStatus($status)
                 ->setMessage('new service initialization')
                 ->setDownTime(0)
+                ->setSlaTimeframe(date('Y-m'))
                 ->setLastUpdateTime(new DateTime());
 
             // persist service monitoring
@@ -279,6 +280,40 @@ class MonitoringManager
     }
 
     /**
+     * Reset down times for all services
+     *
+     * @return void
+     */
+    public function resetDownTimes(): void
+    {
+        /** @var array<MonitoringStatus> $monitoringStatusRepository */
+        $monitoringStatusRepository = $this->monitoringStatusRepository->findAll();
+
+        // get current timeframe
+        $currentTimeframe = date('Y-m');
+
+        // reset down times for all services
+        foreach ($monitoringStatusRepository as $monitoringStatus) {
+            $this->entityManagerInterface->refresh($monitoringStatus);
+            // check if service is in current timeframe
+            if ($monitoringStatus->getSlaTimeframe() != $currentTimeframe) {
+                $monitoringStatus->setSlaTimeframe($currentTimeframe);
+                $monitoringStatus->setDownTime(0);
+            }
+        }
+
+        // flush changes to database
+        try {
+            $this->entityManagerInterface->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to reset down times: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
      * Handle database down
      *
      * @param SymfonyStyle $io The io interface
@@ -317,6 +352,9 @@ class MonitoringManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+
+        // reset down times for all services (reset data for SLA calculation)
+        $this->resetDownTimes();
 
         // get monitoring interval
         $monitoringInterval = (int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60;
