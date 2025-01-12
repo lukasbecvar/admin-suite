@@ -34,12 +34,12 @@
                                     </a>
                                 </td>
                                 <td class="px-4 py-2 border-b border-neutral-700 text-right">
-                                    <a href={{ path('app_manager_database_dump', {'select': 'no', 'database': database.name, 'plain': 'yes'}) }} class="database-link">
+                                    <a href={{ path('app_manager_database_dump', {'select': 'no', 'database': database.name, 'plain': 'yes'}) }} id="loading-blocker" class="database-link">
                                         Dump Structure
                                     </a>
                                 </td>
                                 <td class="px-4 py-2 border-b border-neutral-700 text-right">
-                                <a href={{ path('app_manager_database_dump', {'select': 'no', 'database': database.name, 'plain': 'no'}) }} class="database-link">
+                                <a href={{ path('app_manager_database_dump', {'select': 'no', 'database': database.name, 'plain': 'no'}) }} id="loading-blocker" class="database-link">
                                         Dump Data
                                     </a>
                                 </td>
