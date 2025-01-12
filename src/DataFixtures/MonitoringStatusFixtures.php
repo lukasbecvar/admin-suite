@@ -43,6 +43,7 @@ class MonitoringStatusFixtures extends Fixture
             $MonitoringStatus->setServiceName($serviceName)
                 ->setMessage($message)
                 ->setStatus($status)
+                ->setDownTime(0)
                 ->setLastUpdateTime(new DateTime($lastUpdateTime));
 
             // persist data

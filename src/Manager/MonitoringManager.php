@@ -109,6 +109,7 @@ class MonitoringManager
             $monitoringStatus->setServiceName($serviceName)
                 ->setStatus($status)
                 ->setMessage('new service initialization')
+                ->setDownTime(0)
                 ->setLastUpdateTime(new DateTime());
 
             // persist service monitoring
@@ -214,6 +215,70 @@ class MonitoringManager
     }
 
     /**
+     * Increase down time for a service
+     *
+     * @param string $serviceName The name of the service
+     * @param int $minutes The number of minutes to increase the down time
+     *
+     * @return void
+     */
+    public function increaseDownTime(string $serviceName, int $minutes): void
+    {
+        // get monitoring status repository
+        $repo = $this->monitoringStatusRepository->findOneBy(['service_name' => $serviceName]);
+
+        // check if repository is found
+        if ($repo == null) {
+            $this->setMonitoringStatus($serviceName, 'new service initialization', 'pending');
+            return;
+        }
+
+        // increase down time
+        try {
+            $repo->increaseDownTime($minutes);
+            $this->entityManagerInterface->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to increase down time: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Get service SLA
+     *
+     * @param string $serviceName The name of the service
+     *
+     * @return int|float|null The service SLA, null if not found
+     */
+    public function getServiceMountlySLA(string $serviceName): int|float|null
+    {
+        /** @var MonitoringStatus $repo */
+        $repo = $this->monitoringStatusRepository->findOneBy(['service_name' => $serviceName]);
+
+        // check if repository is found
+        if ($repo == null) {
+            return null;
+        }
+
+        // get down time (minutes)
+        $downTime = $repo->getDownTime();
+        if ($downTime === null) {
+            $this->errorManager->handleError(
+                message: 'error to get service SLA: down time is null',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // total minutes in a month (average month length in days)
+        $totalMinutesInMonth = 30.44 * 24 * 60;
+
+        // calculate SLA
+        return round((1 - ($downTime / $totalMinutesInMonth)) * 100, 2);
+    }
+
+    /**
      * Handle database down
      *
      * @param SymfonyStyle $io The io interface
@@ -255,6 +320,7 @@ class MonitoringManager
 
         // get monitoring interval
         $monitoringInterval = (int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60;
+        $possibleDownTime = $monitoringInterval / 60;
 
         // get metrics
         $cpuUsage = $this->serverUtil->getCpuUsage();
@@ -361,6 +427,7 @@ class MonitoringManager
                         currentStatus: 'not-running',
                         message: $service['display_name'] . ' is not running'
                     );
+                    $this->increaseDownTime($service['service_name'], $possibleDownTime);
                     $io->writeln(
                         '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not running</fg=red>'
                     );
@@ -385,6 +452,7 @@ class MonitoringManager
                             currentStatus: 'not-accepting-code',
                             message: $service['display_name'] . ' is not accepting any of the codes ' . $acceptCodesStr . ' (response code: ' . $serviceStatus['responseCode'] . ')'
                         );
+                        $this->increaseDownTime($service['service_name'], $possibleDownTime);
                         $io->writeln(
                             '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not accepting any of the codes ' . $acceptCodesStr . ' (response code: ' . $serviceStatus['responseCode'] . ')</fg=red>'
                         );
@@ -396,6 +464,7 @@ class MonitoringManager
                             currentStatus: 'not-responding',
                             message: $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . 'ms'
                         );
+                        $this->increaseDownTime($service['service_name'], $possibleDownTime);
                         $io->writeln(
                             '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . ' ms</fg=red>'
                         );
@@ -457,6 +526,7 @@ class MonitoringManager
                         currentStatus: 'not-online',
                         message: $service['display_name'] . ' is offline'
                     );
+                    $this->increaseDownTime($service['service_name'], $possibleDownTime);
                     $io->writeln(
                         '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is offline</fg=red>'
                     );

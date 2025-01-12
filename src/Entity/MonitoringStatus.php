@@ -34,6 +34,9 @@ class MonitoringStatus
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
+    #[ORM\Column(length: 255)]
+    private ?int $down_time = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $last_update_time = null;
 
@@ -117,6 +120,42 @@ class MonitoringStatus
         $this->status = $status;
 
         return $this;
+    }
+
+    /**
+     * Get the down time of the service
+     *
+     * @return int|null The down time of the service or null if not found
+     */
+    public function getDownTime(): ?int
+    {
+        return $this->down_time;
+    }
+
+    /**
+     * Set the down time of the service
+     *
+     * @param int $down_time The down time of the service
+     *
+     * @return static The current object
+     */
+    public function setDownTime(int $down_time): static
+    {
+        $this->down_time = $down_time;
+
+        return $this;
+    }
+
+    /**
+     * Increase the down time of the service
+     *
+     * @param int $minutes The number of minutes to increase the down time
+     *
+     * @return void
+     */
+    public function increaseDownTime(int $minutes): void
+    {
+        $this->down_time += $minutes;
     }
 
     /**

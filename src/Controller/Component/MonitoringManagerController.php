@@ -7,6 +7,7 @@ use App\Util\CacheUtil;
 use App\Manager\LogManager;
 use App\Manager\ServiceManager;
 use App\Annotation\Authorization;
+use App\Manager\MonitoringManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,17 +25,20 @@ class MonitoringManagerController extends AbstractController
     private CacheUtil $cacheUtil;
     private LogManager $logManager;
     private ServiceManager $serviceManager;
+    private MonitoringManager $monitoringManager;
 
     public function __construct(
         AppUtil $appUtil,
         CacheUtil $cacheUtil,
         LogManager $logManager,
-        ServiceManager $serviceManager
+        ServiceManager $serviceManager,
+        MonitoringManager $monitoringManager
     ) {
         $this->appUtil = $appUtil;
         $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
         $this->serviceManager = $serviceManager;
+        $this->monitoringManager = $monitoringManager;
     }
 
     /**
@@ -68,6 +72,7 @@ class MonitoringManagerController extends AbstractController
             'services' => $services,
             'monitoringLogs' => $monitoringLogs,
             'serviceManager' => $this->serviceManager,
+            'monitoringManager' => $this->monitoringManager,
             'lastMonitoringTime' => $lastMonitoringTime
         ]);
     }

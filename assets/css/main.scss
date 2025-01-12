@@ -547,8 +547,8 @@ main {
 }
 
 /* apply only on non mobile devices */ 
-@media screen and (min-width: 400px) { 
-	.non-phone-only {
+@media screen and (min-width: 400px) {
+	.phone-only {
 		display: none;
 	}
 	.mini-disabled {
