@@ -286,11 +286,16 @@ class MonitoringManager
      */
     public function resetDownTimes(): void
     {
-        /** @var array<MonitoringStatus> $monitoringStatusRepository */
-        $monitoringStatusRepository = $this->monitoringStatusRepository->findAll();
-
         // get current timeframe
         $currentTimeframe = date('Y-m');
+
+        /** @var array<MonitoringStatus> $monitoringStatusRepository */
+        $monitoringStatusRepository = $this->monitoringStatusRepository->findByNonCurrentTimeframe($currentTimeframe);
+
+        // check if any services is in non current timeframe
+        if ($monitoringStatusRepository == null) {
+            return;
+        }
 
         // reset down times for all services
         foreach ($monitoringStatusRepository as $monitoringStatus) {

@@ -21,4 +21,20 @@ class MonitoringStatusRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, MonitoringStatus::class);
     }
+
+    /**
+     * Find all entities by non current timeframe
+     *
+     * @param string $currentTimeframe
+     *
+     * @return MonitoringStatus[] Array of MonitoringStatus entities
+     */
+    public function findByNonCurrentTimeframe(string $currentTimeframe): array
+    {
+        return $this->createQueryBuilder('ms')
+            ->where('ms.sla_timeframe != :currentTimeframe')
+            ->setParameter('currentTimeframe', $currentTimeframe)
+            ->getQuery()
+            ->getResult();
+    }
 }
