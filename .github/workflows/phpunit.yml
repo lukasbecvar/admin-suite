@@ -35,7 +35,7 @@ jobs:
 
       # composer install
       - name: Install backend dependencies
-        run: composer install --no-interaction --no-progress --no-suggest
+        run: composer install --no-interaction --no-progress
       
       # node-modules install
       - name: Install frontend dependencies

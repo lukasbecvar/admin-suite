@@ -24,7 +24,7 @@ jobs:
 
     # composer install
     - name: Install backend dependencies
-      run: composer install --no-interaction --no-progress --no-suggest
+      run: composer install --no-interaction --no-progress
 
     # codesniffer process
     - name: Run PHP-CodeSniffer

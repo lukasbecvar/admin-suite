@@ -45,7 +45,7 @@ jobs:
           sed -i 's/^\(APP_ENV=\)dev/\1prod/' .env
 
           # install backend dependencies
-          composer install --no-interaction --no-progress --no-suggest
+          composer install --no-interaction --no-progress
 
           # install frontend dependencies
           npm install --loglevel=error
