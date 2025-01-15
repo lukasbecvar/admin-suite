@@ -67,7 +67,7 @@
 
 {# SEND METRICS DATA TO CHARTS JS #}
 <script>
-    window.metricsData = {{ { categories: data.categories, metrics: data.metrics, serviceName: 'host-system' } | json_encode | raw }};
+    window.metricsData = {{ { categories: data.categories, metrics: data.metrics, serviceName: 'host-system', percentage: true } | json_encode | raw }};
 </script>
 
 {# INCLUDE CHARTS SCRIPT #}

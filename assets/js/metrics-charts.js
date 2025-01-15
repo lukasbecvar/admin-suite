@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // iterate over each service in metricsData
     Object.keys(services).forEach(serviceName => {
-        const { categories, metrics } = services[serviceName]
+        const { categories, metrics, percentage } = services[serviceName]
         Object.keys(metrics).forEach(metricName => {
             const metricData = metrics[metricName]
             const elementId = `${metricName}-${serviceName}`.replace(/\./g, '_').replace(/ /g, '_')
@@ -80,6 +80,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         fontFamily: 'Arial',
                     }
                 },
+            }
+
+            // format data to percentage chart
+            if (percentage) {
+                options.yaxis.min = 0
+                options.yaxis.max = 100
+                options.yaxis.labels = {
+                    formatter: function (value) {
+                        return value + '%'
+                    }
+                }
             }
 
             const chart = new ApexCharts(element, options)
