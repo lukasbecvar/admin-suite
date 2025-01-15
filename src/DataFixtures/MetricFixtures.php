@@ -39,7 +39,7 @@ class MetricFixtures extends Fixture
                 foreach ($metrics as $name) {
                     $metric = new Metric();
                     $metric->setName($name)
-                        ->setValue((string) random_int(10, 30))
+                        ->setValue((string) random_int(10, 100))
                         ->setServiceName($serviceName)
                         ->setTime(clone $currentDate);
 

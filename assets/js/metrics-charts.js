@@ -80,6 +80,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         fontFamily: 'Arial',
                     }
                 },
+                dataLabels: {
+                    enabled: true
+                }
             }
 
             // format data to percentage chart
@@ -91,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         return value + '%'
                     }
                 }
+                options.dataLabels.enabled = false
             }
 
             const chart = new ApexCharts(element, options)
