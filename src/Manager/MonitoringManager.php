@@ -282,9 +282,11 @@ class MonitoringManager
     /**
      * Reset down times for all services
      *
+     * @param SymfonyStyle $io The Symfony command output decorator
+     *
      * @return void
      */
-    public function resetDownTimes(): void
+    public function resetDownTimes(SymfonyStyle $io): void
     {
         // get current timeframe
         $currentTimeframe = date('Y-m');
@@ -302,6 +304,31 @@ class MonitoringManager
             $this->entityManagerInterface->refresh($monitoringStatus);
             // check if service is in current timeframe
             if ($monitoringStatus->getSlaTimeframe() != $currentTimeframe) {
+                // get old timeframe
+                $oldTimeframe = $monitoringStatus->getSlaTimeframe();
+                $serviceName = $monitoringStatus->getServiceName();
+
+                // check if service name set
+                if ($serviceName == null) {
+                    $this->errorManager->handleError(
+                        message: 'error to reset SLA: service name is null',
+                        code: Response::HTTP_INTERNAL_SERVER_ERROR
+                    );
+                }
+
+                // log SLA status to database
+                $this->logManager->log(
+                    name: 'SLA timeframe reset',
+                    message: $monitoringStatus->getServiceName() . ' SLA for timeframe ' . $oldTimeframe . ' is: ' . $this->getServiceMountlySLA($serviceName) . '%',
+                    level: LogManager::LEVEL_INFO
+                );
+
+                // log to command output
+                $io->writeln(
+                    '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=yellow>SLA downtime for service ' . $monitoringStatus->getServiceName() . ' reseted</>'
+                );
+
+                // reset SLA timeframe
                 $monitoringStatus->setSlaTimeframe($currentTimeframe);
                 $monitoringStatus->setDownTime(0);
             }
@@ -359,7 +386,7 @@ class MonitoringManager
         }
 
         // reset down times for all services (reset data for SLA calculation)
-        $this->resetDownTimes();
+        $this->resetDownTimes($io);
 
         // get monitoring interval
         $monitoringInterval = (int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60;

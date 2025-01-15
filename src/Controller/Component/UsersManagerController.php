@@ -3,12 +3,14 @@
 namespace App\Controller\Component;
 
 use Exception;
+use App\Entity\User;
 use App\Util\AppUtil;
 use App\Manager\BanManager;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
 use App\Manager\ErrorManager;
+use App\Manager\DatabaseManager;
 use App\Annotation\Authorization;
 use App\Form\Auth\RegistrationFormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +32,7 @@ class UsersManagerController extends AbstractController
     private UserManager $userManager;
     private AuthManager $authManager;
     private ErrorManager $errorManager;
+    private DatabaseManager $databaseManager;
     private VisitorInfoUtil $visitorInfoUtil;
 
     public function __construct(
@@ -38,6 +41,7 @@ class UsersManagerController extends AbstractController
         UserManager $userManager,
         AuthManager $authManager,
         ErrorManager $errorManager,
+        DatabaseManager $databaseManager,
         VisitorInfoUtil $visitorInfoUtil
     ) {
         $this->appUtil = $appUtil;
@@ -45,6 +49,7 @@ class UsersManagerController extends AbstractController
         $this->userManager = $userManager;
         $this->authManager = $authManager;
         $this->errorManager = $errorManager;
+        $this->databaseManager = $databaseManager;
         $this->visitorInfoUtil = $visitorInfoUtil;
     }
 
@@ -76,8 +81,9 @@ class UsersManagerController extends AbstractController
         // get online users list
         $onlineList = $this->authManager->getOnlineUsersList();
 
-        // get admin suite database name
+        // get admin suite database name and users table name
         $mainDatabase = $this->appUtil->getEnvValue('DATABASE_NAME');
+        $usersTableName = $this->databaseManager->getEntityTableName(User::class);
 
         // get current visitor ip (for highlight current user)
         $currentVisitorIp = $this->visitorInfoUtil->getIp();
@@ -102,8 +108,9 @@ class UsersManagerController extends AbstractController
             'userManager' => $this->userManager,
             'visitorInfoUtil' => $this->visitorInfoUtil,
 
-            // database name
+            // database data
             'mainDatabase' => $mainDatabase,
+            'usersTableName' => $usersTableName,
 
             // users manager data
             'users' => $usersData,

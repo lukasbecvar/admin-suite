@@ -8,6 +8,16 @@
         {# BACK BUTTON #}
         <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a> 
+
+        {# LINK TO MONITORING STATUS DATABASE #}
+        <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': monitoringStatusTable}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Go to unsorted logs">
+            <i class="fa fa-database" aria-hidden="true"></i>
+        </a>
+
+        {# LINK TO METRICS DASHBOARD #}
+        <a href={{ path('app_metrics_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Go to metrics dashboard">
+            <i class="fa fa-chart-line" aria-hidden="true"></i>
         </a>
 
         {# CONFIG BUTTON #}

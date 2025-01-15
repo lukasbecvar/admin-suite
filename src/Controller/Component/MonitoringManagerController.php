@@ -6,6 +6,8 @@ use App\Util\AppUtil;
 use App\Util\CacheUtil;
 use App\Manager\LogManager;
 use App\Manager\ServiceManager;
+use App\Manager\DatabaseManager;
+use App\Entity\MonitoringStatus;
 use App\Annotation\Authorization;
 use App\Manager\MonitoringManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +27,7 @@ class MonitoringManagerController extends AbstractController
     private CacheUtil $cacheUtil;
     private LogManager $logManager;
     private ServiceManager $serviceManager;
+    private DatabaseManager $databaseManager;
     private MonitoringManager $monitoringManager;
 
     public function __construct(
@@ -32,12 +35,14 @@ class MonitoringManagerController extends AbstractController
         CacheUtil $cacheUtil,
         LogManager $logManager,
         ServiceManager $serviceManager,
+        DatabaseManager $databaseManager,
         MonitoringManager $monitoringManager
     ) {
         $this->appUtil = $appUtil;
         $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
         $this->serviceManager = $serviceManager;
+        $this->databaseManager = $databaseManager;
         $this->monitoringManager = $monitoringManager;
     }
 
@@ -61,6 +66,10 @@ class MonitoringManagerController extends AbstractController
         // default last monitoring time
         $lastMonitoringTime = null;
 
+        // get database info
+        $mainDatabaseName = $this->appUtil->getEnvValue('DATABASE_NAME');
+        $monitoringStatusTableName = $this->databaseManager->getEntityTableName(MonitoringStatus::class);
+
         // check if last monitoring time is cached
         if ($this->cacheUtil->isCatched('last-monitoring-time')) {
             // get last monitoring time
@@ -71,9 +80,11 @@ class MonitoringManagerController extends AbstractController
         return $this->render('component/monitoring-manager/monitoring-dashboard.twig', [
             'services' => $services,
             'monitoringLogs' => $monitoringLogs,
+            'mainDatabase' => $mainDatabaseName,
             'serviceManager' => $this->serviceManager,
+            'lastMonitoringTime' => $lastMonitoringTime,
             'monitoringManager' => $this->monitoringManager,
-            'lastMonitoringTime' => $lastMonitoringTime
+            'monitoringStatusTable' => $monitoringStatusTableName
         ]);
     }
 

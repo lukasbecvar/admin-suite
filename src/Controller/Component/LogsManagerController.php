@@ -2,11 +2,13 @@
 
 namespace App\Controller\Component;
 
+use App\Entity\Log;
 use App\Util\AppUtil;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
+use App\Manager\DatabaseManager;
 use App\Annotation\Authorization;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,6 +28,7 @@ class LogsManagerController extends AbstractController
     private LogManager $logManager;
     private UserManager $userManager;
     private AuthManager $authManager;
+    private DatabaseManager $databaseManager;
     private VisitorInfoUtil $visitorInfoUtil;
 
     public function __construct(
@@ -33,12 +36,14 @@ class LogsManagerController extends AbstractController
         LogManager $logManager,
         UserManager $userManager,
         AuthManager $authManager,
+        DatabaseManager $databaseManager,
         VisitorInfoUtil $visitorInfoUtil
     ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->userManager = $userManager;
         $this->authManager = $authManager;
+        $this->databaseManager = $databaseManager;
         $this->visitorInfoUtil = $visitorInfoUtil;
     }
 
@@ -70,6 +75,9 @@ class LogsManagerController extends AbstractController
         $logsCount = $this->logManager->getLogsCountWhereStatus($filter, (int) $userId);
         $logs = $this->logManager->getLogsWhereStatus($filter, (int) $userId, (int) $page);
 
+        // get database info
+        $logsTableName = $this->databaseManager->getEntityTableName(Log::class);
+
         // return logs table view
         return $this->render('component/log-manager/logs-table.twig', [
             // instances for logs manager view
@@ -77,8 +85,9 @@ class LogsManagerController extends AbstractController
             'authManager' => $this->authManager,
             'visitorInfoUtil' => $this->visitorInfoUtil,
 
-            // database name
+            // database data
             'mainDatabase' => $mainDatabase,
+            'logsTableName' => $logsTableName,
 
             // logs data
             'logs' => $logs,
