@@ -42,7 +42,7 @@ class MetricsDashboardController extends AbstractController
         $timePeriod = (string) $request->query->get('time_period', 'last_24_hours');
 
         // get metrics data
-        $data = $this->metricsManager->getResourceUsageMetrics($timePeriod);
+        $data = $this->metricsManager->getServiceMetrics('host-system', $timePeriod);
 
         // return metrics dashboard view
         return $this->render('component/metrics-dashboard/metrics-dashboard.twig', [

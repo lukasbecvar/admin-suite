@@ -52,82 +52,22 @@
 
 {# METRICS-CHARTS #}
 <div class="p-2 space-y-2 metrics-component">
-    {# CPU USAGE #}
-    <div class="flex flex-col md:flex-row gap-2">
-        <div class="flex-4 p-0 border border-neutral-600 shadow-lg card-color rounded relative chart-container">
-            <div class="text-white font-bold text-l mb-1 border-b border-neutral-600 p-2">
-                CPU Usage (current)
-            </div>
-            <div id="cpu-usage-radial"></div>
-            <div id="cpu-usage-percentage" class="absolute text-white text-5xl font-bold percentage">
-                {{ data.cpu.current }}%
-            </div>
-        </div>
-
-        <div class="flex-1 p-0 border border-neutral-600 shadow-lg card-color rounded relative chart-container">
-            <div class="text-white font-bold text-l mb-1 border-b border-neutral-600 p-2">
-                CPU Usage (history)
-            </div>
-            <div id="cpu-usage-line"></div>
-        </div>
-    </div>
-
-    {# RAM USAGE #}
-    <div class="flex flex-col md:flex-row gap-2">
-        <div class="flex-4 p-0 border border-neutral-600 shadow-lg card-color rounded relative chart-container">
-            <div class="text-white font-bold text-l mb-1 border-b border-neutral-600 p-2">
-                RAM Usage (current)
-            </div>
-            <div id="ram-usage-radial"></div>
-            <div id="ram-usage-percentage" class="absolute text-white text-5xl font-bold percentage">
-                {{ data.ram.current }}%
+    {% for metricName, metricData in data.metrics %}
+        <div class="flex flex-col md:flex-row gap-2">
+            <div class="flex-1 p-0 border border-neutral-600 shadow-lg card-color rounded relative chart-container">
+                <div class="px-3 py-2 border-b border-neutral-600 text-white font-bold text-sm flex items-center justify-between">
+                    {{ metricName | replace({'_': ' '}) | capitalize }}
+                    <a href={{ path('app_metrics_delete', {'service_name': 'host-system', 'metric_name': metricName}) }} class="text-indigo-400 hover:text-indigo-300 text-l">delete</a>
+                </div>
+                <div id="{{ (metricName ~ '-' ~ 'default')|replace({'.': '_', ' ': '_'}) }}-line"></div>
             </div>
         </div>
-        <div class="flex-1 p-0 border border-neutral-600 shadow-lg card-color rounded relative chart-container">
-            <div class="text-white font-bold text-l mb-1 border-b border-neutral-600 p-2">
-                RAM Usage (history)
-            </div>
-            <div id="ram-usage-line"></div>
-        </div>
-    </div>
-
-    {# STORAGE USAGE #}
-    <div class="flex flex-col md:flex-row gap-2">
-        <div class="flex-4 p-0 border border-neutral-600 shadow-lg card-color rounded relative chart-container">
-            <div class="text-white font-bold text-l mb-1 border-b border-neutral-600 p-2">
-                Storage Usage (current)
-            </div>
-            <div id="storage-usage-radial"></div>
-            <div id="storage-usage-percentage" class="absolute text-white text-5xl font-bold percentage">
-                {{ data.storage.current }}%
-            </div>
-        </div>
-        <div class="flex-1 p-0 border border-neutral-600 shadow-lg card-color rounded relative chart-container">
-            <div class="text-white font-bold text-l mb-1 border-b border-neutral-600 p-2">
-                Storage Usage (history)
-            </div>
-            <div id="storage-usage-line"></div>
-        </div>
-    </div>
+    {% endfor %}
 </div>
 
-{# GET METRICS DATA FORM CONTROLLER #}
+{# SEND METRICS DATA TO CHARTS JS #}
 <script>
-    window.metricsData = {
-        cpu: {
-            current: {{ data.cpu.current }},
-            data: {{ data.cpu.data|json_encode|raw }},
-        },
-        ram: {
-            current: {{ data.ram.current }},
-            data: {{ data.ram.data|json_encode|raw }},
-        },
-        storage: {
-            current: {{ data.storage.current }},
-            data: {{ data.storage.data|json_encode|raw }},
-        },
-        categories: {{ data.categories|json_encode|raw }},
-    };
+    window.metricsData = {{ { categories: data.categories, metrics: data.metrics, serviceName: 'host-system' } | json_encode | raw }};
 </script>
 
 {# INCLUDE CHARTS SCRIPT #}

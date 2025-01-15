@@ -17,7 +17,6 @@ Encore
     .addEntry('sidebar-element-js', './assets/js/sidebar-element.js')
     .addEntry('loading-component-js', './assets/js/loading-component.js')
     .addEntry('database-table-browser-js', './assets/js/database-table-browser.js')
-    .addEntry('service-metrics-charts-js', './assets/js/service-metrics-charts.js')
     .addEntry('notification-subscriberr-js', './assets/js/notification-subscriber.js')
 
     // copy static assets

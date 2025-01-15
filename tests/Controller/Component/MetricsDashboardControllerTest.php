@@ -37,12 +37,9 @@ class MetricsDashboardControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
-        $this->assertSelectorTextContains('body', 'CPU Usage (current)');
-        $this->assertSelectorTextContains('body', 'CPU Usage (history)');
-        $this->assertSelectorTextContains('body', 'RAM Usage (current)');
-        $this->assertSelectorTextContains('body', 'RAM Usage (history)');
-        $this->assertSelectorTextContains('body', 'Storage Usage (current)');
-        $this->assertSelectorTextContains('body', 'Storage Usage (history)');
+        $this->assertSelectorTextContains('body', 'Cpu usage');
+        $this->assertSelectorTextContains('body', 'Ram usage');
+        $this->assertSelectorTextContains('body', 'Storage usage');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
