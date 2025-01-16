@@ -575,7 +575,7 @@ class MonitoringManager
                                         );
                                         if ($metricSaveStatus) {
                                             $io->writeln(
-                                                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>metric ' . $name . ' from service ' . $service['service_name'] . ' saved</fg=green>'
+                                                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>metric ' . $name . ' from service ' . $service['display_name'] . ' saved</fg=green>'
                                             );
                                         }
                                     } catch (Exception $e) {

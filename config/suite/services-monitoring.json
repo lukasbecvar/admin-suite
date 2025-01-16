@@ -36,7 +36,7 @@
     },
     "becvar.xyz": {
         "service_name": "becvar.xyz",
-        "display_name": "becvar.xyz website",
+        "display_name": "becvar.xyz",
         "url": "https://becvar.xyz",
         "accept_codes": [200],
         "max_response_time": 3000,
@@ -50,7 +50,7 @@
     },
     "paste.becvar.xyz": {
         "service_name": "paste.becvar.xyz",
-        "display_name": "code-paste website",
+        "display_name": "code-paste",
         "url": "https://paste.becvar.xyz",
         "accept_codes": [200],
         "max_response_time": 3000,
@@ -64,7 +64,7 @@
     },
     "admin-suite": {
         "service_name": "admin-suite",
-        "display_name": "admin-suite website",
+        "display_name": "admin-suite",
         "url": "https://admin.becvar.xyz",
         "accept_codes": [302],
         "max_response_time": 3000,
@@ -78,7 +78,7 @@
     },
     "nonlizard.xyz": {
         "service_name": "nonlizard.xyz",
-        "display_name": "nonlizard.xyz website",
+        "display_name": "nonlizard.xyz",
         "url": "https://nonlizard.xyz",
         "accept_codes": [200],
         "max_response_time": 3000,
