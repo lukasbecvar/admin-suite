@@ -170,7 +170,10 @@
     {% if slaHistory|length > 0 %}
         <div class="grid grid-cols-1 sm:grid-cols-1 gap-1 p-2 pt-1 mb-4 py-0 component">
             <div class="border border-neutral-600 shadow-lg overflow-hidden w-full max-h-50 card-color card-component rounded">
-                <div class="px-2 py-2 border-b border-neutral-600 font-extrabold text-white">SLA History</div>
+                <div class="px-2 py-2 border-b border-neutral-600 text-white font-extrabold flex items-center justify-between">
+                    <span>SLA History</span>
+                    <a href={{ path('app_manager_monitoring_export_slahistory') }} id="loading-blocker" class="text-indigo-400 hover:text-indigo-300" title="Export SLA History">Export</a>
+                </div>
                 <div class="space-y-0">
                     {% for service, slaData in slaHistory %}
                         <div class="service-card rounded-lg bg-neutral-800">

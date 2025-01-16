@@ -69,7 +69,8 @@ class NonAuthRedirectTest extends WebTestCase
         ],
         'monitoring_manager' => [
             ['method' => 'GET', 'url' => '/manager/monitoring'],
-            ['method' => 'GET', 'url' => '/manager/monitoring/config']
+            ['method' => 'GET', 'url' => '/manager/monitoring/config'],
+            ['method' => 'GET', 'url' => '/manager/monitoring/export/slahistory']
         ],
         'todo_manager' => [
             ['method' => 'GET', 'url' => '/manager/todo'],
