@@ -8,8 +8,10 @@ use App\Util\AppUtil;
 use App\Util\JsonUtil;
 use App\Util\CacheUtil;
 use App\Util\ServerUtil;
+use App\Entity\SLAHistory;
 use App\Entity\MonitoringStatus;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\SLAHistoryRepository;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\MonitoringStatusRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -32,6 +34,7 @@ class MonitoringManager
     private ErrorManager $errorManager;
     private MetricsManager $metricsManager;
     private ServiceManager $serviceManager;
+    private SLAHistoryRepository $slaHistoryRepository;
     private NotificationsManager $notificationsManager;
     private EntityManagerInterface $entityManagerInterface;
     private MonitoringStatusRepository $monitoringStatusRepository;
@@ -46,6 +49,7 @@ class MonitoringManager
         ErrorManager $errorManager,
         MetricsManager $metricsManager,
         ServiceManager $serviceManager,
+        SLAHistoryRepository $slaHistoryRepository,
         NotificationsManager $notificationsManager,
         EntityManagerInterface $entityManagerInterface,
         MonitoringStatusRepository $monitoringStatusRepository
@@ -59,6 +63,7 @@ class MonitoringManager
         $this->errorManager = $errorManager;
         $this->metricsManager = $metricsManager;
         $this->serviceManager = $serviceManager;
+        $this->slaHistoryRepository = $slaHistoryRepository;
         $this->notificationsManager = $notificationsManager;
         $this->entityManagerInterface = $entityManagerInterface;
         $this->monitoringStatusRepository = $monitoringStatusRepository;
@@ -280,6 +285,69 @@ class MonitoringManager
     }
 
     /**
+     * Get SLA history
+     *
+     * @return array<array<string, float>> The SLA history data
+     */
+    public function getSLAHistory(): array
+    {
+        $data = [];
+        try {
+            // get data from database
+            $slaHistoryData = $this->slaHistoryRepository->findAll();
+
+            // convert data to array
+            foreach ($slaHistoryData as $slaHistory) {
+                $serviceName = $slaHistory->getServiceName();
+                $timeframe = $slaHistory->getSlaTimeframe();
+                $slaValue = $slaHistory->getSlaValue() ?? 0.0;
+
+                // initialize array for service if not already set
+                if (!isset($data[$serviceName])) {
+                    $data[$serviceName] = [];
+                }
+
+                // add timeframe and SLA value to the service array
+                $data[$serviceName][$timeframe] = $slaValue;
+            }
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'Error to get SLA history: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return $data;
+    }
+
+    /**
+     * Save SLA history
+     *
+     * @param string $serviceName The name of the service
+     * @param string $slaTimeframe The timeframe of the SLA
+     * @param float $slaValue The SLA value
+     *
+     * @return void
+     */
+    public function saveSLAHistory(string $serviceName, string $slaTimeframe, float $slaValue): void
+    {
+        $slaHistory = new SLAHistory();
+        $slaHistory->setServiceName($serviceName)
+            ->setSlaTimeframe($slaTimeframe)
+            ->setSlaValue($slaValue);
+
+        try {
+            $this->entityManagerInterface->persist($slaHistory);
+            $this->entityManagerInterface->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to save SLA history: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
      * Reset down times for all services
      *
      * @param SymfonyStyle $io The Symfony command output decorator
@@ -288,6 +356,13 @@ class MonitoringManager
      */
     public function resetDownTimes(SymfonyStyle $io): void
     {
+        // excluded services from reset
+        $excludedServices = [
+            'system-cpu-usage',
+            'system-ram-usage',
+            'system-storage-usage'
+        ];
+
         // get current timeframe
         $currentTimeframe = date('Y-m');
 
@@ -302,11 +377,23 @@ class MonitoringManager
         // reset down times for all services
         foreach ($monitoringStatusRepository as $monitoringStatus) {
             $this->entityManagerInterface->refresh($monitoringStatus);
+
+            // check if service is excluded
+            if (in_array($monitoringStatus->getServiceName(), $excludedServices)) {
+                continue;
+            }
+
             // check if service is in current timeframe
             if ($monitoringStatus->getSlaTimeframe() != $currentTimeframe) {
                 // get old timeframe
-                $oldTimeframe = $monitoringStatus->getSlaTimeframe();
                 $serviceName = $monitoringStatus->getServiceName();
+                $oldTimeframe = $monitoringStatus->getSlaTimeframe();
+                if ($oldTimeframe == null) {
+                    $this->errorManager->handleError(
+                        message: 'error to reset SLA: old timeframe is null',
+                        code: Response::HTTP_INTERNAL_SERVER_ERROR
+                    );
+                }
 
                 // check if service name set
                 if ($serviceName == null) {
@@ -316,12 +403,24 @@ class MonitoringManager
                     );
                 }
 
+                // get sla before reset
+                $slaBeforeReset = $this->getServiceMountlySLA($serviceName);
+                if ($slaBeforeReset == null) {
+                    $this->errorManager->handleError(
+                        message: 'error to calculate SLA before reset: sla value is null',
+                        code: Response::HTTP_INTERNAL_SERVER_ERROR
+                    );
+                }
+
                 // log SLA status to database
                 $this->logManager->log(
                     name: 'SLA timeframe reset',
-                    message: $monitoringStatus->getServiceName() . ' SLA for timeframe ' . $oldTimeframe . ' is: ' . $this->getServiceMountlySLA($serviceName) . '%',
+                    message: $monitoringStatus->getServiceName() . ' SLA for timeframe ' . $oldTimeframe . ' is: ' . $slaBeforeReset . '%',
                     level: LogManager::LEVEL_INFO
                 );
+
+                // save SLA history
+                $this->saveSLAHistory($serviceName, $oldTimeframe, $slaBeforeReset);
 
                 // log to command output
                 $io->writeln(
@@ -565,7 +664,7 @@ class MonitoringManager
                                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                                 );
                             } else {
-                                // collect all metrics
+                                // collect service metrics
                                 foreach ($metrics as $name => $value) {
                                     try {
                                         $metricSaveStatus = $this->metricsManager->saveServiceMetric(

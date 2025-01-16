@@ -16,6 +16,7 @@ use App\Entity\MonitoringStatus;
 use App\Manager\MonitoringManager;
 use App\Manager\NotificationsManager;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\SLAHistoryRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use App\Repository\MonitoringStatusRepository;
 
@@ -40,6 +41,7 @@ class MonitoringManagerTest extends TestCase
     private ServiceManager & MockObject $serviceManagerMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
     private MonitoringStatusRepository & MockObject $repositoryMock;
+    private SLAHistoryRepository & MockObject $slaHistoryRepositoryMock;
     private NotificationsManager & MockObject $notificationsManagerMock;
 
     protected function setUp(): void
@@ -56,6 +58,7 @@ class MonitoringManagerTest extends TestCase
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $this->repositoryMock = $this->createMock(MonitoringStatusRepository::class);
+        $this->slaHistoryRepositoryMock = $this->createMock(SLAHistoryRepository::class);
         $this->notificationsManagerMock = $this->createMock(NotificationsManager::class);
 
         // create the monitoring manager instance
@@ -69,6 +72,7 @@ class MonitoringManagerTest extends TestCase
             $this->errorManagerMock,
             $this->metricsManagerMock,
             $this->serviceManagerMock,
+            $this->slaHistoryRepositoryMock,
             $this->notificationsManagerMock,
             $this->entityManagerMock,
             $this->repositoryMock

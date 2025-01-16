@@ -38,6 +38,7 @@ class MonitoringManagerControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'Internal services');
         $this->assertSelectorTextContains('body', 'HTTP services');
+        $this->assertSelectorTextContains('body', 'SLA History');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 

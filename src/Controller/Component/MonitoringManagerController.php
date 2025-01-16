@@ -76,9 +76,13 @@ class MonitoringManagerController extends AbstractController
             $lastMonitoringTime = $this->cacheUtil->getValue('last-monitoring-time');
         }
 
+        // get sla history
+        $slaHistory = $this->monitoringManager->getSLAHistory();
+
         // return monitoring dashboard page view
         return $this->render('component/monitoring-manager/monitoring-dashboard.twig', [
             'services' => $services,
+            'slaHistory' => $slaHistory,
             'monitoringLogs' => $monitoringLogs,
             'mainDatabase' => $mainDatabaseName,
             'serviceManager' => $this->serviceManager,
