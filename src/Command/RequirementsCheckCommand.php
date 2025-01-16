@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package App\Command
  */
-#[AsCommand(name: 'app:check:requirements', description: 'check app requirements and configuration')]
+#[AsCommand(name: 'app:check:requirements', description: 'Check app requirements and configuration')]
 class RequirementsCheckCommand extends Command
 {
     private ServerUtil $serverUtil;

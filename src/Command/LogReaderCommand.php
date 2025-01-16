@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package App\Command
  */
-#[AsCommand(name: 'app:log:reader', description: 'get logs by status')]
+#[AsCommand(name: 'app:log:reader', description: 'Get logs by status')]
 class LogReaderCommand extends Command
 {
     private LogManager $logManager;
