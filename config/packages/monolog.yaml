@@ -6,6 +6,7 @@ monolog:
             path: '%kernel.logs_dir%/exception.log'
             level: error
             channels: ['!event']
+            formatter: App\Formatter\MonologTimeFormatter
 
         # exclude specific http codes from exception log
         filtered:
@@ -22,11 +23,14 @@ when@dev:
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
                 channels: ["!event"]
+                formatter: App\Formatter\MonologTimeFormatter
             console:
                 type: console
                 process_psr_3_messages: false
                 channels: ["!event", "!doctrine", "!console"]
+                formatter: App\Formatter\MonologTimeFormatter
             stdout:
                 type: stream
                 level: error
                 path: 'php://stdout'
+                formatter: App\Formatter\MonologTimeFormatter
