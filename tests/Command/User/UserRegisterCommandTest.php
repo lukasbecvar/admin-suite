@@ -2,6 +2,7 @@
 
 namespace App\Tests\Command\User;
 
+use Exception;
 use App\Manager\UserManager;
 use App\Manager\AuthManager;
 use PHPUnit\Framework\TestCase;
@@ -36,11 +37,11 @@ class UserRegisterCommandTest extends TestCase
     }
 
     /**
-     * Test execute register command with empty username
+     * Test execute command with empty username
      *
      * @return void
      */
-    public function testExecuteWithEmptyUsername(): void
+    public function testExecuteCommandWithEmptyUsername(): void
     {
         // execute command with empty username
         $exitCode = $this->commandTester->execute(['username' => '']);
@@ -54,11 +55,73 @@ class UserRegisterCommandTest extends TestCase
     }
 
     /**
+     * Test execute register command with invalid username
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithInvalidUsername(): void
+    {
+        // execute command with invalid username
+        $exitCode = $this->commandTester->execute(['username' => 1]);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Invalid username provided', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
+    }
+
+    /**
+     * Test execute register command with username length less than 3
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithUsernameLengthLessThan3(): void
+    {
+        // mock user manager
+        $this->userManager->method('checkIfUserExist')->willReturn(false);
+        $this->authManager->method('isUsernameBlocked')->willReturn(false);
+
+        // execute command with username length less than 3
+        $exitCode = $this->commandTester->execute(['username' => 'te']);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Username must be between 3 and 155 characters', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
+    }
+
+    /**
+     * Test execute register command with blocked username
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithUsernameBlocked(): void
+    {
+        // mock user manager
+        $this->userManager->method('checkIfUserExist')->willReturn(false);
+        $this->authManager->method('isUsernameBlocked')->willReturn(true);
+
+        // execute command with blocked username
+        $exitCode = $this->commandTester->execute(['username' => 'testuser']);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Error username: testuser is blocked', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
+    }
+
+    /**
      * Test execute register command with already existing username
      *
      * @return void
      */
-    public function testExecuteWithUsernameAlreadyExists(): void
+    public function testExecuteCommandWithUsernameAlreadyExists(): void
     {
         // mock user manager
         $this->userManager->method('checkIfUserExist')->willReturn(true);
@@ -75,11 +138,33 @@ class UserRegisterCommandTest extends TestCase
     }
 
     /**
+     * Test execute register command with error register user throw exception
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithErrorRegisterUserThrowException(): void
+    {
+        // mock auth manager
+        $this->authManager->expects($this->once())
+            ->method('registerUser')->willThrowException(new Exception('Error register user'));
+
+        // execute command with new username
+        $exitCode = $this->commandTester->execute(['username' => 'newuser']);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Error to register user: Error register user', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
+    }
+
+    /**
      * Test execute register command with success result
      *
      * @return void
      */
-    public function testExeciuteWithRegisterUserSuccess(): void
+    public function testExecuteCommandWithRegisterUserSuccess(): void
     {
         // mock auth manager
         $this->authManager->expects($this->once())->method('registerUser')->with('newuser');

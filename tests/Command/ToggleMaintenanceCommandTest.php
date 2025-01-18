@@ -34,11 +34,30 @@ class ToggleMaintenanceCommandTest extends TestCase
     }
 
     /**
+     * Test execute toggle maintenance command with exception response
+     *
+     * @return void
+     */
+    public function testExecuteCommandWhenExceptionResponse(): void
+    {
+        // mock getEnvValue to throw an exception
+        $this->appUtilMock->method('getEnvValue')
+            ->willThrowException(new Exception('Failed to get environment value'));
+
+        // execute command
+        $exitCode = $this->commandTester->execute([]);
+
+        // assert command output
+        $this->assertStringContainsString('Error to toggle maintenance mode: Failed to get environment value', $this->commandTester->getDisplay());
+        $this->assertSame(Command::FAILURE, $exitCode);
+    }
+
+    /**
      * Test execute toggle maintenance command with maintenance mode enabled
      *
      * @return void
      */
-    public function testExecuteToggleMaintenanceWithMaintenanceModeEnabled(): void
+    public function testExecuteCommandWithMaintenanceModeEnabled(): void
     {
         // mock getEnvValue to simulate maintenance mode is enabled
         $this->appUtilMock->method('getEnvValue')->willReturn('true');
@@ -60,7 +79,7 @@ class ToggleMaintenanceCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteToggleMaintenanceWithMaintenanceModeDisabled(): void
+    public function testExecuteCommandWithMaintenanceModeDisabled(): void
     {
         // mock getEnvValue to simulate maintenance mode is disabled
         $this->appUtilMock->method('getEnvValue')->willReturn('false');
@@ -75,24 +94,5 @@ class ToggleMaintenanceCommandTest extends TestCase
         // assert command output
         $this->assertStringContainsString("MAINTENANCE_MODE in .env has been set to true", $this->commandTester->getDisplay());
         $this->assertSame(Command::SUCCESS, $exitCode);
-    }
-
-    /**
-     * Test execute toggle maintenance command with exception response
-     *
-     * @return void
-     */
-    public function testExecuteToggleMaintenanceCommandWithException(): void
-    {
-        // mock getEnvValue to throw an exception
-        $this->appUtilMock->method('getEnvValue')
-            ->willThrowException(new Exception('Failed to get environment value'));
-
-        // execute command
-        $exitCode = $this->commandTester->execute([]);
-
-        // assert command output
-        $this->assertStringContainsString('Error to toggle maintenance mode: Failed to get environment value', $this->commandTester->getDisplay());
-        $this->assertSame(Command::FAILURE, $exitCode);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Tests\Command\Notifications;
 
+use Exception;
 use App\Util\AppUtil;
 use PHPUnit\Framework\TestCase;
 use App\Manager\NotificationsManager;
@@ -13,7 +14,7 @@ use App\Command\Notifications\SendNotificationCommand;
 /**
  * Class SendNotificationCommandTest
  *
- * Test cases for execute the send notification command
+ * Test cases for execute send notification command
  *
  * @package App\Tests\Command\Notifications
  */
@@ -40,7 +41,7 @@ class SendNotificationCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWhenMessageIsEmpty(): void
+    public function testExecuteCommandWhenMessageIsEmpty(): void
     {
         // execute the command with empty message
         $exitCode = $this->commandTester->execute(['message' => '']);
@@ -58,7 +59,7 @@ class SendNotificationCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWhenMessageIsNotString(): void
+    public function testExecuteCommandWhenMessageIsNotString(): void
     {
         // execute the command with integer message
         $exitCode = $this->commandTester->execute(['message' => [123]]);
@@ -76,7 +77,7 @@ class SendNotificationCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWhenNotificationsDisabled(): void
+    public function testExecuteCommandWhenNotificationsDisabled(): void
     {
         // mock environment value PUSH_NOTIFICATIONS_ENABLED
         $this->appUtil->method('getEnvValue')->willReturn('false');
@@ -93,11 +94,35 @@ class SendNotificationCommandTest extends TestCase
     }
 
     /**
+     * Test execute command when sending notification throws exception
+     *
+     * @return void
+     */
+    public function testExecuteCommandWhenSendingNotificationThrowsException(): void
+    {
+        // mock environment value PUSH_NOTIFICATIONS_ENABLED
+        $this->appUtil->method('getEnvValue')->willReturn('true');
+
+        // mock send notification method
+        $this->notificationsManager->method('sendNotification')->willThrowException(new Exception('Simulated error'));
+
+        // execute command
+        $exitCode = $this->commandTester->execute(['message' => 'Test message']);
+
+        // get command output
+        $commandOutput = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Error to send notification: Simulated error', $commandOutput);
+        $this->assertEquals(Command::FAILURE, $exitCode);
+    }
+
+    /**
      * Test execute command when sending notification
      *
      * @return void
      */
-    public function testExecuteWhenSendingNotification(): void
+    public function testExecuteCommandWhenSendingNotification(): void
     {
         // mock environment value PUSH_NOTIFICATIONS_ENABLED
         $this->appUtil->method('getEnvValue')->willReturn('true');

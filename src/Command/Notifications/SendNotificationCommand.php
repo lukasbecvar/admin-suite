@@ -89,7 +89,7 @@ class SendNotificationCommand extends Command
             );
 
             // return success status
-            $io->success('Notification sent successfully.');
+            $io->success('Notification sent successfully');
             return Command::SUCCESS;
         } catch (Exception $e) {
             $io->error('Error to send notification: ' . $e->getMessage());

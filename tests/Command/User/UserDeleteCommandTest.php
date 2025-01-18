@@ -14,7 +14,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Class UserDeleteCommandTest
  *
- * Test cases for execute the command to delete a user
+ * Test cases for execute command to delete a user
  *
  * @package App\Tests\Command\User
  */
@@ -35,11 +35,49 @@ class UserDeleteCommandTest extends TestCase
     }
 
     /**
+     * Test execute command with empty username
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithEmptyUsername(): void
+    {
+        // execute command
+        $exitCode = $this->commandTester->execute(['username' => '']);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Username cannot be empty', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
+    }
+
+    /**
+     * Test execute command to delete a user with invalid username error
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithInvalidUsername(): void
+    {
+        $username = 123; // invalid type
+
+        // execute command
+        $exitCode = $this->commandTester->execute(['username' => $username]);
+
+        // get commnad output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Invalid username provided', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
+    }
+
+    /**
      * Test execute command with non-exist user
      *
      * @return void
      */
-    public function testExecuteUserNonExist(): void
+    public function testExecuteCommandWhenUserNonExist(): void
     {
         $username = 'nonexistentuser';
 
@@ -58,31 +96,11 @@ class UserDeleteCommandTest extends TestCase
     }
 
     /**
-     * Test execute command to delete a user with invalid username error
+     * Test execute command when delete user throws exception
      *
      * @return void
      */
-    public function testExecuteInvalidUsername(): void
-    {
-        $username = 123; // invalid type
-
-        // execute command
-        $exitCode = $this->commandTester->execute(['username' => $username]);
-
-        // get commnad output
-        $output = $this->commandTester->getDisplay();
-
-        // assert result
-        $this->assertStringContainsString('Invalid username provided', $output);
-        $this->assertEquals(Command::FAILURE, $exitCode);
-    }
-
-    /**
-     * Test execute command to delete a user with process error
-     *
-     * @return void
-     */
-    public function testExecuteProcessError(): void
+    public function testExecuteCommandWhenDeleteUserThrowsException(): void
     {
         $username = 'testuser';
         $userId = 1;
@@ -94,9 +112,7 @@ class UserDeleteCommandTest extends TestCase
         // mock user manager
         $this->userManagerMock->method('checkIfUserExist')->with($username)->willReturn(true);
         $this->userManagerMock->method('getUserRepository')->with(['username' => $username])->willReturn($user);
-        $this->userManagerMock->method('deleteUser')->with($userId)->will($this->throwException(
-            new Exception('Some error occurred')
-        ));
+        $this->userManagerMock->method('deleteUser')->willThrowException(new Exception('Simulated error'));
 
         // execute command
         $exitCode = $this->commandTester->execute(['username' => $username]);
@@ -105,7 +121,7 @@ class UserDeleteCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Process error: Some error occurred', $output);
+        $this->assertStringContainsString('Process error: Simulated error', $output);
         $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
@@ -114,7 +130,7 @@ class UserDeleteCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteSuccessfulDeletion(): void
+    public function testExecuteCommandWithSuccessfulDeletion(): void
     {
         $username = 'testuser';
         $userId = 1;

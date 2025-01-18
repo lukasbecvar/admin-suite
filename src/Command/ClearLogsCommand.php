@@ -50,7 +50,7 @@ class ClearLogsCommand extends Command
 
         // ask for confirmation
         if (!$io->confirm('Are you sure you want to clear all logs?', false)) {
-            $io->error('Clearing logs cancelled!');
+            $io->error('Clearing logs cancelled');
             return Command::FAILURE;
         }
 
@@ -61,7 +61,7 @@ class ClearLogsCommand extends Command
 
             // truncate logs table
             $this->databaseManager->tableTruncate($databaseName, $tableName);
-            $io->success('Logs cleared successfully!');
+            $io->success('Logs cleared successfully');
             return Command::SUCCESS;
         } catch (Exception $e) {
             $io->error('Error while clearing logs: ' . $e->getMessage());

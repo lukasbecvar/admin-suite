@@ -2,6 +2,7 @@
 
 namespace App\Tests\Command\User;
 
+use Exception;
 use App\Entity\User;
 use App\Manager\BanManager;
 use App\Manager\UserManager;
@@ -37,11 +38,47 @@ class UserBanCommandTest extends TestCase
     }
 
     /**
+     * Test execute command with empty username
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithEmptyUsername(): void
+    {
+        // execute command
+        $exitCode = $this->commandTester->execute(['username' => '']);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Username cannot be empty', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
+    }
+
+    /**
+     * Test execute command with invalid username
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithInvalidUsername(): void
+    {
+        // execute command with invalid username
+        $exitCode = $this->commandTester->execute(['username' => 12345]);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Invalid username provided', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
+    }
+
+    /**
      * Test execute command with non-exist user
      *
      * @return void
      */
-    public function testExecuteUserNotExist(): void
+    public function testExecuteCommandWhenUserNotExist(): void
     {
         // testing username
         $username = 'nonexistentuser';
@@ -61,45 +98,11 @@ class UserBanCommandTest extends TestCase
     }
 
     /**
-     * Test execute command with banned user
-     *
-     * @return void
-     */
-    public function testExecuteUserAlreadyBanned(): void
-    {
-        // testing user data
-        $username = 'banneduser';
-        $userId = 1;
-
-        // mock user
-        $user = $this->createMock(User::class);
-        $user->method('getId')->willReturn($userId);
-
-        // mock user manager
-        $this->userManager->method('checkIfUserExist')->with($username)->willReturn(true);
-        $this->userManager->method('getUserRepository')->with(['username' => $username])->willReturn($user);
-
-        // mock ban manager
-        $this->banManager->method('isUserBanned')->with($userId)->willReturn(true);
-        $this->banManager->expects($this->once())->method('unbanUser')->with($userId);
-
-        // execute command
-        $exitCode = $this->commandTester->execute(['username' => $username]);
-
-        // get command output
-        $output = $this->commandTester->getDisplay();
-
-        // assert result
-        $this->assertStringContainsString('User: banneduser unbanned', $output);
-        $this->assertEquals(Command::SUCCESS, $exitCode);
-    }
-
-    /**
      * Test execute command with non-banned user
      *
      * @return void
      */
-    public function testExecuteUserNotBanned(): void
+    public function testExecuteCommandUserNotBanned(): void
     {
         // testing user data
         $username = 'notbanneduser';
@@ -129,38 +132,70 @@ class UserBanCommandTest extends TestCase
     }
 
     /**
-     * Test execute command with empty username
+     * Test execute command when ban throws exception
      *
      * @return void
      */
-    public function testExecuteWithEmptyUsername(): void
+    public function testExecuteCommandWhenBanThrowsException(): void
     {
+        // testing user data
+        $username = 'banneduser';
+        $userId = 1;
+
+        // mock user
+        $user = $this->createMock(User::class);
+        $user->method('getId')->willReturn($userId);
+
+        // mock user manager
+        $this->userManager->method('checkIfUserExist')->with($username)->willReturn(true);
+        $this->userManager->method('getUserRepository')->with(['username' => $username])->willReturn($user);
+
+        // mock ban manager
+        $this->banManager->method('isUserBanned')->with($userId)->willReturn(false);
+        $this->banManager->method('banUser')->willThrowException(new Exception('Simulated error'));
+
         // execute command
-        $exitCode = $this->commandTester->execute(['username' => '']);
+        $exitCode = $this->commandTester->execute(['username' => $username]);
 
         // get command output
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Username cannot be empty', $output);
+        $this->assertStringContainsString('Process error: Simulated error', $output);
         $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
     /**
-     * Test execute command with invalid username
+     * Test execute command with banned user
      *
      * @return void
      */
-    public function testExecuteWithInvalidUsername(): void
+    public function testExecuteCommandWhenUserAlreadyBanned(): void
     {
-        // execute command with invalid username
-        $exitCode = $this->commandTester->execute(['username' => 12345]);
+        // testing user data
+        $username = 'banneduser';
+        $userId = 1;
+
+        // mock user
+        $user = $this->createMock(User::class);
+        $user->method('getId')->willReturn($userId);
+
+        // mock user manager
+        $this->userManager->method('checkIfUserExist')->with($username)->willReturn(true);
+        $this->userManager->method('getUserRepository')->with(['username' => $username])->willReturn($user);
+
+        // mock ban manager
+        $this->banManager->method('isUserBanned')->with($userId)->willReturn(true);
+        $this->banManager->expects($this->once())->method('unbanUser')->with($userId);
+
+        // execute command
+        $exitCode = $this->commandTester->execute(['username' => $username]);
 
         // get command output
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Invalid username provided', $output);
-        $this->assertEquals(Command::FAILURE, $exitCode);
+        $this->assertStringContainsString('User: banneduser unbanned', $output);
+        $this->assertEquals(Command::SUCCESS, $exitCode);
     }
 }

@@ -33,11 +33,33 @@ class RegenerateAuthTokensCommandTest extends TestCase
     }
 
     /**
+     * Test execute auth tokens regenerate command with exception
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithException(): void
+    {
+        // mock regenerate tokens method status
+        $this->authManager->expects($this->once())->method('regenerateUsersTokens')
+            ->willReturn(['status' => false, 'message' => 'Error']);
+
+        // execute the command
+        $exitCode = $this->commandTester->execute([]);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Token regeneration error: Error', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
+    }
+
+    /**
      * Test execute auth tokens regenerate command
      *
      * @return void
      */
-    public function testExecureRegenerateAuthTokensCommand(): void
+    public function testExecuteCommandWhenRegenerationIsSuccess(): void
     {
         // mock regenerate tokens method status
         $this->authManager->expects($this->once())->method('regenerateUsersTokens')

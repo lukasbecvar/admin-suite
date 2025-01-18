@@ -65,7 +65,7 @@ class LogReaderCommand extends Command
 
         // check if status is empty
         if (empty($status)) {
-            $io->error('status cannot be empty');
+            $io->error('Status cannot be empty');
             return Command::FAILURE;
         }
 

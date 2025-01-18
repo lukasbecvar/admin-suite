@@ -71,7 +71,7 @@ class GenerateVapidKeysCommand extends Command
             $io->text('Private Key: ' . $vapidKeys['privateKey']);
 
             // return success status
-            $io->success('VAPID keys updated successfully.');
+            $io->success('VAPID keys updated successfully');
             return Command::SUCCESS;
         } catch (Exception $e) {
             $io->error('Error to generate VAPID keys: ' . $e->getMessage());

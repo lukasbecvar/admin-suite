@@ -28,6 +28,43 @@ class UserListCommandTest extends TestCase
 
     protected function setUp(): void
     {
+        // mock dependencies
+        $this->userManager = $this->createMock(UserManager::class);
+        $this->visitorInfoUtil = $this->createMock(VisitorInfoUtil::class);
+
+        // initialize the command
+        $this->command = new UserListCommand($this->userManager, $this->visitorInfoUtil);
+        $this->commandTester = new CommandTester($this->command);
+    }
+
+    /**
+     * Test execute command when user list is empty
+     *
+     * @return void
+     */
+    public function testExecuteCommandWhenUserListIsEmpty(): void
+    {
+        // mock user manager
+        $this->userManager->method('isUsersEmpty')->willReturn(true);
+
+        // execute the command
+        $exitCode = $this->commandTester->execute([]);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert output contains expected data
+        $this->assertStringContainsString('User list is empty', $output);
+        $this->assertSame(Command::SUCCESS, $exitCode);
+    }
+
+    /**
+     * Test execute command when response is success
+     *
+     * @return void
+     */
+    public function testExecuteCommandUserListCommandSuccess(): void
+    {
         // mock user object
         $user1 = new User();
         $user1->setUsername('user1');
@@ -36,35 +73,14 @@ class UserListCommandTest extends TestCase
         $user1->setUserAgent('Mozilla/5.0');
         $user1->setRegisterTime(new DateTime('2023-01-01 12:00:00'));
         $user1->setLastLoginTime(new DateTime('2023-01-02 10:00:00'));
+        $this->userManager->expects($this->once())->method('getAllUsersRepositories')->willReturn([$user1]);
 
-        // mock user manager
-        $this->userManager = $this->createMock(UserManager::class);
-
-        // simulate returning one user
-        $this->userManager->expects($this->once())
-            ->method('getAllUsersRepositories')->willReturn([$user1]);
-
-        // mock VisitorInfoUtil
-        $this->visitorInfoUtil = $this->createMock(VisitorInfoUtil::class);
+        // expect call visitor info utils
         $this->visitorInfoUtil->expects($this->once())->method('getBrowserShortify')
-            ->with('Mozilla/5.0')
-            ->willReturn('Mozilla');
+            ->with('Mozilla/5.0')->willReturn('Mozilla');
         $this->visitorInfoUtil->expects($this->once())->method('getOs')
-            ->with('Mozilla/5.0')
-            ->willReturn('Unknown OS');
+            ->with('Mozilla/5.0')->willReturn('Unknown OS');
 
-        // initialize the command
-        $this->command = new UserListCommand($this->userManager, $this->visitorInfoUtil);
-        $this->commandTester = new CommandTester($this->command);
-    }
-
-    /**
-     * Test execute user list command
-     *
-     * @return void
-     */
-    public function testExecuteUserListCommand(): void
-    {
         // execute the command
         $exitCode = $this->commandTester->execute([]);
 

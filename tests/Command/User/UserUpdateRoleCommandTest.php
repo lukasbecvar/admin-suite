@@ -39,7 +39,7 @@ class UserUpdateRoleCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithEmptyUsername(): void
+    public function testExecuteCommandWithEmptyUsername(): void
     {
         // execute command
         $exitCode = $this->commandTester->execute(['username' => '', 'role' => 'ADMIN']);
@@ -57,7 +57,7 @@ class UserUpdateRoleCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithEmptyRole(): void
+    public function testExecuteCommandWithEmptyRole(): void
     {
         // execute command
         $exitCode = $this->commandTester->execute(['username' => 'testuser', 'role' => '']);
@@ -71,11 +71,29 @@ class UserUpdateRoleCommandTest extends TestCase
     }
 
     /**
+     * Test execute user update role command with role is not valid
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithRoleNotValid(): void
+    {
+        // execute command
+        $exitCode = $this->commandTester->execute(['username' => 'testuser', 'role' => 1]);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Invalid role provided', $output);
+        $this->assertSame(Command::FAILURE, $exitCode);
+    }
+
+    /**
      * Test execute user update role command with invalid role
      *
      * @return void
      */
-    public function testExecuteWithInvalidRole(): void
+    public function testExecuteCommandWithInvalidRole(): void
     {
         // execute command
         $exitCode = $this->commandTester->execute(['username' => 'testuser', 'role' => 123]);
@@ -93,7 +111,7 @@ class UserUpdateRoleCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithNonExistingUsername(): void
+    public function testExecuteCommandWithNonExistingUsername(): void
     {
         // mock user manager
         $this->userManager->method('getUserByUsername')->willReturn(null);
@@ -114,7 +132,7 @@ class UserUpdateRoleCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithRoleAlreadyAssigned(): void
+    public function testExecuteCommandWithRoleAlreadyAssigned(): void
     {
         // create user mock
         $user = $this->createMock(User::class);
@@ -140,7 +158,7 @@ class UserUpdateRoleCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithExceptionDuringRoleUpdate(): void
+    public function testExecuteCommandWithExceptionDuringRoleUpdate(): void
     {
         // mock user
         $user = $this->createMock(User::class);
@@ -169,7 +187,7 @@ class UserUpdateRoleCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteSuccessfulRoleUpdate(): void
+    public function testExecuteCommandWithSuccessfulRoleUpdate(): void
     {
         // mock user
         $user = $this->createMock(User::class);

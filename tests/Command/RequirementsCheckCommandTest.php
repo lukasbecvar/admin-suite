@@ -30,26 +30,77 @@ class RequirementsCheckCommandTest extends TestCase
         $this->serverUtil = $this->createMock(ServerUtil::class);
         $this->databaseManager = $this->createMock(DatabaseManager::class);
 
-        // create the command
+        // initialize command instance
         $this->command = new RequirementsCheckCommand($this->serverUtil, $this->databaseManager);
         $this->commandTester = new CommandTester($this->command);
     }
 
     /**
-     * Test execute requirements check command
+     * Test execute command with all requirements met
      *
      * @return void
      */
-    public function testExecuteRequirementsCheckCommand(): void
+    public function testExecuteWithAllRequirementsMet(): void
     {
-        // execute the command
+        // mock checks
+        $this->serverUtil->method('getNotInstalledRequirements')->willReturn([]);
+        $this->databaseManager->method('isDatabaseDown')->willReturn(false);
+
+        // execute command
         $exitCode = $this->commandTester->execute([]);
 
         // get command output
         $output = $this->commandTester->getDisplay();
 
-        // assert the output
+        // assert result
+        $this->assertStringContainsString('All requirements are installed', $output);
         $this->assertStringContainsString('Database connected successfully', $output);
-        $this->assertEquals(Command::SUCCESS, $exitCode);
+        $this->assertSame(Command::SUCCESS, $exitCode);
+    }
+
+    /**
+     * Test execute command with missing requirements
+     *
+     * @return void
+     */
+    public function testExecuteWithMissingRequirements(): void
+    {
+        // mock checks
+        $this->serverUtil->method('getNotInstalledRequirements')->willReturn(['php', 'composer']);
+        $this->databaseManager->method('isDatabaseDown')->willReturn(false);
+
+        // execute command
+        $exitCode = $this->commandTester->execute([]);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('The following requirements are not installed: php, composer', $output);
+        $this->assertStringContainsString('Database connected successfully', $output);
+        $this->assertSame(Command::SUCCESS, $exitCode);
+    }
+
+    /**
+     * Test execute command with database connection failure
+     *
+     * @return void
+     */
+    public function testExecuteWithDatabaseConnectionFailure(): void
+    {
+        // mock checks
+        $this->serverUtil->method('getNotInstalledRequirements')->willReturn([]);
+        $this->databaseManager->method('isDatabaseDown')->willReturn(true);
+
+        // execute command
+        $exitCode = $this->commandTester->execute([]);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('All requirements are installed', $output);
+        $this->assertStringContainsString('Database connection failed', $output);
+        $this->assertSame(Command::SUCCESS, $exitCode);
     }
 }

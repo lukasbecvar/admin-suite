@@ -105,7 +105,7 @@ class UserRegisterCommand extends Command
             $io->success('New user registered username: ' . $username . ' with password: ' . $password);
             return Command::SUCCESS;
         } catch (Exception $e) {
-            $io->error('error to register user: ' . $e->getMessage());
+            $io->error('Error to register user: ' . $e->getMessage());
             return Command::FAILURE;
         }
     }

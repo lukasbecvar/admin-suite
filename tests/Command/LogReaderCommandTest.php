@@ -51,7 +51,7 @@ class LogReaderCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithInvalidStatus(): void
+    public function testExecuteCommandWithInvalidStatus(): void
     {
         // execute command with empty status
         $exitCode = $this->commandTester->execute(['status' => '']);
@@ -60,7 +60,25 @@ class LogReaderCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('status cannot be empty', $output);
+        $this->assertStringContainsString('Status cannot be empty', $output);
+        $this->assertEquals(Command::FAILURE, $exitCode);
+    }
+
+    /**
+     * Test execute command with non-string status
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithNonStringStatus(): void
+    {
+        // execute command with non-string status
+        $exitCode = $this->commandTester->execute(['status' => 1]);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Invalid status provided', $output);
         $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
@@ -69,7 +87,7 @@ class LogReaderCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithValidStatus(): void
+    public function testExecuteCommandWithValidStatus(): void
     {
         // mock log object
         $log = $this->createMock(Log::class);

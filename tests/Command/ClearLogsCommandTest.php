@@ -42,7 +42,7 @@ class ClearLogsCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteConfirmationDeclined(): void
+    public function testExecuteCommandWhenConfirmationIsDeclined(): void
     {
         // mock command tester input
         $this->commandTester->setInputs(['no']);
@@ -54,33 +54,8 @@ class ClearLogsCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert results
-        $this->assertStringContainsString('Clearing logs cancelled!', $output);
+        $this->assertStringContainsString('Clearing logs cancelled', $output);
         $this->assertEquals(Command::FAILURE, $exitCode);
-    }
-
-    /**
-     * Test execute command with user confirming the action
-     *
-     * @return void
-     */
-    public function testExecuteConfirmationAccepted(): void
-    {
-        // mock AppUtil and DatabaseManager
-        $this->appUtil->method('getEnvValue')->with('DATABASE_NAME')->willReturn('test_database');
-        $this->databaseManager->method('getEntityTableName')->with(Log::class)->willReturn('log_table');
-
-        // set inputs for confirmation
-        $this->commandTester->setInputs(['yes']);
-
-        // execute command
-        $exitCode = $this->commandTester->execute([]);
-
-        // get command output
-        $output = $this->commandTester->getDisplay();
-
-        // assert results
-        $this->assertStringContainsString('Logs cleared successfully!', $output);
-        $this->assertEquals(Command::SUCCESS, $exitCode);
     }
 
     /**
@@ -88,7 +63,7 @@ class ClearLogsCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithException(): void
+    public function testExecuteCommandWithExceptionThrown(): void
     {
         // mock AppUtil and DatabaseManager
         $this->appUtil->method('getEnvValue')->willReturn('test_database');
@@ -106,5 +81,30 @@ class ClearLogsCommandTest extends TestCase
         // assert results
         $this->assertStringContainsString('Error while clearing logs: Database error', $output);
         $this->assertEquals(Command::FAILURE, $exitCode);
+    }
+
+    /**
+     * Test execute command with user confirming the action
+     *
+     * @return void
+     */
+    public function testExecuteCommandWhenResponseIsSuccess(): void
+    {
+        // mock AppUtil and DatabaseManager
+        $this->appUtil->method('getEnvValue')->with('DATABASE_NAME')->willReturn('test_database');
+        $this->databaseManager->method('getEntityTableName')->with(Log::class)->willReturn('log_table');
+
+        // set inputs for confirmation
+        $this->commandTester->setInputs(['yes']);
+
+        // execute command
+        $exitCode = $this->commandTester->execute([]);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert results
+        $this->assertStringContainsString('Logs cleared successfully', $output);
+        $this->assertEquals(Command::SUCCESS, $exitCode);
     }
 }
