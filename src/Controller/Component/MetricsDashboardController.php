@@ -3,6 +3,7 @@
 namespace App\Controller\Component;
 
 use Exception;
+use App\Util\ServerUtil;
 use App\Manager\ErrorManager;
 use App\Manager\MetricsManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,11 +20,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class MetricsDashboardController extends AbstractController
 {
+    private ServerUtil $serverUtil;
     private ErrorManager $errorManager;
     private MetricsManager $metricsManager;
 
-    public function __construct(ErrorManager $errorManager, MetricsManager $metricsManager)
+    public function __construct(ServerUtil $serverUtil, ErrorManager $errorManager, MetricsManager $metricsManager)
     {
+        $this->serverUtil = $serverUtil;
         $this->errorManager = $errorManager;
         $this->metricsManager = $metricsManager;
     }
@@ -44,8 +47,18 @@ class MetricsDashboardController extends AbstractController
         // get metrics data
         $data = $this->metricsManager->getServiceMetrics('host-system', $timePeriod);
 
+        // get current usages
+        $currentCpuUsage = $this->serverUtil->getCpuUsage();
+        $currentRamUsage = $this->serverUtil->getRamUsagePercentage();
+        $currentStorageUsage = $this->serverUtil->getDriveUsagePercentage();
+
         // return metrics dashboard view
         return $this->render('component/metrics-dashboard/metrics-dashboard.twig', [
+            'current_usages' => [
+                'cpu' => $currentCpuUsage,
+                'ram' => $currentRamUsage,
+                'storage' => $currentStorageUsage
+            ],
             'data' => $data
         ]);
     }

@@ -7,11 +7,15 @@ WORKDIR /var/www
 # install required packages
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \ 
     libicu-dev \
     libgmp-dev \
+    libpng-dev \
+    zlib1g-dev \
     curl \
     sudo \
-    rpm 
+    rpm
 
 # install PHP extensions
 RUN docker-php-ext-install \
@@ -19,6 +23,10 @@ RUN docker-php-ext-install \
     intl \
     curl \
     gmp
+
+# install phpGD extension
+RUN docker-php-ext-configure gd \
+    && docker-php-ext-install -j$(nproc) gd
 
 # install OPCache extension
 RUN docker-php-ext-install opcache
