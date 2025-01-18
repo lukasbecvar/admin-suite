@@ -24,11 +24,11 @@ class PushNotificationsApiControllerTest extends CustomTestCase
     }
 
     /**
-     * Test get request for push notifications enabled status with status is false
+     * Test get push notifications status with status is false
      *
      * @return void
      */
-    public function testGetPushNotificationsEnabledStatus(): void
+    public function testGetPushNotificationsStatusWhenStatusIsDisabled(): void
     {
         // simulate push notifications enabled
         $_ENV['PUSH_NOTIFICATIONS_ENABLED'] = 'false';
@@ -54,11 +54,11 @@ class PushNotificationsApiControllerTest extends CustomTestCase
     }
 
     /**
-     * Test get request for push notifications public key get when push notifications is disabled
+     * Test get push notifications public key when push notifications is disabled
      *
      * @return void
      */
-    public function testGetPublicKeyWithPushNotificationsDisabled(): void
+    public function testGetPublicKeyWithPushNotificationsIsDisabled(): void
     {
         // simulate push notifications disabled
         $_ENV['PUSH_NOTIFICATIONS_ENABLED'] = 'false';
@@ -84,7 +84,7 @@ class PushNotificationsApiControllerTest extends CustomTestCase
     }
 
     /**
-     * Test get request for push notifications public key get
+     * Test get push notifications public key when push notifications is enabled
      *
      * @return void
      */
@@ -114,11 +114,11 @@ class PushNotificationsApiControllerTest extends CustomTestCase
     }
 
     /**
-     * Test request for subscribing to push notidications with push notifications disabled
+     * Test subscribe to push notidications when push notifications is disabled
      *
      * @return void
      */
-    public function testSubscriberWithPushNotificationsDisabled(): void
+    public function testSubscribeWhenPushNotificationsIsDisabled(): void
     {
         // simulate push notifications disabled
         $_ENV['PUSH_NOTIFICATIONS_ENABLED'] = 'false';
@@ -150,11 +150,11 @@ class PushNotificationsApiControllerTest extends CustomTestCase
     }
 
     /**
-     * Test request for subscribing to push notifications
+     * Test subscribe to push notifications when push notifications is enabled
      *
      * @return void
      */
-    public function testSubscriberWithPushNotificationsEnabled(): void
+    public function testSubscribeWhenPushNotificationsIsEnabled(): void
     {
         // simulate push notifications enabled
         $_ENV['PUSH_NOTIFICATIONS_ENABLED'] = 'true';

@@ -76,7 +76,7 @@ class TerminalApiController extends AbstractController
 
         // check if command empty
         if (empty($command)) {
-            return new Response('command data is empty', Response::HTTP_OK);
+            return new Response('Command data is empty', Response::HTTP_OK);
         }
 
         // security escape command
@@ -88,14 +88,14 @@ class TerminalApiController extends AbstractController
 
         // check if config files are iterable
         if (!is_iterable($blockedCommands) || !is_iterable($aliases)) {
-            return new Response('error to load terminal config files', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new Response('Error to load terminal config files', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // check if command is blocked
         foreach ($blockedCommands as $blockedCommand) {
             /** @var string $blockedCommand */
             if (str_starts_with($command ?? '', $blockedCommand) || str_starts_with($command ?? '', 'sudo ' . $blockedCommand)) {
-                return new Response('command: ' . $command . ' is not allowed', Response::HTTP_OK);
+                return new Response('Command: ' . $command . ' is not allowed', Response::HTTP_OK);
             }
         }
 

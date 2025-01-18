@@ -14,7 +14,7 @@ services:
         mem_limit: 1g
         volumes:
             - .:/app
-        command: composer install
+        command: composer install --ignore-platform-reqs
     
     # node service for building assets
     node:

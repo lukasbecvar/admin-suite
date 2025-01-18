@@ -25,7 +25,7 @@ class TerminalApiControllerTest extends CustomTestCase
     }
 
     /**
-     * Test request for terminal command execute with empty command
+     * Test execute terminal with empty command
      *
      * @return void
      */
@@ -42,12 +42,36 @@ class TerminalApiControllerTest extends CustomTestCase
         }
 
         // assert response
-        $this->assertSame('command data is empty', $responseContent);
+        $this->assertSame('Command data is empty', $responseContent);
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
-     * Test request for terminal command execute with success response
+     * Test execute terminal command with not allowed command
+     *
+     * @return void
+     */
+    public function testExecuteTerminalCommandWhenCommandIsNotAllowed(): void
+    {
+        $this->client->request('POST', '/api/system/terminal', [
+            'command' => 'htop'
+        ]);
+
+        // get response content
+        $responseContent = $this->client->getResponse()->getContent();
+
+        // check if response content is empty
+        if (!$responseContent) {
+            $this->fail('Response content is empty');
+        }
+
+        // assert response
+        $this->assertSame('Command: htop is not allowed', $responseContent);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test execute terminal command with response is success
      *
      * @return void
      */
