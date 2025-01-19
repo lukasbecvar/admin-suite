@@ -68,7 +68,7 @@ class UsersManagerController extends AbstractController
         if ($page < 1) {
             $page = 1;
         }
-        
+
         // get page limit from config
         $pageLimit = $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
 
