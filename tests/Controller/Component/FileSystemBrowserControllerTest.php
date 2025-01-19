@@ -37,12 +37,15 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'Filesystem');
+        $this->assertSelectorExists('a[href="/dashboard"]');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorTextContains('body', 'Path');
         $this->assertSelectorExists('a[href="/filesystem?path=/"]');
         $this->assertSelectorTextContains('body', 'Name');
         $this->assertSelectorTextContains('body', 'Size');
         $this->assertSelectorTextContains('body', 'Permissions');
+        $this->assertSelectorExists('a[href="/filesystem?path=/root"]');
+        $this->assertSelectorTextContains('body', 'root');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -57,11 +60,10 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Filesystem');
-        $this->assertSelectorTextContains('body', 'os-release');
-        $this->assertSelectorExists('a[title="Back to previous page"]');
-        $this->assertSelectorTextContains('body', 'Path');
         $this->assertSelectorExists('a[href="/filesystem?path=/usr/lib"]');
+        $this->assertSelectorExists('a[title="Back to previous page"]');
+        $this->assertSelectorTextContains('body', 'os-release');
+        $this->assertSelectorTextContains('body', 'Path');
         $this->assertSelectorExists('pre');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }

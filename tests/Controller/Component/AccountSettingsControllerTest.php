@@ -31,7 +31,7 @@ class AccountSettingsControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testSettingsTable(): void
+    public function testLoadAccountSettingsTable(): void
     {
         $this->client->request('GET', '/account/settings');
 
@@ -106,7 +106,7 @@ class AccountSettingsControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testSubmitChangeUsernameFormWithEmptyUsername(): void
+    public function testSubmitChangeUsernameFormWithEmptyUsernameInput(): void
     {
         $this->client->request('POST', '/account/settings/change/username', [
             'username_change_form' => [
@@ -173,7 +173,7 @@ class AccountSettingsControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testSubmitChangeUsernameFormSuccess(): void
+    public function testSubmitChangeUsernameFormWithSuccessResponse(): void
     {
         $this->client->request('POST', '/account/settings/change/username', [
             'username_change_form' => [
@@ -209,7 +209,7 @@ class AccountSettingsControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testSubmitPasswordChangeFormWithEmptyPassword(): void
+    public function testSubmitPasswordChangeFormWithEmptyPasswordInput(): void
     {
         $this->client->request('POST', '/account/settings/change/password', [
             'password_change_form' => [
@@ -231,7 +231,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test the password change with low length password
+     * Test submit password change form with low length password
      *
      * @return void
      */
@@ -309,11 +309,11 @@ class AccountSettingsControllerTest extends CustomTestCase
     }
 
     /**
-     * Test submit password change form success
+     * Test submit password change form with success response
      *
      * @return void
      */
-    public function testSubmitPasswordChangeFormSuccess(): void
+    public function testSubmitPasswordChangeFormWithSuccessResponse(): void
     {
         $this->client->request('POST', '/account/settings/change/password', [
             'password_change_form' => [

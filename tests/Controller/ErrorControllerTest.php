@@ -23,11 +23,11 @@ class ErrorControllerTest extends WebTestCase
     }
 
     /**
-     * Test error controller with empty code
+     * Test load error page with empty code
      *
      * @return void
      */
-    public function testErrorEmptyCode(): void
+    public function testLoadErrorPageWithEmptyCode(): void
     {
         $this->client->request('GET', '/error');
 
@@ -43,7 +43,7 @@ class ErrorControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testErrorUnknown(): void
+    public function testLoadErrorUnknownPage(): void
     {
         $this->client->request('GET', '/error?code=unknown');
 
@@ -59,7 +59,7 @@ class ErrorControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testErrorMaintenanceUnknown(): void
+    public function testLoadErrorPageMaintenanceUnknown(): void
     {
         $this->client->request('GET', '/error?code=maintenance');
 
@@ -74,7 +74,7 @@ class ErrorControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testErrorBannedUnknown(): void
+    public function testLoadErrorPageBannedUnknown(): void
     {
         $this->client->request('GET', '/error?code=banned');
 
@@ -90,7 +90,7 @@ class ErrorControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testError400(): void
+    public function testLoadErrorPage400(): void
     {
         $this->client->request('GET', '/error?code=400');
 
@@ -106,7 +106,7 @@ class ErrorControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testError401(): void
+    public function testLoadErrorPage401(): void
     {
         $this->client->request('GET', '/error?code=401');
 
@@ -122,7 +122,7 @@ class ErrorControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testError403(): void
+    public function testLoadErrorPage403(): void
     {
         $this->client->request('GET', '/error?code=403');
 
@@ -138,7 +138,7 @@ class ErrorControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testError404(): void
+    public function testLoadErrorPage404(): void
     {
         $this->client->request('GET', '/error?code=404');
 
@@ -154,7 +154,7 @@ class ErrorControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testError426(): void
+    public function testLoadErrorPage426(): void
     {
         $this->client->request('GET', '/error?code=426');
 
@@ -169,7 +169,7 @@ class ErrorControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testError429(): void
+    public function testLoadErrorPage429(): void
     {
         $this->client->request('GET', '/error?code=429');
 
@@ -185,7 +185,7 @@ class ErrorControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testError500(): void
+    public function testLoadErrorPage500(): void
     {
         $this->client->request('GET', '/error?code=500');
 

@@ -23,11 +23,11 @@ class ActionRunnerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test request service action runner with not logged in response
+     * Test request to service action runner when not logged in
      *
      * @return void
      */
-    public function testServiceActionRunnerNotLoggedIn(): void
+    public function testRequestToServiceActionRunnerWhenNotLoggedIn(): void
     {
         $this->client->request('GET', '/service/action/runner');
 
@@ -41,7 +41,7 @@ class ActionRunnerControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testServiceActionRunnerSuccess(): void
+    public function testSubmitServiceActionRunnerWithSuccessResponse(): void
     {
         // simulate user authentication
         $this->simulateLogin($this->client);

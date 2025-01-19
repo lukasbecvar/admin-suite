@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class RegisterControllerTest
  *
- * Test cases for admin page controller actions
+ * Test cases for admin page controller component
  *
  * @package App\Tests\Controller\Auth
  */
@@ -31,11 +31,11 @@ class RegisterControllerTest extends WebTestCase
     }
 
     /**
-     * Test render register page
+     * Test load register page
      *
      * @return void
      */
-    public function testRenderRegisterPage(): void
+    public function testLoadRegisterPage(): void
     {
         $this->client->request('GET', '/register');
 

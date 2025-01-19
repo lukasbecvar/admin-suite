@@ -27,7 +27,7 @@ class AntiLogControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testAntiLogNotLoggedIn(): void
+    public function testSetAntiLogWithUserNotLoggedIn(): void
     {
         $this->client->request('GET', '/13378/antilog');
 
@@ -41,7 +41,7 @@ class AntiLogControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testAnitLogEnable(): void
+    public function testEnableAntiLog(): void
     {
         // simulate user authentication
         $this->simulateLogin($this->client);

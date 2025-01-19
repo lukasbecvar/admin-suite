@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class MetricsDashboardControllerTest
  *
- * Test cases for the metrics dashboard component
+ * Test cases for metrics dashboard component
  *
  * @package App\Tests\Controller\Component
  */
@@ -37,6 +37,7 @@ class MetricsDashboardControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
+        $this->assertSelectorExists('a[title="Go to monitoring"]');
         $this->assertSelectorTextContains('body', 'Current usage');
         $this->assertSelectorTextContains('body', 'CPU');
         $this->assertSelectorTextContains('body', 'RAM');
@@ -86,7 +87,7 @@ class MetricsDashboardControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testDeleteMetrics(): void
+    public function testDeleteMetricsRequest(): void
     {
         $this->client->request('GET', '/metrics/delete?service_name=becvar.xyz&metric_name=cpu_usage&confirm=yes');
 

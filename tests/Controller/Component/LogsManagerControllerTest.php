@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class LogsManagerControllerTest
  *
- * Test cases for the logs manager component
+ * Test cases for logs manager component
  *
  * @package App\Tests\Controller\Component
  */
@@ -49,6 +49,7 @@ class LogsManagerControllerTest extends CustomTestCase
         $this->assertSelectorExists('th:contains("OS")');
         $this->assertSelectorExists('th:contains("IP Address")');
         $this->assertSelectorExists('th:contains("User")');
+        $this->assertSelectorExists('a[class="delete-button"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -63,6 +64,7 @@ class LogsManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[href="/manager/logs"]');
         $this->assertSelectorTextContains('body', 'Exception files');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -78,7 +80,21 @@ class LogsManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[href="/manager/logs"]');
         $this->assertSelectorTextContains('body', 'System logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test request to set logs as readed
+     *
+     * @return void
+     */
+    public function testRequestLogsSetReaded(): void
+    {
+        $this->client->request('GET', '/manager/logs/set/readed');
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 }

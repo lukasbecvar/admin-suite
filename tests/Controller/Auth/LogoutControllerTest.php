@@ -8,18 +8,18 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class LogoutControllerTest
  *
- * Test the logout controller action
+ * Test cases for logout controller component
  *
  * @package App\Tests\Controller\Auth
  */
 class LogoutControllerTest extends WebTestCase
 {
     /**
-     * Test logout user request
+     * Test user logout action
      *
      * @return void
      */
-    public function testUserLogout(): void
+    public function testUserLogoutAction(): void
     {
         $client = static::createClient();
 
@@ -29,17 +29,5 @@ class LogoutControllerTest extends WebTestCase
         // assert response
         $this->assertResponseRedirects('/login');
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
-
-        // follow redirect
-        $client->followRedirect();
-
-        // assert response
-        $this->assertSelectorTextContains('h2', 'Login');
-        $this->assertSelectorExists('form[name="login_form"]');
-        $this->assertSelectorExists('input[name="login_form[username]"]');
-        $this->assertSelectorExists('input[name="login_form[password]"]');
-        $this->assertSelectorExists('input[name="login_form[remember]"]');
-        $this->assertSelectorTextContains('button', 'Login');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

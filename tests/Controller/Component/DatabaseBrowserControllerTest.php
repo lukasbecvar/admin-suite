@@ -37,6 +37,8 @@ class DatabaseBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[href="/manager/database"]');
+        $this->assertSelectorExists('a[href="/manager/database?database=' . $_ENV['DATABASE_NAME'] . '"]');
         $this->assertSelectorTextContains('body', 'Databases');
         $this->assertSelectorTextContains('body', 'Database');
         $this->assertSelectorTextContains('body', 'Tables');
@@ -58,10 +60,16 @@ class DatabaseBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[href="/manager/database"]');
+        $this->assertSelectorExists('a[href="/manager/database/dump"]');
+        $this->assertSelectorExists('a[href="/manager/database/console"]');
         $this->assertSelectorTextContains('body', $_ENV['DATABASE_NAME']);
+        $this->assertSelectorExists('a[href="/manager/database"]');
+        $this->assertSelectorExists('a[href="/manager/database?database=' . $_ENV['DATABASE_NAME'] . '"]');
+        $this->assertSelectorTextContains('Table', 'Table');
+        $this->assertSelectorTextContains('Table', 'Rows');
         $this->assertSelectorTextContains('Table', 'Size (MB)');
-        $this->assertSelectorTextContains('body', 'users');
-        $this->assertSelectorTextContains('body', 'logs');
+        $this->assertSelectorExists('a[class="database-link"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -78,6 +86,10 @@ class DatabaseBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[href="/manager/database"]');
+        $this->assertSelectorExists('a[href="/manager/database/dump"]');
+        $this->assertSelectorExists('a[href="/manager/database/console"]');
+        $this->assertSelectorExists('a[href="/manager/database"]');
         $this->assertSelectorTextContains('body', 'No tables found');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -96,6 +108,13 @@ class DatabaseBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', $_ENV['DATABASE_NAME']);
+        $this->assertSelectorExists('a[href="/manager/database?database=' . $_ENV['DATABASE_NAME'] . '"]');
+        $this->assertSelectorExists('a[href="/manager/database/add?database=' . $_ENV['DATABASE_NAME'] . '&table=users"]');
+        $this->assertSelectorExists('a[href="/manager/database?database=' . $_ENV['DATABASE_NAME'] . '"]');
+        $this->assertSelectorExists('a[href="/manager/database/truncate?database=' . $_ENV['DATABASE_NAME'] . '&table=users"]');
+        $this->assertSelectorExists('a[href="/manager/database"]');
+        $this->assertSelectorExists('a[href="/manager/database?database=' . $_ENV['DATABASE_NAME'] . '"]');
         $this->assertSelectorTextContains('body', 'users');
         $this->assertSelectorTextContains('body', 'id');
         $this->assertSelectorTextContains('body', 'username');
@@ -106,7 +125,47 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'last_login_time');
         $this->assertSelectorTextContains('body', 'token');
         $this->assertSelectorTextContains('body', 'profile_pic');
+        $this->assertSelectorExists('a[href="/manager/database/edit?database=' . $_ENV['DATABASE_NAME'] . '&table=users&page=1&id=1"]');
+        $this->assertSelectorExists('button[data-url="/manager/database/delete?database=' . $_ENV['DATABASE_NAME'] . '&table=users&page=1&id=1"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test load table truncate confirmation page
+     *
+     * @return void
+     */
+    public function testLoadTableTruncateConfirmationPage(): void
+    {
+        $this->client->request('GET', '/manager/database/truncate', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'logs'
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[href="/manager/database/table?database=' . $_ENV['DATABASE_NAME'] . '&table=logs"]');
+        $this->assertSelectorTextContains('body', 'Truncate table logs');
+        $this->assertSelectorTextContains('body', 'YES');
+        $this->assertSelectorTextContains('body', 'NO');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test submit table truncate confirmation
+     *
+     * @return void
+     */
+    public function testSubmitTableTruncateConfirmation(): void
+    {
+        $this->client->request('GET', '/manager/database/truncate', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'logs',
+            'confirm' => 'yes'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 
     /**
@@ -123,6 +182,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[href="/manager/database/table?database=' . $_ENV['DATABASE_NAME'] . '&table=users"]');
         $this->assertSelectorTextContains('body', 'Add row to users');
         $this->assertSelectorTextContains('body', 'Id');
         $this->assertSelectorTextContains('body', 'Username');
@@ -162,6 +222,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[href="/manager/database/table?database=' . $_ENV['DATABASE_NAME'] . '&table=users"]');
         $this->assertSelectorTextContains('body', 'The field id must be a number.');
         $this->assertSelectorTextContains('body', 'Add row to users');
         $this->assertSelectorTextContains('body', 'Id');
@@ -202,6 +263,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[href="/manager/database/table?database=' . $_ENV['DATABASE_NAME'] . '&table=users"]');
         $this->assertSelectorTextContains('body', 'The field id is required and cannot be empty.');
         $this->assertSelectorTextContains('body', 'Add row to users');
         $this->assertSelectorTextContains('body', 'Id');
@@ -250,7 +312,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testDeleteRowSuccess(): void
+    public function testDeleteRowRequestWithSuccessResponse(): void
     {
         $this->client->request('GET', '/manager/database/delete', [
             'database' => $_ENV['DATABASE_NAME'],
@@ -263,40 +325,54 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Test load table truncate confirmation page
+     * Test delete row request when database not found
      *
      * @return void
      */
-    public function testLoadTableTruncateConfirmation(): void
+    public function testDeleteRowRequestWhenDatabaseNotFound(): void
     {
-        $this->client->request('GET', '/manager/database/truncate', [
-            'database' => $_ENV['DATABASE_NAME'],
-            'table' => 'logs'
+        $this->client->request('GET', '/manager/database/delete', [
+            'database' => 'blblablanonexistdatabaseokokcsmuckmuckxoxo',
+            'table' => 'users',
+            'id' => 5
         ]);
 
         // assert response
-        $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Truncate table logs');
-        $this->assertSelectorTextContains('body', 'YES');
-        $this->assertSelectorTextContains('body', 'NO');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
     /**
-     * Test submit table truncate confirmation
+     * Test delete row request when table not found
      *
      * @return void
      */
-    public function testSubmitTableTruncateConfirmation(): void
+    public function testDeleteRowRequestWhenTableNotFound(): void
     {
-        $this->client->request('GET', '/manager/database/truncate', [
+        $this->client->request('GET', '/manager/database/delete', [
             'database' => $_ENV['DATABASE_NAME'],
-            'table' => 'logs',
-            'confirm' => 'yes'
+            'table' => 'blblablanonexistdatabaseokokcsmuckmuckxoxo',
+            'id' => 5
         ]);
 
         // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * Test delete row request when id is not found
+     *
+     * @return void
+     */
+    public function testDeleteRowRequestWhenIdIsNotFound(): void
+    {
+        $this->client->request('GET', '/manager/database/delete', [
+            'database' => $_ENV['DATABASE_NAME'],
+            'table' => 'users',
+            'id' => 53243324
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -447,6 +523,50 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'Query console');
         $this->assertSelectorTextContains('body', 'Database console');
         $this->assertSelectorTextContains('body', 'Execute Query');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test submit database console query with empty query
+     *
+     * @return void
+     */
+    public function testSubmitDatabaseConsoleQueryWithEmptyQuery(): void
+    {
+        $this->client->request('POST', '/manager/database/console', [
+            'query_console_form' => [
+                'query' => ''
+            ]
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Query console');
+        $this->assertSelectorTextContains('body', 'Database console');
+        $this->assertSelectorTextContains('body', 'Execute Query');
+        $this->assertSelectorTextContains('body', 'Please enter a query');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test submit database console query with success response
+     *
+     * @return void
+     */
+    public function testSubmitDatabaseConsoleQueryWithSuccessResponse(): void
+    {
+        $this->client->request('POST', '/manager/database/console', [
+            'query_console_form' => [
+                'query' => ''
+            ]
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Query console');
+        $this->assertSelectorTextContains('body', 'Database console');
+        $this->assertSelectorTextContains('body', 'Execute Query');
+        $this->assertSelectorTextContains('body', 'Please enter a query');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

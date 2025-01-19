@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class MonitoringManagerControllerTest
  *
- * Test for monitoring dashboard component
+ * Test cases for monitoring dashboard component
  *
  * @package App\Tests\Controller\Component
  */
@@ -36,6 +36,11 @@ class MonitoringManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Monitoring');
+        $this->assertSelectorExists('a[title="Back to dashboard"]');
+        $this->assertSelectorExists('a[title="Go to unsorted logs"]');
+        $this->assertSelectorExists('a[title="Go to metrics dashboard"]');
+        $this->assertSelectorExists('a[title="View services config"]');
         $this->assertSelectorTextContains('body', 'Internal services');
         $this->assertSelectorTextContains('body', 'HTTP services');
         $this->assertSelectorTextContains('body', 'SLA History');
@@ -53,7 +58,12 @@ class MonitoringManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[title="Back to monitoring dashboard"]');
         $this->assertSelectorTextContains('body', 'Services config');
+        $this->assertSelectorTextContains('body', 'Service Name:');
+        $this->assertSelectorTextContains('body', 'Type:');
+        $this->assertSelectorTextContains('body', 'Display Name:');
+        $this->assertSelectorTextContains('body', 'Display:');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

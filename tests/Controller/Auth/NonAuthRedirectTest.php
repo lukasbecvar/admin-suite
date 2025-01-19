@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class NonAuthRedirectTest
  *
- * Test redirect non-authenticated users to login page for admin page routes
+ * Test for redirect non-authenticated users to login page for admin page routes
  *
  * @package App\Tests\Controller\Auth
  */
@@ -123,7 +123,7 @@ class NonAuthRedirectTest extends WebTestCase
     }
 
     /**
-     * Test non-authenticated requests redirect to login
+     * Test requests to admin routes that require authentication
      *
      * @param string $method The HTTP method
      * @param string $url The admin route URL

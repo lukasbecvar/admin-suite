@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class LoginControllerTest
  *
- * Test cases for login page auth controller actions
+ * Test cases for login page auth controller component
  *
  * @package App\Tests\Controller\Auth
 */
@@ -23,11 +23,11 @@ class LoginControllerTest extends WebTestCase
     }
 
     /**
-     * Test render login page
+     * Test load login page
      *
      * @return void
      */
-    public function testRenderLoginPage(): void
+    public function testLoadLoginPage(): void
     {
         $this->client->request('GET', '/login');
 

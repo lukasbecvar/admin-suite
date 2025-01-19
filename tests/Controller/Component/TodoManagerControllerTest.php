@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Class TodoManagerControllerTest
  *
- * Test for todo manager component
+ * Test cases for todo manager component
  *
  * @package App\Tests\Controller\Component
  */
@@ -38,6 +38,8 @@ class TodoManagerControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'Todo list');
+        $this->assertSelectorExists('a[title="Back to dashboard"]');
+        $this->assertSelectorExists('a[title="View closed todos"]');
         $this->assertSelectorExists('input[name="create_todo_form[todo_text]"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -56,6 +58,8 @@ class TodoManagerControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'Todo list');
+        $this->assertSelectorExists('a[title="Back to dashboard"]');
+        $this->assertSelectorExists('a[title="View open todos"]');
         $this->assertSelectorNotExists('input[name="create_todo_form[todo_text]"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }

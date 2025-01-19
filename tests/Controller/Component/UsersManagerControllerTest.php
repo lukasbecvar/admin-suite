@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class UsersManagerControllerTest
  *
- * Test for users manager component
+ * Test cases for users manager component
  *
  * @package App\Tests\Controller\Component
  */
@@ -43,6 +43,9 @@ class UsersManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[title="Back to dashboard"]');
+        $this->assertSelectorExists('a[title="View un-filtered users"]');
+        $this->assertSelectorExists('a[title="Add new user"]');
         $this->assertSelectorExists('select[name="filter"]');
         $this->assertSelectorExists('th:contains("#")');
         $this->assertSelectorExists('th:contains("Username")');
@@ -54,6 +57,8 @@ class UsersManagerControllerTest extends CustomTestCase
         $this->assertSelectorExists('th:contains("Status")');
         $this->assertSelectorExists('th:contains("Banned")');
         $this->assertSelectorExists('th:contains("Ban")');
+        $this->assertSelectorExists('a[class="ban-button"]');
+        $this->assertSelectorExists('a[class="delete-button"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -70,6 +75,7 @@ class UsersManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[title="Back to users manager"]');
         $this->assertSelectorExists('img[alt="User Profile Picture"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -85,6 +91,7 @@ class UsersManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[title="Back to users manager"]');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
         $this->assertSelectorExists('input[name="registration_form[password][first]"]');
@@ -98,7 +105,7 @@ class UsersManagerControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testUserManagerRegisterSubmitWithEmptyInputs(): void
+    public function testSubmitUserRegisterWithEmptyInputs(): void
     {
         $this->client->request('POST', '/manager/users/register', [
             'registration_form' => [
@@ -112,6 +119,7 @@ class UsersManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[title="Back to users manager"]');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
         $this->assertSelectorExists('input[name="registration_form[password][first]"]');
@@ -127,7 +135,7 @@ class UsersManagerControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testUserManagerRegisterSubmitWithInvalidLength(): void
+    public function testSubmitUserRegisterWithInvalidLength(): void
     {
         $this->client->request('POST', '/manager/users/register', [
             'registration_form' => [
@@ -141,6 +149,7 @@ class UsersManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[title="Back to users manager"]');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
         $this->assertSelectorExists('input[name="registration_form[password][first]"]');
@@ -156,7 +165,7 @@ class UsersManagerControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testUserManagerRegisterSubmitWithNotMatchingPasswords(): void
+    public function testSubmitUserRegisterWithNotMatchingPasswords(): void
     {
         $this->client->request('POST', '/manager/users/register', [
             'registration_form' => [
@@ -184,7 +193,7 @@ class UsersManagerControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testUserManagerRegisterSubmitWithSuccessResponse(): void
+    public function testSubmitUserRegisterWithSuccessResponse(): void
     {
         $this->client->request('POST', '/manager/users/register', [
             'registration_form' => [
@@ -205,7 +214,7 @@ class UsersManagerControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testUserManagerUpdateUserRoleWithEmptyId(): void
+    public function testUpdateUserRoleWithEmptyId(): void
     {
         $this->client->request('POST', '/manager/users/role/update', [
             'id' => '',
@@ -221,7 +230,7 @@ class UsersManagerControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testUserManagerUpdateUserRoleWithEmptyRole(): void
+    public function testUpdateUserRoleWithEmptyRole(): void
     {
         $this->client->request('POST', '/manager/users/role/update', [
             'id' => 1,
@@ -237,7 +246,7 @@ class UsersManagerControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testUserManagerUpdateUserRoleWithInvalidId(): void
+    public function testUpdateUserRoleWithInvalidId(): void
     {
         $this->client->request('POST', '/manager/users/role/update', [
             'id' => 13383838383,
@@ -249,11 +258,90 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
+     * Test ban user submit with empty id
+     *
+     * @return void
+     */
+    public function testBanUserWithEmptyId(): void
+    {
+        $this->client->request('GET', '/manager/users/ban', [
+            'id' => ''
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test ban user submit with empty status
+     *
+     * @return void
+     */
+    public function testBanUserWithEmpty(): void
+    {
+        $this->client->request('GET', '/manager/users/ban', [
+            'id' => 1,
+            'status' => ''
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test ban user submit with invalid status
+     *
+     * @return void
+     */
+    public function testBanUserWithInvalidStatus(): void
+    {
+        $this->client->request('GET', '/manager/users/ban', [
+            'id' => 1,
+            'status' => 'invalid'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test ban user submit with not existing user
+     *
+     * @return void
+     */
+    public function testBanUserWithUserNotExist(): void
+    {
+        $this->client->request('GET', '/manager/users/ban', [
+            'id' => 13383838383,
+            'status' => 'active'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test ban user submit with success response
+     *
+     * @return void
+     */
+    public function testBanUserWithSuccessResponse(): void
+    {
+        $this->client->request('GET', '/manager/users/ban', [
+            'id' => 2,
+            'status' => 'active'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    /**
      * Test delete user submit with empty id
      *
      * @return void
      */
-    public function testUserManagerUserDeleteWithEmptyId(): void
+    public function testUserDeleteWithEmptyId(): void
     {
         $this->client->request('GET', '/manager/users/delete', [
             'id' => ''
@@ -268,7 +356,7 @@ class UsersManagerControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testUserManagerUserDeleteWithInvalidId(): void
+    public function testUserDeleteWithInvalidId(): void
     {
         $this->client->request('GET', '/manager/users/delete', [
             'id' => 1323232323232

@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * Class IndexControllerTest
  *
- * Test the index controller
+ * Test cases for index controller
  *
  * @package App\Tests\Controller
  */
@@ -27,7 +27,7 @@ class IndexControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testIndexLoad(): void
+    public function testLoadIndexPage(): void
     {
         $this->client->request('GET', '/');
 
@@ -41,7 +41,7 @@ class IndexControllerTest extends CustomTestCase
      *
      * @return void
      */
-    public function testIndexLoadLoggedIn(): void
+    public function testLoadIndexPageWithLoggedInUser(): void
     {
         // simulate user authentication
         $this->simulateLogin($this->client);
