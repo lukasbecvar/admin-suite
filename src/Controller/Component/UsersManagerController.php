@@ -65,7 +65,10 @@ class UsersManagerController extends AbstractController
     {
         // get current page from request query params
         $page = (int) $request->query->get('page', '1');
-
+        if ($page < 1) {
+            $page = 1;
+        }
+        
         // get page limit from config
         $pageLimit = $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
 
