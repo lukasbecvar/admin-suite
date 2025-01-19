@@ -9,7 +9,7 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## Description
-Simple and easy-to-use solution for monitoring and managing linux servers. This project aims to manage single server instances, not clusters.
+A simple, user-friendly solution for monitoring and managing Linux servers. Designed specifically for single server instances.
 
 ## Installation
 Installation is very simple like any other PHP project.
