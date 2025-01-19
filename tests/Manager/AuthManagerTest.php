@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class AuthManagerTest
  *
- * Test cases for the authentication manager
+ * Test cases for authentication and authorization manager
  *
  * @package App\Tests\Manager
  */
@@ -87,8 +87,7 @@ class AuthManagerTest extends TestCase
         $blockedUsernames = ['admin', 'system', 'root'];
 
         // mock blocked usernames config
-        $this->appUtilMock->method('loadConfig')->with('blocked-usernames.json')
-            ->willReturn($blockedUsernames);
+        $this->appUtilMock->method('loadConfig')->with('blocked-usernames.json')->willReturn($blockedUsernames);
 
         // check if username is blocked
         $result = $this->authManager->isUsernameBlocked('admin');
@@ -107,8 +106,7 @@ class AuthManagerTest extends TestCase
         $blockedUsernames = ['admin', 'system', 'root'];
 
         // mock blocked usernames config
-        $this->appUtilMock->method('loadConfig')->with('blocked-usernames.json')
-            ->willReturn($blockedUsernames);
+        $this->appUtilMock->method('loadConfig')->with('blocked-usernames.json')->willReturn($blockedUsernames);
 
         // check if username is blocked
         $result = $this->authManager->isUsernameBlocked('user');
@@ -127,31 +125,32 @@ class AuthManagerTest extends TestCase
         $blockedUsernames = ['admin', 'system', 'root'];
 
         // mock blocked usernames config
-        $this->appUtilMock->method('loadConfig')->with('blocked-usernames.json')
-            ->willReturn($blockedUsernames);
+        $this->appUtilMock->method('loadConfig')->with('blocked-usernames.json')->willReturn($blockedUsernames);
 
         // expect handle error
-        $this->errorManagerMock->expects($this->once())->method('handleError')
-            ->with('error to register new user: username is system', Response::HTTP_FORBIDDEN);
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            message: 'error to register new user: username is system',
+            code: Response::HTTP_FORBIDDEN
+        );
 
         // call test method
         $this->authManager->registerUser('admin', 'password');
     }
 
     /**
-     * Test register user with already existing username
+     * Test register user when username is already registered
      *
      * @return void
      */
-    public function testRegisterUserAlreadyExists(): void
+    public function testRegisterUserWhenUsernameIsAlreadyRegistered(): void
     {
         // mock user already exists
         $this->userManagerMock->method('checkIfUserExist')->willReturn(true);
 
         // mock handleError to throw exception
-        $this->errorManagerMock
-            ->method('handleError')
-            ->willThrowException(new Exception('error to register new user: username already exist'));
+        $this->errorManagerMock->method('handleError')->willThrowException(
+            new Exception('error to register new user: username already exist')
+        );
 
         // expect entity manager not to be called
         $this->entityManagerMock->expects($this->never())->method('persist');
@@ -163,7 +162,6 @@ class AuthManagerTest extends TestCase
         // call test method
         $this->authManager->registerUser('existingUser', 'password');
     }
-
 
     /**
      * Test register user with successful registration
@@ -184,13 +182,15 @@ class AuthManagerTest extends TestCase
         $this->securityUtilMock->method('generateHash')->willReturn('hashedPassword');
 
         // expect entity manager call
-        $this->entityManagerMock->expects($this->once())->method('persist')
-            ->with($this->isInstanceOf(User::class));
+        $this->entityManagerMock->expects($this->once())->method('persist')->with($this->isInstanceOf(User::class));
         $this->entityManagerMock->expects($this->once())->method('flush');
 
         // expect log manager call
-        $this->logManagerMock->expects($this->once())->method('log')
-            ->with('authenticator', 'new registration user: newUser', LogManager::LEVEL_CRITICAL);
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            name: 'authenticator',
+            message: 'new registration user: newUser',
+            level: LogManager::LEVEL_CRITICAL
+        );
 
         // call test method
         $this->authManager->registerUser('newUser', 'password');
@@ -245,11 +245,11 @@ class AuthManagerTest extends TestCase
     }
 
     /**
-     * Test register user with exception during save
+     * Test register user with exception thrown
      *
      * @return void
      */
-    public function testRegisterUserExceptionDuringSave(): void
+    public function testRegisterUserExceptionThrown(): void
     {
         // mock user manager
         $this->userManagerMock->method('checkIfUserExist')->willReturn(false);
@@ -263,261 +263,139 @@ class AuthManagerTest extends TestCase
         $this->securityUtilMock->method('generateHash')->willReturn('hashedPassword');
 
         // expect entity manager call
-        $this->entityManagerMock->expects($this->once())->method('persist')
-            ->willThrowException(new Exception('Database error'));
-        $this->errorManagerMock->expects($this->once())->method('handleError')
-            ->with('error to register new user: Database error', Response::HTTP_INTERNAL_SERVER_ERROR);
+        $this->entityManagerMock->expects($this->once())->method('persist')->willThrowException(
+            new Exception('Database error')
+        );
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            message: 'error to register new user: Database error',
+            code: Response::HTTP_INTERNAL_SERVER_ERROR
+        );
 
         // call test method
         $this->authManager->registerUser('newUser', 'password');
     }
 
     /**
-     * Test get logged user repository with user not logged in
+     * Test check if user is logged in when session not exist
      *
      * @return void
      */
-    public function testGetLoggedUserRepositoryUserNotLoggedIn(): void
-    {
-        // mock user logged in status
-        $this->authManagerMock->method('isUserLogedin')->willReturn(false);
-
-        // assert result
-        $this->assertNull($this->authManager->getLoggedUserRepository());
-    }
-
-    /**
-     * Test get logged user repository with user not found
-     *
-     * @return void
-     */
-    public function testGetLoggedUserRepositoryUserNotFound(): void
-    {
-        // mock user logged status & session get
-        $this->authManagerMock->method('isUserLogedin')->willReturn(true);
-        $this->sessionUtilMock->method('getSessionValue')->willReturn('validToken');
-        $this->userManagerMock->method('getUserByToken')->willReturn(null);
-
-        // assert result
-        $this->assertNull($this->authManager->getLoggedUserRepository());
-    }
-
-    /**
-     * Test is user logged in with user not logged in
-     *
-     * @return void
-     */
-    public function testIsLoggedInUserAdminUserNotLoggedIn(): void
-    {
-        // mock user logged in status
-        $this->authManagerMock->method('isUserLogedin')->willReturn(false);
-
-        // assert result
-        $this->assertFalse($this->authManager->isLoggedInUserAdmin());
-    }
-
-    /**
-     * Test is user logged in with user not admin
-     *
-     * @return void
-     */
-    public function testIsLoggedInUserAdminUserNotAdmin(): void
-    {
-        // mock user logged status
-        $this->authManagerMock->method('isUserLogedin')->willReturn(true);
-
-        // mock user repository
-        $user = $this->createMock(User::class);
-        $user->method('getId')->willReturn(1);
-        $this->authManagerMock->method('getLoggedUserRepository')->willReturn($user);
-
-        // mock user admin status
-        $this->userManagerMock->method('isUserAdmin')->willReturn(false);
-
-        // assert result
-        $this->assertFalse($this->authManager->isLoggedInUserAdmin());
-    }
-
-    /**
-     * Test is user logged in with user not found
-     *
-     * @return void
-     */
-    public function testIsLoggedInUserAdminUserNotFound(): void
-    {
-        // mock user logged status
-        $this->authManagerMock->method('isUserLogedin')->willReturn(true);
-
-        // mock user repository
-        $this->authManagerMock->method('getLoggedUserRepository')->willReturn(null);
-
-        // assert result
-        $this->assertFalse($this->authManager->isLoggedInUserAdmin());
-    }
-
-    /**
-     * Test is user logged in with user invalid token
-     *
-     * @return void
-     */
-    public function testIsLoggedInUserAdminUserInvalidToken(): void
-    {
-        // mock user logged status
-        $this->authManagerMock->method('isUserLogedin')->willReturn(true);
-
-        // mock user repository
-        $user = $this->createMock(User::class);
-        $user->method('getId')->willReturn(1);
-        $this->authManagerMock->method('getLoggedUserRepository')->willReturn($user);
-
-        // mock user admin status
-        $this->userManagerMock->method('isUserAdmin')->willReturn(false);
-
-        // assert result
-        $this->assertFalse($this->authManager->isLoggedInUserAdmin());
-    }
-
-    /**
-     * Test is user logged in with user admin
-     *
-     * @return void
-     */
-    public function testIsUserLogedinNoSession(): void
+    public function testIsUserLogedinWhenSessionNotExist(): void
     {
         // mock session check
         $this->sessionUtilMock->method('checkSession')->willReturn(false);
 
+        // call test method
+        $result = $this->authManager->isUserLogedin();
+
         // assert result
-        $this->assertFalse($this->authManager->isUserLogedin());
+        $this->assertFalse($result);
     }
 
     /**
-     * Test is user logged in with token not string
+     * Test check if user is logged in when session exist but token is not valid
      *
      * @return void
      */
-    public function testIsUserLogedinTokenNotString(): void
+    public function testIsUserLogedinWhenSessionExistButTokenIsNotValid(): void
     {
         // mock session check
         $this->sessionUtilMock->method('checkSession')->willReturn(true);
+        $this->sessionUtilMock->method('getSessionValue')->willReturn('invalidToken');
 
-        // mock session value get
-        $this->sessionUtilMock->method('getSessionValue')->willReturn(123);
-
-        // expect error manager call
-        $this->errorManagerMock->expects($this->once())->method('handleError');
+        // call test method
+        $result = $this->authManager->isUserLogedin();
 
         // assert result
-        $this->assertFalse($this->authManager->isUserLogedin());
+        $this->assertFalse($result);
     }
 
     /**
-     * Test is user logged in with token exists but no user
+     * Test check if user is logged in when session exist and token is valid
      *
      * @return void
      */
-    public function testIsUserLogedinTokenExistsButNoUser(): void
+    public function testIsUserLogedinWhenSessionExistAndTokenIsValid(): void
     {
         // mock session check
         $this->sessionUtilMock->method('checkSession')->willReturn(true);
-
-        // mock session value get
-        $this->sessionUtilMock->method('getSessionValue')->willReturn('validToken');
-
-        // mock user repository
-        $this->userManagerMock->method('getUserByToken')->willReturn(null);
-
-        // assert result
-        $this->assertFalse($this->authManager->isUserLogedin());
-    }
-
-    /**
-     * Test is user logged in with token exists and user found
-     *
-     * @return void
-     */
-    public function testIsUserLogedinTokenExistsAndUserFound(): void
-    {
-        // mock session check
-        $this->sessionUtilMock->method('checkSession')->willReturn(true);
-
-        // mock session value get
         $this->sessionUtilMock->method('getSessionValue')->willReturn('validToken');
 
         // mock user repository
         $user = $this->createMock(User::class);
+        $user->method('getToken')->willReturn('validToken');
         $this->userManagerMock->method('getUserByToken')->willReturn($user);
 
+        // call test method
+        $result = $this->authManager->isUserLogedin();
+
         // assert result
-        $this->assertTrue($this->authManager->isUserLogedin());
+        $this->assertTrue($result);
     }
 
     /**
-     * Test is user logged in with invalid token type
+     * Test check if user can login when username is empty
      *
      * @return void
      */
-    public function testIsUserLogedinInvalidTokenType(): void
+    public function testCheckifUserCanLoginWhenUsernameIsEmpty(): void
     {
-        // mock session check
-        $this->sessionUtilMock->method('checkSession')->willReturn(true);
-
-        // mock session value get
-        $this->sessionUtilMock->method('getSessionValue')->willReturn(123);
-
-        // expect error manager call
-        $this->errorManagerMock->expects($this->once())->method('handleError');
+        // call test method
+        $result = $this->authManager->canLogin('', 'testpassword');
 
         // assert result
-        $this->assertFalse($this->authManager->isUserLogedin());
+        $this->assertFalse($result);
     }
 
     /**
-     * Test can login with user not exist
+     * Test check if user can login when password is empty
      *
      * @return void
      */
-    public function testCanLoginUserNotExist(): void
-    {
-        // mock user repository
-        $this->userManagerMock->method('getUserByUsername')->willReturn(null);
-
-        // expect log manager call
-        $this->logManagerMock->expects($this->once())->method('log')->with(
-            'authenticator',
-            'invalid login user: testuser:testpassword',
-            LogManager::LEVEL_CRITICAL
-        );
-
-        // assert result
-        $this->assertFalse($this->authManager->canLogin('testuser', 'testpassword'));
-    }
-
-    /**
-     * Test can login with correct password
-     *
-     * @return void
-     */
-    public function testCanLoginCorrectPassword(): void
+    public function testCheckifUserCanLoginWhenPasswordIsEmpty(): void
     {
         // mock user repository
         $user = $this->createMock(User::class);
         $user->method('getPassword')->willReturn('hashedPassword');
         $this->userManagerMock->method('getUserByUsername')->willReturn($user);
 
-        // mock password verification
-        $this->securityUtilMock->method('verifyPassword')->willReturn(true);
+        // call test method
+        $result = $this->authManager->canLogin('testuser', '');
 
         // assert result
-        $this->assertTrue($this->authManager->canLogin('testuser', 'correctpassword'));
+        $this->assertFalse($result);
     }
 
     /**
-     * Test can login with incorrect password
+     * Test check if user can login when user not exist
      *
      * @return void
      */
-    public function testCanLoginIncorrectPassword(): void
+    public function testCheckifUserCanLoginWhenUserNotExist(): void
+    {
+        // mock user repository
+        $this->userManagerMock->method('getUserByUsername')->willReturn(null);
+
+        // expect log manager call
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            name: 'authenticator',
+            message: 'invalid login user: testuser:testpassword',
+            level: LogManager::LEVEL_CRITICAL
+        );
+
+        // call test method
+        $result = $this->authManager->canLogin('testuser', 'testpassword');
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test check if user can login when user exist and password is incorrect
+     *
+     * @return void
+     */
+    public function testCheckifUserCanLoginWhenUserExistAndPasswordIsIncorrect(): void
     {
         // mock user repository
         $user = $this->createMock(User::class);
@@ -527,43 +405,41 @@ class AuthManagerTest extends TestCase
         // mock password verification
         $this->securityUtilMock->method('verifyPassword')->willReturn(false);
 
+        // call test method
+        $result = $this->authManager->canLogin('testuser', 'wrongpassword');
+
         // assert result
-        $this->assertFalse($this->authManager->canLogin('testuser', 'wrongpassword'));
+        $this->assertFalse($result);
     }
 
     /**
-     * Test can login with empty username
+     * Test check if user can login when user exist and password is correct
      *
      * @return void
      */
-    public function testCanLoginEmptyUsername(): void
-    {
-        // assert result
-        $this->assertFalse($this->authManager->canLogin('', 'testpassword'));
-    }
-
-    /**
-     * Test can login with empty password
-     *
-     * @return void
-     */
-    public function testCanLoginEmptyPassword(): void
+    public function testCheckifUserCanLoginWhenUserExistAndPasswordIsCorrect(): void
     {
         // mock user repository
         $user = $this->createMock(User::class);
         $user->method('getPassword')->willReturn('hashedPassword');
         $this->userManagerMock->method('getUserByUsername')->willReturn($user);
 
+        // mock password verification
+        $this->securityUtilMock->method('verifyPassword')->willReturn(true);
+
+        // call test method
+        $result = $this->authManager->canLogin('testuser', 'correctpassword');
+
         // assert result
-        $this->assertFalse($this->authManager->canLogin('testuser', ''));
+        $this->assertTrue($result);
     }
 
     /**
-     * Test login process
+     * Test handle user login
      *
      * @return void
      */
-    public function testLoginProcess(): void
+    public function testHandleUserLogin(): void
     {
         // mock user object
         $user = $this->createMock(User::class);
@@ -578,8 +454,11 @@ class AuthManagerTest extends TestCase
         $this->sessionUtilMock->expects($this->exactly(2))->method('setSession');
 
         // expect cookie set
-        $this->cookieUtilMock->expects($this->once())->method('set')
-            ->with('user-token', 'test_token', $this->anything());
+        $this->cookieUtilMock->expects($this->once())->method('set')->with(
+            name: 'user-token',
+            value: 'test_token',
+            expriation: $this->anything()
+        );
 
         // expect entity manager call
         $this->entityManagerMock->expects($this->once())->method('flush');
@@ -592,7 +471,7 @@ class AuthManagerTest extends TestCase
     }
 
     /**
-     * Test login process with null ip address
+     * Test update user data on login
      *
      * @return void
      */
@@ -648,8 +527,8 @@ class AuthManagerTest extends TestCase
 
         // expect error manager call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            'error to update user data: Database error',
-            Response::HTTP_INTERNAL_SERVER_ERROR
+            message: 'error to update user data: Database error',
+            code: Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call test method
@@ -657,25 +536,244 @@ class AuthManagerTest extends TestCase
     }
 
     /**
-     * Test update data on login with invalid token
+     * Test get logged user repository when user not logged in
      *
      * @return void
      */
-    public function testGetLoggedUserIdNotLoggedIn(): void
+    public function testGetLoggedUserRepositoryWhenUserisNotLoggedIn(): void
+    {
+        // mock user logged in status
+        $this->authManagerMock->method('isUserLogedin')->willReturn(false);
+
+        // call test method
+        $result = $this->authManager->getLoggedUserRepository();
+
+        // assert result
+        $this->assertNull($result);
+    }
+
+    /**
+     * Test get logged user repository when user not found
+     *
+     * @return void
+     */
+    public function testGetLoggedUserRepositoryWhenUserNotFound(): void
+    {
+        // mock user logged status & session get
+        $this->authManagerMock->method('isUserLogedin')->willReturn(true);
+        $this->sessionUtilMock->method('getSessionValue')->willReturn('validToken');
+        $this->userManagerMock->method('getUserByToken')->willReturn(null);
+
+        // call test method
+        $result = $this->authManager->getLoggedUserRepository();
+
+        // assert result
+        $this->assertNull($result);
+    }
+
+    /**
+     * Test check if logged user is admin when user not logged in
+     *
+     * @return void
+     */
+    public function testCheckIfLoggedUserIsAdminWhenUserNotLoggedIn(): void
+    {
+        // mock user logged in status
+        $this->authManagerMock->method('isUserLogedin')->willReturn(false);
+
+        // call test method
+        $result = $this->authManager->isLoggedInUserAdmin();
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test check if logged user is admin when user not found
+     *
+     * @return void
+     */
+    public function testCheckIfLoggedUserIsAdminWhenUserNotFound(): void
+    {
+        // mock user logged status
+        $this->authManagerMock->method('isUserLogedin')->willReturn(true);
+
+        // mock user repository
+        $this->authManagerMock->method('getLoggedUserRepository')->willReturn(null);
+
+        // call test method
+        $result = $this->authManager->isLoggedInUserAdmin();
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test check if logged user is admin when user invalid token
+     *
+     * @return void
+     */
+    public function testCheckIfLoggedUserIsAdminWhenUserInvalidToken(): void
+    {
+        // mock user logged status
+        $this->authManagerMock->method('isUserLogedin')->willReturn(true);
+
+        // mock user repository
+        $user = $this->createMock(User::class);
+        $user->method('getId')->willReturn(1);
+        $this->authManagerMock->method('getLoggedUserRepository')->willReturn($user);
+
+        // mock user admin status
+        $this->userManagerMock->method('isUserAdmin')->willReturn(false);
+
+        // call test method
+        $result = $this->authManager->isLoggedInUserAdmin();
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test check if logged user is admin when user not admin
+     *
+     * @return void
+     */
+    public function testCheckIfLoggedUserIsAdminWhenUserNotAdmin(): void
+    {
+        // mock user logged status
+        $this->authManagerMock->method('isUserLogedin')->willReturn(true);
+
+        // mock user repository
+        $user = $this->createMock(User::class);
+        $user->method('getId')->willReturn(1);
+        $this->authManagerMock->method('getLoggedUserRepository')->willReturn($user);
+
+        // mock user admin status
+        $this->userManagerMock->method('isUserAdmin')->willReturn(false);
+
+        // call test method
+        $result = $this->authManager->isLoggedInUserAdmin();
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test check is user logged in when token is not string
+     *
+     * @return void
+     */
+    public function testCheckIsUserLogedinWhenTokenIsNotString(): void
+    {
+        // mock session check
+        $this->sessionUtilMock->method('checkSession')->willReturn(true);
+
+        // mock session value get
+        $this->sessionUtilMock->method('getSessionValue')->willReturn(123);
+
+        // expect error manager call
+        $this->errorManagerMock->expects($this->once())->method('handleError');
+
+        // call test method
+        $result = $this->authManager->isUserLogedin();
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test check is user logged in when token exists but user not found
+     *
+     * @return void
+     */
+    public function testCheckIsUserLogedinWhenTokenExistsButUserNotFound(): void
+    {
+        // mock session check
+        $this->sessionUtilMock->method('checkSession')->willReturn(true);
+
+        // mock session value get
+        $this->sessionUtilMock->method('getSessionValue')->willReturn('validToken');
+
+        // mock user repository
+        $this->userManagerMock->method('getUserByToken')->willReturn(null);
+
+        // call test method
+        $result = $this->authManager->isUserLogedin();
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test check is user logged in when token exists and user found
+     *
+     * @return void
+     */
+    public function testCheckIsUserLogedinWhenTokenExistsAndUserFound(): void
+    {
+        // mock session check
+        $this->sessionUtilMock->method('checkSession')->willReturn(true);
+
+        // mock session value get
+        $this->sessionUtilMock->method('getSessionValue')->willReturn('validToken');
+
+        // mock user repository
+        $user = $this->createMock(User::class);
+        $this->userManagerMock->method('getUserByToken')->willReturn($user);
+
+        // call test method
+        $result = $this->authManager->isUserLogedin();
+
+        // assert result
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Test check is user logged in when token type is invalid
+     *
+     * @return void
+     */
+    public function testCheckIsUserLogedinWhenTokenTypeIsInvalid(): void
+    {
+        // mock session check
+        $this->sessionUtilMock->method('checkSession')->willReturn(true);
+
+        // mock session value get
+        $this->sessionUtilMock->method('getSessionValue')->willReturn(123);
+
+        // expect error manager call
+        $this->errorManagerMock->expects($this->once())->method('handleError');
+
+        // call test method
+        $result = $this->authManager->isUserLogedin();
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test get logged user id when user is not logged in
+     *
+     * @return void
+     */
+    public function testGetLoggedUserIdWhenUserisNotLoggedIn(): void
     {
         // mock user logged status
         $this->authManagerMock->method('isUserLogedin')->willReturn(false);
 
+        // call test method
+        $result = $this->authManager->getLoggedUserId();
+
         // assert result
-        $this->assertEquals(0, $this->authManager->getLoggedUserId());
+        $this->assertEquals(0, $result);
     }
 
     /**
-     * Test get logged user id with user not found
+     * Test get logged user id when user not found
      *
      * @return void
      */
-    public function testGetLoggedUserIdUserNotFound(): void
+    public function testGetLoggedUserIdWhenUserNotFound(): void
     {
         // mock user logged status
         $this->authManagerMock->method('isUserLogedin')->willReturn(true);
@@ -686,16 +784,19 @@ class AuthManagerTest extends TestCase
         // mock user repository
         $this->userManagerMock->method('getUserByToken')->willReturn(null);
 
+        // call test method
+        $result = $this->authManager->getLoggedUserId();
+
         // assert result
-        $this->assertEquals(0, $this->authManager->getLoggedUserId());
+        $this->assertEquals(0, $result);
     }
 
     /**
-     * Test get logged user id with success
+     * Test get logged user id when user found and logged in
      *
      * @return void
      */
-    public function testGetLoggedUserIdSuccess(): void
+    public function testGetLoggedUserIdWhenUserFoundAndLoggedIn(): void
     {
         // mock user object
         $user = new User();
@@ -711,7 +812,7 @@ class AuthManagerTest extends TestCase
         // mock user repository
         $this->userManagerMock->method('getUserByToken')->willReturn($user);
 
-        // assert result
+        // call test method
         $result = $this->authManager->getLoggedUserId();
 
         // assert result
@@ -719,25 +820,28 @@ class AuthManagerTest extends TestCase
     }
 
     /**
-     * Test get logged user id with invalid token type
+     * Test get logged user id when user not logged in
      *
      * @return void
      */
-    public function testGetLoggedUserTokenNoSession(): void
+    public function testGetLoggedUserTokenWhenUserNotLoggedIn(): void
     {
         // mock session check
         $this->sessionUtilMock->method('checkSession')->willReturn(false);
 
+        // call test method
+        $result = $this->authManager->getLoggedUserToken();
+
         // assert result
-        $this->assertNull($this->authManager->getLoggedUserToken());
+        $this->assertNull($result);
     }
 
     /**
-     * Test get logged user token with user not found
+     * Test get logged user token when user not found
      *
      * @return void
      */
-    public function testGetLoggedUserTokenUserNotFound(): void
+    public function testGetLoggedUserTokenWhenUserNotFound(): void
     {
         // mock session check
         $this->sessionUtilMock->method('checkSession')->willReturn(true);
@@ -748,16 +852,19 @@ class AuthManagerTest extends TestCase
         // mock user repository
         $this->userManagerMock->method('getUserByToken')->willReturn(null);
 
+        // call test method
+        $result = $this->authManager->getLoggedUserToken();
+
         // assert result
-        $this->assertNull($this->authManager->getLoggedUserToken());
+        $this->assertNull($result);
     }
 
     /**
-     * Test get logged user token with success
+     * Test get logged user token when user found and logged in
      *
      * @return void
      */
-    public function testGetLoggedUserTokenSuccess(): void
+    public function testGetLoggedUserTokenWhenUserFoundAndLoggedIn(): void
     {
         // mock session check
         $this->sessionUtilMock->method('checkSession')->willReturn(true);
@@ -770,8 +877,11 @@ class AuthManagerTest extends TestCase
         $user->setToken('validToken');
         $this->userManagerMock->method('getUserByToken')->willReturn($user);
 
+        // call test method
+        $result = $this->authManager->getLoggedUserToken();
+
         // assert result
-        $this->assertEquals('validToken', $this->authManager->getLoggedUserToken());
+        $this->assertEquals('validToken', $result);
     }
 
     /**
@@ -792,16 +902,19 @@ class AuthManagerTest extends TestCase
         $user->method('getUsername')->willReturn('testuser');
         $this->userManagerMock->method('getUserByToken')->willReturn($user);
 
+        // call test method
+        $result = $this->authManager->getLoggedUsername();
+
         // assert result
-        $this->assertEquals('testuser', $this->authManager->getLoggedUsername());
+        $this->assertEquals('testuser', $result);
     }
 
     /**
-     * Test logout process
+     * Test user logout process
      *
      * @return void
      */
-    public function testLogoutProcess(): void
+    public function testUserLogoutProcess(): void
     {
         // mock session util
         $this->sessionUtilMock->method('checkSession')->willReturn(true);
@@ -822,11 +935,11 @@ class AuthManagerTest extends TestCase
     }
 
     /**
-     * Test reset user password with user not found
+     * Test reset user password when user not found
      *
      * @return void
      */
-    public function testResetUserPasswordUserNotFound(): void
+    public function testResetUserPasswordWhenUserNotFound(): void
     {
         // mock user repository
         $this->userManagerMock->method('getUserByUsername')->willReturn(null);
@@ -839,11 +952,11 @@ class AuthManagerTest extends TestCase
     }
 
     /**
-     * Test reset user password with success
+     * Test reset user password with success result
      *
      * @return void
      */
-    public function testResetUserPasswordSuccess(): void
+    public function testResetUserPasswordWithSuccessResult(): void
     {
         // mock user repository
         $user = $this->createMock(User::class);
@@ -859,9 +972,9 @@ class AuthManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            'authenticator',
-            'user: testuser password reset is success',
-            LogManager::LEVEL_CRITICAL
+            name: 'authenticator',
+            message: 'user: testuser password reset is success',
+            level: LogManager::LEVEL_CRITICAL
         );
 
         // call test method
@@ -872,17 +985,21 @@ class AuthManagerTest extends TestCase
     }
 
     /**
-     * Test regenerate users tokens
+     * Test regenerate all users tokens
      *
      * @return void
      */
-    public function testRegenerateUsersTokens(): void
+    public function testRegenerateAllUsersTokens(): void
     {
         // mock user repository
         $user1 = $this->createMock(User::class);
-        $user1->expects($this->once())->method('setToken')->with($this->isType('string'));
+        $user1->expects($this->once())->method('setToken')->with($this->callback(function (mixed $token) {
+            return is_string($token);
+        }));
         $user2 = $this->createMock(User::class);
-        $user2->expects($this->once())->method('setToken')->with($this->isType('string'));
+        $user2->expects($this->once())->method('setToken')->with($this->callback(function (mixed $token) {
+            return is_string($token);
+        }));
         $this->userManagerMock->method('getAllUsersRepositories')->willReturn([$user1, $user2]);
 
         // mock auth manager
@@ -893,9 +1010,9 @@ class AuthManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            'authenticator',
-            'regenerate all users tokens',
-            LogManager::LEVEL_WARNING
+            name: 'authenticator',
+            message: 'regenerate all users tokens',
+            level: LogManager::LEVEL_WARNING
         );
 
         // call test method
@@ -913,7 +1030,7 @@ class AuthManagerTest extends TestCase
      */
     public function testGenerateUserToken(): void
     {
-        // generate user token
+        // call test method
         $token = $this->authManager->generateUserToken();
 
         // assert result

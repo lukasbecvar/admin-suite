@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 /**
  * Class ExceptionEventSubscriberTest
  *
- * Test cases for the exception event subscriber
+ * Test cases for exception event subscriber
  *
  * @package App\Tests\Event\Subscriber
  */
@@ -61,11 +61,11 @@ class ExceptionEventSubscriberTest extends TestCase
     }
 
     /**
-     * Test http exception excluded from logging
+     * Test handle http exception excluded from logging
      *
      * @return void
      */
-    public function testHttpExceptionExcludedFromLogging(): void
+    public function testHandleHttpExceptionExcludedFromLogging(): void
     {
         // mock excluded http codes
         $this->appUtilMock->method('getYamlConfig')->with('packages/monolog.yaml')->willReturn([
@@ -84,16 +84,16 @@ class ExceptionEventSubscriberTest extends TestCase
         // expect logger not to be called
         $this->loggerMock->expects($this->never())->method('error');
 
-        // create & call exception event subscriber
+        // call exception event subscriber
         $this->subscriber->onKernelException($event);
     }
 
     /**
-     * Test http exception logged
+     * Test handle http exception logged to exception log
      *
      * @return void
      */
-    public function testHttpExceptionLogged(): void
+    public function testHandleHttpExceptionLoggedToExceptionLog(): void
     {
         // mock excluded http codes
         $this->appUtilMock->method('getYamlConfig')->with('packages/monolog.yaml')->willReturn([
@@ -114,16 +114,16 @@ class ExceptionEventSubscriberTest extends TestCase
         // expect logger to be called
         $this->loggerMock->expects($this->once())->method('error')->with('Internal Server Error');
 
-        // create & call exception event subscriber
+        // call exception event subscriber
         $this->subscriber->onKernelException($event);
     }
 
     /**
-     * Test non http exception logged
+     * Test handle non http exception
      *
      * @return void
      */
-    public function testNonHttpExceptionLogged(): void
+    public function testHandleNonHttpException(): void
     {
         // mock excluded http codes
         $this->appUtilMock->method('getYamlConfig')->with('packages/monolog.yaml')->willReturn([
@@ -142,7 +142,7 @@ class ExceptionEventSubscriberTest extends TestCase
         // expect logger to be called
         $this->loggerMock->expects($this->once())->method('error')->with('Generic Exception');
 
-        // create & call exception event subscriber
+        // call exception event subscriber
         $this->subscriber->onKernelException($event);
     }
 }
