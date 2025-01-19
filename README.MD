@@ -23,7 +23,7 @@ Installation is very simple like any other PHP project.
 * Create user with console command or web interface (webinterface allows to create user if users table is empty)
 
 ## Configuration
-* You can edit the config files directly in config/suite but it is better to create your own in the project root because these files will be loaded primarily and ignored by git when using the pull for update with scripts/upgrade.sh
+* You can edit the config files directly in config/suite but it is better to create your own in the project root because these files will be loaded primarily and ignored by git.
 * Configure your package-requitements.json & services-monitoring.json in root file (for example use config/suite files)
 * Create systemd or screen service for monitoring process (console command infinite loop) ([systemd-config](https://github.com/lukasbecvar/admin-suite/blob/main/.docker/configs/monitoring-systemd.service))
 
@@ -34,7 +34,7 @@ Authentication uses a completely custom user system with only a username and pas
 In config exceptions-monitoring.json it is possible to set paths to exception files and track exceptions from your applications via log manager
 
 ## Monitoring
-Monitoring is ensured by a console command (infinite loop) ``console app:process:monitoring``. This command needs to be run as a service, and the monitored services should be defined in the services file in the root of the project, which is considered the primary source, or directly in config/suite/services-monitoring.json. it is necessary to set the monitoring interval and the SMTP server in the environment variables for sending alerts. The status and monitoring data can then be viewed on the web dashboard. 
+Monitoring is ensured by a console command (infinite loop) ``console app:process:monitoring``. This command needs to be run as a service, and the monitored services should be defined in the services file in the root of the project, which is considered the primary source, or directly in config/suite/services-monitoring.json. it is necessary to set the monitoring interval and the SMTP server or push notifications in the environment variables for sending alerts. The status and monitoring data can then be viewed in the web dashboard page. 
 
 ## Metrics
 The metrics component stores data during the monitoring process, so its function requires the monitoring process to be running. The metrics store average usage values for CPU, RAM, and storage during the interval set in ``.env`` as ``METRICS_SAVE_INTERVALg``.
@@ -54,6 +54,7 @@ Example response from the Metric Collector URL:
 If you enable push notifications in the environment config, make sure to allow notifications in the browser when loading the admin page. Additionally, if you delete subscribers or VAPID keys, you’ll need to reset notification permissions in the browser.
 
 ## External log API
+External log API is used for retrieving logs from external or monitored services.
 * ``/api/external/log`` - POST (data: name, message, level)
 * The external log API is used for retrieving logs from external services. External API log is in the .env configuration file.
 
