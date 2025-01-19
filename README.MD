@@ -67,6 +67,7 @@ External log API is used for retrieving logs from external or monitored services
 * PHP-OpenSSL extension
 * PHP-Intl extension
 * PHP-Curl extension
+* PHP-GD extension
 
 ## Development environment
 The complete stack for development is in Docker Compose, including PHP, Node, and Composer. You just need to run the docker-start script to launch it.
