@@ -9,7 +9,7 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## Description
-I created this project to manage my personal servers. I wanted a simple and easy-to-use solution that would allow me to monitor and manage my servers without relying on complex software or complicated setups. This project aims to manage single server instances, not clusters.
+Simple and easy-to-use solution for monitoring and managing linux servers. This project aims to manage single server instances, not clusters.
 
 ## Installation
 Installation is very simple like any other PHP project.
