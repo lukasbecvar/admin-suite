@@ -2,10 +2,12 @@
 
 namespace App\Tests\Manager;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Util\JsonUtil;
 use App\Util\CacheUtil;
 use App\Util\ServerUtil;
+use App\Entity\SLAHistory;
 use App\Manager\LogManager;
 use App\Manager\EmailManager;
 use App\Manager\ErrorManager;
@@ -13,12 +15,15 @@ use PHPUnit\Framework\TestCase;
 use App\Manager\ServiceManager;
 use App\Manager\MetricsManager;
 use App\Entity\MonitoringStatus;
+use Psr\Cache\CacheItemInterface;
 use App\Manager\MonitoringManager;
 use App\Manager\NotificationsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SLAHistoryRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use App\Repository\MonitoringStatusRepository;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Class MonitoringManagerTest
@@ -31,12 +36,13 @@ class MonitoringManagerTest extends TestCase
 {
     private AppUtil & MockObject $appUtilMock;
     private JsonUtil & MockObject $jsonUtilMock;
-    private LogManager & MockObject $logManager;
     private MonitoringManager $monitoringManager;
     private CacheUtil & MockObject $cacheUtilMock;
+    private LogManager & MockObject $logManagerMock;
     private ServerUtil & MockObject $serverUtilMock;
     private EmailManager & MockObject $emailManagerMock;
     private ErrorManager & MockObject $errorManagerMock;
+    private SymfonyStyle & MockObject $symfonyStyleMock;
     private MetricsManager & MockObject $metricsManagerMock;
     private ServiceManager & MockObject $serviceManagerMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
@@ -49,11 +55,12 @@ class MonitoringManagerTest extends TestCase
         // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->jsonUtilMock = $this->createMock(JsonUtil::class);
-        $this->logManager = $this->createMock(LogManager::class);
         $this->cacheUtilMock = $this->createMock(CacheUtil::class);
+        $this->logManagerMock = $this->createMock(LogManager::class);
         $this->serverUtilMock = $this->createMock(ServerUtil::class);
         $this->emailManagerMock = $this->createMock(EmailManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
+        $this->symfonyStyleMock = $this->createMock(SymfonyStyle::class);
         $this->metricsManagerMock = $this->createMock(MetricsManager::class);
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
@@ -66,7 +73,7 @@ class MonitoringManagerTest extends TestCase
             $this->appUtilMock,
             $this->jsonUtilMock,
             $this->cacheUtilMock,
-            $this->logManager,
+            $this->logManagerMock,
             $this->serverUtilMock,
             $this->emailManagerMock,
             $this->errorManagerMock,
@@ -181,5 +188,407 @@ class MonitoringManagerTest extends TestCase
 
         // assert result
         $this->assertSame($status, $result);
+    }
+
+    /**
+     * Test get monitoring status when service not found
+     *
+     * @return void
+     */
+    public function testGetMonitoringStatusWhenServiceNotFound(): void
+    {
+        $serviceName = 'test_service';
+
+        // simulate service entity not found
+        $this->repositoryMock->expects($this->once())->method('findOneBy')
+            ->with(['service_name' => $serviceName])->willReturn(null);
+
+        // call tested method
+        $result = $this->monitoringManager->getMonitoringStatus($serviceName);
+
+        // assert result
+        $this->assertNull($result);
+    }
+
+    /**
+     * Test handle monitoring status when status changed first time
+     *
+     * @return void
+     */
+    public function testHandleMonitoringStatusWhenStatusChangedFirstTime(): void
+    {
+        // testing data
+        $serviceName = 'test-service';
+        $message = 'Service is down';
+        $currentStatus = 'down';
+
+        // simulate previous status service status
+        $cacheItemMock = $this->createMock(CacheItemInterface::class);
+        $cacheItemMock->method('get')->willReturn('ok');
+        $this->cacheUtilMock->method('getValue')->willReturn($cacheItemMock);
+
+        // set new status to cache
+        $this->cacheUtilMock->expects($this->once())->method('setValue')->with(
+            'monitoring-status-' . $serviceName,
+            $currentStatus
+        );
+
+        // call tested method
+        $this->monitoringManager->handleMonitoringStatus($serviceName, $currentStatus, $message);
+    }
+
+    /**
+     * Test handle monitoring status when status has not changed since the last handle
+     *
+     * @return void
+     */
+    public function testHandleMonitoringStatusWhenStatusHasNotChangedSinceTheLastHandle(): void
+    {
+        // testing data
+        $serviceName = 'test-service';
+        $message = 'Service is down';
+        $currentStatus = 'down';
+
+        // simulate previous status service status
+        $cacheItemMock = $this->createMock(CacheItemInterface::class);
+        $cacheItemMock->method('get')->willReturn('down');
+        $this->cacheUtilMock->method('getValue')->willReturn($cacheItemMock);
+
+        // set new status to cache
+        $this->cacheUtilMock->expects($this->never())->method('setValue')->with(
+            'monitoring-status-' . $serviceName,
+            $currentStatus
+        );
+
+        // expect send notification
+        $this->notificationsManagerMock->expects($this->once())->method('sendNotification');
+
+        // expect call log
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            name: 'monitoring',
+            message: $serviceName . ' status: ' . $currentStatus . ' msg: ' . $message,
+            level: LogManager::LEVEL_WARNING
+        );
+
+        // call tested method
+        $this->monitoringManager->handleMonitoringStatus($serviceName, $currentStatus, $message);
+    }
+
+    /**
+     * Test increase down time
+     *
+     * @return void
+     */
+    public function testIncreaseDownTime(): void
+    {
+        $serviceName = 'test_service';
+        $minutes = 30;
+
+        // mock service entity
+        $monitoringStatusMock = $this->createMock(MonitoringStatus::class);
+        $this->repositoryMock->expects($this->once())->method('findOneBy')
+            ->with(['service_name' => $serviceName])->willReturn($monitoringStatusMock);
+
+        // expect call increaseDownTime
+        $monitoringStatusMock->expects($this->once())->method('increaseDownTime')->with($minutes);
+
+        // expect call entity manager flush
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->monitoringManager->increaseDownTime($serviceName, $minutes);
+    }
+
+    /**
+     * Test increase down time when exception occurs
+     *
+     * @return void
+     */
+    public function testIncreaseDownTimeWhenExceptionOccurs(): void
+    {
+        $serviceName = 'test_service';
+        $minutes = 30;
+
+        // mock service entity
+        $monitoringStatusMock = $this->createMock(MonitoringStatus::class);
+        $this->repositoryMock->expects($this->once())->method('findOneBy')
+            ->with(['service_name' => $serviceName])->willReturn($monitoringStatusMock);
+
+        // mock the increaseDownTime method to throw an exception
+        $monitoringStatusMock->expects($this->once())->method('increaseDownTime')->with($minutes)
+            ->willThrowException(new Exception('Database error'));
+
+        // expect call handleError
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            message: 'error to increase down time: Database error',
+            code: Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->monitoringManager->increaseDownTime($serviceName, $minutes);
+    }
+
+    /**
+     * Test get service mountly SLA when service found and has down time
+     *
+     * @return void
+     */
+    public function testGetServiceMountlySlaWhenServiceFoundAndHasDownTime(): void
+    {
+        $serviceName = 'test_service';
+        $downTime = 1000;
+
+        // mock service entity
+        $monitoringStatusMock = $this->createMock(MonitoringStatus::class);
+        $monitoringStatusMock->expects($this->once())->method('getDownTime')->willReturn($downTime);
+        $this->repositoryMock->expects($this->once())->method('findOneBy')
+            ->with(['service_name' => $serviceName])->willReturn($monitoringStatusMock);
+
+        // call tested method
+        $result = $this->monitoringManager->getServiceMountlySLA($serviceName);
+
+        // calculate expected SLA value for assert
+        $totalMinutesInMonth = 30.44 * 24 * 60;
+        $expectedSLA = round((1 - ($downTime / $totalMinutesInMonth)) * 100, 2);
+
+        // assert result
+        $this->assertEquals($expectedSLA, $result);
+    }
+
+    /**
+     * Test get service mountly SLA when service is not found in repository
+     *
+     * @return void
+     */
+    public function testGetServiceMountlySlaWhenServiceNotFound(): void
+    {
+        $serviceName = 'test_service';
+
+        // simulate service entity not found
+        $this->repositoryMock->expects($this->once())->method('findOneBy')
+            ->with(['service_name' => $serviceName])->willReturn(null);
+
+        // call tested method
+        $result = $this->monitoringManager->getServiceMountlySLA($serviceName);
+
+        // assert result
+        $this->assertNull($result);
+    }
+
+    /**
+     * Test get service mountly SLA when down time is null
+     *
+     * @return void
+     */
+    public function testGetServiceMountlySlaWhenDownTimeIsNull(): void
+    {
+        $serviceName = 'test_service';
+
+        // mock service entity
+        $monitoringStatusMock = $this->createMock(MonitoringStatus::class);
+        $monitoringStatusMock->expects($this->once())->method('getDownTime')->willReturn(null);
+        $this->repositoryMock->expects($this->once())->method('findOneBy')
+            ->with(['service_name' => $serviceName])->willReturn($monitoringStatusMock);
+
+        // expect handleError call
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            message: 'error to get service SLA: down time is null',
+            code: Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->monitoringManager->getServiceMountlySLA($serviceName);
+    }
+
+    /**
+     * Test get SLA history when data found
+     *
+     * @return void
+     */
+    public function testGetSlaHistoryWhenDataFound(): void
+    {
+        // mock SLA history data
+        $slaHistoryMock1 = $this->createMock(SLAHistory::class);
+        $slaHistoryMock1->expects($this->once())->method('getServiceName')->willReturn('test_service_1');
+        $slaHistoryMock1->expects($this->once())->method('getSlaTimeframe')->willReturn('2025-01-01');
+        $slaHistoryMock1->expects($this->once())->method('getSlaValue')->willReturn(99.9);
+        $slaHistoryMock2 = $this->createMock(SLAHistory::class);
+        $slaHistoryMock2->expects($this->once())->method('getServiceName')->willReturn('test_service_2');
+        $slaHistoryMock2->expects($this->once())->method('getSlaTimeframe')->willReturn('2025-01-02');
+        $slaHistoryMock2->expects($this->once())->method('getSlaValue')->willReturn(98.5);
+
+        // mock repository to return testing data
+        $this->slaHistoryRepositoryMock->expects($this->once())->method('findAll')
+            ->willReturn([$slaHistoryMock1, $slaHistoryMock2]);
+
+        // call tested method
+        $result = $this->monitoringManager->getSLAHistory();
+
+        // expected result
+        $expectedData = [
+            'test_service_1' => [
+                '2025-01-01' => 99.9
+            ],
+            'test_service_2' => [
+                '2025-01-02' => 98.5
+            ]
+        ];
+
+        // assert result
+        $this->assertEquals($expectedData, $result);
+    }
+
+    /**
+     * Test get SLA history when no data found
+     *
+     * @return void
+     */
+    public function testGetSlaHistoryWhenNoDataFound(): void
+    {
+        // simulate empty history data
+        $this->slaHistoryRepositoryMock->expects($this->once())->method('findAll')->willReturn([]);
+
+        // call tested method
+        $result = $this->monitoringManager->getSLAHistory();
+
+        // expected result
+        $this->assertEquals([], $result);
+    }
+
+    /**
+     * Test get SLA history when exception thrown
+     *
+     * @return void
+     */
+    public function testGetSlaHistoryWhenExceptionThrown(): void
+    {
+        // simulate exception thrown
+        $this->slaHistoryRepositoryMock->expects($this->once())->method('findAll')
+            ->willThrowException(new Exception('Database error'));
+
+        // expect handleError call
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            message: 'Error to get SLA history: Database error',
+            code: Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->monitoringManager->getSLAHistory();
+    }
+
+    /**
+     * Test save SLA history
+     *
+     * @return void
+     */
+    public function testSaveSLAHistory(): void
+    {
+        // testing data
+        $serviceName = 'test_service';
+        $slaTimeframe = '2025-01-01';
+        $slaValue = 99.9;
+
+        // expect entity manager call persist and flush
+        $this->entityManagerMock->expects($this->once())->method('persist')->with(
+            $this->isInstanceOf(SLAHistory::class)
+        );
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->monitoringManager->saveSLAHistory($serviceName, $slaTimeframe, $slaValue);
+    }
+
+    /**
+     * Test save SLA history when exception thrown
+     *
+     * @return void
+     */
+    public function testSaveSLAHistoryWhenExceptionThrown(): void
+    {
+        // testing data
+        $serviceName = 'test_service';
+        $slaTimeframe = '2025-01-01';
+        $slaValue = 99.9;
+
+        // expect entity manager call persist
+        $this->entityManagerMock->expects($this->once())->method('persist')->with(
+            $this->isInstanceOf(SLAHistory::class)
+        );
+
+        // mock exception thrown
+        $this->entityManagerMock->expects($this->once())->method('flush')
+            ->willThrowException(new Exception('Database error'));
+
+        // expect handleError call
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            message: 'error to save SLA history: Database error',
+            code: Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call the method and expect it to handle the error
+        $this->monitoringManager->saveSLAHistory($serviceName, $slaTimeframe, $slaValue);
+    }
+
+    /**
+     * Test reset down times when no services in non current timeframe
+     *
+     * @return void
+     */
+    public function testResetDownTimesWhenNoServicesInNonCurrentTimeframe(): void
+    {
+        // simulate find services in non-current timeframe
+        $this->repositoryMock->expects($this->once())->method('findByNonCurrentTimeframe')->willReturn([]);
+
+        // expect flush to not be called
+        $this->entityManagerMock->expects($this->never())->method('flush');
+
+        // call tested method
+        $this->monitoringManager->resetDownTimes($this->symfonyStyleMock);
+    }
+
+    /**
+     * Test reset down times when there are services in non-current timeframe
+     *
+     * @return void
+     */
+    public function testResetDownTimesWhenServicesInNonCurrentTimeframe(): void
+    {
+        // mock testing entity
+        $monitoringStatusMock = $this->createMock(MonitoringStatus::class);
+        $monitoringStatusMock->expects($this->exactly(4))->method('getServiceName')->willReturn('test-service');
+        $monitoringStatusMock->expects($this->exactly(2))->method('getSlaTimeframe')->willReturn('2024-12');
+        $monitoringStatusMock->expects($this->exactly(1))->method('setSlaTimeframe')->with('2025-01');
+        $monitoringStatusMock->expects($this->exactly(1))->method('setDownTime')->with(0);
+        $monitoringStatusMock->expects($this->exactly(1))->method('getDownTime')->willReturn(3);
+        $this->repositoryMock->method('findOneBy')->with(['service_name' => 'test-service'])
+            ->willReturn($monitoringStatusMock);
+        $this->repositoryMock->expects($this->once())->method('findByNonCurrentTimeframe')
+            ->willReturn([$monitoringStatusMock]);
+
+        // expect log to be called
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            name: 'SLA timeframe reset',
+            message: 'test-service SLA for timeframe 2024-12 is: 99.99%',
+            level: LogManager::LEVEL_INFO
+        );
+
+        // call tested method
+        $this->monitoringManager->resetDownTimes($this->symfonyStyleMock);
+    }
+
+    /**
+     * Test handle database down
+     *
+     * @return void
+     */
+    public function testHandleDatabaseDown(): void
+    {
+        // expect console output
+        $this->symfonyStyleMock->expects($this->once())->method('writeln')->with(
+            $this->matchesRegularExpression('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] monitoring: <fg=red>database is down<\/fg=red>/')
+        );
+
+        // call tested method
+        $this->monitoringManager->handleDatabaseDown($this->symfonyStyleMock, true);
     }
 }

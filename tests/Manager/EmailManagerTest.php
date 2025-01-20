@@ -44,11 +44,11 @@ class EmailManagerTest extends TestCase
     }
 
     /**
-     * Test send email with disabled mailer
+     * Test send email when mailer is disabled
      *
      * @return void
      */
-    public function testSendEmailWithDisabledMailer(): void
+    public function testSendEmailWhenMailerDisabled(): void
     {
         // set mailer enabled to false
         $_ENV['MAILER_ENABLED'] = 'false';
@@ -73,11 +73,11 @@ class EmailManagerTest extends TestCase
     }
 
     /**
-     * Test send email with enabled mailer
+     * Test send email when mailer is enabled
      *
      * @return void
      */
-    public function testSendEmailWithMailerEnabled(): void
+    public function testSendEmailWhenMailerEnabled(): void
     {
         // simulate mailer enabled
         $_ENV['MAILER_ENABLED'] = 'true';
@@ -86,19 +86,18 @@ class EmailManagerTest extends TestCase
         $this->errorManagerMock->expects($this->never())->method('handleError');
 
         // expect mailer send call
-        $this->mailerMock->expects($this->once())
-            ->method('send');
+        $this->mailerMock->expects($this->once())->method('send');
 
         // call tested method
         $this->emailManager->sendEmail('recipient@example.com', 'Test Subject', ['key' => 'value']);
     }
 
     /**
-     * Test send email with exception
+     * Test send email when exception is thrown
      *
      * @return void
      */
-    public function testSendEmailWithTransportException(): void
+    public function testSendEmailWhenExceptionIsThrown(): void
     {
         // set mailer enabled to true
         $_ENV['MAILER_ENABLED'] = 'true';

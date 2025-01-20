@@ -41,10 +41,10 @@ class BanManagerTest extends TestCase
         $this->banRepositoryMock = $this->createMock(BannedRepository::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
-        // ban repository mock
+        // mock ban repository
         $this->entityManagerMock->method('getRepository')->willReturn($this->banRepositoryMock);
 
-        // create the ban manager instance
+        // create ban manager instance
         $this->banManager = new BanManager(
             $this->logManagerMock,
             $this->userManagerMock,
@@ -76,8 +76,10 @@ class BanManagerTest extends TestCase
         $this->authManagerMock->method('getLoggedUserRepository')->willReturn($userMock);
 
         // mock ban repository
-        $this->banRepositoryMock->method('findOneBy')
-            ->with(['banned_user_id' => $userId, 'status' => 'active'])->willReturn(null);
+        $this->banRepositoryMock->method('findOneBy')->with([
+            'banned_user_id' => $userId,
+            'status' => 'active'
+        ])->willReturn(null);
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
@@ -96,11 +98,11 @@ class BanManagerTest extends TestCase
      */
     public function testIsUserBanned(): void
     {
+        // testing user id
         $userId = 1;
 
         // mock ban status
-        $this->banRepositoryMock->expects($this->once())->method('isBanned')
-            ->with($userId)->willReturn(true);
+        $this->banRepositoryMock->expects($this->once())->method('isBanned')->with($userId)->willReturn(true);
 
         // call tested method
         $result = $this->banManager->isUserBanned($userId);
@@ -120,16 +122,15 @@ class BanManagerTest extends TestCase
         $reason = 'test reason';
 
         // mock ban status
-        $this->banRepositoryMock->method('isBanned')->with($userId)
-            ->willReturn(true);
+        $this->banRepositoryMock->method('isBanned')->with($userId)->willReturn(true);
 
         // mock get ban reason
-        $this->banRepositoryMock->method('getBanReason')->with($userId)
-            ->willReturn($reason);
+        $this->banRepositoryMock->method('getBanReason')->with($userId)->willReturn($reason);
 
         // call tested method
         $result = $this->banManager->getBanReason($userId);
 
+        // assert result
         $this->assertEquals($reason, $result);
     }
 
@@ -158,12 +159,10 @@ class BanManagerTest extends TestCase
         $this->authManagerMock->method('getLoggedUserRepository')->willReturn($userMock);
 
         // mock ban status
-        $this->banRepositoryMock->method('isBanned')->with($userId)
-            ->willReturn(true);
+        $this->banRepositoryMock->method('isBanned')->with($userId)->willReturn(true);
 
-        // assert that updateBanStatus is called with 'inactive'
-        $this->banRepositoryMock->expects($this->once())->method('updateBanStatus')
-            ->with($userId, 'inactive');
+        // expect update ban status call
+        $this->banRepositoryMock->expects($this->once())->method('updateBanStatus')->with($userId, 'inactive');
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
@@ -185,7 +184,7 @@ class BanManagerTest extends TestCase
         // call the method
         $banList = $this->banManager->getBannedUsers();
 
-        // assert result type
+        // assert result
         $this->assertIsArray($banList);
     }
 
@@ -198,9 +197,10 @@ class BanManagerTest extends TestCase
     {
         $bannedCount = 5;
 
-        // expect ban repository call
-        $this->banRepositoryMock->expects($this->once())->method('count')
-            ->with(['status' => 'active'])->willReturn($bannedCount);
+        // mock count get
+        $this->banRepositoryMock->expects($this->once())->method('count')->with([
+            'status' => 'active'
+        ])->willReturn($bannedCount);
 
         // call tested method
         $result = $this->banManager->getBannedCount();

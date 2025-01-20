@@ -3,6 +3,7 @@
 namespace App\Tests\Manager;
 
 use Exception;
+use App\Entity\User;
 use App\Util\AppUtil;
 use Doctrine\DBAL\Result;
 use App\Manager\LogManager;
@@ -39,7 +40,7 @@ class DatabaseManagerTest extends TestCase
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
-        // initialize the database manager instance
+        // initialize database manager
         $this->databaseManager = new DatabaseManager(
             $this->appUtilMock,
             $this->logManagerMock,
@@ -56,7 +57,7 @@ class DatabaseManagerTest extends TestCase
      */
     public function testGetDatabaseConnection(): void
     {
-        // call the method
+        // call tested method
         $connection = $this->databaseManager->getDatabaseConnection();
 
         // assert result
@@ -73,7 +74,7 @@ class DatabaseManagerTest extends TestCase
         // mock executeQuery exception return
         $this->connectionMock->method('executeQuery')->willThrowException(new Exception());
 
-        // call the method
+        // call tested method
         $result = $this->databaseManager->isDatabaseDown();
 
         // assert result
@@ -81,7 +82,7 @@ class DatabaseManagerTest extends TestCase
     }
 
     /**
-     * Test get the list of databases
+     * Test get databases list
      *
      * @return void
      */
@@ -256,8 +257,7 @@ class DatabaseManagerTest extends TestCase
     public function testDoesRecordExist(): void
     {
         // mock data fetch
-        $this->connectionMock->method('fetchAssociative')
-            ->willReturn(['count' => 1]);
+        $this->connectionMock->method('fetchAssociative')->willReturn(['count' => 1]);
 
         // call tested method
         $result = $this->databaseManager->doesRecordExist('test_db', 'test_table', 1);
@@ -274,8 +274,7 @@ class DatabaseManagerTest extends TestCase
     public function testDoesRecordNotExist(): void
     {
         // mock data fetch
-        $this->connectionMock->method('fetchAssociative')
-            ->willReturn(['count' => 0]);
+        $this->connectionMock->method('fetchAssociative')->willReturn(['count' => 0]);
 
         // call tested method
         $result = $this->databaseManager->doesRecordExist('test_db', 'test_table', 1);
@@ -291,6 +290,7 @@ class DatabaseManagerTest extends TestCase
      */
     public function testAddRowToTable(): void
     {
+        // testing data
         $formData = [
             'name' => 'John Doe',
             'email' => 'john.doe@example.com',
@@ -315,8 +315,14 @@ class DatabaseManagerTest extends TestCase
         $this->databaseManager->addRowToTable($formData, 'test_db', 'test_table');
     }
 
+    /**
+     * Test add row to table throws exception
+     *
+     * @return void
+     */
     public function testAddRowToTableThrowsException(): void
     {
+        // testing data
         $formData = [
             'name' => 'John Doe',
             'email' => 'john.doe@example.com',
@@ -325,8 +331,9 @@ class DatabaseManagerTest extends TestCase
         ];
 
         // expect executeQuery call
-        $this->connectionMock->expects($this->once())->method('executeQuery')
-            ->willThrowException(new Exception('Database error'));
+        $this->connectionMock->expects($this->once())->method('executeQuery')->willThrowException(
+            new Exception('Database error')
+        );
 
         // expect handle error call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
@@ -345,6 +352,7 @@ class DatabaseManagerTest extends TestCase
      */
     public function testUpdateRowById(): void
     {
+        // testing data
         $formData = [
             'name' => 'John Doe',
             'email' => 'john.doe@example.com',
@@ -376,6 +384,7 @@ class DatabaseManagerTest extends TestCase
      */
     public function testUpdateRowByIdThrowsException(): void
     {
+        // testing data
         $formData = [
             'name' => 'John Doe',
             'email' => 'john.doe@example.com',
@@ -384,8 +393,9 @@ class DatabaseManagerTest extends TestCase
         ];
 
         // expect executeQuery call with exception throw
-        $this->connectionMock->expects($this->once())->method('executeQuery')
-            ->willThrowException(new Exception('Database error'));
+        $this->connectionMock->expects($this->once())->method('executeQuery')->willThrowException(
+            new Exception('Database error')
+        );
 
         // expect handle error call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
@@ -455,8 +465,9 @@ class DatabaseManagerTest extends TestCase
     public function testTableTruncateThrowsException(): void
     {
         // expect executeStatement call
-        $this->connectionMock->expects($this->once())->method('executeStatement')
-            ->willThrowException(new Exception('Database error'));
+        $this->connectionMock->expects($this->once())->method('executeStatement')->willThrowException(
+            new Exception('Database error')
+        );
 
         // expect handleError call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
@@ -466,6 +477,20 @@ class DatabaseManagerTest extends TestCase
 
         // call tested method
         $this->databaseManager->tableTruncate('test_db', 'test_table');
+    }
+
+    /**
+     * Test get entity table name
+     *
+     * @return void
+     */
+    public function testGetEntityTableName(): void
+    {
+        // call tested method
+        $result = $this->databaseManager->getEntityTableName(User::class);
+
+        // assert result
+        $this->assertIsString($result);
     }
 
     /**
@@ -509,10 +534,8 @@ class DatabaseManagerTest extends TestCase
      */
     public function testSplitQueriesEmptyQuery(): void
     {
-        $sql = '';
-
         // call tested method
-        $queries = $this->databaseManager->splitQueries($sql);
+        $queries = $this->databaseManager->splitQueries('');
 
         // assert result
         $this->assertCount(0, $queries);

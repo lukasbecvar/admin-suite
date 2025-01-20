@@ -31,7 +31,6 @@ class ErrorManagerTest extends TestCase
 
         // create the error manager instance
         $this->errorManager = new ErrorManager($this->twigMock, $this->loggerMock);
-        ;
     }
 
     /**
@@ -39,7 +38,7 @@ class ErrorManagerTest extends TestCase
      *
      * @return void
      */
-    public function testHandleError(): void
+    public function testHandleErrorException(): void
     {
         // expect the HttpException
         $this->expectException(HttpException::class);
@@ -59,8 +58,7 @@ class ErrorManagerTest extends TestCase
     {
         // expect the error view
         $this->twigMock->expects($this->once())->method('render')
-            ->with('error/error-404.twig')
-            ->willReturn('error view');
+            ->with('error/error-404.twig')->willReturn('error view');
 
         // call tested method
         $result = $this->errorManager->getErrorView(Response::HTTP_NOT_FOUND);
@@ -74,11 +72,15 @@ class ErrorManagerTest extends TestCase
      *
      * @return void
      */
-    public function testLogError(): void
+    public function testLogErrorToExceptionLog(): void
     {
         // expect the logger error
-        $this->loggerMock->expects($this->once())->method('error')
-            ->with('error message', ['code' => Response::HTTP_NOT_FOUND]);
+        $this->loggerMock->expects($this->once())->method('error')->with(
+            'error message',
+            [
+                'code' => Response::HTTP_NOT_FOUND
+            ]
+        );
 
         // call tested method
         $this->errorManager->logError('error message', Response::HTTP_NOT_FOUND);

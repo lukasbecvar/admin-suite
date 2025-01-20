@@ -43,7 +43,7 @@ class NotificationsManagerTest extends TestCase
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $this->repositoryMock = $this->createMock(NotificationSubscriberRepository::class);
 
-        // create instance of NotificationsManager with mocked dependencies
+        // create notifications manager instance
         $this->notificationsManager = new NotificationsManager(
             $this->appUtilMock,
             $this->logManagerMock,
@@ -53,6 +53,40 @@ class NotificationsManagerTest extends TestCase
             $this->entityManagerMock,
             $this->repositoryMock
         );
+    }
+
+    /**
+     * Test check is push notifications enabled when enabled
+     *
+     * @return void
+     */
+    public function testCheckIsPushNotificationsEnabledWhenEnabled(): void
+    {
+        // simulate PUSH_NOTIFICATIONS_ENABLED
+        $this->appUtilMock->expects($this->once())->method('getEnvValue')->willReturn('true');
+
+        // call tested method
+        $result = $this->notificationsManager->checkIsPushNotificationsEnabled();
+
+        // assert result
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Test check is push notifications enabled when disabled
+     *
+     * @return void
+     */
+    public function testCheckIsPushNotificationsEnabledWhenDisabled(): void
+    {
+        // simulate PUSH_NOTIFICATIONS_ENABLED
+        $this->appUtilMock->expects($this->once())->method('getEnvValue')->willReturn('false');
+
+        // call tested method
+        $result = $this->notificationsManager->checkIsPushNotificationsEnabled();
+
+        // assert result
+        $this->assertFalse($result);
     }
 
     /**
@@ -67,15 +101,13 @@ class NotificationsManagerTest extends TestCase
             new NotificationSubscriber(),
             new NotificationSubscriber(),
         ];
-
-        // expect findBy method call
         $this->repositoryMock->expects($this->once())->method('findBy')->with(['status' => 'open'])
             ->willReturn($notificationsSubscribers);
 
         // call tested method
         $result = $this->notificationsManager->getNotificationsSubscribers('open');
 
-        // check result
+        // assert result
         $this->assertEquals($notificationsSubscribers, $result);
     }
 
@@ -96,7 +128,7 @@ class NotificationsManagerTest extends TestCase
         // call tested method
         $result = $this->notificationsManager->getSubscriberIdByEndpoint('endpoint');
 
-        // check result
+        // assert result
         $this->assertEquals($notificationsSubscriber->getId(), $result);
     }
 
@@ -120,6 +152,10 @@ class NotificationsManagerTest extends TestCase
 
         // call tested method
         $result = $this->notificationsManager->regenerateVapidKeys();
+
+        // assert result
+        $this->assertArrayHasKey('publicKey', $result);
+        $this->assertArrayHasKey('privateKey', $result);
     }
 
     /**

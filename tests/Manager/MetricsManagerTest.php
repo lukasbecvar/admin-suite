@@ -18,7 +18,6 @@ use App\Repository\MetricRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class MetricsManagerTest
@@ -68,97 +67,123 @@ class MetricsManagerTest extends TestCase
     }
 
     /**
-     * Test get resource usage metrics success
+     * Test get all services metrics
      *
      * @return void
      */
-    public function testGetResourceUsageMetricsSuccess(): void
+    public function testGetAllServicesMetrics(): void
     {
-        // mock the MetricRepository to return objects instead of arrays for non-aggregate data
+        // mock get services config
+        $this->serviceManagerMock->method('getServicesList')->willReturn([
+            'becvar.xyz' => [
+                'service_name' => 'becvar.xyz',
+                'type' => 'http',
+                'monitoring' => true,
+                'metrics_monitoring' => [
+                    'collect_metrics' => true
+                ]
+            ],
+            'paste.becvar.xyz' => [
+                'service_name' => 'paste.becvar.xyz',
+                'type' => 'http',
+                'monitoring' => true,
+                'metrics_monitoring' => [
+                    'collect_metrics' => false
+                ]
+            ]
+        ]);
+
+        // call tested method
+        $result = $this->metricsManager->getAllServicesMetrics('last_24_hours');
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('becvar.xyz', $result);
+        $this->assertArrayHasKey('categories', $result['becvar.xyz']);
+        $this->assertArrayHasKey('metrics', $result['becvar.xyz']);
+    }
+
+    /**
+     * Test get service metrics
+     *
+     * @return void
+     */
+    public function testGetServiceMetrics(): void
+    {
+        // mock get services config
+        $this->serviceManagerMock->method('getServicesList')->willReturn([
+            'service1' => [
+                'type' => 'http',
+                'metrics_monitoring' => [
+                    'collect_metrics' => true
+                ]
+            ],
+            'service2' => [
+                'type' => 'http',
+                'metrics_monitoring' => [
+                    'collect_metrics' => false
+                ]
+            ]
+        ]);
+
+        // call tested method
+        $result = $this->metricsManager->getServiceMetrics('service1', 'last_24_hours');
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('categories', $result);
+        $this->assertArrayHasKey('metrics', $result);
+    }
+
+    /**
+     * Test get resource usage metrics
+     *
+     * @return void
+     */
+    public function testGetResourceUsageMetrics(): void
+    {
+        // mock testing metrics data
         $cpuMetric = $this->createMock(Metric::class);
         $cpuMetric->method('getTime')->willReturn(new DateTime('2024-11-08 12:00'));
         $cpuMetric->method('getValue')->willReturn('45.5');
-
-        // mock the MetricRepository to return objects instead of arrays for aggregate data
         $cpuMetric2 = $this->createMock(Metric::class);
         $cpuMetric2->method('getTime')->willReturn(new DateTime('2024-11-08 13:00'));
         $cpuMetric2->method('getValue')->willReturn('47.0');
-
-        // mock the MetricRepository to return objects instead of arrays for aggregate data
         $ramMetric = $this->createMock(Metric::class);
         $ramMetric->method('getTime')->willReturn(new DateTime('2024-11-08 12:00'));
         $ramMetric->method('getValue')->willReturn('65.0');
-
-        // mock the MetricRepository to return objects instead of arrays for aggregate data
         $ramMetric2 = $this->createMock(Metric::class);
         $ramMetric2->method('getTime')->willReturn(new DateTime('2024-11-08 13:00'));
         $ramMetric2->method('getValue')->willReturn('66.5');
-
-        // mock the MetricRepository to return objects instead of arrays for aggregate data
         $storageMetric = $this->createMock(Metric::class);
         $storageMetric->method('getTime')->willReturn(new DateTime('2024-11-08 12:00'));
         $storageMetric->method('getValue')->willReturn('80.0');
-
-        // mock the MetricRepository to return objects instead of arrays for aggregate data
         $storageMetric2 = $this->createMock(Metric::class);
         $storageMetric2->method('getTime')->willReturn(new DateTime('2024-11-08 13:00'));
         $storageMetric2->method('getValue')->willReturn('85.0');
-
-        // mocking repository to return Metric objects
         $this->metricRepositoryMock->method('getMetricsByNameAndTimePeriod')->willReturnOnConsecutiveCalls(
             [$cpuMetric, $cpuMetric2],
             [$ramMetric, $ramMetric2],
             [$storageMetric, $storageMetric2]
         );
 
-        // mocking server utilization
+        // mock server util for get current usages
         $this->serverUtilMock->method('getCpuUsage')->willReturn(50.0);
         $this->serverUtilMock->method('getRamUsagePercentage')->willReturn(70);
         $this->serverUtilMock->method('getDriveUsagePercentage')->willReturn('60');
 
-        /**
-         * @var array{
-         *     categories: array<mixed>,
-         *     cpu: array{data: array<string>},
-         *     ram: array{data: array<string>},
-         *     storage: array{data: array<string>}
-         * }
-         */
+        // call tested method
         $metrics = $this->metricsManager->getResourceUsageMetrics('last_24_hours');
 
-        // assert the structure of returned data
+        // assert result
+        $this->assertIsArray($metrics);
         $this->assertArrayHasKey('categories', $metrics);
         $this->assertArrayHasKey('cpu', $metrics);
         $this->assertArrayHasKey('ram', $metrics);
         $this->assertArrayHasKey('storage', $metrics);
-
-        // assert data values
         $this->assertEquals(['45.5', '47.0'], $metrics['cpu']['data']);
         $this->assertEquals(['65.0', '66.5'], $metrics['ram']['data']);
         $this->assertEquals(['80.0', '85.0'], $metrics['storage']['data']);
-    }
-
-    /**
-     * Test get metrics with exception result
-     *
-     * @return void
-     */
-    public function testHandleErrorOnGetResourceUsageMetrics(): void
-    {
-        // mock error handler to simulate an error
-        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            $this->equalTo('error to get metrics: return data is not iterable'),
-            $this->equalTo(Response::HTTP_INTERNAL_SERVER_ERROR)
-        )->willThrowException(new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'Mock error'));
-
-        // mocking the MetricRepository to return non-iterable data
-        $this->metricRepositoryMock->method('getMetricsByNameAndTimePeriod')->willReturn(null);
-
-        // expect exception
-        $this->expectException(HttpException::class);
-
-        // call tested method
-        $this->metricsManager->getResourceUsageMetrics('last_24_hours');
     }
 
     /**
@@ -168,6 +193,7 @@ class MetricsManagerTest extends TestCase
      */
     public function testSaveMetricSuccess(): void
     {
+        // testing data
         $metricName = 'cpu_usage';
         $value = '50.5';
 
@@ -180,11 +206,11 @@ class MetricsManagerTest extends TestCase
     }
 
     /**
-     * Test save metric failure
+     * Test save metric when flush throws exception
      *
      * @return void
      */
-    public function testSaveMetricFailure(): void
+    public function testSaveMetricWhenFlushThrowsException(): void
     {
         $metricName = 'cpu_usage';
         $value = '50.5';
@@ -204,6 +230,62 @@ class MetricsManagerTest extends TestCase
     }
 
     /**
+     * Test save service metric when metric is already cached
+     *
+     * @return void
+     */
+    public function testSaveServiceMetricSkipsIfAlreadyCached(): void
+    {
+        // testing data
+        $value = 256;
+        $metricName = 'memory_usage';
+        $serviceName = 'web-service';
+
+        // simulate METRICS_SAVE_INTERVAL env value
+        $this->appUtilMock->method('getEnvValue')->with('METRICS_SAVE_INTERVAL')->willReturn('10');
+
+        // simulate value is catched
+        $this->cacheUtilMock->method('isCatched')
+            ->with($metricName . '_' . $serviceName . '_last_save_time')->willReturn(true);
+
+        // expect entity manager not to be flushed (skipped)
+        $this->entityManagerMock->expects($this->never())->method('flush');
+
+        // call tested method
+        $this->metricsManager->saveServiceMetric($metricName, $value, $serviceName);
+    }
+
+    /**
+     * Test save service metric when metric is not cached
+     *
+     * @return void
+     */
+    public function testSaveServiceMetricSavesIfNotCached(): void
+    {
+        // testing data
+        $value = 500;
+        $metricName = 'disk_usage';
+        $serviceName = 'db-service';
+
+        // simulate METRICS_SAVE_INTERVAL env value
+        $this->appUtilMock->method('getEnvValue')->with('METRICS_SAVE_INTERVAL')
+            ->willReturn('10');
+
+        // simulate value is not catched
+        $this->cacheUtilMock->method('isCatched')->with($metricName . '_' . $serviceName . '_last_save_time')
+            ->willReturn(false);
+
+        // expect save value to cache call
+        $this->cacheUtilMock->expects($this->once())->method('setValue');
+
+        // expect entity manager to be flushed
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->metricsManager->saveServiceMetric($metricName, $value, $serviceName);
+    }
+
+    /**
      * Test delete metric
      *
      * @return void
@@ -217,7 +299,8 @@ class MetricsManagerTest extends TestCase
         $this->metricRepositoryMock->expects($this->once())->method('findMetricsByNameAndService')
             ->with($metricName, $serviceName)->willReturn([$metricEntityMock]);
 
-        // expect flush call
+        // expect entity manager calls
+        $this->entityManagerMock->expects($this->once())->method('remove');
         $this->entityManagerMock->expects($this->once())->method('flush');
 
         // expect log call

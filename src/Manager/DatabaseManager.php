@@ -343,59 +343,6 @@ class DatabaseManager
     }
 
     /**
-     * Get last page number for a specific table in a specific database
-     *
-     * @param string $dbName The name of the database
-     * @param string $tableName The name of the table
-     *
-     * @throws Exception Error getting last page number
-     *
-     * @return int The last page number
-     */
-    public function getLastPageNumber(string $dbName, string $tableName): int
-    {
-        // check if table exists
-        if (!$this->isTableExists($dbName, $tableName)) {
-            $this->errorManager->handleError(
-                message: 'table ' . $tableName . ' not found in database: ' . $dbName,
-                code: Response::HTTP_NOT_FOUND
-            );
-        }
-
-        // get number of rows in the table
-        $pageLimit = (int) $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
-
-        // build SQL query to get the total number of rows
-        $sql = "SELECT COUNT(*) AS total_rows FROM {$dbName}.{$tableName}";
-
-        try {
-            $stmt = $this->connection->executeQuery($sql);
-            $result = $stmt->fetchAssociative();
-
-            // check if result found
-            if (!$result || !isset($result['total_rows'])) {
-                $this->errorManager->handleError(
-                    message: 'error retrieving the total row count',
-                    code: Response::HTTP_INTERNAL_SERVER_ERROR
-                );
-            }
-
-            $totalRows = $result['total_rows'];
-
-            // calculate total number of pages
-            $totalPages = (int) ceil($totalRows / $pageLimit);
-
-            // return last page number
-            return max($totalPages, 1);
-        } catch (Exception $e) {
-            $this->errorManager->handleError(
-                message: 'error retrieving the total row count: ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
-    }
-
-    /**
      * Get list of columns in a specific table in a specific database
      *
      * @param string $dbName The name of the database

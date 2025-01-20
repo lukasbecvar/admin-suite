@@ -214,7 +214,7 @@ class DatabaseBrowserController extends AbstractController
                 $this->databaseManager->addRowToTable($formData, $databaseName, $tableName);
 
                 // get last page number
-                $lastPageNumber = $this->databaseManager->getLastPageNumber($databaseName, $tableName);
+                $lastPageNumber = $this->databaseManager->getLastTablePage($databaseName, $tableName);
 
                 // redirect to table browser
                 return $this->redirectToRoute('app_manager_database_table_browser', [
