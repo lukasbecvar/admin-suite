@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Class AuthenticatedCheckMiddlewareTest
  *
- * Test the Authenticated middleware
+ * Test cases for authenticated check middleware
  *
  * @package App\Tests\Middleware
  */
@@ -31,7 +31,7 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
         $this->authManagerMock = $this->createMock(AuthManager::class);
         $this->urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
 
-        // create the middleware instance
+        // create middleware instance
         $this->middleware = new AuthenticatedCheckMiddleware(
             $this->authManagerMock,
             $this->urlGeneratorMock
@@ -54,149 +54,78 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
     }
 
     /**
-     * Test user already logged in user
+     * Test request when user is logged in
      *
      * @return void
      */
-    public function testRequestUserAlreadyLoggedIn(): void
+    public function testRequestWhenUserIsLoggedIn(): void
     {
-        // mock the auth manager
-        $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(true);
-
-        // mock the url generator
+        // create testing request event
         $event = $this->createRequestEvent('/admin');
 
-        // call middleware tested method
+        // simulate user is logged in
+        $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(true);
+
+        // call tested middleware
         $this->middleware->onKernelRequest($event);
 
-        // assert the result
+        // assert response
         $this->assertNull($event->getResponse());
     }
 
     /**
-     * Test login page request
+     * Test request to admin page when user is not logged in
      *
      * @return void
      */
-    public function testRequestLoginPage(): void
+    public function testRequestToAdminPageWhenUserIsNotLoggedIn(): void
     {
-        // mock the auth manager
-        $this->authManagerMock->expects($this->never())->method('isUserLogedin');
+        // create testing request event
+        $event = $this->createRequestEvent('/dashboard');
 
-        // create request event
-        $event = $this->createRequestEvent('/login');
-
-        // call middleware tested method
-        $this->middleware->onKernelRequest($event);
-
-        // assert the result
-        $this->assertNull($event->getResponse());
-    }
-
-    /**
-     * Test register page request
-     *
-     * @return void
-     */
-    public function testRequestRegisterPage(): void
-    {
-        // mock the auth manager
-        $this->authManagerMock->expects($this->never())->method('isUserLogedin');
-
-        // create request event
-        $event = $this->createRequestEvent('/register');
-
-        // call middleware tested method
-        $this->middleware->onKernelRequest($event);
-
-        // assert the result
-        $this->assertNull($event->getResponse());
-    }
-
-    /**
-     * Test index component request
-     *
-     * @return void
-     */
-    public function testRequestRootPage(): void
-    {
-        // mock the auth manager
-        $this->authManagerMock->expects($this->never())->method('isUserLogedin');
-
-        // create request event
-        $event = $this->createRequestEvent('/');
-
-        // call middleware tested method
-        $this->middleware->onKernelRequest($event);
-
-        // assert the result
-        $this->assertNull($event->getResponse());
-    }
-
-    /**
-     * Test error page request
-     *
-     * @return void
-     */
-    public function testRequestErrorPage(): void
-    {
-        // mock the auth manager
-        $this->authManagerMock->expects($this->never())->method('isUserLogedin');
-
-        // create request event
-        $event = $this->createRequestEvent('/error');
-
-        // call middleware tested method
-        $this->middleware->onKernelRequest($event);
-
-        // assert the result
-        $this->assertNull($event->getResponse());
-    }
-
-    /**
-     * Test profiler page request
-     *
-     * @return void
-     */
-    public function testRequestProfilerPage(): void
-    {
-        // mock the auth manager
-        $this->authManagerMock->expects($this->never())->method('isUserLogedin');
-
-        // create request event
-        $event = $this->createRequestEvent('/_profiler');
-
-        // call middleware tested method
-        $this->middleware->onKernelRequest($event);
-
-        // assert the result
-        $this->assertNull($event->getResponse());
-    }
-
-    /**
-     * Test admin page (dashboard) request
-     *
-     * @return void
-     */
-    public function testRequestRedirectToLogin(): void
-    {
-        // mock the auth manager
+        // simulate user is not logged in
         $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(false);
 
-        // mock the url generator
+        // expect call url generator
         $this->urlGeneratorMock->expects($this->once())
             ->method('generate')->with('app_auth_login')->willReturn('/login');
 
-        // create request event
-        $event = $this->createRequestEvent('/dashboard');
-
-        // call middleware tested method
+        // call tested middleware
         $this->middleware->onKernelRequest($event);
 
-        // assert the result
-        $response = $event->getResponse();
+        // assert response
+        $this->assertInstanceOf(RedirectResponse::class, $event->getResponse());
+    }
 
-        // assert the result
-        $this->assertInstanceOf(RedirectResponse::class, $response);
+    /**
+     * Test request when pages are excluded from authentication check
+     *
+     * @return void
+     */
+    public function testRequestsForExcludedPages(): void
+    {
+        // list of excluded paths
+        $excludedPaths = [
+            '/login',
+            '/register',
+            '/',
+            '/error',
+            '/_profiler',
+        ];
+
+        // expect auth manager not called
+        $this->authManagerMock->expects($this->never())->method('isUserLogedin');
+
+        // test each excluded path
+        foreach ($excludedPaths as $path) {
+            // create testing request event
+            $event = $this->createRequestEvent($path);
+
+            // call tested middleware
+            $this->middleware->onKernelRequest($event);
+
+            // assert response
+            $this->assertNull($event->getResponse(), "Failed asserting for excluded path: $path");
+        }
     }
 }

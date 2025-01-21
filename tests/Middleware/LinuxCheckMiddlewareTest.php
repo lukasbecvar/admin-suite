@@ -35,7 +35,7 @@ class LinuxCheckMiddlewareTest extends TestCase
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
 
-        // create the middleware instance
+        // create middleware instance
         $this->middleware = new LinuxCheckMiddleware(
             $this->appUtilMock,
             $this->serverUtilMock,
@@ -45,13 +45,13 @@ class LinuxCheckMiddlewareTest extends TestCase
     }
 
     /**
-     * Test if the linux system is detected
+     * Test request when host system is linux
      *
      * @return void
      */
-    public function testRequestLinuxSystem(): void
+    public function testRequestWhenHostSystemIsLinux(): void
     {
-        // mock the server util
+        // simulate system is linux
         $this->serverUtilMock->expects($this->once())->method('isSystemLinux')->willReturn(true);
 
         // mock request event
@@ -59,44 +59,46 @@ class LinuxCheckMiddlewareTest extends TestCase
         $eventMock = $this->createMock(RequestEvent::class);
         $eventMock->expects($this->never())->method('setResponse');
 
-        // execute the middleware
+        // call tested middleware
         $this->middleware->onKernelRequest($eventMock);
     }
 
     /**
-     * Test if the linux system is not detected
+     * Test request when host system is not linux
      *
      * @return void
      */
-    public function testRequestNonLinuxSystem(): void
+    public function testRequestWhenHostSystemIsNotLinux(): void
     {
-        // mock the server util
+        // mock request event
+        /** @var RequestEvent & MockObject $eventMock */
+        $eventMock = $this->createMock(RequestEvent::class);
+
+        // simulate system is not linux
         $this->serverUtilMock->expects($this->once())->method('isSystemLinux')->willReturn(false);
 
-        // mock the app util
+        // simulate dev mode
         $this->appUtilMock->expects($this->once())->method('isDevMode')->willReturn(true);
 
-        // mock the error manager
+        // expect error handler called
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            'This system is only for linux.',
-            Response::HTTP_NOT_IMPLEMENTED
+            message: 'This system is only for linux.',
+            code: Response::HTTP_NOT_IMPLEMENTED
         );
 
-        // mock the error manager
+        // expect get error view called
         $this->errorManagerMock->expects($this->once())->method('getErrorView')->with(Response::HTTP_NOT_IMPLEMENTED)->willReturn(
             '<html><body><h1>Upgrade Required</h1></body></html>'
         );
 
-        // mock request event
-        /** @var RequestEvent & MockObject $eventMock */
-        $eventMock = $this->createMock(RequestEvent::class);
+        // expect middleware response
         $eventMock->expects($this->once())->method('setResponse')->with($this->callback(function (Response $response) {
             $this->assertEquals(Response::HTTP_NOT_IMPLEMENTED, $response->getStatusCode());
             $this->assertStringContainsString('Upgrade Required', (string) $response->getContent());
             return true;
         }));
 
-        // execute the middleware
+        // call tested middleware
         $this->middleware->onKernelRequest($eventMock);
     }
 }

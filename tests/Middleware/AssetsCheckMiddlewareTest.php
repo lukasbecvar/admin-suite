@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class AssetsCheckMiddlewareTest
  *
- * Test the assets check middleware
+ * Test cases for assets check middleware
  *
  * @package App\Tests\Middleware
  */
@@ -25,33 +25,31 @@ class AssetsCheckMiddlewareTest extends TestCase
 
     protected function setUp(): void
     {
-        // create mock objects for dependencies
+        // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        // create an instance of the class under test
+        // create middleware instance
         $this->middleware = new AssetsCheckMiddleware($this->appUtilMock, $this->loggerMock);
     }
 
     /**
-     * Test if the assets do not exist and the middleware handles the error response
+     * Test handle request when assets not exist
      *
      * @return void
      */
-    public function testRequestWithErrorResponse(): void
+    public function testRequestWhenAssetsNotExist(): void
     {
         /** @var RequestEvent&MockObject $eventMock */
         $eventMock = $this->createMock(RequestEvent::class);
 
-        // set up expectations for the mock objects
-        $this->appUtilMock->expects($this->once())
-            ->method('isAssetsExist')->willReturn(false);
+        // simulate assets not exist
+        $this->appUtilMock->expects($this->once())->method('isAssetsExist')->willReturn(false);
 
-        // mock the logger error method
-        $this->loggerMock->expects($this->once())
-            ->method('error')->with('build resources not found');
+        // expect call logger
+        $this->loggerMock->expects($this->once())->method('error')->with('build resources not found');
 
-        // mock the setResponse method
+        // expect middleware response
         $eventMock->expects($this->once())
             ->method('setResponse')->with($this->callback(function ($response) {
                 return $response instanceof Response
@@ -59,33 +57,30 @@ class AssetsCheckMiddlewareTest extends TestCase
                     && $response->getContent() === 'Error: build resources not found, please contact service administrator & report this bug on email: ' . ($_ENV['ADMIN_CONTACT'] ?? 'unknown');
             }));
 
-        // call middleware tested method
+        // call tested middleware
         $this->middleware->onKernelRequest($eventMock);
     }
 
     /**
-     * Test handle request without error response
+     * Test handle request when assets exist
      *
      * @return void
      */
-    public function testRequestWithoutErrorResponse(): void
+    public function testRequestWhenAssetsExist(): void
     {
         /** @var RequestEvent&MockObject $eventMock */
         $eventMock = $this->createMock(RequestEvent::class);
 
-        // set up expectations for the mock objects
-        $this->appUtilMock->expects($this->once())
-            ->method('isAssetsExist')->willReturn(true);
+        // simulate assets exist
+        $this->appUtilMock->expects($this->once())->method('isAssetsExist')->willReturn(true);
 
-        // mock the logger error method
-        $this->loggerMock->expects($this->never())
-            ->method('error');
+        // expect logger not called
+        $this->loggerMock->expects($this->never())->method('error');
 
-        // mock the setResponse method
-        $eventMock->expects($this->never())
-            ->method('setResponse');
+        // expect middleware response not called
+        $eventMock->expects($this->never())->method('setResponse');
 
-        // call middleware tested method
+        // call tested middleware
         $this->middleware->onKernelRequest($eventMock);
     }
 }

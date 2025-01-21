@@ -14,7 +14,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Class AutoLoginMiddlewareTest
  *
- * Test the auto login middleware
+ * Test cases for auto login middleware
  *
  * @package App\Tests\Middleware
  */
@@ -34,7 +34,7 @@ class AutoLoginMiddlewareTest extends TestCase
         $this->authManagerMock = $this->createMock(AuthManager::class);
         $this->userManagerMock = $this->createMock(UserManager::class);
 
-        // create the middleware instance
+        // create middleware instance
         $this->middleware = new AutoLoginMiddleware(
             $this->cookieUtilMock,
             $this->sessionUtilMock,
@@ -44,103 +44,103 @@ class AutoLoginMiddlewareTest extends TestCase
     }
 
     /**
-     * Test already logged in user
+     * Test request when user is already logged in
      *
      * @return void
      */
-    public function testRequestUserAlreadyLoggedIn(): void
+    public function testRequestWhenUserIsAlreadyLoggedIn(): void
     {
-        // mock the auth manager
+        // simulate user is logged in
         $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(true);
 
-        // mock the url generator
+        // expect cookie token get not called
         $this->cookieUtilMock->expects($this->never())->method('get');
 
-        // call middleware tested method
+        // call tested middleware
         $this->middleware->onKernelRequest();
     }
 
     /**
-     * Test cookie not set
+     * Test request when cookie token is not set
      *
      * @return void
      */
-    public function testRequestCookieNotSet(): void
+    public function testRequestWhenCookieTokenIsNotSet(): void
     {
-        // mock the auth manager
+        // simulate user is not logged in
         $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(false);
 
         // unser cookie token
         unset($_COOKIE['user-token']);
 
-        // mock the cookie util
+        // expect cookie token get not called
         $this->cookieUtilMock->expects($this->never())->method('get');
 
-        // call middleware tested method
+        // call tested middleware
         $this->middleware->onKernelRequest();
     }
 
     /**
-     * Test token not exists
+     * Test request when token is valid
      *
      * @return void
      */
-    public function testRequestTokenExists(): void
+    public function testRequestWhenTokenIsValid(): void
     {
-        // mock the user entity
+        // mock user entity
         $userToken = 'valid_token';
         $user = new User();
         $user->setUsername('testuser');
 
-        // mock the cookie util
+        // simulate user token found in cookie
         $this->cookieUtilMock->method('isCookieSet')->with('user-token')->willReturn(true);
 
-        // mock the auth manager
+        // simulate user is not logged in
         $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(false);
 
-        // mock the cookie util
+        // simulate get token from cookie
         $this->cookieUtilMock->expects($this->once())->method('get')->with('user-token')->willReturn($userToken);
 
-        // mock the user manager
+        // mock user manager
         $this->userManagerMock->expects($this->exactly(2))
             ->method('getUserRepository')->with(['token' => $userToken])->willReturn($user);
 
-        // mock the session util
+        // expect call login
         $this->authManagerMock->expects($this->once())->method('login')->with('testuser', true);
 
-        // call middleware tested method
+        // call tested middleware
         $this->middleware->onKernelRequest();
     }
 
     /**
-     * Test invalid token
+     * Test request when token is invalid
      *
      * @return void
      */
-    public function testRequestInvalidToken(): void
+    public function testRequestWhenTokenIsInvalid(): void
     {
-        // mock the user entity
+        // invalid token
         $userToken = 'invalid_token';
 
-        // mock the cookie util
+        // simulate user token found in cookie
         $this->cookieUtilMock->method('isCookieSet')->with('user-token')->willReturn(true);
 
-        // mock the auth manager
+        // simulate user is not logged in
         $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(false);
 
-        // mock the cookie util
+        // simulate get token from cookie
         $this->cookieUtilMock->expects($this->once())->method('get')->with('user-token')->willReturn($userToken);
 
-        // mock the user manager
+        // simulate user with token not found in database
         $this->userManagerMock->expects($this->once())->method('getUserRepository')->with(['token' => $userToken])->willReturn(null);
 
-        // mock the session util
+        // expect cookie token unset (logout invalid session)
         $this->cookieUtilMock->expects($this->once())->method('unset')->with('user-token');
 
-        // mock the session util
+        // expect call session destroy (logout invalid session)
         $this->sessionUtilMock->expects($this->once())->method('destroySession');
 
-        // call middleware tested method
+        // call tested middleware
         $this->middleware->onKernelRequest();
     }
 }

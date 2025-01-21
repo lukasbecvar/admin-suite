@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class AuthorizationMiddlewareTest
  *
- * Tests for the authorization middleware
+ * Test cases for authorization middleware
  *
  * @package App\Tests\Middleware
  */
@@ -31,25 +31,30 @@ class AuthorizationMiddlewareTest extends TestCase
         $this->twig = $this->createMock(Environment::class);
         $this->authManager = $this->createMock(AuthManager::class);
 
-        // create the middleware instance
+        // create middleware instance
         $this->authorizationMiddleware = new AuthorizationMiddleware($this->twig, $this->authManager);
     }
 
     /**
-     * test that a non-admin user is forbidden
+     * Test request when user is not authorized
      *
      * @return void
      */
-    public function testNonAdminUserIsForbidden(): void
+    public function testRequestWhenUserIsNotAuthorized(): void
     {
         // setup request and event
         $request = new Request();
         $request->attributes->set('_controller', 'App\Controller\AntiLogController::enableAntiLog');
-
-        // mock request event
         /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
+
+        // mock user
+        $mockUser = $this->createMock(User::class);
+        $this->authManager->method('isLoggedInUserAdmin')->willReturn(false);
+        $this->authManager->method('getLoggedUserRepository')->willReturn($mockUser);
+
+        // expect middleware response
         $event->expects($this->once())->method('setResponse')->with($this->callback(function ($response) {
             $this->assertInstanceOf(Response::class, $response);
             $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -57,25 +62,20 @@ class AuthorizationMiddlewareTest extends TestCase
             return true;
         }));
 
-        // mock AuthManager responses
-        $this->authManager->method('isLoggedInUserAdmin')->willReturn(false);
+        // expect call twig render
+        $this->twig->expects($this->once())->method('render')->with('component/no-permissions.twig')
+            ->willReturn('Forbidden content');
 
-        $mockUser = $this->createMock(User::class);
-        $this->authManager->method('getLoggedUserRepository')->willReturn($mockUser);
-
-        // mock Twig response
-        $this->twig->method('render')->willReturn('Forbidden content');
-
-        // call middleware tested method
+        // call tested middleware
         $this->authorizationMiddleware->onKernelRequest($event);
     }
 
     /**
-     * test that an admin user is allowed
+     * Test request when user is authorized
      *
      * @return void
      */
-    public function testAdminUserIsAllowed(): void
+    public function testRequestWhenUserIsAuthorized(): void
     {
         // setup request and event
         $request = new Request();
@@ -86,22 +86,22 @@ class AuthorizationMiddlewareTest extends TestCase
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
 
-        // mock AuthManager responses
+        // simulate user is admin
         $this->authManager->method('isLoggedInUserAdmin')->willReturn(true);
 
-        // call middleware tested method
+        // call tested middleware
         $this->authorizationMiddleware->onKernelRequest($event);
 
-        // assert that no response is set, indicating access is allowed
+        // expect response not set
         $event->expects($this->never())->method('setResponse');
     }
 
     /**
-     * test that no authorization annotation
+     * Test request to controller without authorization annotation
      *
      * @return void
      */
-    public function testNoAuthorizationAnnotationDefaultsToUser(): void
+    public function testRequestToControllerWithoutAuthorizationAnnotation(): void
     {
         // setup request and event
         $request = new Request();
@@ -112,13 +112,13 @@ class AuthorizationMiddlewareTest extends TestCase
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
 
-        // mock AuthManager responses
+        // simulate user is not admin
         $this->authManager->method('isLoggedInUserAdmin')->willReturn(false);
 
-        // call middleware tested method
+        // call tested middleware
         $this->authorizationMiddleware->onKernelRequest($event);
 
-        // assert that no response is set, indicating access is allowed
+        // expect response not set
         $event->expects($this->never())->method('setResponse');
     }
 }

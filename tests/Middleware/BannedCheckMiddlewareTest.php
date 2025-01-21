@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class BannedCheckMiddlewareTest
  *
- * Test the banned check middleware
+ * Test cases for banned check middleware
  *
  * @package App\Tests\Middleware
  */
@@ -30,11 +30,6 @@ class BannedCheckMiddlewareTest extends TestCase
     private BanManager & MockObject $banManager;
     private AuthManager & MockObject $authManager;
 
-    /**
-     * Sets up the mock objects before each test
-     *
-     * @return void
-     */
     protected function setUp(): void
     {
         // mock dependencies
@@ -44,7 +39,7 @@ class BannedCheckMiddlewareTest extends TestCase
         $this->banManager = $this->createMock(BanManager::class);
         $this->authManager = $this->createMock(AuthManager::class);
 
-        // create the middleware instance
+        // create middleware instance
         $this->middleware = new BannedCheckMiddleware(
             $this->appUtil,
             $this->twig,
@@ -55,72 +50,70 @@ class BannedCheckMiddlewareTest extends TestCase
     }
 
     /**
-     * Test request user banned
+     * Test request when user is banned
      *
      * @return void
      */
     public function testRequestUserBanned(): void
     {
-        // mock the app util
+        // mock env config
         $this->appUtil->method('getEnvValue')->willReturn('admin@example.com');
 
-        // mock the auth manager
+        // simulate user logged in
         $this->authManager->method('isUserLogedin')->willReturn(true);
         $this->authManager->method('getLoggedUserId')->willReturn(1);
 
-        // mock the ban manager
+        // simulate user is banned
         $this->banManager->method('isUserBanned')->with(1)->willReturn(true);
         $this->banManager->method('getBanReason')->with(1)->willReturn('Violation of terms');
 
-        // mock the twig environment
-        $this->twig->method('render')->with('error/error-banned.twig', [
+        // expect call twig render
+        $this->twig->expects($this->once())->method('render')->with('error/error-banned.twig', [
             'reason' => 'Violation of terms',
             'admin_contact' => 'admin@example.com'
         ])->willReturn('Rendered Template');
 
         // mock request event
         $request = new Request();
-
         /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
 
-        // mock the response
-        $event->expects($this->once())
-            ->method('setResponse')
-            ->with($this->callback(function ($response) {
-                return $response instanceof Response && $response->getStatusCode() === 403 && $response->getContent() === 'Rendered Template';
-            }));
+        // expect middleware response
+        $event->expects($this->once())->method('setResponse')->with($this->callback(function ($response) {
+            return $response instanceof Response &&
+                $response->getStatusCode() === Response::HTTP_FORBIDDEN &&
+                $response->getContent() === 'Rendered Template';
+        }));
 
-        // execute the middleware
+        // call tested middleware
         $this->middleware->onKernelRequest($event);
     }
 
     /**
-     * Test request user not banned
+     * Test request when user is not banned
      *
      * @return void
      */
-    public function testRequestUserNotBanned(): void
+    public function testRequestWhenUserIsNotBanned(): void
     {
-        // mock the auth manager
+        // simulate user logged in
         $this->authManager->method('isUserLogedin')->willReturn(true);
         $this->authManager->method('getLoggedUserId')->willReturn(1);
 
-        // mock the ban manager
+        // simulate user is not banned
         $this->banManager->method('isUserBanned')->with(1)->willReturn(false);
 
         // mock request event
         $request = new Request();
-
         /** @var RequestEvent&MockObject $event */
         $event = $this->createMock(RequestEvent::class);
         $event->method('getRequest')->willReturn($request);
 
-        // mock the response
+        // expect response not set
         $event->expects($this->never())->method('setResponse');
 
-        // execute the middleware
+        // call tested middleware
         $this->middleware->onKernelRequest($event);
     }
 }

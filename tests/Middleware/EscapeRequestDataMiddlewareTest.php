@@ -27,37 +27,33 @@ class EscapeRequestDataMiddlewareTest extends TestCase
 
     protected function setUp(): void
     {
-        // mock SecurityUtil
+        // mock dependencies
+        $this->requestStack = new RequestStack();
         $this->securityUtil = $this->createMock(SecurityUtil::class);
+        $urlGeneratorInterface = $this->createMock(UrlGeneratorInterface::class);
         $this->securityUtil->method('escapeString')->willReturnCallback(function (string $value) {
             return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5);
         });
-
-        // mock RequestStack
-        $this->requestStack = new RequestStack();
-
-        /** @var UrlGeneratorInterface&MockObject $urlGeneratorInterface */
-        $urlGeneratorInterface = $this->createMock(UrlGeneratorInterface::class);
 
         // create middleware instance
         $this->middleware = new EscapeRequestDataMiddleware($this->securityUtil, $urlGeneratorInterface);
     }
 
     /**
-     * Test the security escaping of request data
+     * Test escape request data
      *
      * @return void
      */
     public function testEscapeRequestData(): void
     {
-        // create a request with unescaped data
+        // create request with unescaped data
         $requestData = [
             'name' => '<script>alert("XSS Attack!");</script>',
             'email' => 'user@example.com',
             'message' => '<p>Hello, World!</p>'
         ];
 
-        // create a request and push it to RequestStack
+        // create request and push it to RequestStack
         $request = new Request([], $requestData);
         $this->requestStack->push($request);
 
@@ -68,7 +64,7 @@ class EscapeRequestDataMiddlewareTest extends TestCase
         /** @var Request $request */
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
-        // execute the middleware
+        // call tested middleware
         $this->middleware->onKernelRequest($event);
 
         // assert response
