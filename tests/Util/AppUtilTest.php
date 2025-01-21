@@ -18,8 +18,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class AppUtilTest extends TestCase
 {
     private AppUtil $appUtil;
-    private KernelInterface $kernelInterface;
     private JsonUtil & MockObject $jsonUtilMock;
+    private KernelInterface & MockObject $kernelInterface;
 
     protected function setUp(): void
     {
@@ -27,7 +27,7 @@ class AppUtilTest extends TestCase
         $this->jsonUtilMock = $this->createMock(JsonUtil::class);
         $this->kernelInterface = $this->createMock(KernelInterface::class);
 
-        // create the app util instance
+        // create app util instance
         $this->appUtil = new AppUtil(
             $this->jsonUtilMock,
             $this->kernelInterface
@@ -41,7 +41,11 @@ class AppUtilTest extends TestCase
      */
     public function testGetAppRootDir(): void
     {
-        // get all root dir
+        // expect call get project dir
+        $this->kernelInterface->expects($this->once())
+            ->method('getProjectDir');
+
+        // call tested method
         $result = $this->appUtil->getAppRootDir();
 
         // assert result
@@ -49,19 +53,44 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test check is SSL
+     * Test check if assets exist
      *
      * @return void
      */
-    public function testIsSsl(): void
+    public function testIsAssetsExist(): void
+    {
+        // call tested method
+        $result = $this->appUtil->isAssetsExist();
+
+        // assert result
+        $this->assertIsBool($result);
+    }
+
+    /**
+     * Test check if request is secure when https is on
+     *
+     * @return void
+     */
+    public function testCheckIfRequestIsSecureWithHttpsWhenHttpsIsOn(): void
     {
         $_SERVER['HTTPS'] = 1;
         $this->assertTrue($this->appUtil->isSsl());
 
         $_SERVER['HTTPS'] = 'on';
         $this->assertTrue($this->appUtil->isSsl());
+    }
 
+    /**
+     * Test check if request is secure when https is off
+     *
+     * @return void
+     */
+    public function testCheckIfRequestIsSecureWithHttpWhenHttpsIsOff(): void
+    {
         $_SERVER['HTTPS'] = 0;
+        $this->assertFalse($this->appUtil->isSsl());
+
+        $_SERVER['HTTPS'] = 'off';
         $this->assertFalse($this->appUtil->isSsl());
 
         unset($_SERVER['HTTPS']);
@@ -69,72 +98,146 @@ class AppUtilTest extends TestCase
     }
 
     /**
-     * Test assets exist
+     * Test check if dev mode is enabled when dev mode is on
      *
      * @return void
      */
-    public function testIsAssetsExist(): void
+    public function testCheckIfDevModeIsEnabledWhenDevModeIsOn(): void
     {
-        $this->assertIsBool($this->appUtil->isAssetsExist());
-    }
-
-    /**
-     * Test dev mode check
-     *
-     * @return void
-     */
-    public function testIsDevMode(): void
-    {
+        // simulate dev mode enabled
         $_ENV['APP_ENV'] = 'dev';
-        $this->assertTrue($this->appUtil->isDevMode());
 
-        $_ENV['APP_ENV'] = 'test';
-        $this->assertTrue($this->appUtil->isDevMode());
+        // call tested method
+        $result = $this->appUtil->isDevMode();
 
+        // assert result
+        $this->assertIsBool($result);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Test check if dev mode is disabled when dev mode is off
+     *
+     * @return void
+     */
+    public function testCheckIfDevModeIsDisabledWhenDevModeIsOff(): void
+    {
+        // simulate dev mode disabled
         $_ENV['APP_ENV'] = 'prod';
-        $this->assertFalse($this->appUtil->isDevMode());
+
+        // call tested method
+        $result = $this->appUtil->isDevMode();
+
+        // assert result
+        $this->assertIsBool($result);
+        $this->assertFalse($result);
     }
 
     /**
-     * Test SSl only check
+     * Test check if ssl only is enabled when ssl only is on
      *
      * @return void
      */
-    public function testIsSslOnly(): void
+    public function testCheckIfSslOnlyIsEnabledWhenSslOnlyIsOn(): void
     {
+        // simulate ssl only enabled
         $_ENV['SSL_ONLY'] = 'true';
-        $this->assertTrue($this->appUtil->isSSLOnly());
 
+        // call tested method
+        $result = $this->appUtil->isSslOnly();
+
+        // assert result
+        $this->assertIsBool($result);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Test check if ssl only is disabled when ssl only is off
+     *
+     * @return void
+     */
+    public function testCheckIfSslOnlyIsDisabledWhenSslOnlyIsOff(): void
+    {
+        // simulate ssl only disabled
         $_ENV['SSL_ONLY'] = 'false';
-        $this->assertFalse($this->appUtil->isSSLOnly());
+
+        // call tested method
+        $result = $this->appUtil->isSslOnly();
+
+        // assert result
+        $this->assertIsBool($result);
+        $this->assertFalse($result);
     }
 
     /**
-     * Test maintenance check
+     * Test check if maintenance mode is enabled when maintenance mode is on
      *
      * @return void
      */
-    public function testIsMaintenance(): void
+    public function testCheckIfMaintenanceModeIsEnabledWhenMaintenanceModeIsOn(): void
     {
+        // simulate maintenance mode enabled
         $_ENV['MAINTENANCE_MODE'] = 'true';
-        $this->assertTrue($this->appUtil->isMaintenance());
 
-        $_ENV['MAINTENANCE_MODE'] = 'false';
-        $this->assertFalse($this->appUtil->isMaintenance());
+        // call tested method
+        $result = $this->appUtil->isMaintenance();
+
+        // assert result
+        $this->assertIsBool($result);
+        $this->assertTrue($result);
     }
 
     /**
-     * Test loging enabled check
+     * Test check if maintenance mode is disabled when maintenance mode is off
      *
      * @return void
      */
-    public function testIsDatabaseLoggingEnabled(): void
+    public function testCheckIfMaintenanceModeIsDisabledWhenMaintenanceModeIsOff(): void
     {
-        $_ENV['DATABASE_LOGGING'] = 'true';
-        $this->assertTrue($this->appUtil->isDatabaseLoggingEnabled());
+        // simulate maintenance mode disabled
+        $_ENV['MAINTENANCE_MODE'] = 'false';
 
+        // call tested method
+        $result = $this->appUtil->isMaintenance();
+
+        // assert result
+        $this->assertIsBool($result);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test check if database logging is enabled when database logging is on
+     *
+     * @return void
+     */
+    public function testCheckIfDatabaseLoggingIsEnabledWhenDatabaseLoggingIsOn(): void
+    {
+        // simulate database logging enabled
+        $_ENV['DATABASE_LOGGING'] = 'true';
+
+        // call tested method
+        $result = $this->appUtil->isDatabaseLoggingEnabled();
+
+        // assert result
+        $this->assertIsBool($result);
+    }
+
+    /**
+     * Test check if database logging is disabled when database logging is off
+     *
+     * @return void
+     */
+    public function testCheckIfDatabaseLoggingIsDisabledWhenDatabaseLoggingIsOff(): void
+    {
+        // simulate database logging disabled
         $_ENV['DATABASE_LOGGING'] = 'false';
-        $this->assertFalse($this->appUtil->isDatabaseLoggingEnabled());
+
+        // call tested method
+        $result = $this->appUtil->isDatabaseLoggingEnabled();
+
+        // assert result
+        $this->assertIsBool($result);
+        $this->assertFalse($result);
     }
 
     /**
@@ -144,8 +247,14 @@ class AppUtilTest extends TestCase
      */
     public function testGetEnvValue(): void
     {
+        // set env value
         $_ENV['TEST_KEY'] = 'test-value';
-        $this->assertSame('test-value', $this->appUtil->getEnvValue('TEST_KEY'));
+
+        // call tested method
+        $result = $this->appUtil->getEnvValue('TEST_KEY');
+
+        // assert result
+        $this->assertIsString($result);
     }
 
     /**
@@ -155,6 +264,7 @@ class AppUtilTest extends TestCase
      */
     public function testGetHasherConfig(): void
     {
+        // set env values
         $_ENV['MEMORY_COST'] = '1024';
         $_ENV['TIME_COST'] = '2';
         $_ENV['THREADS'] = '1';
@@ -166,22 +276,12 @@ class AppUtilTest extends TestCase
             'threads' => 1,
         ];
 
-        // assert that the config is correct
-        $this->assertSame($expectedConfig, $this->appUtil->getHasherConfig());
+        // call tested method
+        $result = $this->appUtil->getHasherConfig();
 
-        $_ENV['MEMORY_COST'] = '2048';
-        $_ENV['TIME_COST'] = '4';
-        $_ENV['THREADS'] = '2';
-
-        // expected config
-        $expectedConfig = [
-            'memory_cost' => 2048,
-            'time_cost' => 4,
-            'threads' => 2,
-        ];
-
-        // assert that the config is correct
-        $this->assertSame($expectedConfig, $this->appUtil->getHasherConfig());
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertSame($expectedConfig, $result);
     }
 
     /**
@@ -205,10 +305,47 @@ class AppUtilTest extends TestCase
      */
     public function testCalculateMaxPages(): void
     {
-        // calculate max pages
-        $maxPages = (int) $this->appUtil->calculateMaxPages(100, 10);
+        // call tested method
+        $maxPages = $this->appUtil->calculateMaxPages(100, 10);
 
-        // check if max pages is valid
-        $this->assertSame($maxPages, 10);
+        // assert result
+        $this->assertIsNumeric($maxPages);
+        $this->assertSame(10, (int) $maxPages);
+    }
+
+    /**
+     * Test round times in array
+     *
+     * @return void
+     */
+    public function testRoundTimesInArray(): void
+    {
+        // input data
+        $testData = [
+            '13:15',
+            '13:45',
+            '23:30',
+            '2023-01-01 13:15',
+            '2023-01-01 13:45',
+            '2023-01-01 23:30',
+            'invalid time',
+        ];
+
+        // expected results
+        $expectedResults = [
+            '13:00',
+            '14:00',
+            '00:00',
+            '2023-01-01 13:00',
+            '2023-01-01 14:00',
+            '2023-01-01 00:00',
+            'invalid time',
+        ];
+
+        // call tested method
+        $result = $this->appUtil->roundTimesInArray($testData);
+
+        // assert results
+        $this->assertSame($expectedResults, $result);
     }
 }

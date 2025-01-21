@@ -27,13 +27,13 @@ class ServerUtilTest extends TestCase
 
     protected function setUp(): void
     {
-        // create mock error manager
+        // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->cacheUtilMock = $this->createMock(CacheUtil::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
 
-        // create instance of ServerUtil
+        // create server util instance
         $this->serverUtil = new ServerUtil(
             $this->appUtilMock,
             $this->cacheUtilMock,
@@ -58,7 +58,7 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test get cpu load average
+     * Test get cpu usage
      *
      * @return void
      */
@@ -81,13 +81,13 @@ class ServerUtilTest extends TestCase
     public function testGetRamUsage(): void
     {
         // call tested method
-        $ramUsage = $this->serverUtil->getRamUsage();
+        $result = $this->serverUtil->getRamUsage();
 
-        // assert that the result is an array with keys 'used', 'free', and 'total'
-        $this->assertIsArray($ramUsage);
-        $this->assertArrayHasKey('used', $ramUsage);
-        $this->assertArrayHasKey('free', $ramUsage);
-        $this->assertArrayHasKey('total', $ramUsage);
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('used', $result);
+        $this->assertArrayHasKey('free', $result);
+        $this->assertArrayHasKey('total', $result);
     }
 
     /**
@@ -98,54 +98,12 @@ class ServerUtilTest extends TestCase
     public function testGetRamUsagePercentage(): void
     {
         // call tested method
-        $ramUsagePercentage = $this->serverUtil->getRamUsagePercentage();
+        $result = $this->serverUtil->getRamUsagePercentage();
 
-        // assert that the result is an integer between 0 and 100
-        $this->assertIsInt($ramUsagePercentage);
-        $this->assertGreaterThanOrEqual(0, $ramUsagePercentage);
-        $this->assertLessThanOrEqual(100, $ramUsagePercentage);
-    }
-
-    /**
-     * Test get software info
-     *
-     * @return void
-     */
-    public function testGetSoftwareInfo(): void
-    {
-        // call tested method
-        $softwareInfo = $this->serverUtil->getSystemInfo();
-
-        // assert that the result is an array with keys 'packages' and 'distro'
-        $this->assertIsArray($softwareInfo);
-    }
-
-    /**
-     * Test check is web user sudo
-     *
-     * @return void
-     */
-    public function testIsWebUserSudo(): void
-    {
-        // call tested method
-        $isSudo = $this->serverUtil->isWebUserSudo();
-
-        // assert that the result is a boolean value
-        $this->assertIsBool($isSudo);
-    }
-
-    /**
-     * Test get drive usage percentage
-     *
-     * @return void
-     */
-    public function testGetDriveUsagePercentage(): void
-    {
-        // call tested method
-        $driveUsagePercentage = $this->serverUtil->getDriveUsagePercentage();
-
-        // assert that the result is a string
-        $this->assertIsString($driveUsagePercentage);
+        // assert result
+        $this->assertIsInt($result);
+        $this->assertGreaterThanOrEqual(0, $result);
+        $this->assertLessThanOrEqual(100, $result);
     }
 
     /**
@@ -156,10 +114,53 @@ class ServerUtilTest extends TestCase
     public function testGetStorageUsage(): void
     {
         // call tested method
-        $storageUsage = $this->serverUtil->getStorageUsage();
+        $result = $this->serverUtil->getStorageUsage();
 
-        // assert that the result is an integer
-        $this->assertIsInt($storageUsage);
+        // assert result
+        $this->assertIsInt($result);
+    }
+
+    /**
+     * Test get drive usage percentage
+     *
+     * @return void
+     */
+    public function testGetDriveUsagePercentage(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->getDriveUsagePercentage();
+
+        // assert result
+        $this->assertIsString($result);
+        $this->assertIsNumeric($result);
+    }
+
+    /**
+     * Test get web username
+     *
+     * @return void
+     */
+    public function testGetWebUsername(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->getWebUsername();
+
+        // assert result
+        $this->assertIsString($result);
+    }
+
+    /**
+     * Test check is system linux
+     *
+     * @return void
+     */
+    public function testCheckIsSystemLinux(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->isSystemLinux();
+
+        // assert result
+        $this->assertIsBool($result);
     }
 
     /**
@@ -177,6 +178,94 @@ class ServerUtilTest extends TestCase
     }
 
     /**
+     * Test check is web user sudo
+     *
+     * @return void
+     */
+    public function testIsWebUserSudo(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->isWebUserSudo();
+
+        // assert result
+        $this->assertIsBool($result);
+    }
+
+
+    /**
+     * Test get software info
+     *
+     * @return void
+     */
+    public function testGetSoftwareInfo(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->getSystemInfo();
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('kernel_version', $result);
+        $this->assertArrayHasKey('kernel_arch', $result);
+        $this->assertArrayHasKey('operating_system', $result);
+    }
+
+    /**
+     * Test get system installation date
+     *
+     * @return void
+     */
+    public function testGetSystemInstallInfo(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->getSystemInstallInfo();
+
+        // assert result
+        $this->assertIsString($result);
+    }
+
+    /**
+     * Test check if a service is installed
+     *
+     * @return void
+     */
+    public function testCheckisServiceInstalled(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->isServiceInstalled('nginx');
+
+        // assert result
+        $this->assertIsBool($result);
+    }
+
+    /**
+     * Test check if a php extension is installed
+     *
+     * @return void
+     */
+    public function testCheckIsPhpExtensionInstalled(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->isPhpExtensionInstalled('curl');
+
+        // assert result
+        $this->assertIsBool($result);
+    }
+
+    /**
+     * Test get not installed requirements
+     *
+     * @return void
+     */
+    public function testGetNotInstalledRequirements(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->getNotInstalledRequirements();
+
+        // assert result
+        $this->assertIsArray($result);
+    }
+
+    /**
      * Test get process list
      *
      * @return void
@@ -184,10 +273,13 @@ class ServerUtilTest extends TestCase
     public function testGetProcessList(): void
     {
         // call tested method
-        $processList = $this->serverUtil->getProcessList();
+        $result = $this->serverUtil->getProcessList();
 
-        // assert that the result is an array
-        $this->assertIsArray($processList);
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('pid', $result[0]);
+        $this->assertArrayHasKey('user', $result[0]);
+        $this->assertArrayHasKey('process', $result[0]);
     }
 
     /**

@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class FileSystemUtilTest
  *
- * This class tests the FileSystemUtil class
+ * Test cases for file system util
  *
  * @package App\Tests\Util
  */
@@ -26,7 +26,7 @@ class FileSystemUtilTest extends TestCase
         $this->appUtil = $this->createMock(AppUtil::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
 
-        // create the filesystem util instance
+        // create filesystem util instance
         $this->fileSystemUtil = new FileSystemUtil(
             $this->appUtil,
             $this->errorManager
@@ -53,17 +53,31 @@ class FileSystemUtilTest extends TestCase
     }
 
     /**
-     * Test check if file is executable
+     * Test check if file is executable when file is not executable
      *
      * @return void
      */
-    public function testIsFileExecutable(): void
+    public function testCheckIfFileIsExecutableWhenFileIsNotExecutable(): void
     {
         // call tested method
-        $result = $this->fileSystemUtil->isFileExecutable('/var/www/balbla.txt');
+        $result = $this->fileSystemUtil->isFileExecutable('/etc/os-release');
 
         // assert result is bool
-        $this->assertIsBool($result);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test check if file is executable when file is executable
+     *
+     * @return void
+     */
+    public function testCheckIfFileIsExecutableWhenFileIsExecutable(): void
+    {
+        // call tested method
+        $result = $this->fileSystemUtil->isFileExecutable('/usr/bin/ls');
+
+        // assert result is bool
+        $this->assertTrue($result);
     }
 
     /**
@@ -74,10 +88,11 @@ class FileSystemUtilTest extends TestCase
     public function testDetectMediaType(): void
     {
         // call tested method
-        $result = $this->fileSystemUtil->detectMediaType('/var/www/balbla.txt');
+        $result = $this->fileSystemUtil->detectMediaType('/etc/os-release');
 
-        // assert result is string
+        // assert result
         $this->assertIsString($result);
+        $this->assertEquals('non-mediafile', $result);
     }
 
     /**

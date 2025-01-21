@@ -34,127 +34,157 @@ class VisitorInfoUtilTest extends TestCase
     }
 
     /**
-     * Test get visitor ip when the HTTP_CLIENT_IP server variable is set
+     * Test get visitor ip when HTTP_CLIENT_IP header is set
      *
      * @return void
      */
-    public function testGetIpWithClientIp(): void
+    public function testGetIpWhenHttpClientIpHeaderIsSet(): void
     {
-        // set the server variables
+        // set server variables
         $_SERVER['HTTP_CLIENT_IP'] = '192.168.0.1';
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '';
         $_SERVER['REMOTE_ADDR'] = '192.168.0.2';
 
-        // assert IP is '
-        $this->assertEquals('192.168.0.1', $this->visitorInfoUtil->getIP());
+        // call tested method
+        $result = $this->visitorInfoUtil->getIP();
 
-        // unset the server variables
+        // assert result
+        $this->assertEquals('192.168.0.1', $result);
+
+        // unset server variables
         unset($_SERVER['HTTP_CLIENT_IP']);
         unset($_SERVER['HTTP_X_FORWARDED_FOR']);
         unset($_SERVER['REMOTE_ADDR']);
     }
 
     /**
-     * Test get visitor ip when the HTTP_X_FORWARDED_FOR server variable is set
+     * Test get visitor ip when HTTP_X_FORWARDED_FOR header is set
      *
      * @return void
      */
-    public function testGetIpWithForwardedFor(): void
+    public function testGetIpWhenHttpXForwardedForHeaderIsSet(): void
     {
-        // set the server variables
+        // set server variables
         $_SERVER['HTTP_CLIENT_IP'] = '';
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '192.168.0.3';
         $_SERVER['REMOTE_ADDR'] = '192.168.0.4';
 
-        // assert IP is '
-        $this->assertEquals('192.168.0.3', $this->visitorInfoUtil->getIP());
+        // call tested method
+        $result = $this->visitorInfoUtil->getIP();
 
-        // unset the server variables
+        // assert result
+        $this->assertEquals('192.168.0.3', $result);
+
+        // unset server variables
         unset($_SERVER['HTTP_CLIENT_IP']);
         unset($_SERVER['HTTP_X_FORWARDED_FOR']);
         unset($_SERVER['REMOTE_ADDR']);
     }
 
     /**
-     * Test get visitor ip when the REMOTE_ADDR server variable is set
+     * Test get visitor ip when REMOTE_ADDR header is set
      *
      * @return void
      */
-    public function testGetIpWithRemoteAddr(): void
+    public function testGetIpWhenRemoteAddrHeaderIsSet(): void
     {
-        // set the server variables
+        // set server variables
         $_SERVER['HTTP_CLIENT_IP'] = '';
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '';
         $_SERVER['REMOTE_ADDR'] = '192.168.0.5';
 
-        // assert IP is '
-        $this->assertEquals('192.168.0.5', $this->visitorInfoUtil->getIP());
+        // call tested method
+        $result = $this->visitorInfoUtil->getIP();
 
-        // unset the server variables
+        // assert result
+        $this->assertEquals('192.168.0.5', $result);
+
+        // unset server variables
         unset($_SERVER['HTTP_CLIENT_IP']);
         unset($_SERVER['HTTP_X_FORWARDED_FOR']);
         unset($_SERVER['REMOTE_ADDR']);
     }
 
     /**
-     * Test get user agent when the HTTP_USER_AGENT server variable is set
+     * Test get user agent when HTTP_USER_AGENT header is set
      *
      * @return void
      */
-    public function testGetUserAgentWithUserAgent(): void
+    public function testGetUserAgentWhenHttpUserAgentHeaderIsSet(): void
     {
-        // set the server variable
+        // set server variable
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0';
 
-        // assert user agent is 'Mozilla/5.0' when the server variable is set
-        $this->assertEquals('Mozilla/5.0', $this->visitorInfoUtil->getUserAgent());
+        // call tested method
+        $result = $this->visitorInfoUtil->getUserAgent();
 
-        // unset the server variable
+        // assert result
+        $this->assertEquals('Mozilla/5.0', $result);
+
+        // unset server variable
         unset($_SERVER['HTTP_USER_AGENT']);
     }
 
     /**
-     * Test get user agent when the HTTP_USER_AGENT server variable is not set
+     * Test get user agent when HTTP_USER_AGENT header is not set
      *
      * @return void
      */
-    public function testGetUserAgentWithNoUserAgent(): void
+    public function testGetUserAgentWhenHttpUserAgentHeaderIsNotSet(): void
     {
-        // unset the server variable
+        // unset server variable
         unset($_SERVER['HTTP_USER_AGENT']);
 
-        // assert user agent is 'Unknown' when the server variable is not set
-        $this->assertEquals('Unknown', $this->visitorInfoUtil->getUserAgent());
+        // call tested method
+        $result = $this->visitorInfoUtil->getUserAgent();
+
+        // assert result
+        $this->assertEquals('Unknown', $result);
     }
 
     /**
-     * Test get browser method for getting the visitor's browser
+     * Test get shortified browser name when user agent is chrome
      *
      * @return void
      */
-    public function testGetBrowserShortify(): void
+    public function testGetShortifiedBrowserName(): void
     {
-        $shortifyBrowser = $this->visitorInfoUtil->getBrowserShortify(
+        // call tested method
+        $result = $this->visitorInfoUtil->getBrowserShortify(
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.9999.999 Safari/537.36'
         );
 
-        $unknownResult = $this->visitorInfoUtil->getBrowserShortify('Browser bla bla bla bla');
-
-        // assert browser result
-        $this->assertEquals('Chrome', $shortifyBrowser);
-        $this->assertEquals('Unknown', $unknownResult);
+        // assert result
+        $this->assertEquals('Chrome', $result);
     }
 
     /**
-     * Test get visitor os for getting the visitor's operating system
+     * Test get shortified browser name when user agent is unknown
      *
      * @return void
      */
-    public function testGetOs(): void
+    public function testGetShortifiedBrowserNameWhenUserAgentIsUnknown(): void
+    {
+        // call tested method
+        $result = $this->visitorInfoUtil->getBrowserShortify('Browser bla bla bla bla');
+
+        // assert result
+        $this->assertEquals('Unknown', $result);
+    }
+
+    /**
+     * Test get visitor os name
+     *
+     * @return void
+     */
+    public function testGetOsName(): void
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.9999.999 Safari/537.36';
 
-        // assert Windows OS
-        $this->assertEquals('Windows 10', $this->visitorInfoUtil->getOS());
+        // call tested method
+        $result = $this->visitorInfoUtil->getOS();
+
+        // assert result
+        $this->assertEquals('Windows 10', $result);
     }
 }

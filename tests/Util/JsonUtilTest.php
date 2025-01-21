@@ -29,18 +29,18 @@ class JsonUtilTest extends TestCase
      */
     public function testGetJsonFromFile(): void
     {
-        // test with existing JSON file
+        // arrange test data
         $expectedData = ['key' => 'value'];
         $filePath = tempnam(sys_get_temp_dir(), 'test_');
         file_put_contents($filePath, json_encode($expectedData));
 
-        // get JSON data from file
-        $jsonData = $this->jsonUtil->getJson($filePath);
+        // call tested method
+        $result = $this->jsonUtil->getJson($filePath);
 
-        // assert the data
-        $this->assertEquals($expectedData, $jsonData);
+        // assert result
+        $this->assertEquals($expectedData, $result);
 
-        // clean up the test file
+        // delete test file
         unlink($filePath);
     }
 
@@ -51,16 +51,18 @@ class JsonUtilTest extends TestCase
      */
     public function testGetJsonWithInvalidData(): void
     {
-        // test with invalid JSON data
+        // arrange test data
         $invalidJson = '{"key": "value"';
         $filePath = tempnam(sys_get_temp_dir(), 'test_');
         file_put_contents($filePath, $invalidJson);
 
-        // get JSON data from file
-        $jsonData = $this->jsonUtil->getJson($filePath);
-        $this->assertEmpty($jsonData);
+        // call tested method
+        $result = $this->jsonUtil->getJson($filePath);
 
-        // clean up the test file
+        // assert result
+        $this->assertEmpty($result);
+
+        // delete test file
         unlink($filePath);
     }
 }

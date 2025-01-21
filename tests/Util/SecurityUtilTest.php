@@ -28,23 +28,24 @@ class SecurityUtilTest extends TestCase
         $this->jsonUtilMock = $this->createMock(JsonUtil::class);
         $this->kernelInterface = $this->createMock(KernelInterface::class);
 
-        // create the security util instance
+        // create security util instance
         $this->securityUtil = new SecurityUtil(
             new AppUtil($this->jsonUtilMock, $this->kernelInterface)
         );
     }
 
     /**
-     * Test XSS escaping
+     * Test escape XSS in string when string is insecure
      *
      * @return void
      */
-    public function testEscapeXss(): void
+    public function testEscapeXssInStringWhenStringIsInsecure(): void
     {
+        // arrange test data
         $input = '<script>alert("XSS");</script>';
         $expectedOutput = '&lt;script&gt;alert(&quot;XSS&quot;);&lt;/script&gt;';
 
-        // call the method
+        // call tested method
         $result = $this->securityUtil->escapeString($input);
 
         // assert result
@@ -52,11 +53,11 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Test security escaping without XSS
+     * Test escape XSS in string when string is secure
      *
      * @return void
      */
-    public function testEscapeNonXss(): void
+    public function testEscapeXssInStringWhenStringIsSecure(): void
     {
         $input = 'Hello, World!';
         $expectedOutput = 'Hello, World!';
@@ -69,31 +70,34 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Test generating an Argon2 hash for a password
+     * Test generating Argon2 hash
      *
      * @return void
      */
     public function testGenerateHash(): void
     {
-        $password = 'testPassword123';
-        $hash = $this->securityUtil->generateHash($password);
+        // call tested method
+        $result = $this->securityUtil->generateHash('testPassword123');
 
-        // assert that the hash is a valid Argon2 hash
-        $info = password_get_info($hash);
+        // get result info
+        $info = password_get_info($result);
+
+        // assert result
         $this->assertEquals('argon2id', $info['algoName']);
     }
 
     /**
-     * Test verifying a password using an Argon2 hash
+     * Test verifying password when password is valid
      *
      * @return void
      */
-    public function testVerifyPasswordValid(): void
+    public function testVerifyPasswordWhenPasswordIsValid(): void
     {
+        // generate hash
         $password = 'testPassword123';
         $hash = $this->securityUtil->generateHash($password);
 
-        // call the method
+        // call tested method
         $result = $this->securityUtil->verifyPassword($password, $hash);
 
         // assert result
@@ -101,16 +105,17 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Test verifying an invalid password using an Argon2 hash
+     * Test verifying invalid when password is invalid
      *
      * @return void
      */
-    public function testVerifyPasswordInvalid(): void
+    public function testVerifyPasswordWhenPasswordIsInvalid(): void
     {
+        // generate hash
         $password = 'testPassword123';
         $hash = $this->securityUtil->generateHash($password);
 
-        // call the method
+        // call tested method
         $result = $this->securityUtil->verifyPassword('wrongPassword123', $hash);
 
         // assert result
@@ -118,19 +123,19 @@ class SecurityUtilTest extends TestCase
     }
 
     /**
-     * Test encrypt aes
+     * Test encrypting string to AES
      *
      * @return void
      */
-    public function testEncryptAes(): void
+    public function testEncryptStringToAes(): void
     {
         // encrypt string to aes
         $encryptedData = $this->securityUtil->encryptAes('test value');
 
-        // decrypt aes to string
+        // decrypt string from aes
         $decryptedData = $this->securityUtil->decryptAes($encryptedData);
 
-        // assert that the decrypted data is the same as the original data
+        // assert result
         $this->assertSame('test value', $decryptedData);
     }
 }

@@ -29,11 +29,11 @@ class CookieUtilTest extends TestCase
     }
 
     /**
-     * Test check is set cookie set
+     * Test check is cookie set
      *
      * @return void
      */
-    public function testIsCookieSet(): void
+    public function testCheckIsCookieSet(): void
     {
         // call tested method
         $value = $this->cookieUtil->isCookieSet('test_cookie');
@@ -43,21 +43,21 @@ class CookieUtilTest extends TestCase
     }
 
     /**
-     * Test get cookie value
+     * Test get value from cookie
      *
      * @return void
      */
-    public function testGet(): void
+    public function testGetValueFromCookie(): void
     {
         // set cookie values
         $name = 'test_cookie';
         $encryptedValue = 'encrypted_value';
         $decryptedValue = 'test_value';
 
-        // call the set method and then simulate the cookie set
+        // set value to cookie
         $_COOKIE[$name] = base64_encode($encryptedValue);
 
-        // mock the decryptAes method
+        // mock value decryption
         $this->securityUtilMock->expects($this->once())->method('decryptAes')
             ->with($encryptedValue)->willReturn($decryptedValue);
 
