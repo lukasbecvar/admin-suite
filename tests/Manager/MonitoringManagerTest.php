@@ -229,8 +229,8 @@ class MonitoringManagerTest extends TestCase
 
         // set new status to cache
         $this->cacheUtilMock->expects($this->once())->method('setValue')->with(
-            'monitoring-status-' . $serviceName,
-            $currentStatus
+            name: 'monitoring-status-' . $serviceName,
+            value: $currentStatus
         );
 
         // call tested method
@@ -256,8 +256,8 @@ class MonitoringManagerTest extends TestCase
 
         // set new status to cache
         $this->cacheUtilMock->expects($this->never())->method('setValue')->with(
-            'monitoring-status-' . $serviceName,
-            $currentStatus
+            name: 'monitoring-status-' . $serviceName,
+            value: $currentStatus
         );
 
         // expect send notification

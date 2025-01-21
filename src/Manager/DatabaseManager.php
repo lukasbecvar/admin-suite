@@ -561,9 +561,9 @@ class DatabaseManager
      *
      * @throws Exception Error deleting row
      *
-     * @return bool True if the row was deleted successfully, false otherwise
+     * @return void
      */
-    public function deleteRowById(string $dbName, string $tableName, int $id): bool
+    public function deleteRowById(string $dbName, string $tableName, int $id): void
     {
         // sql query to delete a row with the specific ID
         $sql = 'DELETE FROM ' . $dbName . '.' . $tableName . ' WHERE id = :id';
@@ -580,8 +580,6 @@ class DatabaseManager
                 message: "deleted row with ID: $id from table: $tableName in database: $dbName",
                 level: LogManager::LEVEL_NOTICE
             );
-
-            return true;
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error deleting row: ' . $e->getMessage() . ' from table: ' . $tableName . ' in database: ' . $dbName,

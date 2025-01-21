@@ -40,9 +40,6 @@ class UserManagerTest extends TestCase
         $this->userRepositoryMock = $this->createMock(UserRepository::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
-        // mock user repository
-        $this->entityManagerMock->method('getRepository')->willReturn($this->userRepositoryMock);
-
         // create user manager instance
         $this->userManager = new UserManager(
             $this->appUtilMock,
@@ -73,11 +70,11 @@ class UserManagerTest extends TestCase
     }
 
     /**
-     * Test get all users repos
+     * Test get all users repositories
      *
      * @return void
      */
-    public function testGetAllUserRepos(): void
+    public function testGetAllUsersRepositories(): void
     {
         // mock user repository
         $user = new User();
@@ -88,6 +85,24 @@ class UserManagerTest extends TestCase
 
         // assert result
         $this->assertIsArray($result);
+    }
+
+    /**
+     * Test get user by username
+     *
+     * @return void
+     */
+    public function testGetUserByUsername(): void
+    {
+        // mock find user
+        $this->userRepositoryMock->expects($this->once())->method('findOneBy')->with(['username' => 'test'])
+            ->willReturn($this->createMock(User::class));
+
+        // call tested method
+        $result = $this->userManager->getUserByUsername('test');
+
+        // assert result
+        $this->assertInstanceOf(User::class, $result);
     }
 
     /**
@@ -133,10 +148,10 @@ class UserManagerTest extends TestCase
      */
     public function testGetUsersCount(): void
     {
-        // call the method
+        // call tested method
         $result = $this->userManager->getUsersCount();
 
-        // assert the result
+        // assert result
         $this->assertSame(0, $result);
     }
 
@@ -150,10 +165,10 @@ class UserManagerTest extends TestCase
         // expect findBy method call
         $this->userRepositoryMock->expects($this->once())->method('findBy');
 
-        // call the method
+        // call tested method
         $result = $this->userManager->getUsersByPage(1);
 
-        // assert the result
+        // assert result
         $this->assertIsArray($result);
     }
 
@@ -168,10 +183,28 @@ class UserManagerTest extends TestCase
         $this->userRepositoryMock->expects($this->once())->method('findOneBy')->with(['username' => 'test'])
             ->willReturn($this->createMock(User::class));
 
-        // call the method
+        // call tested method
         $result = $this->userManager->checkIfUserExist('test');
 
-        // assert the result
+        // assert result
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Test check if user exist by id
+     *
+     * @return void
+     */
+    public function testCheckIfUserExistById(): void
+    {
+        // expect findOneBy method call
+        $this->userRepositoryMock->expects($this->once())->method('findOneBy')->with(['id' => 1])
+            ->willReturn($this->createMock(User::class));
+
+        // call tested method
+        $result = $this->userManager->checkIfUserExistById(1);
+
+        // assert result
         $this->assertTrue($result);
     }
 
@@ -187,10 +220,10 @@ class UserManagerTest extends TestCase
         $user->setUsername('test');
         $this->userRepositoryMock->method('findOneBy')->willReturn($user);
 
-        // call the method
+        // call tested method
         $result = $this->userManager->getUsernameById(1);
 
-        // assert the result
+        // assert result
         $this->assertEquals('test', $result);
     }
 
@@ -206,10 +239,10 @@ class UserManagerTest extends TestCase
         $user->setRole('ROLE_USER');
         $this->userRepositoryMock->method('findOneBy')->willReturn($user);
 
-        // call the method
+        // call tested method
         $result = $this->userManager->getUserRoleById(1);
 
-        // assert the result
+        // assert result
         $this->assertEquals('ROLE_USER', $result);
     }
 
@@ -225,10 +258,10 @@ class UserManagerTest extends TestCase
         $user->setRole('ADMIN');
         $this->userRepositoryMock->method('findOneBy')->willReturn($user);
 
-        // call the method
+        // call tested method
         $result = $this->userManager->isUserAdmin(1);
 
-        // assert the result
+        // assert result
         $this->assertTrue($result);
     }
 
@@ -243,30 +276,30 @@ class UserManagerTest extends TestCase
         $user = new User();
         $this->userRepositoryMock->method('findOneBy')->willReturn($user);
 
-        // mock the log manager
+        // expect call log manager
         $this->logManagerMock->expects($this->once())->method('log');
 
-        // mock the entity manager
+        // expect flush call
         $this->entityManagerMock->expects($this->once())->method('flush');
 
-        // call the method
+        // call tested method
         $this->userManager->updateUserRole(1, 'admin');
 
-        // assert the result
+        // assert result
         $this->assertEquals('ADMIN', $user->getRole());
     }
 
     /**
-     * Test is user database empty
+     * Test check if users database is empty
      *
      * @return void
      */
-    public function testIsUsersEmpty(): void
+    public function testCheckIfUsersDatabaseIsEmpty(): void
     {
-        // call get users empty status
+        // call tested method
         $result = $this->userManager->isUsersEmpty();
 
-        // assert the result
+        // assert result
         $this->assertIsBool($result);
     }
 
@@ -286,11 +319,14 @@ class UserManagerTest extends TestCase
         $this->entityManagerMock->expects($this->once())->method('remove')->with($user);
         $this->entityManagerMock->expects($this->once())->method('flush');
 
-        // mock log manager
-        $this->logManagerMock->expects($this->once())
-            ->method('log')->with('user-manager', 'user: testUser deleted');
+        // expect call log manager
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            name: 'user-manager',
+            message: 'user: testUser deleted',
+            level: LogManager::LEVEL_WARNING
+        );
 
-        // call method
+        // call tested method
         $this->userManager->deleteUser(1);
     }
 
@@ -313,20 +349,19 @@ class UserManagerTest extends TestCase
         $this->userRepositoryMock->expects($this->once())
             ->method('findOneBy')->with(['id' => $userId])->willReturn($user);
 
-        // configure logManagerMock
+        // expect call log manager
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            'account-settings',
-            'update username (' . $newUsername . ') for user: ' . $user->getUsername()
+            name: 'account-settings',
+            message: 'update username (' . $newUsername . ') for user: ' . $user->getUsername()
         );
 
-        // configure entityManagerMock
-        $this->entityManagerMock
-            ->expects($this->once())->method('flush');
+        // expect flush call
+        $this->entityManagerMock->expects($this->once())->method('flush');
 
-        // call the method under test
+        // call tested method
         $this->userManager->updateUsername($userId, $newUsername);
 
-        // assert that the username was updated correctly
+        // assert result
         $this->assertEquals($newUsername, $user->getUsername());
     }
 
@@ -345,24 +380,24 @@ class UserManagerTest extends TestCase
         $user = new User();
         $user->setUsername('testUser');
 
-        // configure userRepositoryMock
+        // mock find user
         $this->userRepositoryMock->expects($this->once())
             ->method('findOneBy')->with(['id' => $userId])->willReturn($user);
 
-        // configure securityUtil mock
+        // mock hash generator
         $this->securityUtilMock->expects($this->once())
             ->method('generateHash')->with($newPassword)->willReturn('hashedPassword123');
 
-        // configure logManagerMock
+        // expect call log manager
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            'account-settings',
-            'update password for user: ' . $user->getUsername()
+            name: 'account-settings',
+            message: 'update password for user: ' . $user->getUsername()
         );
 
-        // configure entityManagerMock
+        // expect flush call
         $this->entityManagerMock->expects($this->once())->method('flush');
 
-        // call the method under test
+        // call tested method
         $this->userManager->updatePassword($userId, $newPassword);
     }
 
@@ -381,24 +416,20 @@ class UserManagerTest extends TestCase
         $user = new User();
         $user->setUsername('testUser');
 
-        // configure userRepositoryMock
-        $this->userRepositoryMock
-            ->expects($this->once())
-            ->method('findOneBy')
-            ->with(['id' => $userId])
-            ->willReturn($user);
+        // mock user
+        $this->userRepositoryMock->expects($this->once())->method('findOneBy')
+            ->with(['id' => $userId])->willReturn($user);
 
-        // configure logManagerMock
-        $this->logManagerMock->expects($this->once())
-            ->method('log')->with(
-                'account-settings',
-                'update profile picture for user: ' . $user->getUsername()
-            );
+        // expect call log manager
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            name: 'account-settings',
+            message: 'update profile picture for user: ' . $user->getUsername()
+        );
 
-        // configure entityManagerMock
+        // expect flush call
         $this->entityManagerMock->expects($this->once())->method('flush');
 
-        // call the method under test
+        // call tested method
         $this->userManager->updateProfilePicture($userId, $newProfilePicture);
     }
 }

@@ -221,8 +221,8 @@ class MetricsManagerTest extends TestCase
 
         // expect error handling
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            $this->stringContains('error to save metric: Database error'),
-            $this->equalTo(Response::HTTP_INTERNAL_SERVER_ERROR)
+            message: 'error to save metric: Database error',
+            code: Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method
@@ -305,9 +305,9 @@ class MetricsManagerTest extends TestCase
 
         // expect log call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            $this->equalTo('metrics-manager'),
-            $this->stringContains('deleted metric: ' . $metricName . ' - ' . $serviceName),
-            $this->equalTo(LogManager::LEVEL_WARNING)
+            name: 'metrics-manager',
+            message: 'deleted metric: ' . $metricName . ' - ' . $serviceName,
+            level: LogManager::LEVEL_WARNING
         );
 
         // expect recalculate table ids call

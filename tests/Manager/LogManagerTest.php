@@ -121,8 +121,8 @@ class LogManagerTest extends TestCase
 
         // expect error handler call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            $this->stringContains('log-error: Database error'),
-            Response::HTTP_INTERNAL_SERVER_ERROR
+            message: 'log-error: Database error',
+            code: Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method

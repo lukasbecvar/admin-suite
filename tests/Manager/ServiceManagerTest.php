@@ -2,6 +2,7 @@
 
 namespace App\Tests\Manager;
 
+use App\Entity\User;
 use App\Util\AppUtil;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
@@ -33,7 +34,7 @@ class ServiceManagerTest extends TestCase
         $this->authManager = $this->createMock(AuthManager::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
 
-        // create the service manager instance
+        // create service manager instance
         $this->serviceManager = new ServiceManager(
             $this->appUtilMock,
             $this->logManager,
@@ -43,7 +44,45 @@ class ServiceManagerTest extends TestCase
     }
 
     /**
-     * Test check is service running
+     * Test get services list
+     *
+     * @return void
+     */
+    public function testGetServicesList(): void
+    {
+        // expect call config load
+        $this->appUtilMock->expects($this->once())->method('loadConfig');
+
+        // call tested method
+        $this->serviceManager->getServicesList();
+    }
+
+    /**
+     * Test run systemd action
+     *
+     * @return void
+     */
+    public function testRunSystemdAction(): void
+    {
+        // mock user logged in
+        $this->authManager->method('isUserLogedin')->willReturn(true);
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUsername')->willReturn('test_user');
+        $this->authManager->method('getLoggedUserRepository')->willReturn($userMock);
+
+        // expect call log manager
+        $this->logManager->expects($this->once())->method('log')->with(
+            name: 'action-runner',
+            message: 'test_user start test_service',
+            level: LogManager::LEVEL_WARNING
+        );
+
+        // call tested method
+        $this->serviceManager->runSystemdAction('test_service', 'start');
+    }
+
+    /**
+     * Test check if service is running
      *
      * @return void
      */
@@ -71,11 +110,11 @@ class ServiceManagerTest extends TestCase
     }
 
     /**
-     * Test check is ufw firewall running
+     * Test check if ufw firewall is running
      *
      * @return void
      */
-    public function testIsUfwRunning(): void
+    public function testCheckIfUfwIsRunning(): void
     {
         // call tested method
         $result = $this->serviceManager->isUfwRunning();
