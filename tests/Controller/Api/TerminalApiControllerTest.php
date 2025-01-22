@@ -42,7 +42,7 @@ class TerminalApiControllerTest extends CustomTestCase
         }
 
         // assert response
-        $this->assertSame('Command data is empty', $responseContent);
+        $this->assertSame('Error: command is not set', $responseContent);
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -90,7 +90,7 @@ class TerminalApiControllerTest extends CustomTestCase
         }
 
         // assert response
-        $this->assertNotSame('command data is empty', $responseContent);
+        $this->assertNotSame('Error: command is not set', $responseContent);
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

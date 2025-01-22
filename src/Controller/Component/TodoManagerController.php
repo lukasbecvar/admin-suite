@@ -2,6 +2,7 @@
 
 namespace App\Controller\Component;
 
+use Exception;
 use App\Manager\TodoManager;
 use App\Manager\ErrorManager;
 use App\Form\Todo\CreateTodoFormType;
@@ -56,11 +57,18 @@ class TodoManagerController extends AbstractController
             $formData = $form->getData();
             $todoText = (string) $formData->getTodoText();
 
-            // create todo
-            $this->todoManager->createTodo($todoText);
+            try {
+                // save new todo to database
+                $this->todoManager->createTodo($todoText);
 
-            // self redirect back to todo manager
-            return $this->redirectToRoute('app_todo_manager');
+                // redirect back to todo manager
+                return $this->redirectToRoute('app_todo_manager');
+            } catch (Exception $e) {
+                $this->errorManager->handleError(
+                    message: 'error to create todo: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
         }
 
         // return todo table page view
@@ -68,6 +76,150 @@ class TodoManagerController extends AbstractController
             'filter' => $filter,
             'todos' => $todos,
             'createTodoForm' => $form->createView()
+        ]);
+    }
+
+    /**
+     * Handle todo edit functionality
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The redirect back to todo manager
+     */
+    #[Route('/manager/todo/edit', methods:['GET'], name: 'app_todo_manager_edit')]
+    public function editTodo(Request $request): Response
+    {
+        // get request parameters
+        $todoId = (int) $request->query->get('id');
+        $newTodoText = (string) $request->query->get('todo');
+
+        // check if todo id is valid or not set
+        if ($todoId == 0) {
+            $this->errorManager->handleError(
+                message: 'invalid todo id',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check if new todo text is valid or not set
+        if (empty($newTodoText)) {
+            $this->errorManager->handleError(
+                message: 'todo text parameter are required',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        try {
+            // edit todo
+            $this->todoManager->editTodo($todoId, $newTodoText);
+
+            // redirect back to todo manager
+            return $this->redirectToRoute('app_todo_manager');
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to edit todo: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Handle todo close functionality
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The redirect back to todo manager
+     */
+    #[Route('/manager/todo/close', methods:['GET'], name: 'app_todo_manager_close')]
+    public function closeTodo(Request $request): Response
+    {
+        // get todo id from request parameter
+        $todoId = (int) $request->query->get('id');
+
+        // check if todo id is valid or not set
+        if ($todoId == 0) {
+            $this->errorManager->handleError(
+                message: 'invalid todo id',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        try {
+            // close todo
+            $this->todoManager->closeTodo($todoId);
+
+            // redirect back to todo manager
+            return $this->redirectToRoute('app_todo_manager');
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to close todo: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Handle todo reopen functionality
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The redirect back to todo manager
+     */
+    #[Route('/manager/todo/reopen', methods:['GET'], name: 'app_todo_manager_reopen')]
+    public function reopenTodo(Request $request): Response
+    {
+        // get todo id from request parameter
+        $todoId = (int) $request->query->get('id', '0');
+
+        // check if todo id is valid or not set
+        if ($todoId == 0) {
+            $this->errorManager->handleError(
+                message: 'invalid todo id',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        try {
+            // reopen todo
+            $this->todoManager->reopenTodo($todoId);
+
+            // redirect back to todo manager
+            return $this->redirectToRoute('app_todo_manager');
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to reopen todo: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Handle todo delete functionality
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The response todo manager redirect
+     */
+    #[Route('/manager/todo/delete', methods:['GET'], name: 'app_todo_manager_delete')]
+    public function deleteTodo(Request $request): Response
+    {
+        // get todo id from request parameter
+        $todoId = (int) $request->query->get('id', '0');
+
+        // check if todo id is valid or not set
+        if ($todoId == 0) {
+            $this->errorManager->handleError(
+                message: 'invalid todo id',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // delete todo
+        $this->todoManager->deleteTodo($todoId);
+
+        // self redirect back to todo manager
+        return $this->redirectToRoute('app_todo_manager', [
+            'filter' => 'closed'
         ]);
     }
 
@@ -92,133 +244,17 @@ class TodoManagerController extends AbstractController
             );
         }
 
-        // get todo info
-        $todoInfo = $this->todoManager->getTodoInfo($todoId);
+        try {
+            // get todo info
+            $todoInfo = $this->todoManager->getTodoInfo($todoId);
 
-        // return todo info in json format
-        return $this->json($todoInfo, Response::HTTP_OK);
-    }
-
-    /**
-     * Handle todo edit functionality
-     *
-     * @param Request $request The request object
-     *
-     * @return Response The response todo manager component redirect
-     */
-    #[Route('/manager/todo/edit', methods:['GET'], name: 'app_todo_manager_edit')]
-    public function editTodo(Request $request): Response
-    {
-        // get todo id
-        $todoId = (int) $request->query->get('id');
-        $newTodoText = (string) $request->query->get('todo');
-
-        // check if todo id is valid
-        if ($todoId == 0) {
+            // return todo info in json format
+            return $this->json($todoInfo, Response::HTTP_OK);
+        } catch (Exception $e) {
             $this->errorManager->handleError(
-                message: 'invalid todo id',
-                code: Response::HTTP_BAD_REQUEST
+                message: 'error to get todo info: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        // check if new todo text is valid
-        if ($newTodoText == '') {
-            $this->errorManager->handleError(
-                message: 'invalid todo text',
-                code: Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        // edit todo
-        $this->todoManager->editTodo($todoId, $newTodoText);
-
-        // self redirect back to todo manager
-        return $this->redirectToRoute('app_todo_manager');
-    }
-
-    /**
-     * Handle todo close functionality
-     *
-     * @param Request $request The request object
-     *
-     * @return Response The response todo manager component redirect
-     */
-    #[Route('/manager/todo/close', methods:['GET'], name: 'app_todo_manager_close')]
-    public function closeTodo(Request $request): Response
-    {
-        // get todo id
-        $todoId = (int) $request->query->get('id');
-
-        // check if todo id is valid
-        if ($todoId == 0) {
-            $this->errorManager->handleError(
-                message: 'invalid todo id',
-                code: Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        // close todo
-        $this->todoManager->closeTodo($todoId);
-
-        // self redirect back to todo manager
-        return $this->redirectToRoute('app_todo_manager');
-    }
-
-    /**
-     * Handle todo reopen functionality
-     *
-     * @param Request $request The request object
-     *
-     * @return Response The response todo manager component redirect
-     */
-    #[Route('/manager/todo/reopen', methods:['GET'], name: 'app_todo_manager_reopen')]
-    public function reopenTodo(Request $request): Response
-    {
-        // get todo id
-        $todoId = (int) $request->query->get('id');
-
-        // check if todo id is valid
-        if ($todoId == 0) {
-            $this->errorManager->handleError(
-                message: 'invalid todo id',
-                code: Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        // reopen todo
-        $this->todoManager->reopenTodo($todoId);
-
-        // self redirect back to todo manager
-        return $this->redirectToRoute('app_todo_manager');
-    }
-
-    /**
-     * Handle todo delete functionality
-     *
-     * @param Request $request The request object
-     *
-     * @return Response The response todo manager redirect
-     */
-    #[Route('/manager/todo/delete', methods:['GET'], name: 'app_todo_manager_delete')]
-    public function deleteTodo(Request $request): Response
-    {
-        // get todo id
-        $todoId = (int) $request->query->get('id');
-
-        // check if todo id is valid
-        if ($todoId == 0) {
-            $this->errorManager->handleError(
-                message: 'invalid todo id',
-                code: Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        // delete todo
-        $this->todoManager->deleteTodo($todoId);
-
-        // self redirect back to todo manager
-        return $this->redirectToRoute('app_todo_manager', [
-            'filter' => 'closed'
-        ]);
     }
 }

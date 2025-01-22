@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class RegenerateAuthTokensCommand
  *
- * Command to regenerate all users authentication tokens in the database
+ * Command to regenerate all users authentication tokens (invalidate remember me)
  *
  * @package App\Command
  */
@@ -33,13 +33,13 @@ class RegenerateAuthTokensCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @return int The status code
+     * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI visitor info
+        // set server headers for cli console
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
@@ -51,7 +51,7 @@ class RegenerateAuthTokensCommand extends Command
             $io->success('All tokens is regenerated');
             return Command::SUCCESS;
         } else {
-            $io->error('Token regeneration error: ' . $regenerateState['message']);
+            $io->error('Process error: ' . $regenerateState['message']);
             return Command::FAILURE;
         }
     }

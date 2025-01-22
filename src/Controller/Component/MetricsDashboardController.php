@@ -41,16 +41,23 @@ class MetricsDashboardController extends AbstractController
     #[Route('/metrics/dashboard', methods:['GET'], name: 'app_metrics_dashboard')]
     public function metricsDashboard(Request $request): Response
     {
-        // get metrics time period
+        // get metrics time period from request parameter
         $timePeriod = (string) $request->query->get('time_period', 'last_24_hours');
 
-        // get metrics data
-        $data = $this->metricsManager->getServiceMetrics('host-system', $timePeriod);
+        try {
+            // get metrics data
+            $data = $this->metricsManager->getServiceMetrics('host-system', $timePeriod);
 
-        // get current usages
-        $currentCpuUsage = $this->serverUtil->getCpuUsage();
-        $currentRamUsage = $this->serverUtil->getRamUsagePercentage();
-        $currentStorageUsage = $this->serverUtil->getDriveUsagePercentage();
+            // get current usages
+            $currentCpuUsage = $this->serverUtil->getCpuUsage();
+            $currentRamUsage = $this->serverUtil->getRamUsagePercentage();
+            $currentStorageUsage = $this->serverUtil->getDriveUsagePercentage();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get metrics data: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
         // return metrics dashboard view
         return $this->render('component/metrics-dashboard/metrics-dashboard.twig', [
@@ -64,7 +71,7 @@ class MetricsDashboardController extends AbstractController
     }
 
     /**
-     * Render service metrics page
+     * Render service metrics page for specific service
      *
      * @param Request $request The request object
      *
@@ -73,12 +80,19 @@ class MetricsDashboardController extends AbstractController
     #[Route('/metrics/service', methods:['GET'], name: 'app_metrics_service')]
     public function serviceMetrics(Request $request): Response
     {
-        // get metrics time period
+        // get request parameters
         $serviceName = (string) $request->query->get('service_name', 'host-system');
         $timePeriod = (string) $request->query->get('time_period', 'last_24_hours');
 
         // get metrics data
-        $data = $this->metricsManager->getServiceMetrics($serviceName, $timePeriod);
+        try {
+            $data = $this->metricsManager->getServiceMetrics($serviceName, $timePeriod);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get metrics data: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
         // return service metrics view
         return $this->render('component/metrics-dashboard/service-metrics.twig', [
@@ -92,7 +106,7 @@ class MetricsDashboardController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The service metrics view
+     * @return Response The services metrics view
      */
     #[Route('/metrics/service/all', methods:['GET'], name: 'app_metrics_services_all')]
     public function serviceMetricsAll(Request $request): Response
@@ -101,7 +115,14 @@ class MetricsDashboardController extends AbstractController
         $timePeriod = (string) $request->query->get('time_period', 'last_24_hours');
 
         // get metrics data
-        $data = $this->metricsManager->getAllServicesMetrics($timePeriod);
+        try {
+            $data = $this->metricsManager->getAllServicesMetrics($timePeriod);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get metrics data: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
         // return service metrics view
         return $this->render('component/metrics-dashboard/service-metrics.twig', [
@@ -120,7 +141,7 @@ class MetricsDashboardController extends AbstractController
     #[Route('/metrics/delete', methods:['GET'], name: 'app_metrics_delete')]
     public function deleteMetrics(Request $request): Response
     {
-        // get metric name and service name
+        // get request parameters
         $metricName = (string) $request->request->get('metric_name');
         $serviceName = (string) $request->request->get('service_name');
         $confirm = (string) $request->request->get('confirm', 'none');
@@ -133,6 +154,7 @@ class MetricsDashboardController extends AbstractController
             );
         }
 
+        // check if confirmation not set
         if ($confirm == 'none') {
             return $this->render('component/metrics-dashboard/delete-metric-confirmation.twig', [
                 'metricName' => $metricName,
@@ -140,19 +162,19 @@ class MetricsDashboardController extends AbstractController
             ]);
         }
 
-        // check if user confirmed the action
+        // check if user denied delete action
         if ($confirm == 'no') {
             return $this->redirectToRoute('app_metrics_service', [
                 'service_name' => $serviceName
             ]);
         }
 
-        // delete metric
         try {
+            // delete metric
             $this->metricsManager->deleteMetric($metricName, $serviceName);
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                message: 'Error deleting metric: ' . $e->getMessage(),
+                message: 'Error to delete metric: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

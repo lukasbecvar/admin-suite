@@ -34,7 +34,7 @@ class DatabaseBrowserController extends AbstractController
     }
 
     /**
-     * Render database select page
+     * Render database select page (select database and table)
      *
      * @param Request $request The request object
      *
@@ -48,17 +48,18 @@ class DatabaseBrowserController extends AbstractController
         $databaseName = (string) $request->query->get('database', '');
 
         // check if database name set
-        if ($databaseName == '') {
+        if (empty($databaseName)) {
             // get database list
             $databases = $this->databaseManager->getDatabasesList();
 
-            // disable table browser
+            // disable table selector
             $tables = null;
         } else {
-            $databases = null;
-
             // get database tables list
             $tables = $this->databaseManager->getTablesList($databaseName);
+
+            // disable databases selector
+            $databases = null;
         }
 
         // render render database browser page view
@@ -86,14 +87,14 @@ class DatabaseBrowserController extends AbstractController
         $databaseName = (string) $request->query->get('database');
 
         // check if table name and database name set
-        if ($tableName == '' || $databaseName == '') {
+        if (empty($tableName) || empty($databaseName)) {
             $this->errorManager->handleError(
                 message: 'table name and database name are required',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
 
-        // get limit per page
+        // get item pagination limit
         $limitPerPage = $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
 
         // get data from the table
@@ -107,7 +108,7 @@ class DatabaseBrowserController extends AbstractController
 
         // render table browser page view
         return $this->render('component/database-browser/table-browser.twig', [
-            // filter data
+            // filter & pagination data
             'currentPage' => $page,
             'tableName' => $tableName,
             'databaseName' => $databaseName,
@@ -125,7 +126,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The add row form page view
+     * @return Response The add row form view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/database/add', methods: ['GET', 'POST'], name: 'app_manager_database_add')]
@@ -146,7 +147,7 @@ class DatabaseBrowserController extends AbstractController
         // check if table exists
         if (!$this->databaseManager->isTableExists($databaseName, $tableName)) {
             $this->errorManager->handleError(
-                message: "Table '{$tableName}' not found in database '{$databaseName}'",
+                message: 'Table: ' . $tableName . ' not found in database: ' . $databaseName,
                 code: Response::HTTP_NOT_FOUND
             );
         }
@@ -208,7 +209,7 @@ class DatabaseBrowserController extends AbstractController
                 }
             }
 
-            // check errors
+            // check if errors found
             if (empty($errors)) {
                 // add row to table
                 $this->databaseManager->addRowToTable($formData, $databaseName, $tableName);
@@ -216,7 +217,7 @@ class DatabaseBrowserController extends AbstractController
                 // get last page number
                 $lastPageNumber = $this->databaseManager->getLastTablePage($databaseName, $tableName);
 
-                // redirect to table browser
+                // redirect to table browser (to last page)
                 return $this->redirectToRoute('app_manager_database_table_browser', [
                     'database' => $databaseName,
                     'table' => $tableName,
@@ -243,7 +244,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @return Response The edit row form page view
+     * @return Response The edit row form view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/database/edit', methods: ['GET', 'POST'], name: 'app_manager_database_edit')]
@@ -279,7 +280,7 @@ class DatabaseBrowserController extends AbstractController
             );
         }
 
-        // get columns to generate form
+        // get table columns to generate form
         $columns = $this->databaseManager->getColumnsList($databaseName, $tableName);
 
         // fetch existing row data for pre-filling the form
@@ -288,12 +289,12 @@ class DatabaseBrowserController extends AbstractController
         // initialize form data with existing values or empty if not found
         $formData = $existingData ?: [];
 
-        // unset id column
+        // unset id column (exclude if column from edit form)
         if ($columns[0]['COLUMN_NAME'] == 'id') {
             unset($columns[0]);
         }
 
-        // prepare form data
+        // array for error messages
         $errors = [];
 
         // check if form is submitted with POST method
@@ -382,10 +383,10 @@ class DatabaseBrowserController extends AbstractController
         $tableName = (string) $request->query->get('table');
         $databaseName = (string) $request->query->get('database');
 
-        // check if table name and database name are set
+        // check if request parameters are set
         if (empty($tableName) || empty($databaseName) || empty($id)) {
             $this->errorManager->handleError(
-                message: 'table name/database name and row id are required',
+                message: 'Parameters: table, database and id are required',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -393,7 +394,7 @@ class DatabaseBrowserController extends AbstractController
         // check if table exists
         if (!$this->databaseManager->isTableExists($databaseName, $tableName)) {
             $this->errorManager->handleError(
-                message: 'table ' . $tableName . ' not found in database ' . $databaseName,
+                message: 'table: ' . $tableName . ' not found in database: ' . $databaseName,
                 code: Response::HTTP_NOT_FOUND
             );
         }
@@ -401,7 +402,7 @@ class DatabaseBrowserController extends AbstractController
         // check if record exists
         if (!$this->databaseManager->doesRecordExist($databaseName, $tableName, $id)) {
             $this->errorManager->handleError(
-                message: 'record with ID ' . $id . ' not found in table ' . $tableName . ' in database ' . $databaseName,
+                message: 'record with ID: ' . $id . ' not found in table: ' . $tableName . ' in database: ' . $databaseName,
                 code: Response::HTTP_NOT_FOUND
             );
         }
@@ -418,7 +419,7 @@ class DatabaseBrowserController extends AbstractController
     }
 
     /**
-     * Render truncate table form page
+     * Render table truncate confirmation form
      *
      * @param Request $request The request object
      *
@@ -441,7 +442,7 @@ class DatabaseBrowserController extends AbstractController
             ]);
         }
 
-        // check if table name and database name are set
+        // check if request parameters are set
         if (empty($tableName) || empty($databaseName)) {
             $this->errorManager->handleError(
                 message: 'table name and database name are required',
@@ -452,7 +453,7 @@ class DatabaseBrowserController extends AbstractController
         // check if table exists
         if (!$this->databaseManager->isTableExists($databaseName, $tableName)) {
             $this->errorManager->handleError(
-                message: 'table ' . $tableName . ' not found in database ' . $databaseName,
+                message: 'table: ' . $tableName . ' not found in database: ' . $databaseName,
                 code: Response::HTTP_NOT_FOUND
             );
         }
@@ -460,7 +461,7 @@ class DatabaseBrowserController extends AbstractController
         // truncate table
         $this->databaseManager->tableTruncate($databaseName, $tableName);
 
-        // redirect to table browser
+        // redirect back to table browser
         return $this->redirectToRoute('app_manager_database_table_browser', [
             'page' => 1,
             'table' => $tableName,
@@ -469,7 +470,7 @@ class DatabaseBrowserController extends AbstractController
     }
 
     /**
-     * Dump database to file
+     * Dump database to file and download it
      *
      * @param Request $request The request object
      *
@@ -480,7 +481,7 @@ class DatabaseBrowserController extends AbstractController
     public function databaseDump(Request $request): Response
     {
         // get request parameters
-        $plain = (string) $request->query->get('plain', 'no');
+        $includeData = (string) $request->query->get('include_data', 'no');
         $select = (string) $request->query->get('select', 'yes');
         $databaseName = (string) $request->query->get('database');
 
@@ -495,10 +496,10 @@ class DatabaseBrowserController extends AbstractController
             ]);
         }
 
-        // check if database name and plain flag are set
-        if (empty($databaseName) || empty($plain)) {
+        // check if database name and include data flag are set
+        if (empty($databaseName) || empty($includeData)) {
             $this->errorManager->handleError(
-                message: 'database name and plain flag are required',
+                message: 'database name and include data flag are required',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -506,23 +507,24 @@ class DatabaseBrowserController extends AbstractController
         // check if database exists
         if (!$this->databaseManager->isDatabaseExists($databaseName)) {
             $this->errorManager->handleError(
-                message: 'database ' . $databaseName . ' not found',
+                message: 'database: ' . $databaseName . ' not found',
                 code: Response::HTTP_NOT_FOUND
             );
         }
 
-        // check if plain flag is set
-        if ($plain === 'yes') {
-            $plain = true;
-        } else {
-            $plain = false;
-        }
+        // convert include data flag to boolean
+        $includeData = ($includeData === 'yes');
 
         // get database dump
-        $databaseDump = $this->databaseManager->getDatabaseDump($databaseName, $plain);
+        $databaseDump = $this->databaseManager->getDatabaseDump($databaseName, $includeData);
 
         // get current time
         $currentTime = new DateTime();
+
+        // dump file name
+        $dumpFileName = $includeData
+            ? $databaseName . '-structure-dump-' . $currentTime->format('Y.m.d-H.i') . '.sql'
+            : $databaseName . '-data-dump-' . $currentTime->format('Y.m.d-H.i') . '.sql';
 
         // return database dump file
         return new Response(
@@ -530,7 +532,7 @@ class DatabaseBrowserController extends AbstractController
             status: Response::HTTP_OK,
             headers:[
                 'Content-Type' => 'application/sql',
-                'Content-Disposition' => 'attachment; filename="' . $databaseName . '_dump-' . $currentTime->format('Y.m.d-H.i') . '.sql' . '"'
+                'Content-Disposition' => 'attachment; filename="' . $dumpFileName . '"'
             ]
         );
     }
@@ -558,7 +560,7 @@ class DatabaseBrowserController extends AbstractController
             /** @var string $query sql query input */
             $query = $queryForm->get('query')->getData();
 
-            // execute query
+            // execute query and get output
             $output = $this->databaseManager->executeQuery($query);
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Exception;
 use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
 use App\Manager\ServiceManager;
@@ -14,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class ActionRunnerController
  *
- * Controller for action runner component
+ * Controller for action running on the system
  *
  * @package App\Controller
  */
@@ -61,7 +62,14 @@ class ActionRunnerController extends AbstractController
         }
 
         // run service action
-        $this->serviceManager->runSystemdAction($service, $action);
+        try {
+            $this->serviceManager->runSystemdAction($service, $action);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error running action: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
         // redirect back to referer
         return $this->redirectToRoute($referer);

@@ -50,7 +50,7 @@ class UserPasswordResetCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Username cannot be empty', $output);
+        $this->assertStringContainsString('Username parameter is required', $output);
         $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
@@ -68,7 +68,7 @@ class UserPasswordResetCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Invalid username provided', $output);
+        $this->assertStringContainsString('Invalid username type provided (must be string)', $output);
         $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
@@ -92,7 +92,7 @@ class UserPasswordResetCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Error username: ' . $username . ' does not exist', $output);
+        $this->assertStringContainsString('Error username: ' . $username . ' is not registered', $output);
         $this->assertEquals(Command::FAILURE, $exitCode);
     }
 

@@ -50,7 +50,7 @@ class UserRegisterCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Username cannot be empty', $output);
+        $this->assertStringContainsString('Username parameter is required', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 
@@ -68,7 +68,7 @@ class UserRegisterCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Invalid username provided', $output);
+        $this->assertStringContainsString('Invalid username type provided (must be string)', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 
@@ -90,7 +90,7 @@ class UserRegisterCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Username must be between 3 and 155 characters', $output);
+        $this->assertStringContainsString('Username length must be between 3 and 155 characters', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 
@@ -155,7 +155,7 @@ class UserRegisterCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Error to register user: Error register user', $output);
+        $this->assertStringContainsString('Process error: Error register user', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 

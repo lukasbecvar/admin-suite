@@ -7,7 +7,8 @@ use Attribute;
 /**
  * Class Authorization
  *
- * Controller method annotation for authorization middleware
+ * Annotation for controller methods to mark routes that require admin role
+ * This annotation is checked in authorization middleware
  *
  * @package App\Annotation
  */
@@ -22,7 +23,7 @@ class Authorization
     }
 
     /**
-     * Get the authorization value
+     * Get authorization anotation value
      *
      * @return string The authorization value
      */

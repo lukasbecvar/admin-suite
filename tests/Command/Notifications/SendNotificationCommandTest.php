@@ -50,7 +50,7 @@ class SendNotificationCommandTest extends TestCase
         $commandOutput = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Message cannot be empty', $commandOutput);
+        $this->assertStringContainsString('Message argument is required', $commandOutput);
         $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
@@ -113,7 +113,7 @@ class SendNotificationCommandTest extends TestCase
         $commandOutput = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Error to send notification: Simulated error', $commandOutput);
+        $this->assertStringContainsString('Process error: Simulated error', $commandOutput);
         $this->assertEquals(Command::FAILURE, $exitCode);
     }
 

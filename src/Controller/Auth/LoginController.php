@@ -40,11 +40,9 @@ class LoginController extends AbstractController
     }
 
     /**
-     * Handle user login component
+     * Handle user login action
      *
      * @param Request $request The request object
-     *
-     * @throws Exception Error to user login process
      *
      * @return Response The login view or redirect
      */
@@ -65,7 +63,7 @@ class LoginController extends AbstractController
             /** @var \App\Entity\User $data get the form data */
             $data = $form->getData();
 
-            // get username and password
+            // get username and password from request
             $username = (string) $data->getUsername();
             $password = (string) $data->getPassword();
 
@@ -79,7 +77,7 @@ class LoginController extends AbstractController
                     $this->authManager->login($username, $remember);
 
                     // redirect to app index page
-                    return $this->redirectToRoute('app_index');
+                    return $this->redirectToRoute('app_dashboard');
                 } catch (Exception $e) {
                     // handle login error
                     if ($this->appUtil->isDevMode()) {
@@ -88,7 +86,7 @@ class LoginController extends AbstractController
                             code: Response::HTTP_INTERNAL_SERVER_ERROR
                         );
                     } else {
-                        $this->addFlash('error', 'An error occurred while logging in.');
+                        $this->addFlash('error', 'There was an error while logging in');
                     }
                 }
             } else {

@@ -21,7 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class UsersManagerController
  *
- * Controller for users manager component
+ * Controller for users management componen
  *
  * @package App\Controller
  */
@@ -75,38 +75,45 @@ class UsersManagerController extends AbstractController
         // get filter from request query params
         $filter = $request->query->get('filter', '');
 
-        // get total users count from database
-        $usersCount = $this->userManager->getUsersCount();
-
-        // get users data from database
-        $usersData = $this->userManager->getUsersByPage($page);
-
-        // get online users list
-        $onlineList = $this->authManager->getOnlineUsersList();
-
-        // get admin suite database name and users table name
-        $mainDatabase = $this->appUtil->getEnvValue('DATABASE_NAME');
-        $usersTableName = $this->databaseManager->getEntityTableName(User::class);
-
         // get current visitor ip (for highlight current user)
         $currentVisitorIp = $this->visitorInfoUtil->getIp();
 
-        // get users data from database based on filter
-        switch ($filter) {
-            case 'online':
-                $usersData = $this->authManager->getOnlineUsersList();
-                break;
-            case 'banned':
-                $usersData = $this->banManager->getBannedUsers();
-                break;
-            default:
-                $usersData = $this->userManager->getUsersByPage($page);
-                break;
+        try {
+            // get total users count from database
+            $usersCount = $this->userManager->getUsersCount();
+
+            // get users data from database
+            $usersData = $this->userManager->getUsersByPage($page);
+
+            // get online users list
+            $onlineList = $this->authManager->getOnlineUsersList();
+
+            // get admin suite database name and users table name
+            $mainDatabase = $this->appUtil->getEnvValue('DATABASE_NAME');
+            $usersTableName = $this->databaseManager->getEntityTableName(User::class);
+
+            // get users data from database based on filter
+            switch ($filter) {
+                case 'online':
+                    $usersData = $this->authManager->getOnlineUsersList();
+                    break;
+                case 'banned':
+                    $usersData = $this->banManager->getBannedUsers();
+                    break;
+                default:
+                    $usersData = $this->userManager->getUsersByPage($page);
+                    break;
+            }
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get users list: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         // render users manager table view
         return $this->render('component/users-manager/users-table.twig', [
-            // instances for users manager view
+            // instances for users manager
             'banManager' => $this->banManager,
             'userManager' => $this->userManager,
             'visitorInfoUtil' => $this->visitorInfoUtil,

@@ -40,7 +40,7 @@ class UserRegisterCommand extends Command
      */
     protected function configure(): void
     {
-        $this->addArgument('username', InputArgument::REQUIRED, 'New user name');
+        $this->addArgument('username', InputArgument::REQUIRED, 'New username');
     }
 
     /**
@@ -49,46 +49,44 @@ class UserRegisterCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @throws Exception Error to register user
-     *
-     * @return int The status code
+     * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI visitor info
+        // set server headers for cli console
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
-        // get input username argument
+        // get username from input
         $username = $input->getArgument('username');
 
-        // check is username empty
+        // check is username set
         if (empty($username)) {
-            $io->error('Username cannot be empty');
+            $io->error('Username parameter is required');
             return Command::FAILURE;
         }
 
         // check username input type
         if (!is_string($username)) {
-            $io->error('Invalid username provided');
+            $io->error('Invalid username type provided (must be string)');
             return Command::FAILURE;
         }
 
         // check username input length
         if (strlen($username) < 3 || strlen($username) > 155) {
-            $io->error('Username must be between 3 and 155 characters');
+            $io->error('Username length must be between 3 and 155 characters');
             return Command::FAILURE;
         }
 
         // check if username is blocked
         if ($this->authManager->isUsernameBlocked($username)) {
-            $io->error('Error username: ' . $username . ' is blocked');
+            $io->error('Error username: ' . $username . ' is blocked (this username is reserved for system)');
             return Command::FAILURE;
         }
 
-        // check if username is used
+        // check if username is already used
         if ($this->userManager->checkIfUserExist($username)) {
             $io->error('Error username: ' . $username . ' is already used');
             return Command::FAILURE;
@@ -99,13 +97,13 @@ class UserRegisterCommand extends Command
             $password = ByteString::fromRandom(16)->toString();
 
             // register user
-            $this->authManager->registerUser(strval($username), $password);
+            $this->authManager->registerUser($username, $password);
 
             // return success message
             $io->success('New user registered username: ' . $username . ' with password: ' . $password);
             return Command::SUCCESS;
         } catch (Exception $e) {
-            $io->error('Error to register user: ' . $e->getMessage());
+            $io->error('Process error: ' . $e->getMessage());
             return Command::FAILURE;
         }
     }

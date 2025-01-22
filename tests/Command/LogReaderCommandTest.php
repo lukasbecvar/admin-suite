@@ -60,7 +60,7 @@ class LogReaderCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Status cannot be empty', $output);
+        $this->assertStringContainsString('Status parameter is required', $output);
         $this->assertEquals(Command::FAILURE, $exitCode);
     }
 
@@ -78,7 +78,7 @@ class LogReaderCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Invalid status provided', $output);
+        $this->assertStringContainsString('Invalid status type provided (must be string)', $output);
         $this->assertEquals(Command::FAILURE, $exitCode);
     }
 

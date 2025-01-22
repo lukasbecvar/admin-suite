@@ -315,6 +315,13 @@ class LogManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+
+        // log action
+        $this->log(
+            name: 'log-manager',
+            message: 'Log: ' . $log->getId() . ' status was updated to: ' . $newStatus,
+            level: self::LEVEL_INFO
+        );
     }
 
     /**

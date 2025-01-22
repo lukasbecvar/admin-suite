@@ -656,16 +656,23 @@ class DatabaseManager
             $limit = (int) $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
         }
 
-        // escape table name to prevent SQL injection
-        $platform = $this->connection->getDatabasePlatform();
-        $escapedTableName = $platform->quoteSingleIdentifier($tableName);
+        try {
+            // escape table name to prevent SQL injection
+            $platform = $this->connection->getDatabasePlatform();
+            $escapedTableName = $platform->quoteSingleIdentifier($tableName);
 
-        // get total number of rows in table
-        $query = "SELECT COUNT(*) FROM $dbName.$escapedTableName";
-        $rowCount = $this->connection->fetchOne($query);
+            // get total number of rows in table
+            $query = "SELECT COUNT(*) FROM $dbName.$escapedTableName";
+            $rowCount = $this->connection->fetchOne($query);
 
-        // calculate last page number
-        return (int) ceil($rowCount / $limit);
+            // calculate last page number
+            return (int) ceil($rowCount / $limit);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get last table page: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     /**
@@ -701,13 +708,13 @@ class DatabaseManager
      * Get database dump
      *
      * @param string $dbName The name of the database
-     * @param bool $plain Whether to return the dump in plain text format
+     * @param bool $includeData Whether to return the dump including data
      *
      * @throws Exception Error getting database dump
      *
      * @return string The database dump
      */
-    public function getDatabaseDump(string $dbName, bool $plain = false): string
+    public function getDatabaseDump(string $dbName, bool $includeData = false): string
     {
         // get tables list
         $tables = $this->connection->fetchAllAssociative('SHOW TABLES FROM ' . $this->connection->quoteIdentifier($dbName));
@@ -734,7 +741,7 @@ class DatabaseManager
 
                 $dump .= $createTableStmt['Create Table'] . ";\n\n";
 
-                if (!$plain) {
+                if (!$includeData) {
                     $rows = $this->connection->fetchAllAssociative('SELECT * FROM ' . $dbName . '.' . $this->connection->quoteIdentifier($tableName));
                     foreach ($rows as $row) {
                         $values = [];

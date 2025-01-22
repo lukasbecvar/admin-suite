@@ -50,32 +50,32 @@ class LogReaderCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @return int The status code
+     * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI visitor info
+        // set server headers for cli console
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
-        // get input status argument
+        // get status from input
         $status = $input->getArgument('status');
 
-        // check if status is empty
+        // check is status set
         if (empty($status)) {
-            $io->error('Status cannot be empty');
+            $io->error('Status parameter is required');
             return Command::FAILURE;
         }
 
-        // check status input type
+        // check status type
         if (!is_string($status)) {
-            $io->error('Invalid status provided');
+            $io->error('Invalid status type provided (must be string)');
             return Command::FAILURE;
         }
 
-        // set limit content per page to get all logs
+        // configure limit content per page for disable pagination limit
         $_ENV['LIMIT_CONTENT_PER_PAGE'] = $this->logManager->getLogsCountWhereStatus() + 100;
 
         /** @var array<\App\Entity\Log> $logs */
@@ -87,13 +87,13 @@ class LogReaderCommand extends Command
             return Command::FAILURE;
         }
 
-        // build data for table
+        // build data table
         $data = [];
         foreach ($logs as $log) {
-            // get user name
+            // get user name of log
             $user = $this->userManager->getUsernameById($log->getUserId() ?? 0) ?? 'Unknown user';
 
-            // get log time
+            // get log time and format to string
             $time = $log->getTime();
             $fornmatedLoggedDateTime = $time ? $time->format('Y-m-d H:i:s') : 'Unknown';
 
@@ -110,7 +110,7 @@ class LogReaderCommand extends Command
             ];
         }
 
-        // render logs table
+        // return logs table
         $io->table(
             headers: ['#', 'Name', 'Message', 'time', 'Browser', 'OS', 'Ip Address', 'User'],
             rows: $data

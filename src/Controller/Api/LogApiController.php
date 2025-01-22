@@ -2,8 +2,10 @@
 
 namespace App\Controller\Api;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Manager\LogManager;
+use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,15 +22,17 @@ class LogApiController extends AbstractController
 {
     private AppUtil $appUtil;
     private LogManager $logManager;
+    private ErrorManager $errorManager;
 
-    public function __construct(AppUtil $appUtil, LogManager $logManager)
+    public function __construct(AppUtil $appUtil, LogManager $logManager, ErrorManager $errorManager)
     {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
+        $this->errorManager = $errorManager;
     }
 
     /**
-     * Handle the external log API
+     * Handle log from external service
      *
      * @param Request $request The request object
      *
@@ -43,7 +47,8 @@ class LogApiController extends AbstractController
         // check if token is set
         if (empty($accessToken)) {
             return $this->json([
-                'error' => 'Access token is not set'
+                'status' => 'error',
+                'message' => 'Parameter "token" is required'
             ], JsonResponse::HTTP_BAD_REQUEST);
         }
 
@@ -53,7 +58,8 @@ class LogApiController extends AbstractController
         // check is token matches with auth token
         if ($accessToken != $apiToken) {
             return $this->json([
-                'error' => 'Access token is invalid'
+                'status' => 'error',
+                'message' => 'Access token is invalid'
             ], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
@@ -65,16 +71,32 @@ class LogApiController extends AbstractController
         // check parameters are set
         if (empty($name) || empty($message) || empty($level)) {
             return $this->json([
-                'error' => 'Parameters name, message and level are required'
+                'status' => 'error',
+                'message' => 'Parameters name, message and level are required'
             ], JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        // save log to database
-        $this->logManager->log($name, $message, $level);
+        try {
+            // save log to database
+            $this->logManager->log($name, $message, $level);
 
-        // return success message
-        return $this->json([
-            'success' => 'Log message has been logged'
-        ], JsonResponse::HTTP_OK);
+            // return success message
+            return $this->json([
+                'status' => 'success',
+                'message' => 'Log message has been logged'
+            ], JsonResponse::HTTP_OK);
+        } catch (Exception $e) {
+            // log error to exception log
+            $this->errorManager->logError(
+                message: $message,
+                code: JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            // return error response
+            return $this->json([
+                'status' => 'error',
+                'message' => 'Error to log message'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

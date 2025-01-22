@@ -2,11 +2,13 @@
 
 namespace App\Controller\Component;
 
+use Exception;
 use App\Util\ServerUtil;
 use App\Manager\BanManager;
 use App\Manager\LogManager;
 use App\Manager\UserManager;
 use App\Manager\AuthManager;
+use App\Manager\ErrorManager;
 use App\Manager\ServiceManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,6 +28,7 @@ class DashboardController extends AbstractController
     private BanManager $banManager;
     private UserManager $userManager;
     private AuthManager $authManager;
+    private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
 
     public function __construct(
@@ -34,6 +37,7 @@ class DashboardController extends AbstractController
         BanManager $banManager,
         UserManager $userManager,
         AuthManager $authManager,
+        ErrorManager $errorManager,
         ServiceManager $serviceManager
     ) {
         $this->serverUtil = $serverUtil;
@@ -41,6 +45,7 @@ class DashboardController extends AbstractController
         $this->banManager = $banManager;
         $this->userManager = $userManager;
         $this->authManager = $authManager;
+        $this->errorManager = $errorManager;
         $this->serviceManager = $serviceManager;
     }
 
@@ -52,36 +57,43 @@ class DashboardController extends AbstractController
     #[Route('/dashboard', methods:['GET'], name: 'app_dashboard')]
     public function dashboard(): Response
     {
-        // get warning data
-        $antiLogStatus = $this->logManager->isAntiLogEnabled();
-        $diagnosticData = $this->serverUtil->getDiagnosticData();
+        try {
+            // get data for warning card
+            $antiLogStatus = $this->logManager->isAntiLogEnabled();
+            $diagnosticData = $this->serverUtil->getDiagnosticData();
 
-        // get host system info
-        $ramUsage = $this->serverUtil->getRamUsage();
-        $hostUptime = $this->serverUtil->getHostUptime();
-        $storageUsage = $this->serverUtil->getStorageUsage();
-        $hostSystemInfo = $this->serverUtil->getSystemInfo();
-        $systemInstallInfo = $this->serverUtil->getSystemInstallInfo();
+            // get exception files (for view in warnings card)
+            $exceptionFiles = $this->logManager->getExceptionFiles();
 
-        // get running process list
-        $processList = $this->serverUtil->getProcessList();
+            // get system info data
+            $ramUsage = $this->serverUtil->getRamUsage();
+            $hostUptime = $this->serverUtil->getHostUptime();
+            $storageUsage = $this->serverUtil->getStorageUsage();
+            $hostSystemInfo = $this->serverUtil->getSystemInfo();
+            $systemInstallInfo = $this->serverUtil->getSystemInstallInfo();
 
-        // get services list
-        $services = $this->serviceManager->getServicesList();
+            // get running process list
+            $processList = $this->serverUtil->getProcessList();
 
-        // get logs count
-        $authLogsCount = $this->logManager->getAuthLogsCount();
-        $allLogsCount = $this->logManager->getLogsCountWhereStatus();
-        $readedLogsCount = $this->logManager->getLogsCountWhereStatus('READED');
-        $unreadedLogsCount = $this->logManager->getLogsCountWhereStatus('UNREADED');
+            // get services list for monitoring card
+            $services = $this->serviceManager->getServicesList();
 
-        // get user stats count
-        $onlineUsersCount = count($this->authManager->getOnlineUsersList());
-        $bannedUsersCount = $this->banManager->getBannedCount();
-        $usersCount = $this->userManager->getUsersCount();
+            // get logs counters
+            $authLogsCount = $this->logManager->getAuthLogsCount();
+            $allLogsCount = $this->logManager->getLogsCountWhereStatus();
+            $readedLogsCount = $this->logManager->getLogsCountWhereStatus('READED');
+            $unreadedLogsCount = $this->logManager->getLogsCountWhereStatus('UNREADED');
 
-        // get exception files
-        $exceptionFiles = $this->logManager->getExceptionFiles();
+            // get user stats counters
+            $onlineUsersCount = count($this->authManager->getOnlineUsersList());
+            $bannedUsersCount = $this->banManager->getBannedCount();
+            $usersCount = $this->userManager->getUsersCount();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get dashboard data: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
         // return dashboard page view
         return $this->render('component/dashboard/dashboard.twig', [
@@ -104,13 +116,13 @@ class DashboardController extends AbstractController
             'services' => $services,
             'serviceManager' => $this->serviceManager,
 
-            // logs count
+            // logs counters
             'allLogsCount' => $allLogsCount,
             'authLogsCount' => $authLogsCount,
             'readedLogsCount' => $readedLogsCount,
             'unreadedLogsCount' => $unreadedLogsCount,
 
-            // users count
+            // users stats counters
             'usersCount' => $usersCount,
             'onlineUsersCount' => $onlineUsersCount,
             'bannedUsersCount' => $bannedUsersCount

@@ -43,9 +43,9 @@ class AccountSettingsController extends AbstractController
     }
 
     /**
-     * Render the account settings page
+     * Render account settings page
      *
-     * @return Response The account settings table view
+     * @return Response Account settings table view
      */
     #[Route('/account/settings', methods:['GET'], name: 'app_account_settings_table')]
     public function accountSettingsTable(): Response
@@ -55,11 +55,9 @@ class AccountSettingsController extends AbstractController
     }
 
     /**
-     * Render change profile picture form
+     * Render profile picture change form
      *
      * @param Request $request The request object
-     *
-     * @throws Exception Error to change profile picture
      *
      * @return Response The response profile picture change form
      */
@@ -98,8 +96,8 @@ class AccountSettingsController extends AbstractController
                     // encode image
                     $imageCode = base64_encode((string) $fileContents);
 
-                    // update profile picture
                     try {
+                        // update profile picture
                         $this->userManager->updateProfilePicture(
                             userId: $this->authManager->getLoggedUserId(),
                             newProfilePicture: $imageCode
@@ -133,8 +131,6 @@ class AccountSettingsController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @throws Exception Error to change username
-     *
      * @return Response The response with username change form
      */
     #[Route('/account/settings/change/username', methods:['GET', 'POST'], name: 'app_account_settings_change_username')]
@@ -159,7 +155,7 @@ class AccountSettingsController extends AbstractController
                     code: Response::HTTP_BAD_REQUEST
                 );
             } else {
-                // check if username is already taken
+                // check if username is already used
                 if ($this->userManager->checkIfUserExist($username)) {
                     $this->addFlash('error', 'Username is already taken.');
                 } else {
@@ -170,7 +166,7 @@ class AccountSettingsController extends AbstractController
                             newUsername: $username
                         );
 
-                        // redirect back to  account settings table page
+                        // redirect back to the account settings table page
                         return $this->redirectToRoute('app_account_settings_table');
                     } catch (Exception $e) {
                         // handle change username error
@@ -197,8 +193,6 @@ class AccountSettingsController extends AbstractController
      * Render change password form
      *
      * @param Request $request The request object
-     *
-     * @throws Exception Error to change password
      *
      * @return Response The response with password change form view
      */
@@ -231,7 +225,7 @@ class AccountSettingsController extends AbstractController
                         newPassword: $password
                     );
 
-                    // redirect back to account settings tablepage
+                    // redirect back to the account settings table page
                     return $this->redirectToRoute('app_account_settings_table');
                 } catch (Exception $e) {
                     // handle change password error

@@ -98,7 +98,14 @@ class BanManager
     public function isUserBanned(int $userId): bool
     {
         // check if user is banned
-        return $this->bannedRepository->isBanned($userId);
+        try {
+            return $this->bannedRepository->isBanned($userId);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to check if user is banned: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     /**

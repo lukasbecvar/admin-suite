@@ -33,7 +33,7 @@ class SendNotificationCommand extends Command
     }
 
     /**
-     * Configures command arguments
+     * Configure command arguments
      *
      * @return void
      */
@@ -48,24 +48,22 @@ class SendNotificationCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @throws Exception Notification send error
-     *
-     * @return int The status code
+     * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI visitor info
+        // set server headers for cli console
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
         // get message from input argument
         $message = $input->getArgument('message');
 
-        // check input notification message is empty
+        // check is message set
         if (empty($message)) {
-            $io->error('Message cannot be empty');
+            $io->error('Message argument is required');
             return Command::FAILURE;
         }
 
@@ -75,14 +73,14 @@ class SendNotificationCommand extends Command
             return Command::FAILURE;
         }
 
-        // check is push notifications is enabled
+        // check if push notifications is enabled
         if ($this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_ENABLED') != 'true') {
             $io->error('Push notifiations is disabled');
             return Command::FAILURE;
         }
 
         try {
-            // send notification
+            // send notifications
             $this->notificationsManager->sendNotification(
                 title: 'Admin-suite notification',
                 message: $message
@@ -92,7 +90,7 @@ class SendNotificationCommand extends Command
             $io->success('Notification sent successfully');
             return Command::SUCCESS;
         } catch (Exception $e) {
-            $io->error('Error to send notification: ' . $e->getMessage());
+            $io->error('Process error: ' . $e->getMessage());
             return Command::FAILURE;
         }
     }

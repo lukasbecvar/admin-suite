@@ -178,7 +178,7 @@ class LoginControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
-        $this->assertResponseRedirects('/');
+        $this->assertResponseRedirects('/dashboard');
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 }

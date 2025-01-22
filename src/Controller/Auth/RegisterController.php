@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Class RegisterController
  *
- * Controller for register component
+ * Controller for user register component
  *
  * @package App\Controller\Auth
  */
@@ -44,8 +44,6 @@ class RegisterController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @throws Exception Error to register process
-     *
      * @return Response The registration view or redirect
      */
     #[Route('/register', methods:['GET', 'POST'], name: 'app_auth_register')]
@@ -56,7 +54,7 @@ class RegisterController extends AbstractController
             return $this->redirectToRoute('app_index');
         }
 
-        // check if user database is empty
+        // check if user database is empty (registration is enabled only for first user)
         if (!$this->userManager->isUsersEmpty()) {
             return $this->redirectToRoute('app_auth_login');
         }
@@ -70,11 +68,11 @@ class RegisterController extends AbstractController
             /** @var \App\Entity\User $data get the form data */
             $data = $form->getData();
 
-            // get username and password
+            // get username and password from request
             $username = (string) $data->getUsername();
             $password = (string) $data->getPassword();
 
-            // check if the username is already taken
+            // check if username is already used
             if ($this->userManager->checkIfUserExist($username)) {
                 $this->addFlash('error', 'Username is already taken.');
             } elseif ($this->authManager->isUsernameBlocked($username)) {
@@ -84,7 +82,7 @@ class RegisterController extends AbstractController
                     // register new user
                     $this->authManager->registerUser($username, $password);
 
-                    // auto login after registration
+                    // login user to system
                     $this->authManager->login($username, false);
 
                     // redirect to dashboard page

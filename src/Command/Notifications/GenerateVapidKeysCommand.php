@@ -37,15 +37,13 @@ class GenerateVapidKeysCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @throws Exception Error to generate VAPID keys
-     *
      * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI visitor info
+        // set server headers for cli console
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
@@ -74,7 +72,7 @@ class GenerateVapidKeysCommand extends Command
             $io->success('VAPID keys updated successfully');
             return Command::SUCCESS;
         } catch (Exception $e) {
-            $io->error('Error to generate VAPID keys: ' . $e->getMessage());
+            $io->error('Process error: ' . $e->getMessage());
             return Command::FAILURE;
         }
     }

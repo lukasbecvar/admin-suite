@@ -48,7 +48,7 @@ class UserUpdateRoleCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Username cannot be empty', $output);
+        $this->assertStringContainsString('Username parameter is required', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 
@@ -66,7 +66,7 @@ class UserUpdateRoleCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Role cannot be empty', $output);
+        $this->assertStringContainsString('Role parameter is required', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 
@@ -84,7 +84,7 @@ class UserUpdateRoleCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Invalid role provided', $output);
+        $this->assertStringContainsString('Invalid role type provided (must be string)  ', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 
@@ -102,7 +102,7 @@ class UserUpdateRoleCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Invalid role provided', $output);
+        $this->assertStringContainsString('Invalid role type provided (must be string)  ', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 
@@ -178,7 +178,7 @@ class UserUpdateRoleCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Error updating role: Some error', $output);
+        $this->assertStringContainsString('Process error: Some error', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 

@@ -672,31 +672,38 @@ class AuthManager
     {
         $onlineVisitors = [];
 
-        /** @var \App\Entity\User[] $users */
-        $users = $this->userManager->getAllUsersRepositories();
+        try {
+            /** @var \App\Entity\User[] $users */
+            $users = $this->userManager->getAllUsersRepositories();
 
-        // check if $users is iterable
-        if (!is_iterable($users)) {
-            return $onlineVisitors;
-        }
+            // check if $users is iterable
+            if (!is_iterable($users)) {
+                return $onlineVisitors;
+            }
 
-        // check all users status
-        foreach ($users as $user) {
-            $userId = $user->getId();
+            // check all users status
+            foreach ($users as $user) {
+                $userId = $user->getId();
 
-            // check if id is not null
-            if ($userId != null) {
-                // get visitor status
-                $status = $this->getUserStatus($userId);
+                // check if id is not null
+                if ($userId != null) {
+                    // get visitor status
+                    $status = $this->getUserStatus($userId);
 
-                // check visitor status
-                if ($status == 'online') {
-                    array_push($onlineVisitors, $user);
+                    // check visitor status
+                    if ($status == 'online') {
+                        array_push($onlineVisitors, $user);
+                    }
                 }
             }
-        }
 
-        return $onlineVisitors;
+            return $onlineVisitors;
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get online users list: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     /**

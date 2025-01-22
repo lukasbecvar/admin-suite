@@ -105,7 +105,7 @@ class GenerateVapidKeysCommandTest extends TestCase
         $commandOutput = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('Error to generate VAPID keys: Simulated error', $commandOutput);
+        $this->assertStringContainsString('Process error: Simulated error', $commandOutput);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 

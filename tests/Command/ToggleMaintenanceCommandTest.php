@@ -47,8 +47,11 @@ class ToggleMaintenanceCommandTest extends TestCase
         // execute command
         $exitCode = $this->commandTester->execute([]);
 
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
         // assert command output
-        $this->assertStringContainsString('Error to toggle maintenance mode: Failed to get environment value', $this->commandTester->getDisplay());
+        $this->assertStringContainsString('Process error: Failed to get environment value', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 
@@ -69,8 +72,11 @@ class ToggleMaintenanceCommandTest extends TestCase
         // execute command
         $exitCode = $this->commandTester->execute([]);
 
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
         // assert command output
-        $this->assertStringContainsString("MAINTENANCE_MODE in .env has been set to true", $this->commandTester->getDisplay());
+        $this->assertStringContainsString("MAINTENANCE_MODE in .env has been set to true", $output);
         $this->assertSame(Command::SUCCESS, $exitCode);
     }
 
@@ -91,8 +97,11 @@ class ToggleMaintenanceCommandTest extends TestCase
         // execute command
         $exitCode = $this->commandTester->execute([]);
 
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
         // assert command output
-        $this->assertStringContainsString("MAINTENANCE_MODE in .env has been set to true", $this->commandTester->getDisplay());
+        $this->assertStringContainsString("MAINTENANCE_MODE in .env has been set to true", $output);
         $this->assertSame(Command::SUCCESS, $exitCode);
     }
 }

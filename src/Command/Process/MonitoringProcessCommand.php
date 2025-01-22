@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class MonitoringProcessCommand
  *
- * Command to monitor services process (run in infinite loop as a service)
+ * Command to run monitoring process (run in infinite loop as a service)
  *
  * @package App\Command\Process
  */
@@ -39,13 +39,13 @@ class MonitoringProcessCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @return int The status code
+     * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI visitor info
+        // set server headers for cli console
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
@@ -58,15 +58,15 @@ class MonitoringProcessCommand extends Command
     /**
      * Monitoring process infinite loop
      *
-     * @param SymfonyStyle $io The command io interface
+     * @param SymfonyStyle $io The command output decorator
      *
      * @return void
      */
     private function monitor(SymfonyStyle $io): void
     {
-        // wait to database online
+        // wait for database connection
         while ($this->databaseManager->isDatabaseDown()) {
-            $io->writeln('<fg=yellow>Waiting to ensure that the database is up...</>');
+            $io->writeln('<fg=yellow>Waiting for database connection...</>');
             sleep(10);
         }
 
@@ -77,26 +77,25 @@ class MonitoringProcessCommand extends Command
         while (true) {
             // check if database is down
             if ($this->databaseManager->isDatabaseDown()) {
-                // check if database down handled before
+                // check if database is down before (to prevent multiple db down alerts)
                 if (!$dbDownFlag) {
-                    // handle database down status
                     $this->monitoringManager->handleDatabaseDown($io, $dbDownFlag);
                     $dbDownFlag = true;
                 }
 
-                // sleep to ensure that database is online
-                $io->writeln('<fg=yellow>Waiting to ensure that the database is up...</>');
+                // sleep to wait for database up
+                $io->writeln('<fg=yellow>Database is down, waiting for database connection...</>');
                 sleep(10);
             } else {
+                // reset db down flag after database is up
                 if ($dbDownFlag) {
-                    // reset flag if the database is back up
                     $dbDownFlag = false;
                 }
 
                 // init monitoring process
                 $this->monitoringManager->monitorInit($io);
 
-                // sleep for the monitoring interval
+                // sleep for monitoring interval
                 sleep((int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60);
             }
         }

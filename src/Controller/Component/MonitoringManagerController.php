@@ -2,10 +2,12 @@
 
 namespace App\Controller\Component;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Util\CacheUtil;
 use App\Util\ExportUtil;
 use App\Manager\LogManager;
+use App\Manager\ErrorManager;
 use App\Manager\ServiceManager;
 use App\Manager\DatabaseManager;
 use App\Entity\MonitoringStatus;
@@ -28,6 +30,7 @@ class MonitoringManagerController extends AbstractController
     private CacheUtil $cacheUtil;
     private ExportUtil $exportUtil;
     private LogManager $logManager;
+    private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
     private DatabaseManager $databaseManager;
     private MonitoringManager $monitoringManager;
@@ -37,6 +40,7 @@ class MonitoringManagerController extends AbstractController
         CacheUtil $cacheUtil,
         ExportUtil $exportUtil,
         LogManager $logManager,
+        ErrorManager $errorManager,
         ServiceManager $serviceManager,
         DatabaseManager $databaseManager,
         MonitoringManager $monitoringManager
@@ -45,13 +49,14 @@ class MonitoringManagerController extends AbstractController
         $this->cacheUtil = $cacheUtil;
         $this->exportUtil = $exportUtil;
         $this->logManager = $logManager;
+        $this->errorManager = $errorManager;
         $this->serviceManager = $serviceManager;
         $this->databaseManager = $databaseManager;
         $this->monitoringManager = $monitoringManager;
     }
 
     /**
-     * Render the monitoring dashboard page
+     * Render monitoring dashboard page
      *
      * @return Response The monitoring dashboard view
      */
@@ -61,27 +66,32 @@ class MonitoringManagerController extends AbstractController
         // get services list
         $services = $this->serviceManager->getServicesList();
 
-        // get page limit from config
+        // get pagination limit for monitoring logs
         $pageLimit = (int) $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
 
-        // get monitoring logs
-        $monitoringLogs = $this->logManager->getMonitoringLogs($pageLimit);
+        try {
+            // get monitoring logs
+            $monitoringLogs = $this->logManager->getMonitoringLogs($pageLimit);
 
-        // default last monitoring time
-        $lastMonitoringTime = null;
+            // get database info
+            $mainDatabaseName = $this->appUtil->getEnvValue('DATABASE_NAME');
+            $monitoringStatusTableName = $this->databaseManager->getEntityTableName(MonitoringStatus::class);
 
-        // get database info
-        $mainDatabaseName = $this->appUtil->getEnvValue('DATABASE_NAME');
-        $monitoringStatusTableName = $this->databaseManager->getEntityTableName(MonitoringStatus::class);
-
-        // check if last monitoring time is cached
-        if ($this->cacheUtil->isCatched('last-monitoring-time')) {
             // get last monitoring time
-            $lastMonitoringTime = $this->cacheUtil->getValue('last-monitoring-time');
-        }
+            $lastMonitoringTime = null;
+            if ($this->cacheUtil->isCatched('last-monitoring-time')) {
+                // get last monitoring time
+                $lastMonitoringTime = $this->cacheUtil->getValue('last-monitoring-time');
+            }
 
-        // get sla history
-        $slaHistory = $this->monitoringManager->getSLAHistory();
+            // get sla history
+            $slaHistory = $this->monitoringManager->getSLAHistory();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get monitoring dashboard: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
         // return monitoring dashboard page view
         return $this->render('component/monitoring-manager/monitoring-dashboard.twig', [
@@ -97,16 +107,23 @@ class MonitoringManagerController extends AbstractController
     }
 
     /**
-     * Render the monitoring config page
+     * Render monitoring config page
      *
-     * @return Response The monitoring service config view
+     * @return Response The services config view
      */
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/monitoring/config', methods:['GET'], name: 'app_manager_monitoring_config')]
     public function monitoringConfig(): Response
     {
         // get services list
-        $services = $this->serviceManager->getServicesList();
+        try {
+            $services = $this->serviceManager->getServicesList();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get services list: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
         // return monitoring config page view
         return $this->render('component/monitoring-manager/monitoring-config.twig', [
@@ -115,7 +132,7 @@ class MonitoringManagerController extends AbstractController
     }
 
     /**
-     * Export SLA history to excel file
+     * Export SLA history to excel file and download it
      *
      * @return Response The excel file download response
      */
@@ -123,10 +140,17 @@ class MonitoringManagerController extends AbstractController
     #[Route('/manager/monitoring/export/slahistory', methods:['GET'], name: 'app_manager_monitoring_export_slahistory')]
     public function exportSLAHistory(): Response
     {
-        // get sla history data
-        $dataToExport = $this->monitoringManager->getSLAHistory();
+        try {
+            // get sla history data
+            $dataToExport = $this->monitoringManager->getSLAHistory();
 
-        // return export response (download excel file)
-        return $this->exportUtil->exportSLAHistory($dataToExport);
+            // return export response (download excel file)
+            return $this->exportUtil->exportSLAHistory($dataToExport);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to export SLA history: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 }

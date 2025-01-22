@@ -30,14 +30,14 @@ class UserUpdateRoleCommand extends Command
     }
 
     /**
-     * Configur command arguments
+     * Configure command arguments
      *
      * @return void
      */
     protected function configure(): void
     {
-        $this->addArgument('username', InputArgument::REQUIRED, 'Username to update role');
-        $this->addArgument('role', InputArgument::REQUIRED, 'Role to update');
+        $this->addArgument('username', InputArgument::REQUIRED, 'Username of user to update');
+        $this->addArgument('role', InputArgument::REQUIRED, 'New role');
     }
 
     /**
@@ -46,15 +46,13 @@ class UserUpdateRoleCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @throws Exception Error to update user role
-     *
-     * @return int The status code
+     * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI visitor info
+        // set server headers for cli console
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
@@ -64,19 +62,19 @@ class UserUpdateRoleCommand extends Command
 
         // validate arguments
         if (empty($username)) {
-            $io->error('Username cannot be empty');
+            $io->error('Username parameter is required');
             return Command::FAILURE;
         }
         if (empty($newRole)) {
-            $io->error('Role cannot be empty');
+            $io->error('Role parameter is required');
             return Command::FAILURE;
         }
         if (!is_string($username)) {
-            $io->error('Invalid username provided');
+            $io->error('Invalid username type provided (must be string)');
             return Command::FAILURE;
         }
         if (!is_string($newRole)) {
-            $io->error('Invalid role provided');
+            $io->error('Invalid role type provided (must be string)');
             return Command::FAILURE;
         }
 
@@ -115,7 +113,7 @@ class UserUpdateRoleCommand extends Command
             $io->success('Role updated successfully');
             return Command::SUCCESS;
         } catch (Exception $e) {
-            $io->error('Error updating role: ' . $e->getMessage());
+            $io->error('Process error: ' . $e->getMessage());
             return Command::FAILURE;
         }
     }

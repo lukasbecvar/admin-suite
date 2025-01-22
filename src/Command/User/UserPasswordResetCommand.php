@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class UserPasswordResetCommand
  *
- * Command to reset the user password
+ * Command to reset user password
  *
  * @package App\Command\User
  */
@@ -39,45 +39,43 @@ class UserPasswordResetCommand extends Command
      */
     protected function configure(): void
     {
-        $this->addArgument('username', InputArgument::REQUIRED, 'Username to reset');
+        $this->addArgument('username', InputArgument::REQUIRED, 'Username of user to reset');
     }
 
     /**
-     * Execute user password reset command
+     * Execute command to reset user password
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @throws Exception Error to reset user password
-     *
-     * @return int The status code
+     * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI visitor info
+        // set server headers for cli console
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
-        // get input username argument
+        // get username from input
         $username = $input->getArgument('username');
 
-        // check is username empty
+        // check is username set
         if (empty($username)) {
-            $io->error('Username cannot be empty');
+            $io->error('Username parameter is required');
             return Command::FAILURE;
         }
 
         // check username input type
         if (!is_string($username)) {
-            $io->error('Invalid username provided');
+            $io->error('Invalid username type provided (must be string)');
             return Command::FAILURE;
         }
 
-        // check if username is used
+        // check if username is registered
         if (!$this->userManager->checkIfUserExist($username)) {
-            $io->error('Error username: ' . $username . ' does not exist');
+            $io->error('Error username: ' . $username . ' is not registered');
             return Command::FAILURE;
         }
 
@@ -85,7 +83,7 @@ class UserPasswordResetCommand extends Command
             // reset user password and get them
             $newPassword = $this->authManager->resetUserPassword($username);
 
-            // display success message
+            // display success message with new password
             $io->success('User: ' . $username . ' new password is ' . $newPassword);
             return Command::SUCCESS;
         } catch (Exception $e) {

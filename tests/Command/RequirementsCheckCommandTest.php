@@ -100,7 +100,7 @@ class RequirementsCheckCommandTest extends TestCase
 
         // assert result
         $this->assertStringContainsString('All requirements are installed', $output);
-        $this->assertStringContainsString('Database connection failed', $output);
+        $this->assertStringContainsString('Database is not connected', $output);
         $this->assertSame(Command::SUCCESS, $exitCode);
     }
 }

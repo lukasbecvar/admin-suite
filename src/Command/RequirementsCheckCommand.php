@@ -36,13 +36,13 @@ class RequirementsCheckCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @return int The status code
+     * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // get not installed requirements
+        // get not installed requirements list
         $notInstalledRequirements = $this->serverUtil->getNotInstalledRequirements();
 
         // check if all requirements are installed
@@ -70,7 +70,7 @@ class RequirementsCheckCommand extends Command
             $io->error('package-requirements.json config file not found');
         }
 
-        // services config file exist check
+        // services monitoring config file exist check
         if (file_exists(__DIR__ . '/../../services-monitoring.json')) {
             $io->success('services config file found in /services-monitoring.json');
         } elseif (file_exists(__DIR__ . '/../../config/suite/services-monitoring.json')) {
@@ -101,7 +101,7 @@ class RequirementsCheckCommand extends Command
         if (!$this->databaseManager->isDatabaseDown()) {
             $io->success('Database connected successfully');
         } else {
-            $io->error('Database connection failed');
+            $io->error('Database is not connected');
         }
 
         return Command::SUCCESS;

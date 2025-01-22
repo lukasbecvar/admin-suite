@@ -15,11 +15,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class UserBanCommand
  *
- * Command to ban or unban user by username
+ * Command to ban/unban user by username
  *
  * @package App\Command
  */
-#[AsCommand(name: 'app:user:ban', description: 'Ban or unban the user')]
+#[AsCommand(name: 'app:user:ban', description: 'Ban/unban the user')]
 class UserBanCommand extends Command
 {
     private BanManager $banManager;
@@ -48,34 +48,32 @@ class UserBanCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @throws Exception Error to ban/unban user
-     *
-     * @return int The status code
+     * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // fix get CLI visitor info
+        // set server headers for cli console
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';
 
-        // get input username argument
+        // get username from input
         $username = $input->getArgument('username');
 
         // check if username is empty
         if (empty($username)) {
-            $io->error('Username cannot be empty');
+            $io->error('Username parameter is required');
             return Command::FAILURE;
         }
 
         // check username input type
         if (!is_string($username)) {
-            $io->error('Invalid username provided');
+            $io->error('Invalid username type provided (must be string)');
             return Command::FAILURE;
         }
 
-        // check if username is used
+        // check if user found in database
         if (!$this->userManager->checkIfUserExist($username)) {
             $io->error('Error username: ' . $username . ' not exist');
             return Command::FAILURE;
@@ -88,15 +86,15 @@ class UserBanCommand extends Command
         $userId = (int) $userRepository->getId();
 
         try {
-            // check if user is banned
+            // check if user is already banned
             if ($this->banManager->isUserBanned($userId)) {
                 // unban user
                 $this->banManager->unbanUser($userId);
-                $io->success('User: ' . $username . ' unbanned');
+                $io->success('User: ' . $username . ' is unbanned successfully');
             } else {
                 // ban user
                 $this->banManager->banUser($userId);
-                $io->success('User: ' . $username . ' banned');
+                $io->success('User: ' . $username . ' is banned successfully');
             }
             return Command::SUCCESS;
         } catch (Exception $e) {

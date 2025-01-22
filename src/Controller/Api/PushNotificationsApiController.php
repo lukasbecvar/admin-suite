@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use Exception;
 use App\Util\AppUtil;
+use App\Manager\ErrorManager;
 use App\Manager\NotificationsManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,34 +21,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PushNotificationsApiController extends AbstractController
 {
     private AppUtil $appUtil;
+    private ErrorManager $errorManager;
     private NotificationsManager $notificationsManager;
 
-    public function __construct(AppUtil $appUtil, NotificationsManager $notificationsManager)
+    public function __construct(AppUtil $appUtil, ErrorManager $errorManager, NotificationsManager $notificationsManager)
     {
         $this->appUtil = $appUtil;
+        $this->errorManager = $errorManager;
         $this->notificationsManager = $notificationsManager;
     }
 
     /**
-     * Get push notifications enabled status
+     * API to get push notifications enabled/disabled status
      *
-     * @return JsonResponse The status response
+     * @return JsonResponse The status response in json
      */
     #[Route('/api/notifications/enabled', methods: ['GET'], name: 'api_notifications_get_enabled_status')]
     public function getPushNotificationsEnabledStatus(): JsonResponse
     {
+        // get notifications enabled status
+        $status = $this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_ENABLED');
+
+        // return status response
         return $this->json([
             'status' => 'success',
-            'enabled' => $this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_ENABLED')
+            'enabled' => $status
         ], JsonResponse::HTTP_OK);
     }
 
     /**
-     * Get VAPID public key
+     * API to get VAPID public key
      *
      * @throws Exception Error to get VAPID public key
      *
-     * @return JsonResponse The public key response
+     * @return JsonResponse The json response with the public key
      */
     #[Route('/api/notifications/public-key', methods: ['GET'], name: 'api_notifications_get_vapid_public_key')]
     public function getVapidPublicKey(): JsonResponse
@@ -61,11 +68,11 @@ class PushNotificationsApiController extends AbstractController
         }
 
         try {
-            // get vapid public key
+            // get vapid public key from env config
             $vapidPublicKey = $this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_VAPID_PUBLIC_KEY');
 
             // return vapid public key
-            return new JsonResponse([
+            return $this->json([
                 'status' => 'success',
                 'vapid_public_key' => $vapidPublicKey
             ], JsonResponse::HTTP_OK);
@@ -74,7 +81,7 @@ class PushNotificationsApiController extends AbstractController
             $message = $this->appUtil->isDevMode() ? $e->getMessage() : 'Error to get VAPID public key';
 
             // return error response
-            return new JsonResponse([
+            return $this->json([
                 'status' => 'error',
                 'message' => $message
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
@@ -82,11 +89,9 @@ class PushNotificationsApiController extends AbstractController
     }
 
     /**
-     * API for subscribe to push notifications
+     * API to subscribe push notifications
      *
      * @param Request $request The request object
-     *
-     * @throws Exception Error subscribe to push notifications
      *
      * @return JsonResponse The response with the status of the subscription
      */
@@ -136,7 +141,13 @@ class PushNotificationsApiController extends AbstractController
             ], JsonResponse::HTTP_OK);
         } catch (Exception $e) {
             // get error message
-            $message = $this->appUtil->isDevMode() ? $e->getMessage() : 'Error to subscribe to push notifications';
+            $message = $this->appUtil->isDevMode() ? $e->getMessage() : 'Error to subscribe push notifications';
+
+            // log error to exception log
+            $this->errorManager->logError(
+                message: $message,
+                code: JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+            );
 
             // return error response
             return $this->json([

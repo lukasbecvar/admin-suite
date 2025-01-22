@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class UserListCommand
  *
- * Command to list all users in database
+ * Command to get list of all users in database
  *
  * @package App\Command\User
  */
@@ -31,12 +31,12 @@ class UserListCommand extends Command
     }
 
     /**
-     * Execute command to list all users in database
+     * Execute command to get list of all users in database
      *
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @return int The status code
+     * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -45,22 +45,22 @@ class UserListCommand extends Command
         /** @var array<\App\Entity\User> $users */
         $users = $this->userManager->getAllUsersRepositories();
 
-        // check if user list is empty
+        // check if user database is empty
         if ($this->userManager->isUsersEmpty()) {
             $io->success('User list is empty');
             return Command::SUCCESS;
         }
 
-        // check is $users iterable
+        // check is users iterable
         if (!is_iterable($users)) {
             $io->error('Failed to retrieve users');
             return Command::FAILURE;
         }
 
-        // build data for table
+        // build data table
         $data = [];
         foreach ($users as $user) {
-            // get time data
+            // get time data and format to string
             $registerTime = $user->getRegisterTime();
             $lastLoginTime = $user->getLastLoginTime();
             $registerTime = $registerTime ? $registerTime->format('Y-m-d H:i:s') : 'Unknown';
@@ -78,7 +78,7 @@ class UserListCommand extends Command
             ];
         }
 
-        // render user list table
+        // return user list table
         $io->table(
             headers: ['#', 'Username', 'Role', 'Ip address', 'Browser', 'OS', 'Register time', 'Last login'],
             rows: $data

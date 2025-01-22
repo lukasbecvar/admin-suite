@@ -34,9 +34,7 @@ class ToggleMaintenanceCommand extends Command
      * @param InputInterface $input The input interface
      * @param OutputInterface $output The output interface
      *
-     * @throws Exception If an error occurs while toggling the maintenance mode
-     *
-     * @return int The status code
+     * @return int The command exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -60,7 +58,7 @@ class ToggleMaintenanceCommand extends Command
             $io->success("MAINTENANCE_MODE in .env has been set to true");
             return Command::SUCCESS;
         } catch (Exception $e) {
-            $io->error('Error to toggle maintenance mode: ' . $e->getMessage());
+            $io->error('Process error: ' . $e->getMessage());
             return Command::FAILURE;
         }
     }
