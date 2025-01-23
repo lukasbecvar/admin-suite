@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 /**
  * Class RegistrationFormType
  *
- * The new user registration form
+ * The user registration form
  *
  * @extends AbstractType<User>
  *
@@ -61,7 +61,8 @@ class RegistrationFormType extends AbstractType
                     ],
                 ],
                 'second_options' => ['label' => false]
-            ]);
+            ])
+        ;
     }
 
     /**

@@ -9,14 +9,14 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 /**
  * Class SLAHistoryFixtures
  *
- * Data fixtures for the SLAHistory entity
+ * Testing SLA history data fixtures for fill database with test data
  *
  * @package App\DataFixtures
  */
 class SLAHistoryFixtures extends Fixture
 {
     /**
-     * Load testing data into the database
+     * Load test SLA history fixtures
      *
      * @param ObjectManager $manager The entity manager
      *

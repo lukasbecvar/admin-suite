@@ -77,7 +77,7 @@ class UserRegisterCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteCommandWithUsernameLengthLessThan3(): void
+    public function testExecuteCommandWithUsernameLengthLessThanThree(): void
     {
         // mock user manager
         $this->userManager->method('checkIfUserExist')->willReturn(false);

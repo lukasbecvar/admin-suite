@@ -10,7 +10,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 /**
  * Class MonitoringStatusFixtures
  *
- * Service monitoring fixtures
+ * Testing monitoring status data fixtures for fill database with test data
  *
  * @package App\DataFixtures
  */

@@ -6,6 +6,7 @@ use App\Util\AppUtil;
 use Psr\Log\LoggerInterface;
 use App\Controller\ErrorController;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Class ExceptionEventSubscriber
  *
- * Subscriber to handle error exceptions
+ * Subscriber responsible for handling error exceptions
  *
  * @package App\EventSubscriber
  */
@@ -31,7 +32,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Return array of event names subscriber
+     * Return array with event names to listen to
      *
      * @return array<string> The event names to listen to
      */
@@ -43,7 +44,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Method called when the KernelEvents::EXCEPTION event is dispatched
+     * Method called when this event is dispatched
      *
      * @param ExceptionEvent $event The event object
      *
@@ -58,9 +59,9 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
         $message = $exception->getMessage();
 
         // define default exception code
-        $statusCode = 500;
+        $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
 
-        // check if object is valid exception
+        // check if object is valid exception instance
         if ($exception instanceof HttpException) {
             // get exception status code
             $statusCode = $exception->getStatusCode();
@@ -79,7 +80,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
         }
 
         // call error controller to generate response
-        $response = $this->errorController->show($exception);
+        $response = $this->errorController->showException($exception);
         $event->setResponse($response);
     }
 }

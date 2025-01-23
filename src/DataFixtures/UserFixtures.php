@@ -11,7 +11,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 /**
  * Class UserFixtures
  *
- * The testing user data fixtures
+ * Testing user data fixtures for fill database with test data
  *
  * @package App\DataFixtures
  */
@@ -33,13 +33,14 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        // create owner user
-        $user = new User();
+        // testing roles
+        $roles = ['USER', 'ADMIN', 'DEVELOPER', 'OWNER'];
 
-        // generate hash for password
+        // generate password hash for testing users
         $hash = $this->securityUtil->generateHash('test');
 
-        // set owner user data
+        // create owner user
+        $user = new User();
         $user->setUsername('test')
             ->setPassword($hash)
             ->setRole('OWNER')
@@ -53,9 +54,6 @@ class UserFixtures extends Fixture
         // persist owner user
         $manager->persist($user);
 
-        // testing roles
-        $roles = ['USER', 'ADMIN', 'DEVELOPER', 'OWNER'];
-
         // create 100 random users
         for ($i = 1; $i <= 100; $i++) {
             // get current time
@@ -63,8 +61,6 @@ class UserFixtures extends Fixture
 
             // create test user
             $user = new User();
-
-            // set user data
             $user->setUsername('user' . $i)
                 ->setPassword($hash)
                 ->setRole($roles[array_rand($roles)])
@@ -79,7 +75,7 @@ class UserFixtures extends Fixture
             $manager->persist($user);
         }
 
-        // flush data to the database
+        // flush data to database
         $manager->flush();
     }
 }

@@ -11,7 +11,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 /**
  * Class TodoFixtures
  *
- * The testing todo data fixtures
+ * Testing todo data fixtures for fill database with test data
  *
  * @package App\DataFixtures
  */
@@ -49,7 +49,7 @@ class TodoFixtures extends Fixture
             $manager->persist($todo);
         }
 
-        // flush data to the database
+        // flush data to database
         $manager->flush();
     }
 }

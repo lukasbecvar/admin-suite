@@ -10,7 +10,7 @@ use App\Repository\LogRepository;
 /**
  * Class Log
  *
- * The Log entity database table mapping class
+ * Entity object for mapping database table
  *
  * @package App\Entity
  */
@@ -54,9 +54,9 @@ class Log
     private ?string $status = null;
 
     /**
-     * Get the id of the log
+     * Get database ID of the log
      *
-     * @return int|null The id of the log or null if not found
+     * @return int|null The database ID of the log or null if not found
      */
     public function getId(): ?int
     {
@@ -64,7 +64,7 @@ class Log
     }
 
     /**
-     * Get the name of the log
+     * Get name of the log
      *
      * @return string|null The name of the log or null if not found
      */
@@ -74,11 +74,11 @@ class Log
     }
 
     /**
-     * Set the name of the log
+     * Set name of the log
      *
      * @param string $name The name of the log
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setName(string $name): static
     {
@@ -88,7 +88,7 @@ class Log
     }
 
     /**
-     * Get the message of the log
+     * Get message of the log
      *
      * @return string|null The message of the log or null if not found
      */
@@ -98,11 +98,11 @@ class Log
     }
 
     /**
-     * Set the message of the log
+     * Set message of the log
      *
      * @param string $message The message of the log
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setMessage(string $message): static
     {
@@ -112,7 +112,7 @@ class Log
     }
 
     /**
-     * Get the time of the log
+     * Get time of the log
      *
      * @return DateTimeInterface|null The time of the log or null if not found
      */
@@ -122,11 +122,11 @@ class Log
     }
 
     /**
-     * Set the time of the log
+     * Set time of the log
      *
      * @param DateTimeInterface $time The time of the log
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setTime(DateTimeInterface $time): static
     {
@@ -136,7 +136,7 @@ class Log
     }
 
     /**
-     * Get the user agent of the log
+     * Get user agent of the log
      *
      * @return string|null The user agent of the log or null if not found
      */
@@ -146,11 +146,11 @@ class Log
     }
 
     /**
-     * Set the user agent of the log
+     * Set user agent of the log
      *
      * @param string $user_agent The user agent of the log
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setUserAgent(string $user_agent): static
     {
@@ -165,9 +165,9 @@ class Log
     }
 
     /**
-     * Get the ip address of the log
+     * Get ip address of the user who created the log
      *
-     * @return string|null The ip address of the log or null if not found
+     * @return string|null The ip address of the user who created the log or null if not found
      */
     public function getIpAddress(): ?string
     {
@@ -175,11 +175,11 @@ class Log
     }
 
     /**
-     * Set the ip address of the log
+     * Set ip address of the user who created the log
      *
-     * @param string $ip_address The ip address of the log
+     * @param string $ip_address The ip address of the user who created the log
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setIpAddress(string $ip_address): static
     {
@@ -189,7 +189,7 @@ class Log
     }
 
     /**
-     * Get the level of the log
+     * Get level of the log
      *
      * @return int|null The level of the log or null if not found
      */
@@ -199,11 +199,11 @@ class Log
     }
 
     /**
-     * Set the level of the log
+     * Set level of the log
      *
      * @param int|null $level The level of the log
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setLevel(?int $level): static
     {
@@ -213,7 +213,7 @@ class Log
     }
 
     /**
-     * Get the id of the user who created the log
+     * Get id of the user who created the log
      *
      * @return int|null The id of the user who created the log or null if not found
      */
@@ -223,11 +223,11 @@ class Log
     }
 
     /**
-     * Set the id of the user who created the log
+     * Set id of the user who created the log
      *
      * @param int $user_id The id of the user who created the log
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setUserId(int $user_id): static
     {
@@ -237,7 +237,7 @@ class Log
     }
 
     /**
-     * Get the status of the log
+     * Get status of the log
      *
      * @return string|null The status of the log or null if not found
      */
@@ -247,11 +247,11 @@ class Log
     }
 
     /**
-     * Set the status of the log
+     * Set status of the log
      *
      * @param string $status The status of the log
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setStatus(string $status): static
     {

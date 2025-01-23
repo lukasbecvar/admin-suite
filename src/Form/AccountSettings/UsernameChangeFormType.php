@@ -22,7 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class UsernameChangeFormType extends AbstractType
 {
     /**
-     * Build the form
+     * Build username change form
      *
      * @param FormBuilderInterface<User|null> $builder The form builder
      * @param array<string> $options The form options
@@ -43,11 +43,12 @@ class UsernameChangeFormType extends AbstractType
                         'maxMessage' => 'Your username cannot be longer than {{ limit }} characters'
                     ])
                 ]
-            ]);
+            ])
+        ;
     }
 
     /**
-     * Configure options
+     * Configure options for username change form
      *
      * @param OptionsResolver $resolver The options resolver
      *

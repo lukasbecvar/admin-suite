@@ -10,7 +10,7 @@ use App\Repository\BannedRepository;
 /**
  * Class Banned
  *
- * The Banned entity database table mapping class
+ * Entity object for mapping database table
  *
  * @package App\Entity
  */
@@ -42,9 +42,9 @@ class Banned
     private ?int $banned_user_id = null;
 
     /**
-     * Get the id of the banned user
+     * Get id of the banned status (database ID)
      *
-     * @return int|null The id of the banned user or null if not found
+     * @return int|null The database ID of the banned status or null if not found
      */
     public function getId(): ?int
     {
@@ -52,7 +52,7 @@ class Banned
     }
 
     /**
-     * Get the reason of the ban
+     * Get ban reason
      *
      * @return string|null The reason of the ban or null if not found
      */
@@ -62,11 +62,11 @@ class Banned
     }
 
     /**
-     * Set the reason of the ban
+     * Set the ban reason
      *
      * @param string $reason The reason of the ban
      *
-     * @return static The current object
+     * @return static The banned status object
      */
     public function setReason(string $reason): static
     {
@@ -76,7 +76,7 @@ class Banned
     }
 
     /**
-     * Get the status of the ban
+     * Get status of the ban
      *
      * @return string|null The status of the ban or null if not found
      */
@@ -86,7 +86,7 @@ class Banned
     }
 
     /**
-     * Set the status of the ban
+     * Set status of the ban
      *
      * @param string $status The status of the ban
      */
@@ -98,7 +98,7 @@ class Banned
     }
 
     /**
-     * Get the time of the ban
+     * Get time of the ban
      *
      * @return DateTimeInterface|null The time of the ban or null if not found
      */
@@ -108,11 +108,11 @@ class Banned
     }
 
     /**
-     * Set the time of the ban
+     * Set time of the ban
      *
      * @param DateTimeInterface $time The time of the ban
      *
-     * @return static The current object
+     * @return static The banned status object
      */
     public function setTime(DateTimeInterface $time): static
     {
@@ -122,9 +122,9 @@ class Banned
     }
 
     /**
-     * Get the id of the user who banned the user
+     * Get id of the admin who banned the user
      *
-     * @return int|null The id of the user who banned the user or null if not found
+     * @return int|null The id of the admin who banned the user or null if not found
      */
     public function getBannedById(): ?int
     {
@@ -132,11 +132,11 @@ class Banned
     }
 
     /**
-     * Set the id of the user who banned the user
+     * Set id of the admin who banned the user
      *
-     * @param int $banned_by_id The id of the user who banned the user
+     * @param int $banned_by_id The id of the admin who banned the user
      *
-     * @return static The current object
+     * @return static The banned status object
      */
     public function setBannedById(int $banned_by_id): static
     {
@@ -146,7 +146,7 @@ class Banned
     }
 
     /**
-     * Get the id of the banned user
+     * Get id of the banned user
      *
      * @return int|null The id of the banned user or null if not found
      */
@@ -156,11 +156,11 @@ class Banned
     }
 
     /**
-     * Set the id of the banned user
+     * Set id of the banned user
      *
      * @param int $banned_user_id The id of the banned user
      *
-     * @return static The current object
+     * @return static The banned status object
      */
     public function setBannedUserId(int $banned_user_id): static
     {

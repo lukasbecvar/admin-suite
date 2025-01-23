@@ -8,7 +8,7 @@ use App\Repository\SLAHistoryRepository;
 /**
  * Class SLAHistory
  *
- * The SLAHistory entity database table mapping class
+ * Entity object for mapping database table
  *
  * @package App\Entity
  */
@@ -33,9 +33,9 @@ class SLAHistory
     private ?float $sla_value = null;
 
     /**
-     * Get SLA id
+     * Get database id of the SLA
      *
-     * @return int|null
+     * @return int|null The database id of the SLA or null if not found
      */
     public function getId(): ?int
     {
@@ -43,9 +43,9 @@ class SLAHistory
     }
 
     /**
-     * Get service name
+     * Get service name of the SLA
      *
-     * @return string|null
+     * @return string|null The service name of the SLA or null if not found
      */
     public function getServiceName(): ?string
     {
@@ -53,11 +53,11 @@ class SLAHistory
     }
 
     /**
-     * Set service name
+     * Set service name of the SLA
      *
      * @param string $service_name The service name of the SLA
      *
-     * @return static The current object
+     * @return static The sla history object
      */
     public function setServiceName(string $service_name): static
     {
@@ -81,7 +81,7 @@ class SLAHistory
      *
      * @param string $sla_timeframe The timeframe of the SLA
      *
-     * @return static The current object
+     * @return static The sla history object
      */
     public function setSlaTimeframe(string $sla_timeframe): static
     {
@@ -93,7 +93,7 @@ class SLAHistory
     /**
      * Get SLA value
      *
-     * @return float|null
+     * @return float|null The SLA value or null if not found
      */
     public function getSlaValue(): ?float
     {
@@ -101,11 +101,11 @@ class SLAHistory
     }
 
     /**
-     * Set SLA value
+     * Set SLA value of the service
      *
      * @param float $sla_value The SLA value
      *
-     * @return static The current object
+     * @return static The sla history object
      */
     public function setSlaValue(float $sla_value): static
     {

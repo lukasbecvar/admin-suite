@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 /**
  * Class LoginFormType
  *
- * The user auth login form
+ * The user login form
  *
  * @extends AbstractType<User>
  *
@@ -49,11 +49,12 @@ class LoginFormType extends AbstractType
                 'label' => false,
                 'mapped' => false,
                 'required' => false
-            ]);
+            ])
+        ;
     }
 
     /**
-     * Configure options
+     * Configure options for the login form
      *
      * @param OptionsResolver $resolver The options resolver
      *

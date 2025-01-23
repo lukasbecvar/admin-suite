@@ -48,11 +48,12 @@ class PasswordChangeForm extends AbstractType
                     ],
                 ],
                 'second_options' => ['label' => false]
-            ]);
+            ])
+        ;
     }
 
     /**
-     * Configure options for registration form
+     * Configure options for password change form
      *
      * @param OptionsResolver $resolver The options resolver
      *

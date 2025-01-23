@@ -11,7 +11,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 /**
  * Class MetricFixtures
  *
- * The testing metrics data fixtures
+ * Testing metrics data fixtures for fill database with test data
  *
  * @package App\DataFixtures
  */
@@ -30,10 +30,10 @@ class MetricFixtures extends Fixture
         $serviceNames = ['host-system', 'becvar.xyz', 'paste.becvar.xyz'];
         $interval = new DateInterval('PT1H'); // metrics interval
         $startDate = new DateTime('-1 week'); // history limit
-        $endDate = new DateTime(); // end with current time
+        $endDate = new DateTime();
         $currentDate = clone $startDate;
 
-        // create the metrics history
+        // create metrics history
         while ($currentDate <= $endDate) {
             foreach ($serviceNames as $serviceName) {
                 foreach ($metrics as $name) {

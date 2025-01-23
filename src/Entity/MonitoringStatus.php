@@ -10,7 +10,7 @@ use App\Repository\MonitoringStatusRepository;
 /**
  * Class MonitoringStatus
  *
- * The MonitoringStatus entity database table mapping class
+ * Entity object for mapping database table
  *
  * @package App\Entity
  */
@@ -44,9 +44,9 @@ class MonitoringStatus
     private ?DateTimeInterface $last_update_time = null;
 
     /**
-     * Get the id of the service monitoring
+     * Get database ID of the monitoring status
      *
-     * @return int|null The id of the service monitoring or null if not found
+     * @return int|null The database ID of the monitoring status or null if not found
      */
     public function getId(): ?int
     {
@@ -54,7 +54,7 @@ class MonitoringStatus
     }
 
     /**
-     * Get the name of the service
+     * Get name of the service
      *
      * @return string|null The name of the service or null if not found
      */
@@ -64,11 +64,11 @@ class MonitoringStatus
     }
 
     /**
-     * Set the name of the service
+     * Set name of the service
      *
      * @param string $service_name The name of the service
      *
-     * @return static The current object
+     * @return static The monitoring status object
      */
     public function setServiceName(string $service_name): static
     {
@@ -78,9 +78,9 @@ class MonitoringStatus
     }
 
     /**
-     * Get the message of the service monitoring
+     * Get message of the monitoring status
      *
-     * @return string|null The message of the service monitoring or null if not found
+     * @return string|null The message of the monitoring status or null if not found
      */
     public function getMessage(): ?string
     {
@@ -88,11 +88,11 @@ class MonitoringStatus
     }
 
     /**
-     * Set the message of the service monitoring
+     * Set message of the monitoring status
      *
-     * @param string $message The message of the service monitoring
+     * @param string $message The message of the monitoring status
      *
-     * @return static The current object
+     * @return static The monitoring status object
      */
     public function setMessage(string $message): static
     {
@@ -102,9 +102,9 @@ class MonitoringStatus
     }
 
     /**
-     * Get the status of the service monitoring
+     * Get status of the monitoring status
      *
-     * @return string|null The status of the service monitoring or null if not found
+     * @return string|null The status of the monitoring status or null if not found
      */
     public function getStatus(): ?string
     {
@@ -112,11 +112,11 @@ class MonitoringStatus
     }
 
     /**
-     * Set the status of the service monitoring
+     * Set status of the monitoring status
      *
-     * @param string $status The status of the service monitoring
+     * @param string $status The status of the monitoring status
      *
-     * @return static The current object
+     * @return static The monitoring status object
      */
     public function setStatus(string $status): static
     {
@@ -126,7 +126,7 @@ class MonitoringStatus
     }
 
     /**
-     * Get the down time of the service
+     * Get down time of the service
      *
      * @return int|null The down time of the service or null if not found
      */
@@ -136,11 +136,11 @@ class MonitoringStatus
     }
 
     /**
-     * Set the down time of the service
+     * Set down time of the service
      *
      * @param int $down_time The down time of the service
      *
-     * @return static The current object
+     * @return static The monitoring status object
      */
     public function setDownTime(int $down_time): static
     {
@@ -150,7 +150,7 @@ class MonitoringStatus
     }
 
     /**
-     * Increase the down time of the service
+     * Increase down time of the service
      *
      * @param int $minutes The number of minutes to increase the down time
      *
@@ -162,7 +162,7 @@ class MonitoringStatus
     }
 
     /**
-     * Get the SLA timeframe of the service
+     * Get SLA timeframe of the service
      *
      * @return string|null The SLA timeframe of the service or null if not found
      */
@@ -172,11 +172,11 @@ class MonitoringStatus
     }
 
     /**
-     * Set the SLA timeframe of the service
+     * Set SLA timeframe of the service
      *
      * @param string $sla_timeframe The SLA timeframe of the service
      *
-     * @return static The current object
+     * @return static The monitoring status object
      */
     public function setSlaTimeframe(string $sla_timeframe): static
     {
@@ -186,9 +186,9 @@ class MonitoringStatus
     }
 
     /**
-     * Get the last update time of the service monitoring
+     * Get last update time of the monitoring status
      *
-     * @return DateTimeInterface|null The last update time of the service monitoring or null if not found
+     * @return DateTimeInterface|null The last update time of the monitoring status or null if not found
      */
     public function getLastUpdateTime(): ?DateTimeInterface
     {
@@ -196,11 +196,11 @@ class MonitoringStatus
     }
 
     /**
-     * Set the last update time of the service monitoring
+     * Set last update time of the monitoring status
      *
-     * @param DateTimeInterface $last_update_time The last update time of the service monitoring
+     * @param DateTimeInterface $last_update_time The last update time of the monitoring status
      *
-     * @return static The current object
+     * @return static The monitoring status object
      */
     public function setLastUpdateTime(DateTimeInterface $last_update_time): static
     {

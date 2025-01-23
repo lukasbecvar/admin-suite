@@ -10,7 +10,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 /**
  * Class BannedFixtures
  *
- * The testing banned data fixtures
+ * Testing banned data fixtures for fill database with test data
  *
  * @package App\DataFixtures
  */

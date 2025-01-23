@@ -66,7 +66,7 @@ class ErrorController extends AbstractController
      *
      * @return Response The error page view
      */
-    public function show(Throwable $exception): Response
+    public function showException(Throwable $exception): Response
     {
         // get exception code
         $statusCode = $exception instanceof HttpException

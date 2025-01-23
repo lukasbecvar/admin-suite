@@ -10,7 +10,7 @@ use App\Repository\TodoRepository;
 /**
  * Class Todo
  *
- * The Todo entity database table mapping class
+ * Entity object for mapping database table
  *
  * @package App\Entity
  */
@@ -41,9 +41,9 @@ class Todo
     private ?int $user_id = null;
 
     /**
-     * Get the id of the todo
+     * Get database ID of the todo
      *
-     * @return int|null The id of the todo or null if not found
+     * @return int|null The database ID of the todo or null if not found
      */
     public function getId(): ?int
     {
@@ -51,7 +51,7 @@ class Todo
     }
 
     /**
-     * Get the text of the todo
+     * Get text of the todo
      *
      * @return string|null The text of the todo or null if not found
      */
@@ -61,11 +61,11 @@ class Todo
     }
 
     /**
-     * Set the text of the todo
+     * Set text of the todo
      *
      * @param string $todo_text The text of the todo
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setTodoText(string $todo_text): static
     {
@@ -75,7 +75,7 @@ class Todo
     }
 
     /**
-     * Get the added time of the todo
+     * Get added time of the todo
      *
      * @return DateTimeInterface|null The added time of the todo or null if not found
      */
@@ -85,11 +85,11 @@ class Todo
     }
 
     /**
-     * Set the added time of the todo
+     * Set added time of the todo
      *
      * @param DateTimeInterface $added_time The added time of the todo
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setAddedTime(DateTimeInterface $added_time): static
     {
@@ -99,7 +99,7 @@ class Todo
     }
 
     /**
-     * Get the completed time of the todo
+     * Get completed time of the todo
      *
      * @return DateTimeInterface|null The completed time of the todo or null if not found
      */
@@ -109,11 +109,11 @@ class Todo
     }
 
     /**
-     * Set the completed time of the todo
+     * Set completed time of the todo
      *
      * @param DateTimeInterface|null $completed_time The completed time of the todo
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setCompletedTime(?DateTimeInterface $completed_time): static
     {
@@ -123,7 +123,7 @@ class Todo
     }
 
     /**
-     * Get the status of the todo
+     * Get status of the todo
      *
      * @return string|null The status of the todo or null if not found
      */
@@ -133,11 +133,11 @@ class Todo
     }
 
     /**
-     * Set the status of the todo
+     * Set status of the todo
      *
      * @param string $status The status of the todo
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setStatus(string $status): static
     {
@@ -147,7 +147,7 @@ class Todo
     }
 
     /**
-     * Get the id of the user who created the todo
+     * Get id of the user who created the todo
      *
      * @return int|null The id of the user who created the todo or null if not found
      */
@@ -157,11 +157,11 @@ class Todo
     }
 
     /**
-     * Set the id of the user who created the todo
+     * Set id of the user who created the todo
      *
      * @param int $user_id The id of the user who created the todo
      *
-     * @return static The current object
+     * @return static The log object
      */
     public function setUserId(int $user_id): static
     {

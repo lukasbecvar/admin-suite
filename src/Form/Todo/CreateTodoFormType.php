@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 /**
  * Class CreateTodoFormType
  *
- * The new todo creation form
+ * The todo create form
  *
  * @extends AbstractType<Todo>
  *
@@ -22,7 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class CreateTodoFormType extends AbstractType
 {
     /**
-     * Build todo creation form
+     * Build todo create form
      *
      * @param FormBuilderInterface<Todo|null> $builder
      * @param array<string, mixed> $options
@@ -31,26 +31,28 @@ class CreateTodoFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('todo_text', TextType::class, [
-            'label' => false,
-            'attr' => [
-                'autocomplete' => 'off',
-                'maxlength' => 512
-            ],
-            'constraints' => [
-                new NotBlank(['message' => 'Please enter a todo text']),
-                new Length([
-                    'min' => 1,
-                    'max' => 512,
-                    'minMessage' => 'Your todo text should be at least {{ limit }} characters',
-                    'maxMessage' => 'Your todo text cannot be longer than {{ limit }} characters'
-                ])
-            ]
-        ]);
+        $builder
+            ->add('todo_text', TextType::class, [
+                'label' => false,
+                'attr' => [
+                    'autocomplete' => 'off',
+                    'maxlength' => 512
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Please enter a todo text']),
+                    new Length([
+                        'min' => 1,
+                        'max' => 512,
+                        'minMessage' => 'Your todo text should be at least {{ limit }} characters',
+                        'maxMessage' => 'Your todo text cannot be longer than {{ limit }} characters'
+                    ])
+                ]
+            ])
+        ;
     }
 
     /**
-     * Configure options for the todo creation form
+     * Configure options for the todo create form
      *
      * @param OptionsResolver $resolver
      *

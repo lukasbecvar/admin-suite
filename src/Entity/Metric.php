@@ -10,7 +10,7 @@ use App\Repository\MetricRepository;
 /**
  * Class Metric
  *
- * The Metric entity database table mapping class
+ * Entity object for mapping database table
  *
  * @package App\Entity
  */
@@ -38,9 +38,9 @@ class Metric
     private ?DateTimeInterface $time = null;
 
     /**
-     * Get the id of the metric
+     * Get database ID of the metric
      *
-     * @return int|null The id of the metric or null if not found
+     * @return int|null The database ID of the metric or null if not found
      */
     public function getId(): ?int
     {
@@ -48,7 +48,7 @@ class Metric
     }
 
     /**
-     * Get the name of the metric
+     * Get name of the metric
      *
      * @return string|null The name of the metric or null if not found
      */
@@ -58,11 +58,11 @@ class Metric
     }
 
     /**
-     * Set the name of the metric
+     * Set name of the metric
      *
      * @param string $name The name of the metric
      *
-     * @return static The current object
+     * @return static The metric object
      */
     public function setName(string $name): static
     {
@@ -72,7 +72,7 @@ class Metric
     }
 
     /**
-     * Get the value of the metric
+     * Get value of the metric
      *
      * @return string|null The value of the metric or null if not found
      */
@@ -82,11 +82,11 @@ class Metric
     }
 
     /**
-     * Set the value of the metric
+     * Set value of the metric
      *
      * @param string $value The value of the metric
      *
-     * @return static The current object
+     * @return static The metric object
      */
     public function setValue(string $value): static
     {
@@ -96,9 +96,9 @@ class Metric
     }
 
     /**
-     * Get the service name of the metric
+     * Get service name associated with the metric
      *
-     * @return string|null The service name of the metric or null if not found
+     * @return string|null The service name associated with the metric or null if not found
      */
     public function getServiceName(): ?string
     {
@@ -106,11 +106,11 @@ class Metric
     }
 
     /**
-     * Set the service name of the metric
+     * Set service name associated with the metric
      *
-     * @param string $service_name The service name of the metric
+     * @param string $service_name The service name associated with the metric
      *
-     * @return static The current object
+     * @return static The metric object
      */
     public function setServiceName(string $service_name): static
     {
@@ -120,7 +120,7 @@ class Metric
     }
 
     /**
-     * Get the time of the metric
+     * Get time of the metric
      *
      * @return DateTimeInterface|null The time of the metric or null if not found
      */
@@ -130,11 +130,11 @@ class Metric
     }
 
     /**
-     * Set the time of the metric
+     * Set time of the metric
      *
      * @param DateTimeInterface $time The time of the metric
      *
-     * @return static The current object
+     * @return static The metric object
      */
     public function setTime(DateTimeInterface $time): static
     {

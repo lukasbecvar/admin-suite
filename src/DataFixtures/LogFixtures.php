@@ -11,7 +11,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 /**
  * Class LogFixtures
  *
- * The testing log data fixtures
+ * Testing log data fixtures for fill database with test data
  *
  * @package App\DataFixtures
  */
@@ -46,7 +46,7 @@ class LogFixtures extends Fixture
             $manager->persist($log);
         }
 
-        // save the logs
+        // flush data to database
         $manager->flush();
     }
 }

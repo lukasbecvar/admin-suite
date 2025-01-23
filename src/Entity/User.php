@@ -10,7 +10,7 @@ use App\Repository\UserRepository;
 /**
  * Class User
  *
- * The User entity database table mapping class
+ * Entity object for mapping database table
  *
  * @package App\Entity
  */
@@ -55,9 +55,9 @@ class User
     private ?string $profile_pic = null;
 
     /**
-     * Get the id of the user
+     * Get database ID of the user
      *
-     * @return int|null The id of the user or null if not found
+     * @return int|null The database ID of the user or null if not found
      */
     public function getId(): ?int
     {
@@ -65,7 +65,7 @@ class User
     }
 
     /**
-     * Get the username of the user
+     * Get username of the user
      *
      * @return string|null The username of the user or null if not found
      */
@@ -75,11 +75,11 @@ class User
     }
 
     /**
-     * Set the username of the user
+     * Set username of the user
      *
      * @param string $username The username of the user
      *
-     * @return static The current object
+     * @return static The user object
      */
     public function setUsername(string $username): static
     {
@@ -89,7 +89,7 @@ class User
     }
 
     /**
-     * Get the password of the user
+     * Get password of the user
      *
      * @return string|null The password of the user or null if not found
      */
@@ -99,11 +99,11 @@ class User
     }
 
     /**
-     * Set the password of the user
+     * Set password of the user
      *
      * @param string $password The password of the user
      *
-     * @return static The current object
+     * @return static The user object
      */
     public function setPassword(string $password): static
     {
@@ -113,7 +113,7 @@ class User
     }
 
     /**
-     * Get the role of the user
+     * Get role of the user
      *
      * @return string|null The role of the user or null if not found
      */
@@ -123,11 +123,11 @@ class User
     }
 
     /**
-     * Set the role of the user
+     * Set role of the user
      *
      * @param string $role The role of the user
      *
-     * @return static The current object
+     * @return static The user object
      */
     public function setRole(string $role): static
     {
@@ -137,7 +137,7 @@ class User
     }
 
     /**
-     * Get the ip address of the user
+     * Get ip address of the user
      *
      * @return string|null The ip address of the user or null if not found
      */
@@ -147,11 +147,11 @@ class User
     }
 
     /**
-     * Set the ip address of the user
+     * Set ip address of the user
      *
      * @param string $ip_address The ip address of the user
      *
-     * @return static The current object
+     * @return static The user object
      */
     public function setIpAddress(string $ip_address): static
     {
@@ -161,7 +161,7 @@ class User
     }
 
     /**
-     * Get the user agent of the user
+     * Get user agent of the user
      *
      * @return string|null The user agent of the user or null if not found
      */
@@ -171,11 +171,11 @@ class User
     }
 
     /**
-     * Set the user agent of the user
+     * Set user agent of the user
      *
      * @param string $user_agent The user agent of the user
      *
-     * @return static The current object
+     * @return static The user object
      */
     public function setUserAgent(string $user_agent): static
     {
@@ -190,7 +190,7 @@ class User
     }
 
     /**
-     * Get the register time of the user
+     * Get register time of the user
      *
      * @return DateTimeInterface|null The register time of the user or null if not found
      */
@@ -200,11 +200,11 @@ class User
     }
 
     /**
-     * Set the register time of the user
+     * Set register time of the user
      *
      * @param DateTimeInterface $register_time The register time of the user
      *
-     * @return static The current object
+     * @return static The user object
      */
     public function setRegisterTime(DateTimeInterface $register_time): static
     {
@@ -214,7 +214,7 @@ class User
     }
 
     /**
-     * Get the last login time of the user
+     * Get last login time of the user
      *
      * @return DateTimeInterface|null The last login time of the user or null if not found
      */
@@ -224,11 +224,11 @@ class User
     }
 
     /**
-     * Set the last login time of the user
+     * Set last login time of the user
      *
      * @param DateTimeInterface $last_login_time The last login time of the user
      *
-     * @return static The current object
+     * @return static The user object
      */
     public function setLastLoginTime(DateTimeInterface $last_login_time): static
     {
@@ -238,7 +238,7 @@ class User
     }
 
     /**
-     * Get the token of the user
+     * Get token of the user (security user idenfier)
      *
      * @return string|null The token of the user or null if not found
      */
@@ -248,11 +248,11 @@ class User
     }
 
     /**
-     * Set the token of the user
+     * Set token of the user (security user idenfier)
      *
      * @param string $token The token of the user
      *
-     * @return static The current object
+     * @return static The user object
      */
     public function setToken(string $token): static
     {
@@ -262,9 +262,9 @@ class User
     }
 
     /**
-     * Get the profile pic of the user
+     * Get user profile picture in base64 format
      *
-     * @return string|null The profile pic of the user or null if not found
+     * @return string|null The user profile picture in base64 format or null if not found
      */
     public function getProfilePic(): ?string
     {
@@ -272,11 +272,11 @@ class User
     }
 
     /**
-     * Set the profile pic of the user
+     * Set user profile picture in base64 format
      *
-     * @param string $profile_pic The profile pic of the user
+     * @param string $profile_pic The user profile picture in base64 format
      *
-     * @return static The current object
+     * @return static The user object
      */
     public function setProfilePic(string $profile_pic): static
     {

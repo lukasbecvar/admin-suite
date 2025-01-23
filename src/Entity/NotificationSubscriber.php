@@ -10,7 +10,7 @@ use App\Repository\NotificationSubscriberRepository;
 /**
  * Class NotificationSubscriber
  *
- * The NotificationSubscriber entity database table mapping class
+ * Entity object for mapping database table
  *
  * @package App\Entity
  */
@@ -44,9 +44,9 @@ class NotificationSubscriber
     private ?int $user_id = null;
 
     /**
-     * Get the id of the notification subscriber
+     * Get database ID of the notification subscriber
      *
-     * @return int|null The id of the notification subscriber or null if not found
+     * @return int|null The database ID of the notification subscriber or null if not found
      */
     public function getId(): ?int
     {
@@ -54,7 +54,7 @@ class NotificationSubscriber
     }
 
     /**
-     * Get the endpoint of the notification subscriber
+     * Get endpoint of the notification subscriber
      *
      * @return string|null The endpoint of the notification subscriber or null if not found
      */
@@ -64,11 +64,11 @@ class NotificationSubscriber
     }
 
     /**
-     * Set the endpoint of the notification subscriber
+     * Set endpoint of the notification subscriber
      *
      * @param string $endpoint The endpoint of the notification subscriber
      *
-     * @return static The current object
+     * @return static The notification subscriber object
      */
     public function setEndpoint(string $endpoint): static
     {
@@ -78,7 +78,7 @@ class NotificationSubscriber
     }
 
     /**
-     * Get the public key of the notification subscriber
+     * Get public key of the notification subscriber
      *
      * @return string|null The public key of the notification subscriber or null if not found
      */
@@ -88,9 +88,11 @@ class NotificationSubscriber
     }
 
     /**
-     * Set the public key of the notification subscriber
+     * Set public key of the notification subscriber
      *
      * @param string $publicKey The public key of the notification subscriber
+     *
+     * @return static The notification subscriber object
      */
     public function setPublicKey(string $publicKey): static
     {
@@ -100,7 +102,7 @@ class NotificationSubscriber
     }
 
     /**
-     * Get the auth token of the notification subscriber
+     * Get auth token of the notification subscriber
      *
      * @return string|null The auth token of the notification subscriber or null if not found
      */
@@ -110,11 +112,11 @@ class NotificationSubscriber
     }
 
     /**
-     * Set the auth token of the notification subscriber
+     * Set auth token of the notification subscriber
      *
      * @param string $authToken The auth token of the notification subscriber
      *
-     * @return static The current object
+     * @return static The notification subscriber object
      */
     public function setAuthToken(string $authToken): static
     {
@@ -124,7 +126,7 @@ class NotificationSubscriber
     }
 
     /**
-     * Get the subscribed time of the notification subscriber
+     * Get subscribed time of the notification subscriber
      *
      * @return DateTimeInterface|null The subscribed time of the notification subscriber or null if not found
      */
@@ -134,11 +136,11 @@ class NotificationSubscriber
     }
 
     /**
-     * Set the subscribed time of the notification subscriber
+     * Set subscribed time of the notification subscriber
      *
      * @param DateTimeInterface|null $subscribed_time The subscribed time of the notification subscriber
      *
-     * @return static The current object
+     * @return static The notification subscriber object
      */
     public function setSubscribedTime(?DateTimeInterface $subscribed_time): static
     {
@@ -148,7 +150,7 @@ class NotificationSubscriber
     }
 
     /**
-     * Get the status of the notification subscriber
+     * Get status of the notification subscriber
      *
      * @return string|null The status of the notification subscriber or null if not found
      */
@@ -158,11 +160,11 @@ class NotificationSubscriber
     }
 
     /**
-     * Set the status of the notification subscriber
+     * Set status of the notification subscriber
      *
      * @param string $status The status of the notification subscriber
      *
-     * @return static The current object
+     * @return static The notification subscriber object
      */
     public function setStatus(string $status): static
     {
@@ -172,7 +174,7 @@ class NotificationSubscriber
     }
 
     /**
-     * Get the user id of the notification subscriber
+     * Get user id of the notification subscriber
      *
      * @return int|null The user id of the notification subscriber or null if not found
      */
@@ -182,11 +184,11 @@ class NotificationSubscriber
     }
 
     /**
-     * Set the user id of the notification subscriber
+     * Set user id of the notification subscriber
      *
      * @param int $user_id The user id of the notification subscriber
      *
-     * @return static The current object
+     * @return static The notification subscriber object
      */
     public function setUserId(int $user_id): static
     {

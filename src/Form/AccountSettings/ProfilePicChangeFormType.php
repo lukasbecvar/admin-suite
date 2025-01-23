@@ -52,7 +52,7 @@ class ProfilePicChangeFormType extends AbstractType
     }
 
     /**
-     * Configure options for this form
+     * Configure options for profile picture change form
      *
      * @param OptionsResolver $resolver The resolver for the form options
      *
