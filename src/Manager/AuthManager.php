@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class AuthManager
  *
- * The manager for user authentication and authorization functionality
+ * Manager for user authentication and authorization
  *
  * @package App\Manager
  */
@@ -63,7 +63,7 @@ class AuthManager
     }
 
     /**
-     * Check is username is blocked
+     * Check if username is blocked (reserved for system)
      *
      * @param string $username The username to check
      *
@@ -71,33 +71,30 @@ class AuthManager
      */
     public function isUsernameBlocked(string $username): bool
     {
-        // get blocked usernames array from config file
+        // get blocked usernames from config file
         $blockedUsernames = $this->appUtil->loadConfig('blocked-usernames.json');
 
-        // check is blocked usernames array found
+        // check if blocked usernames list loaded
         if ($blockedUsernames == null) {
             return false;
         }
 
-        // check is username is blocked
+        // check if username is blocked
         $result = in_array($username, $blockedUsernames);
-
         return $result;
     }
 
     /**
      * Register new user to database
      *
-     * @param string $username The username of the new user
-     * @param string $password The password of the new user
-     *
-     * @throws Exception New user flush to database failed
+     * @param string $username The username of new user
+     * @param string $password The password of new user
      *
      * @return void
      */
     public function registerUser(string $username, string $password): void
     {
-        // check is username is blocked
+        // check if username is blocked
         if ($this->isUsernameBlocked($username)) {
             $this->errorManager->handleError(
                 'error to register new user: username is system',
@@ -113,19 +110,19 @@ class AuthManager
             );
         }
 
-        // generate user auth token
+        // generate user token (for security identification)
         $token = $this->generateUserToken();
 
-        // hash user password
+        // hash password
         $password = $this->securityUtil->generateHash($password);
 
-        // get current time
+        // get current date time
         $time = new DateTime();
 
         // get user ip address
         $ip_address = $this->visitorInfoUtil->getIP();
 
-        // get user browser agent
+        // get user browser identifier
         $user_agent = $this->visitorInfoUtil->getUserAgent();
 
         // check if ip address is unknown
@@ -138,10 +135,8 @@ class AuthManager
             $user_agent = 'Unknown';
         }
 
-        // init user entity
+        // create user entity
         $user = new User();
-
-        // set new user properties
         $user->setUsername($username)
             ->setPassword($password)
             ->setRole('USER')
@@ -156,29 +151,29 @@ class AuthManager
             // persist and flush user to database
             $this->entityManager->persist($user);
             $this->entityManager->flush();
-
-            // log user registration event
-            $this->logManager->log(
-                name: 'authenticator',
-                message: 'new registration user: ' . $username,
-                level: LogManager::LEVEL_CRITICAL
-            );
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to register new user: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+
+        // log user registration event
+        $this->logManager->log(
+            name: 'authenticator',
+            message: 'new registration user: ' . $username,
+            level: LogManager::LEVEL_CRITICAL
+        );
     }
 
     /**
-     * Get current logged user repository
+     * Get user repository of current logged user
      *
      * @return User|null The user object if found, null otherwise
      */
     public function getLoggedUserRepository(): ?User
     {
-        // check is user logged in
+        // check if user is logged in
         if (!$this->isUserLogedin()) {
             return null;
         }
@@ -186,10 +181,10 @@ class AuthManager
         // get logged user token from session
         $token = $this->sessionUtil->getSessionValue('user-token');
 
-        // check if token is string
+        // check if token type is valid
         if (!is_string($token)) {
             $this->errorManager->handleError(
-                message: 'error to get logged user token: token is not a string',
+                message: 'error to get logged user token: token type is not valid (must be string)',
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
@@ -199,13 +194,13 @@ class AuthManager
     }
 
     /**
-     * Check is current logged user is admin
+     * Check if current logged user is admin
      *
-     * @return bool The is user admin or not
+     * @return bool The status of admin (true) or not (false)
      */
     public function isLoggedInUserAdmin(): bool
     {
-        // check is user logged in
+        // check if user is logged in
         if (!$this->isUserLogedin()) {
             return false;
         }
@@ -213,12 +208,12 @@ class AuthManager
         // get logged user repository
         $user = $this->getLoggedUserRepository();
 
-        // check is user exist
+        // check if user exist
         if ($user == null) {
             return false;
         }
 
-        // check is user is admin
+        // check if user is admin
         if ($this->userManager->isUserAdmin((int) $user->getId())) {
             return true;
         }
@@ -227,7 +222,7 @@ class AuthManager
     }
 
     /**
-     * Check is user logged in
+     * Check if user is logged in
      *
      * @return bool The user is logged in or not
      */
@@ -241,7 +236,7 @@ class AuthManager
         // get login auth token form session
         $loginToken = $this->sessionUtil->getSessionValue('user-token');
 
-        // check is login token is string
+        // check if login token type is valid
         if (!is_string($loginToken)) {
             $this->errorManager->handleError(
                 message: 'error to check if user is logged in: login token is not a string',
@@ -249,7 +244,7 @@ class AuthManager
             );
         }
 
-        // check is user token exist in database
+        // check if user token exist in database
         if ($this->userManager->getUserByToken($loginToken) != null) {
             return true;
         }
@@ -258,10 +253,10 @@ class AuthManager
     }
 
     /**
-     * Check if a user can login
+     * Check if user can login to the system
      *
-     * @param string $username The username of the user
-     * @param string $password The password of the user
+     * @param string $username The username of user
+     * @param string $password The password of user
      *
      * @return bool True if user can login, otherwise false
      */
@@ -270,7 +265,7 @@ class AuthManager
         // get user repository
         $user = $this->userManager->getUserByUsername($username);
 
-        // check if user exist
+        // check if user exist in database
         if ($user != null) {
             // check if password is correct
             if ($this->securityUtil->verifyPassword($password, (string) $user->getPassword())) {
@@ -278,7 +273,7 @@ class AuthManager
             }
         }
 
-        // log invalid credentials
+        // log invalid credentials login try
         $this->logManager->log(
             name: 'authenticator',
             message: 'invalid login user: ' . $username . ':' . $password,
@@ -292,9 +287,7 @@ class AuthManager
      * Login user to the system
      *
      * @param string $username The username of the user
-     * @param bool $remember Whether to remember the user
-     *
-     * @throws Exception Login process error
+     * @param bool $remember Enable or diable remember me feature
      *
      * @return void
      */
@@ -309,13 +302,13 @@ class AuthManager
             $token = (string) $user->getToken();
 
             try {
-                // set user auth token to session storage
+                // save user auth token to session storage
                 $this->sessionUtil->setSession('user-token', $token);
 
-                // save user identifier in session
+                // save user identifier to session storage
                 $this->sessionUtil->setSession('user-identifier', (string) $user->getId());
 
-                // set user token cookie for auto login on browser restart
+                // set user token cookie for auto login on browser restart (remember me)
                 if ($remember) {
                     $this->cookieUtil->set('user-token', $token, time() + (60 * 60 * 24 * 7 * 365));
                 }
@@ -330,7 +323,7 @@ class AuthManager
                     level: LogManager::LEVEL_CRITICAL
                 );
 
-                // send email alert
+                // send security alert to admin email
                 if (!$this->logManager->isAntiLogEnabled()) {
                     $this->emailManager->sendDefaultEmail(
                         recipient: $this->appUtil->getEnvValue('ADMIN_CONTACT'),
@@ -352,8 +345,6 @@ class AuthManager
      *
      * @param string $token The user token
      *
-     * @throws Exception User data update flush to database failed
-     *
      * @return void
      */
     public function updateDataOnLogin(string $token): void
@@ -361,7 +352,7 @@ class AuthManager
         // get user repository
         $user = $this->userManager->getUserByToken($token);
 
-        // check if user found
+        // check if user found in database
         if ($user == null) {
             $this->errorManager->handleError(
                 message: 'error to update user data: user not found',
@@ -399,10 +390,10 @@ class AuthManager
             // get user auth token
             $token = $this->getLoggedUserToken();
 
-            // check if token is string
+            // check if token type is valid
             if (!is_string($token)) {
                 $this->errorManager->handleError(
-                    message: 'error to get logged user id: token is not a string',
+                    message: 'error to get logged user id: token type is not valid (must be string)',
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
@@ -410,7 +401,7 @@ class AuthManager
             // get user by token
             $user = $this->userManager->getUserByToken($token);
 
-            // check if user exist
+            // check if user exist in database
             if ($user != null) {
                 // get user id
                 $userId = (int) $user->getId();
@@ -435,15 +426,15 @@ class AuthManager
         // get auth token from session storage
         $loginToken = $this->sessionUtil->getSessionValue('user-token');
 
-        // check if token is string
+        // check if token type is valid
         if (!is_string($loginToken)) {
             $this->errorManager->handleError(
-                message: 'error to get logged user token: login token is not a string',
+                message: 'error to get logged user token: login token type is not valid (must be string)',
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 
-        // check if token exist in database
+        // check if token (user) exist in database
         if ($this->userManager->getUserByToken($loginToken) != null) {
             return $loginToken;
         }
@@ -461,10 +452,10 @@ class AuthManager
         // get current logged user token
         $token = $this->getLoggedUserToken();
 
-        // check if token is string
+        // check if token type is valid
         if (!is_string($token)) {
             $this->errorManager->handleError(
-                message: 'error to get logged user token: token is not a string',
+                message: 'error to get logged user token: token type is not valid (must be string)',
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
@@ -480,28 +471,27 @@ class AuthManager
             );
         }
 
-        // get user username
+        // get username
         $username = $user->getUsername();
-
         return $username;
     }
 
     /**
-     * Logout user action
+     * Logout user from the system
      *
      * @return void
      */
     public function logout(): void
     {
-        // check is user logged in
+        // check if user is logged in
         if ($this->isUserLogedin()) {
             // get logged user token
             $token = $this->getLoggedUserToken();
 
-            // check if token is string
+            // check if token type is valid
             if (!is_string($token)) {
                 $this->errorManager->handleError(
-                    message: 'error to logout user: token is not a string',
+                    message: 'error to logout user: token type is not valid (must be string)',
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
@@ -509,7 +499,7 @@ class AuthManager
             // get user repository by auth token
             $user = $this->userManager->getUserByToken($token);
 
-            // check if user found
+            // check if user found in database
             if ($user == null) {
                 $this->errorManager->handleError(
                     message: 'error to update user data: user not found',
@@ -527,17 +517,15 @@ class AuthManager
             // unset login cookie
             $this->cookieUtil->unset('user-token');
 
-            // unset login session
+            // destroy login session
             $this->sessionUtil->destroySession();
         }
     }
 
     /**
-     * Reset the user password
+     * Reset user password
      *
      * @param string $username The username to password reset
-     *
-     * @throws Exception Password reset process error
      *
      * @return string|null The new password or null on error
      */
@@ -546,7 +534,7 @@ class AuthManager
         /** @var \App\Entity\User $user */
         $user = $this->userManager->getUserByUsername($username);
 
-        // check if user exist
+        // check if user exist in database
         if ($user != null) {
             try {
                 // generate new user password
@@ -589,9 +577,7 @@ class AuthManager
     /**
      * Regenerate tokens for all users in the database
      *
-     * @throws Exception Error to flush new user tokens to database
-     *
-     * @return array<bool|null|string> An array containing the status of operation
+     * @return array<bool|null|string> An array containing of process status
      * - The 'status' key indicates if the operation was successful (true) or not (false)
      * - The 'message' key contains any relevant error message if the operation failed, otherwise it is null
      */
@@ -636,15 +622,15 @@ class AuthManager
     }
 
     /**
-     * Generate aunique 32 characters length auth token for a user
+     * Generate aunique auth token for a user
      *
      * @return string The generated user token
      */
-    public function generateUserToken(): string
+    public function generateUserToken(int $length = 32): string
     {
         do {
             // generate user token
-            $token = ByteString::fromRandom(32)->toString();
+            $token = ByteString::fromRandom($length)->toString();
         } while ($this->userManager->getUserByToken($token) != null);
 
         return $token;
@@ -681,7 +667,7 @@ class AuthManager
                 return $onlineVisitors;
             }
 
-            // check all users status
+            // check users status
             foreach ($users as $user) {
                 $userId = $user->getId();
 

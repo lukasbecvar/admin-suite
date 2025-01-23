@@ -7,13 +7,14 @@ use Exception;
 use PDOException;
 use App\Util\AppUtil;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class DatabaseManager
  *
- * The manager for database operations
+ * Manager for database operations
  *
  * @package App\Manager
  */
@@ -68,8 +69,6 @@ class DatabaseManager
     /**
      * Get list of databases
      *
-     * @throws Exception Database list get error
-     *
      * @return array<int,array<string,mixed>> The list of databases
      */
     public function getDatabasesList(): array
@@ -121,11 +120,9 @@ class DatabaseManager
     }
 
     /**
-     * Check if a database exists
+     * Check if database is exists
      *
      * @param string $dbName The name of the database
-     *
-     * @throws Exception Error chacking database exists
      *
      * @return bool True if the database exists, false otherwise
      */
@@ -147,11 +144,9 @@ class DatabaseManager
     }
 
     /**
-     * Get list of tables in a database
+     * Get list of tables in database
      *
      * @param string $dbName The database name
-     *
-     * @throws Exception Error getting tables list
      *
      * @return array<int,array<string,mixed>>|null The list of tables
      */
@@ -211,12 +206,10 @@ class DatabaseManager
     }
 
     /**
-     * Check if a table exists in a specific database
+     * Check if table is exists in database
      *
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
-     *
-     * @throws Exception Error checking table exists
      *
      * @return bool True if the table exists, false otherwise
      */
@@ -244,12 +237,10 @@ class DatabaseManager
     }
 
     /**
-     * Get number of rows in a specific table in a specific database
+     * Get number of rows in specific table in specific database
      *
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
-     *
-     * @throws Exception Error getting table records count
      *
      * @return int The number of rows in the table
      */
@@ -285,13 +276,11 @@ class DatabaseManager
     }
 
     /**
-     * Get data from a specific table in a specific database with pagination
+     * Get data from a specific table in specific database with pagination
      *
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      * @param int $page The page number (1-based index)
-     *
-     * @throws Exception Error getting table data
      *
      * @return array<mixed> Data from the table for the specified page
      */
@@ -322,8 +311,8 @@ class DatabaseManager
                 'offset' => $offset,
                 'pageSize' => $pageLimit
             ], [
-                'offset' => \Doctrine\DBAL\ParameterType::INTEGER,
-                'pageSize' => \Doctrine\DBAL\ParameterType::INTEGER
+                'offset' => ParameterType::INTEGER,
+                'pageSize' => ParameterType::INTEGER
             ]);
 
             // log table data get event
@@ -343,12 +332,10 @@ class DatabaseManager
     }
 
     /**
-     * Get list of columns in a specific table in a specific database
+     * Get list of columns in specific table in specific database
      *
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
-     *
-     * @throws Exception Error getting columns list
      *
      * @return array<int,array<string,mixed>> The list of columns
      */
@@ -387,13 +374,11 @@ class DatabaseManager
     }
 
     /**
-     * Get a row from a specific table in a specific database by ID
+     * Get row from specific table in specific database by ID
      *
      * @param string $databaseName The name of the database
      * @param string $tableName The name of the table
      * @param int $id The ID of the row to retrieve
-     *
-     * @throws Exception Error getting row by ID
      *
      * @return array<mixed>|null The row data or null if not found
      */
@@ -427,13 +412,11 @@ class DatabaseManager
     }
 
     /**
-     * Check if a record with the given ID exists in the specified table and database
+     * Check if record with the given ID exists in the specified table and database
      *
      * @param string $databaseName The name of the database
      * @param string $tableName The name of the table
      * @param int|string $id The ID to check for
-     *
-     * @throws Exception Error checking record
      *
      * @return bool True if the record exists, false otherwise
      */
@@ -465,8 +448,6 @@ class DatabaseManager
      * @param array<mixed> $formData The submitted form data
      * @param string $databaseName The name of the database
      * @param string $tableName The name of the table
-     *
-     * @throws Exception Error executing add row query to database
      *
      * @return void
      */
@@ -505,14 +486,12 @@ class DatabaseManager
     }
 
     /**
-     * Update row in a specific table in a specific database
+     * Update row in specific table in specific database
      *
      * @param array<mixed> $formData The submitted form data
      * @param string $databaseName The name of the database
      * @param string $tableName The name of the table
      * @param int $id The ID of the row to update
-     *
-     * @throws Exception Error updating row
      *
      * @return void
      */
@@ -522,11 +501,11 @@ class DatabaseManager
         unset($formData['database'], $formData['table'], $formData['page']);
 
         try {
-            // create the list of column placeholders for the update query
+            // create list of column placeholders for update query
             $columnsList = array_keys($formData);
             $setClause = implode(', ', array_map(fn($column) => "$column = :$column", $columnsList));
 
-            // build the SQL query for updating the row
+            // build SQL query for updating row
             $sql = sprintf(
                 'UPDATE %s.%s SET %s WHERE id = :id',
                 $databaseName,
@@ -534,7 +513,7 @@ class DatabaseManager
                 $setClause
             );
 
-            // execute query with the data
+            // execute query with data
             $formData['id'] = $id;
             $this->connection->executeQuery($sql, $formData);
 
@@ -553,23 +532,21 @@ class DatabaseManager
     }
 
     /**
-     * Delete row from a specific table in a specific database
+     * Delete row from specific table in specific database
      *
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
      * @param int $id The ID of the row to delete
      *
-     * @throws Exception Error deleting row
-     *
      * @return void
      */
     public function deleteRowById(string $dbName, string $tableName, int $id): void
     {
-        // sql query to delete a row with the specific ID
+        // sql query to delete row with specific ID
         $sql = 'DELETE FROM ' . $dbName . '.' . $tableName . ' WHERE id = :id';
 
         try {
-            // execute the delete query
+            // execute delete query
             $this->connection->executeStatement($sql, [
                 'id' => $id
             ]);
@@ -589,12 +566,10 @@ class DatabaseManager
     }
 
     /**
-     * Truncate table in a specific database
+     * Truncate table in specific database
      *
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
-     *
-     * @throws Exception Error truncating table
      *
      * @return void
      */
@@ -642,7 +617,7 @@ class DatabaseManager
     }
 
     /**
-     * Get last page number for a table given a row limit per page
+     * Get last page number for table
      *
      * @param string $dbName The name of the database
      * @param string $tableName The name of the table
@@ -680,8 +655,6 @@ class DatabaseManager
      *
      * @param string $tableName The name of the table
      *
-     * @throws Exception Error recalculating table IDs
-     *
      * @return void
      */
     public function recalculateTableIds(string $tableName): void
@@ -709,8 +682,6 @@ class DatabaseManager
      *
      * @param string $dbName The name of the database
      * @param bool $includeData Whether to return the dump including data
-     *
-     * @throws Exception Error getting database dump
      *
      * @return string The database dump
      */
@@ -847,7 +818,7 @@ class DatabaseManager
     }
 
     /**
-     * Split a SQL query into multiple queries
+     * Split SQL query into multiple queries
      *
      * @param string $sql The SQL query to split
      *
@@ -862,7 +833,6 @@ class DatabaseManager
 
         for ($i = 0; $i < strlen($sql); $i++) {
             $char = $sql[$i];
-
             if ($char === '\\') {
                 $escaped = !$escaped;
             } elseif ($char === '\'' || $char === '"') {
@@ -875,7 +845,6 @@ class DatabaseManager
                 $currentQuery = '';
                 continue;
             }
-
             $currentQuery .= $char;
         }
 

@@ -2,12 +2,10 @@
 
 namespace App\Tests\Manager;
 
-use DateTime;
 use Exception;
 use App\Util\AppUtil;
 use App\Entity\Metric;
 use App\Util\CacheUtil;
-use App\Util\ServerUtil;
 use App\Manager\LogManager;
 use App\Manager\ErrorManager;
 use App\Manager\MetricsManager;
@@ -31,7 +29,6 @@ class MetricsManagerTest extends TestCase
     private MetricsManager $metricsManager;
     private AppUtil & MockObject $appUtilMock;
     private CacheUtil & MockObject $cacheUtilMock;
-    private ServerUtil & MockObject $serverUtilMock;
     private LogManager & MockObject $logManagerMock;
     private ErrorManager & MockObject $errorManagerMock;
     private ServiceManager & MockObject $serviceManagerMock;
@@ -44,7 +41,6 @@ class MetricsManagerTest extends TestCase
         // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->cacheUtilMock = $this->createMock(CacheUtil::class);
-        $this->serverUtilMock = $this->createMock(ServerUtil::class);
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
@@ -56,7 +52,6 @@ class MetricsManagerTest extends TestCase
         $this->metricsManager = new MetricsManager(
             $this->appUtilMock,
             $this->cacheUtilMock,
-            $this->serverUtilMock,
             $this->logManagerMock,
             $this->errorManagerMock,
             $this->serviceManagerMock,
@@ -133,57 +128,6 @@ class MetricsManagerTest extends TestCase
         $this->assertIsArray($result);
         $this->assertArrayHasKey('categories', $result);
         $this->assertArrayHasKey('metrics', $result);
-    }
-
-    /**
-     * Test get resource usage metrics
-     *
-     * @return void
-     */
-    public function testGetResourceUsageMetrics(): void
-    {
-        // mock testing metrics data
-        $cpuMetric = $this->createMock(Metric::class);
-        $cpuMetric->method('getTime')->willReturn(new DateTime('2024-11-08 12:00'));
-        $cpuMetric->method('getValue')->willReturn('45.5');
-        $cpuMetric2 = $this->createMock(Metric::class);
-        $cpuMetric2->method('getTime')->willReturn(new DateTime('2024-11-08 13:00'));
-        $cpuMetric2->method('getValue')->willReturn('47.0');
-        $ramMetric = $this->createMock(Metric::class);
-        $ramMetric->method('getTime')->willReturn(new DateTime('2024-11-08 12:00'));
-        $ramMetric->method('getValue')->willReturn('65.0');
-        $ramMetric2 = $this->createMock(Metric::class);
-        $ramMetric2->method('getTime')->willReturn(new DateTime('2024-11-08 13:00'));
-        $ramMetric2->method('getValue')->willReturn('66.5');
-        $storageMetric = $this->createMock(Metric::class);
-        $storageMetric->method('getTime')->willReturn(new DateTime('2024-11-08 12:00'));
-        $storageMetric->method('getValue')->willReturn('80.0');
-        $storageMetric2 = $this->createMock(Metric::class);
-        $storageMetric2->method('getTime')->willReturn(new DateTime('2024-11-08 13:00'));
-        $storageMetric2->method('getValue')->willReturn('85.0');
-        $this->metricRepositoryMock->method('getMetricsByNameAndTimePeriod')->willReturnOnConsecutiveCalls(
-            [$cpuMetric, $cpuMetric2],
-            [$ramMetric, $ramMetric2],
-            [$storageMetric, $storageMetric2]
-        );
-
-        // mock server util for get current usages
-        $this->serverUtilMock->method('getCpuUsage')->willReturn(50.0);
-        $this->serverUtilMock->method('getRamUsagePercentage')->willReturn(70);
-        $this->serverUtilMock->method('getDriveUsagePercentage')->willReturn('60');
-
-        // call tested method
-        $metrics = $this->metricsManager->getResourceUsageMetrics('last_24_hours');
-
-        // assert result
-        $this->assertIsArray($metrics);
-        $this->assertArrayHasKey('categories', $metrics);
-        $this->assertArrayHasKey('cpu', $metrics);
-        $this->assertArrayHasKey('ram', $metrics);
-        $this->assertArrayHasKey('storage', $metrics);
-        $this->assertEquals(['45.5', '47.0'], $metrics['cpu']['data']);
-        $this->assertEquals(['65.0', '66.5'], $metrics['ram']['data']);
-        $this->assertEquals(['80.0', '85.0'], $metrics['storage']['data']);
     }
 
     /**

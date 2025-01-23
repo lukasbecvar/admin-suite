@@ -7,7 +7,6 @@ use Exception;
 use App\Util\AppUtil;
 use App\Entity\Metric;
 use App\Util\CacheUtil;
-use App\Util\ServerUtil;
 use App\Repository\MetricRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class MetricsManager
  *
- * The manager for metrics system functionality
+ * Manager for metrics management
  *
  * @package App\Manager
  */
@@ -23,7 +22,6 @@ class MetricsManager
 {
     private AppUtil $appUtil;
     private CacheUtil $cacheUtil;
-    private ServerUtil $serverUtil;
     private LogManager $logManager;
     private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
@@ -34,7 +32,6 @@ class MetricsManager
     public function __construct(
         AppUtil $appUtil,
         CacheUtil $cacheUtil,
-        ServerUtil $serverUtil,
         LogManager $logManager,
         ErrorManager $errorManager,
         ServiceManager $serviceManager,
@@ -44,7 +41,6 @@ class MetricsManager
     ) {
         $this->appUtil = $appUtil;
         $this->cacheUtil = $cacheUtil;
-        $this->serverUtil = $serverUtil;
         $this->logManager = $logManager;
         $this->errorManager = $errorManager;
         $this->serviceManager = $serviceManager;
@@ -74,7 +70,7 @@ class MetricsManager
 
         $metrics = [];
 
-        // get all services with metrics collection enabled
+        // get all services with metrics collection is enabled
         foreach ($servicesList as $serviceName => $serviceConfig) {
             if ($serviceConfig['type'] == 'http' && $serviceConfig['metrics_monitoring']['collect_metrics']) {
                 $metrics[$serviceName] = $this->getServiceMetrics($serviceName, $timePeriod);
@@ -85,10 +81,10 @@ class MetricsManager
     }
 
     /**
-     * Get metrics for service
+     * Get metrics for specific service
      *
      * @param string $serviceName The service name
-     * @param string $timePeriod The time period
+     * @param string $timePeriod The time period (default is 'last_24_hours')
      *
      * @return array<mixed> The metrics data
      */
@@ -127,7 +123,7 @@ class MetricsManager
         // get metrics
         $metrics = $this->metricRepository->getMetricsByServiceName($serviceName, $timePeriod);
 
-        // format all values to 2 decimal places
+        // format metrics values to 2 decimal places
         foreach ($metrics as $name => $metricGroup) {
             foreach ($metricGroup as $key => $metric) {
                 $metrics[$name][$key]['value'] = round($metric['value'], 2);
@@ -142,114 +138,13 @@ class MetricsManager
         }
 
         // round times in categories array for hour rounding
-        if ($this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL') == '60') {
-            $categories = $this->appUtil->roundTimesInArray($categories);
-        }
+        $categories = $this->appUtil->roundTimesInArray($categories);
 
         // return metrics data with categories
         return [
             'categories' => $categories,
             'metrics' => $metrics
         ];
-    }
-
-    /**
-     * Get resource usage metrics
-     *
-     * @param string $timePeriod The time period
-     *
-     * @return array<string,mixed> The metrics data
-     */
-    public function getResourceUsageMetrics(string $timePeriod = 'last_24_hours'): array
-    {
-        $categories = [];
-        $cpuData = [];
-        $ramData = [];
-        $storageData = [];
-
-        // get usage history metrics
-        $cpuUsage = $this->metricRepository->getMetricsByNameAndTimePeriod('cpu_usage', 'host-system', $timePeriod);
-        $ramUsage = $this->metricRepository->getMetricsByNameAndTimePeriod('ram_usage', 'host-system', $timePeriod);
-        $storageUsage = $this->metricRepository->getMetricsByNameAndTimePeriod('storage_usage', 'host-system', $timePeriod);
-
-        // check if metrics data is iterable
-        if (!is_iterable($cpuUsage) || !is_iterable($ramUsage) || !is_iterable($storageUsage)) {
-            $this->errorManager->handleError(
-                message: 'error to get metrics: return data is not iterable',
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
-
-        // get current usages
-        $cpuUsageCurrent = $this->serverUtil->getCpuUsage();
-        $ramUsageCurrent = $this->serverUtil->getRamUsagePercentage();
-        $storageUsageCurrent = $this->serverUtil->getDriveUsagePercentage();
-
-        // format cpu usage value
-        if (str_starts_with((string) $cpuUsageCurrent, '0.')) {
-            $cpuUsageCurrent = round($cpuUsageCurrent, 1);
-        } else {
-            $cpuUsageCurrent = intval($cpuUsageCurrent);
-        }
-
-        if (in_array($timePeriod, ['last_week', 'last_month', 'all_time'])) {
-            // fill categories and cpu usage data (average aggregated)
-            foreach ($cpuUsage as $metric) {
-                $categories[] = $metric['date'];
-                $cpuData[] = (float) $metric['average'];
-            }
-
-            // fill ram usage data (average aggregated)
-            foreach ($ramUsage as $metric) {
-                $ramData[] = (float) $metric['average'];
-            }
-
-            // fill storage usage data (average aggregated)
-            foreach ($storageUsage as $metric) {
-                $storageData[] = (float) $metric['average'];
-            }
-        } else {
-            // fill categories and cpu usage data
-            foreach ($cpuUsage as $metric) {
-                $categories[] = $metric->getTime()->format('H:i');
-                $cpuData[] = (float) $metric->getValue();
-            }
-
-            // fill ram usage data
-            foreach ($ramUsage as $metric) {
-                $ramData[] = (float) $metric->getValue();
-            }
-
-            // fill storage usage data
-            foreach ($storageUsage as $metric) {
-                $storageData[] = (float) $metric->getValue();
-            }
-        }
-
-        // round times in categories array for hour rounding
-        if ($this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL') == '60') {
-            $categories = $this->appUtil->roundTimesInArray($categories);
-        }
-
-        // build metrics data
-        $metricsData = [
-            'categories' => $categories,
-            'cpu' => [
-                'data' => $cpuData,
-                'current' => $cpuUsageCurrent
-            ],
-            'ram' => [
-                'data' => $ramData,
-                'current' => $ramUsageCurrent
-            ],
-            'storage' => [
-                'data' => $storageData,
-                'current' => $storageUsageCurrent
-            ]
-        ];
-
-        // return metrics data
-        return $metricsData;
     }
 
     /**
@@ -274,8 +169,6 @@ class MetricsManager
      * @param string $metricName The metric name
      * @param string $value The metric value
      * @param string $serviceName The metric service name
-     *
-     * @throws Exception Error to flush metric to database
      *
      * @return void
      */
@@ -339,11 +232,11 @@ class MetricsManager
         $this->cacheUtil->setValue($metricKey, $metricSum, $cacheExpiration);
         $this->cacheUtil->setValue($countKey, $count, $cacheExpiration);
 
-        // if it's more than metrics save interval, save averages and reset values
+        // check if metric can save to real database
         if (!$this->cacheUtil->isCatched($lastSaveKey)) {
             $averageValue = round($metricSum / $count, 1);
 
-            // save averages to DB
+            // save average value (per metirc save interval) to database
             $this->saveMetric($metricName, (string) $averageValue, $serviceName);
 
             // reset metrics cache
@@ -388,12 +281,10 @@ class MetricsManager
     }
 
     /**
-     * Delete metrics from database
+     * Delete specifc metric from database based on service name and metric name
      *
      * @param string $metricName The metric name
      * @param string $serviceName The metric service name
-     *
-     * @throws Exception Error to delete metric from database
      *
      * @return void
      */

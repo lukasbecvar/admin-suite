@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class BanManager
  *
- * The manager for user ban system functionality
+ * Manager for user ban list management
  *
  * @package App\Manager
  */
@@ -47,8 +47,6 @@ class BanManager
      * @param int $userId The id of user to ban
      * @param string $reason The ban reason
      *
-     * @throws Exception Error flush ban to database
-     *
      * @return void
      */
     public function banUser(int $userId, string $reason = 'no-reason'): void
@@ -69,7 +67,7 @@ class BanManager
             ->setBannedById($this->authManager->getLoggedUserId())
             ->setBannedUserId($userId);
 
-        // ban user
+        // persist and flush ban to database
         try {
             $this->entityManager->persist($banned);
             $this->entityManager->flush();
@@ -134,8 +132,6 @@ class BanManager
      *
      * @param int $userId The id of user to unban
      *
-     * @throws Exception Error flush unban to database
-     *
      * @return void
      */
     public function unBanUser(int $userId): void
@@ -199,7 +195,7 @@ class BanManager
     }
 
     /**
-     * Get count of banned users
+     * Get banned users count
      *
      * @return int The count of banned users
      */

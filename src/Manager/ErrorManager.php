@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 /**
  * Class ErrorManager
  *
- * The manager for error handling
+ * Manager for error handling
  *
  * @package App\Manager
  */
@@ -30,6 +30,8 @@ class ErrorManager
      *
      * @param string $message The error message
      * @param int $code The error code
+     *
+     * @throws HttpException Error exception
      *
      * @return never Always throws error exception
      */

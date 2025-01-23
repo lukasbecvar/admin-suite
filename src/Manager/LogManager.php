@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class LogManager
  *
- * The manager for log system functionality
+ * Manager for log management
  *
  * @package App\Manager
  */
@@ -65,8 +65,6 @@ class LogManager
      * @param string $message The log message
      * @param int $level The log level
      *
-     * @throws Exception Error to persist or flush log to database
-     *
      * @return void
      */
     public function log(string $name, string $message, int $level = 1): void
@@ -95,15 +93,13 @@ class LogManager
         $ipAddress = $this->visitorInfoUtil->getIP();
         $userAgent = (string) $this->visitorInfoUtil->getUserAgent();
 
-        // check if the visitor ip address is unknown
+        // check if visitor ip address is unknown
         if ($ipAddress == null) {
             $ipAddress = 'Unknown';
         }
 
-        // init log entity
+        // create log entity
         $log = new Log();
-
-        // set log properties
         $log->setName($name)
             ->setMessage($message)
             ->setStatus('UNREADED')
@@ -190,11 +186,7 @@ class LogManager
     /**
      * Get count of logs based on their status
      *
-     * This method retrieves the count of logs from the repository based on the specified status
-     * If the status is 'all', it counts all logs. Otherwise, it counts logs
-     * matching the given status
-     *
-     * @param string $status The status of the logs to count. Defaults to 'all'
+     * @param string $status The status of the logs to count (default is 'all')
      * @param int $userId The user id for get all count logs
      *
      * @return int The count of logs
@@ -232,11 +224,7 @@ class LogManager
     /**
      * Fetch logs based on their status
      *
-     * This method retrieves logs from the repository based on the specified status
-     * If the status is 'all', it retrieves all logs. Otherwise, it fetches logs
-     * matching the given status.
-     *
-     * @param string $status The status of the logs to retrieve. Defaults to 'all'
+     * @param string $status The status of the logs to retrieve (default is 'all')
      * @param int $userId The user id for get all logs
      * @param int $page The logs list page number
      *
@@ -262,7 +250,7 @@ class LogManager
         }
 
         // log logs viewed event
-        $this->log('log-manager', strtolower($status) . ' logs viewed', self::LEVEL_NOTICE);
+        $this->log('log-manager', strtolower($status) . ' logs viewed', self::LEVEL_INFO);
 
         return $logs;
     }
@@ -286,15 +274,13 @@ class LogManager
      * @param string $newStatus The new status to set for the log entry
      *
      * @return void
-     *
-     * @throws Exception Error to update log status
      */
     public function updateLogStatusById(int $id, string $newStatus): void
     {
         /** @var \App\Entity\Log $log */
         $log = $this->logRepository->find($id);
 
-        // check if log found
+        // check if log found in database
         if (!$log) {
             $this->errorManager->handleError(
                 message: 'log status update error: log id: ' . $id . ' not found',
@@ -304,7 +290,6 @@ class LogManager
 
         // update status
         try {
-            // update status
             $log->setStatus($newStatus);
 
             // flush data to database
@@ -327,11 +312,6 @@ class LogManager
     /**
      * Set all logs with status 'UNREADED' to 'READED'
      *
-     * This method fetches logs with status 'UNREADED' using getLogsWhereStatus()
-     * updates their status to 'READED', and flushes the changes to the database
-     *
-     * @throws Exception Error to flush update to database
-     *
      * @return void
      */
     public function setAllLogsToReaded(): void
@@ -346,8 +326,8 @@ class LogManager
             }
         }
 
+        // flush changes to the database
         try {
-            // flush changes to the database
             $this->entityManager->flush();
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -358,18 +338,16 @@ class LogManager
     }
 
     /**
-     * Retrieves list of system log files
+     * Get list of system log files
      *
-     * @throws Exception If there is an error during file retrieval (e.g., file not found or permission issue)
-     *
-     * @return array<array<mixed>> An array of relative pathnames of log files found in the /var/log directory
+     * @return array<array<mixed>> Array of relative pathnames of log files found in logs directory
      */
     public function getSystemLogs(): array
     {
-        // system logs directory
+        // get system logs directory
         $systemLogsDirectory = $this->appUtil->getEnvValue('SYSTEM_LOGS_DIR');
 
-        // get log files list
+        // get logs files list
         $logFiles = $this->fileSystemUtil->getFilesList($systemLogsDirectory, true);
 
         // log system logs viewed event
@@ -380,11 +358,9 @@ class LogManager
     }
 
     /**
-     * Retrieves the content of a specific system log file
+     * Get content of specific system log file
      *
      * @param string $logFile The relative pathname of the log file to retrieve
-     *
-     * @throws Exception If there is an error during file retrieval (e.g., file not found or permission issue)
      *
      * @return mixed The content of the log file, or null if the file does not exist
      */
@@ -407,9 +383,7 @@ class LogManager
     }
 
     /**
-     * Get exception files
-     *
-     * @throws Exception If an error occurs while retrieving the exception files
+     * Get exception files list
      *
      * @return array<mixed>|null
      */
@@ -449,8 +423,6 @@ class LogManager
      * Delete exception file
      *
      * @param string $exceptionFile The name of the exception file to delete
-     *
-     * @throws Exception If there is an error during file deletion
      *
      * @return void
      */
