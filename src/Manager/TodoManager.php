@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class TodoManager
  *
- * The manager for todo component functionality
+ * Manager for todo component functionality
  *
  * @package App\Manager
  */
@@ -56,15 +56,15 @@ class TodoManager
      */
     public function getTodos(string $filter = 'open'): array
     {
-        // init plain todo list
-        $plainTodos = [];
+        // init todo list
+        $todoList = [];
 
         // get todo list
         $todos = $this->todoRepository->findByUserIdAndStatus($this->authManager->getLoggedUserId(), $filter);
 
         // decrypt todo texts
         foreach ($todos as $todo) {
-            $plainTodos[] = [
+            $todoList[] = [
                 'id' => $todo->getId(),
                 'todoText' => $this->securityUtil->decryptAes((string) $todo->getTodoText()),
                 'addedTime' => $todo->getAddedTime(),
@@ -75,7 +75,7 @@ class TodoManager
         }
 
         // return todo list
-        return $plainTodos;
+        return $todoList;
     }
 
     /**
@@ -144,7 +144,7 @@ class TodoManager
         $createdAt = $todo->getAddedTime();
         $closedAt = $todo->getCompletedTime();
 
-        // check if ownerId set
+        // check if owner id is set
         if ($owner != null) {
             $owner = $this->userManager->getUsernameById($owner);
         }
@@ -168,17 +168,15 @@ class TodoManager
     }
 
     /**
-     * Create a new todo
+     * Create new todo
      *
      * @param string $todoText The todo text
-     *
-     * @throws Exception Error to persis or flush todo to database
      *
      * @return void
      */
     public function createTodo(string $todoText): void
     {
-        // encrypt the todo text
+        // encrypt todo text
         $todoText = $this->securityUtil->encryptAes($todoText);
 
         // create new todo entity
@@ -214,8 +212,6 @@ class TodoManager
      * @param int $todoId The todo id
      * @param string $todoText The todo text
      *
-     * @throws Exception Error to update todo entity
-     *
      * @return void
      */
     public function editTodo(int $todoId, string $todoText): void
@@ -231,7 +227,7 @@ class TodoManager
             );
         }
 
-        // check if user is owner of the todo
+        // check if user is owner of todo
         if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
             $this->errorManager->handleError(
                 message: 'you are not the owner of the todo: ' . $todoId,
@@ -277,8 +273,6 @@ class TodoManager
      * Close todo by id
      *
      * @param int $todoId The todo id
-     *
-     * @throws Exception Error to flush changes to database
      *
      * @return void
      */
@@ -329,8 +323,6 @@ class TodoManager
      * Reopen todo by id
      *
      * @param int $todoId The todo id
-     *
-     * @throws Exception Error to flush changes to database
      *
      * @return void
      */
@@ -389,8 +381,6 @@ class TodoManager
      * Delete todo by id
      *
      * @param int $todoId The todo id
-     *
-     * @throws Exception If an error occurs while deleting the todo
      *
      * @return void
      */

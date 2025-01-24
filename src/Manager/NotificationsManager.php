@@ -16,7 +16,7 @@ use App\Repository\NotificationSubscriberRepository;
 /**
  * Class NotificationsManager
  *
- * The manager for notifications functionality
+ * Manager for sending push notifications
  *
  * @package App\Manager
  */
@@ -62,7 +62,7 @@ class NotificationsManager
     }
 
     /**
-     * Get notifications subscribers
+     * Get notification subscribers
      *
      * @param string $status The status of the notifications subscribers
      *
@@ -99,8 +99,6 @@ class NotificationsManager
 
     /**
      * Regenerate VAPID keys
-     *
-     * @throws Exception If an error occurs while regenerating VAPID keys
      *
      * @return array<string> The new VAPID keys
      */
@@ -149,8 +147,6 @@ class NotificationsManager
      * @param string $publicKey The public key of the push notifications
      * @param string $authToken The auth token of the push notifications
      *
-     * @throws Exception If the subscriber is not saved to the database
-     *
      * @return void
      */
     public function subscribePushNotifications(string $endpoint, string $publicKey, string $authToken): void
@@ -191,8 +187,6 @@ class NotificationsManager
      *
      * @param int $id The id of the notifications subscriber
      * @param string $status The status of the notifications subscriber
-     *
-     * @throws Exception If the notifications subscriber is not found
      *
      * @return void
      */
@@ -268,7 +262,7 @@ class NotificationsManager
                     'body' => $message
                 ]);
 
-                // send notification
+                // add notification to queue
                 if ($notificationPayload) {
                     $webPush->queueNotification($subscription, $notificationPayload, [
                         'TTL' => intval($this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_MAX_TTL'))
@@ -276,12 +270,12 @@ class NotificationsManager
                 }
             }
 
-            // flush notifications to send
+            // send notifications
             foreach ($webPush->flush() as $report) {
                 /** @var \Minishlink\WebPush\MessageSentReport $report */
                 $endpoint = $report->getRequest()->getUri()->__toString();
                 if (!$report->isSuccess()) {
-                    // handle subscriber if the error is 410 (Gone)
+                    // check response code status
                     $response = $report->getResponse();
                     if ($response !== null && $response->getStatusCode() === 410) {
                         $subscriberId = $this->getSubscriberIdByEndpoint($endpoint);

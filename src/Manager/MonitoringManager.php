@@ -19,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Class MonitoringManager
  *
- * The manager for monitoring component functionality
+ * Manager for monitoring component
  *
  * @package App\Manager
  */
@@ -74,8 +74,6 @@ class MonitoringManager
      *
      * @param array<mixed> $search The search parameters
      *
-     * @throws Exception Error while retrieving the repository
-     *
      * @return MonitoringStatus|null The service monitoring repository
      */
     public function getMonitoringStatusRepository(array $search): ?MonitoringStatus
@@ -91,13 +89,11 @@ class MonitoringManager
     }
 
     /**
-     * Set monitoring status for a service
+     * Set monitoring status for service
      *
      * @param string $serviceName The name of the service
      * @param string $message The message to set for the service
      * @param string $status The status to set for the service
-     *
-     * @throws Exception Error to flush monitoring status
      *
      * @return void
      */
@@ -108,9 +104,8 @@ class MonitoringManager
 
         // create monitoring status (if not found)
         if ($monitoringStatus == null) {
-            $monitoringStatus = new MonitoringStatus();
-
             // set monitored service properties
+            $monitoringStatus = new MonitoringStatus();
             $monitoringStatus->setServiceName($serviceName)
                 ->setStatus($status)
                 ->setMessage('new service initialization')
@@ -118,10 +113,10 @@ class MonitoringManager
                 ->setSlaTimeframe(date('Y-m'))
                 ->setLastUpdateTime(new DateTime());
 
-            // persist service monitoring
+            // persist monitoring status
             $this->entityManagerInterface->persist($monitoringStatus);
 
-        // update service monitoring properties (if found)
+        // update monitoring status properties (if found)
         } else {
             $monitoringStatus->setMessage($message)
                 ->setStatus($status)
@@ -140,11 +135,9 @@ class MonitoringManager
     }
 
     /**
-     * Get monitoring status for a service
+     * Get monitoring status for service
      *
      * @param string $serviceName The name of the service
-     *
-     * @throws Exception Error to get monitoring status
      *
      * @return string|null The service monitoring status
      */
@@ -221,7 +214,7 @@ class MonitoringManager
     }
 
     /**
-     * Increase down time for a service
+     * Increase down time for specific service
      *
      * @param string $serviceName The name of the service
      * @param int $minutes The number of minutes to increase the down time
@@ -252,7 +245,7 @@ class MonitoringManager
     }
 
     /**
-     * Get service SLA
+     * Get service SLA (for current month timeframe)
      *
      * @param string $serviceName The name of the service
      *
@@ -321,7 +314,7 @@ class MonitoringManager
     }
 
     /**
-     * Save SLA history
+     * Save service SLA to history
      *
      * @param string $serviceName The name of the service
      * @param string $slaTimeframe The timeframe of the SLA
@@ -447,14 +440,14 @@ class MonitoringManager
     /**
      * Handle database down
      *
-     * @param SymfonyStyle $io The io interface
+     * @param SymfonyStyle $io The command output decorator
      * @param bool $databaseDown The database down flag
      *
      * @return void
      */
     public function handleDatabaseDown(SymfonyStyle $io, bool $databaseDown): void
     {
-        // check if database is down flag is set
+        // check if database is down flag is set (if database is not down before)
         if ($databaseDown == false) {
             $this->emailManager->sendMonitoringStatusEmail(
                 recipient: $this->appUtil->getEnvValue('ADMIN_CONTACT'),
@@ -470,7 +463,7 @@ class MonitoringManager
     /**
      * Init monitoring process (called from monitoring process command)
      *
-     * @param SymfonyStyle $io The io interface
+     * @param SymfonyStyle $io The command output decorator
      *
      * @return void
      */
@@ -491,7 +484,7 @@ class MonitoringManager
         $monitoringInterval = (int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60;
         $possibleDownTime = $monitoringInterval / 60;
 
-        // get metrics
+        // get current resource usages
         $cpuUsage = $this->serverUtil->getCpuUsage();
         $ramUsage = $this->serverUtil->getRamUsagePercentage();
         $storageUsage = (int) $this->serverUtil->getDriveUsagePercentage();
@@ -559,28 +552,25 @@ class MonitoringManager
             );
         }
 
-        // get monitored services
+        /** @var array<array<mixed>> $services */
         $services = $this->serviceManager->getServicesList();
 
         // check if services list is iterable
         if (!is_iterable($services)) {
-            $io->error('error to iterate services list');
+            $io->error('Error to iterate services list');
             return;
         }
 
         // handle configured services status
         foreach ($services as $service) {
-            // force retype service array (to avoid phpstan error)
-            $service = (array) $service;
-
             // check if service is enabled
             if ($service['monitoring'] == false) {
                 continue;
             }
 
-            // check systemd service status
+            // monitor systemd services
             if ($service['type'] == 'systemd') {
-                // check running state
+                // check if service is running
                 if ($this->serviceManager->isServiceRunning($service['service_name'])) {
                     $this->handleMonitoringStatus(
                         serviceName: $service['service_name'],
@@ -603,7 +593,7 @@ class MonitoringManager
                 }
             }
 
-            // check http service status
+            // monitor http services
             if ($service['type'] == 'http') {
                 // get service status
                 $serviceStatus = $this->serviceManager->checkWebsiteStatus($service['url']);
@@ -649,7 +639,7 @@ class MonitoringManager
                             '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>' . $service['display_name'] . ' is online (response code: ' . $serviceStatus['responseCode'] . ', response time: ' . $serviceStatus['responseTime'] . 'ms)</>'
                         );
 
-                        // check if metrics should be collected
+                        // check if metrics can be collected
                         if ($service['metrics_monitoring']['collect_metrics'] == 'true') {
                             // get metrics from metrics collector
                             $metrics = $this->jsonUtil->getJson($service['metrics_monitoring']['metrics_collector_url']);
@@ -679,7 +669,7 @@ class MonitoringManager
                                         }
                                     } catch (Exception $e) {
                                         $this->errorManager->logError(
-                                            message: $e->getMessage(),
+                                            message: 'Error to save metric: ' . $e->getMessage(),
                                             code: Response::HTTP_INTERNAL_SERVER_ERROR
                                         );
                                     }
@@ -688,7 +678,7 @@ class MonitoringManager
                         }
                     }
 
-                // service is not online
+                // handle service offline status
                 } else {
                     $this->handleMonitoringStatus(
                         serviceName: $service['service_name'],

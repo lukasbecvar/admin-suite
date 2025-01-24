@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class ServiceManager
  *
- * The manager for services command start, stop and restart functionality
+ * Manager for managing services on the system
  *
  * @package App\Manager
  */
@@ -33,7 +33,7 @@ class ServiceManager
     }
 
     /**
-     * Get services list from the services-monitoring.json file
+     * Get services list from the services configuration file
      *
      * @return array<mixed>|null The services list, null
      */
@@ -43,7 +43,22 @@ class ServiceManager
     }
 
     /**
-     * Run systemd action on a specified service
+     * Check if services list file exists
+     *
+     * @return bool The services list file exists, false otherwise
+     */
+    public function isServicesListExist(): bool
+    {
+        // check if services list exist
+        if ($this->getServicesList() != null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Run systemd action on for specified service
      *
      * @param string $serviceName The name of the service
      * @param string $action The action to run on the service
@@ -89,8 +104,6 @@ class ServiceManager
      *
      * @param string $service The name of the service
      *
-     * @throws Exception Error with systemctl command execution
-     *
      * @return bool The service is running, false otherwise
      */
     public function isServiceRunning(string $service): bool
@@ -117,13 +130,11 @@ class ServiceManager
     }
 
     /**
-     * Check if a socket is open
+     * Check if socket is open (if service is running on ip:port)
      *
      * @param string $ip The IP address
      * @param int $port The port number
-     * @param int $timeout The maximal timeout in seconds
-     *
-     * @throws Exception Error with socket connection
+     * @param int $timeout The maximal timeout in seconds (default: 5)
      *
      * @return string Online if the socket is open, Offline otherwise
      */
@@ -132,7 +143,7 @@ class ServiceManager
         $status = 'Offline';
         $service = null;
 
-        // open service socket
+        // open socket connection
         try {
             $service = @fsockopen($ip, $port, timeout: $timeout);
         } catch (Exception $e) {
@@ -144,7 +155,7 @@ class ServiceManager
 
         // check if service is not null
         if ($service != null) {
-            // check is service online
+            // check if service is online
             if ($service >= 1) {
                 $status = 'Online';
             }
@@ -154,11 +165,9 @@ class ServiceManager
     }
 
     /**
-     * Check if a process is running
+     * Check if process is running
      *
      * @param string $process The name of the process
-     *
-     * @throws Exception Error with pgrep command execution
      *
      * @return bool The process is running, false otherwise
      */
@@ -183,8 +192,6 @@ class ServiceManager
 
     /**
      * Check if UFW (Uncomplicated Firewall) is running
-     *
-     * @throws Exception Error with ufw status execution
      *
      * @return bool UFW is running, false otherwise
      */
@@ -212,26 +219,9 @@ class ServiceManager
     }
 
     /**
-     * Check if services list file exists
-     *
-     * @return bool The services list file exists, false otherwise
-     */
-    public function isServicesListExist(): bool
-    {
-        // check if services list exist
-        if ($this->getServicesList() != null) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Execute command
+     * Execute command on the system
      *
      * @param string $command The command to execute
-     *
-     * @throws Exception If an error occurs while executing command
      *
      * @return void
      */
@@ -248,7 +238,7 @@ class ServiceManager
     }
 
     /**
-     * Check if a website is online
+     * Check if website is online
      *
      * @param string $url The URL of the website
      *

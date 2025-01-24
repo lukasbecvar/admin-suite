@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class UserManager
  *
- * The manager for user system functionality
+ * Manager for user system functionality
  *
  * @package App\Manager
  */
@@ -43,7 +43,7 @@ class UserManager
     }
 
     /**
-     * Get user from the repository by search criteria
+     * Get user from repository by search criteria
      *
      * @param array<mixed> $search The search criteria
      *
@@ -56,7 +56,7 @@ class UserManager
     }
 
     /**
-     * Get all users from the repository
+     * Get all users from repository
      *
      * @return array<User> The user object if found, null otherwise
      */
@@ -66,7 +66,7 @@ class UserManager
     }
 
     /**
-     * Get user from the repository by username
+     * Get user from repository by username
      *
      * @param string $username The username of user to retrieve
      *
@@ -78,7 +78,7 @@ class UserManager
     }
 
     /**
-     * Get user from the repository by ID
+     * Get user from repository by ID
      *
      * @param int $userId The ID of the user to retrieve
      *
@@ -90,7 +90,7 @@ class UserManager
     }
 
     /**
-     * Get user from the repository by token
+     * Get user from repository by token
      *
      * @param string $token The token of the user to retrieve
      *
@@ -102,7 +102,7 @@ class UserManager
     }
 
     /**
-     * Get all users count from the repository
+     * Get all users count from repository
      *
      * @return int|null The user object if found, null otherwise
      */
@@ -112,7 +112,7 @@ class UserManager
     }
 
     /**
-     * Get all users from the repository by page
+     * Get all users from repository by page
      *
      * @param int $page The users list page number
      *
@@ -136,7 +136,7 @@ class UserManager
     }
 
     /**
-     * Check if user exists
+     * Check if user exists in database
      *
      * @param string $username The username to check
      *
@@ -148,7 +148,7 @@ class UserManager
     }
 
     /**
-     * Get if user exists by ID
+     * Check if user exists by ID
      *
      * @param int $userId The id of the user to check
      *
@@ -222,8 +222,6 @@ class UserManager
      * @param int $userId The id of the user to add the admin role
      * @param string $role The role to add
      *
-     * @throws Exception Error to flush updated user data to database
-     *
      * @return void
      */
     public function updateUserRole(int $userId, string $role): void
@@ -283,8 +281,6 @@ class UserManager
      *
      * @param int $userId The user ID
      *
-     * @throws Exception Error to remove user from database
-     *
      * @return void
      */
     public function deleteUser(int $userId): void
@@ -315,12 +311,10 @@ class UserManager
     }
 
     /**
-     * Update user username
+     * Update username
      *
      * @param int $userId The user ID
      * @param string $newUsername The new username
-     *
-     * @throws Exception Error to flush updated user data to database
      *
      * @return void
      */
@@ -362,8 +356,6 @@ class UserManager
      * @param int $userId The user ID
      * @param string $newPassword The new password
      *
-     * @throws Exception Error to flush updated user data to database
-     *
      * @return void
      */
     public function updatePassword(int $userId, string $newPassword): void
@@ -403,8 +395,6 @@ class UserManager
      *
      * @param int $userId The user ID
      * @param string $newProfilePicture The new profile picture (base64 encoded)
-     *
-     * @throws Exception If there is an error while updating the profile picture
      *
      * @return void
      */
