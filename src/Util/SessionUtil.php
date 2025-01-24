@@ -28,7 +28,7 @@ class SessionUtil
     }
 
     /**
-     * Start a new session if not already started
+     * Start new session if not already started
      *
      * @return void
      */
@@ -40,7 +40,7 @@ class SessionUtil
     }
 
     /**
-     * Destroy the current session
+     * Destroy current session
      *
      * @return void
      */
@@ -52,11 +52,11 @@ class SessionUtil
     }
 
     /**
-     * Check if a session with the specified name exists
+     * Check if session with the specified name exists
      *
      * @param string $sessionName The name of the session to check
      *
-     * @return bool Whether the session exists
+     * @return bool Session exists status
      */
     public function checkSession(string $sessionName): bool
     {
@@ -64,7 +64,7 @@ class SessionUtil
     }
 
     /**
-     * Set a session value
+     * Set session value
      *
      * @param string $sessionName The name of the session
      * @param string $sessionValue The value to set for the session
@@ -78,7 +78,7 @@ class SessionUtil
     }
 
     /**
-     * Get the value of a session
+     * Get session value
      *
      * @param string $sessionName The name of the session
      *
@@ -95,6 +95,7 @@ class SessionUtil
             /** @var string $value */
             $value = $this->requestStack->getSession()->get($sessionName);
         } catch (Exception) {
+            return null;
         }
 
         // check if session value get

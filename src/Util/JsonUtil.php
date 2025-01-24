@@ -7,20 +7,18 @@ use Exception;
 /**
  * Class JsonUtil
  *
- * Util for get JSON data from a file or URL
+ * Util for get JSON data from file or URL
  *
  * @package App\Util
  */
 class JsonUtil
 {
     /**
-     * Get JSON data from a file or URL
+     * Get JSON data from file or URL
      *
      * @param string $target The file path or URL
      *
-     * @throws Exception If an error occurs while retrieving the JSON data
-     *
-     * @return array<mixed>|null The decoded JSON data as an associative array or null on failure
+     * @return array<mixed>|null The decoded JSON data in associative array
      */
     public function getJson($target): ?array
     {

@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 /**
  * Class AppUtil
  *
- * The basic utilities class for the application
+ * Util with basic app, env & config methods
  *
  * @package App\Util
  */
@@ -25,7 +25,7 @@ class AppUtil
     }
 
     /**
-     * Get the application root directory
+     * Get application root directory
      *
      * @return string The application root directory
      */
@@ -35,20 +35,20 @@ class AppUtil
     }
 
     /**
-     * Check if the request is SSL
+     * Check if request is running over SSL
      *
-     * @return bool True if the request is SSL, false otherwise
+     * @return bool True if request is secured via SSL, false otherwise
      */
     public function isSsl(): bool
     {
-        // check if HTTPS header is set and its value is either 1 or 'on'
+        // check if HTTPS header is set
         return isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 1 || strtolower($_SERVER['HTTPS']) === 'on');
     }
 
     /**
-     * Check if the assets exist
+     * Check if assets exist
      *
-     * @return bool True if the assets exist, false otherwise
+     * @return bool True if assets exist, false otherwise
      */
     public function isAssetsExist(): bool
     {
@@ -56,14 +56,14 @@ class AppUtil
     }
 
     /**
-     * Check if the application is in development mode
+     * Check if application is in development mode
      *
-     * @return bool True if the application is in development mode, false otherwise
+     * @return bool True if application is in development mode, false otherwise
      */
     public function isDevMode(): bool
     {
+        // get env name
         $envName = $this->getEnvValue('APP_ENV');
-
         if ($envName == 'dev' || $envName == 'test') {
             return true;
         }
@@ -72,9 +72,9 @@ class AppUtil
     }
 
     /**
-     * Check if the SSL only is enabled
+     * Check if SSL only is enabled
      *
-     * @return bool True if the SSL only is enabled, false otherwise
+     * @return bool True if SSL only is enabled, false otherwise
      */
     public function isSSLOnly(): bool
     {
@@ -82,9 +82,9 @@ class AppUtil
     }
 
     /**
-     * Check if the application is in maintenance mode
+     * Check if application is in maintenance mode
      *
-     * @return bool True if the application is in maintenance mode, false otherwise
+     * @return bool True if application is in maintenance mode, false otherwise
      */
     public function isMaintenance(): bool
     {
@@ -92,9 +92,9 @@ class AppUtil
     }
 
     /**
-     * Check if the database logging is enabled
+     * Check if database logging is enabled
      *
-     * @return bool True if the database logging is enabled, false otherwise
+     * @return bool True if database logging is enabled, false otherwise
      */
     public function isDatabaseLoggingEnabled(): bool
     {
@@ -102,7 +102,7 @@ class AppUtil
     }
 
     /**
-     * Get the environment variable value
+     * Get environment variable value
      *
      * @param string $key The environment variable key
      *
@@ -114,7 +114,7 @@ class AppUtil
     }
 
     /**
-     * Get the hasher configuration
+     * Get hasher configuration
      *
      * @return array<int> The hasher configuration
      */
@@ -128,7 +128,7 @@ class AppUtil
     }
 
     /**
-     * Load config file
+     * Load config file (json files only)
      *
      * @param string $configFile The config file to load
      *
@@ -136,22 +136,21 @@ class AppUtil
      */
     public function loadConfig(string $configFile): ?array
     {
-        // default example config path
+        // path to suite configs folder
         $configPath = $this->getAppRootDir() . '/config/suite/' . $configFile;
 
-        // set config path
+        // set config path to specified file
         if (file_exists($this->getAppRootDir() . '/' . $configFile)) {
             $configPath = $this->getAppRootDir() . '/' . $configFile;
         }
 
         // load config file
         $config = $this->jsonUtil->getJson($configPath);
-
         return $config;
     }
 
     /**
-     * Calculate the maximum number of pages
+     * Calculate maximum number of pages
      *
      * @param ?int $totalItems The total number of items
      * @param ?int $itemsPerPage The number of items per page
@@ -160,15 +159,15 @@ class AppUtil
      */
     public function calculateMaxPages(?int $totalItems, ?int $itemsPerPage): int|float
     {
-        // validate the inputs to make sure they are positive integers
+        // validate inputs to make sure they are positive integers
         if ($totalItems <= 0 || $itemsPerPage <= 0) {
             return 0;
         }
 
-        // calculate the maximum number of pages
+        // calculate maximum number of pages
         $maxPages = ceil($totalItems / $itemsPerPage);
 
-        // return the maximum number of pages
+        // return maximum number of pages
         return $maxPages;
     }
 
@@ -185,7 +184,7 @@ class AppUtil
     }
 
     /**
-     * Update the environment variable value
+     * Update environment variable value
      *
      * @param string $key The environment variable key
      * @param string $value The environment variable value
@@ -235,7 +234,7 @@ class AppUtil
             if (preg_match('/^' . $key . '=.*/m', $envContent, $matches)) {
                 $newEnvContent = preg_replace('/^' . $key . '=.*/m', "$key=$value", $envContent);
 
-                // write new content to the environment file
+                // write new content to environment file
                 if (file_put_contents($envFile, $newEnvContent) === false) {
                     throw new Exception('Failed to write to .env ' . $env . ' file');
                 }

@@ -15,22 +15,18 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class FileSystemUtil
 {
-    private AppUtil $appUtil;
     private ErrorManager $errorManager;
 
-    public function __construct(AppUtil $appUtil, ErrorManager $errorManager)
+    public function __construct(ErrorManager $errorManager)
     {
-        $this->appUtil = $appUtil;
         $this->errorManager = $errorManager;
     }
 
     /**
-     * Return list of files and directories in the specified path
+     * Get list of files and directories in the specified path
      *
      * @param string $path The path to list files and directories
      * @param bool $recursive Spec for log manager (return all files resursive without directories)
-     *
-     * @throws Exception If an error occurs while listing the files
      *
      * @return array<array<mixed>> The list of files and directories
      */
@@ -97,12 +93,12 @@ class FileSystemUtil
             );
         }
 
-        // return the final list
+        // return final list
         return $files;
     }
 
     /**
-     * Check if the file is executable
+     * Check if file is executable
      *
      * @param string $path The path to the file
      *
@@ -130,7 +126,6 @@ class FileSystemUtil
 
         // check file info is set
         if (!$fileInfo) {
-            // handle error
             $this->errorManager->handleError(
                 message: 'error get file info: ' . $path . ' file info detection failed',
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
@@ -169,14 +164,13 @@ class FileSystemUtil
 
         // check if MIME type is detected
         if (!$mimeType) {
-            // handle error if MIME type detection fails
             $this->errorManager->handleError(
                 message: 'Error: Unable to detect MIME type for ' . $path,
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 
-        // trim the output
+        // trim output
         $mimeType = trim($mimeType);
 
         // determine if file is an image, video, or audio
@@ -193,11 +187,9 @@ class FileSystemUtil
 
 
     /**
-     * Get content of a file
+     * Get content of file
      *
      * @param string $path The path to the file
-     *
-     * @throws Exception If an error occurs while getting the file content
      *
      * @return string|null The file content or null if the file does not exist
      */
@@ -205,7 +197,6 @@ class FileSystemUtil
     {
         // check file exists
         if (!file_exists($path)) {
-            // handle error
             $this->errorManager->handleError(
                 message: 'error opening file: ' . $path . ' does not exist',
                 code: Response::HTTP_NOT_FOUND
@@ -215,7 +206,6 @@ class FileSystemUtil
         try {
             // check if path is directory
             if (is_dir($path) || is_link($path)) {
-                // handle error
                 $this->errorManager->handleError(
                     message: 'error opening file: ' . $path . ' is a directory or a link',
                     code: Response::HTTP_BAD_REQUEST
@@ -233,16 +223,14 @@ class FileSystemUtil
             // return file content
             return $fileContent;
         } catch (Exception $e) {
-            // return error to file view in non dev mode
-            if (!$this->appUtil->isDevMode()) {
-                return $e->getMessage();
-            }
-
-            // handle error
-            $this->errorManager->handleError(
-                message: 'error opening file: ' . $e->getMessage(),
+            // log error to exception log
+            $this->errorManager->logError(
+                message: 'error to get file content: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
+
+            // return error to file view
+            return $e->getMessage();
         }
     }
 }

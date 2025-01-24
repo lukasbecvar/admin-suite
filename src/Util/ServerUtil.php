@@ -34,7 +34,7 @@ class ServerUtil
     }
 
     /**
-     * Get the host uptime
+     * Get host system uptime
      *
      * @return string The formatted host uptime
      */
@@ -58,7 +58,7 @@ class ServerUtil
     }
 
     /**
-     * Get the CPU usage percentage
+     * Get CPU usage percentage
      *
      * @return float The CPU usage percentage
      */
@@ -83,7 +83,7 @@ class ServerUtil
         // fetch number of CPU cores using nproc command
         $coreNums = (int) trim($coreNums);
 
-        // validate the number of cores obtained
+        // validate number of cores obtained
         if ($coreNums > 0) {
             // calculate CPU usage in percentage
             $load = round(min($loads[0] / $coreNums * 100, 100), 2);
@@ -93,9 +93,9 @@ class ServerUtil
     }
 
     /**
-     * Get the RAM usage information
+     * Get RAM usage information
      *
-     * @return array<string,string> An array containing RAM usage information
+     * @return array<string,string> Array containing RAM usage information
      */
     public function getRamUsage(): array
     {
@@ -125,7 +125,7 @@ class ServerUtil
     }
 
     /**
-     * Get the RAM usage percentage
+     * Get RAM usage percentage
      *
      * @return int The RAM usage percentage
      */
@@ -140,9 +140,7 @@ class ServerUtil
     }
 
     /**
-     * Get the storage usage
-     *
-     * @throws Exception If an error occurs while getting the storage usage
+     * Get storage usage
      *
      * @return int|null The storage usage
      */
@@ -160,9 +158,7 @@ class ServerUtil
     }
 
     /**
-     * Get the drive usage percentage
-     *
-     * @throws Exception If an error occurs while getting the drive usage percentage
+     * Get drive usage in percentage
      *
      * @return string|null The drive usage percentage or null on error
      */
@@ -177,7 +173,7 @@ class ServerUtil
                 $usagePercentage = ($usedSpace / $totalSpace) * 100;
                 return (string) (int) number_format($usagePercentage, 2); // format to 2 decimal places
             } else {
-                return null; // handle case where total space is 0 to avoid division by zero
+                return null;
             }
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -188,9 +184,7 @@ class ServerUtil
     }
 
     /**
-     * Get the web username
-     *
-     * @throws Exception If an error occurs while getting the web username
+     * Get web username
      *
      * @return string|null The web username or null on error
      */
@@ -207,7 +201,7 @@ class ServerUtil
     }
 
     /**
-     * Check if the host system is linux
+     * Check if host system is linux
      *
      * @return bool True if the system is running Linux, false otherwise
      */
@@ -222,7 +216,7 @@ class ServerUtil
     }
 
     /**
-     * Check if the web user has sudo privileges
+     * Check if web user has sudo privileges
      *
      * @return bool True if the web user has sudo privileges, false otherwise
      */
@@ -243,9 +237,9 @@ class ServerUtil
     }
 
     /**
-     * Get information about installed software packages and the Linux distribution
+     * Get information about installed software packages and Linux distribution
      *
-     * @return array<mixed> An array containing information about installed software packages and the Linux distribution
+     * @return array<mixed> Array containing information about installed software packages and the Linux distribution
      */
     public function getSystemInfo(): array
     {
@@ -310,9 +304,9 @@ class ServerUtil
     }
 
     /**
-     * Check if a service is or is php extension installed
+     * Check if service or php extension is installed
      *
-     * @param string $serviceName The name of the service
+     * @param string $serviceName The name of service
      *
      * @return bool The service is installed, false otherwise
      */
@@ -328,7 +322,7 @@ class ServerUtil
             }
         }
 
-        // get the list of installed dpkg packages
+        // get list of installed dpkg packages
         if ($installedPackages === null) {
             $output = shell_exec('dpkg -l');
             if ($output != null) {
@@ -347,9 +341,9 @@ class ServerUtil
     }
 
     /**
-     * Check if a PHP extension is installed
+     * Check if PHP extension is installed
      *
-     * @param string $extension The name of the PHP extension
+     * @param string $extension The name of PHP extension
      *
      * @return bool True if the PHP extension is installed, false otherwise
      */
@@ -359,12 +353,10 @@ class ServerUtil
     }
 
     /**
-     * Get a list of required applications that are not installed
+     * Get list of required applications that are not installed
      *
-     * This method reads a JSON file containing a list of required applications
+     * This method reads JSON file containing list of required applications
      * and checks if each application is installed
-     *
-     * @throws Exception If an error occurs while loading the package-requirements.json file
      *
      * @return array<string> List of applications that are not installed
      */
@@ -420,9 +412,7 @@ class ServerUtil
     }
 
     /**
-     * Get a list of running processes
-     *
-     * @throws Exception If an error occurs while getting the process list
+     * Get list of running processes
      *
      * @return array<array<string>> List of running processes
      */
@@ -433,8 +423,8 @@ class ServerUtil
         try {
             // open process for reading
             $process = proc_open('ps aux', [
-                1 => ['pipe', 'w'],  // stdout is a pipe that we read from
-                2 => ['pipe', 'w']   // stderr is a pipe that we read from
+                1 => ['pipe', 'w'],
+                2 => ['pipe', 'w']
             ], $pipes);
 
             if (is_resource($process)) {
@@ -449,6 +439,7 @@ class ServerUtil
                 // close process
                 $returnValue = proc_close($process);
 
+                // handle process list get error
                 if ($returnValue !== 0) {
                     $this->errorManager->handleError(
                         message: 'error getting process list: ' . $errors,
@@ -467,14 +458,14 @@ class ServerUtil
                 // split output into lines
                 $lines = explode("\n", $output);
 
-                // remove the header line
+                // remove header line
                 array_shift($lines);
 
                 foreach ($lines as $line) {
                     /** @var list<string>|false $parts */
                     $parts = preg_split('/\s+/', $line);
 
-                    // check f parts is countable
+                    // check if parts is countable
                     if (!is_countable($parts)) {
                         continue;
                     }
@@ -483,7 +474,6 @@ class ServerUtil
                         $pid = $parts[1];
                         $user = $parts[0];
                         $processName = implode(' ', array_slice($parts, 10));
-
                         $processes[] = [
                             'pid' => $pid,
                             'user' => $user,

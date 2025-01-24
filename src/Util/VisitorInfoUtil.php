@@ -65,12 +65,11 @@ class VisitorInfoUtil
 
         // escape user agent
         $browserAgent = $this->securityUtil->escapeString($browserAgent);
-
         return $browserAgent;
     }
 
     /**
-     * Get a short version of the browser name
+     * Get short version of the browser name
      *
      * @param string $userAgent The user agent string
      *
@@ -133,7 +132,7 @@ class VisitorInfoUtil
     }
 
     /**
-     * Get the visitor operating system
+     * Get visitor operating system
      *
      * @param string $userAgent The user agent string
      *
@@ -148,7 +147,7 @@ class VisitorInfoUtil
             $userAgent = $this->getUserAgent();
         }
 
-        // OS list
+        // os list
         $osArray = array (
             '/windows nt 5.2/i'     =>  'Windows Server_2003',
             '/windows nt 6.0/i'     =>  'Windows Vista',

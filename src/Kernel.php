@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 /**
  * Class Kernel
  *
- * The kernel for the application
+ * The kernel init class
  *
  * @package App
  */

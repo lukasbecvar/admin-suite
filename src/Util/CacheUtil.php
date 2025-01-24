@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class CacheUtil
  *
- * Util for manage the cache functionality
+ * Util for manage cache storage
  *
  * @package App\Util
  */
@@ -29,11 +29,9 @@ class CacheUtil
     }
 
     /**
-     * Check if a key exists in the cache
+     * Check if key exists in the cache storage
      *
-     * @param string $key The key to check in the cache
-     *
-     * @throws Exception If an error occurs while checking the cache
+     * @param string $key The key to check in cache
      *
      * @return bool True if the key exists in the cache, otherwise false
      */
@@ -50,11 +48,9 @@ class CacheUtil
     }
 
     /**
-     * Get the value associated with a given key from the cache
+     * Get value associated with given key from the cache storage
      *
      * @param string $key The key for which to retrieve the value
-     *
-     * @throws Exception If an error occurs while retrieving the cache value
      *
      * @return CacheItemInterface The cached value associated with the key, or null if not found
      */
@@ -71,13 +67,11 @@ class CacheUtil
     }
 
     /**
-     * Set value in the cache with the specified key and expiration time
+     * Set value in cache with specified key and expiration time
      *
-     * @param string $key The key under which to store the value in the cache
-     * @param mixed $value The value to store in the cache
-     * @param int $expiration The expiration time in seconds for the cached value
-     *
-     * @throws Exception If an error occurs while storing the cache value
+     * @param string $key The key under which to store value in the cache
+     * @param mixed $value The value to store in cache
+     * @param int $expiration The expiration time in seconds for cached value
      *
      * @return void
      */
@@ -100,11 +94,9 @@ class CacheUtil
     }
 
     /**
-     * Delete value from cache using the specified key
+     * Delete value from cache storage by key
      *
-     * @param string $key The key of the value to delete from the cache
-     *
-     * @throws Exception If an error occurs while deleting the cache value
+     * @param string $key The key of the value to delete from cache
      *
      * @return void
      */

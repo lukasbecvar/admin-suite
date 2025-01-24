@@ -19,7 +19,7 @@ class ExportUtil
     /**
      * Export SLA history to Excel file
      *
-     * @param array<array<string, float>> $slaHistory The sla history
+     * @param array<array<string, float>> $slaHistory The sla history data
      * @param string|null $fileName Exported file name
      *
      * @return Response The download excel file response
@@ -58,8 +58,8 @@ class ExportUtil
         // apply header style
         $sheet->getStyle('A1:C1')->applyFromArray($headerStyle);
 
-        // set the data rows
-        $row = 2; // start from the second row (after the headers)
+        // set data rows
+        $row = 2; // start from second row (after the headers)
         foreach ($slaHistory as $serviceName => $months) {
             foreach ($months as $month => $sla) {
                 $sheet->setCellValue("A{$row}", $serviceName);
@@ -98,19 +98,19 @@ class ExportUtil
         // apply conditional styles to SLA column (text color)
         $sheet->getStyle("C2:C{$row}")->setConditionalStyles($conditionalStyles);
 
-        // create a new Xlsx writer
+        // create new xlsx writer
         $writer = new Xlsx($spreadsheet);
 
         // start output buffering
         ob_start();
 
-        // save the spreadsheet to php://output
+        // save spreadsheet to php://output
         $writer->save('php://output');
 
         // get contents of the buffer
         $output = ob_get_clean() ?: '';
 
-        // prepare response
+        // return response with excel file
         $response = new Response($output);
         $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '.xlsx"');

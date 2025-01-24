@@ -31,7 +31,7 @@ class SecurityUtil
     }
 
     /**
-     * Generate hash for a given password
+     * Generate hash for given password
      *
      * @param string $password The password to hash
      *
@@ -52,12 +52,12 @@ class SecurityUtil
     }
 
     /**
-     * Verify a password against a given Argon2 hash
+     * Verify if password hash is valid password
      *
      * @param string $password The password to verify
-     * @param string $hash The hash to verify against
+     * @param string $hash The hash to verify
      *
-     * @return bool True if the password is valid, false otherwise
+     * @return bool True if password is valid, false otherwise
      */
     public function verifyPassword(string $password, string $hash): bool
     {
@@ -65,7 +65,7 @@ class SecurityUtil
     }
 
     /**
-     * Encrypt a string using AES encryption
+     * Encrypt string using AES encryption
      *
      * @param string $plainText The plain text to encrypt
      * @param string $method The encryption method (default: AES-128-CBC)
@@ -76,13 +76,13 @@ class SecurityUtil
     {
         $key = $_ENV['APP_SECRET'];
 
-        // derive a fixed-size key using PBKDF2 with SHA-256
+        // derive fixed-size key using PBKDF2 with SHA-256
         $derivedKey = hash_pbkdf2("sha256", $key, "", 10000, 32);
 
-        // generate a random Initialization Vector (IV) for added security
+        // generate random Initialization Vector (IV) for added security
         $iv = openssl_random_pseudo_bytes(16);
 
-        // encrypt the plain text using AES encryption with the derived key and IV
+        // encrypt plain text using AES encryption with the derived key and IV
         $encryptedData = openssl_encrypt($plainText, $method, $derivedKey, 0, $iv);
 
         // IV and encrypted data, then base64 encode the result
@@ -103,19 +103,19 @@ class SecurityUtil
     {
         $key = $_ENV['APP_SECRET'];
 
-        // derive a fixed-size key using PBKDF2 with SHA-256
+        // derive fixed-size key using PBKDF2 with SHA-256
         $derivedKey = hash_pbkdf2("sha256", $key, "", 10000, 32);
 
-        // decode the base64-encoded encrypted data
+        // decode base64-encoded encrypted data
         $decodedData = base64_decode($encryptedData);
 
-        // extract the Initialization Vector (IV) from the decoded data
+        // extract Initialization Vector (IV) from the decoded data
         $iv = substr($decodedData, 0, 16);
 
-        // extract the encrypted data (remaining bytes) from the decoded data
+        // extract encrypted data (remaining bytes) from the decoded data
         $encryptedData = substr($decodedData, 16);
 
-        // decrypt the data using AES decryption with the derived key and IV
+        // decrypt data using AES decryption with the derived key and IV
         $decryptedData = openssl_decrypt($encryptedData, $method, $derivedKey, 0, $iv);
 
         // check if decryption was successful

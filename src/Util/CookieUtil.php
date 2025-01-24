@@ -8,7 +8,7 @@ use App\Util\SecurityUtil;
 /**
  * Class CookieUtil
  *
- * Util for manage the browser cookies
+ * Util for manage browser cookies
  *
  * @package App\Util
  */
@@ -22,7 +22,7 @@ class CookieUtil
     }
 
     /**
-     * Set cookie with the specified name, value, and expiration
+     * Set cookie with specified name, value, and expiration
      *
      * @param string $name The name of the cookie
      * @param string $value The value to store in the cookie
@@ -38,7 +38,7 @@ class CookieUtil
             $value = base64_encode($value);
 
             // set cookie
-            setcookie($name, $value, $expiration, '/');
+            setcookie($name, $value, $expiration, '/', httponly: true);
         }
     }
 
@@ -96,9 +96,9 @@ class CookieUtil
             // unset the cookie for each part of the URI.
             foreach ($parts as $part) {
                 $cookiePath = '/' . ltrim($cookiePath . '/' . $part, '//');
-                setcookie($name, '', 1, $cookiePath);
+                setcookie($name, '', 1, $cookiePath, httponly: true);
                 do {
-                    setcookie($name, '', 1, $cookiePath, $domain);
+                    setcookie($name, '', 1, $cookiePath, $domain, httponly: true);
                 } while (strpos($domain, '.') !== false && $domain = substr($domain, 1 + strpos($domain, '.')));
             }
         }
