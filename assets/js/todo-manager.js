@@ -1,3 +1,4 @@
+/** todo component functionality */
 document.addEventListener('DOMContentLoaded', function () {
     let currentTodoId = null
     let pressTimer

@@ -91,7 +91,7 @@ class FileSystemBrowserController extends AbstractController
                     // log file access
                     $this->logManager->log(
                         name: 'file-browser',
-                        message: 'File: ' . $path . ' was accessed',
+                        message: 'file: ' . $path . ' was accessed',
                         level: LogManager::LEVEL_INFO
                     );
                 }
@@ -143,7 +143,7 @@ class FileSystemBrowserController extends AbstractController
             // log file access
             $this->logManager->log(
                 name: 'file-browser',
-                message: 'File: ' . $path . ' was accessed',
+                message: 'file: ' . $path . ' was accessed',
                 level: LogManager::LEVEL_INFO
             );
 

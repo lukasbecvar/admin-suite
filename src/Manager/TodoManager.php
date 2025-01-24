@@ -132,7 +132,7 @@ class TodoManager
         // check if todo exists
         if ($todo == null) {
             $this->errorManager->handleError(
-                message: 'Todo id: ' . $todoId . ' does not exist',
+                message: 'todo id: ' . $todoId . ' does not exist',
                 code: Response::HTTP_NOT_FOUND
             );
         }

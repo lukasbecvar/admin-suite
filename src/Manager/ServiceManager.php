@@ -70,8 +70,8 @@ class ServiceManager
         // check if user logged in
         if (!$this->authManager->isUserLogedin()) {
             $this->errorManager->handleError(
-                'error action runner is only for authenticated users',
-                Response::HTTP_UNAUTHORIZED
+                message: 'error action runner is only for authenticated users',
+                code: Response::HTTP_UNAUTHORIZED
             );
         }
 
@@ -112,8 +112,8 @@ class ServiceManager
             $output = shell_exec('systemctl is-active ' . $service);
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                'error to get service status: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to get service status: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 
@@ -148,8 +148,8 @@ class ServiceManager
             $service = @fsockopen($ip, $port, timeout: $timeout);
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                'error to check socket: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to check socket: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 
@@ -177,8 +177,8 @@ class ServiceManager
             exec('pgrep ' . $process, $pids);
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                'error to check process: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to check process: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 
@@ -210,8 +210,8 @@ class ServiceManager
             }
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                'error to get ufw status' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to get ufw status' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 
@@ -231,8 +231,8 @@ class ServiceManager
             exec($command);
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                'error to executed command: ' . $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                message: 'error to executed command: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }

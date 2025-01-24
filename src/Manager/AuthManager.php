@@ -97,16 +97,16 @@ class AuthManager
         // check if username is blocked
         if ($this->isUsernameBlocked($username)) {
             $this->errorManager->handleError(
-                'error to register new user: username is system',
-                Response::HTTP_FORBIDDEN
+                message: 'error to register new user: username is system',
+                code: Response::HTTP_FORBIDDEN
             );
         }
 
         // check if user already exist in database
         if ($this->userManager->checkIfUserExist($username)) {
             $this->errorManager->handleError(
-                'error to register new user: username already exist',
-                Response::HTTP_FORBIDDEN
+                message: 'error to register new user: username already exist',
+                code: Response::HTTP_FORBIDDEN
             );
         }
 

@@ -151,7 +151,7 @@ class ServerUtil
             return (int) ($storageUsage / 1073741824); // convert bytes to GB
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                message: 'Error getting storage usage: ' . $e->getMessage(),
+                message: 'error getting storage usage: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

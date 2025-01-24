@@ -107,7 +107,7 @@ class NotificationsManager
         // check if push notifications is enabled
         if (!$this->checkIsPushNotificationsEnabled()) {
             $this->errorManager->handleError(
-                message: 'Push notifications are disabled',
+                message: 'push notifications are disabled',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -177,7 +177,7 @@ class NotificationsManager
         // log subscribe notification event
         $this->logManager->log(
             name: 'notifications',
-            message: 'Subscribe push notifications',
+            message: 'subscribe push notifications',
             level: LogManager::LEVEL_INFO
         );
     }
@@ -199,7 +199,7 @@ class NotificationsManager
             // check if subscriber found
             if ($notificationSubscriber == null) {
                 $this->errorManager->handleError(
-                    message: 'Notification subscriber id: ' . $id . ' not found',
+                    message: 'notification subscriber id: ' . $id . ' not found',
                     code: Response::HTTP_NOT_FOUND
                 );
             } else {

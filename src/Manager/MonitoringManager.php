@@ -305,7 +305,7 @@ class MonitoringManager
             }
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                message: 'Error to get SLA history: ' . $e->getMessage(),
+                message: 'error to get SLA history: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

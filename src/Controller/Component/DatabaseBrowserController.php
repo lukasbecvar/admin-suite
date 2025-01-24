@@ -139,7 +139,7 @@ class DatabaseBrowserController extends AbstractController
         // check if table name and database name are set
         if (empty($tableName) || empty($databaseName)) {
             $this->errorManager->handleError(
-                message: 'Table name and database name are required',
+                message: 'table name and database name are required',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -147,7 +147,7 @@ class DatabaseBrowserController extends AbstractController
         // check if table exists
         if (!$this->databaseManager->isTableExists($databaseName, $tableName)) {
             $this->errorManager->handleError(
-                message: 'Table: ' . $tableName . ' not found in database: ' . $databaseName,
+                message: 'table: ' . $tableName . ' not found in database: ' . $databaseName,
                 code: Response::HTTP_NOT_FOUND
             );
         }
@@ -386,7 +386,7 @@ class DatabaseBrowserController extends AbstractController
         // check if request parameters are set
         if (empty($tableName) || empty($databaseName) || empty($id)) {
             $this->errorManager->handleError(
-                message: 'Parameters: table, database and id are required',
+                message: 'parameters: table, database and id are required',
                 code: Response::HTTP_BAD_REQUEST
             );
         }

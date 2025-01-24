@@ -49,7 +49,7 @@ class LinuxCheckMiddleware
             // handle debug mode exception
             if ($this->appUtil->isDevMode()) {
                 $this->errorManager->handleError(
-                    message: 'This system is only for linux.',
+                    message: 'this system is only for linux.',
                     code: Response::HTTP_NOT_IMPLEMENTED
                 );
             } else {

@@ -88,7 +88,7 @@ class FileSystemUtil
             });
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                message: 'Error listing files: ' . $e->getMessage(),
+                message: 'error listing files: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

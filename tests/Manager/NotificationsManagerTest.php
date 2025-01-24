@@ -179,7 +179,7 @@ class NotificationsManagerTest extends TestCase
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
             name: 'notifications',
-            message: 'Subscribe push notifications',
+            message: 'subscribe push notifications',
             level: LogManager::LEVEL_INFO
         );
 

@@ -554,7 +554,7 @@ class DatabaseManager
             // log delete row event
             $this->logManager->log(
                 name: 'database-manager',
-                message: "deleted row with ID: $id from table: $tableName in database: $dbName",
+                message: 'deleted row with ID: ' . $id . ' from table: ' . $tableName . ' in database: ' . $dbName,
                 level: LogManager::LEVEL_NOTICE
             );
         } catch (Exception $e) {
@@ -585,7 +585,7 @@ class DatabaseManager
             // log truncate table event
             $this->logManager->log(
                 name: 'database-manager',
-                message: "truncated table: $tableName in database: $dbName",
+                message: 'truncated table: ' . $tableName . ' in database: ' . $dbName,
                 level: LogManager::LEVEL_CRITICAL
             );
         } catch (Exception $e) {
@@ -806,7 +806,7 @@ class DatabaseManager
             // log execute query event
             $this->logManager->log(
                 name: 'database-manager',
-                message: 'Executed query',
+                message: 'executed query',
                 level: LogManager::LEVEL_NOTICE
             );
 

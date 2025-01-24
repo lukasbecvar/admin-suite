@@ -468,7 +468,7 @@ class MonitoringManagerTest extends TestCase
 
         // expect handleError call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'Error to get SLA history: Database error',
+            message: 'error to get SLA history: Database error',
             code: Response::HTTP_INTERNAL_SERVER_ERROR
         );
 

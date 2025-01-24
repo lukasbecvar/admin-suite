@@ -149,7 +149,7 @@ class MetricsDashboardController extends AbstractController
         // check if parameters are valid
         if (empty($metricName) || empty($serviceName)) {
             $this->errorManager->handleError(
-                message: 'Parameters: metric_name and service_name are required',
+                message: 'parameters: metric_name and service_name are required',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -174,7 +174,7 @@ class MetricsDashboardController extends AbstractController
             $this->metricsManager->deleteMetric($metricName, $serviceName);
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                message: 'Error to delete metric: ' . $e->getMessage(),
+                message: 'error to delete metric: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

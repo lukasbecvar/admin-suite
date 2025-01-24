@@ -82,7 +82,7 @@ class LinuxCheckMiddlewareTest extends TestCase
 
         // expect error handler called
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'This system is only for linux.',
+            message: 'this system is only for linux.',
             code: Response::HTTP_NOT_IMPLEMENTED
         );
 
