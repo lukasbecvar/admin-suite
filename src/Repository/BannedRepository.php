@@ -40,11 +40,11 @@ class BannedRepository extends ServiceEntityRepository
     }
 
     /**
-     * Get the reason of a banned user
+     * Get ban reason
      *
-     * @param int $bannedUserId The ID of the banned user
+     * @param int $bannedUserId The ID of banned user
      *
-     * @return string|null The reason of the banned user
+     * @return string|null The reason of banned user
      */
     public function getBanReason(int $bannedUserId): ?string
     {
@@ -59,8 +59,8 @@ class BannedRepository extends ServiceEntityRepository
     /**
      * Update status of a banned user
      *
-     * @param int $bannedUserId The ID of the banned user
-     * @param string $newStatus The new status of the banned user
+     * @param int $bannedUserId The ID of banned user
+     * @param string $newStatus The new status of banned user
      *
      * @return void
      */

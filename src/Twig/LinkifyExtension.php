@@ -8,16 +8,16 @@ use Twig\Extension\AbstractExtension;
 /**
  * Class LinkifyExtension
  *
- * Twig linkify extension for linkifying links in text
+ * Extension for linkifying text
  *
  * @package App\Twig
  */
 class LinkifyExtension extends AbstractExtension
 {
     /**
-     * Get the filters provided by this extension
+     * Get filters provided by this extension
      *
-     * @return array<TwigFilter> An array of Twig filters
+     * @return array<TwigFilter> Array of Twig filters
      */
     public function getFilters(): array
     {

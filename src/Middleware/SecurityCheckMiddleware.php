@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class SecurityCheckMiddleware
  *
- * Middleware for checking the security rules
+ * Middleware for checking security rules
  *
  * @package App\Middleware
  */
@@ -26,7 +26,7 @@ class SecurityCheckMiddleware
     }
 
     /**
-     * Handle the security rules check
+     * Handle security rules check
      *
      * @param RequestEvent $event The request event
      *

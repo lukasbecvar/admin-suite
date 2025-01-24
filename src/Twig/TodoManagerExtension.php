@@ -9,7 +9,7 @@ use Twig\Extension\AbstractExtension;
 /**
  * Class TodoManagerExtension
  *
- * Twig extension for the todo manager
+ * Extension for providing todo manager methods
  *
  * @package App\Twig
  */
@@ -23,11 +23,11 @@ class TodoManagerExtension extends AbstractExtension
     }
 
     /**
-     * Get the twig functions
+     * Get twig functions from todo manager
      *
      * getTodosCount = getTodosCount in TodoManager
      *
-     * @return TwigFunction[] An array of TwigFunction objects
+     * @return TwigFunction[] Array of TwigFunction objects
      */
     public function getFunctions(): array
     {

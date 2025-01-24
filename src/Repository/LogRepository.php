@@ -9,7 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 /**
  * Class LogRepository
  *
- * Repository for the Log database entity
+ * Repository for Log database entity
  *
  * @extends ServiceEntityRepository<Log>
  *

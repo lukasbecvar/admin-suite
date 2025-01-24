@@ -9,7 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 /**
  * Class TodoRepository
  *
- * Repository for the Todo database entity
+ * Repository for Todo database entity
  *
  * @extends ServiceEntityRepository<Todo>
  *
@@ -28,7 +28,7 @@ class TodoRepository extends ServiceEntityRepository
      * @param int $userId
      * @param string $status
      *
-     * @return Todo[] Returns an array of Todo objects
+     * @return Todo[] Array of Todo entities
      */
     public function findByUserIdAndStatus(int $userId, string $status): array
     {

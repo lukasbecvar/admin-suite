@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Class AuthenticatedCheckMiddleware
  *
- * Middleware for checking authentication status before accessing admin routes
+ * Middleware for checking authentication before accessing admin routes
  *
  * @package App\Middleware
  */
@@ -26,7 +26,7 @@ class AuthenticatedCheckMiddleware
     }
 
     /**
-     * Check if user is loggedin
+     * Check if user is logged in
      *
      * @param RequestEvent $event The request event
      *
@@ -37,7 +37,7 @@ class AuthenticatedCheckMiddleware
         $request = $event->getRequest();
         $pathInfo = $request->getPathInfo();
 
-        // check if pathInfo is excluded from authentication check
+        // check if route is excluded from authentication check
         if (
             $pathInfo !== '/api/external/log' &&
             $pathInfo !== '/login' &&
@@ -46,9 +46,9 @@ class AuthenticatedCheckMiddleware
             !str_starts_with($pathInfo, '/error') &&
             !preg_match('#^/(_profiler|_wdt)#', $pathInfo)
         ) {
-            // check if user is loggedin
+            // check if user is logged in
             if (!$this->authManager->isUserLogedin()) {
-                // get login page route url
+                // get login page route route
                 $loginUrl = $this->urlGenerator->generate('app_auth_login');
 
                 // redirect to login page

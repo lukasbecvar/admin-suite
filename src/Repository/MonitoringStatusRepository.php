@@ -9,7 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 /**
  * Class MonitoringStatusRepository
  *
- * Repository for the MonitoringStatus database entity
+ * Repository for MonitoringStatus database entity
  *
  * @extends ServiceEntityRepository<MonitoringStatus>
  *

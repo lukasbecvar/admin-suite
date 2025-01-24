@@ -9,7 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 /**
  * Class SLAHistoryRepository
  *
- * Repository for the SLAHistory database entity
+ * Repository for SLAHistory database entity
  *
  * @extends ServiceEntityRepository<SLAHistory>
  *

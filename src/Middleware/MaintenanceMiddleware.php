@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class MaintenanceMiddleware
  *
- * Middleware for handle the maintenance mode
+ * Middleware for handle maintenance mode
  *
  * @package App\Middleware
  */
@@ -29,7 +29,7 @@ class MaintenanceMiddleware
     }
 
     /**
-     * Handle the maintenance mode page
+     * Handle maintenance page
      *
      * @param RequestEvent $event The request event
      *

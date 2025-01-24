@@ -2,7 +2,6 @@
 
 namespace App\Middleware;
 
-use App\Entity\User;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Manager\AuthManager;
@@ -11,7 +10,7 @@ use App\Manager\UserManager;
 /**
  * Class AutoLoginMiddleware
  *
- * Middleware for auto login for remember me functionality
+ * Middleware for auto login (remember me) functionality
  *
  * @package App\Middleware
  */
@@ -35,7 +34,7 @@ class AutoLoginMiddleware
     }
 
     /**
-     * Handle auto-login process for remember me feature
+     * Handle auto login process for remember me feature
      *
      * @return void
      */
@@ -48,32 +47,26 @@ class AutoLoginMiddleware
         if (!$loginStatus) {
             // check if cookie set
             if ($this->cookieUtil->isCookieSet('user-token')) {
-                // init user entity
-                $user = new User();
-
-                // get user token
+                // get user token from cookie storage
                 $userToken = $this->cookieUtil->get('user-token');
 
                 // check if token exist in database
                 if ($this->userManager->getUserRepository(['token' => $userToken]) != null) {
-                    // get user data
+                    /** @var \App\Entity\User $user get user data */
                     $user = $this->userManager->getUserRepository(['token' => $userToken]);
+                    $username = $user->getUsername() ?? 'Unknown';
 
-                    // get username to login
-                    $username = $user->getUsername();
-
-                    // login user
+                    // login user to the system
                     $this->authManager->login((string) $username, true);
                 } else {
+                    // destory session and cookie if token not exist in database
                     $this->cookieUtil->unset('user-token');
-
-                    // destory session is cookie token is invalid
                     $this->sessionUtil->destroySession();
                 }
             }
         }
 
-        // check if user logged in
+        // check if user is logged in
         if ($loginStatus) {
             // cache user online status
             $this->authManager->cacheOnlineUser($this->authManager->getLoggedUserId());

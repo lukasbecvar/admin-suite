@@ -9,7 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 /**
  * Class NotificationSubscriberRepository
  *
- * Repository for the NotificationSubscriber database entity
+ * Repository for NotificationSubscriber database entity
  *
  * @extends ServiceEntityRepository<NotificationSubscriber>
  *

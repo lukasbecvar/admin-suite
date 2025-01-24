@@ -11,7 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 /**
  * Class MetricRepository
  *
- * Repository for the Metric database entity
+ * Repository for Metric database entity
  *
  * @extends ServiceEntityRepository<Metric>
  *
@@ -25,7 +25,7 @@ class MetricRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find metrics by name and service
+     * Find metrics by name and service name
      *
      * @param string $metricName The metric name
      * @param string $serviceName The service name
@@ -198,7 +198,7 @@ class MetricRepository extends ServiceEntityRepository
                 $groupedMetrics[$name][$dateKey] = ['total' => 0, 'count' => 0];
             }
 
-            // aggregate the metric value
+            // aggregate metric value
             $groupedMetrics[$name][$dateKey]['total'] += (float) $metric->getValue();
             $groupedMetrics[$name][$dateKey]['count']++;
         }

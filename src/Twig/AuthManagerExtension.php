@@ -9,7 +9,7 @@ use Twig\Extension\AbstractExtension;
 /**
  * Class AuthManagerExtension
  *
- * Twig extension for the auth manager
+ * Extension for providing auth manager methods
  *
  * @package App\Twig
  */
@@ -23,12 +23,12 @@ class AuthManagerExtension extends AbstractExtension
     }
 
     /**
-     * Get the twig functions from auth manager
+     * Get twig functions from auth manager
      *
      * isAdmin = isLoggedInUserAdmin
      * getUserData = getLoggedUserRepository
      *
-     * @return TwigFunction[] An array of TwigFunction objects
+     * @return TwigFunction[] Array of TwigFunction objects
      */
     public function getFunctions(): array
     {

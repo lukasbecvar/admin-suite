@@ -9,7 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 /**
  * Class UserRepository
  *
- * Repository for the User database entity
+ * Repository for User database entity
  *
  * @extends ServiceEntityRepository<User>
  *

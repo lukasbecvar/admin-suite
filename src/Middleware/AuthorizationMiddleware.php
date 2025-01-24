@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class AuthorizationMiddleware
  *
- * Middleware for checking the user authorization
+ * Middleware for checking user authorization before accessing admin routes
  *
  * @package App\Middleware
  */
@@ -28,7 +28,7 @@ class AuthorizationMiddleware
     }
 
     /**
-     * Check if user have permission to access the page
+     * Check if user have permission to access to admin page
      *
      * @param RequestEvent $event The request event
      *
@@ -41,18 +41,16 @@ class AuthorizationMiddleware
         /** @var string $controller controller class path */
         $controller = $request->attributes->get('_controller');
 
-        // split controller string into the class and method
+        // split controller string into class and method
         list($controllerClass, $methodName) = explode('::', $controller);
 
-        // check if method exists in the controller class
+        // check if method exists in controller class
         if (!method_exists($controllerClass, $methodName)) {
             return;
         }
 
-        // get reflection method object
-        $reflectionMethod = new ReflectionMethod($controllerClass, $methodName);
-
         // get authorization attribute from method annotation
+        $reflectionMethod = new ReflectionMethod($controllerClass, $methodName);
         $authorization = $reflectionMethod->getAttributes(Authorization::class);
 
         // check if annotation exists
@@ -64,7 +62,7 @@ class AuthorizationMiddleware
             $authorizationRequired = $authorizationAttribute->getAuthorization();
         }
 
-        // check if user have permission to access the page
+        // check if user have permission to access to component
         if ($authorizationRequired == 'ADMIN' && !$this->authManager->isLoggedInUserAdmin()) {
             // return no permissions page
             $content = $this->twig->render('component/no-permissions.twig');

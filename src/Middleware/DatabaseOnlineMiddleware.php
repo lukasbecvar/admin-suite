@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Class DatabaseOnlineMiddleware
  *
- * Middleware for checking the database connection
+ * Middleware for checking database connection
  *
  * @package App\Middleware
  */
@@ -40,8 +40,6 @@ class DatabaseOnlineMiddleware
      * Check database connection status
      *
      * @param RequestEvent $event The request event
-     *
-     * @throws Exception Database connection error
      *
      * @return void
      */
