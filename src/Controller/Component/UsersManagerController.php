@@ -191,8 +191,6 @@ class UsersManagerController extends AbstractController
      *
      * @param Request $request The request object
      *
-     * @throws Exception Error to register new user
-     *
      * @return Response The user register form view
      */
     #[Authorization(authorization: 'ADMIN')]
