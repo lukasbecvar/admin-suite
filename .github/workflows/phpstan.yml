@@ -22,10 +22,10 @@ jobs:
       with:
         php-version: 8.4
 
-    # composer install
+    # install backend dependencies
     - name: Install backend dependencies
       run: composer install --no-interaction --no-progress
 
-    # phpstan process
+    # analyze code with phpstan
     - name: Run PHPStan
       run: ./bin/phpstan analyse --configuration phpstan.neon -vvv

@@ -33,11 +33,11 @@ jobs:
           php-version: 8.4
           extensions: mbstring, intl, pdo_mysql, pdo, zip
 
-      # composer install
+      # install backend dependencies
       - name: Install backend dependencies
         run: composer install --no-interaction --no-progress
       
-      # node-modules install
+      # install frontend dependencies
       - name: Install frontend dependencies
         run: npm install --loglevel=error
 
@@ -57,6 +57,6 @@ jobs:
       - name: Load db datafixtures
         run: php bin/console doctrine:fixtures:load --no-interaction --env=test
 
-      # phpunit process
+      # run tests
       - name: Run PHPUnit
         run: php ./bin/phpunit
