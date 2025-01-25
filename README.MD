@@ -2,7 +2,7 @@
 ### <p align="center">Solution for administration and monitoring linux servers</p>
 <p align="center">
     <a href="https://github.com/lukasbecvar/admin-suite/blob/main/LICENSE" target="_blank">License</a> |
-    <a href="https://becvar.xyz" target="_blank">Author</a>
+    <a href="https://becvar.xyz" target="_blank">Author website</a>
 </p>
 
 ## Dashboard preview
