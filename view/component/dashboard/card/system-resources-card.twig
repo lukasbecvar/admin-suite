@@ -7,17 +7,17 @@
         {# CPU USAGE #}
         <p class="text-white mb-1">CPU: {{ diagnosticData.cpuUsage|e }}%</p>
         <div class="progress-bar">
-            <div class="progress rounded" style="width: {{ diagnosticData.cpuUsage|e }}%;"></div>
+            <div class="progress rounded-lg" style="width: {{ diagnosticData.cpuUsage|e }}%;"></div>
         </div>
         {# RAM USAGE #}
         <p class="text-white mb-1">RAM: ({{ ramUsage.used|e }}G / {{ diagnosticData.ramUsage|e }}%)</p>
         <div class="progress-bar">
-            <div class="progress rounded" style="width: {{ diagnosticData.ramUsage|e }}%;"></div>
+            <div class="progress rounded-lg" style="width: {{ diagnosticData.ramUsage|e }}%;"></div>
         </div>
         {# STORAGE USAGE #}
         <p class="text-white mb-1">STORAGE: ({{ storageUsage|e }}G / {{ diagnosticData.driveSpace|e }}%)</p>
         <div class="progress-bar">
-            <div class="progress rounded" style="width: {{ diagnosticData.driveSpace|e }}%;"></div>
+            <div class="progress rounded-lg" style="width: {{ diagnosticData.driveSpace|e }}%;"></div>
         </div>
     </div>
 </div>

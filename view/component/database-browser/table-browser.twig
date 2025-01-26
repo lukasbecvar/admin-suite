@@ -46,7 +46,7 @@
             {% else %}
                 <table class="min-w-full bg-neutral-880 text-white border-b border-neutral-700">
                     <thead>
-                        <tr>
+                        <tr class="bg-neutral-840">
                             {# TABLE HEADER #}
                             {% for column in tableData[0]|keys %}
                                 <th class="text-left px-2 py-2 border-b border-neutral-700 text-left">{{ column }}</th>
@@ -66,7 +66,7 @@
                     <tbody>
                         {# TABLE ROW #}
                         {% for row in tableData %}
-                            <tr class="hover:bg-neutral-700">
+                            <tr class="hover:bg-neutral-800">
                                 {% for column in row %}
                                     <td class="px-2 py-2 border-b border-neutral-700 text-left relative">
                                         <div class="flex items-center">
