@@ -4,7 +4,7 @@
 {% block component %} 
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
-    <a href={{ path('app_manager_users') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to users manager">
+    <a href={{ path('app_manager_users') }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to users manager">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
     <span class="mr-1 text-white">User info</span>
@@ -29,7 +29,7 @@
         {% endif %}
 
         {# USER ONLINE STATUS LINE #}
-        <p class="text-xs font-semibold">
+        <p class="text-xs font-semibold mt-1">
             {% set isOnline = false %}
             {% for onlineUser in onlineList %}
                 {% if userRepository.getId() == onlineUser.id %}
@@ -43,9 +43,9 @@
             {% endif %}
         </p>
     </div>
-    <div class="p-6 bg-neutral-800">
+    <div class="p-5 bg-neutral-800">
         {# GO TO USER LOGS #}
-        <div class="flex items-center mt-4">
+        <div class="flex items-center mt-1">
             <div class="text-white">
                 <i class="fas fa-list mr-2"></i>
                 <span>logs <a href={{ path('app_manager_logs', {'user_id': userRepository.getId, 'filter': 'all'}) }} class="profile-link text-blue-400">here</a></span>
@@ -78,15 +78,15 @@
             <span>Registered: {{ userRepository.getRegisterTime()|date('Y-m-d H:i:s')|e }}</span>
         </div>
         {# USER LAST LOGIN TIME #}
-        <div class="mt-2 text-white">
+        <div class="mt-3 text-white">
             <i class="fas fa-clock mr-2"></i>
             <span>Last Login: {{ userRepository.getLastLoginTime()|date('Y-m-d H:i:s')|e }}</span>
         </div>
         {# USER BAN STATUS #}
-        <div class="mt-2 text-white">
+        <div class="mt-3 text-white">
             <i class="fas fa-ban mr-2"></i>
             {% if banManager.isUserBanned(userRepository.getId()) %}
-                <span><span class="text-red-400">banned</span> for: {{ banManager.getBanReason(userRepository.getId()) }}</span>
+                <span><span class="text-red-400">banned for:</span> {{ banManager.getBanReason(userRepository.getId()) }}</span>
             {% else %}
                 <span class="text-green-400">non-banned</span>
             {% endif %}

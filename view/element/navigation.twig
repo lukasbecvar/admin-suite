@@ -1,11 +1,10 @@
-<nav class="nav-bar p-1 flex justify-between items-center border-b border-neutral-600">
+<nav class="nav-bar p-1 flex justify-between items-center border-b border-neutral-700 disable-on-small-devices">
     {# TOGGLE SIDEBAR BUTTON #}
     <button id="menu-toggle" class="text-white ml-1 hover:text-cyan-300 mt-02">
-        <i class="fas fa-bars"></i> <span class="menu-text mini-disabled">Menu</span>
+        <i class="fas fa-bars"></i><span class="ml-1 phone-none">Menu</span>
     </button>
+    {# LOGOUT BUTTON #}
     <div class="flex items-center">
-
-        {# LOGOUT BUTTON #}
         <a href={{ path('app_auth_logout') }} class="logout-link text-white mr-1 hover:text-cyan-300 mt-02" title="Logout user">
             <i class="fas fa-sign-out-alt"></i>
         </a>

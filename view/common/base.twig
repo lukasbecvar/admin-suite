@@ -16,5 +16,10 @@
 <body>
     {# MAIN COMPONENT WRAPPER #}
     {% block body %}{% endblock %}
+    
+    {# SCREEN TOO SMALL ERROR MESSAGE #}
+    <div class="fixed inset-0 flex items-center justify-center background-dark text-white text-lg font-bold hidden xs:flex p-1">
+        <center>Your screen width is too small! Please, enlarge your window.</center>
+    </div>
 </body>
 </html>

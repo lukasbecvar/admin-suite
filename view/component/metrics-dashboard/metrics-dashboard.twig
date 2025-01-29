@@ -4,12 +4,12 @@
 {% block component %}
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
-    <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
+    <a href={{ path('app_dashboard') }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
 
     {# LINK TO MONITORING #}
-    <a href={{ path('app_manager_monitoring') }} class="border border-neutral-600 font-bold px-1 py-0 rounded ml-1 text-white" title="Go to monitoring">
+    <a href={{ path('app_manager_monitoring') }} class="border border-neutral-700 font-bold px-1 py-0 rounded ml-1 text-white" title="Go to monitoring">
         <i class="fa fa-eye" aria-hidden="true"></i>
     </a>
 
@@ -17,7 +17,7 @@
     <span class="mr-1"></span>
     <span>
         <label for="time-period">Time period:</label>
-        <select id="time-period" onchange="updateTimePeriod()" class="bg-neutral-800 text-white border border-neutral-600 rounded">
+        <select id="time-period" onchange="updateTimePeriod()" class="bg-neutral-800 text-white border border-neutral-700 rounded">
             <option value="last_24_hours" selected>Last 24 hours</option>
             <option value="last_week">Last week</option>
             <option value="last_month">Last month</option>
@@ -54,8 +54,8 @@
 <div class="p-2 space-y-2 metrics-component">
     {# CURRENT USAGE CARD #}
     <div class="flex flex-col md:flex-row gap-2">
-        <div class="flex-1 border border-neutral-600 shadow-lg card-color rounded relative">
-            <div class="px-3 py-2 border-b border-neutral-600 text-white font-bold text-sm flex items-center justify-between">
+        <div class="flex-1 border border-neutral-700 shadow-lg card-color rounded relative">
+            <div class="px-3 py-2 border-b border-neutral-700 text-white font-bold text-sm flex items-center justify-between">
                 Current usage
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3">
@@ -78,8 +78,8 @@
     {# USAGE HISTORY CHARTS #}
     {% for metricName, metricData in data.metrics %}
         <div class="flex flex-col md:flex-row gap-2">
-            <div class="flex-1 p-0 border border-neutral-600 shadow-lg card-color rounded relative chart-container">
-                <div class="px-3 py-2 border-b border-neutral-600 text-white font-bold text-sm flex items-center justify-between">
+            <div class="flex-1 p-0 border border-neutral-700 shadow-lg card-color rounded relative chart-container">
+                <div class="px-3 py-2 border-b border-neutral-700 text-white font-bold text-sm flex items-center justify-between">
                     {{ metricName | replace({'_': ' '}) | capitalize }} (history)
                     <a href={{ path('app_metrics_delete', {'service_name': 'host-system', 'metric_name': metricName}) }} class="text-indigo-400 hover:text-indigo-300 text-l">delete</a>
                 </div>

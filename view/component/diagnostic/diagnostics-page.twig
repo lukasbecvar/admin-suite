@@ -4,7 +4,7 @@
 {% block component %} 
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
-    <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
+    <a href={{ path('app_dashboard') }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
     <span class="mr-1 text-white">Diagnostics</span>
@@ -13,8 +13,8 @@
 {# DIAGNOSTICS CARDS #}
 <div class="flex-center mx-1 mt-2 component">
     {# HOST SYSTEM DIAGNOSTICS CARD #}
-    <div class="shadow-lg text-white mb-3 border border-neutral-600 card-color rounded">
-        <div class="px-3 py-2 mb-2 border-b border-neutral-600">System diagnostics</div>
+    <div class="shadow-lg text-white mb-3 border border-neutral-700 card-color rounded">
+        <div class="px-3 py-2 mb-2 border-b border-neutral-700">System diagnostics</div>
         {# NOT-INSTALLED-REQUIREMENTS CHECK #}
         <div class="px-4 py-1">
             {% if diagnosticData.notInstalledRequirements is empty %}
@@ -106,8 +106,8 @@
     </div>
 
     {# SELF WEB DIAGNOSTICS CARD #}
-    <div class="shadow-lg text-white mb-3 border border-neutral-600 card-color rounded">
-        <div class="px-3 py-2 border-b border-neutral-600">Website diagnostics</div>
+    <div class="shadow-lg text-white mb-3 border border-neutral-700 card-color rounded">
+        <div class="px-3 py-2 border-b border-neutral-700">Website diagnostics</div>
         {# SSL-RUNNING CHECK #}
         <div class="px-4 py-2">
             {% if diagnosticData.isSSL %}

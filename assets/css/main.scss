@@ -85,6 +85,10 @@ main {
 	background-color: rgb(161, 27, 27) !important;
 }
 
+.border-neutral-850 {
+	border-color: #2c3031 !important;
+}
+
 .card-color {
 	background-color: #151618;
 }
@@ -345,7 +349,7 @@ main {
     margin-bottom: 10px;
 	border-radius: 10px;
     background-color: #202020;
-	border: 0.8px solid #524d45;
+	border: 0.8px solid #46413b;
 }
 
 .dashbard-component .progress {
@@ -556,6 +560,16 @@ main {
 		display: none;
 	}
 	.mini-disabled {
+		display: none;
+	}
+}
+
+/* apply only on too small devices */
+@media screen and (max-width: 265px) { 
+	.disable-on-small-devices {
+		display: none;
+	}
+	::-webkit-scrollbar {
 		display: none;
 	}
 }

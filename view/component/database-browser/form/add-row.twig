@@ -4,14 +4,14 @@
 {% block component %}
 {# SUB-NAVIGATION #}
 <div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb p-4">
-    <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to database table browser">
+    <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to database table browser">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
     <span class="mr-1 text-white">{{ tableName|e }}</span>
 </div>
 
 {# ROW ADD FORM #}
-<div class="add-row-input mx-auto max-w-4xl p-3 bg-neutral-885 shadow-lg border border-neutral-600 rounded disable-phone-border">
+<div class="add-row-input mx-auto max-w-4xl p-3 bg-neutral-885 shadow-lg border border-neutral-700 rounded disable-phone-border">
     <h2 class="text-2xl text-white mb-4 text-center">Add row to {{ tableName|e }}</h2>
 
     {# ERROR BOX #}
@@ -34,7 +34,7 @@
                     <label class="block text-gray-200 mb-1" for={{ column.COLUMN_NAME|e }}>{{ column.COLUMN_NAME|capitalize|e }}</label>
                     {% if column.COLUMN_TYPE == 'datetime' %}
                         <input 
-                            class="form-input rounded w-full px-4 py-2 border border-neutral-600 bg-neutral-880 text-white focus:outline-none focus:border-blue-500"
+                            class="form-input rounded w-full px-4 py-2 border border-neutral-700 bg-neutral-880 text-white focus:outline-none focus:border-blue-500"
                             type="datetime-local"
                             name={{ column.COLUMN_NAME|e }}
                             id={{ column.COLUMN_NAME|e }}
@@ -42,7 +42,7 @@
                         >
                     {% else %}
                         <input 
-                            class="form-input rounded w-full px-4 py-2 border border-neutral-600 bg-neutral-880 text-white focus:outline-none focus:border-blue-500"
+                            class="form-input rounded w-full px-4 py-2 border border-neutral-700 bg-neutral-880 text-white focus:outline-none focus:border-blue-500"
                             type="text"
                             name={{ column.COLUMN_NAME|e }}
                             id={{ column.COLUMN_NAME|e }}

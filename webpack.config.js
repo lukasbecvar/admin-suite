@@ -49,6 +49,7 @@ Encore
                         extend: {
                             screens: {
                                 'phn': '340px',
+                                'xs': { max: "265px" }
                             },
                         },
                     },
