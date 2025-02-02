@@ -9,7 +9,7 @@
 ![Dashboard](.github/assets/preview.png)
 
 ## Description
-A simple, user-friendly solution for monitoring and managing Linux servers. Designed specifically for single server instances.
+Simple & user-friendly solution for monitoring and managing Linux servers, primarily designed for single server instances debian-based systems.
 
 ## Installation
 Installation is very simple like any other PHP project.
