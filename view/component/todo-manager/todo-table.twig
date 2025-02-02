@@ -35,7 +35,7 @@
             {% for todo in todos %}
                 <div class="flex items-center justify-between p-3 my-2 rounded bg-neutral-810 transition-colors duration-200" data-todo-id="{{ todo.id }}" data-todo-text="{{ todo.todoText|e('html_attr') }}">
                     <div class="flex-grow">
-                        <span class="text-white whitespace-pre-line">{{ todo.todoText|linkify }}</span>
+                        <span class="text-white whitespace-pre-line disable-select-on-phone">{{ todo.todoText|linkify }}</span>
                     </div>
                     <div class="flex space-x-2 ml-1">
                         {% if filter == 'open' %}
@@ -58,7 +58,7 @@
                             </a>
                         {% endif %}
                         {# VIEW TODO INFO POPUP #}
-                        <button class="info-button hidden sm:block" data-todo-id="1" title="View Info">
+                        <button class="info-button phone-none" data-todo-id="1" title="View Info">
                             <i class="fas fa-info-circle text-gray-500"></i>
                         </button>
                     </div>
@@ -90,7 +90,7 @@
 </div>
 
 {# TODO EDIT POPUP OVERLAY #}
-<div id="editPopup" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden">
+<div id="editPopup" class="fixed inset-0 bg-black bg-opacity-80 flex items-start justify-center pt-[15%] sm:items-center sm:pt-0 hidden">
     <div class="bg-neutral-890 rounded p-4 border border-neutral-700 w-full max-w-xl">
         <h2 class="text-lg font-bold mb-4 text-white">Edit Todo</h2>
         <textarea id="editTodoInput" class="bg-neutral-880 text-white w-full p-3 border border-neutral-700 rounded focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" placeholder="New todo text" maxlength="512" rows="4"></textarea>

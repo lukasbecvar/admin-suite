@@ -1,9 +1,10 @@
 {# CREATE NEW TODO FORM #} 
-{{ form_start(createTodoForm) }}
+{{ form_start(createTodoForm, {'attr': {'onsubmit': 'disableSubmitButton(this)'}}) }}
     <div class="bg-neutral-910 flex-none">
-        {# FORM CONSTRAINTS ERROR #}
+
+        {# SUBMIT ERROR MESSAGE #}
         {% if createTodoForm.todo_text.vars.errors|length > 0 %}
-            <div class="text-red-500 text-l">
+            <div class="bg-neutral-900 text-red-500 text-l border-t border-neutral-700 px-2 py-2">
                 {{ form_errors(createTodoForm.todo_text) }}
             </div>
         {% endif %}
@@ -11,10 +12,12 @@
         <div class="bg-neutral-890 flex-none border-t border-b border-neutral-700">
             <div class="flex items-center">
                 {# TODO TEXT INPUT #}
-                {{ form_widget(createTodoForm.todo_text, {'attr': {'class': 'flex-1 bg-neutral-900 px-2 py-2 text-white outline-none', 'placeholder': 'Enter new todo...'}}) }}
-                
+                {{ form_widget(createTodoForm.todo_text, {'attr': {
+                    'class': 'flex-1 bg-neutral-900 px-2 py-2 text-white outline-none',
+                    'placeholder': 'Enter new todo...'
+                }})}} 
                 {# ADD TODO BUTTON #}
-                <button class="border border-neutral-700 bg-green-700 hover:bg-green-600 text-white px-4 py-2 mt-0 focus:outline-none flex items-center add-todo-button">
+                <button type="submit" class="border border-neutral-700 bg-green-700 hover:bg-green-600 text-white px-4 py-2 mt-0 focus:outline-none flex items-center add-todo-button">
                     <i class="fa fa-plus text-xl" aria-hidden="true"></i>
                     <span class="hidden sm:inline ml-2">Add Todo</span>
                 </button>
@@ -22,3 +25,14 @@
         </div>
     </div>
 {{ form_end(createTodoForm) }}
+
+{# DISABLE SUBMIT BUTTON WHEN FORM IS SUBMITTED (prevents multiple submits) #}
+<script>
+    function disableSubmitButton(form) {
+        const submitButton = form.querySelector('.add-todo-button');
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+    }
+</script>

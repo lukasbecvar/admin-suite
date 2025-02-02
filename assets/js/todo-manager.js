@@ -1,8 +1,7 @@
-/** todo component functionality */
+/** todo manager component functionality */
 document.addEventListener('DOMContentLoaded', function () {
     let currentTodoId = null
-    let pressTimer
-    
+
     // get edit elements
     const editPopup = document.getElementById('editPopup')
     const editButtons = document.querySelectorAll('.fa-edit')
@@ -22,14 +21,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // handle edit button
     editButtons.forEach(button => {
         button.addEventListener('click', function () {
-            // close info popup if is open
             if (!infoPopup.classList.contains('hidden')) {
                 infoPopup.classList.add('hidden')
             }
-
-            // clear any ongoing press timer to prevent info popup
-            clearTimeout(pressTimer)
-
             currentTodoId = this.closest('button').dataset.todoId
             const todoText = this.closest('button').dataset.todoText
             editPopup.classList.remove('hidden')
@@ -52,13 +46,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // handle escape key
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') {
-            // close edit popup
             if (!editPopup.classList.contains('hidden')) {
                 editPopup.classList.add('hidden')
                 editTodoInput.value = ''
             }
-
-            // close info popup
             if (!infoPopup.classList.contains('hidden')) {
                 infoPopup.classList.add('hidden')
             }
@@ -74,27 +65,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // handle long press on todo item for mobile (on mobile, use long press)
+    // for each todo item, attach a click event to its info button (if available)
     todoItems.forEach(item => {
-        item.addEventListener('touchstart', function () {
-            // long press detection for mobile
-            pressTimer = setTimeout(() => {
-                if (editPopup.classList.contains('hidden')) {
-                    currentTodoId = item.dataset.todoId;
-                    getTodoInfo(currentTodoId);
-                }
-            }, 800) // 800ms long press threshold
-        })
-
-        item.addEventListener('touchend', function () {
-            clearTimeout(pressTimer) // cancel long press if touch ends early
-        })
-
-        item.addEventListener('touchmove', function () {
-            clearTimeout(pressTimer) // cancel long press if touch moves
-        })
-
-        // info button click for desktop (only on desktop)
         const infoButton = item.querySelector('.info-button')
         if (infoButton) {
             infoButton.addEventListener('click', function () {
@@ -116,13 +88,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // show todo info in popup
     function showTodoInfoPopup(todo) {
-        // set todo info content to popup
         if (todoOwner) todoOwner.textContent = `Owner: ${todo.owner}`
         if (todoStatus) todoStatus.textContent = `Status: ${todo.status}`
         if (todoCreatedAt) todoCreatedAt.textContent = `Created At: ${todo.created_at}`
         if (todoClosedAt) todoClosedAt.textContent = `Closed At: ${todo.closed_at}`
-
-        // show info popup
         infoPopup.classList.remove('hidden')
     }
 

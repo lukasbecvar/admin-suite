@@ -508,6 +508,9 @@ main {
 		margin-top: 0px !important;
 		width: 100% !important;
 	}
+	.disable-select-on-phone {
+		user-select: none;
+	}
 	.nav-bar {
 		height: 30px;
 	}
