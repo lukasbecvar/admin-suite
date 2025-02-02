@@ -557,7 +557,7 @@ class MonitoringManagerTest extends TestCase
         $monitoringStatusMock = $this->createMock(MonitoringStatus::class);
         $monitoringStatusMock->expects($this->exactly(4))->method('getServiceName')->willReturn('test-service');
         $monitoringStatusMock->expects($this->exactly(2))->method('getSlaTimeframe')->willReturn('2024-12');
-        $monitoringStatusMock->expects($this->exactly(1))->method('setSlaTimeframe')->with('2025-01');
+        $monitoringStatusMock->expects($this->exactly(1))->method('setSlaTimeframe')->with(date('Y-m'));
         $monitoringStatusMock->expects($this->exactly(1))->method('setDownTime')->with(0);
         $monitoringStatusMock->expects($this->exactly(1))->method('getDownTime')->willReturn(3);
         $this->repositoryMock->method('findOneBy')->with(['service_name' => 'test-service'])

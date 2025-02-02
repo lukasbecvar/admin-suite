@@ -1,13 +1,13 @@
 <aside id="sidebar" class="text-white md:active border-r border-neutral-700 flex flex-col justify-between h-full">
     <div>
         {# USER INFO #}
-        <div class="flex flex-col items-center mb-2 mt-2">
+        <div class="flex flex-col items-center mb-0 mt-3">
             {# PROFILE IMAGE #}
-            <div class="profile-image mb-2">
+            <div class="profile-image mb-1 border border-neutral-850 rounded-md">
                 {% if getUserData().getProfilePic == 'default_pic' %}
-                    <img class="rounded shadow-md" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture" width="80" height="80">
+                    <img class="rounded shadow-md" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture">
                 {% else %}
-                    <img class="rounded shadow-md" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture" width="80" height="80">
+                    <img class="rounded shadow-md" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture">
                 {% endif %}
             </div>
             {# USERNAME #}

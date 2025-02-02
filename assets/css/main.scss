@@ -237,10 +237,9 @@ main {
 }
 
 #sidebar .profile-image {
-	width: 70px;
-    height: 70px;
+	width: 85%;
+    height: 85%;
 	overflow: hidden;
-	border-radius: 5px;
     margin-bottom: 3px !important;
 }
 
@@ -521,8 +520,12 @@ main {
 		font-size: 20px !important;
 	}
 	#sidebar ul li span {
-		padding-top: 3px !important;
-		padding-bottom: 3px !important;
+		padding-top: 1.7px !important;
+		padding-bottom: 1.7px !important;
+	}
+	#sidebar .profile-image {
+		width: 30%;
+		height: 30%;
 	}
 	.nav-bar #menu-toggle {
 		margin-bottom: 0px;
