@@ -283,6 +283,48 @@ class ServerUtilTest extends TestCase
     }
 
     /**
+     * Test check if system reboot is required
+     *
+     * @return void
+     */
+    public function testIsRebootRequired(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->isRebootRequired();
+
+        // assert result
+        $this->assertIsBool($result);
+    }
+
+    /**
+     * Test check if system update is available
+     *
+     * @return void
+     */
+    public function testIsUpdateAvailable(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->isUpdateAvailable();
+
+        // assert result
+        $this->assertIsBool($result);
+    }
+
+    /**
+     * Test check if directory has 777 permissions
+     *
+     * @return void
+     */
+    public function testCheckIfDirectoryHas777Permissions(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->checkIfDirectoryHas777Permissions('/var');
+
+        // assert result
+        $this->assertIsBool($result);
+    }
+
+    /**
      * Test get diagnostic data
      *
      * @return void
@@ -303,6 +345,10 @@ class ServerUtilTest extends TestCase
         $this->assertArrayHasKey('driveSpace', $diagnosticData);
         $this->assertArrayHasKey('webUsername', $diagnosticData);
         $this->assertArrayHasKey('isWebUserSudo', $diagnosticData);
+        $this->assertArrayHasKey('rebootRequired', $diagnosticData);
+        $this->assertArrayHasKey('updateAvailable', $diagnosticData);
         $this->assertArrayHasKey('notInstalledRequirements', $diagnosticData);
+        $this->assertArrayHasKey('isLastMonitoringTimeCached', $diagnosticData);
+        $this->assertArrayHasKey('websiteDirectoryPermissions', $diagnosticData);
     }
 }

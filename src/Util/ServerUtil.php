@@ -493,6 +493,105 @@ class ServerUtil
     }
 
     /**
+     * Check if system reboot is required
+     *
+     * @return bool True if reboot is required, false otherwise
+     */
+    public function isRebootRequired(): bool
+    {
+        // debian check
+        if (file_exists('/run/reboot-required')) {
+            return true;
+        }
+
+        // rhel/centos check
+        if (file_exists('/var/run/reboot-required') || file_exists('/var/run/reboot-required.pkgs')) {
+            return true;
+        }
+
+        // check with "needs-restarting" (if available)
+        $needsRestart = shell_exec('command -v needs-restarting && needs-restarting -r 2>/dev/null');
+        if (!empty($needsRestart)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if system update is available
+     *
+     * @return bool True if update is available, false otherwise
+     */
+    public function isUpdateAvailable(): bool
+    {
+        // debian check
+        if (file_exists('/usr/bin/apt-get')) {
+            $updates = shell_exec('apt list --upgradable 2>/dev/null | grep -c "upgradable"');
+            if (!$updates) {
+                return false;
+            }
+            if (intval(trim($updates)) > 0) {
+                return true;
+            }
+        }
+
+        // rhel/centos check
+        if (file_exists('/usr/bin/dnf')) {
+            $updates = shell_exec('dnf check-update 2>/dev/null | grep -c "Available Packages"');
+            if (!$updates) {
+                return false;
+            }
+            if (intval(trim($updates)) > 0) {
+                return true;
+            }
+        }
+
+        // fedora check
+        if (file_exists('/usr/bin/yum')) {
+            $updates = shell_exec('yum check-update 2>/dev/null | grep -Evc "^\s*$"');
+            if (!$updates) {
+                return false;
+            }
+            if (intval(trim($updates)) > 0) {
+                return true;
+            }
+        }
+
+        // arch check
+        if (file_exists('/usr/bin/pacman')) {
+            $updates = shell_exec('checkupdates 2>/dev/null | wc -l');
+            if (!$updates) {
+                return false;
+            }
+            if (intval(trim($updates)) > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if directory has 777 permissions
+     *
+     * @param string $folderPath The folder path
+     *
+     * @return bool True if directory has 777 permissions, false otherwise
+     */
+    public function checkIfDirectoryHas777Permissions(string $folderPath): bool
+    {
+        // check if path is directory
+        if (!is_dir($folderPath)) {
+            return false;
+        }
+
+        // check if folder has 777 permissions
+        $permissions = substr(sprintf('%o', fileperms($folderPath)), -3);
+        return $permissions === '777';
+    }
+
+    /**
      * Get diagnostic data
      *
      * @return array<string,mixed> The diagnostic data
@@ -506,8 +605,11 @@ class ServerUtil
         $isWebUserSudo = $this->isWebUserSudo();
         $isDevMode = $this->appUtil->isDevMode();
         $ramUsage = $this->getRamUsagePercentage();
+        $rebootRequired = $this->isRebootRequired();
+        $updateAvailable = $this->isUpdateAvailable();
         $driveSpace = $this->getDriveUsagePercentage();
         $notInstalledRequirements = $this->getNotInstalledRequirements();
+        $websiteCachePermissions = $this->checkIfDirectoryHas777Permissions($this->appUtil->getAppRootDir() . '/var');
 
         // check if last monitoring cached is expired (only if monitoring service is running)
         $isLastMonitoringTimeCached = true;
@@ -523,7 +625,10 @@ class ServerUtil
             'driveSpace' => $driveSpace,
             'webUsername' => $webUsername,
             'isWebUserSudo' => $isWebUserSudo,
+            'rebootRequired' => $rebootRequired,
+            'updateAvailable' => $updateAvailable,
             'notInstalledRequirements' => $notInstalledRequirements,
+            'websiteDirectoryPermissions' => $websiteCachePermissions,
             'isLastMonitoringTimeCached' => $isLastMonitoringTimeCached
         ];
     }
