@@ -12,7 +12,7 @@
 Simple & user-friendly solution for monitoring and managing Linux servers, primarily designed for single server instances debian-based systems.
 
 ## Documentation
-Documentation is available at [documentation](DOC.MD).
+Documentation is available [here](DOC.MD).
 
 ## Requirements
 * NPM package manager and assets build tool for encore build
