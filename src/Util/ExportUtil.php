@@ -72,7 +72,7 @@ class ExportUtil
 
         // apply column widths
         $sheet->getColumnDimension('A')->setWidth(25);
-        $sheet->getColumnDimension('B')->setWidth(15);
+        $sheet->getColumnDimension('B')->setWidth(20);
         $sheet->getColumnDimension('C')->setWidth(15);
 
         // add conditional formatting for SLA column (change text color)

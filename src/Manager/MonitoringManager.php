@@ -292,16 +292,24 @@ class MonitoringManager
             // convert data to array
             foreach ($slaHistoryData as $slaHistory) {
                 $serviceName = $slaHistory->getServiceName();
-                $timeframe = $slaHistory->getSlaTimeframe();
+                $timeframe = $slaHistory->getSlaTimeframe() ?? 'N/A';
                 $slaValue = $slaHistory->getSlaValue() ?? 0.0;
+
+                // format timeframe (month - year)
+                if ($timeframe != 'N/A') {
+                    $date = DateTime::createFromFormat('Y-m', $timeframe);
+                    $formattedTimeframe = $date ? $date->format('F - Y') : $timeframe;
+                } else {
+                    $formattedTimeframe = $timeframe;
+                }
 
                 // initialize array for service if not already set
                 if (!isset($data[$serviceName])) {
                     $data[$serviceName] = [];
                 }
 
-                // add timeframe and SLA value to the service array
-                $data[$serviceName][$timeframe] = $slaValue;
+                // add formatted timeframe and SLA value to the service array
+                $data[$serviceName][$formattedTimeframe] = $slaValue;
             }
         } catch (Exception $e) {
             $this->errorManager->handleError(
