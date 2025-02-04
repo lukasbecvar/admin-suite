@@ -15,7 +15,7 @@ Simple & user-friendly solution for monitoring and managing Linux servers, prima
 ##### Development
 The complete stack for development is in Docker Compose, including PHP, Node, and Composer. You just need to run the ``sh docker-start-dev.sh`` script to launch it.
 ##### Production
-The application is designed to run on bare-metal rather than as a containerized application. For this reason, it requires very little software to operate, making it easy to install and manage. For example, the metrics component stores data in MySQL, and the cache uses the filesystem instead of Redis.
+The application is designed to run on bare-metal rather than as a containerized application. For this reason, it requires minimal software to operate, making it easy to install and manage. For example, the metrics component stores data in MySQL, and the cache uses the filesystem instead of Redis.
 
 ## Index
 - [Requirements](#requirements)
