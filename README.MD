@@ -12,9 +12,9 @@
 Simple & user-friendly solution for monitoring and managing Linux servers, primarily designed for single server instances debian-based systems.
 
 ## Tech stack
-##### Development
+#### Development
 The complete stack for development is in Docker Compose, including PHP, Node, and Composer. You just need to run the ``sh docker-start-dev.sh`` script to launch it.
-##### Production
+#### Production
 The application is designed to run on bare-metal rather than as a containerized application. For this reason, it requires minimal software to operate, making it easy to install and manage. For example, the metrics component stores data in MySQL, and the cache uses the filesystem instead of Redis.
 
 ## Index
@@ -29,12 +29,12 @@ The application is designed to run on bare-metal rather than as a containerized 
 - [License](#license)
 
 ## Requirements
-##### Software
+#### Software
 * PHP 8.4 and compatible web server
 * MySQL 8 or higher
 * Composer
 * NPM
-##### PHP extensions
+#### PHP extensions
 * PHP-PDO extension (db driver)
 * PHP-OpenSSL extension
 * PHP-Intl extension
@@ -56,7 +56,7 @@ Installation is very simple like any other PHP project.
 * Create main admin user using console command or web interface (webinterface allows to create user if users table is empty)
 
 ## Configuration
-##### Environment variables
+#### Environment variables
 The environment variables are loaded from .env file. You can create .env file in root directory with your configuration.
 | Variable | Description | Example value |
 | --- | --- | --- |
@@ -94,7 +94,7 @@ The environment variables are loaded from .env file. You can create .env file in
 | PUSH_NOTIFICATIONS_CONTENT_ENCODING | Push notifications content encoding | aes-256-gcm |
 | PUSH_NOTIFICATIONS_VAPID_PUBLIC_KEY | Public key for push notifications | 12938747T6T6R236 |
 | PUSH_NOTIFICATIONS_VAPID_PRIVATE_KEY | Private key for push notifications | 12938747T6T6R236 |
-##### Suite configuration
+#### Suite configuration
 The default admin suite configuration is stored in json files in config/suite directory. You can create your own configuration files in app root and override default configuration.
 * config/suite/blocked-usernames.json - list of blocked usernames
 * config/suite/exceptions-monitoring.json - list of paths to exception log files
@@ -107,15 +107,15 @@ The default admin suite configuration is stored in json files in config/suite di
 Authentication uses a completely custom user system with a username and password, managed by the application user manager. Only the first user can use the registration form to create admin user. Login uses standard PHP session and cookie for the 'remember me' feature.
 
 ## Monitoring
-##### Services monitoring
+#### Services monitoring
 HTTP and systemd services monitoring is ensured by a console command (infinite loop) ``console app:process:monitoring``. This command needs to be run as a service, and the monitored services should be defined in the services config file in config/suite/services-monitoring.json. it is necessary to set the monitoring interval and the SMTP server or push notifications in the environment variables for sending alerts. The status and monitoring data can then be viewed in the web dashboard page.
-##### Exceptions monitoring
+#### Exceptions monitoring
 In config exceptions-monitoring.json it is possible to set paths to exception files and track exceptions from your applications via log manager
-##### Metrics
+#### Metrics
 The metrics component stores data during the monitoring process, so its function requires the monitoring process to be running. The metrics store average usage values for CPU, RAM, and storage during the interval set in ``.env`` as ``METRICS_SAVE_INTERVAL``.
-##### Metrics Collector for HTTP services
+#### Metrics Collector for HTTP services
 The Metric Collector allows you to collect metrics from monitored HTTP web applications. You can enable the metric collector in the `services-monitoring.json` file ([services-monitoring.json](config/suite/services-monitoring.json)) by setting `collect_metrics` to true and specifying the `metrics_collector_url`. The Metric Collector accepts `key` (string) and `value` (int|float).
-##### Example response from the Metric Collector URL:
+#### Example response from the Metric Collector URL:
 ```json
 {
   "cpu_usage": 64,
