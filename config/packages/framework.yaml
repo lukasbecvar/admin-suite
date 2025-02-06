@@ -7,24 +7,8 @@ framework:
         enabled: true
         handler_id: 'session.handler.native_file'
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
-
-    # cross-site request protection
-    csrf_protection: true
-    form:
-        csrf_protection:
-            enabled: true
-            field_name: 'csrf_token'
-
 when@test:
     framework:
         test: true
-        
-        # cross-site request protection (disabled in test)
-        csrf_protection: false
-        form:
-            csrf_protection:
-                enabled: false
-
-        # test session
         session:
             storage_factory_id: session.storage.factory.mock_file
