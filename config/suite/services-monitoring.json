@@ -75,19 +75,5 @@
             "collect_metrics": false,
             "metrics_collector_url": ""
         }
-    },
-    "nonlizard.xyz": {
-        "service_name": "nonlizard.xyz",
-        "display_name": "nonlizard.xyz",
-        "url": "https://nonlizard.xyz",
-        "accept_codes": [200],
-        "max_response_time": 3000,
-        "type": "http",
-        "monitoring": true,
-        "display": true,
-        "metrics_monitoring": {
-            "collect_metrics": false,
-            "metrics_collector_url": ""
-        }
     }
 }
