@@ -164,6 +164,13 @@ class DatabaseBrowserController extends AbstractController
             /** @var array<mixed> $formData */
             $formData = $request->request->all();
 
+            // convert empty string values to null
+            foreach ($formData as $key => $value) {
+                if ($value === '') {
+                    $formData[$key] = null;
+                }
+            }
+
             // column data validation
             foreach ($columns as $column) {
                 /** @var string $columnName */
@@ -176,7 +183,7 @@ class DatabaseBrowserController extends AbstractController
                 $columnType = $column['COLUMN_TYPE'];
 
                 // check if value is present for non-nullable fields
-                if (!$isNullable && empty($formData[$columnName])) {
+                if (!$isNullable && empty($formData[$columnName]) && $column['COLUMN_TYPE'] !== 'tinyint(1)') {
                     $errors[] = 'The field ' . $columnName . ' is required and cannot be empty.';
                 }
 
@@ -302,6 +309,13 @@ class DatabaseBrowserController extends AbstractController
             /** @var array<mixed> $formData */
             $formData = $request->request->all();
 
+            // convert empty string values to null
+            foreach ($formData as $key => $value) {
+                if ($value === '') {
+                    $formData[$key] = null;
+                }
+            }
+
             // column data validation
             foreach ($columns as $column) {
                 /** @var string $columnName */
@@ -314,7 +328,7 @@ class DatabaseBrowserController extends AbstractController
                 $columnType = $column['COLUMN_TYPE'];
 
                 // check if value is present for non-nullable fields
-                if (!$isNullable && empty($formData[$columnName])) {
+                if (!$isNullable && empty($formData[$columnName]) && $column['COLUMN_TYPE'] !== 'tinyint(1)') {
                     $errors[] = 'The field ' . $columnName . ' is required and cannot be empty.';
                 }
 
