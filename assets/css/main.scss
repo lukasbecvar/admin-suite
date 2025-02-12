@@ -346,6 +346,7 @@ main {
     width: 100%;
 	height: 18px;
     margin-bottom: 10px;
+	border-radius: 50px;
     background-color: #202020;
 	border: 0.8px solid #46413b;
 }
@@ -353,6 +354,8 @@ main {
 .dashbard-component .progress {
 	width: 0%;
     height: 100%;
+	min-width: 3%;
+	border-radius: 50px;
     transition: width 0.2s ease;
     background-color: rgb(30, 110, 207);
 }
@@ -546,6 +549,9 @@ main {
 		margin-top: 0;
 		margin-bottom: 0;
 		overflow-y: auto; 
+	}
+	.dashbard-component .progress {
+		min-width: 4%;
 	}
 }
 
