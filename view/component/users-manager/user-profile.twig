@@ -48,28 +48,28 @@
         <div class="flex items-center mt-1">
             <div class="text-white">
                 <i class="fas fa-list mr-2"></i>
-                <span>logs <a href={{ path('app_manager_logs', {'user_id': userRepository.getId, 'filter': 'all'}) }} class="profile-link text-blue-400">here</a></span>
+                <span>Logs: <a href={{ path('app_manager_logs', {'user_id': userRepository.getId, 'filter': 'all'}) }} class="profile-link text-blue-400">view</a></span>
             </div>
         </div>
         {# USER IP ADDRESS #}
         <div class="flex items-center mt-4">
             <div class="text-white">
-                <i class="fas fa-address-book mr-2"></i>
-                <span>{{ userRepository.getIpAddress()|e }}</span>
+                <i class="fas fa-address-book ml-[1px] mr-[9.2px]"></i>
+                <span>IP-Address: {{ userRepository.getIpAddress()|e }}</span>
             </div>
         </div>
         {# USER BROWSER #}
         <div class="flex items-center mt-4">
             <div class="text-white">
                 <i class="fas fa-window-maximize mr-2"></i>
-                <span>{{ visitorInfoUtil.getBrowserShortify(userRepository.getUserAgent())|e }}</span>
+                <span>Browser: {{ visitorInfoUtil.getBrowserShortify(userRepository.getUserAgent())|e }}</span>
             </div>
         </div>
         {# USER OS #}
         <div class="flex items-center mt-4">
             <div class="text-white">
-                <i class="fas fa-tv mr-2"></i>
-                <span>{{ visitorInfoUtil.getOs(userRepository.getUserAgent())|e }}</span>
+                <i class="fas fa-tv ml-[-2px]"></i>
+                <span class="ml-[6px]">Platform: {{ visitorInfoUtil.getOs(userRepository.getUserAgent())|e }}</span>
             </div>
         </div>
         {# USER REGISTERED TIME #}
@@ -86,9 +86,9 @@
         <div class="mt-3 text-white">
             <i class="fas fa-ban mr-2"></i>
             {% if banManager.isUserBanned(userRepository.getId()) %}
-                <span><span class="text-red-400">banned for:</span> {{ banManager.getBanReason(userRepository.getId()) }}</span>
+                <span><span class="text-red-400">Banned for:</span> {{ banManager.getBanReason(userRepository.getId()) }}</span>
             {% else %}
-                <span class="text-green-400">non-banned</span>
+                <span class="test-white">Banned status: <span class="text-green-400">non-banned</span></span>
             {% endif %}
         </div>
     </div>
