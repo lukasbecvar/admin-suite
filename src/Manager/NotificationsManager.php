@@ -98,6 +98,40 @@ class NotificationsManager
     }
 
     /**
+     * Get notifications subscriber by user id
+     *
+     * @param int|null $userId The user id (default null: get current logged user id)
+     *
+     * @return NotificationSubscriber|null The notifications subscriber or null if not found
+     */
+    public function getNotificationsSubscriberByUserId(?int $userId = null): ?NotificationSubscriber
+    {
+        if ($userId == null) {
+            $userId = $this->authManager->getLoggedUserId();
+        }
+
+        return $this->notificationSubscriberRepository->findOneBy([
+            'user_id' => $userId,
+            'status' => 'open'
+        ]);
+    }
+
+    /**
+     * Check if push notifications subscription is active
+     *
+     * @param string $endpoint The endpoint of the push notifications
+     *
+     * @return bool
+     */
+    public function checkIfEndpointIsSubscribed(string $endpoint): bool
+    {
+        return $this->notificationSubscriberRepository->findOneBy([
+            'endpoint' => $endpoint,
+            'status' => 'open'
+        ]) != false;
+    }
+
+    /**
      * Regenerate VAPID keys
      *
      * @return array<string> The new VAPID keys

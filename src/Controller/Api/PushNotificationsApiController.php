@@ -154,4 +154,50 @@ class PushNotificationsApiController extends AbstractController
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * API to check if push notifications subscription is active
+     *
+     * @param Request $request The request object
+     *
+     * @return JsonResponse The response with the status of the subscription
+     */
+    #[Route('/api/notifications/check-push-subscription', name: 'api_notifications_check_push_subscription', methods: ['POST'])]
+    public function checkPushSubscription(Request $request): JsonResponse
+    {
+        // check if push notifications is enabled
+        if ($this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_ENABLED') != 'true') {
+            return $this->json([
+                'status' => 'disabled',
+                'message' => 'Push notifications is disabled'
+            ], JsonResponse::HTTP_FORBIDDEN);
+        }
+
+        // get request data
+        $data = json_decode($request->getContent(), true);
+        $endpoint = $data['endpoint'] ?? null;
+
+        // check if endpoint is set
+        if (!$endpoint) {
+            return $this->json([
+                'status' => 'error',
+                'message' => 'Invalid request'
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        // check if endpoint is subscribed
+        if ($this->notificationsManager->checkIfEndpointIsSubscribed($endpoint)) {
+            return $this->json([
+                'status' => 'success',
+                'message' => 'Your subscription is active',
+                'subscriber_id' => $this->notificationsManager->getSubscriberIdByEndpoint($endpoint)
+            ], JsonResponse::HTTP_OK);
+        }
+
+        // return default response
+        return $this->json([
+            'status' => 'error',
+            'message' => 'Your subscription is not registred on the server'
+        ], JsonResponse::HTTP_OK);
+    }
 }

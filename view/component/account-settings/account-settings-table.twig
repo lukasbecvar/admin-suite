@@ -70,4 +70,21 @@
         </div>
     </div>
 </div>
+
+{# PUSH NOTIFICATIONS SETTINGS #}
+{% if pushNotificationsEnabled != false %}
+    <div class="w-full flex justify-center">
+        <div class="w-full max-w-3xl card-color shadow-lg p-4 md:mt-5 border border-neutral-700 rounded account-settings">
+            <h2 class="text-xl font-semibold mb-4 text-white text-center">Push notifications</h2>
+            <div>
+                Subscription status: <span id="push-status" class="text-green-400">checking...</span>
+            </div>
+            <center>
+                <button id="subscribe-btn" class="hidden mt-4 bg-blue-800 text-white px-4 py-2 rounded hover:bg-blue-700">Subscribe notifications</button>
+            </center>
+        </div>
+    </div>
+    {# REGISTER NOTIFICATIONS SETTINGS JAVASCRIPT #}
+    {{ encore_entry_script_tags('notifications-settings-js') }}
+{% endif %}
 {% endblock %}

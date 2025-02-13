@@ -133,6 +133,48 @@ class NotificationsManagerTest extends TestCase
     }
 
     /**
+     * Test get notifications subscriber by user id
+     *
+     * @return void
+     */
+    public function testGetNotificationsSubscriberByUserId(): void
+    {
+        // mock notifications subscriber
+        $notificationsSubscriber = new NotificationSubscriber();
+
+        // expect findOneBy method call
+        $this->repositoryMock->expects($this->once())->method('findOneBy')->with(['user_id' => 1, 'status' => 'open'])
+            ->willReturn($notificationsSubscriber);
+
+        // call tested method
+        $result = $this->notificationsManager->getNotificationsSubscriberByUserId(1);
+
+        // assert result
+        $this->assertEquals($notificationsSubscriber, $result);
+    }
+
+    /**
+     * Test check if endpoint is subscribed
+     *
+     * @return void
+     */
+    public function testCheckIfEndpointIsSubscribed(): void
+    {
+        // mock notifications subscriber
+        $notificationsSubscriber = new NotificationSubscriber();
+
+        // expect findOneBy method call
+        $this->repositoryMock->expects($this->once())->method('findOneBy')->with(['endpoint' => 'endpoint', 'status' => 'open'])
+            ->willReturn($notificationsSubscriber);
+
+        // call tested method
+        $result = $this->notificationsManager->checkIfEndpointIsSubscribed('endpoint');
+
+        // assert result
+        $this->assertTrue($result);
+    }
+
+    /**
      * Test regenerate vapid keys
      *
      * @return void

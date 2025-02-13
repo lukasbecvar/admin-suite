@@ -44,16 +44,8 @@ class LogApiControllerTest extends WebTestCase
     {
         $this->client->request('POST', '/api/external/log');
 
-        // get response content
-        $responseContent = $this->client->getResponse()->getContent();
-
-        // check if response content is empty
-        if (!$responseContent) {
-            $this->fail('Response content is empty');
-        }
-
-        /** @var array<string> $responseData */
-        $responseData = json_decode($responseContent, true);
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
 
         // assert response
         $this->assertEquals('Parameter "token" is required', $responseData['message']);
@@ -71,16 +63,8 @@ class LogApiControllerTest extends WebTestCase
             'token' => 'invalid'
         ]);
 
-        // get response content
-        $responseContent = $this->client->getResponse()->getContent();
-
-        // check if response content is empty
-        if (!$responseContent) {
-            $this->fail('Response content is empty');
-        }
-
-        /** @var array<string> $responseData */
-        $responseData = json_decode($responseContent, true);
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
 
         // assert response
         $this->assertEquals('Access token is invalid', $responseData['message']);
@@ -98,16 +82,8 @@ class LogApiControllerTest extends WebTestCase
             'token' => $_ENV['EXTERNAL_API_LOG_TOKEN']
         ]);
 
-        // get response content
-        $responseContent = $this->client->getResponse()->getContent();
-
-        // check if response content is empty
-        if (!$responseContent) {
-            $this->fail('Response content is empty');
-        }
-
-        /** @var array<string> $responseData */
-        $responseData = json_decode($responseContent, true);
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
 
         // assert response
         $this->assertEquals('Parameters name, message and level are required', $responseData['message']);
@@ -128,16 +104,8 @@ class LogApiControllerTest extends WebTestCase
             'level' => 1
         ]);
 
-        // get response content
-        $responseContent = $this->client->getResponse()->getContent();
-
-        // check if response content is empty
-        if (!$responseContent) {
-            $this->fail('Response content is empty');
-        }
-
-        /** @var array<string> $responseData */
-        $responseData = json_decode($responseContent, true);
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
 
         // assert response
         $this->assertEquals('Log message has been logged', $responseData['message']);

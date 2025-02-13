@@ -7,6 +7,7 @@ use App\Util\AppUtil;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use App\Manager\ErrorManager;
+use App\Manager\NotificationsManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,17 +30,20 @@ class AccountSettingsController extends AbstractController
     private UserManager $userManager;
     private AuthManager $authManager;
     private ErrorManager $errorManager;
+    private NotificationsManager $notificationsManager;
 
     public function __construct(
         AppUtil $appUtil,
         UserManager $userManager,
         AuthManager $authManager,
-        ErrorManager $errorManager
+        ErrorManager $errorManager,
+        NotificationsManager $notificationsManager
     ) {
         $this->appUtil = $appUtil;
         $this->userManager = $userManager;
         $this->authManager = $authManager;
         $this->errorManager = $errorManager;
+        $this->notificationsManager = $notificationsManager;
     }
 
     /**
@@ -50,8 +54,18 @@ class AccountSettingsController extends AbstractController
     #[Route('/account/settings', methods:['GET'], name: 'app_account_settings_table')]
     public function accountSettingsTable(): Response
     {
+        // get push notifications config
+        $pushNotificationSubscriber = null;
+        $pushNotificationsEnabled = $this->notificationsManager->checkIsPushNotificationsEnabled();
+        if ($pushNotificationsEnabled) {
+            $pushNotificationSubscriber = $this->notificationsManager->getNotificationsSubscriberByUserId();
+        }
+
         // return account settings table
-        return $this->render('component/account-settings/account-settings-table.twig');
+        return $this->render('component/account-settings/account-settings-table.twig', [
+            'pushNotificationSubscriber' => $pushNotificationSubscriber,
+            'pushNotificationsEnabled' => $pushNotificationsEnabled
+        ]);
     }
 
     /**
