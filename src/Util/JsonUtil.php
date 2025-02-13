@@ -17,10 +17,11 @@ class JsonUtil
      * Get JSON data from file or URL
      *
      * @param string $target The file path or URL
+     * @param int $timeout The timeout in seconds (default: 5)
      *
      * @return array<mixed>|null The decoded JSON data in associative array
      */
-    public function getJson($target): ?array
+    public function getJson(string $target, int $timeout = 5): ?array
     {
         // request context
         $context = stream_context_create([
@@ -29,7 +30,7 @@ class JsonUtil
                 'header' => [
                     'User-Agent: admin-suite'
                 ],
-                'timeout' => 5
+                'timeout' => $timeout
             ]
         ]);
 

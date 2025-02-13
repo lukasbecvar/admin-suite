@@ -650,7 +650,7 @@ class MonitoringManager
                         // check if metrics can be collected
                         if ($service['metrics_monitoring']['collect_metrics'] == 'true') {
                             // get metrics from metrics collector
-                            $metrics = $this->jsonUtil->getJson($service['metrics_monitoring']['metrics_collector_url']);
+                            $metrics = $this->jsonUtil->getJson($service['metrics_monitoring']['metrics_collector_url'], 30);
 
                             // check if metrics get is successful
                             if ($metrics == null) {
