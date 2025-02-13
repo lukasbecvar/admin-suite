@@ -502,6 +502,9 @@ main {
 	.phone-none {
 		display: none;
 	}
+	.phone-disable-border-top {
+		border-top: none !important;
+	}
 	.disable-phone-border {
 		border: none !important;
 		border-radius: 0px !important;
