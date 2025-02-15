@@ -78,4 +78,11 @@ document.addEventListener('DOMContentLoaded', function() {
             openDeletePopup(button.getAttribute('data-url'))
         })
     })
+
+    // close delete popup when clicking outside of it
+    document.getElementById('deletePopup').addEventListener('click', function(event) {
+        if (event.target === this) {
+            this.classList.add('hidden')
+        }
+    })
 })

@@ -106,4 +106,18 @@ document.addEventListener('DOMContentLoaded', function () {
         e.innerHTML = input
         return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue
     }
+
+    // close info popup when clicking outside of it
+    document.getElementById('infoPopup').addEventListener('click', function (event) {
+        if (event.target === this) {
+            this.classList.add('hidden')
+        }
+    })
+
+    // close edit popup when clicking outside of it
+    document.getElementById('editPopup').addEventListener('click', function (event) {
+        if (event.target === this) {
+            this.classList.add('hidden')
+        }
+    })
 })

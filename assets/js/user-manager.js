@@ -165,4 +165,32 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     })
+
+    // close popup overlay when clicking outside of it 
+    document.getElementById('popup-overlay').addEventListener('click', function (event) {
+        if (event.target === this) {
+            this.classList.add('hidden')
+        }
+    })
+
+    // close role update popup overlay when clicking outside of it 
+    document.getElementById('role-update-popup-overlay').addEventListener('click', function (event) {
+        if (event.target === this) {
+            this.classList.add('hidden')
+        }
+    })
+
+    // close ban popup overlay when clicking outside of it 
+    document.getElementById('ban-popup-overlay').addEventListener('click', function (event) {
+        if (event.target === this) {
+            this.classList.add('hidden')
+        }
+    })
+
+    // close unban popup overlay when clicking outside of it 
+    document.getElementById('unban-popup-overlay').addEventListener('click', function (event) {
+        if (event.target === this) {
+            this.classList.add('hidden')
+        }
+    })
 })
