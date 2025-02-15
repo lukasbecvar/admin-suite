@@ -3,24 +3,24 @@
 {# USER LOGIN COMPONENT #}
 {% block body %}
 <div class="auth-component flex justify-center items-center h-screen">
-    <div class="mt-5 max-w-md w-full shadow-lg px-4 py-5 mb-4 border border-neutral-700 rounded-md background-dark m-w-95">
+    <div class="mt-5 max-w-md w-full shadow-lg px-4 py-5 mb-4 border border-neutral-700 rounded-md background-dark opacity-95 m-w-95">
         <h2 class="text-2xl mb-4 text-center text-white">Login</h2>
 
         {# EMPTY USER LIST ALERT BOX (FIRST USER REGISTER) #}
         {% if isUsersEmpty %}
-            <div class="bg-red-750 text-white p-3 mb-4 rounded text-center">
+            <div class="bg-red-750 text-white p-3 mb-4 rounded text-center animate-popin">
                 <p>Users table is empty Register now <a href={{ path('app_auth_register') }} class="text-blue-500 font-bold hover:text-blue-400">here</a></p>
             </div>
         {% endif %}
 
         {# SUCCESS MESSAGE BOX #}
         {% for message in app.flashes('success') %}
-            <div class="bg-green-700 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
+            <div class="bg-green-750 text-white p-3 mb-3 rounded text-center animate-popin">{{ message|e }}</div>
         {% endfor %}
 
         {# ERROR MESSAGE BOX #}
         {% for message in app.flashes('error') %}
-            <div class="bg-red-750 text-white p-3 mb-3 rounded text-center">{{ message|e }}</div>
+            <div class="bg-red-750 text-white p-3 mb-3 rounded text-center animate-popin">{{ message|e }}</div>
         {% endfor %}
 
         {# LOGIN FORM #}

@@ -17,12 +17,12 @@
     
         {# SUCCESS MESSAGE RETURN BOX #}
         {% for message in app.flashes('success') %}
-            <div class="bg-green-700 text-white p-3 mb-4 rounded text-center">{{ message|e }}</div>
+            <div class="bg-green-700 text-white p-3 mb-4 rounded text-center animate-popin">{{ message|e }}</div>
         {% endfor %}
     
         {# ERROR MESSAGE RETURN BOX #}
         {% for message in app.flashes('error') %}
-            <div class="bg-red-700 text-white p-3 mb-4 rounded text-center">{{ message|e }}</div>
+            <div class="bg-red-700 text-white p-3 mb-4 rounded text-center animate-popin">{{ message|e }}</div>
         {% endfor %}
     
         {# REGISTER FORM #}

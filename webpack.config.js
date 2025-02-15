@@ -50,7 +50,21 @@ Encore
                         extend: {
                             screens: {
                                 'phn': '340px',
-                                'xs': { max: "265px" }
+
+                                // screen sizes limit properties for show small screen error message
+                                'xs': { max: "265px" },
+                                'short': { raw: "(max-height: 160px)" }
+                            },
+
+                            // animations config
+                            keyframes: {
+                                popIn: {
+                                    "0%": { opacity: "0", transform: "scale(0.5)" },
+                                    "100%": { opacity: "1", transform: "scale(1)" },
+                                },
+                            },
+                            animation: {
+                                popin: "popIn 0.1s ease-out",
                             },
                         },
                     },

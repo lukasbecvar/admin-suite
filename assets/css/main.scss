@@ -33,22 +33,6 @@ main {
 }
 
 /* common styles */
-.ml-05 {
-	margin-left: 1.8px !important;
-}
-
-.mt-02 {
-	margin-top: 3px !important;
-}
-
-.mrc-2 {
-	margin-right: 6.8px !important;
-}
-
-.mrc-3 {
-	margin-right: 10px !important;
-}
-
 .bg-neutral-810 {
 	background-color: #1e1f20 !important;
 }
@@ -212,10 +196,6 @@ main {
 	font-size: 22px !important;
 }
 
-.nav-bar .menu-text {
-	margin-right: 5px;
-}
-
 .breadcrumb {
 	font-size: 18px;
 }
@@ -344,20 +324,22 @@ main {
 /* dashboard component */
 .dashbard-component .progress-bar {
     width: 100%;
-	height: 18px;
-    margin-bottom: 10px;
-	border-radius: 50px;
-    background-color: #202020;
-	border: 0.8px solid #46413b;
+    height: 20px;
+    margin-bottom: 15px;
+    border-radius: 50px;
+	background-color: #202020;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
 }
 
 .dashbard-component .progress {
-	width: 0%;
+    width: 0%;
     height: 100%;
-	min-width: 3%;
-	border-radius: 50px;
-    transition: width 0.2s ease;
-    background-color: rgb(30, 110, 207);
+    min-width: 3%;
+    border-radius: 50px;
+    transition: width 0.4s ease, background-color 0.4s ease;
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    box-shadow: 0 0 3px rgba(30, 110, 207, 0.8);
 }
 
 .dashbard-component .card-text {

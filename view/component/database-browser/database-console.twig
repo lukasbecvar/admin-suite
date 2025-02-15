@@ -16,7 +16,7 @@
 
     {# OUTPUT BOX #}
     {% if output is not null %}
-        <div class="bg-neutral-885 ml-2 mr-2 mt-1 border border-neutral-700 shadow-md">
+        <div class="bg-neutral-885 ml-2 mr-2 mt-1 border border-neutral-700 shadow-md animate-popin">
             <p class="text-lg font-semibold border-b border-neutral-700 p-1">Database output</p>
             <pre id="query-output" class="text-sm whitespace-pre-wrap break-words p-2">{{ output|raw }}</pre>
         </div>

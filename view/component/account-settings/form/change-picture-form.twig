@@ -17,16 +17,16 @@
     
         {# SUCCESS MESSAGE BOX #}
         {% for message in app.flashes('success') %}
-            <div class="bg-green-700 text-white p-3 mb-1 rounded text-center">{{ message|e }}</div>
+            <div class="bg-green-700 text-white p-3 mb-1 rounded text-center animate-popin">{{ message|e }}</div>
         {% endfor %}
     
         {# ERROR MESSAGE BOX #}
         {% for message in app.flashes('error') %}
-            <div class="bg-red-700 text-white p-3 mb-1 rounded text-center">{{ message|e }}</div>
+            <div class="bg-red-700 text-white p-3 mb-1 rounded text-center animate-popin">{{ message|e }}</div>
         {% endfor %}
 
         {# IMAGE PREVIEW BOX #}
-        <div class="image-preview mb-2 flex justify-center">
+        <div class="image-preview mb-2 flex justify-center animate-popin">
             <div class="relative rounded-lg overflow-hidden border border-neutral-700 shadow-lg" style="display: none;" id="image-preview-container">
                 <img id="preview-image" src="#" alt="Image preview" class="w-40 h-40 object-cover">
             </div>

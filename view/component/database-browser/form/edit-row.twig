@@ -16,7 +16,7 @@
 
     {# ERROR BOX #}
     {% if errors is not empty %}
-        <div class="bg-red-700 text-white p-4 mb-4">
+        <div class="bg-red-700 text-white p-4 mb-4 animate-popin">
             <h3 class="font-bold">There were some errors:</h3>
             <ul class="list-disc ml-5">
                 {% for error in errors %}
