@@ -137,21 +137,29 @@ class TerminalApiController extends AbstractController
 
                 // check if dir is / root dir
                 if (!str_starts_with($newDir, '/')) {
-                    $finalDir = getcwd() . '/' . $newDir;
+                    if (getcwd() == '/') {
+                        $finalDir = '/' . $newDir;
+                    } else {
+                        $finalDir = getcwd() . '/' . $newDir;
+                    }
                 } else {
                     $finalDir = $newDir;
                 }
 
                 // check if directory exists
                 if (file_exists($finalDir)) {
+                    // check if directory is readable
+                    if (!is_readable($finalDir)) {
+                        return new Response('Error: you do not have permission to access this directory', Response::HTTP_OK);
+                    }
                     $this->sessionUtil->setSession('terminal-dir', $finalDir);
-                    return new Response('', Response::HTTP_OK);
+                    return new Response(status: Response::HTTP_OK);
                 } else {
-                    return new Response('Error directory: ' . $finalDir . ' not found', Response::HTTP_OK);
+                    return new Response('Error: directory: ' . $finalDir . ' not found', Response::HTTP_OK);
                 }
             } else {
                 // execute command
-                exec('sudo ' . $command, $output, $returnCode);
+                exec($command, $output, $returnCode);
 
                 // check if command run valid
                 if ($returnCode !== 0) {
@@ -160,7 +168,7 @@ class TerminalApiController extends AbstractController
                         message: $username . ' executed command: ' . $command . ' with error code: ' . $returnCode,
                         level: LogManager::LEVEL_WARNING
                     );
-                    return new Response('Error to execute command: ' . $command, Response::HTTP_OK);
+                    return new Response('Error to execute command: ' . $command . ', status code: ' . $returnCode, Response::HTTP_OK);
                 }
 
                 // log execute action

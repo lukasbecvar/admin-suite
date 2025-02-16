@@ -418,9 +418,10 @@ main {
 }
 
 .terminal-component #output-container {
-	flex-grow: 1;
-    color: white;
     padding-top: 0px !important;
+	line-height: 1.1;
+    color: white;
+	flex-grow: 1;
 }
 
 .terminal-component #command-container {
@@ -433,7 +434,9 @@ main {
 }
 
 .terminal-component .command-history-prompt {
-    margin-top: 1.3px;
+	font-size: 16px;
+	font-weight: 500;
+	padding-top: 5.2px !important;
 }
 
 .terminal-component #prompt {
@@ -441,12 +444,16 @@ main {
 }
 
 .terminal-component #prompt-line {
-    white-space: nowrap;
+	font-size: 16px;
+	line-height: 1.1;
 	color: #6262ff;
+	white-space: nowrap;
+	padding-top: -2px !important;
 }
 
 .terminal-component .last-command {
-    margin-left: 6px;
+	margin-top: -2px !important;
+    margin-left: 5px;
 }
 
 .terminal-component #command {
