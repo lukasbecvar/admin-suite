@@ -1,5 +1,5 @@
 /** push notifications subscriber functionality */
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', function() {
     // function for checking if notifications are enabled on backend
     async function checkNotificationsEnabled() {
         const response = await fetch('/api/notifications/enabled')

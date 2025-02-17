@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function decodeInput(input) {
         const e = document.createElement('div')
         e.innerHTML = input
-        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue
+        return e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue
     }
 
     // close info popup when clicking outside of it

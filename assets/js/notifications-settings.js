@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const subscribeButton = document.getElementById('subscribe-btn')
 
     // resubscribe to push notifications
-    subscribeButton.addEventListener("click", async () => {
+    subscribeButton.addEventListener('click', async () => {
         console.log('Subscription button clicked.')
         if (Notification.permission === 'denied') {
             alert('Push notifications are disabled in your browser settings. Please enable them manually.')
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // check if notifications are disabled
-        if (Notification.permission === "denied") {
+        if (Notification.permission === 'denied') {
             statusElement.textContent = 'Push notifications are disabled. Please enable them in your browser settings.'
             subscribeButton.classList.remove('hidden')
             return

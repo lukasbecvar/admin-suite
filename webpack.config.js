@@ -10,15 +10,16 @@ Encore
     .addEntry('index-css', './assets/css/index.scss')
 
     // register js
-    .addEntry('terminal-js', './assets/js/terminal.js')
     .addEntry('todo-manager-js', './assets/js/todo-manager.js')
     .addEntry('user-manager-js', './assets/js/user-manager.js')
     .addEntry('metrics-charts-js', './assets/js/metrics-charts.js')
     .addEntry('sidebar-element-js', './assets/js/sidebar-element.js')
     .addEntry('loading-component-js', './assets/js/loading-component.js')
+    .addEntry('terminal-component-js', './assets/js/terminal-component.js')
     .addEntry('database-table-browser-js', './assets/js/database-table-browser.js')
     .addEntry('notifications-settings-js', './assets/js/notifications-settings.js')
     .addEntry('notification-subscriberr-js', './assets/js/notification-subscriber.js')
+    .addEntry('system-resources-updater-js', './assets/js/system-resources-updater.js')
 
     // copy static assets
     .copyFiles(

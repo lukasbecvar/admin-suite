@@ -1,7 +1,7 @@
 /** metrics component graph functionality */
 const ApexCharts = require('apexcharts')
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
     // function for dynamic color based on value
     function getColor(value, metricData) {
         const maxMetricValue = Math.max(...metricData.map(m => m.value))
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!window.metricsData) {
-        console.error("Metrics data not found in window.metricsData")
+        console.error('Metrics data not found in window.metricsData')
         return
     }
     const services = typeof window.metricsData.categories === 'undefined' ? window.metricsData : { default: window.metricsData }

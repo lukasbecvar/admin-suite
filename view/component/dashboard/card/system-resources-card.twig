@@ -3,23 +3,23 @@
         <span>System Resources</span>
         <a href={{ path('app_metrics_dashboard') }} class="text-indigo-400 hover:text-indigo-300 text-xs" title="Go to metrics view">View All</a>
     </div>
-    <div class="p-4 pb-1">
+    <div class="p-3 pb-1">
         {# CPU USAGE #}
-        <p class="text-white mb-1">CPU: {{ diagnosticData.cpuUsage|e }}%</p>
+        <p class="text-white mb-1" id="cpu-usage">CPU: {{ diagnosticData.cpuUsage|e }}%</p>
         <div class="progress-bar">
-            <div class="progress" style="width: {{ diagnosticData.cpuUsage|e }}%; background: {{ diagnosticData.cpuUsage > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)' }};"></div>
+            <div class="progress" id="cpu-progress" style="width: {{ diagnosticData.cpuUsage|e }}%; background: {{ diagnosticData.cpuUsage > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)' }};"></div>
         </div>
 
         {# RAM USAGE #}
-        <p class="text-white mb-1">RAM: ({{ ramUsage.used|e }}G / {{ diagnosticData.ramUsage|e }}%)</p>
+        <p class="text-white mb-1" id="ram-usage">RAM: ({{ ramUsage.used|e }}G / {{ diagnosticData.ramUsage|e }}%)</p>
         <div class="progress-bar">
-            <div class="progress" style="width: {{ diagnosticData.ramUsage|e }}%; background: {{ diagnosticData.ramUsage > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)' }};"></div>
+            <div class="progress" id="ram-progress" style="width: {{ diagnosticData.ramUsage|e }}%; background: {{ diagnosticData.ramUsage > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)' }};"></div>
         </div>
 
         {# STORAGE USAGE #}
-        <p class="text-white mb-1">STORAGE: ({{ storageUsage|e }}G / {{ diagnosticData.driveSpace|e }}%)</p>
+        <p class="text-white mb-1" id="drive-space">STORAGE: ({{ storageUsage|e }}G / {{ diagnosticData.driveSpace|e }}%)</p>
         <div class="progress-bar">
-            <div class="progress" style="width: {{ diagnosticData.driveSpace|e }}%; background: {{ diagnosticData.driveSpace > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)' }};"></div>
+            <div class="progress" id="drive-space-progress" style="width: {{ diagnosticData.driveSpace|e }}%; background: {{ diagnosticData.driveSpace > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)' }};"></div>
         </div>
     </div>
 </div>

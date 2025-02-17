@@ -1,5 +1,5 @@
 /** terminal component functionality */
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', function() {
     // get html element list
     const pathElement = document.getElementById('path')
     const commandInput = document.getElementById('command')
@@ -77,8 +77,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // event listener for keypress in the command input
-    commandInput.addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
+    commandInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
             const command = this.value.trim()
             if (command.length > 0) {
 
@@ -108,13 +108,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 scrollToBottom()
             }
         // handle command history navigation up
-        } else if (e.key === "ArrowUp") {
+        } else if (e.key === 'ArrowUp') {
             if (historyIndex > 0) {
                 historyIndex--
                 commandInput.value = commandHistory[historyIndex]
             }
         // handle command history navigation down
-        } else if (e.key === "ArrowDown") {
+        } else if (e.key === 'ArrowDown') {
             if (historyIndex < commandHistory.length - 1) {
                 historyIndex++
                 commandInput.value = commandHistory[historyIndex]
@@ -126,13 +126,13 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
     // focus on command input when user starts typing
-    document.addEventListener("keydown", function(e) {
+    document.addEventListener('keydown', function(e) {
         // disable focus when ctrl+c is pressed
-        if (e.ctrlKey && e.key.toLowerCase() === "c") {
+        if (e.ctrlKey && e.key.toLowerCase() === 'c') {
             return;
         }
         
-        if (e.key !== "Control") {
+        if (e.key !== 'Control') {
             commandInput.focus();
         }
     });    
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 case '1': color = 'font-weight: bold;'; break;
                 default: color = ''; break;
             }
-            return `<span style="${color}">`;
+            return `<span style='${color}'>`;
         });
         
         // reset code
@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         // display command output
                         terminal.innerHTML += convertBashColors('<div>' + xhr.responseText + '</div>')
                         
-                        // check if command starts with "cd "
+                        // check if command starts with 'cd '
                         if (command.startsWith('cd ')) {
                             setTimeout(function() {
                                 commandContainer.style.display = ''
@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // convert the first letter of the command to lowercase
-    document.getElementById("command").addEventListener("input", function(e) {
+    document.getElementById('command').addEventListener('input', function(e) {
         if (this.value.length === 1) {
             this.value = this.value.toLowerCase();
         }

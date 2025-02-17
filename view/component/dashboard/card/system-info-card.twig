@@ -1,13 +1,13 @@
 <div class="card-color border border-neutral-700 shadow-lg rounded overflow-hidden w-full">
-    <div class="px-3 py-2 border-b border-neutral-700 text-white font-bold text-sm">
+    <div class="pl-3 py-2 border-b border-neutral-700 text-white font-bold text-sm">
         System Information
     </div>
-    <div class="p-3 pl-4">
+    <div class="p-3">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
             {# HOST UPTIME #}
             <div class="flex flex-col">
                 <p class="text-gray-300 mb-1">Uptime</p>
-                <p class="text-white font-medium">{{ hostUptime|e }}</p>
+                <p class="text-white font-medium" id="system-uptime">{{ hostUptime|e }}</p>
             </div>
             {# HOST SYSTEM #}
             <div class="flex flex-col">
