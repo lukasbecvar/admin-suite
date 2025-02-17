@@ -58,7 +58,7 @@
         "monitoring": true,
         "display": true,
         "metrics_monitoring": {
-            "collect_metrics": true,
+            "collect_metrics": false,
             "metrics_collector_url": "https://paste.becvar.xyz/metrics/export?time_period=H"
         }
     },
