@@ -60,8 +60,7 @@ class DashboardControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'Monitoring');
         $this->assertSelectorTextContains('body', 'System Information');
         $this->assertSelectorTextContains('body', 'System Resources');
-        $this->assertSelectorTextContains('body', 'Logs');
-        $this->assertSelectorTextContains('body', 'Users');
+        $this->assertSelectorTextContains('body', 'Database statistics');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }
