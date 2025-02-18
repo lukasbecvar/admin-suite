@@ -39,10 +39,14 @@ class SystemResourcesApiController extends AbstractController
         $storageUsage = $this->serverUtil->getStorageUsage();
         $diagnosticData = $this->serverUtil->getDiagnosticData();
 
+        // get network stats
+        $networkStats = $this->serverUtil->getNetworkStats();
+
         return $this->json([
             'ramUsage' => $ramUsage,
             'hostUptime' => $hostUptime,
             'storageUsage' => $storageUsage,
+            'networkStats' => $networkStats,
             'diagnosticData' => $diagnosticData
         ]);
     }

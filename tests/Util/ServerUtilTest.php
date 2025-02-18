@@ -252,6 +252,27 @@ class ServerUtilTest extends TestCase
     }
 
     /**
+     * Test get network stats
+     *
+     * @return void
+     */
+    public function testGetNetworkStats(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->getNetworkStats();
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('pingToIp', $result);
+        $this->assertArrayHasKey('interface', $result);
+        $this->assertArrayHasKey('lastCheckTime', $result);
+        $this->assertArrayHasKey('uploadMbps', $result);
+        $this->assertArrayHasKey('downloadMbps', $result);
+        $this->assertArrayHasKey('networkUsagePercent', $result);
+        $this->assertArrayHasKey('pingMs', $result);
+    }
+
+    /**
      * Test get not installed requirements
      *
      * @return void

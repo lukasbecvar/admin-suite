@@ -68,6 +68,7 @@ class SystemResourcesApiControllerTest extends CustomTestCase
         $this->assertArrayHasKey('ramUsage', $responseData);
         $this->assertArrayHasKey('hostUptime', $responseData);
         $this->assertArrayHasKey('storageUsage', $responseData);
+        $this->assertArrayHasKey('networkStats', $responseData);
         $this->assertArrayHasKey('diagnosticData', $responseData);
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }

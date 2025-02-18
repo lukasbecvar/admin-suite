@@ -497,6 +497,9 @@ class MonitoringManager
         $ramUsage = $this->serverUtil->getRamUsagePercentage();
         $storageUsage = (int) $this->serverUtil->getDriveUsagePercentage();
 
+        // get network usage
+        $networkStats = $this->serverUtil->getNetworkStats();
+
         // monitor cpu usage
         if ($cpuUsage > 98) {
             $this->handleMonitoringStatus(
@@ -703,7 +706,7 @@ class MonitoringManager
 
         // save host usages metrics to database
         try {
-            $this->metricsManager->saveUsageMetrics($cpuUsage, $ramUsage, $storageUsage);
+            $this->metricsManager->saveUsageMetrics($cpuUsage, $ramUsage, $storageUsage, (float) $networkStats['networkUsagePercent']);
             $io->writeln(
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>host usages metrics saved</fg=green>'
             );

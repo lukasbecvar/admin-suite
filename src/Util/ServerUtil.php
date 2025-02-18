@@ -353,6 +353,62 @@ class ServerUtil
     }
 
     /**
+     * Get network statistics
+     *
+     * @param string $interface The network interface
+     * @param string $pingToIp The IP address to ping (default: 8.8.8.8)
+     * @param int $maxSpeedMbps The maximum speed in Mbps (default: 1000)
+     *
+     * @return array<string,float|string> The network statistics
+     */
+    public function getNetworkStats(string $interface = 'enp0s6', string $pingToIp = '8.8.8.8', int $maxSpeedMbps = 1000): array
+    {
+        // first measurement
+        $rx1 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $2}'");
+        $tx1 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $10}'");
+        $rx1 = intval($rx1);
+        $tx1 = intval($tx1);
+
+        // wait 1 second before second measurement
+        usleep(1000000);
+
+        // second measurement
+        $rx2 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $2}'");
+        $tx2 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $10}'");
+        $rx2 = intval($rx2);
+        $tx2 = intval($tx2);
+
+        // calculate speed in Mbps
+        $rxMbps = (($rx2 - $rx1) * 8) / 1_000_000;
+        $txMbps = (($tx2 - $tx1) * 8) / 1_000_000;
+
+        // ping google dns
+        $pingOutput = shell_exec("ping -c 1 $pingToIp | grep 'time=' | awk -F'time=' '{print $2}' | awk '{print $1}'");
+        if ($pingOutput != false) {
+            $ping = trim($pingOutput) ?: "N/A";
+        } else {
+            $ping = "N/A";
+        }
+
+        // calculate usage in %
+        $usagePercent = (($rxMbps + $txMbps) / $maxSpeedMbps) * 100;
+        $networkUsagePercent = round($usagePercent, 2);
+        if ($networkUsagePercent == 0.0) {
+            $networkUsagePercent = 0.1;
+        }
+
+        return [
+            'pingToIp' => $pingToIp,
+            'interface' => $interface,
+            'lastCheckTime' => date('H:i:s'),
+            'uploadMbps' => round($txMbps, 2),
+            'downloadMbps' => round($rxMbps, 2),
+            'networkUsagePercent' => $networkUsagePercent,
+            'pingMs' => is_numeric($ping) ? round(floatval($ping), 2) : "N/A"
+        ];
+    }
+
+    /**
      * Get list of required applications that are not installed
      *
      * This method reads JSON file containing list of required applications

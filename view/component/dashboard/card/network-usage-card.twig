@@ -1,0 +1,47 @@
+<div class="card-color bg-neutral-900 border border-neutral-700 shadow-lg rounded w-full">
+    <div class="px-3 py-2 border-b border-neutral-700 text-white font-bold text-sm flex items-center justify-between">
+        <span>Network usage</span>
+    </div>
+
+    {# NETWORK STATS INFO #}
+    <div class="grid grid-cols-2 gap-x-4 col-span-2 p-3 pt-0 pb-0 mt-2">
+        <div>
+            <p class="text-gray-300 mb-2">
+                Download (Mbps): <span class="text-white font-semibold" id="network-usage-download">...</span>
+            </p>
+        </div>
+        <div>
+            <p class="text-gray-300 mb-2">
+                Upload (Mbps): <span class="text-white font-semibold" id="network-usage-upload">...</span>
+            </p>
+        </div>
+        <div>
+            <p class="text-gray-300 mb-2">
+                Ping: <span class="text-white font-semibold" id="network-usage-ping">...</span>
+            </p>
+        </div>
+        <div>
+            <p class="text-gray-300 mb-2">
+                Interface: <span class="text-white font-semibold" id="network-usage-interface">...</span>
+            </p>
+        </div>
+        <div>
+            <p class="text-gray-300 mb-2">
+                Ping server: <span class="text-white font-semibold" id="network-usage-ping-server">...</span>
+            </p>
+        </div>
+    </div>
+
+    {# LAST CHECK TIME #}
+    <p class="text-gray-300 mb-1 ml-3">
+        Last check time: <span class="text-white font-semibold" id="network-last-check-time">...</span>
+    </p>
+
+    {# NETWORK USAGE PROGRESS BAR #}
+    <div class="p-3 pb-1 mt-[-6px]">
+        <p class="text-white mb-1" id="network-usage">Usage: ...</p>
+        <div class="progress-bar">
+            <div class="progress" id="network-progress" style="width: 0%;"></div>
+        </div>
+    </div>
+</div>

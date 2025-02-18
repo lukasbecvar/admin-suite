@@ -153,14 +153,16 @@ class MetricsManager
      * @param float $cpuUsage The CPU usage
      * @param int $ramUsage The RAM usage
      * @param int $storageUsage The storage usage
+     * @param float $networkUsage The network usage
      *
      * @return void
      */
-    public function saveUsageMetrics(float $cpuUsage, int $ramUsage, int $storageUsage): void
+    public function saveUsageMetrics(float $cpuUsage, int $ramUsage, int $storageUsage, float $networkUsage): void
     {
         $this->saveMetricWithCacheSummary('cpu_usage', $cpuUsage, 'host-system');
         $this->saveMetricWithCacheSummary('ram_usage', $ramUsage, 'host-system');
         $this->saveMetricWithCacheSummary('storage_usage', $storageUsage, 'host-system');
+        $this->saveMetricWithCacheSummary('network_usage', $networkUsage, 'host-system');
     }
 
     /**
