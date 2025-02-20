@@ -58,7 +58,7 @@
             {% for metricName, metricData in data.metrics %}
                 <div class="flex flex-col md:flex-row gap-2">
                     <div class="flex-1 p-0 border border-neutral-700 shadow-lg card-color rounded relative chart-container">
-                        <div class="px-3 py-2 border-b border-neutral-700 text-white font-bold text-sm flex items-center justify-between">
+                        <div class="px-3 py-2 border-b border-neutral-700 text-white font-bold text-sm flex items-center justify-between mb-1">
                             {{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}
                             <a href={{ path('app_metrics_delete', {'service_name': serviceName, 'metric_name': metricName}) }} class="text-indigo-400 hover:text-indigo-300 text-l">delete</a>
                         </div>
@@ -82,7 +82,7 @@
                     {% for metricName, metricData in serviceData.metrics %}
                         <div class="flex flex-col md:flex-row gap-1">                        
                             <div class="flex-1 p-0 border border-neutral-700 shadow-lg card-color rounded relative chart-container">
-                                <div class="px-3 py-2 border-b border-neutral-700 text-white font-bold text-sm flex items-center justify-between">
+                                <div class="px-3 py-2 border-b border-neutral-700 text-white font-bold text-sm flex items-center justify-between mb-1"">
                                     {{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}
                                 </div>
                                 <div id="{{ (metricName ~ '-' ~ serviceName)|replace({'.': '_', ' ': '_'}) }}-line"></div>
