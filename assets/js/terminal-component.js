@@ -129,39 +129,39 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('keydown', function(e) {
         // disable focus when ctrl+c is pressed
         if (e.ctrlKey && e.key.toLowerCase() === 'c') {
-            return;
+            return
         }
         
         if (e.key !== 'Control') {
-            commandInput.focus();
+            commandInput.focus()
         }
-    });    
+    })  
     
     // colorize the output using bash color codes
     function convertBashColors(input) {
         // regex to match the bash color codes
-        const regex = /\x1b\[([0-9;]*)m/g;
-        let output = input;
+        const regex = /\x1b\[([0-9;]*)m/g
+        let output = input
         
         // replace color codes with corresponding HTML styles
         output = output.replace(regex, function(match, code) {
-            let color = '';
+            let color = ''
             switch(code) {
-                case '31': color = 'color: red;'; break;
-                case '32': color = 'color: green;'; break;
-                case '33': color = 'color: yellow;'; break;
-                case '34': color = 'color: blue;'; break;
-                case '0': color = 'color: white;'; break;
-                case '1': color = 'font-weight: bold;'; break;
-                default: color = ''; break;
+                case '31': color = 'color: red;'; break
+                case '32': color = 'color: green;'; break
+                case '33': color = 'color: yellow;'; break
+                case '34': color = 'color: blue;'; break
+                case '0': color = 'color: white;'; break
+                case '1': color = 'font-weight: bold;'; break
+                default: color = ''; break
             }
-            return `<span style='${color}'>`;
-        });
+            return `<span style='${color}'>`
+        })
         
         // reset code
-        output = output.replace(/\x1b\[0m/g, '</span>');
+        output = output.replace(/\x1b\[0m/g, '</span>')
         
-        return output;
+        return output
     }
 
     // execute the entered command
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // convert the first letter of the command to lowercase
     document.getElementById('command').addEventListener('input', function(e) {
         if (this.value.length === 1) {
-            this.value = this.value.toLowerCase();
+            this.value = this.value.toLowerCase()
         }
-    });
+    })
 })

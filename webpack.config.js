@@ -22,12 +22,10 @@ Encore
     .addEntry('system-resources-updater-js', './assets/js/system-resources-updater.js')
 
     // copy static assets
-    .copyFiles(
-        {
-            from: './assets/images', 
-            to: 'images/[path][name].[ext]' 
-        }
-    )
+    .copyFiles({
+        from: './assets/images', 
+        to: 'images/[path][name].[ext]' 
+    })
 
     // other webpack configs
     .splitEntryChunks()
