@@ -357,12 +357,13 @@ class ServerUtil
      *
      * @param string $interface The network interface
      * @param string $pingToIp The IP address to ping (default: 8.8.8.8)
-     * @param int $maxSpeedMbps The maximum speed in Mbps (default: 3200)
      *
      * @return array<string,float|string> The network statistics
      */
-    public function getNetworkStats(string $interface = 'enp0s6', string $pingToIp = '8.8.8.8', int $maxSpeedMbps = 1000): array
+    public function getNetworkStats(string $interface = 'enp0s6', string $pingToIp = '8.8.8.8'): array
     {
+        $maxSpeedMbps = (int) $this->appUtil->getEnvValue('NETWORK_SPEED_MAX');
+
         // first measurement
         $rx1 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $2}'");
         $tx1 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $10}'");

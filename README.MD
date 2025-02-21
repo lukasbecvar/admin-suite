@@ -78,6 +78,7 @@ The environment variables are loaded from .env file. You can create .env file in
 | LIMIT_CONTENT_PER_PAGE | Limit items per page | 10 |
 | MONITORING_INTERVAL | Monitoring interval | 60 |
 | METRICS_SAVE_INTERVAL | Metrics save interval | 60 |
+| NETWORK_SPEED_MAX | Network speed (Mbps) limit for usage calculation | 1000 |
 | DATABASE_DRIVER | Database driver | pdo_mysql |
 | DATABASE_HOST | Database host | localhost |
 | DATABASE_PORT | Database port | 3306 |
