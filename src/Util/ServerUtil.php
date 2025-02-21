@@ -357,11 +357,11 @@ class ServerUtil
      *
      * @param string $interface The network interface
      * @param string $pingToIp The IP address to ping (default: 8.8.8.8)
-     * @param int $maxSpeedMbps The maximum speed in Mbps (default: 1000)
+     * @param int $maxSpeedMbps The maximum speed in Mbps (default: 3200)
      *
      * @return array<string,float|string> The network statistics
      */
-    public function getNetworkStats(string $interface = 'enp0s6', string $pingToIp = '8.8.8.8', int $maxSpeedMbps = 1000): array
+    public function getNetworkStats(string $interface = 'enp0s6', string $pingToIp = '8.8.8.8', int $maxSpeedMbps = 3200): array
     {
         // first measurement
         $rx1 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $2}'");
@@ -391,7 +391,7 @@ class ServerUtil
         }
 
         // calculate usage in %
-        $usagePercent = (($rxMbps + $txMbps) / $maxSpeedMbps) * 100;
+        $usagePercent = (max($rxMbps, $txMbps) / $maxSpeedMbps) * 100;
         $networkUsagePercent = round($usagePercent, 2);
         if ($networkUsagePercent == 0.0) {
             $networkUsagePercent = 0.1;
