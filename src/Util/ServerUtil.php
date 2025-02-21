@@ -361,7 +361,7 @@ class ServerUtil
      *
      * @return array<string,float|string> The network statistics
      */
-    public function getNetworkStats(string $interface = 'enp0s6', string $pingToIp = '8.8.8.8', int $maxSpeedMbps = 3200): array
+    public function getNetworkStats(string $interface = 'enp0s6', string $pingToIp = '8.8.8.8', int $maxSpeedMbps = 1000): array
     {
         // first measurement
         $rx1 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $2}'");
