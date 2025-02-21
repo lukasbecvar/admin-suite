@@ -391,7 +391,7 @@ class ServerUtil
         }
 
         // calculate usage in %
-        $usagePercent = (max($rxMbps, $txMbps) / $maxSpeedMbps) * 100;
+        $usagePercent = (($rxMbps + $txMbps) / $maxSpeedMbps) * 100;
         $networkUsagePercent = round($usagePercent, 2);
         if ($networkUsagePercent == 0.0) {
             $networkUsagePercent = 0.1;
