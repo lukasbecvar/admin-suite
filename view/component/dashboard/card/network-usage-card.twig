@@ -3,46 +3,56 @@
         <span>Network usage</span>
         <a href={{ path('app_metrics_dashboard') }} class="text-indigo-400 hover:text-indigo-300 text-xs" title="Go to metrics view">View All</a>
     </div>
+    <div class="relative min-h-[180px]">
+        {# LOADING COMPONENT #}
+        <div id="loading-network-stats" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-5xl">
+            <div class="flex items-center mt-5 phone-mt-disable">
+                <i class="fas fa-circle-notch fa-spin fa-3x text-cyan-400"></i>
+            </div>
+        </div>
 
-    {# NETWORK STATS INFO #}
-    <div class="grid grid-cols-2 gap-x-4 col-span-2 p-3 pt-0 pb-0 mt-2">
-        <div>
-            <p class="text-gray-300 mb-2">
-                Download (Mbps): <span class="text-white font-semibold" id="network-usage-download">...</span>
-            </p>
-        </div>
-        <div>
-            <p class="text-gray-300 mb-2">
-                Upload (Mbps): <span class="text-white font-semibold" id="network-usage-upload">...</span>
-            </p>
-        </div>
-        <div>
-            <p class="text-gray-300 mb-2">
-                Ping: <span class="text-white font-semibold" id="network-usage-ping">...</span>
-            </p>
-        </div>
-        <div>
-            <p class="text-gray-300 mb-2">
-                Interface: <span class="text-white font-semibold" id="network-usage-interface">...</span>
-            </p>
-        </div>
-        <div>
-            <p class="text-gray-300 mb-2">
-                Ping server: <span class="text-white font-semibold" id="network-usage-ping-server">...</span>
-            </p>
-        </div>
-    </div>
+        {# NETWORK STATS INFO #}
+        <div id="network-stats" class="hidden animate-popin">
+            <div class="grid grid-cols-2 gap-x-4 col-span-2 p-3 pt-0 pb-0 mt-2">
+                <div>
+                    <p class="text-gray-300 mb-2">
+                        Download (Mbps): <span class="text-white font-semibold" id="network-usage-download">...</span>
+                    </p>
+                </div>
+                <div>
+                    <p class="text-gray-300 mb-2">
+                        Upload (Mbps): <span class="text-white font-semibold" id="network-usage-upload">...</span>
+                    </p>
+                </div>
+                <div>
+                    <p class="text-gray-300 mb-2">
+                        Ping: <span class="text-white font-semibold" id="network-usage-ping">...</span>
+                    </p>
+                </div>
+                <div>
+                    <p class="text-gray-300 mb-2">
+                        Interface: <span class="text-white font-semibold" id="network-usage-interface">...</span>
+                    </p>
+                </div>
+                <div>
+                    <p class="text-gray-300 mb-2">
+                        Ping server: <span class="text-white font-semibold" id="network-usage-ping-server">...</span>
+                    </p>
+                </div>
+            </div>
 
-    {# LAST CHECK TIME #}
-    <p class="text-gray-300 mb-1 ml-3">
-        Last check time: <span class="text-white font-semibold" id="network-last-check-time">...</span>
-    </p>
+            {# LAST CHECK TIME #}
+            <p class="text-gray-300 mb-1 ml-3">
+                Last check time: <span class="text-white font-semibold" id="network-last-check-time">...</span>
+            </p>
 
-    {# NETWORK USAGE PROGRESS BAR #}
-    <div class="p-3 pb-1 mt-[-6px]">
-        <p class="text-white mb-1" id="network-usage">Usage: ...</p>
-        <div class="progress-bar">
-            <div class="progress" id="network-progress" style="width: 0%;"></div>
+            {# NETWORK USAGE PROGRESS BAR #}
+            <div class="p-3 pb-1 mt-[-6px]">
+                <p class="text-white mb-1" id="network-usage">Usage: ...</p>
+                <div class="progress-bar">
+                    <div class="progress" id="network-progress" style="width: 0%;"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

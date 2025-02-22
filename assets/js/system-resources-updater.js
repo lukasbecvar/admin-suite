@@ -1,5 +1,7 @@
 /** system resources dashboard refresher functionality */
 document.addEventListener('DOMContentLoaded', function() {
+    let firstRequest = true
+
     // get progress bars
     const cpuProgress = document.getElementById('cpu-progress')
     const ramProgress = document.getElementById('ram-progress')
@@ -19,7 +21,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const networkUsagePingServerElement = document.getElementById('network-usage-ping-server')
     const networkLastCheckTimeElement = document.getElementById('network-last-check-time')
 
+    // get network stats elements for switching visibility
+    const loadingNetworkStats = document.getElementById('loading-network-stats')
+    const networkStats = document.getElementById('network-stats')
+
     function updateResourcesUsage() {
+        // show loading only on first request
+        if (firstRequest) {
+            networkStats.style.display = 'none'
+            loadingNetworkStats.style.display = 'block'
+        }
+
         // get resources usage from API
         fetch('/api/system/resources').then(response => response.json()).then(data => {
             // update resources usage
@@ -46,19 +58,23 @@ document.addEventListener('DOMContentLoaded', function() {
             // update progress bars background color
             cpuProgress.style.background = data.diagnosticData.cpuUsage > 80 
                 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' 
-                : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)'
-                
+                : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)'
             ramProgress.style.background = data.diagnosticData.ramUsage > 80 
                 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' 
-                : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)'
-                
+                : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)'
             driveProgress.style.background = data.diagnosticData.driveSpace > 80 
                 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' 
-                : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)'
-
+                : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)'
             networkProgress.style.background = data.networkStats.networkUsagePercent > 80 
                 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' 
-                : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)'
+                : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)'
+
+            // load stats only on first request
+            if (firstRequest) {
+                loadingNetworkStats.style.display = 'none'
+                networkStats.style.display = 'block'
+                firstRequest = false
+            }
         }).catch(error => {
             console.log(error)
         })
