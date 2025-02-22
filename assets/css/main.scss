@@ -542,6 +542,12 @@ main {
 		margin-bottom: 0;
 		overflow-y: auto; 
 	}
+	.table-truncate-confirmation-phone {
+		border-top: 0px !important;
+		border-left: none !important;
+		border-right: none !important;
+		border-radius: 0px !important;
+	}
 }
 
 /* fix component width on small devices */
