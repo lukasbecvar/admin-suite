@@ -243,6 +243,14 @@ class TodoManager
             );
         }
 
+        // check if todo text length is valid
+        if (strlen($todoText) > 2048) {
+            $this->errorManager->handleError(
+                message: 'todo text length is too long',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
         // encrypt todo text
         $todoText = $this->securityUtil->encryptAes($todoText);
 

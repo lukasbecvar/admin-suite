@@ -126,29 +126,24 @@ class TodoManagerControllerTest extends CustomTestCase
                     sdfasdfasdfasdfasdfasdfasdfasdfasdfas
                     sdfasdfasdfasdfasdfasdfasdfasdfasdfas
                     sdfasdfasdfasdfasdfasdfasdfasdfasdfas
+                    asdfasdfasdfasdfasdfasdfasdfasdfasdfa
+                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
+                    dfasdfasdfasdfasdfasdfasdfasdfasdfasd
+                    fasdfasdfasdfasdfasdfasdfasdfasdfasdf
+                    asdfasdfasdfasdfasdfasdfasdfasdfasdfa
                     sdfasdfasdfasdfasdfasdfasdfasdfasdfas
                     sdfasdfasdfasdfasdfasdfasdfasdfasdfas
                     sdfasdfasdfasdfasdfasdfasdfasdfasdfas
                     sdfasdfasdfasdfasdfasdfasdfasdfasdfas
                     sdfasdfasdfasdfasdfasdfasdfasdfasdfas
-                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
-                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
-                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
-                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
-                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
-                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
-                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
-                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
-                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
-                    sdfasdfasdfasdfasdfasdfasdfasdfasdfas
-                    dfasdfasdfasdfasdfasdfasdfasdfafff'
+                '
             ]
         ]);
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'Todo list');
-        $this->assertSelectorTextContains('body', 'Your todo text cannot be longer than 512 characters');
+        $this->assertSelectorTextContains('body', 'Your todo text cannot be longer than 1024 characters');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 

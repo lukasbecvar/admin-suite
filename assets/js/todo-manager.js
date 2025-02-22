@@ -58,10 +58,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // edit confirm function
     function confirmEdit() {
-        if (editTodoInput.value.length >= 1 && editTodoInput.value.length <= 512) {
+        if (editTodoInput.value.length >= 1 && editTodoInput.value.length <= 2048) {
             window.location.href = `/manager/todo/edit?id=${currentTodoId}&todo=${encodeURIComponent(editTodoInput.value)}`
         } else {
-            alert('Todo text must be between 1 and 512 characters')
+            alert('Todo text must be between 1 and 2048 characters')
         }
     }
 

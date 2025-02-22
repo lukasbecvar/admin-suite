@@ -36,13 +36,13 @@ class CreateTodoFormType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'autocomplete' => 'off',
-                    'maxlength' => 512
+                    'maxlength' => 1024
                 ],
                 'constraints' => [
                     new NotBlank(['message' => 'Please enter a todo text']),
                     new Length([
                         'min' => 1,
-                        'max' => 512,
+                        'max' => 1024,
                         'minMessage' => 'Your todo text should be at least {{ limit }} characters',
                         'maxMessage' => 'Your todo text cannot be longer than {{ limit }} characters'
                     ])
