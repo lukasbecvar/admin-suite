@@ -5,6 +5,7 @@ namespace Tests\Unit\Util;
 use App\Util\AppUtil;
 use App\Util\CacheUtil;
 use App\Util\ServerUtil;
+use App\Manager\LogManager;
 use App\Manager\ErrorManager;
 use App\Manager\ServiceManager;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +24,7 @@ class ServerUtilTest extends TestCase
     private ErrorManager $errorManager;
     private AppUtil & MockObject $appUtilMock;
     private CacheUtil & MockObject $cacheUtilMock;
+    private LogManager & MockObject $logManagerMock;
     private ServiceManager & MockObject $serviceManagerMock;
 
     protected function setUp(): void
@@ -31,12 +33,14 @@ class ServerUtilTest extends TestCase
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->cacheUtilMock = $this->createMock(CacheUtil::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
+        $this->logManagerMock = $this->createMock(LogManager::class);
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
 
         // create server util instance
         $this->serverUtil = new ServerUtil(
             $this->appUtilMock,
             $this->cacheUtilMock,
+            $this->logManagerMock,
             $this->errorManager,
             $this->serviceManagerMock
         );

@@ -3,6 +3,7 @@
 namespace App\Util;
 
 use Exception;
+use App\Manager\LogManager;
 use App\Manager\ErrorManager;
 use App\Manager\ServiceManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,17 +19,20 @@ class ServerUtil
 {
     private AppUtil $appUtil;
     private CacheUtil $cacheUtil;
+    private LogManager $logManager;
     private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
 
     public function __construct(
         AppUtil $appUtil,
         CacheUtil $cacheUtil,
+        LogManager $logManager,
         ErrorManager $errorManager,
         ServiceManager $serviceManager
     ) {
         $this->appUtil = $appUtil;
         $this->cacheUtil = $cacheUtil;
+        $this->logManager = $logManager;
         $this->errorManager = $errorManager;
         $this->serviceManager = $serviceManager;
     }
@@ -649,6 +653,26 @@ class ServerUtil
     }
 
     /**
+     * Get last monitoring time
+     *
+     * @return string|null The last monitoring time
+     */
+    public function getLastMonitoringTime(): ?string
+    {
+        // check if last monitoring time is cached
+        if (!$this->cacheUtil->isCatched('last-monitoring-time')) {
+            return null;
+        }
+
+        // get last monitoring time
+        $lastMonitoringTime = $this->cacheUtil->getValue('last-monitoring-time');
+
+        // format last monitoring time to string
+        $lastMonitoringTime = $lastMonitoringTime->get();
+        return $lastMonitoringTime->format('Y-m-d H:i:s');
+    }
+
+    /**
      * Get diagnostic data
      *
      * @return array<string,mixed> The diagnostic data
@@ -665,6 +689,8 @@ class ServerUtil
         $rebootRequired = $this->isRebootRequired();
         $updateAvailable = $this->isUpdateAvailable();
         $driveSpace = $this->getDriveUsagePercentage();
+        $lastMonitoringTime = $this->getLastMonitoringTime();
+        $exceptionFilesList = $this->logManager->getExceptionFiles();
         $notInstalledRequirements = $this->getNotInstalledRequirements();
         $websiteCachePermissions = $this->checkIfDirectoryHas777Permissions($this->appUtil->getAppRootDir() . '/var');
 
@@ -684,6 +710,8 @@ class ServerUtil
             'isWebUserSudo' => $isWebUserSudo,
             'rebootRequired' => $rebootRequired,
             'updateAvailable' => $updateAvailable,
+            'lastMonitoringTime' => $lastMonitoringTime,
+            'exceptionFilesList' => $exceptionFilesList,
             'notInstalledRequirements' => $notInstalledRequirements,
             'websiteDirectoryPermissions' => $websiteCachePermissions,
             'isLastMonitoringTimeCached' => $isLastMonitoringTimeCached
