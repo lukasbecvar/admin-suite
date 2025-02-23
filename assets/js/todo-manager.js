@@ -113,11 +113,4 @@ document.addEventListener('DOMContentLoaded', function () {
             this.classList.add('hidden')
         }
     })
-
-    // close edit popup when clicking outside of it
-    document.getElementById('editPopup').addEventListener('click', function (event) {
-        if (event.target === this) {
-            this.classList.add('hidden')
-        }
-    })
 })
