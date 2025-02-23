@@ -414,6 +414,44 @@ class ServerUtil
     }
 
     /**
+     * Get public IP address of the host server
+     *
+     * @return string|null The public IP address
+     */
+    public function getPublicIP(): ?string
+    {
+        // check if host IP is cached
+        if ($this->cacheUtil->isCatched('host-ip')) {
+            return (string) $this->cacheUtil->getValue('host-ip')->get();
+        }
+
+        // get list of IP APIs
+        $apis = explode(',', $this->appUtil->getEnvValue('IP_APIS'));
+
+        foreach ($apis as $api) {
+            $ch = curl_init($api);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => 2,
+                CURLOPT_CONNECTTIMEOUT => 2,
+                CURLOPT_FAILONERROR => true,
+            ]);
+
+            $ip = (string) curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($ip && $httpCode === Response::HTTP_OK && filter_var($ip, FILTER_VALIDATE_IP)) {
+                $hostIp = trim($ip);
+                $this->cacheUtil->setValue('host-ip', $hostIp, 86400);
+                return $hostIp;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get list of required applications that are not installed
      *
      * This method reads JSON file containing list of required applications

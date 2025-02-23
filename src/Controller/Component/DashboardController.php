@@ -72,6 +72,9 @@ class DashboardController extends AbstractController
             $hostSystemInfo = $this->serverUtil->getSystemInfo();
             $systemInstallInfo = $this->serverUtil->getSystemInstallInfo();
 
+            // get host server public ip address
+            $hostServerPublicIP = $this->serverUtil->getPublicIP() ?? 'N/A';
+
             // get running process list
             $processList = $this->serverUtil->getProcessList();
 
@@ -108,6 +111,7 @@ class DashboardController extends AbstractController
             'storageUsage' => $storageUsage,
             'hostSystemInfo' => $hostSystemInfo,
             'systemInstallInfo' => $systemInstallInfo,
+            'hostServerPublicIP' => $hostServerPublicIP,
 
             // process list
             'processList' => $processList,
