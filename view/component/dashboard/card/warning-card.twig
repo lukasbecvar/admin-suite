@@ -3,6 +3,9 @@
         <a href={{ path('app_diagnostic') }} class="card-rederer text-sm" title="Go to diagnostic">
             Diagnostic alerts
         </a>
+        <button onclick="document.getElementById('wrarning-box').style.display='none'" class="text-white hover:text-cyan-300 transition-colors duration-200 cursor-pointer">
+            <i class="fas fa-times"></i>
+        </button>
     </div>
     <div class="p-2 card-text" id="wraning-elements">
         {# CHECK IF EXCEPTION FILES IS FOUND #}
