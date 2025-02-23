@@ -144,7 +144,7 @@ class MetricsDashboardController extends AbstractController
         // get request parameters
         $metricName = (string) $request->request->get('metric_name');
         $serviceName = (string) $request->request->get('service_name');
-        $confirm = (string) $request->request->get('confirm', 'none');
+        $referer = (string) $request->request->get('referer', 'app_metrics_dashboard');
 
         // check if parameters are valid
         if (empty($metricName) || empty($serviceName)) {
@@ -152,21 +152,6 @@ class MetricsDashboardController extends AbstractController
                 message: 'parameters: metric_name and service_name are required',
                 code: Response::HTTP_BAD_REQUEST
             );
-        }
-
-        // check if confirmation not set
-        if ($confirm == 'none') {
-            return $this->render('component/metrics-dashboard/delete-metric-confirmation.twig', [
-                'metricName' => $metricName,
-                'serviceName' => $serviceName
-            ]);
-        }
-
-        // check if user denied delete action
-        if ($confirm == 'no') {
-            return $this->redirectToRoute('app_metrics_service', [
-                'service_name' => $serviceName
-            ]);
         }
 
         try {
@@ -180,7 +165,7 @@ class MetricsDashboardController extends AbstractController
         }
 
         // return back to service metrics page
-        return $this->redirectToRoute('app_metrics_service', [
+        return $this->redirectToRoute($referer, [
             'service_name' => $serviceName
         ]);
     }

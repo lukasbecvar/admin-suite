@@ -67,29 +67,13 @@ class MetricsDashboardControllerTest extends CustomTestCase
     }
 
     /**
-     * Test load delete metric confirmation page
-     *
-     * @return void
-     */
-    public function testLoadDeleteMetricConfirmationPage(): void
-    {
-        $this->client->request('GET', '/metrics/delete?service_name=becvar.xyz&metric_name=cpu_usage&confirm=none');
-
-        // assert response
-        $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('a[title="Back to dashboard"]');
-        $this->assertSelectorTextContains('body', 'Metric delete confirmation');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    }
-
-    /**
      * Test delete metrics
      *
      * @return void
      */
     public function testDeleteMetricsRequest(): void
     {
-        $this->client->request('GET', '/metrics/delete?service_name=becvar.xyz&metric_name=cpu_usage&confirm=yes');
+        $this->client->request('GET', '/metrics/delete?service_name=becvar.xyz&metric_name=cpu_usage');
 
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
