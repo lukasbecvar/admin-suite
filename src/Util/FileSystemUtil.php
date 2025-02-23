@@ -43,11 +43,16 @@ class FileSystemUtil
             // execute find command
             $type = $recursive ? '-type f' : '\\( -type f -o -type d \\)';
             $depth = $recursive ? '' : '-mindepth 1 -maxdepth 1';
-            $command = "sudo find " . escapeshellarg($path) . " $depth $type -printf '%f;%s;%m;%y;%p\n' 2>&1";
+            $command = "sudo find " . escapeshellarg($path) . " $depth $type -printf '%f;%s;%m;%y;%p;%T@;%Y\n' 2>&1";
             $output = shell_exec($command);
 
+            // check if output is empty or not set
+            if ($output === null) {
+                return [];
+            }
+
             // check if output is empty
-            if ($output == false || trim($output) === '') {
+            if ($output === false || trim($output) === '') {
                 // return empty array if no files found
                 return $files;
             }
@@ -61,7 +66,7 @@ class FileSystemUtil
                 }
 
                 // split output to variables
-                [$name, $size, $permissions, $type, $realPath] = explode(';', $line);
+                [$name, $size, $permissions, $type, $realPath, $creationTime] = explode(';', $line);
 
                 // exclude root and boot directories and original path
                 if ($realPath === '/' || $realPath === '/boot' || $realPath === realpath($path)) {
@@ -74,6 +79,7 @@ class FileSystemUtil
                     'permissions' => $permissions,
                     'isDir' => $type === 'd',
                     'path' => $realPath,
+                    'creationTime' => date('Y-m-d H:i:s', (int)$creationTime),
                 ];
             }
 

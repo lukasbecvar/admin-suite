@@ -68,6 +68,9 @@
                     <th scope="col" class="text-white px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                         Permissions
                     </th>
+                    <th scope="col" class="text-white px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        Creation time
+                    </th>
                 </tr>
             </thead>
             <tbody class="card-color">
@@ -86,6 +89,7 @@
                         </td>
                         <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-100 border-b border-neutral-700">{{ file.size|e }}</td>
                         <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-100 border-b border-neutral-700">{{ file.permissions|e }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-100 border-b border-neutral-700">{{ file.creationTime|e }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
