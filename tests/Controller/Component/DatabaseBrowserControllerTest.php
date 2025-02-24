@@ -145,7 +145,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[href="/manager/database/table?database=' . $_ENV['DATABASE_NAME'] . '&table=logs"]');
-        $this->assertSelectorTextContains('body', 'Truncate table logs');
+        $this->assertSelectorTextContains('body', 'Clear logs table');
         $this->assertSelectorTextContains('body', 'YES');
         $this->assertSelectorTextContains('body', 'NO');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);

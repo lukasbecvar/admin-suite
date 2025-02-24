@@ -18,6 +18,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const todoClosedAt = document.getElementById('todoClosedAt')
     const closePopupButton = document.getElementById('closePopup')
 
+    // get todo delete elements
+    let deleteUrl = ''
+    const deletePopupOverlay = document.getElementById('delete-popup-overlay')
+    const deleteButton = document.querySelectorAll('.delete-button')
+    const deleteCancelButton = document.getElementById('delete-cancel-button')
+    const deleteConfirmButton =  document.getElementById('delete-confirm-button')
+
     // handle edit button
     editButtons.forEach(button => {
         button.addEventListener('click', function () {
@@ -53,6 +60,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!infoPopup.classList.contains('hidden')) {
                 infoPopup.classList.add('hidden')
             }
+            if (!deletePopupOverlay.classList.contains('hidden')) {
+                deletePopupOverlay.classList.add('hidden')
+            }
         }
     })
 
@@ -64,6 +74,36 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Todo text must be between 1 and 2048 characters')
         }
     }
+
+    // handle line up/down move keys 
+    editTodoInput.addEventListener("keydown", function (event) {
+        if (event.altKey && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
+            event.preventDefault()
+    
+            let textarea = event.target
+            let text = textarea.value
+            let start = textarea.selectionStart
+            let end = textarea.selectionEnd
+    
+            // split text into lines
+            let lines = text.split("\n")
+            let cursorLine = text.substring(0, start).split("\n").length - 1
+    
+            if ((event.key === "ArrowUp" && cursorLine > 0) || (event.key === "ArrowDown" && cursorLine < lines.length - 1)) {
+                let swapLine = event.key === "ArrowUp" ? cursorLine - 1 : cursorLine + 1;
+                [lines[cursorLine], lines[swapLine]] = [lines[swapLine], lines[cursorLine]] // swap lines
+    
+                // calculate new cursor position
+                let beforeCursor = lines.slice(0, swapLine).join("\n").length + 1
+                let cursorOffset = start - (text.substring(0, start).lastIndexOf("\n") + 1)
+                let newCursorPos = beforeCursor + cursorOffset
+    
+                // update textarea
+                textarea.value = lines.join("\n")
+                textarea.setSelectionRange(newCursorPos, newCursorPos)
+            }
+        }
+    })
 
     // for each todo item, attach a click event to its info button (if available)
     todoItems.forEach(item => {
@@ -109,6 +149,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // close info popup when clicking outside of it
     document.getElementById('infoPopup').addEventListener('click', function (event) {
+        if (event.target === this) {
+            this.classList.add('hidden')
+        }
+    })
+
+    // handle delete popup open
+    deleteButton.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault()
+            deleteUrl = this.getAttribute('data-delete-url')
+            deletePopupOverlay.classList.remove('hidden')
+        })
+    })
+
+    // handle click on cancel in delete popup
+    deleteCancelButton.addEventListener('click', function() {
+        deletePopupOverlay.classList.add('hidden')
+        deleteUrl = ''
+    })
+
+    // handle delete confirmation
+    deleteConfirmButton.addEventListener('click', function() {
+        if(deleteUrl) {
+            window.location.href = deleteUrl
+        }
+    })
+
+    // close info popup when clicking outside of it
+    deletePopupOverlay.addEventListener('click', function (event) {
         if (event.target === this) {
             this.classList.add('hidden')
         }
