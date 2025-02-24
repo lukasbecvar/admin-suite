@@ -179,13 +179,13 @@ class MetricRepository extends ServiceEntityRepository
             if ($timePeriod === 'last_24_hours') {
                 $dateKey = $time->format('H:i');
             } elseif ($timePeriod === 'last_week') {
-                $dateKey = $time->format('m-d');
+                $dateKey = $time->format('m/d');
             } elseif ($timePeriod === 'last_month') {
-                $dateKey = $time->format('m-d');
+                $dateKey = $time->format('m/d');
             } elseif ($timePeriod === 'all_time') {
-                $dateKey = $time->format('Y-m');
+                $dateKey = $time->format('Y/m');
             } else {
-                $dateKey = $time->format('Y-m-d H:i');
+                $dateKey = $time->format('Y/m/d H:i');
             }
 
             // initialize metric data if not already set
