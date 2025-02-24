@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
             systemStorageElement.innerHTML = 'STORAGE: (' + data.storageUsage + 'G / ' + data.diagnosticData.driveSpace + '%)'
 
             // update network usage
-            networkUsageElement.innerHTML = 'Usage: ' + data.networkStats.networkUsagePercent + '%'
+            networkUsageElement.innerHTML = data.networkStats.networkUsagePercent + '%'
             networkUsageDownloadElement.innerHTML = data.networkStats.downloadMbps + 'Mbps'
             networkUsageUploadElement.innerHTML = data.networkStats.uploadMbps + 'Mbps'
             networkUsagePingElement.innerHTML = data.networkStats.pingMs + 'ms'
