@@ -1,38 +1,38 @@
 /* database table reader component functionality */
 document.addEventListener('DOMContentLoaded', function() {
-    let deleteUrl = ''
+    let deleteUrl
 
     // select popup elements
     const popup = document.getElementById('textPopup')
     const popupText = document.getElementById('popupText')
-    const closePopupButton = document.getElementById('closePopupButton')
-
-    // delete confirmation popup elements
     const deletePopup = document.getElementById('deletePopup')
+    const deleteButton = document.querySelectorAll('.delete-button')
+    const viewRawButton = document.querySelectorAll('.view-raw-button')
+    const closePopupButton = document.getElementById('closePopupButton')
     const cancelDeleteButton = document.getElementById('cancelDeleteButton')
     const confirmDeleteButton = document.getElementById('confirmDeleteButton')
-    
-    // get raw string from escaped data
+
+    // get raw string
     function decodeInput(input) {
         const e = document.createElement('div')
         e.innerHTML = input
         return e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue
     }
 
-    // handle open popup
+    // handle popup open (raw data viewer)
     function openPopup(text) {
         popupText.textContent = text
         popup.classList.remove('hidden')
         document.addEventListener('keydown', handleEscKey)
     }
 
-    // handle close popup
+    // handle popup close (raw data viewer)
     function closePopup() {
         popup.classList.add('hidden')
         document.removeEventListener('keydown', handleEscKey)
     }
 
-    // handle esc key
+    // handle close popup with esc key press (raw data viewer)
     function handleEscKey(event) {
         if (event.key === 'Escape') {
             closePopup()
@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // detect click on truncate button
-    document.querySelectorAll('.truncate-button').forEach(function(button) {
+    // detect click on truncate button (raw data viewer)
+    viewRawButton.forEach(function(button) {
         button.addEventListener('click', function() {
             openPopup(decodeInput(button.getAttribute('data-fulltext')))
         })
@@ -50,14 +50,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // init close popup button event
     closePopupButton.addEventListener('click', closePopup)
 
-    // handle open delete confirmation popup
+    // handle row delete confirmation popup open
     function openDeletePopup(url) {
         deleteUrl = url
         deletePopup.classList.remove('hidden')
         document.addEventListener('keydown', handleEscKey)
     }
 
-    // handle close delete confirmation popup
+    // handle row delete confirmation popup close
     function closeDeletePopup() {
         deletePopup.classList.add('hidden')
         document.removeEventListener('keydown', handleEscKey)
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
     cancelDeleteButton.addEventListener('click', closeDeletePopup)
 
     // detect click on delete button
-    document.querySelectorAll('.delete-button').forEach(function(button) {
+    deleteButton.forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.preventDefault()
             openDeletePopup(button.getAttribute('data-url'))

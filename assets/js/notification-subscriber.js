@@ -1,6 +1,6 @@
 /** push notifications subscriber functionality */
 document.addEventListener('DOMContentLoaded', function() {
-    // function for checking if notifications are enabled on backend
+    // check if notifications are enabled on backend
     async function checkNotificationsEnabled() {
         const response = await fetch('/api/notifications/enabled')
         const data = await response.json()
@@ -93,8 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then(() => {
             subscribeUser()
-        })
-        .catch((error) => {
+        }).catch((error) => {
             console.error('Service Worker registration failed:', error)
         })
     }

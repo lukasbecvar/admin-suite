@@ -72,7 +72,7 @@
                                         <div class="flex items-center">
                                             <span class="truncate max-w-xl">{{ column|slice(0, 50) ~ (column|length > 50 ? '' : '') }}</span>
                                             {% if column|length > 50 %}
-                                                <button class="text-blue-400 hover:text-blue-300 text-sm font-bold truncate-button" data-fulltext="{{ column|e('html_attr') }}">...</button>
+                                                <button class="text-blue-400 hover:text-blue-300 text-sm font-bold view-raw-button" data-fulltext={{ column|e('html_attr') }}>...</button>
                                             {% endif %}
                                         </div>
                                     </td>

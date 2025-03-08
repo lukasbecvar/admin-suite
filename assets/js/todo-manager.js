@@ -118,12 +118,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // fetch todo info by id
     function getTodoInfo(todoId) {
-        fetch(`/manager/todo/info?id=${todoId}`)
-            .then(response => response.json())
-            .then(data => {
-                showTodoInfoPopup(data)
-            })
-            .catch(error => console.error('Error fetching todo info:', error))
+        fetch(`/manager/todo/info?id=${todoId}`).then(response => response.json()).then(data => {
+            showTodoInfoPopup(data)
+        }).catch(
+            error => console.error('Error fetching todo info:', error
+        ))
     }
 
     // show todo info in popup

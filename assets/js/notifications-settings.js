@@ -6,6 +6,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const statusElement = document.getElementById('push-status')
     const subscribeButton = document.getElementById('subscribe-btn')
 
+    // convert Base64 URL to Uint8Array
+    function urlBase64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
+        const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/')
+        const rawData = window.atob(base64)
+        return new Uint8Array([...rawData].map(char => char.charCodeAt(0)))
+    }
+
     // resubscribe to push notifications
     subscribeButton.addEventListener('click', async () => {
         console.log('Subscription button clicked.')
@@ -107,12 +115,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
         statusElement.textContent = 'Error while checking'
         subscribeButton.classList.remove('hidden')
-    }
-
-    function urlBase64ToUint8Array(base64String) {
-        const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
-        const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/')
-        const rawData = window.atob(base64)
-        return new Uint8Array([...rawData].map(char => char.charCodeAt(0)))
     }
 })

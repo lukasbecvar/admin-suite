@@ -1,6 +1,6 @@
 /** service exception file delete confirmation popup functionality */
 document.addEventListener('DOMContentLoaded', function () {
-    let fileToDelete = null
+    let fileToDelete
     
     // get view elements
     const deletePopup = document.getElementById('deletePopup')
@@ -16,14 +16,14 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     })
 
-    // handle cancel button
+    // handle cancel button click
     cancelDeleteButton.addEventListener('click', function () {
         console.log('cancel delete')
         deletePopup.classList.add('hidden')
         fileToDelete = null
     })
 
-    // handle escape key
+    // handle escape key press
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') {
             if (!deletePopup.classList.contains('hidden')) {

@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // determine dynamic color based on the latest metric value
             const dynamicColor = getColor(metricData[metricData.length - 1]?.value || 0, metricData)
 
+            // chart style options
             const options = {
                 chart: {
                     type: 'area',
