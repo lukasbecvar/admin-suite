@@ -27,6 +27,13 @@
         "monitoring": true,
         "display": true
     },
+    "minecraft": {
+        "service_name": "minecraft",
+        "display_name": "Minecraft",
+        "type": "systemd",
+        "monitoring": true,
+        "display": true
+    },
     "admin-suite-monitoring": {
         "service_name": "admin-suite-monitoring",
         "display_name": "Monitoring",
