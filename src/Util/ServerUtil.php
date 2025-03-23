@@ -520,66 +520,40 @@ class ServerUtil
         $processes = [];
 
         try {
-            // open process for reading
-            $process = proc_open('ps aux', [
-                1 => ['pipe', 'w'],
-                2 => ['pipe', 'w']
-            ], $pipes);
+            $procDir = '/proc';
+            $pids = array_filter(scandir($procDir), fn($pid) => is_numeric($pid));
 
-            if (is_resource($process)) {
-                // read stdout
-                $output = stream_get_contents($pipes[1]);
-                fclose($pipes[1]);
+            foreach ($pids as $pid) {
+                $statusFile = "$procDir/$pid/status";
+                $cmdlineFile = "$procDir/$pid/cmdline";
 
-                // read stderr
-                $errors = stream_get_contents($pipes[2]);
-                fclose($pipes[2]);
-
-                // close process
-                $returnValue = proc_close($process);
-
-                // handle process list get error
-                if ($returnValue !== 0) {
-                    $this->errorManager->handleError(
-                        message: 'error getting process list: ' . $errors,
-                        code: Response::HTTP_INTERNAL_SERVER_ERROR
-                    );
+                if (!is_readable($statusFile) || !is_readable($cmdlineFile)) {
+                    continue;
                 }
 
-                // check if output is null
-                if ($output == null) {
-                    $this->errorManager->handleError(
-                        message: 'error getting process list: output is null',
-                        code: Response::HTTP_INTERNAL_SERVER_ERROR
-                    );
+                // read status file to get user info
+                $statusContent = file_get_contents($statusFile);
+                if (!$statusContent) {
+                    continue;
                 }
+                preg_match('/Uid:\s+(\d+)/', $statusContent, $matches);
+                $uid = $matches[1] ?? 'unknown';
 
-                // split output into lines
-                $lines = explode("\n", $output);
+                // resolve UID to username
+                $user = posix_getpwuid((int) $uid)['name'] ?? 'unknown';
 
-                // remove header line
-                array_shift($lines);
-
-                foreach ($lines as $line) {
-                    /** @var list<string>|false $parts */
-                    $parts = preg_split('/\s+/', $line);
-
-                    // check if parts is countable
-                    if (!is_countable($parts)) {
-                        continue;
-                    }
-
-                    if (count($parts) > 10) {
-                        $pid = $parts[1];
-                        $user = $parts[0];
-                        $processName = implode(' ', array_slice($parts, 10));
-                        $processes[] = [
-                            'pid' => $pid,
-                            'user' => $user,
-                            'process' => $processName,
-                        ];
-                    }
+                // read command line file to get process name
+                $cmdline = file_get_contents($cmdlineFile);
+                if (!$cmdline) {
+                    continue;
                 }
+                $processName = str_replace("\0", ' ', trim($cmdline)) ?: '[unknown]';
+
+                $processes[] = [
+                    'pid' => $pid,
+                    'user' => $user,
+                    'process' => $processName,
+                ];
             }
         } catch (Exception $e) {
             $this->errorManager->handleError(
