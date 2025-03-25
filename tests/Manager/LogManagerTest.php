@@ -169,7 +169,7 @@ class LogManagerTest extends TestCase
         $this->cookieUtilMock->expects($this->once())->method('set')->with(
             'anti-log',
             'test-token',
-                 $this->greaterThan(time())
+            $this->greaterThan(time())
         );
 
         // call tested method
