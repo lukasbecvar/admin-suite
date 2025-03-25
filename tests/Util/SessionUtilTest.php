@@ -210,8 +210,8 @@ class SessionUtilTest extends TestCase
 
         // expect error handling to be called
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error to decrypt session data',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error to decrypt session data',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method

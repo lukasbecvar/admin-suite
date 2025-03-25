@@ -142,8 +142,8 @@ class CacheUtilTest extends TestCase
 
         // expect call error handler
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error to store cache value: Test exception',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error to store cache value: Test exception',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method
@@ -184,8 +184,8 @@ class CacheUtilTest extends TestCase
 
         // expect call error handler
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error to delete cache value: Test exception',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error to delete cache value: Test exception',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method

@@ -90,9 +90,9 @@ class DatabaseManagerTest extends TestCase
     {
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'database-manager',
-            message: 'get databases list',
-            level: LogManager::LEVEL_NOTICE
+            'database-manager',
+            'get databases list',
+            LogManager::LEVEL_NOTICE
         );
 
         // expect handleError not be called
@@ -137,9 +137,9 @@ class DatabaseManagerTest extends TestCase
     {
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'database-manager',
-            message: 'get tables list',
-            level: LogManager::LEVEL_NOTICE
+            'database-manager',
+            'get tables list',
+            LogManager::LEVEL_NOTICE
         );
 
         // expect handleError not be called
@@ -306,9 +306,9 @@ class DatabaseManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'database-manager',
-            message: 'add row to table: test_table',
-            level: LogManager::LEVEL_NOTICE
+            'database-manager',
+            'add row to table: test_table',
+            LogManager::LEVEL_NOTICE
         );
 
         // call tested method
@@ -337,8 +337,8 @@ class DatabaseManagerTest extends TestCase
 
         // expect handle error call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error adding row: Database error to table: test_table',
-            statusCode: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error adding row: Database error to table: test_table',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method
@@ -368,9 +368,9 @@ class DatabaseManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'database-manager',
-            message: 'updated row with ID: 1 in table: test_table in database: test_db',
-            level: LogManager::LEVEL_NOTICE
+            'database-manager',
+            'updated row with ID: 1 in table: test_table in database: test_db',
+            LogManager::LEVEL_NOTICE
         );
 
         // call tested method
@@ -399,8 +399,8 @@ class DatabaseManagerTest extends TestCase
 
         // expect handle error call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error updating row: Database error in table: test_table in database: test_db',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error updating row: Database error in table: test_table in database: test_db',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method
@@ -422,9 +422,9 @@ class DatabaseManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'database-manager',
-            message: 'deleted row with ID: 1 from table: test_table in database: test_db',
-            level: LogManager::LEVEL_NOTICE
+            'database-manager',
+            'deleted row with ID: 1 from table: test_table in database: test_db',
+            LogManager::LEVEL_NOTICE
         );
 
         // call tested method
@@ -445,9 +445,9 @@ class DatabaseManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'database-manager',
-            message: 'truncated table: test_table in database: test_db',
-            level: LogManager::LEVEL_CRITICAL
+            'database-manager',
+            'truncated table: test_table in database: test_db',
+            LogManager::LEVEL_CRITICAL
         );
 
         // call tested method
@@ -468,8 +468,8 @@ class DatabaseManagerTest extends TestCase
 
         // expect handleError call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error truncating table: Database error in database: test_db',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error truncating table: Database error in database: test_db',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method

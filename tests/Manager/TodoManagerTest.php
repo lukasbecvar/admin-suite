@@ -324,9 +324,9 @@ class TodoManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'todo-manager',
-            message: 'todo deleted',
-            level: LogManager::LEVEL_INFO
+            'todo-manager',
+            'todo deleted',
+            LogManager::LEVEL_INFO
         );
 
         // expect remove and flush methods to be called

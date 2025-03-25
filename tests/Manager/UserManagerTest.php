@@ -321,9 +321,9 @@ class UserManagerTest extends TestCase
 
         // expect call log manager
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'user-manager',
-            message: 'user: testUser deleted',
-            level: LogManager::LEVEL_WARNING
+            'user-manager',
+            'user: testUser deleted',
+            LogManager::LEVEL_WARNING
         );
 
         // call tested method
@@ -351,8 +351,8 @@ class UserManagerTest extends TestCase
 
         // expect call log manager
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'account-settings',
-            message: 'update username (' . $newUsername . ') for user: ' . $user->getUsername()
+            'account-settings',
+            'update username (' . $newUsername . ') for user: ' . $user->getUsername()
         );
 
         // expect flush call
@@ -390,8 +390,8 @@ class UserManagerTest extends TestCase
 
         // expect call log manager
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'account-settings',
-            message: 'update password for user: ' . $user->getUsername()
+            'account-settings',
+            'update password for user: ' . $user->getUsername()
         );
 
         // expect flush call
@@ -422,8 +422,8 @@ class UserManagerTest extends TestCase
 
         // expect call log manager
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'account-settings',
-            message: 'update profile picture for user: ' . $user->getUsername()
+            'account-settings',
+            'update profile picture for user: ' . $user->getUsername()
         );
 
         // expect flush call

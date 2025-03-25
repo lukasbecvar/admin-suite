@@ -187,9 +187,9 @@ class NotificationsManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->exactly(1))->method('log')->with(
-            name: 'notifications-manager',
-            message: 'generate vapid keys',
-            level: LogManager::LEVEL_CRITICAL
+            'notifications-manager',
+            'generate vapid keys',
+            LogManager::LEVEL_CRITICAL
         );
 
         // call tested method
@@ -220,9 +220,9 @@ class NotificationsManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'notifications',
-            message: 'subscribe push notifications',
-            level: LogManager::LEVEL_INFO
+            'notifications',
+            'subscribe push notifications',
+            LogManager::LEVEL_INFO
         );
 
         // call tested method

@@ -129,8 +129,8 @@ class AuthManagerTest extends TestCase
 
         // expect handle error
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error to register new user: username is system',
-            code: Response::HTTP_FORBIDDEN
+            'error to register new user: username is system',
+            Response::HTTP_FORBIDDEN
         );
 
         // call test method
@@ -187,9 +187,9 @@ class AuthManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'authenticator',
-            message: 'new registration user: newUser',
-            level: LogManager::LEVEL_CRITICAL
+            'authenticator',
+            'new registration user: newUser',
+            LogManager::LEVEL_CRITICAL
         );
 
         // call test method
@@ -267,8 +267,8 @@ class AuthManagerTest extends TestCase
             new Exception('Database error')
         );
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error to register new user: Database error',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error to register new user: Database error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call test method
@@ -378,9 +378,9 @@ class AuthManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'authenticator',
-            message: 'invalid login user: testuser:testpassword',
-            level: LogManager::LEVEL_CRITICAL
+            'authenticator',
+            'invalid login user: testuser:testpassword',
+            LogManager::LEVEL_CRITICAL
         );
 
         // call test method
@@ -455,9 +455,9 @@ class AuthManagerTest extends TestCase
 
         // expect cookie set
         $this->cookieUtilMock->expects($this->once())->method('set')->with(
-            name: 'user-token',
-            value: 'test_token',
-            expriation: $this->anything()
+            'user-token',
+            'test_token',
+            $this->anything()
         );
 
         // expect entity manager call
@@ -527,8 +527,8 @@ class AuthManagerTest extends TestCase
 
         // expect error manager call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error to update user data: Database error',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error to update user data: Database error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call test method
@@ -972,9 +972,9 @@ class AuthManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'authenticator',
-            message: 'user: testuser password reset is success',
-            level: LogManager::LEVEL_CRITICAL
+            'authenticator',
+            'user: testuser password reset is success',
+            LogManager::LEVEL_CRITICAL
         );
 
         // call test method
@@ -1010,9 +1010,9 @@ class AuthManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'authenticator',
-            message: 'regenerate all users tokens',
-            level: LogManager::LEVEL_WARNING
+            'authenticator',
+            'regenerate all users tokens',
+            LogManager::LEVEL_WARNING
         );
 
         // call test method

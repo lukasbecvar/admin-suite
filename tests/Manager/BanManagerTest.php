@@ -83,8 +83,8 @@ class BanManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'ban-manager',
-            message: 'user: ' . $userId . ' has been banned'
+            'ban-manager',
+            'user: ' . $userId . ' has been banned'
         );
 
         // call tested method
@@ -166,8 +166,8 @@ class BanManagerTest extends TestCase
 
         // expect log manager call
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'ban-manager',
-            message: 'user: ' . $userId . ' is unbanned'
+            'ban-manager',
+            'user: ' . $userId . ' is unbanned'
         );
 
         // call tested method

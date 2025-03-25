@@ -121,8 +121,8 @@ class LogManagerTest extends TestCase
 
         // expect error handler call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'log-error: Database error',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'log-error: Database error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method
@@ -167,9 +167,9 @@ class LogManagerTest extends TestCase
 
         // expect set cookie call
         $this->cookieUtilMock->expects($this->once())->method('set')->with(
-            name: 'anti-log',
-            value: 'test-token',
-            expiration: $this->greaterThan(time())
+            'anti-log',
+            'test-token',
+                 $this->greaterThan(time())
         );
 
         // call tested method
@@ -366,8 +366,8 @@ class LogManagerTest extends TestCase
 
         // expect error handler call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error to update log status: Database error',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error to update log status: Database error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method

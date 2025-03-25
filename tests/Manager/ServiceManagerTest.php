@@ -72,9 +72,9 @@ class ServiceManagerTest extends TestCase
 
         // expect call log manager
         $this->logManager->expects($this->once())->method('log')->with(
-            name: 'action-runner',
-            message: 'test_user start test_service',
-            level: LogManager::LEVEL_WARNING
+            'action-runner',
+            'test_user start test_service',
+            LogManager::LEVEL_WARNING
         );
 
         // call tested method

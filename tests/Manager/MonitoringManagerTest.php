@@ -229,8 +229,8 @@ class MonitoringManagerTest extends TestCase
 
         // set new status to cache
         $this->cacheUtilMock->expects($this->once())->method('setValue')->with(
-            name: 'monitoring-status-' . $serviceName,
-            value: $currentStatus
+            'monitoring-status-' . $serviceName,
+            $currentStatus
         );
 
         // call tested method
@@ -256,8 +256,8 @@ class MonitoringManagerTest extends TestCase
 
         // set new status to cache
         $this->cacheUtilMock->expects($this->never())->method('setValue')->with(
-            name: 'monitoring-status-' . $serviceName,
-            value: $currentStatus
+            'monitoring-status-' . $serviceName,
+            $currentStatus
         );
 
         // expect send notification
@@ -265,9 +265,9 @@ class MonitoringManagerTest extends TestCase
 
         // expect call log
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'monitoring',
-            message: $serviceName . ' status: ' . $currentStatus . ' msg: ' . $message,
-            level: LogManager::LEVEL_WARNING
+            'monitoring',
+            $serviceName . ' status: ' . $currentStatus . ' msg: ' . $message,
+            LogManager::LEVEL_WARNING
         );
 
         // call tested method
@@ -320,8 +320,8 @@ class MonitoringManagerTest extends TestCase
 
         // expect call handleError
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error to increase down time: Database error',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error to increase down time: Database error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method
@@ -392,8 +392,8 @@ class MonitoringManagerTest extends TestCase
 
         // expect handleError call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error to get service SLA: down time is null',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error to get service SLA: down time is null',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method
@@ -468,8 +468,8 @@ class MonitoringManagerTest extends TestCase
 
         // expect handleError call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error to get SLA history: Database error',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error to get SLA history: Database error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call tested method
@@ -521,8 +521,8 @@ class MonitoringManagerTest extends TestCase
 
         // expect handleError call
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            message: 'error to save SLA history: Database error',
-            code: Response::HTTP_INTERNAL_SERVER_ERROR
+            'error to save SLA history: Database error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
         );
 
         // call the method and expect it to handle the error
@@ -567,9 +567,9 @@ class MonitoringManagerTest extends TestCase
 
         // expect log to be called
         $this->logManagerMock->expects($this->once())->method('log')->with(
-            name: 'SLA timeframe reset',
-            message: 'test-service SLA for timeframe 2024-12 is: 99.99%',
-            level: LogManager::LEVEL_INFO
+            'SLA timeframe reset',
+            'test-service SLA for timeframe 2024-12 is: 99.99%',
+            LogManager::LEVEL_INFO
         );
 
         // call tested method
