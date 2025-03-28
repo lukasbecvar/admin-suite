@@ -189,7 +189,7 @@
                                 </thead>
                                 <tbody>
                                     {% for month, sla in slaData %}
-                                        <tr class="bg-neutral-910 bg-neutral-910-sla border border-neutral-800">
+                                        <tr class="bg-neutral-910 hover:bg-neutral-800 border border-neutral-800">
                                             <td class="p-2 border-r border-neutral-800">{{ month }}</td>
                                             {% if sla < 99 %}
                                                 <td class="p-2 text-red-500">{{ sla|e }}%</td>
