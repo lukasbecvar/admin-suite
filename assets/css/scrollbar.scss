@@ -5,21 +5,21 @@
 } 
 
 ::-webkit-scrollbar-track {
-	background: rgb(42, 42, 42);
+	background: #202122 !important;
 }
  
 .card-component ::-webkit-scrollbar-track {
-	background: rgb(15, 15, 15);
+	background: #1e1f20 !important;
 }
 
 ::-webkit-scrollbar-corner {
-    background: rgb(42, 42, 42);
+    background: #1e1f20 !important;
 }
 
 ::-webkit-scrollbar-thumb {
 	-webkit-transition: all 0.2s ease;
 	transition: all 0.2s ease;
-	background: #444952;
+	background: #373b42;
 	min-height: 80px;
 } 
 

@@ -3,7 +3,7 @@
 {# USER LOGIN COMPONENT #}
 {% block body %}
 <div class="auth-component flex justify-center items-center h-screen">
-    <div class="mt-5 max-w-md w-full shadow-lg px-4 py-5 mb-4 border border-neutral-700 rounded-md background-dark opacity-95 m-w-95">
+    <div class="mt-5 max-w-md w-full shadow-lg px-4 py-5 mb-4 border border-neutral-800 rounded-md background-dark opacity-95 m-w-95">
         <h2 class="text-2xl mb-4 text-center text-white">Login</h2>
 
         {# EMPTY USER LIST ALERT BOX (FIRST USER REGISTER) #}
@@ -25,7 +25,6 @@
 
         {# LOGIN FORM #}
         {{ form_start(loginForm) }}
-        
             {# FORM FIELDS #}
             {{ form_row(loginForm.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
             {{ form_row(loginForm.password, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
@@ -37,7 +36,7 @@
             </div>
 
             {# FORM SUBMIT BUTTON #}
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white hover:text-gray-200 font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Login</button>
+            <button type="submit" class="bg-blue-700 hover:bg-blue-600 text-white hover:text-gray-200 font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Login</button>
         {{ form_end(loginForm) }}
     </div>
 </div>

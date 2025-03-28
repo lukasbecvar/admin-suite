@@ -3,15 +3,15 @@
 {# DATABASE BROWSER COMPONENT - TABLE TRUNCATE CONFIRMATION #}
 {% block component %}
 {# SUB-NAVIGATION #}
-<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb p-4">
-    <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to database table browser">
+<div class="bg-neutral-900 border-b border-neutral-800 sub-navigation breadcrumb p-4">
+    <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to database table browser">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
     <span class="mr-1 text-white">{{ tableName|e }}</span>
 </div>
 
 {# TABLE TRUNCATE CONFIRMATION #}
-<div class="mt-8 mb-8 mx-auto max-w-lg p-4 card-color text-white shadow-lg border border-neutral-700 rounded phone-mt-disable table-truncate-confirmation-phone">
+<div class="mt-8 mb-8 mx-auto max-w-lg p-4 card-color text-white shadow-lg border border-neutral-800 rounded phone-mt-disable table-truncate-confirmation-phone">
     <h2 class="text-2xl font-semibold mb-4 text-center">Clear {{ tableName|e }} table</h2>
     <p class="text-center mb-4">
         Are you you want to delete all data from the table: <strong>{{ tableName|e }}</strong>?

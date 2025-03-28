@@ -1,23 +1,23 @@
-<div class="card-color custom-scrollbar border border-neutral-700 shadow-md rounded overflow-hidden w-full max-h-50">
-    <div class="px-3 py-2 border-b border-neutral-700 text-white font-bold text-sm flex items-center justify-between">
+<div class="card-color custom-scrollbar border border-neutral-800 shadow-md rounded overflow-hidden w-full max-h-50">
+    <div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
         Process list
     </div>
     <div class="overflow-scroll max-h-72">
-        <table class="min-w-full divide-y divide-neutral-700 bg-neutral-910 text-white">
+        <table class="min-w-full divide-y divide-neutral-800 bg-neutral-885 text-white">
             <thead class="bg-neutral-900">
                 <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-910 z-10">
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-885 z-10">
                         PID
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-910 z-10">
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-885 z-10">
                         User
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-910 z-10">
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-885 z-10">
                         Process
                     </th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-neutral-700 bg-neutral-850">
+            <tbody class="divide-y divide-neutral-800 bg-neutral-880">
                 {% for process in processList %}
                     <tr class="hover:bg-neutral-800">
                         <td class="px-4 py-2 whitespace-nowrap text-sm font-bold">{{ process.pid|e }}</td>

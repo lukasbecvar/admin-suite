@@ -1,11 +1,11 @@
 {# DATABASE BROWSER COMPONENT - QUERY FORM #}
 <div class="p-2">
-    {{ form_start(queryForm, {'attr': {'class': 'space-y-6'}}) }}        
+    {{ form_start(queryForm, {'attr': {'class': 'space-y-3'}}) }}        
         <div>
             {{ form_row(queryForm.query, {
                 'label_attr': {'class': 'block text-sm font-medium text-gray-300'},
                 'attr': {
-                    'class': 'mt-1 block w-full p-2.5 rounded bg-neutral-890 border border-neutral-700 text-white focus:border-blue-500 focus:ring-blue-500 resize-none outline-none',
+                    'class': 'mt-1 block w-full p-2.5 rounded bg-neutral-890 border border-neutral-800 text-white focus:border-blue-500 focus:ring-blue-500 resize-none outline-none',
                     'style': 'resize: none;'
                 }}) 
             }}
@@ -13,7 +13,7 @@
 
         {# FORM SUBMIT BUTTON #}
         <div class="text-right">
-            <button type="submit" class="bg-blue-600 rounded text-white font-bold py-2 px-4 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button type="submit" class="bg-blue-700 rounded text-white font-bold py-2 px-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 Execute Query
             </button>
         </div>

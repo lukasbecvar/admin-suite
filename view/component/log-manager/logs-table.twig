@@ -4,39 +4,39 @@
 {% block component %} 
 {# SUB-NAVIGATION #}
 <div class="users-manager">
-    <div class="flex items-center bg-neutral-890 border-b border-neutral-700 sub-navigation whitespace-nowrap breadcrumb">
+    <div class="flex items-center bg-neutral-890 border-b border-neutral-800 sub-navigation whitespace-nowrap breadcrumb">
         {# BACK BUTTON #}
-        <a href={{ path('app_dashboard') }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
+        <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
        
         {# LINK TO UNFILTERED LOGS #}
-        <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': logsTableName}) }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Go to unsorted logs">
+        <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': logsTableName}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Go to unsorted logs">
             <i class="fa fa-database" aria-hidden="true"></i>
         </a>
 
         {# SET ALL LOGS READED #}
-        <a href={{ path('app_manager_logs_set_readed') }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="set all logs readed">
+        <a href={{ path('app_manager_logs_set_readed') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="set all logs readed">
             <i class="fa fa-check" aria-hidden="true"></i>
         </a>
 
         {# SYSTEM LOG READER #}
-        <a href={{ path('app_manager_logs_system') }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Server logs">
+        <a href={{ path('app_manager_logs_system') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Server logs">
             <i class="fas fa-server"></i>
         </a>
 
         {# WEB EXCEPTION LOG #}
-        <a href={{ path('app_manager_logs_exception_files') }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="App exception files">
+        <a href={{ path('app_manager_logs_exception_files') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="App exception files">
             <i class="fa fa-bomb"></i>
         </a>
 
         {# ANTI-LOG SETTINGS LINK #}
         {% if antiLogEnabled %}
-            <a href={{ path('app_anti_log_enable', {'state': 'disable'}) }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Disable anti-log">
+            <a href={{ path('app_anti_log_enable', {'state': 'disable'}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Disable anti-log">
                 <i class="fa fa-toggle-on" aria-hidden="true"></i>
             </a>
         {% else %}
-            <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Enable anti-log">
+            <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Enable anti-log">
                 <i class="fa fa-toggle-off" aria-hidden="true"></i>
             </a>
         {% endif %}
@@ -48,7 +48,7 @@
         <span class="mr-1 phone-only"></span>
         <div>
             <form method="get" action={{ path('app_manager_logs') }}>
-                <select name="filter" onchange="this.form.submit()" class="bg-neutral-800 text-white border border-neutral-700 rounded">
+                <select name="filter" onchange="this.form.submit()" class="bg-neutral-800 text-white border border-neutral-600 rounded">
                     <option value="UNREADED">UNREADED</option>
                     <option value="READED" {% if filter == 'READED' %}selected{% endif %}>READED</option>
                     <option value="all" {% if filter == 'all' %}selected{% endif %}>ALL</option>
@@ -65,7 +65,7 @@
         <div class="bg-neutral-880 overflow-x-auto component">
             <table class="min-w-full divide-y divide-white whitespace-nowrap">
                 <thead>
-                    <tr class="border-b border-neutral-700 bg-neutral-840">
+                    <tr class="border-b border-neutral-800 bg-neutral-900">
                         <th class="text-left text-white p-1 py-2">#</th>
                         <th class="text-left text-white p-1 py-2">Name</th>
                         <th class="text-left text-white p-1 py-2">Message</th>
@@ -97,16 +97,16 @@
                         {% endif %}
 
                         {# LOG LINE #}
-                        <tr class="hover:bg-neutral-800 border-b border-neutral-700 text-lg text-{{ color }}">
+                        <tr class="hover:bg-neutral-800 border-b border-neutral-800 text-lg text-{{ color }}">
                             {# LOG DATA #}
-                            <td class="p-1 border-b border-neutral-700">{{ row.id|e }}</td>
-                            <td class="p-1 border-b border-neutral-700">{{ row.name|e }}</td>
-                            <td class="p-1 border-b border-neutral-700">{{ row.message|e|linkify }}</td>
-                            <td class="p-1 border-b border-neutral-700">{{ row.time|date('Y-m-d H:i:s')|e }}</td>
-                            <td class="p-1 border-b border-neutral-700">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
-                            <td class="p-1 border-b border-neutral-700">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
-                            <td class="p-1 border-b border-neutral-700">{{ row.ipAddress|e }}</td>
-                            <td class="p-1 border-b border-neutral-700">
+                            <td class="p-1 border-b border-neutral-800">{{ row.id|e }}</td>
+                            <td class="p-1 border-b border-neutral-800">{{ row.name|e }}</td>
+                            <td class="p-1 border-b border-neutral-800">{{ row.message|e|linkify }}</td>
+                            <td class="p-1 border-b border-neutral-800">{{ row.time|date('Y-m-d H:i:s')|e }}</td>
+                            <td class="p-1 border-b border-neutral-800">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
+                            <td class="p-1 border-b border-neutral-800">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
+                            <td class="p-1 border-b border-neutral-800">{{ row.ipAddress|e }}</td>
+                            <td class="p-1 border-b border-neutral-800">
                                 {% if userManager.getUsernameById(row.userId) != null or authManager.isUsernameBlocked(row.name) %}
                                     <a href={{ path('app_manager_users_profile', {'id': row.userId}) }} class="underline profile-link">{{ userManager.getUsernameById(row.userId) ?? 'system' }}</a>
                                 {% else %}
@@ -116,7 +116,7 @@
 
                             {# SET LOG READED LINK #}
                             {% if filter == 'UNREADED' %}
-                                <td class="p-1 border-b border-neutral-700">
+                                <td class="p-1 border-b border-neutral-800">
                                     <a href={{ path('app_manager_logs_set_readed', {'id': row.id, 'page': currentPage, 'filter': filter, 'user_id': userId }) }} class="delete-button"><i class="fa fa-check" aria-hidden="true"></i></a>
                                 </td>
                             {% endif %}
@@ -130,7 +130,7 @@
     {# PAGINATION SYSTEM #}
     {% if (logsCount > limitPerPage) %}
         <div class="mt-2 flex justify-center mb-2">
-            <div class="border border-neutral-700 rounded overflow-hidden">
+            <div class="border border-neutral-800 rounded overflow-hidden">
                 <ul class="flex">
                     {% set totalPages = (logsCount / limitPerPage)|round(0, 'ceil') %}
                     {% set previousPage = currentPage > 1 ? currentPage - 1 : 1 %}

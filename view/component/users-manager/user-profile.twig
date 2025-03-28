@@ -3,16 +3,16 @@
 {# USER PROFILE VIEWER COMPONENT #}
 {% block component %} 
 {# SUB-NAVIGATION #}
-<div class="bg-neutral-900 border-b border-neutral-700 sub-navigation breadcrumb">
-    <a href={{ path('app_manager_users') }} class="border border-neutral-700 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to users manager">
+<div class="bg-neutral-900 border-b border-neutral-800 sub-navigation breadcrumb">
+    <a href={{ path('app_manager_users') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to users manager">
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
     <span class="mr-1 text-white">User info</span>
 </div>
 
 {# PROFILE COMPONENT #}
-<div class="bg-white card-color shadow-lg border border-neutral-700 mt-5 phone-mt-disable disable-phone-border users-manager phone-max-h rounded mx-auto md:w-5/12">
-    <div class="text-white text-center py-3 border-b border-neutral-700">
+<div class="bg-white card-color shadow-lg border border-neutral-800 mt-5 phone-mt-disable disable-phone-border users-manager phone-max-h rounded mx-auto md:w-5/12">
+    <div class="text-white text-center py-3 border-b border-neutral-800">
         {% if userRepository.getProfilePic() == 'default_pic' %}
             <img class="w-24 h-24 rounded-full mx-auto" src={{ asset('/assets/images/default-profile.jpg') }} alt="User Profile Picture">
         {% else %}
@@ -43,7 +43,7 @@
             {% endif %}
         </p>
     </div>
-    <div class="p-5 bg-neutral-800">
+    <div class="p-5 bg-neutral-830">
         {# GO TO USER LOGS #}
         <div class="flex items-center mt-1">
             <div class="text-white">
