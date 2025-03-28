@@ -180,21 +180,21 @@
                             <div class="px-2 py-1 bg-neutral-910 border border-neutral-800">
                                 <h3 class="text-white text-xl font-semibold">{{ service|e }}</h3>
                             </div>
-                            <table class="w-full text-gray-200 border-collapse">
+                            <table class="w-full text-gray-200">
                                 <thead>
-                                    <tr class="bg-neutral-910">
-                                        <th class="p-2 border border-neutral-800">Timeframe</th>
-                                        <th class="p-2 border border-neutral-800">SLA</th>
+                                    <tr class="bg-neutral-910 border border-neutral-800">
+                                        <th class="p-2 border-r border-neutral-800">Timeframe</th>
+                                        <th class="p-2">SLA</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for month, sla in slaData %}
-                                        <tr class="bg-neutral-910 bg-neutral-910-sla">
-                                            <td class="p-2 border border-neutral-800">{{ month }}</td>
+                                        <tr class="bg-neutral-910 bg-neutral-910-sla border border-neutral-800">
+                                            <td class="p-2 border-r border-neutral-800">{{ month }}</td>
                                             {% if sla < 99 %}
-                                                <td class="p-2 border border-neutral-800 text-red-500">{{ sla|e }}%</td>
+                                                <td class="p-2 text-red-500">{{ sla|e }}%</td>
                                             {% else %}
-                                                <td class="p-2 border border-neutral-800 text-green-500">{{ sla|e }}%</td>
+                                                <td class="p-2 text-green-500">{{ sla|e }}%</td>
                                             {% endif %}
                                         </tr>
                                     {% endfor %}
