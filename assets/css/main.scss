@@ -367,19 +367,21 @@ main {
 /* todo manager component */
 .todo-manager {
 	height: 100%;
-	background-color: rgb(23 23 23);;
+	background-color: rgb(23 23 23);
 }
 
 .todo-manager .todo-list {
     overflow-y: auto;
-	height: calc(100% - 5.2rem);
+	height: calc(100% - 5.1rem);
 }
 
 .todo-manager form {
-    position: absolute;
-	width: 100%;
+    position: fixed;
     bottom: 0;
+    width: 100%;
+    height: 2.9rem;
     background-color: #1f2937;
+    z-index: 50;
 }
 
 .todo-manager .add-todo-button {
