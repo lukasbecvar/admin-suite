@@ -157,9 +157,35 @@ class TerminalApiController extends AbstractController
                 } else {
                     return new Response('Error: directory: ' . $finalDir . ' not found', Response::HTTP_OK);
                 }
+
+            // switch terminal user
+            } elseif (str_starts_with($command, 'su ')) {
+                $newUser = str_replace('su ', '', $command);
+
+                // check if username is empty
+                if (strlen($newUser) == 0) {
+                    return new Response('Error: username is not set', Response::HTTP_OK);
+                }
+
+                // check if username exists in passwd file
+                $userList = file_get_contents('/etc/passwd');
+                if (!$userList) {
+                    return new Response('Error to get user list', Response::HTTP_OK);
+                }
+                if (!str_contains($userList, $newUser)) {
+                    return new Response('Error: username: ' . $newUser . ' not found', Response::HTTP_OK);
+                }
+
+                // save new user to session storage
+                $this->sessionUtil->setSession('terminal-user', $newUser);
+
+                // return user switch status
+                return new Response('User switched to: ' . $newUser, Response::HTTP_OK);
+
+            // regular command execution
             } else {
                 // execute command
-                exec($command, $output, $returnCode);
+                exec('sudo -u ' . $this->sessionUtil->getSessionValue('terminal-user') . ' ' . $command, $output, $returnCode);
 
                 // check if command run valid
                 if ($returnCode !== 0) {
