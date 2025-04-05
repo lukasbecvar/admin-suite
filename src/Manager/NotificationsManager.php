@@ -228,17 +228,15 @@ class NotificationsManager
     {
         try {
             // get notification subscriber
-            $notificationSubscriber = $this->notificationSubscriberRepository->find($id);
+            $notificationSubscriber = $this->notificationSubscriberRepository->findBy(['user_id' => $id]);
 
             // check if subscriber found
-            if ($notificationSubscriber == null) {
-                $this->errorManager->handleError(
-                    message: 'notification subscriber id: ' . $id . ' not found',
-                    code: Response::HTTP_NOT_FOUND
-                );
-            } else {
-                // update status
-                $notificationSubscriber->setStatus($status);
+            if ($notificationSubscriber != null) {
+                foreach ($notificationSubscriber as $subscriber) {
+                    $subscriber->setStatus($status);
+                }
+
+                // flush changes to database
                 $this->entityManager->flush();
             }
         } catch (Exception $e) {

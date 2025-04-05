@@ -243,7 +243,7 @@ class NotificationsManagerTest extends TestCase
         $subscriber = $this->createMock(NotificationSubscriber::class);
 
         // mock repository
-        $this->repositoryMock->method('find')->with(1)->willReturn($subscriber);
+        $this->repositoryMock->method('findBy')->willReturn([$subscriber]);
 
         // expect flush method to be called
         $this->entityManagerMock->expects($this->once())->method('flush');

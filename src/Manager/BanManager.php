@@ -24,6 +24,7 @@ class BanManager
     private ErrorManager $errorManager;
     private BannedRepository $bannedRepository;
     private EntityManagerInterface $entityManager;
+    private NotificationsManager $notificationsManager;
 
     public function __construct(
         LogManager $logManager,
@@ -31,7 +32,8 @@ class BanManager
         AuthManager $authManager,
         ErrorManager $errorManager,
         BannedRepository $bannedRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        NotificationsManager $notificationsManager
     ) {
         $this->logManager = $logManager;
         $this->userManager = $userManager;
@@ -39,6 +41,7 @@ class BanManager
         $this->errorManager = $errorManager;
         $this->entityManager = $entityManager;
         $this->bannedRepository = $bannedRepository;
+        $this->notificationsManager = $notificationsManager;
     }
 
     /**
@@ -77,6 +80,9 @@ class BanManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+
+        // close notifications subscriber
+        $this->notificationsManager->updateNotificationsSubscriberStatus($userId, 'closed');
 
         // log ban event
         $this->logManager->log(

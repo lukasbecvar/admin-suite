@@ -11,6 +11,7 @@ use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\BannedRepository;
+use App\Manager\NotificationsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -30,6 +31,7 @@ class BanManagerTest extends TestCase
     private ErrorManager & MockObject $errorManagerMock;
     private BannedRepository & MockObject $banRepositoryMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
+    private NotificationsManager & MockObject $notificationsManagerMock;
 
     protected function setUp(): void
     {
@@ -40,6 +42,7 @@ class BanManagerTest extends TestCase
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->banRepositoryMock = $this->createMock(BannedRepository::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
+        $this->notificationsManagerMock = $this->createMock(NotificationsManager::class);
 
         // mock ban repository
         $this->entityManagerMock->method('getRepository')->willReturn($this->banRepositoryMock);
@@ -51,7 +54,8 @@ class BanManagerTest extends TestCase
             $this->authManagerMock,
             $this->errorManagerMock,
             $this->banRepositoryMock,
-            $this->entityManagerMock
+            $this->entityManagerMock,
+            $this->notificationsManagerMock
         );
     }
 
