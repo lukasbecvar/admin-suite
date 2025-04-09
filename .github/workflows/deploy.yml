@@ -67,3 +67,6 @@ jobs:
 
           # disable maintenance mode
           php bin/console app:toggle:maintenance
+
+          # send push notifications to users
+          php bin/console app:notifications:send "[Actions]: new admin-suite release deployed!"
