@@ -469,6 +469,48 @@ class MonitoringManager
     }
 
     /**
+     * Temporarily disable monitoring for specific service
+     *
+     * @param string $serviceName The name of the service
+     * @param int $minutes The number of minutes to disable monitoring
+     *
+     * @return void
+     */
+    public function temporaryDisableMonitoring(string $serviceName, int $minutes): void
+    {
+        // check if service exists in monitoring config
+        $servicesList = $this->serviceManager->getServicesList() ?? [];
+        if (!array_key_exists($serviceName, $servicesList)) {
+            $this->errorManager->handleError(
+                message: 'error to disable monitoring: service ' . $serviceName . ' not found',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // convert seconds to minutes
+        $minutes = $minutes * 60;
+
+        // set monitoring status to pending
+        $this->cacheUtil->setValue('monitoring-temporary-disabled-' . $serviceName, 'disabled', $minutes);
+    }
+
+    /**
+     * Check if monitoring is temporarily disabled for specific service
+     *
+     * @param string $serviceName The name of the service
+     *
+     * @return bool|null The monitoring status
+     */
+    public function isMonitoringTemporarilyDisabled(string $serviceName): ?bool
+    {
+        if ($this->cacheUtil->isCatched('monitoring-temporary-disabled-' . $serviceName)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Init monitoring process (called from monitoring process command)
      *
      * @param SymfonyStyle $io The command output decorator
@@ -576,6 +618,12 @@ class MonitoringManager
         foreach ($services as $service) {
             // check if service is enabled
             if ($service['monitoring'] == false) {
+                continue;
+            }
+
+            // check if monitoring is temporary disabled
+            if ($this->isMonitoringTemporarilyDisabled($service['service_name'])) {
+                $io->writeln('<fg=yellow>monitoring for service ' . $service['service_name'] . ' skipped (check temporarily disabled)</>');
                 continue;
             }
 

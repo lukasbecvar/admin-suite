@@ -4,7 +4,7 @@ Description=Admin suite monitoring process
 
 [Service]
 Type=simple
-ExecStart=php /services/website/admin-suite/bin/console app:process:monitoring
+ExecStart=php /services/website/admin-suite/bin/console app:monitoring:process
 User=root
 Group=root
 Restart=always

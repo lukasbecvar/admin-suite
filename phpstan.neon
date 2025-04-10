@@ -6,7 +6,7 @@ parameters:
         - src
         - tests
     excludePaths:
-        - src/Command/Process/MonitoringProcessCommand.php
+        - src/Command/Monitoring/MonitoringProcessCommand.php
 includes:
     - vendor/phpstan/phpstan-symfony/extension.neon
     - vendor/phpstan/phpstan-phpunit/extension.neon

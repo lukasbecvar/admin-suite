@@ -110,7 +110,7 @@ Authentication uses a completely custom user system with a username and password
 
 ## Monitoring
 #### Services monitoring
-HTTP and systemd services monitoring is ensured by a console command (infinite loop) ``console app:process:monitoring``. This command needs to be run as a service, and the monitored services should be defined in the services config file in config/suite/services-monitoring.json. it is necessary to set the monitoring interval and the SMTP server or push notifications in the environment variables for sending alerts. The status and monitoring data can then be viewed in the web dashboard page.
+HTTP and systemd services monitoring is ensured by a console command (infinite loop) ``console app:monitoring:process``. This command needs to be run as a service, and the monitored services should be defined in the services config file in config/suite/services-monitoring.json. it is necessary to set the monitoring interval and the SMTP server or push notifications in the environment variables for sending alerts. The status and monitoring data can then be viewed in the web dashboard page.
 #### Exceptions monitoring
 In config exceptions-monitoring.json it is possible to set paths to exception files and track exceptions from your applications via log manager
 #### Metrics

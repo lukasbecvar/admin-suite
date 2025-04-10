@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command\Process;
+namespace App\Command\Monitoring;
 
 use App\Util\AppUtil;
 use App\Manager\DatabaseManager;
@@ -16,9 +16,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Command to run monitoring process (run in infinite loop as a service)
  *
- * @package App\Command\Process
+ * @package App\Command\Monitoring
  */
-#[AsCommand(name: 'app:process:monitoring', description: 'Service monitoring process loop')]
+#[AsCommand(name: 'app:monitoring:process', description: 'Service monitoring process loop')]
 class MonitoringProcessCommand extends Command
 {
     private AppUtil $appUtil;

@@ -591,4 +591,71 @@ class MonitoringManagerTest extends TestCase
         // call tested method
         $this->monitoringManager->handleDatabaseDown($this->symfonyStyleMock, true);
     }
+
+    /**
+     * Test temporary disable monitoring
+     *
+     * @return void
+     */
+    public function testTemporaryDisableMonitoring(): void
+    {
+        // mock services list
+        $this->serviceManagerMock->expects($this->once())->method('getServicesList')->willReturn([
+            'test_service' => [
+                'monitoring' => true,
+                'type' => 'systemd',
+                'display_name' => 'Test service',
+                'url' => 'http://test.com',
+                'metrics_monitoring' => [
+                    'collect_metrics' => true,
+                    'metrics_collector_url' => 'http://test.com/metrics'
+                ]
+            ]
+        ]);
+
+        // expect cache set
+        $this->cacheUtilMock->expects($this->once())->method('setValue')->with(
+            'monitoring-temporary-disabled-test_service',
+            'disabled',
+            60
+        );
+
+        // call tested method
+        $this->monitoringManager->temporaryDisableMonitoring('test_service', 1);
+    }
+
+    /**
+     * Test check if monitoring disabled when found in cache
+     *
+     * @return void
+     */
+    public function testIsMonitoringTemporarilyDisabled(): void
+    {
+        // mock cache
+        $this->cacheUtilMock->method('isCatched')->willReturn(true);
+
+        // call tested method
+        $result = $this->monitoringManager->isMonitoringTemporarilyDisabled('test_service');
+
+        // assert result
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Test check if monitoring disabled when not found in cache
+     *
+     * @return void
+     */
+    public function testIsMonitoringNotTemporarilyDisabled(): void
+    {
+        // mock cache
+        $this->cacheUtilMock->method('isCatched')->willReturn(false);
+
+
+        // call tested method
+        $result = $this->monitoringManager->isMonitoringTemporarilyDisabled('test_service');
+
+        // assert result
+        $this->assertFalse($result);
+    }
 }
