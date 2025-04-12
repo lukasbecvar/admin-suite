@@ -1,0 +1,136 @@
+<div class="shadow-lg text-white mb-3 pb-1 border border-neutral-800 card-color rounded">
+	<div class="p-2 mb-2 border-b border-neutral-800">System diagnostics</div>
+	{# NOT-INSTALLED-REQUIREMENTS CHECK #}
+	<div class="px-3 py-1">
+		{% if diagnosticData.notInstalledRequirements is empty %}
+			<span>
+				<span class="text-green-500">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					All requirements is installed
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					Not found requirements:
+					{{ diagnosticData.notInstalledRequirements|join(', ')|e }}
+				</span>
+			</span>
+		{% endif %}
+	</div>
+	{# STORAGE-SPACE CHECK #}
+	<div class="px-3 py-1">
+		{% if diagnosticData.driveSpace < 90 %}
+			<span>
+				<span class="text-green-500">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					Storage space
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					main storage storage is full, please delete some unnecessary data or increase storage space
+				</span>
+			</span>
+		{% endif %}
+	</div>
+	{# CPU-OVERLOAD CHECK #}
+	<div class="px-3 py-1">
+		{% if diagnosticData.cpuUsage > 98.00 %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					CPU is overloaded, please check cpu usage
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-green-400">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					CPU is at normal values
+				</span>
+			</span>
+		{% endif %}
+	</div>
+	{# RAM-OVERLOAD CHECK #}
+	<div class="px-3 py-1">
+		{% if diagnosticData.ramUsage > 98.00 %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					RAM Memory is overloaded, please check usage
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-green-400">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					RAM Memory is available
+				</span>
+			</span>
+		{% endif %}
+	</div>
+	{# REBOOT REQUIRED #}
+	<div class="px-3 py-1">
+		{% if diagnosticData.rebootRequired %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					Reboot is required
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-green-400">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					Reboot not required
+				</span>
+			</span>
+		{% endif %}
+	</div>
+	{# CHECK FOR UPDATES #}
+	<div class="px-3 py-1">
+		{% if diagnosticData.updateAvailable %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					Update available (please update your repositories)
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-green-400">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					No updates available
+				</span>
+			</span>
+		{% endif %}
+	</div>
+</div>

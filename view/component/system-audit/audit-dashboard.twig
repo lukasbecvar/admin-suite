@@ -1,0 +1,53 @@
+{% extends 'common/layout.twig' %}
+
+{# SYSTEM AUDIT COMPONENT VIEW #}
+{% block component %} 
+{# SUB-NAVIGATION #}
+<div class="bg-neutral-900 border-b border-neutral-800 sub-navigation breadcrumb">
+    {# BACK BUTTON #}
+    <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+    </a>
+    {# LINK TO METRICS DASHBOARD #}
+    <a href={{ path('app_metrics_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Go to metrics dashboard">
+        <i class="fa fa-chart-line" aria-hidden="true"></i>
+    </a>
+    {# LINK TO DIAGNOSTICS #}
+    <a href={{ path('app_diagnostic') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Go to diagnostics">
+        <i class="fas fa-check" aria-hidden="true"></i>
+    </a>
+    <span class="mr-1 text-white">System Audit</span>
+</div>
+
+{# SYSTEM INFO CONTENT #}
+<div class="w-full dashbard-component">
+    {# SYSTEM INFO CARDS (INCLUDED FROM DASHBOARD) #}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2 component">
+        {% include "component/dashboard/card/system-info-card.twig" %}
+        {% include "component/dashboard/card/process-list-card.twig" %}
+    </div>
+
+    {# SYSTEM LOGS CARD #}
+    <div class="p-2 mt-[-8px]">
+        <div class="card-color custom-scrollbar border border-neutral-800 shadow-md rounded overflow-hidden w-full max-h-50 text-white">
+            <div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
+                System logs
+            </div>
+            <div class="overflow-scroll max-h-72 p-1">
+                <ul class="space-y-[5px]">
+                    {% for logFile in logFiles %}
+                        <li>
+                            <a href={{ path('app_file_system_view', { path: logFile.path, referer: 'app_system_audit' }) }} class="block p-3 bg-neutral-800 hover:bg-blue-700 break-words">{{ logFile.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {# SYSTEM DIAGNOSTICS CARD #}
+    <div class="p-2 mt-[-8px] component">
+        {% include "component/diagnostic/card/system-diagnostics.twig" %}
+    </div>
+</div>
+{% endblock %}

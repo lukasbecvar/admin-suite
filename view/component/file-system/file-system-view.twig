@@ -16,6 +16,8 @@
         {% set backPath = path('app_manager_logs_exception_files') %}
     {% elseif referer == 'log_manager_server_logs' %}
         {% set backPath = path('app_manager_logs_system') %}
+    {% elseif referer == 'app_system_audit' %}
+        {% set backPath = path('app_system_audit') %}
     {% else %}
         {% set backPath = path('app_file_system_browser', { 'path': directoryPath }) %}
     {% endif %}

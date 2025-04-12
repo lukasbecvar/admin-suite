@@ -1,0 +1,117 @@
+<div class="shadow-lg text-white mb-3 pb-1 border border-neutral-800 card-color rounded">
+	<div class="p-2 border-b border-neutral-800 mb-1">Suite diagnostics</div>
+	{# LAST MONITORING TIME CHECK (check if monitoring process is running) #}
+	{% set now = "now"|date("Y-m-d H:i:s") %}
+	{% set lastTime = diagnosticData.lastMonitoringTime %}
+	{% set timeDiff = lastTime is not null ? (now|date("U") - lastTime|date("U")) : null %}
+	<div class="px-3 py-1">
+		{% if lastTime is not null and timeDiff is not null and timeDiff <= monitoringInterval %}
+			<span>
+				<span class="text-green-500">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					Monitoring process is running
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					Monitoring process has been inactive for a long time
+				</span>
+			</span>
+		{% endif %}
+	</div>
+	{# SSL-RUNNING CHECK #}
+	<div class="px-3 py-1">
+		{% if diagnosticData.isSSL %}
+			<span>
+				<span class="text-green-500">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					Page is secured with https
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					Session is running on http [non secure connction] please contact web admin for fix it
+				</span>
+			</span>
+		{% endif %}
+	</div>
+	{# DEV-MODE CHECK #}
+	<div class="px-3 py-1">
+		{% if diagnosticData.isDevMode %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					Developer mode is enabled, please set APP_ENV=prod in .env config file
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-green-500">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					Developer mode config is not enabled
+				</span>
+			</span>
+		{% endif %}
+	</div>
+	{# WEBSERVER USER PERMISSIONS CHECK #}
+	<div class="px-3 py-1 mb-1">
+		{% if diagnosticData.isWebUserSudo %}
+			<span>
+				<span class="text-green-400">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					Site permissions is root
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					Permissions error: please add "{{ diagnosticData.webUsername|e }}
+					ALL=NOPASSWD: ALL" to /etc/sudoers
+				</span>
+			</span>
+		{% endif %}
+	</div>
+	{# CHECK WEBSITE CACHE FOLDER PERMISSIONS #}
+	<div class="px-3 mb-1">
+		{% if diagnosticData.websiteDirectoryPermissions %}
+			<span>
+				<span class="text-green-400">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					Website filesystem cache permissions is set
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					Permissions error: please add set root permissions to /var directory
+				</span>
+			</span>
+		{% endif %}
+	</div>
+</div>

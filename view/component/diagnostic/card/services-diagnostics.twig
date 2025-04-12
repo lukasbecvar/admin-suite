@@ -1,0 +1,26 @@
+<div class="shadow-lg text-white mb-0 pb-1 border border-neutral-800 card-color rounded">
+	<div class="p-2 mb-2 border-b border-neutral-800">Services diagnostics</div>
+	{# CHECK SERVICES EXCEPTION FILES #}
+	<div class="px-3 mb-1">
+		{% if diagnosticData.exceptionFilesList == null %}
+			<span>
+				<span class="text-green-400">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					No exception files found
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					Exception files found:
+					{{ diagnosticData.exceptionFilesList|length }}
+				</span>
+			</span>
+		{% endif %}
+	</div>
+</div>
