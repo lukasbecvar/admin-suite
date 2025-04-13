@@ -685,6 +685,58 @@ class ServerUtil
     }
 
     /**
+     * Get ufw open ports
+     *
+     * @return array<array<string>|null> List of open ports
+     */
+    public function getUfwOpenPorts(): array
+    {
+        try {
+            $output = shell_exec('sudo ufw status');
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get ufw open ports: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        if ($output == null || $output == false) {
+            return [];
+        }
+
+        $lines = explode("\n", $output);
+        $result = [];
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if ($line === '') {
+                continue;
+            }
+
+            // skip headers and separator line
+            if (str_starts_with($line, 'To') || str_starts_with($line, '--')) {
+                continue;
+            }
+
+            // split variable spacing
+            $parts = preg_split('/\s{2,}/', $line);
+            if (!is_countable($parts)) {
+                continue;
+            }
+
+            if (count($parts) >= 3) {
+                $result[] = [
+                    'port_service' => $parts[0],
+                    'action' => $parts[1],
+                    'from' => $parts[2],
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Get diagnostic data
      *
      * @return array<string,mixed> The diagnostic data

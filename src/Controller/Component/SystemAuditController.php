@@ -6,6 +6,7 @@ use Exception;
 use App\Util\ServerUtil;
 use App\Manager\LogManager;
 use App\Manager\ErrorManager;
+use App\Manager\ServiceManager;
 use App\Annotation\Authorization;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,12 +24,18 @@ class SystemAuditController extends AbstractController
     private LogManager $logManager;
     private ServerUtil $serverUtil;
     private ErrorManager $errorManager;
+    private ServiceManager $serviceManager;
 
-    public function __construct(LogManager $logManager, ServerUtil $serverUtil, ErrorManager $errorManager)
-    {
+    public function __construct(
+        LogManager $logManager,
+        ServerUtil $serverUtil,
+        ErrorManager $errorManager,
+        ServiceManager $serviceManager
+    ) {
         $this->logManager = $logManager;
         $this->serverUtil = $serverUtil;
         $this->errorManager = $errorManager;
+        $this->serviceManager = $serviceManager;
     }
 
     /**
@@ -45,6 +52,9 @@ class SystemAuditController extends AbstractController
         $processList = $this->serverUtil->getProcessList();
         $hostSystemInfo = $this->serverUtil->getSystemInfo();
         $systemInstallInfo = $this->serverUtil->getSystemInstallInfo();
+
+        // get ufw open ports
+        $ufwOpenPorts = $this->serverUtil->getUfwOpenPorts();
 
         // get diagnostic data
         $diagnosticData = $this->serverUtil->getDiagnosticData();
@@ -64,6 +74,9 @@ class SystemAuditController extends AbstractController
 
         // return system audit dashboard page view
         return $this->render('component/system-audit/audit-dashboard.twig', [
+            // service manager instance
+            'serviceManager' => $this->serviceManager,
+
             // system info data
             'processList' => $processList,
             'hostUptime' => $hostUptime,
@@ -72,6 +85,9 @@ class SystemAuditController extends AbstractController
 
             // log files data
             'logFiles' => $logFiles,
+
+            // ufw open ports
+            'ufwOpenPorts' => $ufwOpenPorts,
 
             // diagnostic data
             'diagnosticData' => $diagnosticData,
