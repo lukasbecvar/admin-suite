@@ -47,13 +47,13 @@
 
     {# SSH ACCESS HISTORY CARD #}
     <div class="p-2 mt-[-8px]">
-        <div class="card-color border border-neutral-800 shadow-md rounded overflow-hidden w-full max-h-50 text-white">
+        <div class="card-color custom-scrollbar border border-neutral-800 shadow-md rounded overflow-hidden w-full max-h-50 text-white">
             <div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
                 SSH access history
             </div>
-            <div class="max-h-72 p-1">
+            <div class="overflow-scroll max-h-72 p-1">
                 {% if sshAccessHistory|length == 0 %}
-                    <div class="text-center text-neutral-300 text-sm">No SSH access history found</div>
+                    <div class="text-center text-neutral-200 text-sm">No SSH access history found</div>
                 {% endif %}
                 <ul class="space-y-[5px]">
                     {% for login in sshAccessHistory %}
