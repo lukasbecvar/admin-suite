@@ -49,6 +49,9 @@ class SystemAuditController extends AbstractController
         // get diagnostic data
         $diagnosticData = $this->serverUtil->getDiagnosticData();
 
+        // get ssh logins from journalctl
+        $sshAccessHistory = $this->logManager->getSshLoginsFromJournalctl();
+
         // get log files from host system
         try {
             $logFiles = $this->logManager->getSystemLogs();
@@ -71,7 +74,10 @@ class SystemAuditController extends AbstractController
             'logFiles' => $logFiles,
 
             // diagnostic data
-            'diagnosticData' => $diagnosticData
+            'diagnosticData' => $diagnosticData,
+
+            // ssh access history
+            'sshAccessHistory' => $sshAccessHistory
         ]);
     }
 }

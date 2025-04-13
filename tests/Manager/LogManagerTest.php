@@ -432,4 +432,18 @@ class LogManagerTest extends TestCase
         // assert result
         $this->assertEquals('file content', $result);
     }
+
+    /**
+     * Test get ssh logins from journalctl
+     *
+     * @return void
+     */
+    public function testGetSshLoginsFromJournalctl(): void
+    {
+        // call tested method
+        $result = $this->logManager->getSshLoginsFromJournalctl();
+
+        // assert result
+        $this->assertIsArray($result);
+    }
 }

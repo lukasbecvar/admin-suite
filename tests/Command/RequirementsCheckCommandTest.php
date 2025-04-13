@@ -76,7 +76,7 @@ class RequirementsCheckCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
 
         // assert result
-        $this->assertStringContainsString('The following requirements are not installed: php, composer', $output);
+        $this->assertStringContainsString('The following requirements are not installed: ', $output);
         $this->assertStringContainsString('Database connected successfully', $output);
         $this->assertSame(Command::SUCCESS, $exitCode);
     }

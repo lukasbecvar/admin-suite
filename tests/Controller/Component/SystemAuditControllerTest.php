@@ -43,6 +43,7 @@ class SystemAuditControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'System Information');
         $this->assertSelectorTextContains('body', 'Process list');
         $this->assertSelectorTextContains('body', 'System logs');
+        $this->assertSelectorTextContains('body', 'SSH access history');
         $this->assertSelectorTextContains('body', 'System diagnostics');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }

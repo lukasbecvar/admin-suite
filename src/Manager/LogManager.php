@@ -383,6 +383,49 @@ class LogManager
     }
 
     /**
+     * Get ssh logins from journalctl
+     *
+     * @return array<mixed>|null The ssh logins from journalctl
+     */
+    public function getSshLoginsFromJournalctl(): array|null
+    {
+        // build log get command
+        $cmd = 'sudo journalctl -u ssh --no-pager';
+
+        // execute command
+        try {
+            $output = shell_exec($cmd);
+            if (!$output) {
+                return [];
+            }
+
+            // format output to array
+            $lines = explode("\n", $output);
+            $logins = [];
+            foreach ($lines as $line) {
+                if (str_contains($line, 'Accepted')) {
+                    if (preg_match('/^(\w+\s+\d+\s+\d+:\d+:\d+)\s+(.*?)\s+sshd\[\d+\]:\s+Accepted\s+(\w+)\s+for\s+(\w+)\s+from\s+([\d\.]+)\s+port\s+(\d+)/', $line, $matches)) {
+                        $logins[] = [
+                            'date'     => $matches[1],
+                            'host'     => $matches[2],
+                            'method'   => $matches[3],
+                            'user'     => $matches[4],
+                            'ip'       => $matches[5],
+                            'port'     => $matches[6],
+                        ];
+                    }
+                }
+            }
+            return $logins;
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get ssh logins from journalctl: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
      * Get exception files list
      *
      * @return array<mixed>|null
