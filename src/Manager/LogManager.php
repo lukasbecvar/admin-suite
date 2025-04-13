@@ -416,7 +416,7 @@ class LogManager
                     }
                 }
             }
-            return $logins;
+            return array_reverse($logins);
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get ssh logins from journalctl: ' . $e->getMessage(),
