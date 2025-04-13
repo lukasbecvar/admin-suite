@@ -27,31 +27,13 @@
         {% include "component/dashboard/card/process-list-card.twig" %}
     </div>
 
-    {# SYSTEM LOGS CARD #}
-    <div class="p-2 mt-[-8px]">
-        <div class="card-color custom-scrollbar border border-neutral-800 shadow-md rounded overflow-hidden w-full max-h-50 text-white">
-            <div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
-                System logs
-            </div>
-            <div class="overflow-scroll max-h-72 p-1">
-                <ul class="space-y-[5px]">
-                    {% for logFile in logFiles %}
-                        <li>
-                            <a href={{ path('app_file_system_view', { path: logFile.path, referer: 'app_system_audit' }) }} class="block p-3 bg-neutral-800 hover:bg-blue-700 break-words">{{ logFile.name }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
-
     {# SSH ACCESS HISTORY CARD #}
     <div class="p-2 mt-[-8px]">
         <div class="card-color custom-scrollbar border border-neutral-800 shadow-md rounded overflow-hidden w-full max-h-50 text-white">
             <div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
                 SSH access history
             </div>
-            <div class="overflow-scroll max-h-72 p-1">
+            <div class="overflow-y-scroll max-h-72 p-1">
                 {% if sshAccessHistory|length == 0 %}
                     <div class="text-center text-neutral-200 text-sm">No SSH access history found</div>
                 {% endif %}
@@ -62,11 +44,29 @@
                                 <div class="flex items-center">
                                     <div class="flex flex-col">
                                         <div class="text-sm font-bold">{{ login.user }}</div>
-                                        <div class="text-xs text-neutral-500">{{ login.date }}</div>
+                                        <div class="text-xs text-green-500">{{ login.date }}</div>
                                     </div>
                                 </div>
                                 {{ login.host }} - {{ login.ip }} - {{ login.port }}
                             </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {# SYSTEM LOGS CARD #}
+    <div class="p-2 mt-[-8px]">
+        <div class="card-color custom-scrollbar border border-neutral-800 shadow-md rounded overflow-hidden w-full max-h-50 text-white">
+            <div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
+                System logs
+            </div>
+            <div class="overflow-y-scroll max-h-72 p-1">
+                <ul class="space-y-[5px]">
+                    {% for logFile in logFiles %}
+                        <li>
+                            <a href={{ path('app_file_system_view', { path: logFile.path, referer: 'app_system_audit' }) }} class="block p-3 bg-neutral-800 hover:bg-blue-700 break-words">{{ logFile.name }}</a>
                         </li>
                     {% endfor %}
                 </ul>
