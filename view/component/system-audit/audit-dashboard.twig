@@ -23,9 +23,10 @@
 <div class="w-full dashbard-component">
     {# SYSTEM INFO CARDS (INCLUDED FROM DASHBOARD) #}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2 component">
-        {% include "component/dashboard/card/system-info-card.twig" %}
         {% include "component/dashboard/card/process-list-card.twig" %}
+        {% include "component/system-audit/card/linux-users-list-card.twig" %}
         {% include "component/system-audit/card/ufw-open-ports-card.twig" %}
+        {% include "component/dashboard/card/system-info-card.twig" %}
     </div>
 
     {# SSH ACCESS HISTORY CARD #}

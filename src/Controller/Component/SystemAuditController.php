@@ -62,6 +62,9 @@ class SystemAuditController extends AbstractController
         // get ssh logins from journalctl
         $sshAccessHistory = $this->logManager->getSshLoginsFromJournalctl();
 
+        // get linux system users
+        $linuxUsers = $this->serverUtil->getLinuxUsers();
+
         // get log files from host system
         try {
             $logFiles = $this->logManager->getSystemLogs();
@@ -93,7 +96,10 @@ class SystemAuditController extends AbstractController
             'diagnosticData' => $diagnosticData,
 
             // ssh access history
-            'sshAccessHistory' => $sshAccessHistory
+            'sshAccessHistory' => $sshAccessHistory,
+
+            // linux system users
+            'linuxUsers' => $linuxUsers
         ]);
     }
 }

@@ -354,6 +354,33 @@ class ServerUtilTest extends TestCase
     }
 
     /**
+     * Test get linux users
+     *
+     * @return void
+     */
+    public function testGetLinuxUsers(): void
+    {
+        // call tested method
+        $users = $this->serverUtil->getLinuxUsers();
+
+        // assert result
+        $this->assertIsArray($users);
+        $this->assertNotEmpty($users[0]);
+        $this->assertArrayHasKey('username', $users[0]);
+        $this->assertArrayHasKey('uid', $users[0]);
+        $this->assertArrayHasKey('gid', $users[0]);
+        $this->assertArrayHasKey('home', $users[0]);
+        $this->assertArrayHasKey('shell', $users[0]);
+        $this->assertArrayHasKey('has_sudo', $users[0]);
+        $this->assertIsString($users[0]['username']);
+        $this->assertIsInt($users[0]['uid']);
+        $this->assertIsInt($users[0]['gid']);
+        $this->assertIsString($users[0]['home']);
+        $this->assertIsString($users[0]['shell']);
+        $this->assertIsBool($users[0]['has_sudo']);
+    }
+
+    /**
      * Test get diagnostic data
      *
      * @return void

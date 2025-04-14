@@ -737,6 +737,49 @@ class ServerUtil
     }
 
     /**
+     * Get list of Linux system users from /etc/passwd
+     *
+     * @return array<array<mixed>> List of usernames
+     */
+    public function getLinuxUsers(): array
+    {
+        $users = [];
+        $passwdLines = @file('/etc/passwd', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $groupLines = @file('/etc/group', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+        if ($passwdLines === false || $groupLines === false) {
+            return [];
+        }
+
+        // parse sudo group members
+        $sudoUsers = [];
+        foreach ($groupLines as $line) {
+            $parts = explode(':', $line);
+            if (count($parts) === 4 && in_array($parts[0], ['sudo', 'wheel'])) {
+                $groupUsers = explode(',', $parts[3]);
+                $sudoUsers = array_merge($sudoUsers, $groupUsers);
+            }
+        }
+
+        // format: username:x:UID:GID:comment:home:shell
+        foreach ($passwdLines as $line) {
+            $parts = explode(':', $line);
+            if (count($parts) >= 7) {
+                $users[] = [
+                    'username'   => $parts[0],
+                    'uid'        => (int)$parts[2],
+                    'gid'        => (int)$parts[3],
+                    'home'       => $parts[5],
+                    'shell'      => $parts[6],
+                    'has_sudo'   => in_array($parts[0], $sudoUsers),
+                ];
+            }
+        }
+
+        return $users;
+    }
+
+    /**
      * Get diagnostic data
      *
      * @return array<string,mixed> The diagnostic data
