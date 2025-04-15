@@ -108,11 +108,35 @@ class LogApiController extends AbstractController
     /**
      * Get system logs with journalctl command execute
      *
+     * @param Request $request The request object
+     *
      * @return JsonResponse The JSON response with system logs
      */
     #[Route('/api/system/logs', methods:['GET'], name: 'app_api_system_logs')]
-    public function getSystemLogs(): JsonResponse
+    public function getSystemLogs(Request $request): JsonResponse
     {
+        // get access token from request parameter
+        $accessToken = (string) $request->query->get('token');
+
+        // check if token is set
+        if (empty($accessToken)) {
+            return $this->json([
+                'status' => 'error',
+                'message' => 'Parameter "token" is required'
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        // get api token for authentication
+        $apiToken = $this->appUtil->getEnvValue('EXTERNAL_API_LOG_TOKEN');
+
+        // check is token matches with auth token
+        if ($accessToken != $apiToken) {
+            return $this->json([
+                'status' => 'error',
+                'message' => 'Access token is invalid'
+            ], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
         // cache key to save last get time
         $cacheKey = 'last_journalctl_timestamp';
 

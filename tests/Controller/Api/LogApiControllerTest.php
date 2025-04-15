@@ -2,9 +2,9 @@
 
 namespace App\Tests\Controller\Api;
 
+use App\Tests\CustomTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * Class LogApiControllerTest
@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  *
  * @package App\Tests\Controller
  */
-class LogApiControllerTest extends WebTestCase
+class LogApiControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;
 
@@ -23,7 +23,7 @@ class LogApiControllerTest extends WebTestCase
     }
 
     /**
-     * Test the external log request with invalid method
+     * Test external log request with invalid method
      *
      * @return void
      */
@@ -36,7 +36,7 @@ class LogApiControllerTest extends WebTestCase
     }
 
     /**
-     * Test the external log request without token
+     * Test external log request without token
      *
      * @return void
      */
@@ -53,7 +53,7 @@ class LogApiControllerTest extends WebTestCase
     }
 
     /**
-     * Test the external log request with invalid token
+     * Test external log request with invalid token
      *
      * @return void
      */
@@ -72,7 +72,7 @@ class LogApiControllerTest extends WebTestCase
     }
 
     /**
-     * Test the external log request without parameters
+     * Test external log request without parameters
      *
      * @return void
      */
@@ -91,7 +91,7 @@ class LogApiControllerTest extends WebTestCase
     }
 
     /**
-     * Test the external log request with valid parameters
+     * Test external log request with valid parameters
      *
      * @return void
      */
@@ -109,6 +109,98 @@ class LogApiControllerTest extends WebTestCase
 
         // assert response
         $this->assertEquals('Log message has been logged', $responseData['message']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test get system logs request with invalid method
+     *
+     * @return void
+     */
+    public function testGetSystemLogsRequestWithInvalidMethod(): void
+    {
+        $this->client->request('POST', '/api/system/logs');
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_METHOD_NOT_ALLOWED);
+    }
+
+    /**
+     * Test get system logs request when user is not logged in
+     *
+     * @return void
+     */
+    public function testGetSystemLogsRequestWhenUserIsNotLoggedIn(): void
+    {
+        $this->client->request('GET', '/api/system/logs');
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    /**
+     * Test get system logs request without token
+     *
+     * @return void
+     */
+    public function testGetSystemLogsRequestWithoutToken(): void
+    {
+        // simulate login
+        $this->simulateLogin($this->client);
+
+        $this->client->request('GET', '/api/system/logs');
+
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
+
+        // assert response
+        $this->assertEquals('Parameter "token" is required', $responseData['message']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test get system logs request with invalid token
+     *
+     * @return void
+     */
+    public function testGetSystemLogsRequestWithInvalidToken(): void
+    {
+        // simulate login
+        $this->simulateLogin($this->client);
+
+        $this->client->request('GET', '/api/system/logs', [
+            'token' => 'invalid'
+        ]);
+
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
+
+        // assert response
+        $this->assertEquals('Access token is invalid', $responseData['message']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * Test get system logs request with valid parameters
+     *
+     * @return void
+     */
+    public function testGetSystemLogsRequestWithValidParameters(): void
+    {
+        // simulate login
+        $this->simulateLogin($this->client);
+
+        $this->client->request('GET', '/api/system/logs?token', [
+            'token' => $_ENV['EXTERNAL_API_LOG_TOKEN']
+        ]);
+
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
+
+        // assert response
+        $this->assertArrayHasKey('from', $responseData);
+        $this->assertArrayHasKey('to', $responseData);
+        $this->assertArrayHasKey('logs', $responseData);
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }
