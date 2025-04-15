@@ -2,12 +2,15 @@
 
 namespace App\Controller\Api;
 
+use DateTime;
 use Exception;
 use App\Util\AppUtil;
+use App\Util\CacheUtil;
 use App\Manager\LogManager;
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -21,12 +24,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class LogApiController extends AbstractController
 {
     private AppUtil $appUtil;
+    private CacheUtil $cacheUtil;
     private LogManager $logManager;
     private ErrorManager $errorManager;
 
-    public function __construct(AppUtil $appUtil, LogManager $logManager, ErrorManager $errorManager)
+    public function __construct(AppUtil $appUtil, CacheUtil $cacheUtil, LogManager $logManager, ErrorManager $errorManager)
     {
         $this->appUtil = $appUtil;
+        $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
         $this->errorManager = $errorManager;
     }
@@ -98,5 +103,51 @@ class LogApiController extends AbstractController
                 'message' => 'Error to log message'
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * Get system logs with journalctl command execute
+     *
+     * @return JsonResponse The JSON response with system logs
+     */
+    #[Route('/api/system/logs', methods:['GET'], name: 'app_api_system_logs')]
+    public function getSystemLogs(): JsonResponse
+    {
+        // cache key to save last get time
+        $cacheKey = 'last_journalctl_timestamp';
+
+        // get last get time
+        $cacheItem = $this->cacheUtil->getValue($cacheKey);
+        if ($cacheItem != null) {
+            $lastTimestamp = $cacheItem->get();
+        } else {
+            $lastTimestamp = (new DateTime('-10 seconds'))->format('Y-m-d H:i:s');
+        }
+
+        // journalctl command execute to get logs
+        try {
+            $escapedSince = escapeshellarg("'" . $lastTimestamp . "'");
+            $command = "sudo journalctl --since $escapedSince -o short-iso";
+            $output = shell_exec($command);
+            if ($output == false) {
+                $output = 'No logs found.';
+            }
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'Error to get system logs: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // update timestamp in cache for next call
+        $now = (new DateTime())->format('Y-m-d H:i:s');
+        $this->cacheUtil->deleteValue($cacheKey);
+        $this->cacheUtil->setValue($cacheKey, $now, (60 * 60 * 24));
+
+        return $this->json([
+            'from' => $lastTimestamp,
+            'to' => $now,
+            'logs' => explode("\n", trim($output)),
+        ]);
     }
 }
