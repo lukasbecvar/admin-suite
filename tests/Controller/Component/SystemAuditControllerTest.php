@@ -43,7 +43,7 @@ class SystemAuditControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'Process list');
         $this->assertSelectorTextContains('body', 'Linux system users');
         $this->assertSelectorTextContains('body', 'Firewall open ports (ufw)');
-        $this->assertSelectorTextContains('body', 'System Information');
+        $this->assertSelectorTextContains('body', 'System information');
         $this->assertSelectorTextContains('body', 'SSH access history');
         $this->assertSelectorTextContains('body', 'System logs');
         $this->assertSelectorTextContains('body', 'System diagnostics');

@@ -23,7 +23,7 @@
 			<tbody class="divide-y divide-neutral-800 bg-neutral-880">
 				{% for user in linuxUsers %}
 					<tr class="hover:bg-neutral-800">
-						<td class="px-4 py-2 whitespace-nowrap text-sm font-bold">{{ user.username|e }}</td>
+						<td class="px-4 py-2 whitespace-nowrap text-sm font-bold"><a href={{ path('app_file_system_view', { path: user.home ~ '/.bash_history', referer: 'app_system_audit' }) }} class="text-blue-400 hover:text-blue-300">{{ user.username|e }}</a></td>
 						<td class="px-4 py-2 whitespace-nowrap text-sm">{{ user.home|e }}</td>
 						<td class="px-4 py-2 whitespace-nowrap text-sm">{{ user.shell|e }}</td>
                         {% if user.has_sudo == true %}

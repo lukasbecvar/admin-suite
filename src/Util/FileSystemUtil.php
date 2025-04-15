@@ -201,14 +201,6 @@ class FileSystemUtil
      */
     public function getFileContent(string $path): ?string
     {
-        // check file exists
-        if (!file_exists($path)) {
-            $this->errorManager->handleError(
-                message: 'error opening file: ' . $path . ' does not exist',
-                code: Response::HTTP_NOT_FOUND
-            );
-        }
-
         try {
             // check if path is directory
             if (is_dir($path) || is_link($path)) {
@@ -223,7 +215,7 @@ class FileSystemUtil
 
             // check file content is set
             if (!$fileContent) {
-                $fileContent = 'file is empty';
+                $fileContent = 'file is empty ';
             }
 
             // return file content

@@ -1,0 +1,27 @@
+<div class="p-2 mt-[-8px]">
+	<div class="card-color custom-scrollbar border border-neutral-800 shadow-md rounded overflow-hidden w-full max-h-50 text-white">
+		<div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
+			SSH access history
+		</div>
+		<div class="overflow-y-scroll max-h-72">
+			{% if sshAccessHistory|length == 0 %}
+				<div class="text-center text-neutral-200 text-sm p-1">No SSH access history found</div>
+			{% endif %}
+			<ul>
+				{% for login in sshAccessHistory %}
+					<li>
+						<div class="flex items-center justify-between border-b border-neutral-800 pr-2 hover:bg-neutral-800">
+							<div class="flex items-center p-[5px] pt-[2px] pb-[2px]">
+								<div class="flex flex-col">
+									<div class="text-sm font-bold">{{ login.user }}</div>
+									<div class="text-xs text-green-500">{{ login.date }}</div>
+								</div>
+							</div>
+							{{ login.host }} - {{ login.ip }} - {{ login.port }}
+						</div>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
