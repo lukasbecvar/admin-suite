@@ -1,11 +1,11 @@
 /* system journalctl log card functionality */
 document.addEventListener('DOMContentLoaded', () => {
-	const scrollBox = document.getElementById('journalctl-scrollbox')
 	const ul = document.getElementById('journalctl-logs')
+	const scrollBox = document.getElementById('journalctl-scrollbox')
 	const waitingForLogs = document.getElementById('waiting-for-logs')
 
 	async function fetchLogs() {
-		// check if scroll is near bottom (10px)
+		// check if scroll is near bottom (tolerance 10px)
 		const isAtBottom = scrollBox.scrollHeight - scrollBox.scrollTop <= scrollBox.clientHeight + 10
 
 		try {
@@ -24,10 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				const li = document.createElement('li')
 				li.classList.add('whitespace-pre-wrap', 'font-mono', 'text-sm')
 
-				// try to parse journalctl line
-				const match = log.match(/^(\w{3} \d{1,2} \d{2}:\d{2}:\d{2}) ([\w\-]+) ([\w\.\-\[\]@]+): (.*)$/)
+				// ISO log format parsing
+				const match = log.match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\+\d{4})?) (\S+) (\S+):\s?(.*)$/)
 				if (match) {
-					const [, timestamp, hostname, unit, message] = match
+					const [, timestamp, host, unit, message] = match
 
 					const timeSpan = document.createElement('span')
 					timeSpan.textContent = `${timestamp} `
@@ -38,7 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
 					unitSpan.className = 'text-purple-400'
 
 					const msgSpan = document.createElement('span')
-					msgSpan.textContent = message
+					msgSpan.textContent = message || '(no message)'
+					msgSpan.className = 'text-white'
 
 					li.appendChild(timeSpan)
 					li.appendChild(unitSpan)
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				ul.appendChild(li)
 			})
 
-			// scroll to bottom if needed
+			// scroll if needed
 			if (isAtBottom) {
 				scrollBox.scrollTop = scrollBox.scrollHeight
 			}
