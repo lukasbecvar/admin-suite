@@ -126,11 +126,11 @@ class LogApiController extends AbstractController
 
         // journalctl command execute to get logs
         try {
-            $escapedSince = escapeshellarg("'" . $lastTimestamp . "'");
-            $command = "sudo journalctl --since $escapedSince -o short-iso";
+            $escapedSince = escapeshellarg($lastTimestamp);
+            $command = "sudo journalctl --since $escapedSince -o short-iso | grep -v 'COMMAND=/usr/bin/journalctl' | grep -v 'pam_unix(sudo:session)'";
             $output = shell_exec($command);
             if ($output == false) {
-                $output = 'No logs found.';
+                $output = '';
             }
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -144,10 +144,11 @@ class LogApiController extends AbstractController
         $this->cacheUtil->deleteValue($cacheKey);
         $this->cacheUtil->setValue($cacheKey, $now, (60 * 60 * 24));
 
+        // return response with logs
         return $this->json([
             'from' => $lastTimestamp,
             'to' => $now,
             'logs' => explode("\n", trim($output)),
-        ]);
+        ], Response::HTTP_OK);
     }
 }
