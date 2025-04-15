@@ -150,8 +150,7 @@ class LogApiController extends AbstractController
 
         // journalctl command execute to get logs
         try {
-            $escapedSince = escapeshellarg($lastTimestamp);
-            $command = "sudo journalctl --since $escapedSince -o short-iso | grep -v 'COMMAND=/usr/bin/journalctl' | grep -v 'pam_unix(sudo:session)'";
+            $command = "sudo journalctl --since '$lastTimestamp' -o short-iso | grep -v 'COMMAND=/usr/bin/journalctl' | grep -v 'pam_unix(sudo:session)'";
             $output = shell_exec($command);
             if ($output == false) {
                 $output = '';
