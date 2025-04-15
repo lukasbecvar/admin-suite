@@ -139,60 +139,16 @@ class LogApiControllerTest extends CustomTestCase
     }
 
     /**
-     * Test get system logs request without token
+     * Test get system logs request with success response
      *
      * @return void
      */
-    public function testGetSystemLogsRequestWithoutToken(): void
+    public function testGetSystemLogsRequestWithSuccessResponse(): void
     {
         // simulate login
         $this->simulateLogin($this->client);
 
-        $this->client->request('GET', '/api/system/logs');
-
-        /** @var array<mixed> $responseData */
-        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
-
-        // assert response
-        $this->assertEquals('Parameter "token" is required', $responseData['message']);
-        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
-    }
-
-    /**
-     * Test get system logs request with invalid token
-     *
-     * @return void
-     */
-    public function testGetSystemLogsRequestWithInvalidToken(): void
-    {
-        // simulate login
-        $this->simulateLogin($this->client);
-
-        $this->client->request('GET', '/api/system/logs', [
-            'token' => 'invalid'
-        ]);
-
-        /** @var array<mixed> $responseData */
-        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
-
-        // assert response
-        $this->assertEquals('Access token is invalid', $responseData['message']);
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
-    }
-
-    /**
-     * Test get system logs request with valid parameters
-     *
-     * @return void
-     */
-    public function testGetSystemLogsRequestWithValidParameters(): void
-    {
-        // simulate login
-        $this->simulateLogin($this->client);
-
-        $this->client->request('GET', '/api/system/logs?token', [
-            'token' => $_ENV['EXTERNAL_API_LOG_TOKEN']
-        ]);
+        $this->client->request('GET', '/api/system/logs?token');
 
         /** @var array<mixed> $responseData */
         $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);

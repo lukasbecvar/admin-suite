@@ -45,6 +45,7 @@ class SystemAuditControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'Firewall open ports (ufw)');
         $this->assertSelectorTextContains('body', 'System information');
         $this->assertSelectorTextContains('body', 'SSH access history');
+        $this->assertSelectorTextContains('body', 'Journalctl live logs');
         $this->assertSelectorTextContains('body', 'System logs');
         $this->assertSelectorTextContains('body', 'System diagnostics');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
