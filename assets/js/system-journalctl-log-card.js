@@ -4,6 +4,24 @@ document.addEventListener('DOMContentLoaded', () => {
 	const scrollBox = document.getElementById('journalctl-scrollbox')
 	const waitingForLogs = document.getElementById('waiting-for-logs')
 
+	// format timestamp to human readable
+	function formatTimestamp(isoString) {
+		try {
+			const date = new Date(isoString)
+			const day = date.getDate().toString().padStart(2, '0')
+			const month = (date.getMonth() + 1).toString().padStart(2, '0')
+			const year = date.getFullYear()
+			const hours = date.getHours().toString().padStart(2, '0')
+			const minutes = date.getMinutes().toString().padStart(2, '0')
+			const seconds = date.getSeconds().toString().padStart(2, '0')
+
+			return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`
+		} catch {
+			return isoString
+		}
+	}
+
+	// fetch logs from server
 	async function fetchLogs() {
 		// check if scroll is near bottom (tolerance 10px)
 		const isAtBottom = scrollBox.scrollHeight - scrollBox.scrollTop <= scrollBox.clientHeight + 10
@@ -30,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					const [, timestamp, host, unit, message] = match
 
 					const timeSpan = document.createElement('span')
-					timeSpan.textContent = `${timestamp} `
+					timeSpan.textContent = `${formatTimestamp(timestamp)} `
 					timeSpan.className = 'text-green-400'
 
 					const unitSpan = document.createElement('span')
