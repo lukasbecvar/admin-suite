@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			const logs = data.logs
 
 			// remove waiting message
-			if (logs.length > 0 && waitingForLogs) {
-				waitingForLogs.remove()
+			if (logs[0] != '') {
+				waitingForLogs.style = 'display: none'
 			}
 
 			logs.forEach(log => {
