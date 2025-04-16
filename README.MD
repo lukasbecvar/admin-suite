@@ -4,7 +4,7 @@
     <a href="LICENSE" target="_blank">License</a> |
     <a href="https://becvar.xyz" target="_blank">Author website</a>
 </p>
- 
+
 ## Dashboard preview
 ![Dashboard](.github/assets/preview.png)
 
