@@ -1,12 +1,12 @@
-<nav class="nav-bar p-1 flex justify-between items-center border-b border-neutral-800 disable-on-small-devices">
+<nav class="nav-bar w-full px-4 py-2 border-b border-zinc-800/80 bg-zinc-900/50 backdrop-blur-md flex items-center justify-between text-white disable-on-small-devices">
     {# TOGGLE SIDEBAR BUTTON #}
-    <button id="menu-toggle" class="text-white hover:text-cyan-300 mt-1">
-        <i class="fas fa-bars"></i><span class="ml-1 phone-none">Menu</span>
+    <button id="menu-toggle" class="bg-transparent flex items-center text-sm font-medium text-zinc-300 hover:text-cyan-400 duration-200 mt-1">
+        <i class="fas fa-bars text-lg"></i>
+        <span class="ml-1 phone-none">Menu</span>
     </button>
+
     {# LOGOUT BUTTON #}
-    <div class="flex items-center">
-        <a href={{ path('app_auth_logout') }} class="logout-link text-white hover:text-cyan-300 mt-1" title="Logout user">
-            <i class="fas fa-sign-out-alt"></i>
-        </a>
-    </div>
+    <a href={{ path('app_auth_logout') }} class="text-zinc-300 hover:text-red-400 transition-colors duration-15 mt-1" title="Logout user">
+        <i class="fas fa-sign-out-alt text-lg"></i>
+    </a>
 </nav>

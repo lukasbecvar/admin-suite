@@ -32,17 +32,29 @@
             </div>
         </div>
     
-        {# PICTURE CHANGE FORM #}
-        {{ form_start(profilePicChangeForm) }}
-    
-            {# FORM FIELDS #}
-            <div class="mb-2">
-                {{ form_label(profilePicChangeForm['profile-pic'], 'Choose Picture', {'label_attr': {'class': 'block text-sm font-bold mb-2'}}) }}
-                {{ form_row(profilePicChangeForm['profile-pic'], {'attr': {'class': 'block w-full px-3 py-2 mt-1 bg-neutral-880 text-white border border-gray-300 rounded focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500', 'accept': 'image/*', 'onchange': 'previewImage(this)'}}) }}
+        {# CHANGE PICTURE FORM #}
+        {{ form_start(profilePicChangeForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
+            <div class="mb-4">
+                <div class="flex justify-center items-center space-x-4">
+                    <label class="cursor-pointer inline-flex items-center px-4 py-2 bg-neutral-800 text-white rounded-md hover:bg-neutral-700 transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M4 16l6-6 4 4 6-6"></path>
+                        </svg>
+                        Select Image
+                        {{ form_row(profilePicChangeForm['profile-pic'], {
+                            'attr': {
+                                'class': 'hidden',
+                                'accept': 'image/*',
+                                'onchange': 'previewImage(this)'
+                            }
+                        }) }}
+                    </label>
+                    <img id="imagePreview" src="#" alt="Image Preview" class="hidden w-16 h-16 rounded object-cover border border-gray-600">
+                </div>
             </div>
 
             {# FORM SUBMIT BUTTON #}
-            <button type="submit" class="mt-2 mb-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2">
                 Change
             </button>
         {{ form_end(profilePicChangeForm) }}
@@ -53,14 +65,14 @@
 <script>
     function previewImage(input) {
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
+            var reader = new FileReader()
             reader.onload = function(e) {
-                document.getElementById('preview-image').setAttribute('src', e.target.result);
-                document.getElementById('image-preview-container').style.display = 'block';
+                document.getElementById('preview-image').setAttribute('src', e.target.result)
+                document.getElementById('image-preview-container').style.display = 'block'
             }
-            reader.readAsDataURL(input.files[0]);
+            reader.readAsDataURL(input.files[0])
         } else {
-            document.getElementById('image-preview-container').style.display = 'none';
+            document.getElementById('image-preview-container').style.display = 'none'
         }
     }
 </script>

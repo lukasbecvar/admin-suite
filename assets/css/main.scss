@@ -70,7 +70,7 @@ main {
 }
 
 .border-neutral-850 {
-	border-color: #2c3031 !important;
+	border-color: #3a3e3e !important;
 }
 
 .card-color {
@@ -178,10 +178,10 @@ main {
 .nav-bar {
 	top: 0;
 	width: 100%;
-	height: 28px;
 	z-index: 1000;
 	position: fixed;
-	background-color: #0f1011;
+	padding: 0px 8px;
+	background-color: #15161892;
 }
 
 .nav-bar #menu-toggle {
@@ -192,6 +192,7 @@ main {
 .nav-bar .logout-link {
 	margin-bottom: 3px;
 	font-size: 22px !important;
+	background-color: transparent;
 }
 
 .breadcrumb {
@@ -205,9 +206,9 @@ main {
 	position: fixed;
 	overflow-y: auto; 
 	height: calc(100% - 28px); 
-	background-color: #0f1011;
 	transform: translateX(-100%);
 	transition: transform 0.2s ease;
+	background: #15161892;
 }
 
 #sidebar ul {
@@ -222,7 +223,7 @@ main {
 }
 
 #sidebar.active {
-	transform: translateX(0); 
+    transform: translateX(0);
 }
 
 #sidebar .role {
@@ -230,7 +231,7 @@ main {
 }
 
 #sidebar a:hover {
-	color: #79d5ec;
+	color: #87dcf1e9;
 	background-color: rgba(87, 87, 87, 0.397);
 }
 
@@ -239,7 +240,7 @@ main {
 	padding: 3px;
     display: flex;
     justify-content: flex-start;
-	background-color: #0f1011 !important;
+	background-color: #15161892 !important;
 }
 
 .sub-navigation > * {

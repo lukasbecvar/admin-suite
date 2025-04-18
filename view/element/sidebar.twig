@@ -1,4 +1,4 @@
-<aside id="sidebar" class="text-white md:active border-r border-neutral-800 flex flex-col justify-between h-full">
+<aside id="sidebar" class="text-white md:active border-r border-zinc-800/80 flex flex-col justify-between h-full disable-on-small-devices">
     <div>
         {# USER INFO #}
         <div class="flex flex-col items-center mb-0 mt-5">
@@ -29,7 +29,7 @@
             {% if current_url matches '/admin/' %}
                 {% set new_url = current_url|replace({'admin.': ''}) %}
                 <li>
-                    <a href="{{ new_url }}/admin" target="_blank" class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4px]">
+                    <a href="{{ new_url }}/admin" target="_blank" class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
                         <i class="fas fa-globe mr-[6.8px] ml-[1.8px]"></i>&nbsp;
                         <span>Main site</span>
                     </a>
@@ -38,7 +38,7 @@
 
             {# DASHBOARD LINK #}
             <li>
-                <a href={{ path('app_dashboard') }} class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4.5px]">
+                <a href={{ path('app_dashboard') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4.5px]">
                     <i class="fas fa-desktop mr-1.5 mt-[3px]"></i>&nbsp;
                     <span>Dashboard</span>
                 </a>
@@ -46,7 +46,7 @@
             
             {# LOGS-MANAGER LINK #}
             <li>
-                <a href={{ path('app_manager_logs') }} class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4px]">
+                <a href={{ path('app_manager_logs') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
                     <i class="fas fa-list mr-2"></i>&nbsp;
                     <span>Logs</span>
                 </a>
@@ -54,7 +54,7 @@
 
             {# DATABASE-MANAGER LINK #}
             <li>
-                <a href={{ path('app_manager_database') }} class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4px]">
+                <a href={{ path('app_manager_database') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
                     <i class="fas fa-database mr-[10px]"></i>&nbsp;
                     <span>Database</span>
                 </a>
@@ -62,7 +62,7 @@
 
             {# METRICS DASHBOARD LINK #}
             <li>
-                <a href={{ path('app_metrics_dashboard') }} class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4px]">
+                <a href={{ path('app_metrics_dashboard') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
                     <i class="fas fa-chart-line mr-2"></i>&nbsp;
                     <span>Metrics</span>
                 </a>
@@ -70,7 +70,7 @@
 
             {# MONITORING-MANAGER LINK #}
             <li>
-                <a href={{ path('app_manager_monitoring') }} class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4px]">
+                <a href={{ path('app_manager_monitoring') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
                     <i class="fa fa-briefcase-medical mr-2"></i>&nbsp;
                     <span>Monitoring</span>
                 </a>
@@ -78,7 +78,7 @@
 
             {# DIAGNOSTICS LINK #}
             <li>
-                <a href={{ path('app_diagnostic') }} class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4px]">
+                <a href={{ path('app_diagnostic') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
                     <i class="fas fa-check mr-2"></i>&nbsp;
                     <span>Diagnostics</span>
                 </a>
@@ -86,7 +86,7 @@
 
             {# SYSTEM-AUDIT LINK #}
             <li>
-                <a href={{ path('app_system_audit') }} class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4px]">
+                <a href={{ path('app_system_audit') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
                     <i class="fas fa-columns mr-2"></i>&nbsp;
                     <span>System audit</span>
                 </a>
@@ -94,7 +94,7 @@
 
             {# FILESYSTEM BROWSER LINK #}
             <li>
-                <a href={{ path('app_file_system_browser') }} class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4px]">
+                <a href={{ path('app_file_system_browser') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
                     <i class="fas fa-file-export mr-1.5"></i>&nbsp;
                     <span>Filesystem</span>
                 </a>
@@ -102,7 +102,7 @@
 
             {# TERMINAL LINK #}
             <li>
-                <a href={{ path('app_terminal') }} class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4px]">
+                <a href={{ path('app_terminal') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
                     <i class="fas fa-terminal mr-1.5"></i>&nbsp;
                     <span>Terminal</span>
                 </a>
@@ -110,7 +110,7 @@
 
             {# TODO-MANAGER LINK #}
             <li>
-                <a href={{ path('app_todo_manager') }} class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4px]">
+                <a href={{ path('app_todo_manager') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
                     <i class="fas fa-tasks mr-2"></i>&nbsp;
                     <span>Todos ({{ getTodosCount() }})</span>
                 </a>
@@ -118,7 +118,7 @@
 
             {# USERS-MANAGER LINK #}
             <li>
-                <a href={{ path('app_manager_users') }} class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4px]">
+                <a href={{ path('app_manager_users') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
                     <i class="fas fa-users mr-1"></i>&nbsp;
                     <span>Users</span>
                 </a>
@@ -126,7 +126,7 @@
 
             {# ACCOUNT-SETTINGS LINK #}
             <li>
-                <a href={{ path('app_account_settings_table') }} class="flex items-center border-b border-neutral-800 block px-3 py-[5px] pt-[4px]">
+                <a href={{ path('app_account_settings_table') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
                     <i class="fas fa-user-cog mr-1"></i>&nbsp;
                     <span>Account settings</span>
                 </a>

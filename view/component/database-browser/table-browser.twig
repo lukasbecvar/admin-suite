@@ -44,9 +44,9 @@
                     No records found
                 </p>
             {% else %}
-                <table class="min-w-full bg-neutral-880 text-white border-b border-neutral-800">
+                <table class="bg-neutral-880 min-w-full text-white border-b border-neutral-800 component">
                     <thead>
-                        <tr class="bg-neutral-900">
+                        <tr class="bg-neutral-840">
                             {# TABLE HEADER #}
                             {% for column in tableData[0]|keys %}
                                 <th class="text-left px-2 py-2 border-b border-neutral-800 text-left">{{ column }}</th>
