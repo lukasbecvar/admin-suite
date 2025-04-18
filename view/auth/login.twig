@@ -3,41 +3,41 @@
 {# USER LOGIN COMPONENT #}
 {% block body %}
 <div class="auth-component flex justify-center items-center h-screen">
-    <div class="mt-5 max-w-md w-full shadow-lg px-4 py-5 mb-4 border border-neutral-800 rounded-md background-dark opacity-95 m-w-95">
-        <h2 class="text-2xl mb-4 text-center text-white">Login</h2>
+	<div class="mt-5 max-w-md w-full px-6 py-6 mb-4 rounded-xl bg-black/20 backdrop-blur-md border border-white/10 shadow-2xl">
+		<h2 class="text-3xl mb-6 text-center text-white font-semibold tracking-wide">Login</h2>
 
         {# EMPTY USER LIST ALERT BOX (FIRST USER REGISTER) #}
-        {% if isUsersEmpty %}
-            <div class="bg-red-750 text-white p-3 mb-4 rounded text-center animate-popin">
-                <p>Users table is empty Register now <a href={{ path('app_auth_register') }} class="text-blue-500 font-bold hover:text-blue-400">here</a></p>
-            </div>
-        {% endif %}
+		{% if isUsersEmpty %}
+			<div class="bg-yellow-800 border border-yellow-600 text-white p-3 mb-4 rounded text-center animate-popin">
+				<p>Users table is empty you can register <a href={{ path('app_auth_register') }} class="text-blue-400 font-bold underline hover:text-blue-300">here</a></p>
+			</div>
+		{% endif %}
 
         {# SUCCESS MESSAGE BOX #}
-        {% for message in app.flashes('success') %}
-            <div class="bg-green-750 text-white p-3 mb-3 rounded text-center animate-popin">{{ message|e }}</div>
-        {% endfor %}
+		{% for message in app.flashes('success') %}
+			<div class="bg-green-800 border border-green-600 text-white p-3 mb-2 rounded text-center animate-popin">{{ message|e }}</div>
+		{% endfor %}
 
         {# ERROR MESSAGE BOX #}
-        {% for message in app.flashes('error') %}
-            <div class="bg-red-750 text-white p-3 mb-3 rounded text-center animate-popin">{{ message|e }}</div>
-        {% endfor %}
+		{% for message in app.flashes('error') %}
+			<div class="bg-red-900 border border-red-500 text-white p-3 mb-3 rounded text-center animate-popin">{{ message|e }}</div>
+		{% endfor %}
 
         {# LOGIN FORM #}
-        {{ form_start(loginForm) }}
+		{{ form_start(loginForm) }}
             {# FORM FIELDS #}
-            {{ form_row(loginForm.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
-            {{ form_row(loginForm.password, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
-            
+			{{ form_row(loginForm.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
+			{{ form_row(loginForm.password, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
+
             {# REMEMBER ME CHECKBOX #}
-            <div class="flex items-center text-white mt-1 mb-1">
-                <label for="login_form_remember" class="mr-1">Remember me</label>
-                {{ form_widget(loginForm.remember, {'attr': {'class': 'rememberme-checkbox'}}) }}
-            </div>
+			<div class="flex items-center text-white mt-2 mb-2">
+				<label for="login_form_remember" class="mr-2">Remember me</label>
+				{{ form_widget(loginForm.remember, {'attr': {'class': 'rememberme-checkbox'}}) }}
+			</div>
 
             {# FORM SUBMIT BUTTON #}
-            <button type="submit" class="bg-blue-700 hover:bg-blue-600 text-white hover:text-gray-200 font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">Login</button>
-        {{ form_end(loginForm) }}
-    </div>
+			<button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-md w-full transition duration-300 ease-in-out hover:shadow-lg hover:shadow-blue-900">Login</button>
+		{{ form_end(loginForm) }}
+	</div>
 </div>
 {% endblock %}

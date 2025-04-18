@@ -69,10 +69,6 @@ main {
 	background-color: #101212;
 }
 
-.bg-red-750 {
-	background-color: rgb(161, 27, 27) !important;
-}
-
 .border-neutral-850 {
 	border-color: #2c3031 !important;
 }
@@ -97,91 +93,85 @@ main {
 /* auth component style */
 .auth-component::before {
 	top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-    content: '';
-    position: fixed;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-image: url('../images/background.jpg');
-}
-
-.auth-component ul li {
-    color: white;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: -1;
+	content: '';
+	position: fixed;
+	filter: blur(2px);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-image: url('../images/background.jpg');
 }
 
 .auth-form-input {
 	width: 100%;
-	color: white;
+	margin: 6px 0;
 	font-size: 16px;
-    margin-top: 6px;
-	text-align: left;
-	padding: 8px 12px;
-    margin-bottom: 5px;
-	text-align: center;
-    border-radius: 0.375rem;
-	outline: none !important;
+	color: #f0f0f0;
+	padding: 10px 14px;
+	border-radius: 0.5rem;
 	transition: all 0.3s ease;
+	backdrop-filter: blur(6px);
 	font-family: 'Inter', sans-serif;
-	background: #1a1a1d;
-	border: 1px solid #26282a !important;
+	background: rgba(26, 26, 29, 0.6);
+	border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .auth-form-input:focus {
-	color: white;
 	border-color: rgb(24, 132, 255);
 }
 
-.auth-form-input:focus {
-	color: white;
-}
-
-.auth-form-input::-moz-placeholder { 
-	color: lightgrey;
-}
-
-.auth-form-input:-ms-input-placeholder {
-	color: lightgrey;
-}
-
-.auth-form-input::placeholder { 
-	color: lightgrey;
-}
-
-.auth-form-input:-webkit-autofill, 
-.form .auth-form-input:-webkit-autofill:hover, 
-.form .auth-form-input:-webkit-autofill:focus {
-	border: 1px solid rgba(230, 230, 230, 0.24);
-	transition: background-color 5000s ease-in-out 0s;
-	-webkit-text-fill-color: white;
-	-webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset;
-}
-
-.auth-form-input:-webkit-autofill, 
-.auth-form-input:-webkit-autofill:hover, 
-.auth-form-input:-webkit-autofill:focus 
-.auth-form-input:-moz-autofill, 
-.auth-form-input:-moz-autofill:hover, 
-.auth-form-input:-moz-autofill-preview, 
-.auth-form-input:-moz-autofill:focus {
-	filter: none !important;
-	box-shadow: 0 0 0 100px #8f88 inset !important;
-	border: 1px solid rgba(230, 230, 230, 0.24) !important;
-	background-color: rgba(255, 255, 255, 0.062) !important;
-	transition: background-color 5000s ease-in-out 0s !important;
-	-webkit-text-fill-color: white !important;
-	-webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.062) inset !important;
+.auth-form-input::placeholder {
+	color: #cccccc;
 }
 
 .auth-component .rememberme-checkbox {
-	width: 25px;
+	width: 20px;
 	height: 20px;
-	position: relative;
-	border: 2px solid rgba(255, 255, 255, 0.24);
-	background: rgba(180, 38, 38, 0.062) !important;
+	display: flex;
+	cursor: pointer;
+	appearance: none;
+	align-items: center;
+	border-radius: 0.25rem;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.auth-component .rememberme-checkbox:checked {
+	background-color: rgb(24, 132, 255);
+	border-color: rgb(24, 132, 255);
+}
+
+.auth-component .rememberme-checkbox:checked::after {
+	content: '✓';
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.auth-form-input:-webkit-autofill {
+	-webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+    -webkit-box-shadow: 0 0 0 1000px rgba(26, 26, 29, 0.7) inset !important;
+}
+
+.auth-form-input:-webkit-autofill:focus {
+    border-color: rgb(24, 132, 255) !important;
+}
+
+.auth-form-input:-moz-autofill {
+    color: white !important;
+    box-shadow: 0 0 0 1000px rgba(26, 26, 29, 0.7) inset !important;
+}
+
+.auth-component li {
+	color: white;
+	margin-left: 1px;
 }
 
 /* top navigation */
