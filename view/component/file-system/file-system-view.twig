@@ -3,7 +3,7 @@
 {# FILE SYSTEM BROWSER COMPONENT - VIEW FILE #}
 {% block component %}
 {# SUB-NAVIGATION #}
-<div class="bg-neutral-900 border-b border-neutral-800 sub-navigation breadcrumb">
+<div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
     {# GET DIRECTORY PATH #}
     {% set parts = currentPath|split('/') %}
     {% set directoryPath = parts|slice(0, parts|length - 1)|join('/') %}

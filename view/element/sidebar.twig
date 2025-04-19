@@ -1,136 +1,78 @@
-<aside id="sidebar" class="text-white md:active border-r border-zinc-800/80 flex flex-col justify-between h-full disable-on-small-devices">
-    <div>
+<aside id="sidebar" class="text-white border-r border-zinc-200/10 bg-gradient-to-b from-zinc-900/100 to-zinc-950/100 backdrop-blur flex flex-col h-full w-64">
+    <div class="px-6 py-4">
         {# USER INFO #}
-        <div class="flex flex-col items-center mb-0 mt-5">
+        <div class="flex flex-col items-center space-y-2">
             {# PROFILE IMAGE #}
-            <div class="profile-image mb-1 border border-neutral-850 rounded-md">
+            <div class="h-20 w-20 rounded-full overflow-hidden border-2 border-zinc-700/50">
                 {% if getUserData().getProfilePic == 'default_pic' %}
-                    <img class="rounded shadow-md" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture">
+                    <img class="h-full w-full object-cover" src="{{ asset('/assets/images/default-profile.jpg') }}" alt="profile picture">
                 {% else %}
-                    <img class="rounded shadow-md" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture">
+                    <img class="h-full w-full object-cover" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture">
                 {% endif %}
             </div>
-            {# USERNAME #}
-            <div class="username font-bold text-xl">{{ getUserData().username|e }}</div>
-            {# USER ROLE #}
-            <div class="role text-base">
-                {% if isAdmin() %}
-                    <span class="text-red-400">{{ getUserData().role|lower|e }}</span>
-                {% else %}
-                    <span class="text-green-500">{{ getUserData().role|lower|e }}</span>
-                {% endif %}
+            
+            {# USERNAME AND ROLE #}
+            <div class="text-center">
+                <h3 id="username" class="font-medium text-lg text-zinc-100">{{ getUserData().username|e }}</h3>
+                <span id="role" class="inline-block px-2 py-1 rounded-full text-xs font-medium mt-1
+                    {% if isAdmin() %}
+                        bg-red-500/10 text-red-400
+                    {% else %}
+                        bg-emerald-500/10 text-emerald-400
+                    {% endif %}">
+                    {{ getUserData().role|lower|e }}
+                </span>
             </div>
         </div>
+    </div>
 
-        {# MENU LINKS #}
-        <ul class="py-0 text-base text-gray-200">
-            {# MAIN-SITE LINK #}
+    {# NAVIGATION #}
+    <nav class="px-1 space-y-1 mb-1">
+        <ul>
+            {# MAIN SITE LINK #}
             {% set current_url = app.request.getSchemeAndHttpHost() %}
             {% if current_url matches '/admin/' %}
                 {% set new_url = current_url|replace({'admin.': ''}) %}
-                <li>
-                    <a href="{{ new_url }}/admin" target="_blank" class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
-                        <i class="fas fa-globe mr-[6.8px] ml-[1.8px]"></i>&nbsp;
-                        <span>Main site</span>
-                    </a>
-                </li>
+                <a href="{{ new_url }}/admin" 
+                target="_blank"
+                class="flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-300 hover:text-white hover:bg-white/5 transition-colors">
+                    <i class="fas fa-globe h-5 w-5"></i>
+                    <span>Main site</span>
+                </a>
             {% endif %}
 
-            {# DASHBOARD LINK #}
-            <li>
-                <a href={{ path('app_dashboard') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4.5px]">
-                    <i class="fas fa-desktop mr-1.5 mt-[3px]"></i>&nbsp;
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            
-            {# LOGS-MANAGER LINK #}
-            <li>
-                <a href={{ path('app_manager_logs') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
-                    <i class="fas fa-list mr-2"></i>&nbsp;
-                    <span>Logs</span>
-                </a>
-            </li>
+            {# MENU ITEMS #}
+            {% set menu_items = [
+                {'route': 'app_dashboard', 'icon': 'fas fa-desktop', 'label': 'Dashboard'},
+                {'route': 'app_manager_logs', 'icon': 'fas fa-list', 'label': 'Logs'},
+                {'route': 'app_manager_database', 'icon': 'fas fa-database', 'label': 'Database'},
+                {'route': 'app_metrics_dashboard', 'icon': 'fas fa-chart-line', 'label': 'Metrics'},
+                {'route': 'app_manager_monitoring', 'icon': 'fa fa-briefcase-medical', 'label': 'Monitoring'},
+                {'route': 'app_diagnostic', 'icon': 'fas fa-check', 'label': 'Diagnostics'},
+                {'route': 'app_system_audit', 'icon': 'fas fa-columns', 'label': 'System audit'},
+                {'route': 'app_file_system_browser', 'icon': 'fas fa-file-export', 'label': 'Filesystem'},
+                {'route': 'app_terminal', 'icon': 'fas fa-terminal', 'label': 'Terminal'},
+                {'route': 'app_todo_manager', 'icon': 'fas fa-tasks', 'label': 'Todos'},
+                {'route': 'app_manager_users', 'icon': 'fas fa-users', 'label': 'Users'},
+                {'route': 'app_account_settings_table', 'icon': 'fas fa-user-cog', 'label': 'Account settings'}
+            ] %}
 
-            {# DATABASE-MANAGER LINK #}
-            <li>
-                <a href={{ path('app_manager_database') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
-                    <i class="fas fa-database mr-[10px]"></i>&nbsp;
-                    <span>Database</span>
-                </a>
-            </li>
-
-            {# METRICS DASHBOARD LINK #}
-            <li>
-                <a href={{ path('app_metrics_dashboard') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
-                    <i class="fas fa-chart-line mr-2"></i>&nbsp;
-                    <span>Metrics</span>
-                </a>
-            </li>
-
-            {# MONITORING-MANAGER LINK #}
-            <li>
-                <a href={{ path('app_manager_monitoring') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
-                    <i class="fa fa-briefcase-medical mr-2"></i>&nbsp;
-                    <span>Monitoring</span>
-                </a>
-            </li>
-
-            {# DIAGNOSTICS LINK #}
-            <li>
-                <a href={{ path('app_diagnostic') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
-                    <i class="fas fa-check mr-2"></i>&nbsp;
-                    <span>Diagnostics</span>
-                </a>
-            </li>
-
-            {# SYSTEM-AUDIT LINK #}
-            <li>
-                <a href={{ path('app_system_audit') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
-                    <i class="fas fa-columns mr-2"></i>&nbsp;
-                    <span>System audit</span>
-                </a>
-            </li>
-
-            {# FILESYSTEM BROWSER LINK #}
-            <li>
-                <a href={{ path('app_file_system_browser') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
-                    <i class="fas fa-file-export mr-1.5"></i>&nbsp;
-                    <span>Filesystem</span>
-                </a>
-            </li>
-
-            {# TERMINAL LINK #}
-            <li>
-                <a href={{ path('app_terminal') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
-                    <i class="fas fa-terminal mr-1.5"></i>&nbsp;
-                    <span>Terminal</span>
-                </a>
-            </li>
-
-            {# TODO-MANAGER LINK #}
-            <li>
-                <a href={{ path('app_todo_manager') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
-                    <i class="fas fa-tasks mr-2"></i>&nbsp;
-                    <span>Todos ({{ getTodosCount() }})</span>
-                </a>
-            </li>
-
-            {# USERS-MANAGER LINK #}
-            <li>
-                <a href={{ path('app_manager_users') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
-                    <i class="fas fa-users mr-1"></i>&nbsp;
-                    <span>Users</span>
-                </a>
-            </li>
-
-            {# ACCOUNT-SETTINGS LINK #}
-            <li>
-                <a href={{ path('app_account_settings_table') }} class="flex items-center border-b border-zinc-800/80 block px-3 py-[5px] pt-[4px]">
-                    <i class="fas fa-user-cog mr-1"></i>&nbsp;
-                    <span>Account settings</span>
-                </a>
-            </li>
+            {% for item in menu_items %}
+                <li>
+                    <a href="{{ path(item.route) }}" 
+                    class="flex items-center pl-1 px-1 py-2 rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-colors">
+                        <i class="{{ item.icon }} h-5 w-5 mt-1 mr-1 ml-1"></i>
+                        <span>
+                            {{ item.label }}
+                            {% if item.route == 'app_todo_manager' and getTodosCount() > 0 %}
+                                <span class="ml-1 px-2 py-0.5 text-xs rounded-full bg-zinc-700">
+                                    {{ getTodosCount() }}
+                                </span>
+                            {% endif %}
+                        </span>
+                    </a>
+                </li>
+            {% endfor %}
         </ul>
-    </div>
+    </nav>
 </aside>

@@ -41,8 +41,8 @@ class DashboardControllerTest extends CustomTestCase
         $this->assertSelectorExists('a[href="/logout"]');
         $this->assertSelectorExists('aside[id="sidebar"]');
         $this->assertSelectorExists('img[alt="profile picture"]');
-        $this->assertSelectorExists('div[class="username font-bold text-xl"]');
-        $this->assertSelectorExists('div[class="role text-base"]');
+        $this->assertSelectorExists('h3[id="username"]');
+        $this->assertSelectorExists('span[id="role"]');
         $this->assertSelectorExists('a[href="/dashboard"]');
         $this->assertSelectorExists('a[href="/manager/logs"]');
         $this->assertSelectorExists('a[href="/manager/database"]');
