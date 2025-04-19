@@ -33,9 +33,7 @@
             {% set current_url = app.request.getSchemeAndHttpHost() %}
             {% if current_url matches '/admin/' %}
                 {% set new_url = current_url|replace({'admin.': ''}) %}
-                <a href="{{ new_url }}/admin" 
-                target="_blank"
-                class="flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-300 hover:text-white hover:bg-white/5 bg-white/5 mb-[2px] transition-colors">
+                <a href="{{ new_url }}/admin" target="_blank" class="flex items-center space-x-3 px-3 py-2 rounded text-zinc-300 hover:text-white hover:bg-white/5 bg-white/5 mb-[2px] transition-colors">
                     <i class="fas fa-globe h-5 w-5"></i>
                     <span>Main site</span>
                 </a>
@@ -59,8 +57,7 @@
 
             {% for item in menu_items %}
                 <li>
-                    <a href="{{ path(item.route) }}" 
-                    class="flex items-center pl-1 px-1 py-2 rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-colors">
+                    <a href="{{ path(item.route) }}" class="flex items-center pl-1 px-1 py-2 rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-colors">
                         <i class="{{ item.icon }} h-5 w-5 mt-1 mr-1 ml-1"></i>
                         <span>
                             {{ item.label }}
