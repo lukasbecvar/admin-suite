@@ -13,7 +13,7 @@
             
             {# USERNAME AND ROLE #}
             <div class="text-center">
-                <h3 id="username" class="font-medium text-lg text-zinc-100">{{ getUserData().username|e }}</h3>
+                <h3 id="username" class="font-medium text-2xl text-zinc-100">{{ getUserData().username|e }}</h3>
                 <span id="role" class="inline-block px-2 py-1 rounded-full text-xs font-medium mt-1
                     {% if isAdmin() %}
                         bg-red-500/10 text-red-400

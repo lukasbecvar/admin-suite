@@ -29,7 +29,7 @@ class SystemResourcesApiController extends AbstractController
      *
      * @return JsonResponse The system resources data
      */
-    #[Authorization(authorization: 'ADMIN')]
+    #[Authorization(authorization: 'USER')]
     #[Route('/api/system/resources', methods: ['GET'], name: 'api_system_resources')]
     public function terminalAction(): JsonResponse
     {

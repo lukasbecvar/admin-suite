@@ -11,7 +11,7 @@ body {
 }
 
 main {
-	margin-top: 28px;
+	margin-top: 38px;
 }
 
 #main-content {
@@ -19,7 +19,7 @@ main {
 	margin-left: 0; 
 	position: relative;
 	flex-direction: column;
-	height: calc(100vh - 28px);
+	height: calc(100vh - 38px);
 	transition: margin-left 0.2s ease; 
 }
 
@@ -219,6 +219,11 @@ main {
 	position: fixed;
 	padding-top: 2px;
 	padding-bottom: 2px;
+	height: 38px;
+}
+
+.nav-bar a .logout-text {
+	margin-top: -2px !important;
 }
 
 /* sub navigation */
@@ -512,6 +517,13 @@ main {
 	}
 	.nav-bar {
 		height: 30px;
+	}
+	.nav-bar a .menu-icon {
+		font-size: 35px;
+	}
+	.nav-bar a .logout-icon {
+		font-size: 22px;
+		margin-top: -1.2px;
 	}
 	#sidebar {
 		top: 29.5px;

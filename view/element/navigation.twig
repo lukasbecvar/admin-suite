@@ -2,14 +2,14 @@
     <div class="px-1 flex items-center justify-between">
         {# TOGGLE SIDEBAR BUTTON #}
         <button id="menu-toggle" class="inline-flex items-center justify-center gap-1 rounded px-1 py-[2px] mt-[1px] text-sm font-medium text-zinc-300 transition-all hover:text-white hover:bg-white/10 active:bg-white/20" title="open/close sidebar">
-            <i class="fas fa-bars text-lg"></i>
-            <span class="hidden sm:inline">Menu</span>
+            <i class="fas fa-bars text-lg menu-icon"></i>
+            <span class="phone-none sm:inline text-xl">Menu</span>
         </button>
 
         {# LOGOUT BUTTON #}
         <a href={{ path('app_auth_logout') }} class="inline-flex items-center justify-center rounded px-1 py-[2px] mt-[1px] text-sm font-medium text-zinc-300 transition-all hover:text-red-400 hover:bg-red-400/10 active:bg-red-400/20" title="Logout user">
-            <i class="fas fa-sign-out-alt text-lg"></i>
-            <span class="hidden sm:inline ml-1">Logout</span>
+            <i class="fas fa-sign-out-alt text-lg logout-icon"></i>
+            <span class="phone-none sm:inline ml-1 text-xl logout-text">Logout</span>
         </a>
     </div>
 </nav>
