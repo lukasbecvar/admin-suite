@@ -12,11 +12,11 @@
 
 {# DATABASE CONSOLE #}
 <div class="p-1 shadow-md backdrop-blur-md bg-white/5 border border-white/20 rounded mb-2 database-console rounded">
-    <h2 class="text-2xl text-center text-white font-semibold">Database console</h2>
+    <h2 class="text-xl text-center text-white/80 font-semibold mt-1 mb-1">Database console</h2>
 
     {# OUTPUT BOX #}
     {% if output is not null %}
-        <div class="backdrop-blur-md bg-white/5 ml-2 mr-2 mt-1 border border-white/20 shadow-md animate-popin text-white">
+        <div class="backdrop-blur-md bg-white/5 ml-2 mr-2 mt-2 border border-white/20 shadow-md animate-popin text-white rounded">
             <p class="text-lg font-semibold border-b border-white/20 p-1">Database output</p>
             <pre id="query-output" class="text-sm whitespace-pre-wrap break-words p-2">{{ output|raw }}</pre>
         </div>
