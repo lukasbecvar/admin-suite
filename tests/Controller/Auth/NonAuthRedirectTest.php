@@ -104,6 +104,9 @@ class NonAuthRedirectTest extends WebTestCase
             ['method' => 'GET', 'url' => '/metrics/service'],
             ['method' => 'GET', 'url' => '/metrics/dashboard'],
             ['method' => 'GET', 'url' => '/metrics/service/all']
+        ],
+        'system_audit' => [
+            ['method' => 'GET', 'url' => '/system/audit']
         ]
     ];
 
