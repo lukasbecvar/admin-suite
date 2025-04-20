@@ -1,7 +1,7 @@
 {% extends 'common/layout.twig' %}
 
 {# MONITPORING DASHBOARD #}
-{% block component %} 
+{% block component %}
 <div class="users-manager component">
     {# SUB-NAVIGATION #}
     <div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
@@ -36,8 +36,8 @@
     {# SERVICES STATUS LOG #}
     {% if monitoringLogs|length > 0 %}        
         <div class="grid grid-cols-1 sm:grid-cols-1 gap-1 p-2 pt-2 py-0 component">
-            <div class="bg-neutral-900 border border-neutral-800 shadow-md card-color w-full sm:col-span-2 card-component rounded">
-                <div class="px-2 py-2 border-b border-neutral-800 font-extrabold text-white">Status log</div>
+            <div class="backdrop-blur-md bg-white/5 border border-white/20 shadow-md w-full sm:col-span-2 card-component rounded">
+                <div class="px-2 py-2 border-b border-white/10 font-extrabold text-white">Status log</div>
                 <div class="p-1 card-text" style="max-height: 200px; overflow-y: auto;">
                     {% for log in monitoringLogs %}
                         <p class="text-gray-200 text-lg">[{{ log.time|date('Y-m-d H:i:s') }}]: {{ log.message|e }}</p>
@@ -50,12 +50,12 @@
     {# SERVICES STATUS CARDS #}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2 pt-2">
         {# SERVICES DASHBOARD CARD #}
-        <div class="border border-neutral-800 shadow-lg overflow-hidden w-full max-h-50 card-color card-component rounded">
-            <div class="px-2 py-2 border-b border-neutral-800 text-white font-bold">Internal services</div>
-            <div class="p-1 overflow-y-auto h-70">
+        <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-lg overflow-hidden w-full max-h-50 card-component rounded">
+            <div class="px-2 py-2 border-b border-white/15 text-white/80 font-bold">Internal services</div>
+            <div class="p-1 overflow-y-auto h-70 mb-[-5px]">
                 
                 {# UFW SERVICE #}
-                <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-910 p-2 border border-neutral-800 rounded">
+                <div class="flex justify-between items-center bg-neutral-500/5 border border-white/10 rounded p-2 text-sm hover:bg-white/10 transition mb-[5px] mt-[2px] mr-[2px] ml-[2px]">
                     <div class="flex items-center space-x-2">
                         <span class="text-gray-300 font-semibold">UFW</span>
                         <span class="text-white ml-r">
@@ -82,12 +82,11 @@
                 {% for service in services %}
                     {% if service.display %}
                         {% if service.type == 'systemd' %}
-                            
                             {# SERVICE STATUS #}
                             {% set serviceStatus = serviceManager.isServiceRunning(service.service_name) %}
 
                             {# SERVICE ITEM #}
-                            <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-910 p-2 border border-neutral-800 rounded">
+                            <div class="flex justify-between items-center bg-neutral-500/5 border border-white/10 rounded p-2 text-sm hover:bg-white/10 transition mb-[5px] mr-[2px] ml-[2px]">
                                 <div class="flex items-center space-x-2">
                                     <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
                                     <span class="text-white ml-r">
@@ -119,11 +118,11 @@
         </div>
 
         {# SERVICES DASHBOARD CARD #}
-        <div class="border border-neutral-800 shadow-lg overflow-hidden w-full max-h-50 card-color card-component rounded">
-            <div class="px-2 py-2 border-b border-neutral-800 text-white font-bold">
+        <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-lg overflow-hidden w-full max-h-50 card-component rounded">
+            <div class="px-2 py-2 border-b border-white/15 text-white/80 font-bold">
                 HTTP services
                 <a href={{ path('app_metrics_services_all') }} class="text-blue-500 hover:text-blue-300" title="View metrics">
-                    <i class="fa fa-chart-line border-neutral-800 border p-1 rounded" aria-hidden="true"></i>
+                    <i class="fa fa-chart-line border-neutral-500 border p-1 rounded" aria-hidden="true"></i>
                 </a>
             </div>
             <div class="p-1 overflow-y-auto h-50">
@@ -137,7 +136,7 @@
                             {% set serviceStatus = serviceManager.checkWebsiteStatus(service.url) %}
 
                             {# SERVICE ITEM #}
-                            <div class="hover:bg-neutral-800 flex justify-between items-center mb-1 bg-neutral-910 p-2 border border-neutral-800 rounded">
+                            <div class="flex justify-between items-center bg-neutral-500/5 border border-white/10 rounded p-2 text-sm hover:bg-white/10 transition mb-[5px] mr-[2px] ml-[2px] mt-[2px]">
                                 <div class="flex items-center space-x-2">
                                     <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
                                     <span class="text-white ml-r">
@@ -153,8 +152,8 @@
                                         (SLA: {{ monitoringManager.getServiceMountlySLA(service.service_name) is not null ? monitoringManager.getServiceMountlySLA(service.service_name)|e ~ '%' : 'unknown' }})
                                     </span>
                                     {% if service.metrics_monitoring.collect_metrics == true %}
-                                        <a href={{ path('app_metrics_service', {'service_name': service.service_name}) }} class="text-blue-500 hover:text-blue-300" title="View metrics">
-                                            <i class="fa fa-chart-line border-neutral-800 border p-1 rounded" aria-hidden="true"></i>
+                                        <a href={{ path('app_metrics_service', {'service_name': service.service_name}) }} class="text-blue-500 hover:text-blue-300 bg-neutral-800" title="View metrics">
+                                            <i class="fa fa-chart-line border-neutral-500 border p-1 rounded" aria-hidden="true"></i>
                                         </a>
                                     {% endif %}
                                 </div>
@@ -169,28 +168,28 @@
     {# SLA HISTORY CARD #}
     {% if slaHistory|length > 0 %}
         <div class="grid grid-cols-1 sm:grid-cols-1 gap-1 p-2 pt-1 mb-4 py-0 component">
-            <div class="border border-neutral-800 shadow-lg overflow-hidden w-full card-color card-component rounded">
-                <div class="px-2 py-2 border-b border-neutral-800 text-white font-extrabold flex items-center justify-between">
+                <div class="backdrop-blur-md bg-white/5 border border-white/20 shadow-lg overflow-hidden w-full card-component rounded">
+                    <div class="px-2 py-2 border-b border-white/10 text-white/80 font-extrabold flex items-center justify-between">
                     <span>SLA History</span>
                     <a href={{ path('app_manager_monitoring_export_slahistory') }} id="loading-blocker" class="text-indigo-400 hover:text-indigo-300" title="Export SLA History">Export</a>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                     {% for service, slaData in slaHistory %}
                         <div class="service-card bg-neutral-800 w-full">
-                            <div class="px-2 py-1 bg-neutral-910 border border-neutral-800">
+                            <div class="px-2 py-1 bg-neutral-900/10 border border-white/10">
                                 <h3 class="text-white text-xl font-semibold">{{ service|e }}</h3>
                             </div>
                             <table class="w-full text-gray-200">
                                 <thead>
-                                    <tr class="bg-neutral-910 border border-neutral-800">
-                                        <th class="p-2 border-r border-neutral-800">Timeframe</th>
+                                    <tr class="bg-white/1 border border-white/10">
+                                        <th class="p-2 border-r border-neutral-700">Timeframe</th>
                                         <th class="p-2">SLA</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for month, sla in slaData %}
-                                        <tr class="bg-neutral-910 hover:bg-neutral-800 border border-neutral-800">
-                                            <td class="p-2 border-r border-neutral-800">{{ month }}</td>
+                                        <tr class="bg-white/1 hover:bg-neutral-700 border border-neutral-700">
+                                            <td class="p-2 border-r border-neutral-700">{{ month }}</td>
                                             {% if sla < 99 %}
                                                 <td class="p-2 text-red-500">{{ sla|e }}%</td>
                                             {% else %}

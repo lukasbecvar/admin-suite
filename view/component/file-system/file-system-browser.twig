@@ -33,7 +33,7 @@
 
 <div class="component">
     {# FILESYSTEM PATH BREADCRUMB #}
-    <div class="p-1 card-color border-b border-neutral-800 shadow flex items-center space-x-2">
+    <div class="p-1 card-color border-b border-neutral-700 shadow flex items-center space-x-2">
         <span class="text-sm font-medium text-gray-300">Path:</span>
         <span class="text-sm text-gray-100">
             {% set parts = currentPath|split('/') %}
@@ -57,7 +57,7 @@
     {# FILES LIST TABLE #}
     <div class="overflow-auto">
         <table class="min-w-full">
-            <thead class="card-color border-b border-neutral-800">
+            <thead class="bg-white/10 border-b border-neutral-600">
                 <tr>
                     <th scope="col" class="text-white px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                         Name
@@ -73,10 +73,10 @@
                     </th>
                 </tr>
             </thead>
-            <tbody class="card-color">
+            <tbody class="bg-white/5">
                 {% for file in filesystemList %}
-                    <tr class="hover:bg-neutral-800">
-                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-100 border-b border-neutral-800">
+                    <tr class="hover:bg-neutral-700">
+                        <td class="px-2 py-2 text-left relative border-b border-neutral-850">
                             {% if file.isDir %}
                                 <a href={{ path('app_file_system_browser', { 'path': currentPath ~ '/' ~ file.name }) }} class="link font-bold">
                                     {{ file.name|e }}
@@ -87,9 +87,9 @@
                                 </a>
                             {% endif %}
                         </td>
-                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-100 border-b border-neutral-800">{{ file.size|e }}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-100 border-b border-neutral-800">{{ file.permissions|e }}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-100 border-b border-neutral-800">{{ file.creationTime|e }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-100 border-b border-neutral-700">{{ file.size|e }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-100 border-b border-neutral-700">{{ file.permissions|e }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-100 border-b border-neutral-700">{{ file.creationTime|e }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

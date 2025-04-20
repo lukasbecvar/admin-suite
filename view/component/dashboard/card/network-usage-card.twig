@@ -1,61 +1,67 @@
-<div class="card-color bg-neutral-900 border border-neutral-800 shadow-lg rounded w-full">
-    <div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
-        <span>Network usage</span>
+<div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded shadow-xl text-white w-full overflow-hidden">
+    <div class="px-3 py-3 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <i class="fas fa-network-wired text-white/70"></i>
+            Network usage
+        </div>
         <a href={{ path('app_metrics_dashboard') }} class="text-indigo-400 hover:text-indigo-300 text-xs" title="Go to metrics view">View All</a>
     </div>
     <div class="relative min-h-[180px]">
-        {# LOADING COMPONENT #}
+        {# LOADING STATE #}
         <div id="loading-network-stats" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-5xl">
-            <div class="flex items-center mt-5 phone-mt-disable">
+            <div class="flex items-center">
                 <i class="fas fa-spinner fa-spin fa-2x text-cyan-200"></i>
             </div>
         </div>
-
-        {# NETWORK STATS INFO #}
+        {# NETWORK DATA #}
         <div id="network-stats" class="hidden animate-popin">
-            <div class="grid grid-cols-2 gap-x-4 col-span-2 p-3 pt-0 pb-0 mt-2">
+            <div class="grid grid-cols-2 gap-x-6 p-4 pt-2 pb-0 text-base text-white/90">
                 <div>
-                    <p class="text-gray-300 mb-2">
-                        Download (Mbps): <span class="text-white font-semibold" id="network-usage-download">...</span>
+                    <p class="text-white/80 mb-1">
+                        <i class="fas fa-arrow-down text-cyan-300 mr-[5px]"></i>
+                        Download: <span class="font-semibold text-white" id="network-usage-download">...</span>
                     </p>
                 </div>
                 <div>
-                    <p class="text-gray-300 mb-2">
-                        Upload (Mbps): <span class="text-white font-semibold" id="network-usage-upload">...</span>
+                    <p class="text-white/80 mb-1">
+                        <i class="fas fa-arrow-up text-green-300 mr-[5px]"></i>
+                        Upload: <span class="font-semibold text-white" id="network-usage-upload">...</span>
                     </p>
                 </div>
                 <div>
-                    <p class="text-gray-300 mb-2">
-                        Ping: <span class="text-white font-semibold" id="network-usage-ping">...</span>
+                    <p class="text-white/80 mb-1">
+                        <i class="fas fa-tachometer-alt text-yellow-300 ml-[-1px] mr-[3px]"></i>
+                        Ping: <span class="font-semibold text-white" id="network-usage-ping">...</span>
                     </p>
                 </div>
                 <div>
-                    <p class="text-gray-300 mb-2">
-                        Interface: <span class="text-white font-semibold" id="network-usage-interface">...</span>
+                    <p class="text-white/80 mb-1">
+                        <i class="fas fa-ethernet text-indigo-300 mr-1"></i>
+                        Interface: <span class="font-semibold text-white" id="network-usage-interface">...</span>
                     </p>
                 </div>
                 <div>
-                    <p class="text-gray-300 mb-2">
-                        Ping server: <span class="text-white font-semibold" id="network-usage-ping-server">...</span>
+                    <p class="text-white/80 mb-1">
+                        <i class="fas fa-server text-pink-300 mr-1"></i>
+                        Ping ip: <span class="font-semibold text-white" id="network-usage-ping-server">...</span>
                     </p>
                 </div>
                 <div>
-                    <p class="text-gray-300 mb-2">
-                        Public IP: <span class="text-white font-semibold">{{ hostServerPublicIP|e }}</span>
+                    <p class="text-white/80 mb-1">
+                        <i class="fas fa-globe text-blue-300 mr-1"></i>
+                        IP: <span class="font-semibold text-white">{{ hostServerPublicIP|e }}</span>
                     </p>
                 </div>
             </div>
-
             {# LAST CHECK TIME #}
-            <p class="text-gray-300 mb-1 ml-3">
+            <p class="text-white/70 text-base ml-4 mt-0">
                 Last check time: <span class="text-white font-semibold" id="network-last-check-time">...</span>
             </p>
-
-            {# NETWORK USAGE PROGRESS BAR #}
-            <div class="p-3 pb-1 mt-[-6px]">
-                <p class="text-gray-300 mb-1">Usage: <span class="text-white" id="network-usage">...</span></p>
-                <div class="progress-bar">
-                    <div class="progress" id="network-progress" style="width: 0%;"></div>
+            {# USAGE BAR #}
+            <div class="px-4 pb-2 pt-1">
+                <p class="text-white/70 text-base mb-1">Usage: <span class="text-white" id="network-usage">...</span></p>
+                <div class="w-full h-4 bg-white/10 rounded overflow-hidden">
+                    <div class="h-full bg-cyan-400 transition-all duration-300 ease-in-out" id="network-progress" style="width: 0%;"></div>
                 </div>
             </div>
         </div>

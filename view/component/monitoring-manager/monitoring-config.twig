@@ -16,8 +16,8 @@
     <div class="text-white p-2">
         {% for service in services %}
             {% if service.type == 'systemd' %}
-                <div class="mb-2 bg-gray-800 shadow-md border border-neutral-800 card-color rounded">
-                    <h2 class="px-2 py-2 border-b border-neutral-800 text-white font-bold">{{ service.display_name|e }}</h2>
+                <div class="mb-2 backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded">
+                    <h2 class="px-2 py-2 border-b border-white/10 text-white font-bold">{{ service.display_name|e }}</h2>
                     <div class="grid grid-cols-2 gap-2 p-2">
                         <p><span class="font-semibold">Service Name:</span> {{ service.service_name|e }}</p>
                         <p><span class="font-semibold">Display Name:</span> {{ service.display_name|e }}</p>
@@ -26,8 +26,8 @@
                     </div>
                 </div>
             {% elseif service.type == 'http' %}
-                <div class="mb-2 bg-gray-800 shadow-md border border-neutral-800 card-color rounded">
-                    <h2 class="px-2 py-2 border-b border-neutral-800 text-white font-bold">{{ service.display_name|e }}</h2>
+                <div class="mb-2 backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded">
+                    <h2 class="px-2 py-2 border-b border-white/10 text-white font-bold">{{ service.display_name|e }}</h2>
                     <div class="grid grid-cols-2 gap-2 p-2">
                         <p><span class="font-semibold">Service Name:</span> {{ service.service_name|e }}</p>
                         <p><span class="font-semibold">Display Name:</span> {{ service.display_name|e }}</p>

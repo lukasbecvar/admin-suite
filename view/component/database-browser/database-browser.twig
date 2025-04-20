@@ -52,26 +52,26 @@
         <div class="overflow-x-auto">
             {% if databaseName == '' %}
                 {# DATABASE LIST #}
-                <table class="min-w-full bg-neutral-880 text-white border border-neutral-800 card-color whitespace-nowrap">
+                <table class="min-w-full text-white whitespace-nowrap bg-white/5 border border-white/10">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2 border-b border-neutral-800 text-left">Database</th>
-                            <th class="px-4 py-2 border-b border-neutral-800 text-right">Tables</th>
-                            <th class="px-4 py-2 border-b border-neutral-800 text-right">Size (MB)</th>
+                            <th class="px-4 py-2 border-b border-white/15 text-left">Database</th>
+                            <th class="px-4 py-2 border-b border-white/15 text-right">Tables</th>
+                            <th class="px-4 py-2 border-b border-white/15 text-right">Size (MB)</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for database in databases %}
-                            <tr class="hover:bg-neutral-800">
-                                <td class="px-4 py-2 border-b border-neutral-800 text-left">
+                            <tr class="hover:bg-neutral-700">
+                                <td class="px-4 py-2 border-b border-white/10 text-left">
                                     <a href={{ path('app_manager_database', {'database': database.name}) }} class="database-link">
                                         {{ database.name|e }}
                                     </a>
                                 </td>
-                                <td class="px-4 py-2 border-b border-neutral-800 text-right">
+                                <td class="px-4 py-2 border-b border-white/10 text-right">
                                     {{ database.table_count|e }}
                                 </td>
-                                <td class="px-4 py-2 border-b border-neutral-800 text-right">
+                                <td class="px-4 py-2 border-b border-white/10 text-right">
                                     {{ database.size_mb|number_format(2)|e }}
                                 </td>
                             </tr>
@@ -85,26 +85,26 @@
                         No tables found
                     </p>
                 {% else %}
-                    <table class="min-w-full bg-neutral-880 text-white border border-neutral-800 card-color whitespace-nowrap">
+                    <table class="min-w-full text-white whitespace-nowrap bg-white/5 border border-white/10">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 border-b border-neutral-800 text-left">Table</th>
-                                <th class="px-4 py-2 border-b border-neutral-800 text-right">Rows</th>
-                                <th class="px-4 py-2 border-b border-neutral-800 text-right">Size (MB)</th>
+                                <th class="px-4 py-2 border-b border-white/15 text-left">Table</th>
+                                <th class="px-4 py-2 border-b border-white/15 text-right">Rows</th>
+                                <th class="px-4 py-2 border-b border-white/15 text-right">Size (MB)</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for table in tables %}
-                                <tr class="hover:bg-neutral-800">
-                                    <td class="px-4 py-2 border-b border-neutral-800 text-left">
+                                <tr class="hover:bg-neutral-700">
+                                    <td class="px-4 py-2 border-b border-white/10 text-left">
                                         <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': table.name}) }} class="database-link">
                                             {{ table.name|e }}
                                         </a>
                                     </td>
-                                    <td class="px-4 py-2 border-b border-neutral-800 text-right">
+                                    <td class="px-4 py-2 border-b border-white/10 text-right">
                                         {{ table.row_count|e }}
                                     </td>
-                                    <td class="px-4 py-2 border-b border-neutral-800 text-right">
+                                    <td class="px-4 py-2 border-b border-white/10 text-right">
                                         {{ table.size_mb|number_format(2)|e }}
                                     </td>
                                 </tr>

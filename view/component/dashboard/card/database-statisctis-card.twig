@@ -1,60 +1,71 @@
-<div class="card-color bg-neutral-900 border border-neutral-800 shadow-lg rounded w-full">
-    <div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
-        <span>Database statistics</span>
+<div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded shadow-xl text-white w-full overflow-hidden">
+    <div class="px-3 py-3 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
+        <i class="fas fa-database text-white/70"></i>
+        Database statistics
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="divide-y divide-white/10 space-y-0">
         {# SECTION: LOGS #}
-        <div class="col-span-2 text-white font-semibold text-sm border-b border-neutral-800 p-1 pl-3 flex items-center justify-between">
-            <span>Logs</span>
-            <a href={{ path('app_manager_logs') }} class="pr-2 text-indigo-400 hover:text-indigo-300 text-xs" title="Go to logs">View All</a>
-        </div>
-        <div class="grid grid-cols-2 gap-x-4 col-span-2 p-3 pt-0 pb-0 mb-[-10px] mt-[-5px]">
-            <div>
-                <p class="text-gray-300 mb-1">
-                    Logs count: <span class="text-white font-semibold">{{ allLogsCount|e }}</span>
-                </p>
+        <div class="space-y-0">
+            <div class="flex items-center justify-between border-b border-white/10">
+                <div class="flex items-center gap-2 text-sm text-white/70 font-semibold p-2">
+                    <i class="fas fa-scroll text-white/50"></i>
+                    Logs
+                </div>
+                <a href={{ path('app_manager_logs') }} class="text-indigo-400 hover:text-indigo-300 text-xs pr-2 font-semibold" title="Go to logs">View All</a>
             </div>
-            <div>
-                <p class="text-gray-300 mb-1">
-                    Auth logs: <span class="text-white font-semibold">{{ authLogsCount|e }}</span>
-                </p>
-            </div>
-            <div>
-                <p class="text-gray-300 mb-1">
-                    Readed: <span class="text-white font-semibold">{{ readedLogsCount|e }}</span>
-                </p>
-            </div>
-            <div>
-                <p class="text-gray-300 mb-1">
-                    Unreaded: <span class="text-white font-semibold">{{ unreadedLogsCount|e }}</span>
-                </p>
-            </div>
-        </div>
 
-        {# SECTION: USERS #}
-        <div class="col-span-2 text-white font-semibold text-sm border-b border-t border-neutral-800 p-1 pl-3 flex items-center justify-between">
-            <span>Users</span>
-            <a href={{ path('app_manager_users') }} class="pr-2 text-indigo-400 hover:text-indigo-300 text-xs" title="Go to users manager">View All</a>
+            <div class="grid grid-cols-2 gap-x-4 col-span-2 p-2 pb-1">
+                <div>
+                    <p class="text-gray-300 mb-1">
+                        Logs count: <span class="text-white font-semibold">{{ allLogsCount|e }}</span>
+                    </p>
+                </div>
+                <div>
+                    <p class="text-gray-300 mb-1">
+                        Auth logs: <span class="text-white font-semibold">{{ authLogsCount|e }}</span>
+                    </p>
+                </div>
+                <div>
+                    <p class="text-gray-300 mb-1">
+                        Readed: <span class="text-white font-semibold">{{ readedLogsCount|e }}</span>
+                    </p>
+                </div>
+                <div>
+                    <p class="text-gray-300 mb-1">
+                        Unreaded: <span class="text-white font-semibold">{{ unreadedLogsCount|e }}</span>
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="grid grid-cols-2 gap-x-4 col-span-2 p-3 pt-0 pb-1 mt-[-5px]">
-            <div>
-                <p class="text-gray-300 mb-1">
-                    Users count: <span class="text-white font-semibold">{{ usersCount|e }}</span>
-                </p>
+        {# SECTION: USERS #}
+        <div class="space-y-2">
+            <div class="flex items-center justify-between border-b border-white/10">
+                <div class="flex items-center gap-2 text-sm text-white/70 font-semibold p-2">
+                    <i class="fas fa-users text-white/50"></i>
+                    Users
+                </div>
+                <a href={{ path('app_manager_users') }} class="text-indigo-400 hover:text-indigo-300 text-xs pr-2 font-semibold" title="Go to users manager">View All</a>
             </div>
-            <div>
-                <p class="text-gray-300 mb-1">
-                    Online: <span class="text-white font-semibold">
-                        {{ onlineUsersCount|e }} (<a href="{{ path('app_manager_users', {'filter': 'online'}) }}" class="text-blue-400 hover:text-blue-300">list</a>)
-                    </span>
-                </p>
-            </div>
-            <div class="col-span-2">
-                <p class="text-gray-300 mb-1">
-                    Banned: <span class="text-white font-semibold">
-                        {{ bannedUsersCount|e }} (<a href="{{ path('app_manager_users', {'filter': 'banned'}) }}" class="text-blue-400 hover:text-blue-300">list</a>)
-                    </span>
-                </p>
+            <div class="grid grid-cols-2 gap-x-4 col-span-2 p-2 pb-1">
+                <div>
+                    <p class="text-gray-300 mb-1">
+                        Users count: <span class="text-white font-semibold">{{ usersCount|e }}</span>
+                    </p>
+                </div>
+                <div>
+                    <p class="text-gray-300 mb-1">
+                        Online: <span class="text-white font-semibold">
+                            {{ onlineUsersCount|e }} (<a href="{{ path('app_manager_users', {'filter': 'online'}) }}" class="text-blue-400 hover:text-blue-300">list</a>)
+                        </span>
+                    </p>
+                </div>
+                <div class="col-span-2">
+                    <p class="text-gray-300 mb-1">
+                        Banned: <span class="text-white font-semibold">
+                            {{ bannedUsersCount|e }} (<a href="{{ path('app_manager_users', {'filter': 'banned'}) }}" class="text-blue-400 hover:text-blue-300">list</a>)
+                        </span>
+                    </p>
+                </div>
             </div>
         </div>
     </div>

@@ -5,7 +5,7 @@
 } 
 
 ::-webkit-scrollbar-track {
-	background: #202122 !important;
+	background: #2c2d2e !important;
 }
  
 .card-component ::-webkit-scrollbar-track {
@@ -19,12 +19,12 @@
 ::-webkit-scrollbar-thumb {
 	-webkit-transition: all 0.2s ease;
 	transition: all 0.2s ease;
-	background: #373b42;
+	background: #474c55;
 	min-height: 40px;
 } 
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #5c646b;
+	background: rgb(99, 106, 112);
 }
 
 /* mobile devices style */

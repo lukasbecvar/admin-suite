@@ -52,8 +52,6 @@ Encore
                         extend: {
                             screens: {
                                 'phn': '340px',
-
-                                // screen sizes limit properties for show small screen error message
                                 'xs': { max: "265px" },
                                 'short': { raw: "(max-height: 160px)" }
                             },

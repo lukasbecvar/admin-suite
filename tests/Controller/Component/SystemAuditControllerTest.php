@@ -42,7 +42,7 @@ class SystemAuditControllerTest extends CustomTestCase
         $this->assertSelectorExists('a[title="Go to metrics dashboard"]');
         $this->assertSelectorTextContains('body', 'Process list');
         $this->assertSelectorTextContains('body', 'Linux system users');
-        $this->assertSelectorTextContains('body', 'Firewall open ports (ufw)');
+        $this->assertSelectorTextContains('body', 'Firewall open ports (UFW)');
         $this->assertSelectorTextContains('body', 'System information');
         $this->assertSelectorTextContains('body', 'SSH access history');
         $this->assertSelectorTextContains('body', 'Journalctl live logs');

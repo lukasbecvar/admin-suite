@@ -1,13 +1,13 @@
-<div class="border border-neutral-800 shadow-lg rounded overflow-hidden w-full card-color max-h-50">
-    <div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
-        <span>Monitoring</span>
-        <a href={{ path('app_manager_monitoring') }} class="text-indigo-400 hover:text-indigo-300 text-xs" title="Go to monitoring">View All</a>
+<div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded shadow-xl text-white w-full overflow-hidden">
+    <div class="px-3 py-3 border-b border-white/10 text-white/80 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
+        <span><i class="fas fa-desktop text-white/70"></i> <span class="ml-[6px]">Monitoring</span></span>
+        <a href={{ path('app_manager_monitoring') }} class="text-indigo-400 hover:text-indigo-300 text-xs font-semibold transition" title="Go to metrics view">View All</a>
     </div>
-    <div class="p-1 py-0 overflow-y-auto max-h-72">
+    <div class="p-1 py-0 overflow-y-auto max-h-[320px] pb-1 pt-[1px]">
         {# UFW SERVICE #}
-        <div class="flex justify-between items-center mb-1 mt-1 bg-neutral-910 p-2 border border-neutral-800 hover:bg-neutral-800 rounded text-sm">
+        <div class="flex justify-between items-center bg-neutral-500/5 border border-white/10 rounded p-2 text-sm hover:bg-white/10 transition mb-1 mt-[4px] mr-[2px] ml-[2px]">
             <div class="flex items-center space-x-2">
-                <span class="text-gray-300 font-semibold">UFW</span>
+                <span class="text-gray-300 font-semibold mr-[-4px]">UFW</span>
                 <span class="text-white">
                     {% if serviceManager.isUfwRunning() %}
                         [<span class="text-green-500 font-bold">ONLINE</span>]
@@ -29,9 +29,9 @@
         {% for service in services %}
             {% if service.display %}
                 {% if service.type == 'systemd' %}
-                    <div class="flex justify-between items-center mb-1 bg-neutral-910 p-2 border border-neutral-800 hover:bg-neutral-800 rounded text-sm">
+                    <div class="flex justify-between items-center bg-neutral-500/5 border border-white/10 rounded p-2 text-sm hover:bg-white/10 transition mb-1 mt-[4px] mr-[2px] ml-[2px]">
                         <div class="flex items-center space-x-2">
-                            <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
+                            <span class="text-gray-300 font-semibold mr-[-4px]">{{ service.display_name|e }}</span>
                             <span class="text-white">
                                 {% set serviceStatus = serviceManager.isServiceRunning(service.service_name) %}
                                 {% if serviceStatus %}

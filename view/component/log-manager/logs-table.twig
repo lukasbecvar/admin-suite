@@ -9,7 +9,7 @@
         <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
-       
+
         {# LINK TO UNFILTERED LOGS #}
         <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': logsTableName}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Go to unsorted logs">
             <i class="fa fa-database" aria-hidden="true"></i>
@@ -62,10 +62,10 @@
         <p class="flex items-center justify-center mt-20 mb-20 text-2xl text-white font-bold">No relative logs were found</p>
     {% else %}
         {# LOG VIEW TABLE #}
-        <div class="bg-neutral-880 overflow-x-auto component">
-            <table class="min-w-full divide-y divide-white whitespace-nowrap">
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-white whitespace-nowrap bg-white/5">
                 <thead>
-                    <tr class="border-b border-neutral-800 bg-neutral-880">
+                    <tr class="border-b border-neutral-700 bg-white/5">
                         <th class="text-left text-white p-1 py-2">#</th>
                         <th class="text-left text-white p-1 py-2">Name</th>
                         <th class="text-left text-white p-1 py-2">Message</th>
@@ -97,16 +97,16 @@
                         {% endif %}
 
                         {# LOG LINE #}
-                        <tr class="hover:bg-neutral-800 border-b border-neutral-800 text-lg text-{{ color }}">
+                        <tr class="hover:bg-neutral-700 border-b border-neutral-700 text-lg text-{{ color }}">
                             {# LOG DATA #}
-                            <td class="p-1 border-b border-neutral-800">{{ row.id|e }}</td>
-                            <td class="p-1 border-b border-neutral-800">{{ row.name|e }}</td>
-                            <td class="p-1 border-b border-neutral-800">{{ row.message|e|linkify }}</td>
-                            <td class="p-1 border-b border-neutral-800">{{ row.time|date('Y-m-d H:i:s')|e }}</td>
-                            <td class="p-1 border-b border-neutral-800">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
-                            <td class="p-1 border-b border-neutral-800">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
-                            <td class="p-1 border-b border-neutral-800">{{ row.ipAddress|e }}</td>
-                            <td class="p-1 border-b border-neutral-800">
+                            <td class="p-1 border-b border-neutral-700">{{ row.id|e }}</td>
+                            <td class="p-1 border-b border-neutral-700">{{ row.name|e }}</td>
+                            <td class="p-1 border-b border-neutral-700">{{ row.message|e|linkify }}</td>
+                            <td class="p-1 border-b border-neutral-700">{{ row.time|date('Y-m-d H:i:s')|e }}</td>
+                            <td class="p-1 border-b border-neutral-700">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
+                            <td class="p-1 border-b border-neutral-700">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
+                            <td class="p-1 border-b border-neutral-700">{{ row.ipAddress|e }}</td>
+                            <td class="p-1 border-b border-neutral-700">
                                 {% if userManager.getUsernameById(row.userId) != null or authManager.isUsernameBlocked(row.name) %}
                                     <a href={{ path('app_manager_users_profile', {'id': row.userId}) }} class="underline profile-link">{{ userManager.getUsernameById(row.userId) ?? 'system' }}</a>
                                 {% else %}
@@ -116,7 +116,7 @@
 
                             {# SET LOG READED LINK #}
                             {% if filter == 'UNREADED' %}
-                                <td class="p-1 border-b border-neutral-800">
+                                <td class="p-1 border-b border-neutral-700">
                                     <a href={{ path('app_manager_logs_set_readed', {'id': row.id, 'page': currentPage, 'filter': filter, 'user_id': userId }) }} class="delete-button"><i class="fa fa-check" aria-hidden="true"></i></a>
                                 </td>
                             {% endif %}
@@ -130,7 +130,7 @@
     {# PAGINATION SYSTEM #}
     {% if (logsCount > limitPerPage) %}
         <div class="mt-2 flex justify-center mb-2">
-            <div class="border border-neutral-800 rounded overflow-hidden">
+            <div class="border border-neutral-800 rounded overflow-hidden bg-neutral-800 border border-neutral-500/50">
                 <ul class="flex">
                     {% set totalPages = (logsCount / limitPerPage)|round(0, 'ceil') %}
                     {% set previousPage = currentPage > 1 ? currentPage - 1 : 1 %}
@@ -139,7 +139,7 @@
                     {% set endPage = min(currentPage + 2, totalPages) %}
                     {% if currentPage > 1 %}
                         <li>
-                            <a href={{ path('app_manager_logs', {'page': previousPage, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white hover:bg-neutral-800">Previous</a>
+                            <a href={{ path('app_manager_logs', {'page': previousPage, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white hover:bg-neutral-600">Previous</a>
                         </li>
                     {% else %}
                         <li>
@@ -148,12 +148,12 @@
                     {% endif %}
                     {% for page in startPage..endPage %}
                         <li>
-                            <a href={{ path('app_manager_logs', {'page': page, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white {% if page == currentPage %}bg-neutral-800{% else %}hover:bg-neutral-800{% endif %}">{{ page }}</a>
+                            <a href={{ path('app_manager_logs', {'page': page, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white {% if page == currentPage %}bg-neutral-600{% else %}hover:bg-neutral-600{% endif %}">{{ page }}</a>
                         </li>
                     {% endfor %}
                     {% if currentPage < totalPages %}
                         <li>
-                            <a href={{ path('app_manager_logs', {'page': nextPage, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white hover:bg-neutral-800">Next</a>
+                            <a href={{ path('app_manager_logs', {'page': nextPage, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white hover:bg-neutral-600">Next</a>
                         </li>
                     {% else %}
                         <li>

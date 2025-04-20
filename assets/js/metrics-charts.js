@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 chart: {
                     type: 'area',
                     height: 250,
-                    background: '#151718',
+                    background: '#19191b',
                     foreColor: '#ccc',
                     toolbar: {
                         show: true,

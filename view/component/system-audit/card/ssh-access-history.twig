@@ -1,27 +1,28 @@
 <div class="p-2 mt-[-8px]">
-	<div class="card-color custom-scrollbar border border-neutral-800 shadow-md rounded overflow-hidden w-full max-h-50 text-white">
-		<div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
-			SSH access history
-		</div>
-		<div class="overflow-y-scroll max-h-72">
-			{% if sshAccessHistory|length == 0 %}
-				<div class="text-center text-neutral-200 text-sm p-1">No SSH access history found</div>
-			{% endif %}
-			<ul>
-				{% for login in sshAccessHistory %}
-					<li>
-						<div class="flex items-center justify-between border-b border-neutral-800 pr-2 hover:bg-neutral-800">
-							<div class="flex items-center p-[5px] pt-[2px] pb-[2px]">
-								<div class="flex flex-col">
-									<div class="text-sm font-bold">{{ login.user }}</div>
-									<div class="text-xs text-green-500">{{ login.date }}</div>
-								</div>
-							</div>
-							{{ login.host }} - {{ login.ip }} - {{ login.port }}
-						</div>
-					</li>
-				{% endfor %}
-			</ul>
-		</div>
-	</div>
+    <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded shadow-xl text-white w-full overflow-hidden">
+        <div class="px-3 py-3 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center justify-between">
+            <span><i class="fas fa-terminal text-white/70 mr-2"></i> SSH Access History</span>
+        </div>
+        <div class="overflow-auto max-h-[320px] custom-scrollbar">
+            {% if sshAccessHistory|length == 0 %}
+                <div class="text-center text-white/70 text-sm p-3">No SSH access history found</div>
+            {% else %}
+                <ul class="divide-y divide-white/10">
+                    {% for login in sshAccessHistory %}
+                        <li class="hover:bg-white/10 transition-colors duration-150">
+                            <div class="flex items-center justify-between px-4 py-2">
+                                <div class="flex flex-col">
+                                    <div class="text-sm font-semibold">{{ login.user }}</div>
+                                    <div class="text-xs text-green-400">{{ login.date }}</div>
+                                </div>
+                                <div class="text-right text-sm text-white/90">
+                                    {{ login.host }} <span class="text-white/50">-</span> {{ login.ip }} <span class="text-white/50">-</span> {{ login.port }}
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
 </div>

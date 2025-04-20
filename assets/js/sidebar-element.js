@@ -53,28 +53,52 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // setup swipe detection for an element
     function setupSwipeDetection(element) {
+        let touchedElement = null
+    
         element.addEventListener('touchstart', function(e) {
             touchStartX = e.changedTouches[0].screenX
             touchStartY = e.changedTouches[0].screenY
             touchEndX = touchStartX
             touchEndY = touchStartY
             isHorizontalSwipe = true
+                touchedElement = document.elementFromPoint(
+                e.changedTouches[0].clientX,
+                e.changedTouches[0].clientY
+            )
         })
-
+    
         element.addEventListener('touchmove', function(e) {
             touchEndX = e.changedTouches[0].screenX
             touchEndY = e.changedTouches[0].screenY
-
-            // determine if it's a horizontal or vertical swipe
+    
             const diffX = Math.abs(touchEndX - touchStartX)
             const diffY = Math.abs(touchEndY - touchStartY)
+    
             if (diffY > diffX) {
                 isHorizontalSwipe = false
             }
         })
-
+    
         element.addEventListener('touchend', function() {
-            handleSwipeGesture()
+            const swipeThreshold = 80
+            const swipeDistance = touchEndX - touchStartX
+                if (isHorizontalSwipe && Math.abs(swipeDistance) > swipeThreshold) {
+                let el = touchedElement
+                while (el) {
+                    const canScroll = el.scrollWidth > el.clientWidth && ((swipeDistance > 0 && el.scrollLeft > 0) || (swipeDistance < 0 && el.scrollLeft < el.scrollWidth - el.clientWidth))
+                    if (canScroll) {
+                        return
+                    }
+                    el = el.parentElement
+                }
+                if (swipeDistance > swipeThreshold) {
+                    sidebar.classList.add('active')
+                    mainContent.classList.add('active')
+                } else if (swipeDistance < -swipeThreshold) {
+                    sidebar.classList.remove('active')
+                    mainContent.classList.remove('active')
+                }
+            }
         })
     }
 

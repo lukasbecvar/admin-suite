@@ -1,9 +1,11 @@
-<div class="bg-neutral-900 border border-neutral-800 rounded shadow-md card-color w-full sm:col-span-2" id="wrarning-box">
-    <div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
-        <a href={{ path('app_diagnostic') }} class="card-rederer text-sm" title="Go to diagnostic">
-            Diagnostic alerts
-        </a>
-        <button onclick="document.getElementById('wrarning-box').style.display='none'" class="text-white hover:text-cyan-300 transition-colors duration-200 cursor-pointer">
+<div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded shadow-xl text-white w-full overflow-hidden w-full sm:col-span-2" id="wrarning-box">
+    <div class="px-3 py-2 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center justify-between">
+        <span><i class="fas fa-desktop text-white/70 mr-2"></i>
+            <a href={{ path('app_diagnostic') }} class="text-sm text-white/70 hover:text-white/100 transition-colors duration-200" title="Go to diagnostic">
+                Diagnostic alerts
+            </a>
+        </span>
+        <button onclick="document.getElementById('wrarning-box').style.display='none'" class="text-white hover:text-cyan-300 transition-colors duration-200 cursor-pointer text-lg">
             <i class="fas fa-times"></i>
         </button>
     </div>

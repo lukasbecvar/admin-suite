@@ -11,7 +11,7 @@
 </div>
 
 {# PROFILE COMPONENT #}
-<div class="bg-white card-color shadow-lg border border-neutral-800 mt-5 phone-mt-disable disable-phone-border users-manager phone-max-h rounded mx-auto md:w-5/12">
+<div class="shadow-lg mt-5 phone-mt-disable disable-phone-border users-manager phone-max-h rounded mx-auto md:w-5/12 backdrop-blur-md bg-white/10 border border-white/5">
     <div class="text-white text-center py-3 border-b border-neutral-800">
         {% if userRepository.getProfilePic() == 'default_pic' %}
             <img class="w-24 h-24 rounded-full mx-auto" src={{ asset('/assets/images/default-profile.jpg') }} alt="User Profile Picture">
@@ -43,7 +43,7 @@
             {% endif %}
         </p>
     </div>
-    <div class="p-5 bg-neutral-830">
+    <div class="p-5 bg-neutral-830 rounded-b">
         {# GO TO USER LOGS #}
         <div class="flex items-center mt-1">
             <div class="text-white">

@@ -11,13 +11,13 @@
 </div>
 
 {# DATABASE CONSOLE #}
-<div class="bg-neutral-885 p-1 shadow-md card-color border border-neutral-800 mb-2 database-console rounded">
+<div class="p-1 shadow-md backdrop-blur-md bg-white/5 border border-white/20 rounded mb-2 database-console rounded">
     <h2 class="text-2xl text-center text-white font-semibold">Database console</h2>
 
     {# OUTPUT BOX #}
     {% if output is not null %}
-        <div class="bg-neutral-890 ml-2 mr-2 mt-1 border border-neutral-800 shadow-md animate-popin text-white">
-            <p class="text-lg font-semibold border-b border-neutral-800 p-1">Database output</p>
+        <div class="backdrop-blur-md bg-white/5 ml-2 mr-2 mt-1 border border-white/20 shadow-md animate-popin text-white">
+            <p class="text-lg font-semibold border-b border-white/20 p-1">Database output</p>
             <pre id="query-output" class="text-sm whitespace-pre-wrap break-words p-2">{{ output|raw }}</pre>
         </div>
     {% endif %}

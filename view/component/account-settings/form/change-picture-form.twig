@@ -12,8 +12,8 @@
 
 {# PICTURE CHANGE FORM #}
 <div class="flex justify-center items-center mb-10 component">
-    <div class="text-white max-w-md w-full card-color shadow-md px-3 py-1 border border-neutral-800 rounded m-w-95">
-        <h2 class="text-xl mt-2 mb-2 text-center text-white">Change picture</h2>
+    <div class="text-white max-w-md w-full shadow-md px-3 py-1 bg-neutral-400/5 border border-white/15 rounded m-w-95">
+        <h2 class="text-xl mt-2 mb-2 text-center text-white/80">Change picture</h2>
     
         {# SUCCESS MESSAGE BOX #}
         {% for message in app.flashes('success') %}
@@ -54,7 +54,7 @@
             </div>
 
             {# FORM SUBMIT BUTTON #}
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2">
+            <button type="submit" class="mt-1 mb-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-md w-full transition duration-300 ease-in-out hover:shadow-lg hover:shadow-blue-900">
                 Change
             </button>
         {{ form_end(profilePicChangeForm) }}

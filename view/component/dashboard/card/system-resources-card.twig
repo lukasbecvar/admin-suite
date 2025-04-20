@@ -1,25 +1,25 @@
-<div class="card-color border border-neutral-800 shadow-lg rounded w-full">
-    <div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
-        <span>System resources</span>
-        <a href={{ path('app_metrics_dashboard') }} class="text-indigo-400 hover:text-indigo-300 text-xs" title="Go to metrics view">View All</a>
+<div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded shadow-xl text-white w-full overflow-hidden">
+    <div class="px-3 py-3 border-b border-white/10 text-white/80 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
+        <span><i class="fas fa-cogs text-white/70"></i> <span class="ml-1">System resources</span></span>
+        <a href={{ path('app_metrics_dashboard') }} class="text-indigo-400 hover:text-indigo-300 text-xs font-semibold transition" title="Go to metrics view">View All</a>
     </div>
-    <div class="p-3 pb-1">
+    <div class="p-3 pt-2">
         {# CPU USAGE #}
         <p class="text-white mb-1" id="cpu-usage">CPU: {{ diagnosticData.cpuUsage|e }}%</p>
-        <div class="progress-bar">
-            <div class="progress" id="cpu-progress" style="width: {{ diagnosticData.cpuUsage|e }}%; background: {{ diagnosticData.cpuUsage > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)' }};"></div>
+        <div class="w-full h-4 bg-white/5 rounded overflow-hidden mb-2">
+            <div class="h-full bg-cyan-400 transition-all duration-300 ease-in-out" id="cpu-progress" style="width: {{ diagnosticData.cpuUsage|e }}%; background: {{ diagnosticData.cpuUsage > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)' }};"></div>
         </div>
 
         {# RAM USAGE #}
-        <p class="text-white mb-1" id="ram-usage">RAM: ({{ ramUsage.used|e }}G / {{ diagnosticData.ramUsage|e }}%)</p>
-        <div class="progress-bar">
-            <div class="progress" id="ram-progress" style="width: {{ diagnosticData.ramUsage|e }}%; background: {{ diagnosticData.ramUsage > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)' }};"></div>
+        <p class="text-white mb-2 mt-[10px]" id="ram-usage">RAM: ({{ ramUsage.used|e }}G / {{ diagnosticData.ramUsage|e }}%)</p>
+        <div class="w-full h-4 bg-white/5 rounded overflow-hidden mb-2">
+            <div class="h-full bg-cyan-400 transition-all duration-300 ease-in-out" id="ram-progress" style="width: {{ diagnosticData.ramUsage|e }}%; background: {{ diagnosticData.ramUsage > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)' }};"></div>
         </div>
 
         {# STORAGE USAGE #}
         <p class="text-white mb-1" id="drive-space">STORAGE: ({{ storageUsage|e }}G / {{ diagnosticData.driveSpace|e }}%)</p>
-        <div class="progress-bar">
-            <div class="progress" id="drive-space-progress" style="width: {{ diagnosticData.driveSpace|e }}%; background: {{ diagnosticData.driveSpace > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg,rgb(0, 182, 233), #0072ff)' }};"></div>
+        <div class="w-full h-4 bg-white/5 rounded overflow-hidden">
+            <div class="h-full bg-cyan-400 transition-all duration-300 ease-in-out" id="drive-space-progress" style="width: {{ diagnosticData.driveSpace|e }}%; background: {{ diagnosticData.driveSpace > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)' }};"></div>
         </div>
     </div>
 </div>

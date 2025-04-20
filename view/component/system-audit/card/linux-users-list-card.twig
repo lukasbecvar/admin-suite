@@ -1,36 +1,36 @@
-<div class="card-color custom-scrollbar border border-neutral-800 shadow-md rounded overflow-hidden w-full max-h-50">
-	<div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
-		Linux system users
+<div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded shadow-xl text-white w-full overflow-hidden">
+	<div class="px-3 py-3 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center justify-between">
+		<span><i class="fas fa-users text-white/70 mr-2"></i> Linux system users</span>
 	</div>
-	<div class="overflow-y-scroll max-h-72">
-		<table class="min-w-full divide-y divide-neutral-800 bg-neutral-885 text-white">
-			<thead class="bg-neutral-900">
+	<div class="overflow-auto max-h-[320px] custom-scrollbar border-b border-white/10">
+		<table class="min-w-full divide-y divide-white/10 text-white text-sm">
+			<thead class="bg-white/10">
 				<tr>
-					<th scope="col" class="px-6 py-2 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-885 z-10">
+					<th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-800 z-10">
 						Username
 					</th>
-					<th scope="col" class="px-6 py-2 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-885 z-10">
+					<th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-800 z-10">
 						Home
 					</th>
-					<th scope="col" class="px-6 py-2 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-885 z-10">
+					<th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-800 z-10">
 						Shell
 					</th>
-					<th scope="col" class="px-6 py-2 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-885 z-10">
-						Sudo permissions
+					<th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-800 z-10">
+						Sudo Permissions
 					</th>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-neutral-800 bg-neutral-880">
+			<tbody class="divide-y divide-white/10">
 				{% for user in linuxUsers %}
-					<tr class="hover:bg-neutral-800">
-						<td class="px-4 py-2 whitespace-nowrap text-sm font-bold"><a href={{ path('app_file_system_view', { path: user.home ~ '/.bash_history', referer: 'app_system_audit' }) }} class="text-blue-400 hover:text-blue-300">{{ user.username|e }}</a></td>
-						<td class="px-4 py-2 whitespace-nowrap text-sm">{{ user.home|e }}</td>
-						<td class="px-4 py-2 whitespace-nowrap text-sm">{{ user.shell|e }}</td>
-                        {% if user.has_sudo == true %}
-                            <td class="px-4 py-2 whitespace-nowrap text-sm text-green-500">Yes</td>
-                        {% else %}
-                            <td class="px-4 py-2 whitespace-nowrap text-sm text-red-500">No</td>
-                        {% endif %}
+					<tr class="hover:bg-white/10 transition-colors duration-150">
+						<td class="px-4 py-3 whitespace-nowrap font-semibold">
+							<a href={{ path('app_file_system_view', { path: user.home ~ '/.bash_history', referer: 'app_system_audit' }) }} class="text-blue-400 hover:text-blue-300">{{ user.username|e }}</a>
+						</td>
+						<td class="px-4 py-3 whitespace-nowrap">{{ user.home|e }}</td>
+						<td class="px-4 py-3 whitespace-nowrap">{{ user.shell|e }}</td>
+						<td class="px-4 py-3 whitespace-nowrap {% if user.has_sudo %}text-green-400{% else %}text-red-400{% endif %}">
+							{{ user.has_sudo ? 'Yes' : 'No' }}
+						</td>
 					</tr>
 				{% endfor %}
 			</tbody>

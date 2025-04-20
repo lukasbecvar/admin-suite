@@ -1,16 +1,16 @@
 <div class="p-2 mt-[-8px]">
-	<div class="card-color custom-scrollbar border border-neutral-800 shadow-md rounded overflow-hidden w-full max-h-50 text-white">
-		<div class="px-3 py-2 border-b border-neutral-800 text-white font-bold text-sm flex items-center justify-between">
-			Journalctl live logs
-		</div>
-		<div id="journalctl-scrollbox" class="overflow-y-scroll max-h-72 p-1">
-			<ul id="journalctl-logs" class="space-y-[2px] text-white">
-				<li id="waiting-for-logs" class="text-center text-sm mt-1">
-					Waiting for logs...
-				</li>
-			</ul>
-		</div>
-	</div>
+    <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded shadow-xl text-white w-full overflow-hidden">
+        <div class="px-3 py-3 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center justify-between">
+            <span><i class="fas fa-stream text-white/70 mr-2"></i> Journalctl live logs</span>
+        </div>
+        <div id="journalctl-scrollbox" class="overflow-y-auto max-h-[320px] custom-scrollbar p-2">
+            <ul id="journalctl-logs" class="space-y-1 text-white text-sm font-mono leading-snug">
+                <li id="waiting-for-logs" class="text-center text-white/60 mt-1">
+                    Waiting for logs...
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 {# INCLUDE LOGS GET SCRIPT #}

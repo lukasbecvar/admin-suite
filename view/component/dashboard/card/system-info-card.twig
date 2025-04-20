@@ -1,35 +1,55 @@
-<div class="card-color border border-neutral-800 shadow-lg rounded overflow-hidden w-full">
-    <div class="pl-3 py-2 border-b border-neutral-800 text-white font-bold text-sm">
+<div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded shadow-xl text-white w-full overflow-hidden">
+    <div class="px-3 py-3 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
+        <i class="fas fa-desktop text-white/70"></i>
         System information
     </div>
-    <div class="p-3">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+    <div class="p-4 divide-y divide-white/10 space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {# HOST UPTIME #}
             <div class="flex flex-col">
-                <p class="text-gray-300 mb-1">Uptime</p>
-                <p class="text-white font-medium" id="system-uptime">{{ hostUptime|e }}</p>
+                <span class="text-sm text-white/60 flex items-center gap-2">
+                    <i class="fas fa-clock text-white/50"></i>
+                    Uptime
+                </span>
+                <span class="text-base font-semibold text-white" id="system-uptime">{{ hostUptime|e }}</span>
             </div>
+
             {# HOST SYSTEM #}
             <div class="flex flex-col">
-                <p class="text-gray-300 mb-1">System</p>
-                <p class="text-white font-medium">
+                <span class="text-sm text-white/60 flex items-center gap-2">
+                    <i class="fas fa-server text-white/50"></i>
+                    System
+                </span>
+                <span class="text-base font-semibold text-white">
                     {{ hostSystemInfo.operating_system|split('"')[1]|trim('" NAME')|e }}
-                </p>
+                </span>
             </div>
+
             {# HOST KERNEL #}
             <div class="flex flex-col">
-                <p class="text-gray-300 mb-1">Kernel</p>
-                <p class="text-white font-medium">{{ hostSystemInfo.kernel_version|e }}</p>
+                <span class="text-sm text-white/60 flex items-center gap-2">
+                    <i class="fas fa-code-branch text-white/50"></i>
+                    Kernel
+                </span>
+                <span class="text-base font-semibold text-white">{{ hostSystemInfo.kernel_version|e }}</span>
             </div>
+
             {# HOST ARCHITECTURE #}
             <div class="flex flex-col">
-                <p class="text-gray-300 mb-1">Architecture</p>
-                <p class="text-white font-medium">{{ hostSystemInfo.kernel_arch|e }}</p>
+                <span class="text-sm text-white/60 flex items-center gap-2">
+                    <i class="fas fa-microchip text-white/50"></i>
+                    Architecture
+                </span>
+                <span class="text-base font-semibold text-white">{{ hostSystemInfo.kernel_arch|e }}</span>
             </div>
+
             {# INSTALLATION TIME #}
-            <div class="flex flex-col">
-                <p class="text-gray-300 mb-1">Installation time</p>
-                <p class="text-white font-medium">{{ systemInstallInfo|e }}</p>
+            <div class="flex flex-col md:col-span-2">
+                <span class="text-sm text-white/60 flex items-center gap-2">
+                    <i class="fas fa-calendar-alt text-white/50"></i>
+                    Installation Time
+                </span>
+                <span class="text-base font-semibold text-white">{{ systemInstallInfo|e }}</span>
             </div>
         </div>
     </div>

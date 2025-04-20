@@ -15,30 +15,30 @@
 <div class="database-browser md:p-4 component">
     <div class="max-w-4xl mx-auto">
         <div class="overflow-x-auto">
-            <table class="min-w-full bg-neutral-880 text-white border border-neutral-800 card-color">
+                <table class="min-w-full text-white whitespace-nowrap backdrop-blur-md bg-white/5 border border-white/10">
                 <thead>
                     <tr>
-                        <th class="px-4 py-2 border-b border-neutral-800 text-left">Database</th>
-                        <th class="px-4 py-2 border-b border-neutral-800 text-right">Structure</th>
-                        <th class="px-4 py-2 border-b border-neutral-800 text-right">Data</th>
+                        <th class="px-4 py-2 border-b border-white/20 text-left">Database</th>
+                        <th class="px-4 py-2 border-b border-white/20 text-right">Structure</th>
+                        <th class="px-4 py-2 border-b border-white/20 text-right">Data</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for database in databases %}
                         {# SHOW ONLY NON-SYSTEM DATABASES #}
                         {% if database.name != 'information_schema' and database.name != 'performance_schema' and database.name != 'sys' %}
-                            <tr class="hover:bg-neutral-800">
-                                <td class="px-4 py-2 border-b border-neutral-800 text-left">
+                            <tr class="hover:bg-neutral-700">
+                                <td class="px-4 py-2 border-b border-white/10 text-left">
                                     <a href={{ path('app_manager_database', {'database': database.name}) }} class="database-link">
                                         {{ database.name|e }}
                                     </a>
                                 </td>
-                                <td class="px-4 py-2 border-b border-neutral-800 text-right">
+                                <td class="px-4 py-2 border-b border-white/10 text-right">
                                     <a href={{ path('app_manager_database_dump', {'select': 'no', 'database': database.name, 'include_data': 'yes'}) }} id="loading-blocker" class="database-link">
                                         Dump Structure
                                     </a>
                                 </td>
-                                <td class="px-4 py-2 border-b border-neutral-800 text-right">
+                                <td class="px-4 py-2 border-b border-white/10 text-right">
                                 <a href={{ path('app_manager_database_dump', {'select': 'no', 'database': database.name, 'include_data': 'no'}) }} id="loading-blocker" class="database-link">
                                         Dump Data
                                     </a>

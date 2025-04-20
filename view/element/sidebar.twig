@@ -5,7 +5,7 @@
             {# PROFILE IMAGE #}
             <div class="h-20 w-20 rounded-full overflow-hidden border-2 border-zinc-700/50">
                 {% if getUserData().getProfilePic == 'default_pic' %}
-                    <img class="h-full w-full object-cover" src="{{ asset('/assets/images/default-profile.jpg') }}" alt="profile picture">
+                    <img class="h-full w-full object-cover" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture">
                 {% else %}
                     <img class="h-full w-full object-cover" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture">
                 {% endif %}
@@ -30,17 +30,17 @@
     <nav class="px-1 space-y-1 mb-1">
         <ul>
             {# MAIN SITE LINK #}
-            {% set current_url = app.request.getSchemeAndHttpHost() %}
-            {% if current_url matches '/admin/' %}
-                {% set new_url = current_url|replace({'admin.': ''}) %}
-                <a href="{{ new_url }}/admin" target="_blank" class="flex items-center space-x-3 px-3 py-2 rounded text-zinc-300 hover:text-white hover:bg-white/5 bg-white/5 mb-[2px] transition-colors">
+            {% set currentUrl = app.request.getSchemeAndHttpHost() %}
+            {% if currentUrl matches '/admin/' %}
+                {% set newUrl = currentUrl|replace({'admin.': ''}) %}
+                <a href="{{ newUrl }}/admin" target="_blank" class="flex items-center space-x-3 px-3 py-2 rounded text-zinc-300 hover:text-white hover:bg-white/5 bg-white/5 mb-[2px] transition-colors">
                     <i class="fas fa-globe h-5 w-5"></i>
                     <span>Main site</span>
                 </a>
             {% endif %}
 
             {# MENU ITEMS #}
-            {% set menu_items = [
+            {% set menuItems = [
                 {'route': 'app_dashboard', 'icon': 'fas fa-desktop', 'label': 'Dashboard'},
                 {'route': 'app_manager_logs', 'icon': 'fas fa-list', 'label': 'Logs'},
                 {'route': 'app_manager_database', 'icon': 'fas fa-database', 'label': 'Database'},
@@ -55,10 +55,10 @@
                 {'route': 'app_account_settings_table', 'icon': 'fas fa-user-cog', 'label': 'Account settings'}
             ] %}
 
-            {% for item in menu_items %}
+            {% for item in menuItems %}
                 <li>
-                    <a href="{{ path(item.route) }}" class="flex items-center pl-1 px-1 py-2 rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-colors">
-                        <i class="{{ item.icon }} h-5 w-5 mt-1 mr-1 ml-1"></i>
+                    <a href={{ path(item.route) }} class="flex items-center pl-1 px-1 py-[6px] rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-colors">
+                        <i class="{{ item.icon }} h-5 w-5 mt-[6px] mr-1 ml-1"></i>
                         <span>
                             {{ item.label }}
                             {% if item.route == 'app_todo_manager' and getTodosCount() > 0 %}
