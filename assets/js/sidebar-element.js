@@ -54,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // setup swipe detection for an element
     function setupSwipeDetection(element) {
         let touchedElement = null
-    
         element.addEventListener('touchstart', function(e) {
             touchStartX = e.changedTouches[0].screenX
             touchStartY = e.changedTouches[0].screenY
@@ -70,10 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
         element.addEventListener('touchmove', function(e) {
             touchEndX = e.changedTouches[0].screenX
             touchEndY = e.changedTouches[0].screenY
-    
             const diffX = Math.abs(touchEndX - touchStartX)
             const diffY = Math.abs(touchEndY - touchStartY)
-    
             if (diffY > diffX) {
                 isHorizontalSwipe = false
             }
