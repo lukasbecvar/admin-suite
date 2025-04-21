@@ -58,7 +58,7 @@
             {% for item in menuItems %}
                 <li>
                     <a href={{ path(item.route) }} class="flex items-center pl-1 px-1 py-[6px] rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-colors">
-                        <i class="{{ item.icon }} h-5 w-5 mt-[6px] mr-1 ml-1"></i>
+                        <i class="{{ item.icon }} h-5 w-5 mt-[8px] mr-1 ml-1"></i>
                         <span>
                             {{ item.label }}
                             {% if item.route == 'app_todo_manager' and getTodosCount() > 0 %}
