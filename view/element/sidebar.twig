@@ -1,7 +1,7 @@
 <aside id="sidebar" class="text-white border-r border-zinc-200/10 bg-gradient-to-b from-zinc-900/100 to-zinc-950/100 backdrop-blur flex flex-col h-full w-64">
-    <div class="px-6 py-4">
+    <div class="px-6 py-2">
         {# USER INFO #}
-        <div class="flex flex-col items-center space-y-2">
+        <div class="flex flex-col items-center space-y-0">
             {# PROFILE IMAGE #}
             <div class="h-20 w-20 rounded-full overflow-hidden border-2 border-zinc-700/50">
                 {% if getUserData().getProfilePic == 'default_pic' %}
@@ -14,7 +14,7 @@
             {# USERNAME AND ROLE #}
             <div class="text-center">
                 <h3 id="username" class="font-medium text-2xl text-zinc-100">{{ getUserData().username|e }}</h3>
-                <span id="role" class="inline-block px-2 py-1 rounded-full text-xs font-medium mt-1
+                <span id="role" class="inline-block px-2 py-1 rounded-full text-xs font-medium mt-0
                     {% if isAdmin() %}
                         bg-red-500/10 text-red-400
                     {% else %}
@@ -27,7 +27,7 @@
     </div>
 
     {# NAVIGATION #}
-    <nav class="px-1 space-y-1 mb-1">
+    <nav class="px-1 space-y-0 mb-0">
         <ul>
             {# MAIN SITE LINK #}
             {% set currentUrl = app.request.getSchemeAndHttpHost() %}
