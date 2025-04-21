@@ -33,10 +33,12 @@
             {% set currentUrl = app.request.getSchemeAndHttpHost() %}
             {% if currentUrl matches '/admin/' %}
                 {% set newUrl = currentUrl|replace({'admin.': ''}) %}
-                <a href="{{ newUrl }}/admin" target="_blank" class="flex items-center space-x-3 px-3 py-2 rounded text-zinc-300 hover:text-white hover:bg-white/5 bg-white/5 mb-[2px] transition-colors">
-                    <i class="fas fa-globe h-5 w-5"></i>
-                    <span>Main site</span>
-                </a>
+                <li>
+                    <a href="{{ newUrl }}/admin" target="_blank" class="flex items-center pl-1 px-1 py-[6px] rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-colors">
+                        <i class="fas fa-globe h-5 w-5 mt-[7px] mr-1 ml-[7px]"></i>
+                        <span class="ml-[-3px]">Main site</span>
+                    </a>
+                </li>
             {% endif %}
 
             {# MENU ITEMS #}
