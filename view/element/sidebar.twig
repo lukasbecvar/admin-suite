@@ -10,7 +10,7 @@
                     <img class="h-full w-full object-cover" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture">
                 {% endif %}
             </div>
-            
+
             {# USERNAME AND ROLE #}
             <div class="text-center">
                 <h3 id="username" class="font-medium text-2xl text-zinc-100">{{ getUserData().username|e }}</h3>
@@ -27,8 +27,8 @@
     </div>
 
     {# NAVIGATION #}
-    <nav class="px-1 space-y-0 mb-0">
-        <ul>
+    <nav class="px-1 space-y-0">
+        <ul class="pb-[10px]">
             {# MAIN SITE LINK #}
             {% set currentUrl = app.request.getSchemeAndHttpHost() %}
             {% if currentUrl matches '/admin/' %}
