@@ -2,6 +2,7 @@
 
 namespace App\Tests\Command;
 
+use Exception;
 use App\Util\AppUtil;
 use PHPUnit\Framework\TestCase;
 use App\Command\ToggleMaintenanceCommand;
@@ -115,7 +116,7 @@ class ToggleMaintenanceCommandTest extends TestCase
     {
         // mock update env value
         $this->appUtil->method('updateEnvValue')
-            ->willThrowException(new \Exception('Something went wrong'));
+            ->willThrowException(new Exception('Something went wrong'));
 
         // execute command
         $exitCode = $this->commandTester->execute(['mode' => 'true']);
