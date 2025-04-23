@@ -3,7 +3,7 @@
 {# FILE SYSTEM BROWSER COMPONENT #}
 {% block component %}
 {# SUB-NAVIGATION #}
-<div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
+<div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40">
     {# GET BACK PATH #}
     {% set pathParts = currentPath|split('/') %}
     {% if pathParts|length > 1 %}
@@ -33,7 +33,7 @@
 
 <div class="component">
     {# FILESYSTEM PATH BREADCRUMB #}
-    <div class="p-1 card-color border-b border-neutral-700 shadow flex items-center space-x-2">
+    <div class="p-1 border-b border-neutral-700 shadow flex items-center space-x-2 bg-gradient-to-b from-zinc-900/40 to-zinc-950/40">
         <span class="text-sm font-medium text-gray-300">Path:</span>
         <span class="text-sm text-gray-100">
             {% set parts = currentPath|split('/') %}
@@ -76,7 +76,7 @@
             <tbody class="bg-white/5">
                 {% for file in filesystemList %}
                     <tr class="hover:bg-neutral-700">
-                        <td class="px-2 py-2 text-left relative border-b border-neutral-850">
+                        <td class="px-2 py-2 text-left relative border-b border-neutral-700">
                             {% if file.isDir %}
                                 <a href={{ path('app_file_system_browser', { 'path': currentPath ~ '/' ~ file.name }) }} class="link font-bold">
                                     {{ file.name|e }}

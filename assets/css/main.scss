@@ -32,41 +32,6 @@ main {
 	overflow-y: auto; 
 }
 
-/* common styles */
-.bg-neutral-810 {
-	background-color: #1e1f20 !important;
-}
-
-.bg-neutral-810:hover {
-	background-color: #2a2b2c !important;
-}
-
-.bg-neutral-830 {
-	background-color: #1d1e1f !important;
-}
-
-.bg-neutral-890 {
-	background-color: #101212 !important;
-}
-
-.bg-neutral-910 {
-	background-color: #101212;
-}
-
-.border-neutral-850 {
-	border-color: #3a3e3e !important;
-}
-
-.card-color {
-	background-color: #16171a;
-	background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.015), rgba(0, 0, 0, 0.02));
-	background-blend-mode: overlay;
-}
-
-.background-dark {
-    background: #141416 !important;
-}
-
 .link {
 	color: rgb(49, 114, 255);
 }

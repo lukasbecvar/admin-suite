@@ -68,7 +68,7 @@
                         {% for row in tableData %}
                             <tr class="hover:bg-neutral-700">
                                 {% for column in row %}
-                                    <td class="px-2 py-2 border-b border-neutral-850 text-left relative">
+                                    <td class="px-2 py-2 border-b border-neutral-600 text-left relative">
                                         <div class="flex items-center">
                                             <span class="truncate max-w-xl">{{ column|slice(0, 50) ~ (column|length > 50 ? '' : '') }}</span>
                                             {% if column|length > 50 %}
@@ -80,12 +80,12 @@
 
                                 {# EDIT AND DELETE BUTTONS #}
                                 {% if row.id|default(null) is not null %}
-                                    <td class="px-2 py-2 border-b border-neutral-850 text-left">
+                                    <td class="px-2 py-2 border-b border-neutral-600 text-left">
                                         <a href={{ path('app_manager_database_edit', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }} class="text-yellow-400 hover:text-yellow-300" title="Edit record">
                                             <i class="fa fa-edit" aria-hidden="true"></i>
                                         </a>
                                     </td>
-                                    <td class="px-2 py-2 border-b border-neutral-850 text-left">
+                                    <td class="px-2 py-2 border-b border-neutral-600 text-left">
                                         <button class="text-red-500 hover:text-red-400 text-sm font-bold delete-button" data-url={{ path('app_manager_database_delete', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }}>
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </button>
@@ -102,7 +102,7 @@
     {# PAGINATION SYSTEM #}
     {% if tableDataCount > limitPerPage %}
         <div class="mt-2 flex justify-center mb-2">
-            <div class="border border-neutral-800 rounded overflow-hidden bg-neutral-800 border border-neutral-500/50">
+            <div class="rounded overflow-hidden bg-neutral-800 border border-neutral-500/50">
                 <ul class="flex">
                     {% set totalPages = (tableDataCount / limitPerPage)|round(0, 'ceil') %}
                     {% set previousPage = currentPage > 1 ? currentPage - 1 : 1 %}

@@ -1,6 +1,6 @@
 {# CREATE NEW TODO FORM #} 
 {{ form_start(createTodoForm, {'attr': {'onsubmit': 'disableSubmitButton(this)'}}) }}
-    <div class="bg-neutral-910 flex-none">
+    <div class="bg-neutral-900 flex-none">
 
         {# SUBMIT ERROR MESSAGE #}
         {% if createTodoForm.todo_text.vars.errors|length > 0 %}
@@ -9,7 +9,7 @@
             </div>
         {% endif %}
 
-        <div class="bg-neutral-890 flex-none border-t border-b border-neutral-800">
+        <div class="bg-neutral-900 flex-none border-t border-b border-neutral-800">
             <div class="flex items-center">
                 {# TODO TEXT INPUT #}
                 {{ form_widget(createTodoForm.todo_text, {'attr': {
