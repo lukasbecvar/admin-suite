@@ -172,6 +172,13 @@ class UsersManagerController extends AbstractController
             );
         }
 
+        // get user ip info
+        $ipAddress = $userRepository->getIpAddress();
+        if ($ipAddress == null) {
+            $ipAddress = 'Unknown';
+        }
+        $userIpInfo = (array) $this->visitorInfoUtil->getIpInfo($ipAddress);
+
         // render user profile view
         return $this->render('component/users-manager/user-profile.twig', [
             // visitor info util instance
@@ -182,6 +189,7 @@ class UsersManagerController extends AbstractController
             'onlineList' => $onlineList,
 
             // user data
+            'userIpInfo' => $userIpInfo,
             'userRepository' => $userRepository
         ]);
     }

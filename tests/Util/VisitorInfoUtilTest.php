@@ -2,7 +2,9 @@
 
 namespace App\Tests\Util;
 
+use App\Util\CacheUtil;
 use App\Util\SecurityUtil;
+use Psr\Log\LoggerInterface;
 use App\Util\VisitorInfoUtil;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -16,12 +18,16 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class VisitorInfoUtilTest extends TestCase
 {
+    private LoggerInterface $loggerMock;
     private VisitorInfoUtil $visitorInfoUtil;
+    private CacheUtil & MockObject $cacheUtilMock;
     private SecurityUtil & MockObject $securityUtilMock;
 
     protected function setUp(): void
     {
         // mock dependencies
+        $this->cacheUtilMock = $this->createMock(CacheUtil::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->securityUtilMock = $this->createMock(SecurityUtil::class);
 
         // mock escape string behavior
@@ -30,7 +36,7 @@ class VisitorInfoUtilTest extends TestCase
         });
 
         // create visitor info util instance
-        $this->visitorInfoUtil = new VisitorInfoUtil($this->securityUtilMock);
+        $this->visitorInfoUtil = new VisitorInfoUtil($this->cacheUtilMock, $this->loggerMock, $this->securityUtilMock);
     }
 
     /**
@@ -186,5 +192,16 @@ class VisitorInfoUtilTest extends TestCase
 
         // assert result
         $this->assertEquals('Windows 10', $result);
+    }
+
+    /**
+     * Test get visitor ip info
+     *
+     * @return void
+     */
+    public function testGetIpInfo(): void
+    {
+        // assert result
+        $this->assertNotNull($this->visitorInfoUtil->getIpInfo('8.8.8.8'));
     }
 }

@@ -11,7 +11,7 @@
 </div>
 
 {# PROFILE COMPONENT #}
-<div class="shadow-lg mt-5 phone-mt-disable disable-phone-border users-manager phone-max-h rounded mx-auto md:w-5/12 backdrop-blur-md bg-white/10 border border-white/5">
+<div class="shadow-lg mt-5 mb-6 phone-mb-disable phone-mt-disable disable-phone-sides-border users-manager phone-max-h rounded mx-auto md:w-5/12 backdrop-blur-md bg-white/10 border border-white/5">
     <div class="text-white text-center py-3 border-b border-neutral-800">
         {% if userRepository.getProfilePic() == 'default_pic' %}
             <img class="w-24 h-24 rounded-full mx-auto" src={{ asset('/assets/images/default-profile.jpg') }} alt="User Profile Picture">
@@ -92,5 +92,43 @@
             {% endif %}
         </div>
     </div>
+</div>
+
+{# IP INFO TABLE #}
+{% if userIpInfo is defined and userIpInfo.status is defined %}
+<div class="phone-mt-disable disable-phone-border phone-max-h mx-auto md:w-5/12 backdrop-blur-md bg-white/10 border border-white/15 rounded shadow-xl mb-5">
+    <div class="text-white text-center border-b border-neutral-800">
+        <div class="px-3 py-3 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
+            <i class="fas fa-map-marker-alt text-white/70"></i>
+            IP Info
+        </div>
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full text-sm text-left text-white border border-neutral-700 bg-neutral-900/60">
+                <thead class="bg-neutral-800 text-gray-300">
+                    <tr>
+                        <th class="px-4 py-2 border-b border-neutral-700">Key</th>
+                        <th class="px-4 py-2 border-b border-neutral-700">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, value in userIpInfo %}
+                        <tr class="hover:bg-neutral-700/60">
+                            <td class="px-4 py-2 border-b border-neutral-700 font-semibold">
+                                {{ key|title|replace({'_': ' '}) }}
+                            </td>
+                            <td class="px-4 py-2 border-b border-neutral-700">
+                                {% if value is iterable %}
+                                    [array]
+                                {% else %}
+                                    {{ value }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div><br>
+{% endif %}
 {% endblock %}

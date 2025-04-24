@@ -2,6 +2,9 @@
 
 namespace App\Util;
 
+use Exception;
+use Psr\Log\LoggerInterface;
+
 /**
  * Class VisitorInfoUtil
  *
@@ -11,10 +14,14 @@ namespace App\Util;
  */
 class VisitorInfoUtil
 {
+    private CacheUtil $cacheUtil;
+    private LoggerInterface $logger;
     private SecurityUtil $securityUtil;
 
-    public function __construct(SecurityUtil $securityUtil)
+    public function __construct(CacheUtil $cacheUtil, LoggerInterface $logger, SecurityUtil $securityUtil)
     {
+        $this->logger = $logger;
+        $this->cacheUtil = $cacheUtil;
         $this->securityUtil = $securityUtil;
     }
 
@@ -185,5 +192,49 @@ class VisitorInfoUtil
         }
 
         return $os;
+    }
+
+    /**
+     * Get information about IP address using a geolocation API
+     *
+     * @param string $ipAddress The IP address to look up
+     *
+     * @return object|null The decoded JSON response from the geolocation API, or null if an error occurs
+     */
+    public function getIpInfo(string $ipAddress): ?object
+    {
+        // check if ip info is cached
+        if ($this->cacheUtil->isCatched('ip-info-' . $ipAddress)) {
+            return json_decode($this->cacheUtil->getValue('ip-info-' . $ipAddress)->get());
+        }
+
+        // create stream context with timeout of 1 second
+        $context = stream_context_create(array(
+            'http' => array(
+                'timeout' => 3
+            )
+        ));
+
+        try {
+            // get get ip info data
+            $data = file_get_contents(
+                $_ENV['IP_INFO_API'] . '/json/' . $ipAddress,
+                false,
+                $context
+            );
+
+            if ($data == false) {
+                return null;
+            }
+
+            // cache response
+            $this->cacheUtil->setValue('ip-info-' . $ipAddress, $data, (60 * 60 * 12));
+
+            // decode response data & return data
+            return json_decode($data);
+        } catch (Exception $e) {
+            $this->logger->error('error to get ip information: ' . $e->getMessage());
+            return null;
+        }
     }
 }

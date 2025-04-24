@@ -435,6 +435,14 @@ main {
 		margin-top: 0px !important;
 		width: 100% !important;
 	}
+	.phone-mb-disable {
+		margin-bottom: 0px !important;
+	}
+	.disable-phone-sides-border {
+		border-left: none !important;
+		border-right: none !important;
+		border-radius: 0px !important;
+	}
 	.disable-select-on-phone {
 		user-select: none;
 	}

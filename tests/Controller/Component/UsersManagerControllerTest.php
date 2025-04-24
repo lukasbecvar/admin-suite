@@ -77,6 +77,7 @@ class UsersManagerControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[title="Back to users manager"]');
         $this->assertSelectorExists('img[alt="User Profile Picture"]');
+        $this->assertSelectorTextContains('body', 'IP Info');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
