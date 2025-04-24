@@ -20,6 +20,7 @@ Encore
     .addEntry('notifications-settings-js', './assets/js/notifications-settings.js')
     .addEntry('notification-subscriberr-js', './assets/js/notification-subscriber.js')
     .addEntry('system-resources-updater-js', './assets/js/system-resources-updater.js')
+    .addEntry('profile-photo-view-toggle-js', './assets/js/profile-photo-view-toggle.js')
     .addEntry('system-journalctl-log-card-js', './assets/js/system-journalctl-log-card.js')
     .addEntry('metrics-delete-confirmaton-js', './assets/js/metrics-delete-confirmaton.js')
     .addEntry('exception-log-delete-confirmation-js', './assets/js/exception-log-delete-confirmation.js')

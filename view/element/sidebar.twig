@@ -3,7 +3,7 @@
         {# USER INFO #}
         <div class="flex flex-col items-center space-y-0">
             {# PROFILE IMAGE #}
-            <div class="h-20 w-20 rounded-full overflow-hidden border-2 border-zinc-700/50">
+            <div class="h-20 w-20 rounded-full overflow-hidden border-2 border-zinc-700/50 cursor-pointer" id="open-profile-modal">
                 {% if getUserData().getProfilePic == 'default_pic' %}
                     <img class="h-full w-full object-cover" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture">
                 {% else %}
