@@ -9,15 +9,15 @@
 
     {# PROFILE IMAGE VIEW #}
     <div id="profile-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
-        <div class="relative bg-zinc-900 rounded-lg p-6 max-w-md w-full border border-white/15">
-            <div class="px-0 py-[-50px] border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
-                Profile picture
+        <div class="relative bg-zinc-900 rounded max-w-md w-full border border-white/15">
+            <div class="px-4 py-[-50px] border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
+                <span class="mb-2 mt-2">Profile picture</span>
                 <button id="close-profile-modal" class="absolute top-0 right-1 text-white text-4xl leading-none hover:text-red-400">&times;</button>
             </div>
             {% if getUserData().getProfilePic == 'default_pic' %}
-                <img class="w-full h-auto rounded" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture">
+                <img class="w-full h-auto rounded-b" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture">
             {% else %}
-                <img class="w-full h-auto rounded" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture">
+                <img class="w-full h-auto rounded-b" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture">
             {% endif %}
         </div>
     </div>
