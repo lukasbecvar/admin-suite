@@ -179,6 +179,9 @@ class UsersManagerController extends AbstractController
         }
         $userIpInfo = (array) $this->visitorInfoUtil->getIpInfo($ipAddress);
 
+        // get user role status
+        $isUserAdmin = $this->userManager->isUserAdmin((int) $userRepository->getId());
+
         // render user profile view
         return $this->render('component/users-manager/user-profile.twig', [
             // visitor info util instance
@@ -190,6 +193,7 @@ class UsersManagerController extends AbstractController
 
             // user data
             'userIpInfo' => $userIpInfo,
+            'isUserAdmin' => $isUserAdmin,
             'userRepository' => $userRepository
         ]);
     }
