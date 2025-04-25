@@ -220,4 +220,18 @@ class SessionUtilTest extends TestCase
         // assert result
         $this->assertNull($result);
     }
+
+    /**
+     * Test get session id
+     *
+     * @return void
+     */
+    public function testGetSessionId(): void
+    {
+        // call tested method
+        $result = $this->sessionUtil->getSessionId();
+
+        // assert result
+        $this->assertIsString($result);
+    }
 }

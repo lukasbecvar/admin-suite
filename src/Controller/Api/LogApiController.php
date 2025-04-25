@@ -6,6 +6,7 @@ use DateTime;
 use Exception;
 use App\Util\AppUtil;
 use App\Util\CacheUtil;
+use App\Util\SessionUtil;
 use App\Manager\LogManager;
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,13 +27,20 @@ class LogApiController extends AbstractController
     private AppUtil $appUtil;
     private CacheUtil $cacheUtil;
     private LogManager $logManager;
+    private SessionUtil $sessionUtil;
     private ErrorManager $errorManager;
 
-    public function __construct(AppUtil $appUtil, CacheUtil $cacheUtil, LogManager $logManager, ErrorManager $errorManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        CacheUtil $cacheUtil,
+        LogManager $logManager,
+        SessionUtil $sessionUtil,
+        ErrorManager $errorManager
+    ) {
         $this->appUtil = $appUtil;
         $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
+        $this->sessionUtil = $sessionUtil;
         $this->errorManager = $errorManager;
     }
 
@@ -113,8 +121,11 @@ class LogApiController extends AbstractController
     #[Route('/api/system/logs', methods:['GET'], name: 'app_api_system_logs')]
     public function getSystemLogs(): JsonResponse
     {
+        // get session id (to store last get time separately for each session)
+        $sessionId = $this->sessionUtil->getSessionId();
+
         // cache key to save last get time
-        $cacheKey = 'last_journalctl_timestamp';
+        $cacheKey = 'last_journalctl_timestamp-' . $sessionId;
 
         // get last get time
         $cacheItem = $this->cacheUtil->getValue($cacheKey);

@@ -118,4 +118,14 @@ class SessionUtil
         // return decrypted session value
         return $value;
     }
+
+    /**
+     * Get session id
+     *
+     * @return string Session id
+     */
+    public function getSessionId(): string
+    {
+        return $this->requestStack->getSession()->getId();
+    }
 }
