@@ -68,6 +68,7 @@ The environment variables are loaded from .env file. You can create .env file in
 | PWA_APP_SUPPORT | Enable pwa app support | true |
 | ADMIN_CONTACT | The system maintener contact email | admin@becvar.xyz |
 | IP_APIS | The list of APIs to get host server pulic ip | IP_APIS=IP_APIS=https://ifconfig.me,url2,url2 |
+| IP_INFO_API | API for get information about visitor ip | http://ip-api.com |
 | EXTERNAL_API_LOG_TOKEN | Token for external api logging | 1234567890 |
 | ANTI_LOG_TOKEN | Token for disable logging | 1234567890 |
 | SYSTEM_LOGS_DIR | System logs directory | /var/log |
