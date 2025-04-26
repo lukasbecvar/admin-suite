@@ -1,5 +1,6 @@
 /* system journalctl log card functionality */
 document.addEventListener('DOMContentLoaded', () => {
+	let lastSeenTimestamp = null
 	const ul = document.getElementById('journalctl-logs')
 	const scrollBox = document.getElementById('journalctl-scrollbox')
 	const waitingForLogs = document.getElementById('waiting-for-logs')
@@ -14,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			const hours = date.getHours().toString().padStart(2, '0')
 			const minutes = date.getMinutes().toString().padStart(2, '0')
 			const seconds = date.getSeconds().toString().padStart(2, '0')
-
 			return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`
 		} catch {
 			return isoString
@@ -27,25 +27,30 @@ document.addEventListener('DOMContentLoaded', () => {
 		const isAtBottom = scrollBox.scrollHeight - scrollBox.scrollTop <= scrollBox.clientHeight + 10
 
 		try {
-			const res = await fetch('/api/system/logs')
+			let url = '/api/system/logs'
+			if (lastSeenTimestamp) {
+				url += '?last_seen_timestamp=' + encodeURIComponent(lastSeenTimestamp)
+			}
+
+			const res = await fetch(url)
 			if (!res.ok) throw new Error('Network response was not ok')
 
 			const data = await res.json()
 			const logs = data.logs
 
 			// remove waiting message
-			if (logs[0] != '') {
-				waitingForLogs.style = 'display: none'
+			if (logs[0] !== '') {
+				waitingForLogs.style.display = 'none'
 			}
 
 			logs.forEach(log => {
 				const li = document.createElement('li')
 				li.classList.add('whitespace-pre-wrap', 'font-mono', 'text-sm')
 
-				// ISO log format parsing
 				const match = log.match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\+\d{4})?) (\S+) (\S+):\s?(.*)$/)
+				// ISO log format parsing
 				if (match) {
-					const [, timestamp, host, unit, message] = match
+					const [, timestamp, unit, message] = match
 
 					const timeSpan = document.createElement('span')
 					timeSpan.textContent = `${formatTimestamp(timestamp)} `
@@ -69,6 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				ul.appendChild(li)
 			})
+
+			// update last seen timestamp
+			lastSeenTimestamp = data.to
 
 			// scroll if needed
 			if (isAtBottom) {
