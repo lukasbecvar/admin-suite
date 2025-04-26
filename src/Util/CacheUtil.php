@@ -84,7 +84,15 @@ class CacheUtil
             $cache_item->expiresAfter($expiration);
 
             // save value
-            $this->cacheItemPoolInterface->save($cache_item);
+            $saveStatus = $this->cacheItemPoolInterface->save($cache_item);
+
+            // check if value was saved
+            if ($saveStatus == false) {
+                $this->errorManager->handleError(
+                    message: 'error to store cache value',
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to store cache value: ' . $e->getMessage(),
