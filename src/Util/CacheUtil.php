@@ -89,7 +89,7 @@ class CacheUtil
             // check if value was saved
             if ($saveStatus == false) {
                 $this->errorManager->handleError(
-                    message: 'error to store cache value',
+                    message: 'error to store cache value with key: ' . $key . ' and expiration: ' . $expiration,
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
