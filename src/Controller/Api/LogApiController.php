@@ -5,6 +5,8 @@ namespace App\Controller\Api;
 use DateTime;
 use Exception;
 use App\Util\AppUtil;
+use App\Util\CacheUtil;
+use App\Util\SessionUtil;
 use App\Manager\LogManager;
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,16 +25,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class LogApiController extends AbstractController
 {
     private AppUtil $appUtil;
+    private CacheUtil $cacheUtil;
     private LogManager $logManager;
+    private SessionUtil $sessionUtil;
     private ErrorManager $errorManager;
 
     public function __construct(
         AppUtil $appUtil,
+        CacheUtil $cacheUtil,
         LogManager $logManager,
+        SessionUtil $sessionUtil,
         ErrorManager $errorManager
     ) {
         $this->appUtil = $appUtil;
+        $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
+        $this->sessionUtil = $sessionUtil;
         $this->errorManager = $errorManager;
     }
 
@@ -108,23 +116,28 @@ class LogApiController extends AbstractController
     /**
      * Get system logs with journalctl command execute
      *
-     * @param Request $request The request object
-     *
      * @return JsonResponse The JSON response with system logs
      */
     #[Route('/api/system/logs', methods:['GET'], name: 'app_api_system_logs')]
-    public function getSystemLogs(Request $request): JsonResponse
+    public function getSystemLogs(): JsonResponse
     {
-        // get last seen timestamp
-        $lastSeen = (string) $request->query->get('last_seen_timestamp');
+        // get session id (to store last get time separately for each session)
+        $sessionId = $this->sessionUtil->getSessionId();
 
-        // get time parameters
-        $since = $lastSeen ?: (new DateTime('-10 seconds'))->format('Y-m-d H:i:s');
-        $now = (new DateTime())->format('Y-m-d H:i:s');
+        // cache key to save last get time
+        $cacheKey = 'last_log_get_timestamp_' . $sessionId;
+
+        // get last get time
+        $cacheItem = $this->cacheUtil->getValue($cacheKey);
+        if ($cacheItem != null) {
+            $lastTimestamp = $cacheItem->get();
+        } else {
+            $lastTimestamp = (new DateTime('-10 seconds'))->format('Y-m-d H:i:s');
+        }
 
         // journalctl command execute to get logs
         try {
-            $command = "sudo journalctl --since '$since' -o short-iso | grep -v 'COMMAND=/usr/bin/journalctl' | grep -v 'pam_unix(sudo:session)'";
+            $command = "sudo journalctl --since '$lastTimestamp' -o short-iso | grep -v 'COMMAND=/usr/bin/journalctl' | grep -v 'pam_unix(sudo:session)'";
             $output = shell_exec($command);
             if ($output == false) {
                 $output = '';
@@ -136,9 +149,14 @@ class LogApiController extends AbstractController
             );
         }
 
+        // update timestamp in cache for next call
+        $now = (new DateTime())->format('Y-m-d H:i:s');
+        $this->cacheUtil->deleteValue($cacheKey);
+        $this->cacheUtil->setValue($cacheKey, $now, (60 * 60));
+
         // return response with logs
         return $this->json([
-            'from' => $since,
+            'from' => $lastTimestamp,
             'to' => $now,
             'logs' => explode("\n", trim($output)),
         ], Response::HTTP_OK);
