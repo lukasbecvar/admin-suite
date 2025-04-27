@@ -61,15 +61,15 @@ jobs:
           sudo systemctl start apache2
           sudo systemctl start admin-suite-monitoring
 
-          # set storage permissions
-          sudo chmod -R 777 var/
-          sudo chown -R www-data:www-data var/
-
           # wait for ensure that services are started
           sleep 5
 
           # disable maintenance mode
           php bin/console app:toggle:maintenance false
+
+          # set storage permissions
+          sudo chmod -R 777 var/
+          sudo chown -R www-data:www-data var/
 
           # send push notifications to users
           php bin/console app:notifications:send "[Actions]: new admin-suite release deployed!"
