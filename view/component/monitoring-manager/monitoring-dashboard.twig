@@ -36,7 +36,7 @@
     {# SERVICES STATUS LOG #}
     {% if monitoringLogs|length > 0 %}        
         <div class="grid grid-cols-1 sm:grid-cols-1 gap-1 p-2 pt-2 py-0 component">
-            <div class="backdrop-blur-md bg-white/5 border border-white/20 shadow-md w-full sm:col-span-2 card-component rounded">
+            <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-md w-full sm:col-span-2 card-component rounded">
                 <div class="px-2 py-2 border-b border-white/10 font-extrabold text-white">Status log</div>
                 <div class="p-1 card-text" style="max-height: 200px; overflow-y: auto;">
                     {% for log in monitoringLogs %}
@@ -51,7 +51,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2 pt-2">
         {# SERVICES DASHBOARD CARD #}
         <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-lg overflow-hidden w-full max-h-50 card-component rounded">
-            <div class="px-2 py-2 border-b border-white/15 text-white/80 font-bold">Internal services</div>
+            <div class="px-2 py-2 border-b border-white/10 text-white/80 font-bold">Internal services</div>
             <div class="p-1 overflow-y-auto h-70 mb-[-5px]">
                 
                 {# UFW SERVICE #}
@@ -119,7 +119,7 @@
 
         {# SERVICES DASHBOARD CARD #}
         <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-lg overflow-hidden w-full max-h-50 card-component rounded">
-            <div class="px-2 py-2 border-b border-white/15 text-white/80 font-bold">
+            <div class="px-2 py-2 border-b border-white/10 text-white/80 font-bold">
                 HTTP services
                 <a href={{ path('app_metrics_services_all') }} class="text-blue-500 hover:text-blue-300" title="View metrics">
                     <i class="fa fa-chart-line border-neutral-500 border p-1 rounded" aria-hidden="true"></i>
