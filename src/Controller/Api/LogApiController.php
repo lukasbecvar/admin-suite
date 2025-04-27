@@ -125,7 +125,7 @@ class LogApiController extends AbstractController
         $sessionId = $this->sessionUtil->getSessionId();
 
         // cache key to save last get time
-        $cacheKey = 'last_log_get_time-' . md5($sessionId);
+        $cacheKey = 'last_log_get_time_' . substr(md5($sessionId), 0, 8);
 
         // get last get time
         $cacheItem = $this->cacheUtil->getValue($cacheKey);
