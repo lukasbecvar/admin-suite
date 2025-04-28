@@ -53,21 +53,23 @@
 {# METRICS-CARDS #}
 <div class="p-2 space-y-2 metrics-component">
     {# CURRENT USAGE CARD #}
-    <div class="flex flex-col md:flex-row gap-2">
-        <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded shadow-xl text-white w-full overflow-hidden">
-            <div class="px-4 py-3 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">Current usage</div>
-            <div class="grid grid-cols-1 md:grid-cols-3">
-                <div class="flex flex-col items-center bg-red-700 p-2 md:rounded-bl">
-                    <span class="text-neutral-200 text-lg font-medium">CPU</span>
-                    <span class="text-white text-xl font-bold">{{ current_usages.cpu|e }}%</span>
+    <div class="flex flex-col md:flex-row gap-4">
+        <div class="w-full rounded border border-white/10 bg-neutral-400/5 backdrop-blur-lg shadow-2xl text-white overflow-hidden">
+            <div class="px-3 py-3 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
+                Current usage
+            </div>
+            <div class="grid grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+                <div class="flex flex-col items-center justify-center p-2 bg-gradient-to-br from-red-500/40 to-red-800/20">
+                    <span class="text-white/70 text-sm font-medium tracking-wide">CPU</span>
+                    <span class="text-white text-2xl font-bold mt-1">{{ current_usages.cpu|e }}%</span>
                 </div>
-                <div class="flex flex-col items-center bg-blue-700 p-2">
-                    <span class="text-neutral-200 text-lg font-medium">RAM</span>
-                    <span class="text-white text-xl font-bold">{{ current_usages.ram|e }}%</span>
+                <div class="flex flex-col items-center justify-center p-2 bg-gradient-to-br from-blue-500/40 to-blue-800/20">
+                    <span class="text-white/70 text-sm font-medium tracking-wide">RAM</span>
+                    <span class="text-white text-2xl font-bold mt-1">{{ current_usages.ram|e }}%</span>
                 </div>
-                <div class="flex flex-col items-center bg-green-700 p-2 md:rounded-br">
-                    <span class="text-neutral-200 text-lg font-medium">Storage</span>
-                    <span class="text-white text-xl font-bold">{{ current_usages.storage|e }}%</span>
+                <div class="flex flex-col items-center justify-center p-2 bg-gradient-to-br from-emerald-500/40 to-emerald-800/20">
+                    <span class="text-white/70 text-sm font-medium tracking-wide">Storage</span>
+                    <span class="text-white text-2xl font-bold mt-1">{{ current_usages.storage|e }}%</span>
                 </div>
             </div>
         </div>

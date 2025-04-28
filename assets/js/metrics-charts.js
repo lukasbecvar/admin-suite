@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function getColor(value, metricData) {
         const maxMetricValue = Math.max(...metricData.map(m => m.value))
         if (maxMetricValue > 100) {
-            return '#19bf3f'
+            return '#1fa33d'
         }
-        return value > 80 ? '#f73925' : '#19bf3f'
+        return value > 50 ? '#cc3829' : '#1fa33d'
     }
 
     if (!window.metricsData) {
