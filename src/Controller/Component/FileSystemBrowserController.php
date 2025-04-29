@@ -212,6 +212,14 @@ class FileSystemBrowserController extends AbstractController
             );
         }
 
+        // check filename length (max 255 characters)
+        if (strlen($filename) > 255) {
+            $this->errorManager->handleError(
+                message: 'Filename must be between 1 and 255 characters',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
         // build full file path
         $filePath = rtrim($directoryPath, '/') . '/' . $filename;
 
@@ -305,6 +313,14 @@ class FileSystemBrowserController extends AbstractController
         if (str_contains($directoryName, '/')) {
             $this->errorManager->handleError(
                 message: 'Directory name cannot contain path separators (/)',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check directory name length (max 255 characters)
+        if (strlen($directoryName) > 255) {
+            $this->errorManager->handleError(
+                message: 'Directory name must be between 1 and 255 characters',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -440,6 +456,14 @@ class FileSystemBrowserController extends AbstractController
         if (str_contains($newName, '/')) {
             $this->errorManager->handleError(
                 message: 'New name cannot contain path separators (/).',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check new name length (max 255 characters)
+        if (strlen($newName) > 255) {
+            $this->errorManager->handleError(
+                message: 'New name must be between 1 and 255 characters',
                 code: Response::HTTP_BAD_REQUEST
             );
         }

@@ -21,11 +21,17 @@ document.addEventListener('DOMContentLoaded', function() {
     unchangedErrorMessage.textContent = 'New name must be different from the current name'
     errorContainer.appendChild(unchangedErrorMessage)
 
-    //empty error messages
+    // empty error messages
     const emptyErrorMessage = document.createElement('p')
     emptyErrorMessage.className = 'text-red-500 text-xs mt-1 hidden'
     emptyErrorMessage.textContent = 'Name cannot be empty'
     errorContainer.appendChild(emptyErrorMessage)
+
+    // length error messages
+    const lengthErrorMessage = document.createElement('p')
+    lengthErrorMessage.className = 'text-red-500 text-xs mt-1 hidden'
+    lengthErrorMessage.textContent = 'Name must be between 1 and 255 characters'
+    errorContainer.appendChild(lengthErrorMessage)
 
     // validate name
     function validateNewName() {
@@ -35,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         slashErrorMessage.classList.add('hidden')
         unchangedErrorMessage.classList.add('hidden')
         emptyErrorMessage.classList.add('hidden')
+        lengthErrorMessage.classList.add('hidden')
         newNameInput.classList.remove('border-red-500')
 
         // check if name is empty
@@ -54,6 +61,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // check if name is unchanged
         if (newName === originalName) {
             unchangedErrorMessage.classList.remove('hidden')
+            newNameInput.classList.add('border-red-500')
+            return false
+        }
+
+        // check name length (max 255 characters)
+        if (newName.length > 255) {
+            lengthErrorMessage.classList.remove('hidden')
             newNameInput.classList.add('border-red-500')
             return false
         }

@@ -2,24 +2,60 @@
 document.addEventListener('DOMContentLoaded', function() {
     const directoryNameInput = document.getElementById('directoryname')
     const form = document.querySelector('form')
-    const errorMessage = document.createElement('p')
+    const errorContainer = document.createElement('div')
 
-    // error messages
-    errorMessage.className = 'text-red-500 text-xs mt-1 hidden'
-    errorMessage.textContent = 'Directory name cannot contain path separators (/)'
-    directoryNameInput.parentNode.appendChild(errorMessage)
+    // create error container
+    errorContainer.className = 'mt-2'
+    directoryNameInput.parentNode.appendChild(errorContainer)
 
-    // validate directory name doesn't contain slashes
+    // create slash error message
+    const slashErrorMessage = document.createElement('p')
+    slashErrorMessage.className = 'text-red-500 text-xs mt-1 hidden'
+    slashErrorMessage.textContent = 'Directory name cannot contain path separators (/)'
+    errorContainer.appendChild(slashErrorMessage)
+
+    // create length error message
+    const lengthErrorMessage = document.createElement('p')
+    lengthErrorMessage.className = 'text-red-500 text-xs mt-1 hidden'
+    lengthErrorMessage.textContent = 'Directory name must be between 1 and 255 characters'
+    errorContainer.appendChild(lengthErrorMessage)
+
+    // create empty error message
+    const emptyErrorMessage = document.createElement('p')
+    emptyErrorMessage.className = 'text-red-500 text-xs mt-1 hidden'
+    emptyErrorMessage.textContent = 'Directory name cannot be empty'
+    errorContainer.appendChild(emptyErrorMessage)
+
+    // validate directory name
     function validateDirectoryName() {
-        const directoryName = directoryNameInput.value
-        const isValid = !directoryName.includes('/')
+        const directoryName = directoryNameInput.value.trim()
+        let isValid = true
 
-        if (!isValid) {
-            errorMessage.classList.remove('hidden')
+        // reset all error states
+        slashErrorMessage.classList.add('hidden')
+        lengthErrorMessage.classList.add('hidden')
+        emptyErrorMessage.classList.add('hidden')
+        directoryNameInput.classList.remove('border-red-500')
+
+        // check if directory name is empty
+        if (directoryName === '') {
+            emptyErrorMessage.classList.remove('hidden')
             directoryNameInput.classList.add('border-red-500')
-        } else {
-            errorMessage.classList.add('hidden')
-            directoryNameInput.classList.remove('border-red-500')
+            isValid = false
+        }
+
+        // check if directory name contains slashes
+        if (directoryName.includes('/')) {
+            slashErrorMessage.classList.remove('hidden')
+            directoryNameInput.classList.add('border-red-500')
+            isValid = false
+        }
+
+        // check directory name length (max 255 characters)
+        if (directoryName.length > 255) {
+            lengthErrorMessage.classList.remove('hidden')
+            directoryNameInput.classList.add('border-red-500')
+            isValid = false
         }
 
         return isValid

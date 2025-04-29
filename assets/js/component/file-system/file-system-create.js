@@ -3,24 +3,60 @@ document.addEventListener('DOMContentLoaded', function() {
     const editor = document.getElementById('editor')
     const filenameInput = document.getElementById('filename')
     const form = document.querySelector('form')
-    const errorMessage = document.createElement('p')
+    const errorContainer = document.createElement('div')
 
-    // error messages
-    errorMessage.className = 'text-red-500 text-xs mt-1 hidden'
-    errorMessage.textContent = 'Filename cannot contain path separators (/)'
-    filenameInput.parentNode.appendChild(errorMessage)
+    // create error container
+    errorContainer.className = 'mt-2'
+    filenameInput.parentNode.appendChild(errorContainer)
 
-    // validate filename does not contain slashes
+    // create slash error message
+    const slashErrorMessage = document.createElement('p')
+    slashErrorMessage.className = 'text-red-500 text-xs mt-1 hidden'
+    slashErrorMessage.textContent = 'Filename cannot contain path separators (/)'
+    errorContainer.appendChild(slashErrorMessage)
+
+    // create length error message
+    const lengthErrorMessage = document.createElement('p')
+    lengthErrorMessage.className = 'text-red-500 text-xs mt-1 hidden'
+    lengthErrorMessage.textContent = 'Filename must be between 1 and 255 characters'
+    errorContainer.appendChild(lengthErrorMessage)
+
+    // create empty error message
+    const emptyErrorMessage = document.createElement('p')
+    emptyErrorMessage.className = 'text-red-500 text-xs mt-1 hidden'
+    emptyErrorMessage.textContent = 'Filename cannot be empty'
+    errorContainer.appendChild(emptyErrorMessage)
+
+    // validate filename
     function validateFilename() {
-        const filename = filenameInput.value
-        const isValid = !filename.includes('/')
+        const filename = filenameInput.value.trim()
+        let isValid = true
 
-        if (!isValid) {
-            errorMessage.classList.remove('hidden')
-            filenameInput.classList.add('border', 'border-red-500')
-        } else {
-            errorMessage.classList.add('hidden')
-            filenameInput.classList.remove('border', 'border-red-500')
+        // reset all error states
+        slashErrorMessage.classList.add('hidden')
+        lengthErrorMessage.classList.add('hidden')
+        emptyErrorMessage.classList.add('hidden')
+        filenameInput.classList.remove('border-red-500')
+
+        // check if filename is empty
+        if (filename === '') {
+            emptyErrorMessage.classList.remove('hidden')
+            filenameInput.classList.add('border-red-500')
+            isValid = false
+        }
+
+        // check if filename contains slashes
+        if (filename.includes('/')) {
+            slashErrorMessage.classList.remove('hidden')
+            filenameInput.classList.add('border-red-500')
+            isValid = false
+        }
+
+        // check filename length (max 255 characters)
+        if (filename.length > 255) {
+            lengthErrorMessage.classList.remove('hidden')
+            filenameInput.classList.add('border-red-500')
+            isValid = false
         }
 
         return isValid
