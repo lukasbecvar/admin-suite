@@ -10,18 +10,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const confirmEditButton = document.getElementById('confirmEditButton')
 
     // get info elements
-    const todoItems = document.querySelectorAll('[data-todo-id]')
     const infoPopup = document.getElementById('infoPopup')
     const todoOwner = document.getElementById('todoOwner')
     const todoStatus = document.getElementById('todoStatus')
-    const todoCreatedAt = document.getElementById('todoCreatedAt')
     const todoClosedAt = document.getElementById('todoClosedAt')
+    const todoItems = document.querySelectorAll('[data-todo-id]')
+    const todoCreatedAt = document.getElementById('todoCreatedAt')
     const closePopupButton = document.getElementById('closePopup')
 
     // get todo delete elements
     let deleteUrl = ''
-    const deletePopupOverlay = document.getElementById('delete-popup-overlay')
     const deleteButton = document.querySelectorAll('.delete-button')
+    const deletePopupOverlay = document.getElementById('delete-popup-overlay')
     const deleteCancelButton = document.getElementById('delete-cancel-button')
     const deleteConfirmButton =  document.getElementById('delete-confirm-button')
 

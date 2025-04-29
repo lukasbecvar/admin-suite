@@ -6,37 +6,37 @@
 <div class="users-manager">
     <div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
         {# BACK BUTTON #}
-        <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white" title="Back to dashboard">
+        <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="Back to dashboard">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
 
         {# LINK TO UNFILTERED LOGS #}
-        <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': logsTableName}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Go to unsorted logs">
+        <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': logsTableName}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="Go to unsorted logs">
             <i class="fa fa-database" aria-hidden="true"></i>
         </a>
 
         {# SET ALL LOGS READED #}
-        <a href={{ path('app_manager_logs_set_readed') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="set all logs readed">
+        <a href={{ path('app_manager_logs_set_readed') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="set all logs readed">
             <i class="fa fa-check" aria-hidden="true"></i>
         </a>
 
         {# SYSTEM LOG READER #}
-        <a href={{ path('app_manager_logs_system') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Server logs">
+        <a href={{ path('app_manager_logs_system') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="Server logs">
             <i class="fas fa-server"></i>
         </a>
 
         {# WEB EXCEPTION LOG #}
-        <a href={{ path('app_manager_logs_exception_files') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="App exception files">
+        <a href={{ path('app_manager_logs_exception_files') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="App exception files">
             <i class="fa fa-bomb"></i>
         </a>
 
         {# ANTI-LOG SETTINGS LINK #}
         {% if antiLogEnabled %}
-            <a href={{ path('app_anti_log_enable', {'state': 'disable'}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Disable anti-log">
+            <a href={{ path('app_anti_log_enable', {'state': 'disable'}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="Disable anti-log">
                 <i class="fa fa-toggle-on" aria-hidden="true"></i>
             </a>
         {% else %}
-            <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white" title="Enable anti-log">
+            <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="Enable anti-log">
                 <i class="fa fa-toggle-off" aria-hidden="true"></i>
             </a>
         {% endif %}

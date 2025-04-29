@@ -3,6 +3,7 @@
 namespace App\Tests\Controller\Component;
 
 use App\Tests\CustomTestCase;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
@@ -62,9 +63,323 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[href="/filesystem?path=/usr/lib"]');
         $this->assertSelectorExists('a[title="Back to previous page"]');
+        $this->assertSelectorExists('a[href="/filesystem/edit?path=/usr/lib/os-release"]');
+        $this->assertSelectorExists('a[title="Edit this file"]');
         $this->assertSelectorTextContains('body', 'os-release');
         $this->assertSelectorTextContains('body', 'Path');
         $this->assertSelectorExists('pre');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test load file system edit page
+     *
+     * @return void
+     */
+    public function testLoadFileSystemEditPage(): void
+    {
+        $this->client->request('GET', '/filesystem/edit?path=/usr/lib/os-release');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[href="/filesystem/view?path=/usr/lib/os-release"]');
+        $this->assertSelectorExists('a[title="Back to file view"]');
+        $this->assertSelectorTextContains('body', 'File Editor');
+        $this->assertSelectorTextContains('body', 'Path');
+        $this->assertSelectorExists('form[action="/filesystem/save"]');
+        $this->assertSelectorExists('textarea[id="editor"]');
+        $this->assertSelectorExists('button[type="submit"]');
+        $this->assertSelectorTextContains('button[type="submit"]', 'Save');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test save file content
+     *
+     * @return void
+     */
+    #[Group('file-save')]
+    public function testSaveFileContent(): void
+    {
+        // create a temporary file for testing
+        $tempFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($tempFile, 'Original content');
+
+        // submit the form with new content
+        $this->client->request('POST', '/filesystem/save', [
+            'path' => $tempFile,
+            'content' => 'New content'
+        ]);
+
+        // assert redirect back to file view
+        $this->assertResponseRedirects('/filesystem/view?path=' . $tempFile);
+
+        // clean up
+        unlink($tempFile);
+    }
+
+    /**
+     * Test load file system create page
+     *
+     * @return void
+     */
+    public function testLoadFileSystemCreatePage(): void
+    {
+        $this->client->request('GET', '/filesystem/create?path=/tmp');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[href="/filesystem?path=/tmp"]');
+        $this->assertSelectorExists('a[title="Back to directory"]');
+        $this->assertSelectorTextContains('body', 'Create New File');
+        $this->assertSelectorTextContains('body', 'Directory');
+        $this->assertSelectorExists('form[action="/filesystem/create/save"]');
+        $this->assertSelectorExists('input[id="filename"]');
+        $this->assertSelectorExists('label[for="filename"]');
+        $this->assertSelectorTextContains('label[for="filename"]', 'Filename:');
+        $this->assertSelectorExists('textarea[id="editor"]');
+        $this->assertSelectorExists('button[type="submit"]');
+        $this->assertSelectorTextContains('button[type="submit"]', 'Create');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test load file system create directory page
+     *
+     * @return void
+     */
+    public function testLoadFileSystemCreateDirectoryPage(): void
+    {
+        $this->client->request('GET', '/filesystem/create/directory?path=/tmp');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[href="/filesystem?path=/tmp"]');
+        $this->assertSelectorExists('a[title="Back to directory"]');
+        $this->assertSelectorTextContains('body', 'Create New Directory');
+        $this->assertSelectorExists('form[action="/filesystem/create/directory/save"]');
+        $this->assertSelectorExists('input[id="directoryname"]');
+        $this->assertSelectorExists('label[for="directoryname"]');
+        $this->assertSelectorTextContains('label[for="directoryname"]', 'Folder Name:');
+        $this->assertSelectorExists('button[type="submit"]');
+        $this->assertSelectorTextContains('button[type="submit"]', 'Create Folder');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test create new file
+     *
+     * @return void
+     */
+    #[Group('file-save')]
+    public function testCreateNewFile(): void
+    {
+        // create temporary directory for testing
+        $tempDir = sys_get_temp_dir() . '/test_' . uniqid();
+        mkdir($tempDir);
+
+        // new file path
+        $newFilePath = $tempDir . '/test_file.txt';
+
+        // submit form to create new file
+        $this->client->request('POST', '/filesystem/create/save', [
+            'directory' => $tempDir,
+            'filename' => 'test_file.txt',
+            'content' => 'Test content'
+        ]);
+
+        // assert redirect to file view
+        $this->assertResponseRedirects('/filesystem/view?path=' . $newFilePath);
+
+        // clean up
+        if (file_exists($newFilePath)) {
+            unlink($newFilePath);
+        }
+        rmdir($tempDir);
+    }
+
+    /**
+     * Test create new directory
+     *
+     * @return void
+     */
+    #[Group('file-save')]
+    public function testCreateNewDirectory(): void
+    {
+        // create temporary directory for testing
+        $tempDir = sys_get_temp_dir() . '/test_' . uniqid();
+        mkdir($tempDir);
+
+        // new directory path
+        $newDirName = 'test_dir_' . uniqid();
+        $newDirPath = $tempDir . '/' . $newDirName;
+
+        // submit form to create new directory
+        $this->client->request('POST', '/filesystem/create/directory/save', [
+            'directory' => $tempDir,
+            'directoryname' => $newDirName
+        ]);
+
+        // assert redirect to directory
+        $this->assertResponseRedirects('/filesystem?path=' . $newDirPath);
+
+        // assert directory was created
+        $this->assertDirectoryExists($newDirPath);
+
+        // clean up
+        rmdir($newDirPath);
+        rmdir($tempDir);
+    }
+
+    /**
+     * Test delete file
+     *
+     * @return void
+     */
+    #[Group('file-delete')]
+    public function testDeleteFile(): void
+    {
+        // create temporary file for testing
+        $tempFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($tempFile, 'Test content');
+
+        // get directory path
+        $directoryPath = dirname($tempFile);
+
+        // submit form to delete file
+        $this->client->request('POST', '/filesystem/delete', [
+            'path' => $tempFile
+        ]);
+
+        // assert redirect to directory
+        $this->assertResponseRedirects('/filesystem?path=' . $directoryPath);
+
+        // assert file was deleted
+        $this->assertFileDoesNotExist($tempFile);
+    }
+
+    /**
+     * Test delete directory
+     *
+     * @return void
+     */
+    #[Group('file-delete')]
+    public function testDeleteDirectory(): void
+    {
+        // create temporary directory for testing
+        $tempDir = sys_get_temp_dir() . '/test_' . uniqid();
+        mkdir($tempDir);
+
+        // get parent directory path
+        $parentDir = dirname($tempDir);
+
+        // submit form to delete directory
+        $this->client->request('POST', '/filesystem/delete', [
+            'path' => $tempDir
+        ]);
+
+        // assert redirect to parent directory
+        $this->assertResponseRedirects('/filesystem?path=' . $parentDir);
+
+        // assert directory was deleted
+        $this->assertDirectoryDoesNotExist($tempDir);
+    }
+
+    /**
+     * Test rename file form
+     *
+     * @return void
+     */
+    #[Group('file-rename')]
+    public function testRenameFileForm(): void
+    {
+        // create temporary file for testing
+        $tempFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($tempFile, 'Test content');
+
+        // request rename form
+        $this->client->request('GET', '/filesystem/rename', [
+            'path' => $tempFile
+        ]);
+
+        // assert response is successful
+        $this->assertResponseIsSuccessful();
+
+        // assert form exists
+        $this->assertSelectorExists('form[action="/filesystem/rename/save"]');
+        $this->assertSelectorExists('input[name="path"]');
+        $this->assertSelectorExists('input[name="newName"]');
+        $this->assertSelectorExists('button[type="submit"]');
+
+        // clean up
+        unlink($tempFile);
+    }
+
+    /**
+     * Test rename file
+     *
+     * @return void
+     */
+    #[Group('file-rename')]
+    public function testRenameFile(): void
+    {
+        // create temporary file for testing
+        $tempFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($tempFile, 'Test content');
+
+        // get directory path and new file path
+        $directoryPath = dirname($tempFile);
+        $newName = 'renamed_' . basename($tempFile);
+        $newPath = $directoryPath . '/' . $newName;
+
+        // submit form to rename file
+        $this->client->request('POST', '/filesystem/rename/save', [
+            'path' => $tempFile,
+            'newName' => $newName
+        ]);
+
+        // assert redirect to directory
+        $this->assertResponseRedirects('/filesystem?path=' . $directoryPath);
+
+        // assert file was renamed
+        $this->assertFileExists($newPath);
+        $this->assertFileDoesNotExist($tempFile);
+
+        // clean up
+        unlink($newPath);
+    }
+
+    /**
+     * Test rename directory
+     *
+     * @return void
+     */
+    #[Group('file-rename')]
+    public function testRenameDirectory(): void
+    {
+        // create temporary directory for testing
+        $tempDir = sys_get_temp_dir() . '/test_' . uniqid();
+        mkdir($tempDir);
+
+        // get parent directory path and new directory path
+        $parentDir = dirname($tempDir);
+        $newName = 'renamed_' . basename($tempDir);
+        $newPath = $parentDir . '/' . $newName;
+
+        // submit form to rename directory
+        $this->client->request('POST', '/filesystem/rename/save', [
+            'path' => $tempDir,
+            'newName' => $newName
+        ]);
+
+        // assert redirect to parent directory
+        $this->assertResponseRedirects('/filesystem?path=' . $parentDir);
+
+        // assert directory was renamed
+        $this->assertDirectoryExists($newPath);
+        $this->assertDirectoryDoesNotExist($tempDir);
+
+        // clean up
+        rmdir($newPath);
     }
 }

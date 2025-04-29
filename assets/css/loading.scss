@@ -13,13 +13,13 @@
 }
 
 #loader {
-	border: 15px solid rgba(255, 255, 255, 0.3);
-	border-top: 15px solid rgb(63, 223, 223);
 	width: 150px;
 	height: 150px;
 	border-radius: 50%;
 	background-color: transparent;
 	animation: spin 1.5s linear infinite;
+	border: 15px solid rgba(255, 255, 255, 0.3);
+	border-top: 15px solid rgb(63, 223, 223);
 }
 
 @keyframes spin {

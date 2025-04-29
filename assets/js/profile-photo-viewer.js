@@ -1,8 +1,8 @@
 /** profile photo view toggle component */
 document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('profile-modal')
     const openBtn = document.getElementById('open-profile-modal')
     const closeBtn = document.getElementById('close-profile-modal')
-    const modal = document.getElementById('profile-modal')
 
     openBtn.addEventListener('click', () => {
         modal.classList.remove('hidden')

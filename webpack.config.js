@@ -12,23 +12,29 @@ Encore
     // register js
     .addEntry('todo-manager-js', './assets/js/todo-manager.js')
     .addEntry('user-manager-js', './assets/js/user-manager.js')
-    .addEntry('metrics-charts-js', './assets/js/metrics-charts.js')
     .addEntry('sidebar-element-js', './assets/js/sidebar-element.js')
     .addEntry('loading-component-js', './assets/js/loading-component.js')
     .addEntry('terminal-component-js', './assets/js/terminal-component.js')
-    .addEntry('database-table-browser-js', './assets/js/database-table-browser.js')
-    .addEntry('notifications-settings-js', './assets/js/notifications-settings.js')
-    .addEntry('notification-subscriberr-js', './assets/js/notification-subscriber.js')
+    .addEntry('metrics-charts-js', './assets/js/component/metrics/metrics-charts.js')
     .addEntry('system-resources-updater-js', './assets/js/system-resources-updater.js')
-    .addEntry('profile-photo-view-toggle-js', './assets/js/profile-photo-view-toggle.js')
+    .addEntry('profile-photo-view-toggle-js', './assets/js/profile-photo-viewer.js')
     .addEntry('system-journalctl-log-card-js', './assets/js/system-journalctl-log-card.js')
-    .addEntry('metrics-delete-confirmaton-js', './assets/js/metrics-delete-confirmaton.js')
-    .addEntry('exception-log-delete-confirmation-js', './assets/js/exception-log-delete-confirmation.js')
+    .addEntry('file-system-edit-js', './assets/js/component/file-system/file-system-edit.js')
+    .addEntry('file-system-create-js', './assets/js/component/file-system/file-system-create.js')
+    .addEntry('file-system-rename-js', './assets/js/component/file-system/file-system-rename.js')
+    .addEntry('notifications-settings-js', './assets/js/component/notification/notifications-settings.js')
+    .addEntry('file-system-file-delete-js', './assets/js/component/file-system/file-system-file-delete.js')
+    .addEntry('file-system-create-menu-js', './assets/js/component/file-system/file-system-create-menu.js')
+    .addEntry('notification-subscriberr-js', './assets/js/component/notification/notification-subscriber.js')
+    .addEntry('metrics-delete-confirmaton-js', './assets/js/component/metrics/metrics-delete-confirmaton.js')
+    .addEntry('database-table-browser-js', './assets/js/component/database-browser/database-table-browser.js')
+    .addEntry('file-system-create-directory-js', './assets/js/component/file-system/file-system-create-directory.js')
+    .addEntry('exception-log-delete-confirmation-js', './assets/js/component/file-system/exception-log-delete-confirmation.js')
 
     // copy static assets
     .copyFiles({
-        from: './assets/images', 
-        to: 'images/[path][name].[ext]' 
+        from: './assets/images',
+        to: 'images/[path][name].[ext]'
     })
 
     // other webpack configs

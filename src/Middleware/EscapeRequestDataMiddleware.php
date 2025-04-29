@@ -35,8 +35,11 @@ class EscapeRequestDataMiddleware
     {
         $request = $event->getRequest();
 
-        // check if request is for database console
-        if ($request->getPathInfo() == $this->urlGenerator->generate('app_manager_database_console')) {
+        // excluded controller paths from escaping
+        if (
+            $request->getPathInfo() == $this->urlGenerator->generate('app_manager_database_console') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_save')
+        ) {
             return;
         }
 

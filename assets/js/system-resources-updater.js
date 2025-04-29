@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // get progress bars
     const cpuProgress = document.getElementById('cpu-progress')
     const ramProgress = document.getElementById('ram-progress')
-    const driveProgress = document.getElementById('drive-space-progress')
     const networkProgress = document.getElementById('network-progress')
+    const driveProgress = document.getElementById('drive-space-progress')
 
     // get info elements
     const cpuUsageElement = document.getElementById('cpu-usage')
@@ -14,12 +14,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const systemStorageElement = document.getElementById('drive-space')
     const systemUptimeElement = document.getElementById('system-uptime')
     const networkUsageElement = document.getElementById('network-usage')
-    const networkUsageDownloadElement = document.getElementById('network-usage-download')
-    const networkUsageUploadElement = document.getElementById('network-usage-upload')
     const networkUsagePingElement = document.getElementById('network-usage-ping')
+    const networkUsageUploadElement = document.getElementById('network-usage-upload')
+    const networkUsageDownloadElement = document.getElementById('network-usage-download')
+    const networkLastCheckTimeElement = document.getElementById('network-last-check-time')
     const networkUsageInterfaceElement = document.getElementById('network-usage-interface')
     const networkUsagePingServerElement = document.getElementById('network-usage-ping-server')
-    const networkLastCheckTimeElement = document.getElementById('network-last-check-time')
 
     // get network stats elements for switching visibility
     const loadingNetworkStats = document.getElementById('loading-network-stats')

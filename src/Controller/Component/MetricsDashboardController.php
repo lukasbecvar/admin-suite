@@ -60,7 +60,7 @@ class MetricsDashboardController extends AbstractController
         }
 
         // return metrics dashboard view
-        return $this->render('component/metrics-dashboard/metrics-dashboard.twig', [
+        return $this->render('component/metrics/metrics-dashboard.twig', [
             'current_usages' => [
                 'cpu' => $currentCpuUsage,
                 'ram' => $currentRamUsage,
@@ -95,7 +95,7 @@ class MetricsDashboardController extends AbstractController
         }
 
         // return service metrics view
-        return $this->render('component/metrics-dashboard/service-metrics.twig', [
+        return $this->render('component/metrics/service-metrics.twig', [
             'serviceName' => $serviceName,
             'data' => $data
         ]);
@@ -125,7 +125,7 @@ class MetricsDashboardController extends AbstractController
         }
 
         // return service metrics view
-        return $this->render('component/metrics-dashboard/service-metrics.twig', [
+        return $this->render('component/metrics/service-metrics.twig', [
             'serviceName' => 'all-services',
             'data' => $data
         ]);

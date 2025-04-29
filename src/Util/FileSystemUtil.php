@@ -73,23 +73,39 @@ class FileSystemUtil
                     continue;
                 }
 
+                // for directories, calculate total size if not recursive
+                $isDir = $type === 'd';
+                $fileSize = (int)$size;
+
+                // if it is a directory and we are not in recursive mode, calculate the total size
+                if ($isDir && !$recursive) {
+                    $fileSize = $this->calculateDirectorySize($realPath);
+                }
+
+                // format size for display
+                $formattedSize = $this->formatFileSize($fileSize);
+
                 $files[] = [
                     'name' => $name,
-                    'size' => (int)$size,
+                    'size' => $formattedSize,
+                    'rawSize' => $fileSize, // keep raw size for sorting
                     'permissions' => $permissions,
-                    'isDir' => $type === 'd',
+                    'isDir' => $isDir,
                     'path' => $realPath,
                     'creationTime' => date('Y-m-d H:i:s', (int)$creationTime),
                 ];
             }
 
-            // sort the list
+            // sort the list - directories first, then by name
             usort($files, function ($a, $b) {
+                // directories always come first
                 if ($a['isDir'] && !$b['isDir']) {
                     return -1;
                 } elseif (!$a['isDir'] && $b['isDir']) {
                     return 1;
                 }
+
+                // if both are directories or both are files, sort by name
                 return strcasecmp($a['name'], $b['name']);
             });
         } catch (Exception $e) {
@@ -214,8 +230,8 @@ class FileSystemUtil
             $fileContent = shell_exec('sudo cat ' . escapeshellarg($path));
 
             // check file content is set
-            if (!$fileContent) {
-                $fileContent = 'file is empty ';
+            if ($fileContent === null || $fileContent === false) {
+                $fileContent = '';
             }
 
             // return file content
@@ -230,5 +246,358 @@ class FileSystemUtil
             // return error to file view
             return $e->getMessage();
         }
+    }
+
+    /**
+     * Save content to file
+     *
+     * @param string $path The path to the file
+     * @param string $content The content to save
+     *
+     * @return bool True if the content was saved successfully, false otherwise
+     */
+    public function saveFileContent(string $path, string $content): bool
+    {
+        try {
+            // check if path is directory
+            if (is_dir($path) || is_link($path)) {
+                $this->errorManager->handleError(
+                    message: 'error saving file: ' . $path . ' is a directory or a link',
+                    code: Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // create temporary file
+            $tempFile = tempnam(sys_get_temp_dir(), 'admin_suite_');
+            if ($tempFile === false) {
+                throw new Exception('Failed to create temporary file');
+            }
+
+            // ensure content ends with a newline character
+            if (!empty($content) && substr($content, -1) !== "\n") {
+                $content .= "\n";
+            }
+
+            // write content to temporary file
+            if (file_put_contents($tempFile, $content) === false) {
+                throw new Exception('Failed to write to temporary file');
+            }
+
+            // get original file owner and group
+            $fileInfo = null;
+            if (file_exists($path)) {
+                $fileInfo = stat($path);
+            }
+
+            // write content to destination file using sudo
+            $command = 'sudo tee ' . escapeshellarg($path) . ' > /dev/null';
+            $descriptorspec = [
+                0 => ['pipe', 'r'],
+                1 => ['pipe', 'w'],
+                2 => ['pipe', 'w']
+            ];
+
+            $process = proc_open($command, $descriptorspec, $pipes);
+            if (is_resource($process)) {
+                // write content
+                fwrite($pipes[0], $content);
+                fclose($pipes[0]);
+
+                // read any errors
+                stream_get_contents($pipes[1]);
+                $error = stream_get_contents($pipes[2]);
+                fclose($pipes[1]);
+                fclose($pipes[2]);
+
+                // close process
+                $exitCode = proc_close($process);
+
+                // check if command was successful
+                if ($exitCode !== 0 || !empty($error)) {
+                    throw new Exception('Failed to save file: ' . $error);
+                }
+
+                // restore original owner and group
+                $fileInfo = stat($path);
+                if ($fileInfo !== false) {
+                    $uid = $fileInfo['uid'];
+                    $gid = $fileInfo['gid'];
+
+                    // restore original owner and group
+                    $chownCommand = 'sudo chown ' . $uid . ':' . $gid . ' ' . escapeshellarg($path);
+                    shell_exec($chownCommand);
+                }
+            } else {
+                throw new Exception('Failed to open process for saving file');
+            }
+
+            // remove temporary file
+            if (file_exists($tempFile)) {
+                unlink($tempFile);
+            }
+
+            return true;
+        } catch (Exception $e) {
+            // log error to exception log
+            $this->errorManager->logError(
+                message: 'error to save file content: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            return false;
+        }
+    }
+
+    /**
+     * Check if file is editable (text file)
+     *
+     * @param string $path The path to the file
+     *
+     * @return bool True if the file is editable, false otherwise
+     */
+    public function isFileEditable(string $path): bool
+    {
+        // check if file exists
+        if (!file_exists($path)) {
+            return false;
+        }
+
+        // check if path is directory or link
+        if (is_dir($path) || is_link($path)) {
+            return false;
+        }
+
+        // check if file is executable
+        if ($this->isFileExecutable($path)) {
+            return false;
+        }
+
+        // get MIME type using the file command
+        $mimeType = shell_exec("sudo file --mime-type -b " . escapeshellarg($path));
+
+        // check if MIME type is detected
+        if (!$mimeType) {
+            return false;
+        }
+
+        // trim output
+        $mimeType = trim($mimeType);
+
+        // check if file is a media file
+        if (
+            str_starts_with($mimeType, 'image/') ||
+            str_starts_with($mimeType, 'video/') ||
+            str_starts_with($mimeType, 'audio/')
+        ) {
+            return false;
+        }
+
+        // check if file is a binary file
+        if (
+            str_starts_with($mimeType, 'application/') &&
+            !str_contains($mimeType, 'text') &&
+            !str_contains($mimeType, 'json') &&
+            !str_contains($mimeType, 'xml')
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Delete file or directory
+     *
+     * @param string $path The path to the file or directory to delete
+     *
+     * @return bool True if the file or directory was deleted successfully, false otherwise
+     */
+    public function deleteFileOrDirectory(string $path): bool
+    {
+        try {
+            // check if path exists
+            if (!file_exists($path)) {
+                $this->errorManager->handleError(
+                    message: 'error deleting file: ' . $path . ' does not exist',
+                    code: Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // check if path is a directory
+            if (is_dir($path)) {
+                // always use rm -rf for directories (empty or not)
+                $command = 'sudo rm -rf ' . escapeshellarg($path);
+            } else {
+                // delete file using sudo
+                $command = 'sudo rm ' . escapeshellarg($path);
+            }
+
+            // execute command
+            $output = shell_exec($command);
+
+            // check if command was successful
+            if ($output !== null && !empty($output)) {
+                throw new Exception('Failed to delete file or directory: ' . $output);
+            }
+
+            return true;
+        } catch (Exception $e) {
+            // log error to exception log
+            $this->errorManager->logError(
+                message: 'error to delete file or directory: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            return false;
+        }
+    }
+
+    /**
+     * Rename file or directory
+     *
+     * @param string $oldPath The path to the file or directory to rename
+     * @param string $newPath The new full path for the file or directory
+     *
+     * @return bool True if the file or directory was renamed successfully, false otherwise
+     */
+    public function renameFileOrDirectory(string $oldPath, string $newPath): bool
+    {
+        try {
+            // check if old path exists
+            if (!file_exists($oldPath)) {
+                $this->errorManager->handleError(
+                    message: 'error renaming file: ' . $oldPath . ' does not exist',
+                    code: Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // check if new path already exists
+            if (file_exists($newPath)) {
+                throw new Exception('Destination already exists: ' . $newPath);
+            }
+
+            // rename file or directory using sudo
+            $command = 'sudo mv ' . escapeshellarg($oldPath) . ' ' . escapeshellarg($newPath);
+            $output = shell_exec($command);
+
+            // check if command was successful
+            if ($output !== null && !empty($output)) {
+                throw new Exception('Failed to rename file or directory: ' . $output);
+            }
+
+            // Verify the rename was successful
+            if (!file_exists($newPath)) {
+                throw new Exception('Rename operation completed but the new path does not exist: ' . $newPath);
+            }
+
+            return true;
+        } catch (Exception $e) {
+            // log error to exception log
+            $this->errorManager->logError(
+                message: 'error to rename file or directory: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            return false;
+        }
+    }
+
+    /**
+     * Create directory
+     *
+     * @param string $path The path to the directory to create
+     *
+     * @return bool True if the directory was created successfully, false otherwise
+     */
+    public function createDirectory(string $path): bool
+    {
+        try {
+            // check if path already exists
+            if (file_exists($path)) {
+                $this->errorManager->handleError(
+                    message: 'error creating directory: ' . $path . ' already exists',
+                    code: Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // create directory using sudo
+            $command = 'sudo mkdir -p ' . escapeshellarg($path);
+            $output = shell_exec($command);
+
+            // check if command was successful
+            if ($output !== null && !empty($output)) {
+                throw new Exception('Failed to create directory: ' . $output);
+            }
+
+            return true;
+        } catch (Exception $e) {
+            // log error to exception log
+            $this->errorManager->logError(
+                message: 'error to create directory: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            return false;
+        }
+    }
+    /**
+     * Calculate the total size of a directory including all files and subdirectories
+     *
+     * @param string $path The path to the directory
+     *
+     * @return int The total size in bytes
+     */
+    public function calculateDirectorySize(string $path): int
+    {
+        try {
+            // check if path exists and is a directory
+            if (!file_exists($path) || !is_dir($path)) {
+                return 0;
+            }
+
+            // use du command to get directory size
+            $command = 'sudo du -sb ' . escapeshellarg($path) . ' 2>&1';
+            $output = shell_exec($command);
+
+            // check if output is empty or not set
+            if ($output === null || $output === false) {
+                return 0;
+            }
+
+            // parse output to get the size
+            if (preg_match('/^(\d+)\s+/', $output, $matches)) {
+                return (int)$matches[1];
+            }
+
+            return 0;
+        } catch (Exception $e) {
+            $this->errorManager->logError(
+                message: 'Error calculating directory size: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+            return 0;
+        }
+    }
+
+    /**
+     * Format file size to human-readable format
+     *
+     * @param int $bytes The size in bytes
+     * @param int $precision The number of decimal places to round to
+     *
+     * @return string The formatted size
+     */
+    public function formatFileSize(int $bytes, int $precision = 2): string
+    {
+        if ($bytes <= 0) {
+            return '0 B';
+        }
+
+        $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        $base = 1024;
+        $exponent = floor(log($bytes, $base));
+        $value = $bytes / pow($base, $exponent);
+
+        return round($value, $precision) . ' ' . $units[$exponent];
     }
 }
