@@ -197,7 +197,7 @@ class FileSystemBrowserController extends AbstractController
         // check if directory exists
         if (!file_exists($directoryPath)) {
             $this->errorManager->handleError(
-                message: 'Directory does not exist: ' . $directoryPath,
+                message: 'directory does not exist: ' . $directoryPath,
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -205,7 +205,7 @@ class FileSystemBrowserController extends AbstractController
         // validate filename
         if (empty($filename)) {
             $this->errorManager->handleError(
-                message: 'Filename cannot be empty',
+                message: 'filename cannot be empty',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -213,7 +213,7 @@ class FileSystemBrowserController extends AbstractController
         // check that filename does not contain path separators
         if (str_contains($filename, '/')) {
             $this->errorManager->handleError(
-                message: 'Filename cannot contain path separators (/)',
+                message: 'filename cannot contain path separators (/)',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -221,7 +221,7 @@ class FileSystemBrowserController extends AbstractController
         // check filename length (max 255 characters)
         if (strlen($filename) > 255) {
             $this->errorManager->handleError(
-                message: 'Filename must be between 1 and 255 characters',
+                message: 'filename must be between 1 and 255 characters',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -248,7 +248,7 @@ class FileSystemBrowserController extends AbstractController
             $parentDir = dirname($filePath);
             if (!file_exists($parentDir)) {
                 $this->errorManager->handleError(
-                    message: 'Parent directory does not exist: ' . $parentDir,
+                    message: 'parent directory does not exist: ' . $parentDir,
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
@@ -278,7 +278,7 @@ class FileSystemBrowserController extends AbstractController
             // check if save was successful
             if (!$result) {
                 $this->errorManager->handleError(
-                    message: 'Failed to create file',
+                    message: 'failed to create file',
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
@@ -327,7 +327,7 @@ class FileSystemBrowserController extends AbstractController
         // check if parent directory exists
         if (!file_exists($parentPath)) {
             $this->errorManager->handleError(
-                message: 'Parent directory does not exist: ' . $parentPath,
+                message: 'parent directory does not exist: ' . $parentPath,
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -335,7 +335,7 @@ class FileSystemBrowserController extends AbstractController
         // validate directory name
         if (empty($directoryName)) {
             $this->errorManager->handleError(
-                message: 'Directory name cannot be empty',
+                message: 'directory name cannot be empty',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -343,7 +343,7 @@ class FileSystemBrowserController extends AbstractController
         // check that directory name does not contain path separators
         if (str_contains($directoryName, '/')) {
             $this->errorManager->handleError(
-                message: 'Directory name cannot contain path separators (/)',
+                message: 'directory name cannot contain path separators (/)',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -351,7 +351,7 @@ class FileSystemBrowserController extends AbstractController
         // check directory name length (max 255 characters)
         if (strlen($directoryName) > 255) {
             $this->errorManager->handleError(
-                message: 'Directory name must be between 1 and 255 characters',
+                message: 'directory name must be between 1 and 255 characters',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -380,7 +380,7 @@ class FileSystemBrowserController extends AbstractController
             // check if creation was successful
             if (!$result) {
                 $this->errorManager->handleError(
-                    message: 'Failed to create directory',
+                    message: 'failed to create directory',
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
@@ -464,7 +464,7 @@ class FileSystemBrowserController extends AbstractController
         // additional validation for the old path
         if (!file_exists($oldPath)) {
             $this->errorManager->handleError(
-                message: 'The file or directory to rename does not exist: ' . $oldPath,
+                message: 'the file or directory to rename does not exist: ' . $oldPath,
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -478,7 +478,7 @@ class FileSystemBrowserController extends AbstractController
         // validate new name
         if (empty($newName)) {
             $this->errorManager->handleError(
-                message: 'New name cannot be empty',
+                message: 'new name cannot be empty',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -486,7 +486,7 @@ class FileSystemBrowserController extends AbstractController
         // validate that the new name does not contain path separators
         if (str_contains($newName, '/')) {
             $this->errorManager->handleError(
-                message: 'New name cannot contain path separators (/).',
+                message: 'new name cannot contain path separators (/).',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -494,7 +494,7 @@ class FileSystemBrowserController extends AbstractController
         // check new name length (max 255 characters)
         if (strlen($newName) > 255) {
             $this->errorManager->handleError(
-                message: 'New name must be between 1 and 255 characters',
+                message: 'new name must be between 1 and 255 characters',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -509,7 +509,7 @@ class FileSystemBrowserController extends AbstractController
             // check if rename was successful
             if (!$result) {
                 $this->errorManager->handleError(
-                    message: 'Failed to rename file or directory',
+                    message: 'failed to rename file or directory',
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
@@ -642,7 +642,7 @@ class FileSystemBrowserController extends AbstractController
 
             if ($this->fileSystemUtil->isFileExecutable($path) && !$isShellScript) {
                 $this->errorManager->handleError(
-                    message: 'You cannot edit an executable file (except shell scripts)',
+                    message: 'you cannot edit an executable file (except shell scripts)',
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
@@ -653,7 +653,7 @@ class FileSystemBrowserController extends AbstractController
             // check if file is a media file
             if ($mediaType != 'non-mediafile') {
                 $this->errorManager->handleError(
-                    message: 'You cannot edit a media file',
+                    message: 'you cannot edit a media file',
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
@@ -706,7 +706,7 @@ class FileSystemBrowserController extends AbstractController
 
             if ($this->fileSystemUtil->isFileExecutable($path) && !$isShellScript) {
                 $this->errorManager->handleError(
-                    message: 'You cannot edit an executable file (except shell scripts)',
+                    message: 'you cannot edit an executable file (except shell scripts)',
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
@@ -717,7 +717,7 @@ class FileSystemBrowserController extends AbstractController
             // check if file is a media file
             if ($mediaType != 'non-mediafile') {
                 $this->errorManager->handleError(
-                    message: 'You cannot edit a media file',
+                    message: 'you cannot edit a media file',
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
@@ -731,7 +731,7 @@ class FileSystemBrowserController extends AbstractController
             // check if save was successful
             if (!$result) {
                 $this->errorManager->handleError(
-                    message: 'Failed to save file content',
+                    message: 'failed to save file content',
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
@@ -773,7 +773,7 @@ class FileSystemBrowserController extends AbstractController
         // additional validation for the path
         if (!file_exists($path)) {
             $this->errorManager->handleError(
-                message: 'The file or directory to delete does not exist: ' . $path,
+                message: 'the file or directory to delete does not exist: ' . $path,
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -791,7 +791,7 @@ class FileSystemBrowserController extends AbstractController
             // check if delete was successful
             if (!$result) {
                 $this->errorManager->handleError(
-                    message: 'Failed to delete file or directory',
+                    message: 'failed to delete file or directory',
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
@@ -833,7 +833,7 @@ class FileSystemBrowserController extends AbstractController
         // check if path exists
         if (!file_exists($path)) {
             $this->errorManager->handleError(
-                message: 'Error moving file: ' . $path . ' does not exist',
+                message: 'error moving file: ' . $path . ' does not exist',
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -912,7 +912,7 @@ class FileSystemBrowserController extends AbstractController
         // additional validation for the source path
         if (!file_exists($sourcePath)) {
             $this->errorManager->handleError(
-                message: 'The file or directory to move does not exist: ' . $sourcePath,
+                message: 'the file or directory to move does not exist: ' . $sourcePath,
                 code: Response::HTTP_BAD_REQUEST
             );
         }
@@ -922,7 +922,7 @@ class FileSystemBrowserController extends AbstractController
             // check if path is empty
             if (empty($destinationPath)) {
                 $this->errorManager->handleError(
-                    message: 'Destination path cannot be empty',
+                    message: 'destination path cannot be empty',
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
@@ -930,7 +930,7 @@ class FileSystemBrowserController extends AbstractController
             // check if path starts with /
             if (!str_starts_with($destinationPath, '/')) {
                 $this->errorManager->handleError(
-                    message: 'Destination path must start with /',
+                    message: 'destination path must start with /',
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
@@ -963,7 +963,7 @@ class FileSystemBrowserController extends AbstractController
             // check if move was successful
             if (!$result) {
                 $this->errorManager->handleError(
-                    message: 'Failed to move file or directory',
+                    message: 'failed to move file or directory',
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
@@ -974,7 +974,7 @@ class FileSystemBrowserController extends AbstractController
             // log file move
             $this->logManager->log(
                 name: 'file-browser',
-                message: 'File/directory: ' . $sourcePath . ' was moved to ' . $destinationPath . '/' . $basename,
+                message: 'file/directory: ' . $sourcePath . ' was moved to ' . $destinationPath . '/' . $basename,
                 level: LogManager::LEVEL_INFO
             );
 
@@ -1011,7 +1011,7 @@ class FileSystemBrowserController extends AbstractController
 
             // handle other errors
             $this->errorManager->handleError(
-                message: 'Error moving file or directory: ' . $e->getMessage(),
+                message: 'error moving file or directory: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
