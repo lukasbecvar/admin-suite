@@ -32,6 +32,11 @@
         </a>
     {% endif %}
 
+    {# MOVE BUTTON #}
+    <a href={{ path('app_file_system_move', { 'path': currentPath }) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white pt-[2px] px-[5px] ml-1 hover:bg-neutral-700" title="Move this file">
+        <i class="fa fa-file-export" aria-hidden="true"></i>
+    </a>
+
     {# DELETE AND RENAME BUTTONS #}
     <div>
         <button class="delete-file-button border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white pt-[2px] px-[5px] ml-1 hover:bg-neutral-700" data-path={{ currentPath }} data-is-dir="false" title="Delete this file">

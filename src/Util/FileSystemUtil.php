@@ -40,10 +40,16 @@ class FileSystemUtil
         $files = [];
 
         try {
-            // execute find command
+            // Skip system directories that might cause permission issues
+            if (in_array($path, ['/proc', '/sys', '/dev', '/run'])) {
+                return [];
+            }
+
+            // execute find command with exclusions for system directories
             $type = $recursive ? '-type f' : '\\( -type f -o -type d \\)';
             $depth = $recursive ? '' : '-mindepth 1 -maxdepth 1';
-            $command = "sudo find " . escapeshellarg($path) . " $depth $type -printf '%f;%s;%m;%y;%p;%T@;%Y\n' 2>&1";
+            $excludes = '-not -path "/proc/*" -not -path "/sys/*" -not -path "/dev/*" -not -path "/run/*"';
+            $command = "sudo find " . escapeshellarg($path) . " $depth $type $excludes -printf '%f;%s;%m;%y;%p;%T@;%Y\n' 2>/dev/null";
             $output = shell_exec($command);
 
             // check if output is empty or not set
@@ -66,7 +72,24 @@ class FileSystemUtil
                 }
 
                 // split output to variables
-                [$name, $size, $permissions, $type, $realPath, $creationTime] = explode(';', $line);
+                $parts = explode(';', $line);
+
+                // Check if we have all the expected parts
+                if (count($parts) < 6) {
+                    // Skip lines with permission denied or no such file errors
+                    if (str_contains($line, 'Permission denied') || str_contains($line, 'No such file or directory')) {
+                        continue;
+                    }
+
+                    // Log other problematic lines
+                    $this->errorManager->logError(
+                        message: 'Invalid format in find output: ' . $line,
+                        code: Response::HTTP_INTERNAL_SERVER_ERROR
+                    );
+                    continue;
+                }
+
+                [$name, $size, $permissions, $type, $realPath, $creationTime] = $parts;
 
                 // exclude root and boot directories and original path
                 if ($realPath === '/' || $realPath === '/boot' || $realPath === realpath($path)) {
@@ -599,5 +622,89 @@ class FileSystemUtil
         $value = $bytes / pow($base, $exponent);
 
         return round($value, $precision) . ' ' . $units[$exponent];
+    }
+
+    /**
+     * Move file or directory to a new location
+     *
+     * @param string $sourcePath The source path of the file or directory
+     * @param string $destinationPath The destination directory path
+     *
+     * @return bool True if the file or directory was moved successfully, false otherwise
+     */
+    public function moveFileOrDirectory(string $sourcePath, string $destinationPath): bool
+    {
+        try {
+            // check if source path exists
+            if (!file_exists($sourcePath)) {
+                $this->errorManager->handleError(
+                    message: 'Error moving file: ' . $sourcePath . ' does not exist',
+                    code: Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // check if destination path exists and is a directory
+            if (!file_exists($destinationPath) || !is_dir($destinationPath)) {
+                $this->errorManager->handleError(
+                    message: 'Error moving file: Destination ' . $destinationPath . ' is not a valid directory',
+                    code: Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // get the basename of the source
+            $basename = basename($sourcePath);
+
+            // build the full destination path
+            if ($destinationPath === '/') {
+                $newPath = '/' . $basename;
+            } else {
+                $newPath = rtrim($destinationPath, '/') . '/' . $basename;
+            }
+
+            // check if destination already exists
+            if (file_exists($newPath)) {
+                throw new Exception('Destination already exists: ' . $newPath);
+            }
+
+            // check if source is a subdirectory of destination (for directories)
+            if (is_dir($sourcePath) && strpos($destinationPath, $sourcePath . '/') === 0) {
+                throw new Exception('Cannot move a directory into its own subdirectory');
+            }
+
+            // move file or directory using sudo
+            if ($destinationPath === '/') {
+                $command = 'sudo mv ' . escapeshellarg($sourcePath) . ' ' . escapeshellarg('/' . $basename);
+            } else {
+                $command = 'sudo mv ' . escapeshellarg($sourcePath) . ' ' . escapeshellarg($destinationPath);
+            }
+            $output = shell_exec($command);
+
+            // check if command was successful
+            if ($output !== null && !empty($output)) {
+                throw new Exception('Failed to move file or directory: ' . $output);
+            }
+
+            // build full destination path for verification
+            if ($destinationPath === '/') {
+                $newFullPath = '/' . $basename;
+            } else {
+                $newFullPath = rtrim($destinationPath, '/') . '/' . $basename;
+            }
+
+            // verify the move was successful
+            if (!file_exists($newFullPath)) {
+                throw new Exception('Move operation completed but the new path does not exist: ' . $newFullPath);
+            }
+
+            return true;
+        } catch (Exception $e) {
+            // log error to exception log
+            $this->errorManager->logError(
+                message: 'Error moving file or directory: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            return false;
+        }
     }
 }

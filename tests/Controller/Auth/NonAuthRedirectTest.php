@@ -94,11 +94,13 @@ class NonAuthRedirectTest extends WebTestCase
         'file_browser' => [
             ['method' => 'GET', 'url' => '/filesystem'],
             ['method' => 'GET', 'url' => '/filesystem/view'],
+            ['method' => 'GET', 'url' => '/filesystem/move'],
             ['method' => 'GET', 'url' => '/filesystem/edit'],
             ['method' => 'POST', 'url' => '/filesystem/save'],
             ['method' => 'GET', 'url' => '/filesystem/create'],
             ['method' => 'GET', 'url' => '/filesystem/rename'],
             ['method' => 'POST', 'url' => '/filesystem/delete'],
+            ['method' => 'POST', 'url' => '/filesystem/move/save'],
             ['method' => 'POST', 'url' => '/filesystem/rename/save'],
             ['method' => 'POST', 'url' => '/filesystem/create/save'],
             ['method' => 'GET', 'url' => '/filesystem/get/resource']

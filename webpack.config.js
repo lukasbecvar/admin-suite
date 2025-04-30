@@ -22,6 +22,7 @@ Encore
     .addEntry('file-system-edit-js', './assets/js/component/file-system/file-system-edit.js')
     .addEntry('file-system-create-js', './assets/js/component/file-system/file-system-create.js')
     .addEntry('file-system-rename-js', './assets/js/component/file-system/file-system-rename.js')
+    .addEntry('file-system-move-js', './assets/js/component/file-system/file-system-move.js')
     .addEntry('notifications-settings-js', './assets/js/component/notification/notifications-settings.js')
     .addEntry('file-system-file-delete-js', './assets/js/component/file-system/file-system-file-delete.js')
     .addEntry('file-system-create-menu-js', './assets/js/component/file-system/file-system-create-menu.js')

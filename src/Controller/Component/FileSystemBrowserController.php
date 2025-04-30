@@ -769,4 +769,205 @@ class FileSystemBrowserController extends AbstractController
             );
         }
     }
+
+    /**
+     * Render file/directory move component
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The file move view response
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/filesystem/move', methods:['GET'], name: 'app_file_system_move')]
+    public function filesystemMove(Request $request): Response
+    {
+        // get file path
+        $path = (string) $request->query->get('path', '/');
+
+        // check if path exists
+        if (!file_exists($path)) {
+            $this->errorManager->handleError(
+                message: 'Error moving file: ' . $path . ' does not exist',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // get current name and directory path
+        $isDirectory = is_dir($path);
+        $directoryPath = dirname($path);
+        if ($directoryPath === '.') {
+            $directoryPath = '/';
+        }
+
+        // always use basename for the display name
+        $currentName = basename($path);
+
+        // get list of all directories for destination selection
+        $availableFolders = [];
+
+        // add root directory
+        $availableFolders[] = [
+            'path' => '/',
+            'displayPath' => '/root'
+        ];
+
+        // add common directories
+        $commonDirs = ['/var', '/var/www', '/var/www/html', '/home', '/tmp', '/opt'];
+        foreach ($commonDirs as $dir) {
+            if (file_exists($dir) && is_dir($dir) && $dir !== $path && !str_starts_with($path, $dir . '/')) {
+                $availableFolders[] = [
+                    'path' => $dir,
+                    'displayPath' => $dir
+                ];
+            }
+        }
+
+        // add parent directory of the current path
+        $parentDir = dirname($path);
+        if ($parentDir !== '/' && $parentDir !== $path) {
+            $availableFolders[] = [
+                'path' => $parentDir,
+                'displayPath' => $parentDir
+            ];
+        }
+
+        // render file move view
+        return $this->render('component/file-system/file-system-move.twig', [
+            'currentPath' => $path,
+            'currentName' => $currentName,
+            'directoryPath' => $directoryPath,
+            'isDirectory' => $isDirectory,
+            'availableFolders' => $availableFolders
+        ]);
+    }
+
+    /**
+     * Move file or directory
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The redirect response
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/filesystem/move/save', methods:['POST'], name: 'app_file_system_move_save')]
+    public function filesystemMoveSave(Request $request): Response
+    {
+        // get source path
+        $sourcePath = (string) $request->request->get('sourcePath', '/');
+
+        // get destination path based on the selected type
+        $destinationPathType = (string) $request->request->get('destinationPathType', 'select');
+        if ($destinationPathType === 'custom') {
+            $destinationPath = (string) $request->request->get('customDestinationPath', '/');
+        } else {
+            $destinationPath = (string) $request->request->get('destinationPath', '/');
+        }
+
+        // additional validation for the source path
+        if (!file_exists($sourcePath)) {
+            $this->errorManager->handleError(
+                message: 'The file or directory to move does not exist: ' . $sourcePath,
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // validate custom destination path
+        if ($destinationPathType === 'custom') {
+            // check if path is empty
+            if (empty($destinationPath)) {
+                $this->errorManager->handleError(
+                    message: 'Destination path cannot be empty',
+                    code: Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // check if path starts with /
+            if (!str_starts_with($destinationPath, '/')) {
+                $this->errorManager->handleError(
+                    message: 'Destination path must start with /',
+                    code: Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // check if destination path exists and is a directory
+            if (!file_exists($destinationPath) || !is_dir($destinationPath)) {
+                // render error page instead of throwing an exception
+                return $this->render('component/file-system/file-system-error.twig', [
+                    'errorTitle' => 'Invalid Destination',
+                    'errorMessage' => 'The destination path does not exist or is not a directory.',
+                    'details' => 'Path: ' . $destinationPath,
+                    'returnPath' => dirname($sourcePath),
+                    'actionPath' => $this->generateUrl('app_file_system_move', ['path' => $sourcePath]),
+                    'actionText' => 'Try Different Path',
+                    'actionIcon' => 'exchange'
+                ]);
+            }
+        }
+
+        // fet return path (directory containing the file)
+        $directoryPath = dirname($sourcePath);
+        if ($directoryPath === '.') {
+            $directoryPath = '/';
+        }
+
+        try {
+            // move file or directory
+            $result = $this->fileSystemUtil->moveFileOrDirectory($sourcePath, $destinationPath);
+
+            // check if move was successful
+            if (!$result) {
+                $this->errorManager->handleError(
+                    message: 'Failed to move file or directory',
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+
+            // get the basename of the source
+            $basename = basename($sourcePath);
+
+            // log file move
+            $this->logManager->log(
+                name: 'file-browser',
+                message: 'File/directory: ' . $sourcePath . ' was moved to ' . $destinationPath . '/' . $basename,
+                level: LogManager::LEVEL_INFO
+            );
+
+            // add flash message
+            $this->addFlash('success', (is_dir($destinationPath . '/' . $basename) ? 'Directory' : 'File') . ' moved successfully');
+
+            // redirect to destination directory
+            return $this->redirectToRoute('app_file_system_browser', ['path' => $destinationPath]);
+        } catch (Exception $e) {
+            // check if the error is about destination already existing
+            if (str_contains($e->getMessage(), 'Destination already exists')) {
+                // render error page instead of throwing an exception
+                return $this->render('component/file-system/file-system-error.twig', [
+                    'errorTitle' => 'Destination Already Exists',
+                    'errorMessage' => 'A file or directory with the same name already exists in the destination folder.',
+                    'details' => $e->getMessage(),
+                    'returnPath' => $directoryPath,
+                    'actionPath' => $this->generateUrl('app_file_system_move', ['path' => $sourcePath]),
+                    'actionText' => 'Try Different Destination',
+                    'actionIcon' => 'exchange'
+                ]);
+            } elseif (str_contains($e->getMessage(), 'Cannot move a directory into its own subdirectory')) {
+                // render error page for subdirectory move attempt
+                return $this->render('component/file-system/file-system-error.twig', [
+                    'errorTitle' => 'Invalid Move Operation',
+                    'errorMessage' => 'You cannot move a directory into its own subdirectory.',
+                    'details' => $e->getMessage(),
+                    'returnPath' => $directoryPath,
+                    'actionPath' => $this->generateUrl('app_file_system_move', ['path' => $sourcePath]),
+                    'actionText' => 'Try Different Destination',
+                    'actionIcon' => 'exchange'
+                ]);
+            }
+
+            // handle other errors
+            $this->errorManager->handleError(
+                message: 'Error moving file or directory: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }

@@ -131,6 +131,9 @@
                                         <a href={{ path('app_file_system_rename', { 'path': currentPath ~ '/' ~ file.name }) }} class="px-1.5 py-0.5 text-gray-300 hover:text-yellow-500 hover:bg-neutral-800 border-l border-neutral-700" title="Rename {{ file.isDir ? 'directory' : 'file' }}">
                                             <i class="fa fa-pen" aria-hidden="true"></i>
                                         </a>
+                                        <a href={{ path('app_file_system_move', { 'path': currentPath ~ '/' ~ file.name }) }} class="px-1.5 py-0.5 text-gray-300 hover:text-blue-500 hover:bg-neutral-800 border-l border-neutral-700" title="Move {{ file.isDir ? 'directory' : 'file' }}">
+                                            <i class="fa fa-file-export" aria-hidden="true"></i>
+                                        </a>
                                         <button class="delete-file-button px-1.5 py-0.5 text-gray-300 hover:text-red-500 hover:bg-neutral-800 border-l border-neutral-700" data-path="{{ currentPath ~ '/' ~ file.name }}" data-is-dir="{{ file.isDir ? 'true' : 'false' }}" title="Delete {{ file.isDir ? 'directory' : 'file' }}">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </button>
