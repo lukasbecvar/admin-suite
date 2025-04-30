@@ -59,13 +59,14 @@
 
             {% for item in menuItems %}
                 <li>
-                    <a href={{ path(item.route) }} class="flex items-center pl-1 px-1 py-[6px] rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-colors">
-                        <i class="{{ item.icon }} h-5 w-5 mt-[8px] mr-1 ml-1"></i>
-                        <span>
+                    <a href={{ path(item.route) }} class="group flex items-center relative pl-1 px-1 py-[6px] rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-all duration-200">
+                        <span class="absolute left-0 top-0 h-full w-[4px] bg-emerald-400 opacity-0 group-hover:opacity-100 rounded-r transition-all duration-200"></span>
+                        <i class="{{ item.icon }} h-5 w-5 mt-[8px] mr-1 ml-3 transition-all duration-200 group-hover:ml-4"></i>
+                        <span class="transition-all duration-200 group-hover:ml-1">
                             {{ item.label }}
                             {% if item.route == 'app_todo_manager' and getTodosCount() > 0 %}
                                 <span class="ml-1 px-2 py-0.5 text-xs rounded-full bg-zinc-700">
-                                    {{ getTodosCount() }}
+                                    {{ getTodosCount()|e }}
                                 </span>
                             {% endif %}
                         </span>
