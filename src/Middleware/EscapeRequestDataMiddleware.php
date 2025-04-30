@@ -38,7 +38,8 @@ class EscapeRequestDataMiddleware
         // excluded controller paths from escaping
         if (
             $request->getPathInfo() == $this->urlGenerator->generate('app_manager_database_console') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_save')
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_create_save') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_edit')
         ) {
             return;
         }

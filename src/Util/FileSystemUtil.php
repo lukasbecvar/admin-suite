@@ -151,11 +151,6 @@ class FileSystemUtil
      */
     public function isFileExecutable(string $path): bool
     {
-        // check if file is bash script
-        if (str_ends_with($path, '.sh') || str_ends_with($path, '.bash')) {
-            return false;
-        }
-
         // check file exists
         if (!file_exists($path)) {
             return false;
@@ -166,8 +161,14 @@ class FileSystemUtil
             return false;
         }
 
+        // check if file has executable permissions
+        $perms = fileperms($path);
+        if ($perms !== false && ($perms & 0111)) {
+            return true;
+        }
+
         // get file info
-        $fileInfo = exec('sudo file ' . $path);
+        $fileInfo = exec('sudo file ' . escapeshellarg($path));
 
         // check file info is set
         if (!$fileInfo) {
@@ -177,8 +178,13 @@ class FileSystemUtil
             );
         }
 
-        // check if file type is supported
-        if (strpos($fileInfo, 'executable')) {
+        // check if file is a shell script
+        if (strpos($fileInfo, 'shell script') !== false) {
+            return true;
+        }
+
+        // check if file type is executable
+        if (strpos($fileInfo, 'executable') !== false) {
             return true;
         }
 
@@ -296,6 +302,45 @@ class FileSystemUtil
                 throw new Exception('Failed to create temporary file');
             }
 
+            // check if file is a shell script
+            $isShellScript = false;
+            $fileInfo = exec('sudo file ' . escapeshellarg($path));
+            if ($fileInfo === false) {
+                $fileInfo = '';
+            }
+            if (file_exists($path) && (strpos($fileInfo, 'shell script') !== false || str_ends_with($path, '.sh') || str_ends_with($path, '.bash'))) {
+                $isShellScript = true;
+            }
+
+            // fet original file permissions and owner
+            $originalPerms = null;
+            $fileOwner = null;
+            $fileGroup = null;
+            if (file_exists($path)) {
+                $originalPerms = fileperms($path);
+                $fileInfo = stat($path);
+                if ($fileInfo !== false) {
+                    $fileOwner = $fileInfo['uid'];
+                    $fileGroup = $fileInfo['gid'];
+                }
+            }
+
+            // decode HTML entities in content
+            $content = html_entity_decode($content, ENT_QUOTES | ENT_HTML5);
+
+            // for shell scripts, ensure we use LF line endings
+            if ($isShellScript) {
+                // convert all line endings to LF
+                $content = str_replace("\r\n", "\n", $content);
+                $content = str_replace("\r", "\n", $content);
+
+                // ensure first line has shebang if it's a shell script
+                if (!empty($content) && !preg_match('/^#!/', $content)) {
+                    // add shebang if it doesn't exist
+                    $content = "#!/bin/bash\n" . $content;
+                }
+            }
+
             // ensure content ends with a newline character
             if (!empty($content) && substr($content, -1) !== "\n") {
                 $content .= "\n";
@@ -306,52 +351,29 @@ class FileSystemUtil
                 throw new Exception('Failed to write to temporary file');
             }
 
-            // get original file owner and group
-            $fileInfo = null;
-            if (file_exists($path)) {
-                $fileInfo = stat($path);
+            // use cat to preserve line endings instead of tee
+            $command = 'sudo cat ' . escapeshellarg($tempFile) . ' > ' . escapeshellarg($path);
+            $output = shell_exec('sudo bash -c ' . escapeshellarg($command) . ' 2>&1');
+
+            // check if command was successful
+            if ($output !== null && !empty($output)) {
+                throw new Exception('Failed to save file: ' . $output);
             }
 
-            // write content to destination file using sudo
-            $command = 'sudo tee ' . escapeshellarg($path) . ' > /dev/null';
-            $descriptorspec = [
-                0 => ['pipe', 'r'],
-                1 => ['pipe', 'w'],
-                2 => ['pipe', 'w']
-            ];
+            // restore original permissions if it was executable
+            if ($originalPerms !== null && ($originalPerms & 0111)) {
+                $chmodCommand = 'sudo chmod ' . sprintf('%o', $originalPerms & 0777) . ' ' . escapeshellarg($path);
+                shell_exec($chmodCommand);
+            } elseif ($isShellScript) {
+                // make shell scripts executable
+                $chmodCommand = 'sudo chmod +x ' . escapeshellarg($path);
+                shell_exec($chmodCommand);
+            }
 
-            $process = proc_open($command, $descriptorspec, $pipes);
-            if (is_resource($process)) {
-                // write content
-                fwrite($pipes[0], $content);
-                fclose($pipes[0]);
-
-                // read any errors
-                stream_get_contents($pipes[1]);
-                $error = stream_get_contents($pipes[2]);
-                fclose($pipes[1]);
-                fclose($pipes[2]);
-
-                // close process
-                $exitCode = proc_close($process);
-
-                // check if command was successful
-                if ($exitCode !== 0 || !empty($error)) {
-                    throw new Exception('Failed to save file: ' . $error);
-                }
-
-                // restore original owner and group
-                $fileInfo = stat($path);
-                if ($fileInfo !== false) {
-                    $uid = $fileInfo['uid'];
-                    $gid = $fileInfo['gid'];
-
-                    // restore original owner and group
-                    $chownCommand = 'sudo chown ' . $uid . ':' . $gid . ' ' . escapeshellarg($path);
-                    shell_exec($chownCommand);
-                }
-            } else {
-                throw new Exception('Failed to open process for saving file');
+            // restore original owner and group
+            if ($fileOwner !== null && $fileGroup !== null) {
+                $chownCommand = 'sudo chown ' . $fileOwner . ':' . $fileGroup . ' ' . escapeshellarg($path);
+                shell_exec($chownCommand);
             }
 
             // remove temporary file
@@ -390,7 +412,16 @@ class FileSystemUtil
             return false;
         }
 
-        // check if file is executable
+        // special case for shell scripts - allow editing
+        $fileInfo = exec('sudo file ' . escapeshellarg($path));
+        if ($fileInfo === false) {
+            return false;
+        }
+        if (strpos($fileInfo, 'shell script') !== false || str_ends_with($path, '.sh') || str_ends_with($path, '.bash')) {
+            return true;
+        }
+
+        // check if file is executable (but not a shell script)
         if ($this->isFileExecutable($path)) {
             return false;
         }

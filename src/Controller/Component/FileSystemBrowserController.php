@@ -86,9 +86,15 @@ class FileSystemBrowserController extends AbstractController
         $fileContent = null;
 
         try {
-            // check if file is executable
-            if ($this->fileSystemUtil->isFileExecutable($path)) {
-                $fileContent = 'You cannot view the content of an binnary executable file';
+            // check if file is executable but not a shell script
+            $fileInfo = exec('sudo file ' . escapeshellarg($path));
+            if ($fileInfo === false) {
+                $fileInfo = '';
+            }
+            $isShellScript = strpos($fileInfo, 'shell script') !== false || str_ends_with($path, '.sh') || str_ends_with($path, '.bash');
+
+            if ($this->fileSystemUtil->isFileExecutable($path) && !$isShellScript) {
+                $fileContent = 'You cannot view the content of a binary executable file';
             } else {
                 // get media type of the file
                 $mediaType = $this->fileSystemUtil->detectMediaType($path);
@@ -247,6 +253,25 @@ class FileSystemBrowserController extends AbstractController
                 );
             }
 
+            // decode HTML entities in content
+            $content = html_entity_decode($content, ENT_QUOTES | ENT_HTML5);
+
+            // check if file is a shell script
+            $isShellScript = str_ends_with($filePath, '.sh') || str_ends_with($filePath, '.bash');
+
+            // for shell scripts, ensure we use LF line endings and have a shebang
+            if ($isShellScript) {
+                // convert all line endings to LF
+                $content = str_replace("\r\n", "\n", $content);
+                $content = str_replace("\r", "\n", $content);
+
+                // ensure first line has shebang if it's a shell script
+                if (!empty($content) && !preg_match('/^#!/', $content)) {
+                    // add shebang if it doesn't exist
+                    $content = "#!/bin/bash\n" . $content;
+                }
+            }
+
             // save file content
             $result = $this->fileSystemUtil->saveFileContent($filePath, $content);
 
@@ -256,6 +281,12 @@ class FileSystemBrowserController extends AbstractController
                     message: 'Failed to create file',
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
+            }
+
+            // Make shell scripts executable
+            if ($isShellScript) {
+                $chmodCommand = 'sudo chmod +x ' . escapeshellarg($filePath);
+                shell_exec($chmodCommand);
             }
 
             // log file creation
@@ -602,10 +633,16 @@ class FileSystemBrowserController extends AbstractController
         $fileContent = null;
 
         try {
-            // check if file is executable
-            if ($this->fileSystemUtil->isFileExecutable($path)) {
+            // check if file is executable but not a shell script
+            $fileInfo = exec('sudo file ' . escapeshellarg($path));
+            if ($fileInfo === false) {
+                $fileInfo = '';
+            }
+            $isShellScript = strpos($fileInfo, 'shell script') !== false || str_ends_with($path, '.sh') || str_ends_with($path, '.bash');
+
+            if ($this->fileSystemUtil->isFileExecutable($path) && !$isShellScript) {
                 $this->errorManager->handleError(
-                    message: 'You cannot edit an executable file',
+                    message: 'You cannot edit an executable file (except shell scripts)',
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
@@ -660,10 +697,16 @@ class FileSystemBrowserController extends AbstractController
         $content = (string) $request->request->get('content', '');
 
         try {
-            // check if file is executable
-            if ($this->fileSystemUtil->isFileExecutable($path)) {
+            // check if file is executable but not a shell script
+            $fileInfo = exec('sudo file ' . escapeshellarg($path));
+            if ($fileInfo === false) {
+                $fileInfo = '';
+            }
+            $isShellScript = strpos($fileInfo, 'shell script') !== false || str_ends_with($path, '.sh') || str_ends_with($path, '.bash');
+
+            if ($this->fileSystemUtil->isFileExecutable($path) && !$isShellScript) {
                 $this->errorManager->handleError(
-                    message: 'You cannot edit an executable file',
+                    message: 'You cannot edit an executable file (except shell scripts)',
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
@@ -678,6 +721,9 @@ class FileSystemBrowserController extends AbstractController
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
+
+            // decode HTML entities in content
+            $content = html_entity_decode($content, ENT_QUOTES | ENT_HTML5);
 
             // save file content
             $result = $this->fileSystemUtil->saveFileContent($path, $content);
