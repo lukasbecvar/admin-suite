@@ -1,9 +1,9 @@
 /** file-system create component functionality */
 document.addEventListener('DOMContentLoaded', function() {
-    const editor = document.getElementById('editor')
-    const filenameInput = document.getElementById('filename')
     const form = document.querySelector('form')
+    const editor = document.getElementById('editor')
     const errorContainer = document.createElement('div')
+    const filenameInput = document.getElementById('filename')
 
     // create error container
     errorContainer.className = 'mt-2'

@@ -41,7 +41,7 @@
 
     {# RENAME FORM #}
     <form action={{ path('app_file_system_rename_save') }} method="post" class="flex flex-col flex-grow">
-        <input type="hidden" name="path" value="{{ currentPath }}">
+        <input type="hidden" name="path" value={{ currentPath }}>
 
         {# SIMPLE RENAME FORM #}
         <div class="flex-grow flex items-center justify-center">

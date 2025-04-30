@@ -1,8 +1,8 @@
 /** file-system create directory functionality */
 document.addEventListener('DOMContentLoaded', function() {
-    const directoryNameInput = document.getElementById('directoryname')
     const form = document.querySelector('form')
     const errorContainer = document.createElement('div')
+    const directoryNameInput = document.getElementById('directoryname')
 
     // create error container
     errorContainer.className = 'mt-2'

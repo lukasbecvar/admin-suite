@@ -24,7 +24,7 @@
                 {% if part is not empty %}
                     {% set accumulatedPath = accumulatedPath ~ '/' ~ part %}
                     <span>/</span>
-                    <a href="{{ path('app_file_system_browser', { 'path': accumulatedPath }) }}" class="text-blue-500 hover:underline">{{ part }}</a>
+                    <a href={{ path('app_file_system_browser', { 'path': accumulatedPath }) }} class="text-blue-500 hover:underline">{{ part }}</a>
                 {% endif %}
             {% endfor %}
         </span>
@@ -41,7 +41,7 @@
 
     {# CREATE DIRECTORY FORM #}
     <form action={{ path('app_file_system_create_directory_save') }} method="post" class="flex flex-col flex-grow">
-        <input type="hidden" name="directory" value="{{ currentPath }}">
+        <input type="hidden" name="directory" value={{ currentPath }}>
 
         {# SIMPLE DIRECTORY CREATION FORM #}
         <div class="flex-grow flex items-center justify-center">

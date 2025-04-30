@@ -40,7 +40,7 @@ class FileSystemUtil
         $files = [];
 
         try {
-            // Skip system directories that might cause permission issues
+            // skip system directories that might cause permission issues
             if (in_array($path, ['/proc', '/sys', '/dev', '/run'])) {
                 return [];
             }
@@ -74,14 +74,14 @@ class FileSystemUtil
                 // split output to variables
                 $parts = explode(';', $line);
 
-                // Check if we have all the expected parts
+                // check if we have all the expected parts
                 if (count($parts) < 6) {
-                    // Skip lines with permission denied or no such file errors
+                    // skip lines with permission denied or no such file errors
                     if (str_contains($line, 'Permission denied') || str_contains($line, 'No such file or directory')) {
                         continue;
                     }
 
-                    // Log other problematic lines
+                    // lLog other problematic lines
                     $this->errorManager->logError(
                         message: 'Invalid format in find output: ' . $line,
                         code: Response::HTTP_INTERNAL_SERVER_ERROR

@@ -1,4 +1,4 @@
-# /etc/systemd/system/admin-suite-monitoring.service
+# /etc/systemd/system/admin-suite-monitoring.service (monitoring process service config example)
 [Unit]
 Description=Admin suite monitoring process
 
