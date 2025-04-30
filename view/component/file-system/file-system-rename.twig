@@ -41,7 +41,7 @@
 
     {# RENAME FORM #}
     <form action={{ path('app_file_system_rename_save') }} method="post" class="flex flex-col flex-grow">
-        <input type="hidden" name="path" value={{ currentPath }}>
+        <input type="hidden" name="path" value="{{ currentPath }}">
 
         {# SIMPLE RENAME FORM #}
         <div class="flex-grow flex items-center justify-center">
@@ -62,7 +62,7 @@
                         type="text"
                         id="newName"
                         name="newName"
-                        value={{ currentName }}
+                        value="{{ currentName }}"
                         class="w-full bg-gray-900 text-white font-mono p-2 border border-gray-700 rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
                         placeholder="Enter new name"
                         required

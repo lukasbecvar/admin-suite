@@ -160,7 +160,7 @@
             <button id="cancel-delete" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                 Cancel
             </button>
-            <form id="delete-file-form" action={{ path('app_file_system_delete') }} method="post">
+            <form id="delete-file-form" action="{{ path('app_file_system_delete') }}" method="post">
                 <input type="hidden" id="delete-file-path" name="path" value="">
                 <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Delete

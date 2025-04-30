@@ -41,7 +41,7 @@
 
     {# MOVE FORM #}
     <form action={{ path('app_file_system_move_save') }} method="post" class="flex flex-col flex-grow">
-        <input type="hidden" name="sourcePath" value={{ currentPath }}>
+        <input type="hidden" name="sourcePath" value="{{ currentPath }}">
 
         {# MOVE FORM CONTENT #}
         <div class="flex-grow flex items-center justify-center">
@@ -90,7 +90,7 @@
                             class="w-full bg-gray-900 text-white p-2 border border-gray-700 rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
                         >
                             {% for folder in availableFolders %}
-                                <option value={{ folder.path }} {% if folder.path == directoryPath %}selected{% endif %}>
+                                <option value="{{ folder.path }}" {% if folder.path == directoryPath %}selected{% endif %}>
                                     {{ folder.displayPath }}
                                 </option>
                             {% endfor %}
