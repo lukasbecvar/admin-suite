@@ -30,8 +30,10 @@
             {% if service.display %}
                 {% if service.type == 'systemd' %}
                     <div class="flex justify-between items-center bg-neutral-500/5 border border-white/10 rounded p-2 text-sm hover:bg-white/10 transition mb-1 mt-[4px] mr-[2px] ml-[2px]">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-gray-300 font-semibold mr-[-4px]">{{ service.display_name|e }}</span>
+                        <div class="flex items-center space-x-1">
+                            <div class="flex items-center gap-1">
+                                <a href={{ path('app_manager_monitoring_service_detail', {'service_name': service.service_name}) }} class="text-gray-300 font-semibold hover:text-blue-400 truncate max-w-[150px] relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-blue-400 hover:after:w-full after:transition-all after:duration-300">{{ service.display_name|e }}</a>
+                            </div>
                             <span class="text-white">
                                 {% set serviceStatus = serviceManager.isServiceRunning(service.service_name) %}
                                 {% if serviceStatus %}

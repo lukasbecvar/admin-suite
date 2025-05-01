@@ -70,12 +70,12 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="flex flex-wrap items-center gap-1 mt-1 sm:mt-0">
+                    <div class="flex flex-wrap items-center gap-2 mt-1 sm:mt-0">
                         {% if serviceManager.isUfwRunning() %}
-                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'reload', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-600 hover:bg-yellow-500 text-white px-3 py-1 rounded text-xs font-bold phone-none whitespace-nowrap">Reload</a>
-                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_manager_monitoring'}) }} class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs font-bold whitespace-nowrap">Stop</a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'reload', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Reload firewall"><i class="fa fa-redo text-sm"></i></a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-red-600 hover:bg-red-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Disable firewall"><i class="fa fa-stop text-sm"></i></a>
                         {% else %}
-                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_manager_monitoring'}) }} class="bg-green-700 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-bold whitespace-nowrap">Start</a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-green-700 hover:bg-green-600 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Enable firewall"><i class="fa fa-play text-sm ml-[1px]"></i></a>
                         {% endif %}
                     </div>
                 </div>
@@ -103,15 +103,15 @@
                                         {% endif %}
                                     </div>
                                     <div class="text-white whitespace-nowrap ml-[-3px]">
-                                        (SLA: {{ monitoringManager.getServiceMountlySLA(service.service_name) is not null ? monitoringManager.getServiceMountlySLA(service.service_name)|e ~ '%' : 'unknown' }})
+                                        (SLA: {{ monitoringManager.getServiceMountlySLA(service.service_name) is not null ? monitoringManager.getServiceMountlySLA(service.service_name)|e ~ '%' : 'N/A' }})
                                     </div>
                                 </div>
-                                <div class="flex flex-wrap items-center gap-1 mt-1 sm:mt-0">
-                                    {% if serviceStatus %}
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-600 hover:bg-yellow-500 text-white px-3 py-1 rounded text-xs font-bold phone-none whitespace-nowrap">Restart</a>
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs font-bold whitespace-nowrap">Stop</a>
+                                <div class="flex flex-wrap items-center gap-2 mt-1 sm:mt-0">
+                                    {% if true %}
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Restart service"><i class="fa fa-redo text-sm"></i></a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-red-600 hover:bg-red-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Stop service"><i class="fa fa-stop text-sm"></i></a>
                                     {% else %}
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="bg-green-700 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-bold whitespace-nowrap">Start</a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-green-700 hover:bg-green-600 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Start service"><i class="fa fa-play text-sm ml-[1px]"></i></a>
                                     {% endif %}
                                 </div>
                             </div>
@@ -154,7 +154,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="text-white whitespace-nowrap ml-[-3px]">
-                                        (SLA: {{ monitoringManager.getServiceMountlySLA(service.service_name) is not null ? monitoringManager.getServiceMountlySLA(service.service_name)|e ~ '%' : 'unknown' }})
+                                        (SLA: {{ monitoringManager.getServiceMountlySLA(service.service_name) is not null ? monitoringManager.getServiceMountlySLA(service.service_name)|e ~ '%' : 'N/A' }})
                                     </div>
                                     {% if service.metrics_monitoring.collect_metrics == true %}
                                         <a href={{ path('app_metrics_service', {'service_name': service.service_name}) }} class="text-blue-500 hover:text-blue-300 bg-neutral-800" title="View metrics">
