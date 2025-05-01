@@ -81,6 +81,26 @@ class FileSystemBrowserController extends AbstractController
         // get browsing file path
         $path = (string) $request->query->get('path', '/');
 
+        // check if file exists
+        if (!file_exists($path)) {
+            // get directory path for return link
+            $directoryPath = dirname($path);
+            if ($directoryPath === '.') {
+                $directoryPath = '/';
+            }
+
+            // render error page for non-existent file
+            return $this->render('component/file-system/file-system-error.twig', [
+                'errorTitle' => 'File Not Found',
+                'errorMessage' => 'The file you are trying to view does not exist.',
+                'details' => 'Path: ' . $path,
+                'returnPath' => $directoryPath,
+                'actionPath' => null,
+                'actionText' => null,
+                'actionIcon' => null
+            ]);
+        }
+
         // default file content value
         $mediaType = null;
         $fileContent = null;
