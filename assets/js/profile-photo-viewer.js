@@ -1,31 +1,71 @@
-/** profile photo view toggle component */
+/** profile photo view component */
 document.addEventListener('DOMContentLoaded', function () {
-    const modal = document.getElementById('profile-modal')
-    const openBtn = document.getElementById('open-profile-modal')
-    const closeBtn = document.getElementById('close-profile-modal')
+    const sidebarModal = document.getElementById('profile-modal')
+    const sidebarOpenBtn = document.getElementById('open-profile-modal')
+    const sidebarCloseBtn = document.getElementById('close-profile-modal')
+    const userProfileModal = document.getElementById('user-profile-modal')
+    const userProfilePhoto = document.getElementById('user-profile-photo')
+    const userProfileCloseBtn = document.getElementById('close-user-profile-modal')
 
-    openBtn.addEventListener('click', () => {
-        modal.classList.remove('hidden')
-        modal.classList.add('flex')
-    })
+    // initialize sidebar modal functionality
+    if (sidebarModal && sidebarOpenBtn && sidebarCloseBtn) {
+        // handle sidebar profile photo click
+        sidebarOpenBtn.addEventListener('click', () => {
+            sidebarModal.classList.remove('hidden')
+            sidebarModal.classList.add('flex')
+        })
 
-    closeBtn.addEventListener('click', () => {
-        modal.classList.remove('flex')
-        modal.classList.add('hidden')
-    })
+        // close button handler
+        sidebarCloseBtn.addEventListener('click', () => {
+            sidebarModal.classList.remove('flex')
+            sidebarModal.classList.add('hidden')
+        })
 
-    // close modal when clicking outside the image box
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.remove('flex')
-            modal.classList.add('hidden')
-        }
-    })
+        // close modal when clicking outside image box
+        sidebarModal.addEventListener('click', (e) => {
+            if (e.target === sidebarModal) {
+                sidebarModal.classList.remove('flex')
+                sidebarModal.classList.add('hidden')
+            }
+        })
+    }
 
+    // initialize user profile modal functionality
+    if (userProfileModal && userProfilePhoto && userProfileCloseBtn) {
+        // handle user profile photo click
+        userProfilePhoto.addEventListener('click', () => {
+            userProfileModal.classList.remove('hidden')
+            userProfileModal.classList.add('flex')
+        })
+
+        // close button handler
+        userProfileCloseBtn.addEventListener('click', () => {
+            userProfileModal.classList.remove('flex')
+            userProfileModal.classList.add('hidden')
+        })
+
+        // close modal when clicking outside image box
+        userProfileModal.addEventListener('click', (e) => {
+            if (e.target === userProfileModal) {
+                userProfileModal.classList.remove('flex')
+                userProfileModal.classList.add('hidden')
+            }
+        })
+    }
+
+    // global escape key handler for all modals
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
-            modal.classList.remove('flex')
-            modal.classList.add('hidden')
+            // close sidebar modal if it exists and is open
+            if (sidebarModal && sidebarModal.classList.contains('flex')) {
+                sidebarModal.classList.remove('flex')
+                sidebarModal.classList.add('hidden')
+            }
+            // close user profile modal if it exists and is open
+            if (userProfileModal && userProfileModal.classList.contains('flex')) {
+                userProfileModal.classList.remove('flex')
+                userProfileModal.classList.add('hidden')
+            }
         }
     })
 })
