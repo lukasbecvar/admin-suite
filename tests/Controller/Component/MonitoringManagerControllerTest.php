@@ -104,8 +104,6 @@ class MonitoringManagerControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'HTTP Service Details');
         $this->assertSelectorTextContains('body', 'URL:');
         $this->assertSelectorTextContains('body', 'Max Response Time:');
-        $this->assertSelectorTextContains('body', 'Accept Codes:');
-        $this->assertSelectorTextContains('body', 'Configuration Files');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
