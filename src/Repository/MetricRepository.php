@@ -66,10 +66,12 @@ class MetricRepository extends ServiceEntityRepository
             case 'last_24_hours':
                 $date = new DateTime('-24 hours');
                 break;
-            case 'last_week':
+            case 'last_7_days':
+            case 'last_week': // For backward compatibility
                 $date = new DateTime('-7 days');
                 break;
-            case 'last_month':
+            case 'last_30_days':
+            case 'last_month': // For backward compatibility
                 $date = new DateTime('-30 days');
                 break;
             case 'all_time':
@@ -90,8 +92,8 @@ class MetricRepository extends ServiceEntityRepository
         // get metrics
         $metrics = $qb->getQuery()->getResult();
 
-        // aggregate data if time period is 'last_week', 'last_month' or 'all_time'
-        if (in_array($timePeriod, ['last_week', 'last_month', 'all_time'])) {
+        // aggregate data if time period is 'last_7_days', 'last_30_days', 'last_week', 'last_month' or 'all_time'
+        if (in_array($timePeriod, ['last_7_days', 'last_week', 'last_30_days', 'last_month', 'all_time'])) {
             $aggregatedData = [];
 
             // check if metrics data is iterable
@@ -146,10 +148,12 @@ class MetricRepository extends ServiceEntityRepository
             case 'last_24_hours':
                 $date = new DateTime('-24 hours');
                 break;
-            case 'last_week':
+            case 'last_7_days':
+            case 'last_week': // For backward compatibility
                 $date = new DateTime('-7 days');
                 break;
-            case 'last_month':
+            case 'last_30_days':
+            case 'last_month': // For backward compatibility
                 $date = new DateTime('-30 days');
                 break;
             case 'all_time':
@@ -178,9 +182,9 @@ class MetricRepository extends ServiceEntityRepository
             // get date key based on time period
             if ($timePeriod === 'last_24_hours') {
                 $dateKey = $time->format('H:i');
-            } elseif ($timePeriod === 'last_week') {
+            } elseif ($timePeriod === 'last_7_days' || $timePeriod === 'last_week') {
                 $dateKey = $time->format('m/d');
-            } elseif ($timePeriod === 'last_month') {
+            } elseif ($timePeriod === 'last_30_days' || $timePeriod === 'last_month') {
                 $dateKey = $time->format('m/d');
             } elseif ($timePeriod === 'all_time') {
                 $dateKey = $time->format('Y/m');
@@ -215,12 +219,12 @@ class MetricRepository extends ServiceEntityRepository
         }
 
         // filter results based on time period to return only required number of values
-        if ($timePeriod === 'last_week') {
+        if ($timePeriod === 'last_7_days' || $timePeriod === 'last_week') {
             foreach ($result as $metricName => $metricValues) {
                 // return only 7 days history
                 $result[$metricName] = array_slice($metricValues, 0, 7);
             }
-        } elseif ($timePeriod === 'last_month') {
+        } elseif ($timePeriod === 'last_30_days' || $timePeriod === 'last_month') {
             foreach ($result as $metricName => $metricValues) {
                 // return only 31 days history
                 $result[$metricName] = array_slice($metricValues, 0, 31);

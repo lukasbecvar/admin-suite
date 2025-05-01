@@ -18,6 +18,8 @@
         {% set backPath = path('app_manager_logs_system') %}
     {% elseif referer == 'app_system_audit' %}
         {% set backPath = path('app_system_audit') %}
+    {% elseif referer == 'monitoring_service_detail' %}
+        {% set backPath = path('app_manager_monitoring') %}
     {% else %}
         {% set backPath = path('app_file_system_browser', { 'path': directoryPath }) %}
     {% endif %}

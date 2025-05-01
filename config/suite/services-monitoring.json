@@ -4,42 +4,66 @@
         "display_name": "SSHD",
         "type": "systemd",
         "monitoring": true,
-        "display": true
+        "display": true,
+        "config_files": [
+            "/lib/systemd/system/ssh.service",
+            "/etc/ssh/sshd_config"
+        ]
     },
     "apache2": {
         "service_name": "apache2",
         "display_name": "Apache2",
         "type": "systemd",
         "monitoring": true,
-        "display": true
+        "display": true,
+        "config_files": [
+            "/etc/apache2/sites-available/default-suite.conf",
+            "/lib/systemd/system/apache2.service",
+            "/etc/apache2/apache2.conf"
+        ]
     },
     "mysql": {
         "service_name": "mysql",
         "display_name": "Mysql",
         "type": "systemd",
         "monitoring": true,
-        "display": true
+        "display": true,
+        "config_files": [
+            "/etc/mysql/mysql.conf.d/mysqld.cnf"
+        ]
     },
     "openvpn": {
         "service_name": "openvpn",
         "display_name": "OpenVPN",
         "type": "systemd",
         "monitoring": true,
-        "display": true
+        "display": true,
+        "config_files": [
+            "/etc/openvpn/server.conf"
+        ]
     },
     "minecraft": {
         "service_name": "minecraft",
         "display_name": "Minecraft",
         "type": "systemd",
         "monitoring": true,
-        "display": true
+        "display": true,
+        "config_files": [
+            "/services/minecraft-server/server.properties",
+            "/etc/systemd/system/minecraft.service",
+            "/services/minecraft-server/spigot.yml"
+        ]
     },
     "admin-suite-monitoring": {
         "service_name": "admin-suite-monitoring",
         "display_name": "Monitoring",
         "type": "systemd",
         "monitoring": true,
-        "display": true
+        "display": true,
+        "config_files": [
+            "/services/website/admin-suite/config/suite/services-monitoring.json",
+            "/etc/systemd/system/admin-suite-monitoring.service"
+        ]
     },
     "becvar.xyz": {
         "service_name": "becvar.xyz",
@@ -81,6 +105,14 @@
         "metrics_monitoring": {
             "collect_metrics": false,
             "metrics_collector_url": ""
-        }
+        },
+        "config_files": [
+            "/services/website/admin-suite/config/suite/terminal-blocked-commands.json",
+            "/services/website/admin-suite/config/suite/exceptions-monitoring.json",
+            "/services/website/admin-suite/config/suite/package-requirements.json",
+            "/services/website/admin-suite/config/suite/services-monitoring.json",
+            "/services/website/admin-suite/config/suite/blocked-usernames.json",
+            "/services/website/admin-suite/config/suite/terminal-aliases.json"
+        ]
     }
 }

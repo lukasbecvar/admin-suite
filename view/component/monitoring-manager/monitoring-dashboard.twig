@@ -8,7 +8,7 @@
         {# BACK BUTTON #}
         <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="Back to dashboard">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
-        </a> 
+        </a>
 
         {# LINK TO MONITORING STATUS DATABASE #}
         <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': monitoringStatusTable}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="Go to unsorted logs">
@@ -34,7 +34,7 @@
     </div>
 
     {# SERVICES STATUS LOG #}
-    {% if monitoringLogs|length > 0 %}        
+    {% if monitoringLogs|length > 0 %}
         <div class="grid grid-cols-1 sm:grid-cols-1 gap-1 p-2 pt-2 py-0 component">
             <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-md w-full sm:col-span-2 card-component rounded">
                 <div class="px-2 py-2 border-b border-white/10 font-extrabold text-white">Status log</div>
@@ -53,30 +53,32 @@
         <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-lg overflow-hidden w-full max-h-50 card-component rounded">
             <div class="px-2 py-2 border-b border-white/10 text-white/80 font-bold">Internal services</div>
             <div class="p-1 overflow-y-auto h-70 mb-[-5px]">
-                
+
                 {# UFW SERVICE #}
-                <div class="flex justify-between items-center bg-neutral-500/5 border border-white/10 rounded p-2 text-sm hover:bg-white/10 transition mb-[5px] mt-[2px] mr-[2px] ml-[2px]">
-                    <div class="flex items-center space-x-2">
-                        <span class="text-gray-300 font-semibold">UFW</span>
-                        <span class="text-white ml-r">
+                <div class="flex flex-wrap justify-between items-center bg-neutral-500/5 border border-white/10 rounded p-2 text-sm hover:bg-white/10 transition mb-[5px] mt-[2px] mr-[2px] ml-[2px]">
+                    <div class="flex flex-wrap items-center gap-2 min-w-0 flex-grow">
+                        <div class="flex items-center gap-1">
+                            <span class="text-gray-300 font-semibold truncate max-w-[150px]">UFW</span>
+                        </div>
+                        <div class="flex items-center ml-[-5px]">
                             {% if serviceManager.isUfwRunning() %}
-                                <span class="phone-none">[<span class="text-green-500 font-bold">ONLINE</span>]</span>
+                                <span class="phone-none whitespace-nowrap text-white">[<span class="text-green-500 font-bold">ONLINE</span>]</span>
                                 <span class="text-green-500 phone-only"><i class="fas fa-circle"></i></span>
                             {% else %}
-                                <span class="phone-none">[<span class="text-red-500 font-bold">OFFLINE</span>]</span>
+                                <span class="phone-none whitespace-nowrap text-white">[<span class="text-red-500 font-bold">OFFLINE</span>]</span>
                                 <span class="text-red-500 phone-only"><i class="fas fa-circle"></i></span>
                             {% endif %}
-                        </span>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-1">
+                    <div class="flex flex-wrap items-center gap-1 mt-1 sm:mt-0">
                         {% if serviceManager.isUfwRunning() %}
-                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'reload', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-600 hover:bg-yellow-500 text-white px-3 py-1 rounded text-xs font-bold phone-none">Reload</a>
-                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_manager_monitoring'}) }} class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs font-bold">Stop</a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'reload', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-600 hover:bg-yellow-500 text-white px-3 py-1 rounded text-xs font-bold phone-none whitespace-nowrap">Reload</a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_manager_monitoring'}) }} class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs font-bold whitespace-nowrap">Stop</a>
                         {% else %}
-                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_manager_monitoring'}) }} class="bg-green-700 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-bold">Start</a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_manager_monitoring'}) }} class="bg-green-700 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-bold whitespace-nowrap">Start</a>
                         {% endif %}
                     </div>
-                </div> 
+                </div>
 
                 {# SERVICES LIST #}
                 {% for service in services %}
@@ -86,28 +88,30 @@
                             {% set serviceStatus = serviceManager.isServiceRunning(service.service_name) %}
 
                             {# SERVICE ITEM #}
-                            <div class="flex justify-between items-center bg-neutral-500/5 border border-white/10 rounded p-2 text-sm hover:bg-white/10 transition mb-[5px] mr-[2px] ml-[2px]">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
-                                    <span class="text-white ml-r">
+                            <div class="flex flex-wrap justify-between items-center bg-neutral-500/5 border border-white/10 rounded p-2 text-sm hover:bg-white/10 transition mb-[5px] mr-[2px] ml-[2px]">
+                                <div class="flex flex-wrap items-center gap-2 min-w-0 flex-grow">
+                                    <div class="flex items-center gap-1">
+                                        <a href={{ path('app_manager_monitoring_service_detail', {'service_name': service.service_name}) }} class="text-gray-300 font-semibold hover:text-blue-400 truncate max-w-[150px] relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-blue-400 hover:after:w-full after:transition-all after:duration-300">{{ service.display_name|e }}</a>
+                                    </div>
+                                    <div class="flex items-center ml-[-4px]">
                                         {% if serviceStatus %}
-                                            <span class="phone-none">[<span class="text-green-500 font-bold">ONLINE</span>]</span>
+                                            <span class="phone-none whitespace-nowrap text-white">[<span class="text-green-500 font-bold">ONLINE</span>]</span>
                                             <span class="text-green-500 phone-only"><i class="fas fa-circle"></i></span>
                                         {% else %}
-                                            <span class="phone-none">[<span class="text-red-500 font-bold">OFFLINE</span>]</span>
+                                            <span class="phone-none whitespace-nowrap text-white">[<span class="text-red-500 font-bold">OFFLINE</span>]</span>
                                             <span class="text-red-500 phone-only"><i class="fas fa-circle"></i></span>
                                         {% endif %}
-                                    </span>
-                                    <span class="text-white ml-r">
+                                    </div>
+                                    <div class="text-white whitespace-nowrap ml-[-3px]">
                                         (SLA: {{ monitoringManager.getServiceMountlySLA(service.service_name) is not null ? monitoringManager.getServiceMountlySLA(service.service_name)|e ~ '%' : 'unknown' }})
-                                    </span>
+                                    </div>
                                 </div>
-                                <div class="flex items-center space-x-1">
+                                <div class="flex flex-wrap items-center gap-1 mt-1 sm:mt-0">
                                     {% if serviceStatus %}
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-600 hover:bg-yellow-500 text-white px-3 py-1 rounded text-xs font-bold phone-none">Restart</a>
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs font-bold">Stop</a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="bg-yellow-600 hover:bg-yellow-500 text-white px-3 py-1 rounded text-xs font-bold phone-none whitespace-nowrap">Restart</a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs font-bold whitespace-nowrap">Stop</a>
                                     {% else %}
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="bg-green-700 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-bold">Start</a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="bg-green-700 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-bold whitespace-nowrap">Start</a>
                                     {% endif %}
                                 </div>
                             </div>
@@ -131,26 +135,27 @@
                 {% for service in services %}
                     {% if service.display %}
                         {% if service.type == 'http' %}
-                            
                             {# SERVICE STATUS #}
                             {% set serviceStatus = serviceManager.checkWebsiteStatus(service.url) %}
 
                             {# SERVICE ITEM #}
-                            <div class="flex justify-between items-center bg-neutral-500/5 border border-white/10 rounded p-2 text-sm hover:bg-white/10 transition mb-[5px] mr-[2px] ml-[2px] mt-[2px]">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-gray-300 font-semibold">{{ service.display_name|e }}</span>
-                                    <span class="text-white ml-r">
+                            <div class="flex flex-wrap justify-between items-center bg-neutral-500/5 border border-white/10 rounded p-2 text-sm hover:bg-white/10 transition mb-[5px] mr-[2px] ml-[2px] mt-[2px]">
+                                <div class="flex flex-wrap items-center gap-2 min-w-0 flex-grow">
+                                    <div class="flex items-center gap-1">
+                                        <a href={{ path('app_manager_monitoring_service_detail', {'service_name': service.service_name}) }} class="text-gray-300 font-semibold hover:text-blue-400 truncate max-w-[150px] relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-blue-400 hover:after:w-full after:transition-all after:duration-300">{{ service.display_name|e }}</a>
+                                    </div>
+                                    <div class="flex items-center ml-[-4px]">
                                         {% if serviceStatus.responseCode in service.accept_codes %}
-                                            <span class="phone-none">[<span class="text-green-500 font-bold">ONLINE</span>]</span>
+                                            <span class="phone-none whitespace-nowrap text-white">[<span class="text-green-500 font-bold">ONLINE</span>]</span>
                                             <span class="text-green-500 phone-only"><i class="fas fa-circle"></i></span>
                                         {% else %}
-                                            <span class="phone-none">[<span class="text-red-500 font-bold">OFFLINE</span>]</span>
+                                            <span class="phone-none whitespace-nowrap text-white">[<span class="text-red-500 font-bold">OFFLINE</span>]</span>
                                             <span class="text-red-500 phone-only"><i class="fas fa-circle"></i></span>
                                         {% endif %}
-                                    </span>
-                                    <span class="text-white ml-r">
+                                    </div>
+                                    <div class="text-white whitespace-nowrap ml-[-3px]">
                                         (SLA: {{ monitoringManager.getServiceMountlySLA(service.service_name) is not null ? monitoringManager.getServiceMountlySLA(service.service_name)|e ~ '%' : 'unknown' }})
-                                    </span>
+                                    </div>
                                     {% if service.metrics_monitoring.collect_metrics == true %}
                                         <a href={{ path('app_metrics_service', {'service_name': service.service_name}) }} class="text-blue-500 hover:text-blue-300 bg-neutral-800" title="View metrics">
                                             <i class="fa fa-chart-line border-neutral-500 border p-1 rounded" aria-hidden="true"></i>
@@ -168,27 +173,27 @@
     {# SLA HISTORY CARD #}
     {% if slaHistory|length > 0 %}
         <div class="grid grid-cols-1 sm:grid-cols-1 gap-1 p-2 pt-1 mb-4 py-0 component">
-                <div class="backdrop-blur-md bg-white/5 border border-white/20 shadow-lg overflow-hidden w-full card-component rounded">
+            <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-lg overflow-hidden w-full card-component rounded">
                     <div class="px-2 py-2 border-b border-white/10 text-white/80 font-extrabold flex items-center justify-between">
                     <span>SLA History</span>
                     <a href={{ path('app_manager_monitoring_export_slahistory') }} id="loading-blocker" class="text-indigo-400 hover:text-indigo-300" title="Export SLA History">Export</a>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                     {% for service, slaData in slaHistory %}
-                        <div class="service-card bg-neutral-800 w-full">
-                            <div class="px-2 py-1 bg-neutral-900/10 border border-white/10">
-                                <h3 class="text-white text-xl font-semibold">{{ service|e }}</h3>
+                        <div class="service-card w-full">
+                            <div class="px-2 py-1 bg-white/5 border border-white/10">
+                                <h3 class="text-white text-xl font-semibold"><a href={{ path('app_manager_monitoring_service_detail', {'service_name': service}) }} class="hover:text-blue-400">{{ service|e }}</a></h3>
                             </div>
                             <table class="w-full text-gray-200">
                                 <thead>
-                                    <tr class="bg-white/1 border border-white/10">
+                                    <tr class="bg-white/5 border border-white/10">
                                         <th class="p-2 border-r border-neutral-700">Timeframe</th>
                                         <th class="p-2">SLA</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for month, sla in slaData %}
-                                        <tr class="bg-white/1 hover:bg-neutral-700 border border-neutral-700">
+                                        <tr class="bg-white/1 hover:bg-neutral-800 border border-neutral-700">
                                             <td class="p-2 border-r border-neutral-700">{{ month }}</td>
                                             {% if sla < 99 %}
                                                 <td class="p-2 text-red-500">{{ sla|e }}%</td>

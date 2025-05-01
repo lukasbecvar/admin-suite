@@ -66,4 +66,59 @@ class MonitoringManagerControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'Display:');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
+
+    /**
+     * Test load service detail page
+     *
+     * @return void
+     */
+    public function testLoadServiceDetailPage(): void
+    {
+        $this->client->request('GET', '/manager/monitoring/service?service_name=apache2');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('a[title="Back to monitoring dashboard"]');
+        $this->assertSelectorTextContains('body', 'Service Detail:');
+        $this->assertSelectorTextContains('body', 'Service Information');
+        $this->assertSelectorTextContains('body', 'Configuration');
+        $this->assertSelectorTextContains('body', 'SLA History');
+        $this->assertSelectorTextContains('body', 'Configuration Files');
+        $this->assertSelectorTextContains('body', 'Service Actions');
+        $this->assertSelectorExists('a:contains("Restart Service")');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test load service detail page with metrics
+     *
+     * @return void
+     */
+    public function testLoadServiceDetailPageWithMetrics(): void
+    {
+        $this->client->request('GET', '/manager/monitoring/service?service_name=becvar.xyz');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('body', 'Service Detail:');
+        $this->assertSelectorTextContains('body', 'HTTP Service Details');
+        $this->assertSelectorTextContains('body', 'URL:');
+        $this->assertSelectorTextContains('body', 'Max Response Time:');
+        $this->assertSelectorTextContains('body', 'Accept Codes:');
+        $this->assertSelectorTextContains('body', 'Configuration Files');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test service detail page with invalid service name
+     *
+     * @return void
+     */
+    public function testServiceDetailPageWithInvalidServiceName(): void
+    {
+        $this->client->request('GET', '/manager/monitoring/service?service_name=invalid_service');
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+    }
 }

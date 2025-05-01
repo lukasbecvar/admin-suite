@@ -8,11 +8,13 @@ use App\Util\CacheUtil;
 use App\Util\ExportUtil;
 use App\Manager\LogManager;
 use App\Manager\ErrorManager;
+use App\Manager\MetricsManager;
 use App\Manager\ServiceManager;
 use App\Manager\DatabaseManager;
 use App\Entity\MonitoringStatus;
 use App\Annotation\Authorization;
 use App\Manager\MonitoringManager;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,6 +33,7 @@ class MonitoringManagerController extends AbstractController
     private ExportUtil $exportUtil;
     private LogManager $logManager;
     private ErrorManager $errorManager;
+    private MetricsManager $metricsManager;
     private ServiceManager $serviceManager;
     private DatabaseManager $databaseManager;
     private MonitoringManager $monitoringManager;
@@ -41,6 +44,7 @@ class MonitoringManagerController extends AbstractController
         ExportUtil $exportUtil,
         LogManager $logManager,
         ErrorManager $errorManager,
+        MetricsManager $metricsManager,
         ServiceManager $serviceManager,
         DatabaseManager $databaseManager,
         MonitoringManager $monitoringManager
@@ -50,6 +54,7 @@ class MonitoringManagerController extends AbstractController
         $this->exportUtil = $exportUtil;
         $this->logManager = $logManager;
         $this->errorManager = $errorManager;
+        $this->metricsManager = $metricsManager;
         $this->serviceManager = $serviceManager;
         $this->databaseManager = $databaseManager;
         $this->monitoringManager = $monitoringManager;
@@ -129,6 +134,96 @@ class MonitoringManagerController extends AbstractController
         return $this->render('component/monitoring-manager/monitoring-config.twig', [
             'services' => $services
         ]);
+    }
+
+    /**
+     * Show service details
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The service details view
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/manager/monitoring/service', methods:['GET'], name: 'app_manager_monitoring_service_detail')]
+    public function serviceDetail(Request $request): Response
+    {
+        // get service name from request parameter
+        $serviceName = (string) $request->query->get('service_name');
+
+        try {
+            // get time period from request parameter
+            $timePeriod = (string) $request->query->get('time_period', 'last_24_hours');
+
+            // get services list
+            $services = $this->serviceManager->getServicesList();
+
+            // check if service exists
+            if (!isset($services[$serviceName])) {
+                $this->errorManager->handleError(
+                    message: 'service not found: ' . $serviceName,
+                    code: Response::HTTP_NOT_FOUND
+                );
+            }
+
+            // get service configuration
+            $serviceConfig = $services[$serviceName];
+
+            // get service status
+            $serviceStatus = null;
+            if ($serviceConfig['type'] === 'systemd') {
+                $serviceStatus = $this->serviceManager->isServiceRunning($serviceName) ? 'running' : 'not-running';
+            } elseif ($serviceConfig['type'] === 'http') {
+                $statusCheck = $this->serviceManager->checkWebsiteStatus($serviceConfig['url']);
+                $serviceStatus = $statusCheck['isOnline'] ? 'online' : 'offline';
+            }
+
+            // get monitoring status from database
+            $monitoringStatus = $this->monitoringManager->getMonitoringStatusRepository(['service_name' => $serviceName]);
+
+            // get SLA history for service
+            $slaHistory = $this->monitoringManager->getSLAHistory();
+            $serviceSlaHistory = [];
+
+            if (isset($slaHistory[$serviceName])) {
+                $serviceSlaHistory = $slaHistory[$serviceName];
+            }
+
+            // get metrics data if available
+            $metricsData = null;
+            $hasMetrics = false;
+
+            // check if service has metrics
+            if ($serviceConfig['type'] === 'http' && isset($serviceConfig['metrics_monitoring']) && $serviceConfig['metrics_monitoring']['collect_metrics']) {
+                try {
+                    // get metrics data
+                    $metricsData = $this->metricsManager->getServiceMetrics($serviceName, $timePeriod);
+                    $hasMetrics = !empty($metricsData) && !empty($metricsData['metrics']);
+                } catch (Exception $e) {
+                    $this->errorManager->handleError(
+                        message: 'error to get metrics data: ' . $e->getMessage(),
+                        code: Response::HTTP_INTERNAL_SERVER_ERROR
+                    );
+                }
+            }
+
+            // return service details view
+            return $this->render('component/monitoring-manager/monitoring-service-detail.twig', [
+                'serviceName' => $serviceName,
+                'serviceConfig' => $serviceConfig,
+                'serviceStatus' => $serviceStatus,
+                'monitoringStatus' => $monitoringStatus,
+                'slaHistory' => $serviceSlaHistory,
+                'serviceManager' => $this->serviceManager,
+                'metricsData' => $metricsData,
+                'hasMetrics' => $hasMetrics,
+                'timePeriod' => $timePeriod
+            ]);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error getting service details: ' . $e->getMessage(),
+                code: $e->getCode()
+            );
+        }
     }
 
     /**
