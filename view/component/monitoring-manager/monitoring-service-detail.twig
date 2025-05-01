@@ -82,12 +82,9 @@
                     <div class="grid grid-cols-1 gap-1">
                         {% for configFile in serviceConfig.config_files %}
                             <div class="flex items-center justify-between bg-neutral-700/50 p-2 rounded hover:bg-neutral-700/70 transition-all">
-                                <div class="flex items-center">
-                                    <i class="fa fa-file-code-o text-blue-400 mr-2"></i>
+                                <a href={{ path('app_file_system_view', {'path': configFile, 'referer': 'monitoring_service_detail'}) }} class="flex items-center">
+                                    <i class="fa fa-file text-blue-400 mr-2"></i>
                                     <span class="text-white">{{ configFile|e }}</span>
-                                </div>
-                                <a href={{ path('app_file_system_view', {'path': configFile, 'referer': 'monitoring_service_detail'}) }} class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded px-2 py-1 text-xs transition-all duration-150 shadow hover:shadow-md">
-                                    <i class="fa fa-file mr-1"></i> View
                                 </a>
                             </div>
                         {% endfor %}
@@ -139,7 +136,7 @@
                 <div class="px-2 py-2 border-b border-white/10 text-white/80 font-bold">Service Actions</div>
                 <div class="p-2 flex gap-2">
                     <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded px-4 py-2 text-sm transition-all duration-150 shadow hover:shadow-md">
-                        <i class="fa fa-refresh mr-1"></i> Restart Service
+                        <i class="fa fa-redo mr-1"></i> Restart Service
                     </a>
                     {% if serviceStatus == 'running' %}
                         <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="bg-red-600 hover:bg-red-700 text-white font-semibold rounded px-4 py-2 text-sm transition-all duration-150 shadow hover:shadow-md">
