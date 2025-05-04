@@ -129,10 +129,11 @@ class LogApiController extends AbstractController
 
         // get last get time
         $cacheItem = $this->cacheUtil->getValue($cacheKey);
-        if ($cacheItem != null) {
-            $lastTimestamp = $cacheItem->get();
+        $lastTimestamp = $cacheItem->get();
+        if ($lastTimestamp != null) {
+            $lastTimestamp = $lastTimestamp;
         } else {
-            $lastTimestamp = (new DateTime('-10 seconds'))->format('Y-m-d H:i:s');
+            $lastTimestamp = (new DateTime('-30 seconds'))->format('Y-m-d H:i:s');
         }
 
         // journalctl command execute to get logs
@@ -152,7 +153,7 @@ class LogApiController extends AbstractController
         // update timestamp in cache for next call
         $now = (new DateTime())->format('Y-m-d H:i:s');
         $this->cacheUtil->deleteValue($cacheKey);
-        $this->cacheUtil->setValue($cacheKey, $now, (60 * 60));
+        $this->cacheUtil->setValue($cacheKey, $now, 30);
 
         // return response with logs
         return $this->json([
