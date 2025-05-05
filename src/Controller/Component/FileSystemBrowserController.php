@@ -303,7 +303,7 @@ class FileSystemBrowserController extends AbstractController
                 );
             }
 
-            // Make shell scripts executable
+            // make shell scripts executable
             if ($isShellScript) {
                 $chmodCommand = 'sudo chmod +x ' . escapeshellarg($filePath);
                 shell_exec($chmodCommand);
@@ -382,7 +382,7 @@ class FileSystemBrowserController extends AbstractController
         try {
             // check if directory already exists
             if (file_exists($directoryPath)) {
-                // Render error page instead of throwing an exception
+                // render error page instead of throwing an exception
                 return $this->render('component/file-system/file-system-error.twig', [
                     'errorTitle' => 'Directory Already Exists',
                     'errorMessage' => 'The directory you are trying to create already exists.',

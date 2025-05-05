@@ -83,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
             let textarea = event.target
             let text = textarea.value
             let start = textarea.selectionStart
-            let end = textarea.selectionEnd
     
             // split text into lines
             let lines = text.split("\n")
@@ -105,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     })
 
-    // for each todo item, attach a click event to its info button (if available)
+    // handle click on info button
     todoItems.forEach(item => {
         const infoButton = item.querySelector('.info-button')
         if (infoButton) {

@@ -62,7 +62,7 @@
 
             {% for item in menuItems %}
                 <li>
-                    <a href={{ path(item.route) }} class="group flex items-center relative pl-1 px-1 py-[6px] rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-all duration-200">
+                    <a href={{ path(item.route) }} class="group flex items-center relative pl-1 px-1 py-[6px] rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-900/20 hover:to-transparent">
                         <span class="absolute left-0 top-0 h-full w-[4px] bg-emerald-400 opacity-0 group-hover:opacity-100 rounded-r transition-all duration-200 phone-none"></span>
                         <i class="{{ item.icon }} h-5 w-5 mt-[8px] mr-1 ml-2 transition-all duration-200 group-hover:ml-3"></i>
                         <span class="transition-all duration-200">

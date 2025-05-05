@@ -67,11 +67,11 @@ class MetricRepository extends ServiceEntityRepository
                 $date = new DateTime('-24 hours');
                 break;
             case 'last_7_days':
-            case 'last_week': // For backward compatibility
+            case 'last_week':
                 $date = new DateTime('-7 days');
                 break;
             case 'last_30_days':
-            case 'last_month': // For backward compatibility
+            case 'last_month':
                 $date = new DateTime('-30 days');
                 break;
             case 'all_time':
@@ -149,11 +149,11 @@ class MetricRepository extends ServiceEntityRepository
                 $date = new DateTime('-24 hours');
                 break;
             case 'last_7_days':
-            case 'last_week': // For backward compatibility
+            case 'last_week':
                 $date = new DateTime('-7 days');
                 break;
             case 'last_30_days':
-            case 'last_month': // For backward compatibility
+            case 'last_month':
                 $date = new DateTime('-30 days');
                 break;
             case 'all_time':
