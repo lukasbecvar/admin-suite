@@ -651,11 +651,85 @@ class MonitoringManagerTest extends TestCase
         // mock cache
         $this->cacheUtilMock->method('isCatched')->willReturn(false);
 
-
         // call tested method
         $result = $this->monitoringManager->isMonitoringTemporarilyDisabled('test_service');
 
         // assert result
         $this->assertFalse($result);
+    }
+
+    /**
+     * Test handle database down when database is down for the first time
+     *
+     * @return void
+     */
+    public function testHandleDatabaseDownWhenDatabaseIsDownForTheFirstTime(): void
+    {
+        // Expect email to be sent
+        $this->emailManagerMock->expects($this->once())
+            ->method('sendMonitoringStatusEmail')
+            ->with(
+                $this->anything(),
+                'Mysql',
+                'Mysql server is down'
+            );
+
+        // Expect console output
+        $this->symfonyStyleMock->expects($this->once())
+            ->method('writeln')
+            ->with($this->stringContains('database is down'));
+
+        // Call the method
+        $this->monitoringManager->handleDatabaseDown($this->symfonyStyleMock, false);
+    }
+
+    /**
+     * Test save SLA history with specific values
+     *
+     * @return void
+     */
+    public function testSaveSLAHistoryWithSpecificValues(): void
+    {
+        // testing data
+        $serviceName = 'nginx';
+        $slaTimeframe = '2023-01';
+        $slaValue = 99.95;
+
+        // expect entity manager to persist with correct values
+        $this->entityManagerMock->expects($this->once())->method('persist')->with($this->callback(function (SLAHistory $slaHistory) use ($serviceName, $slaTimeframe, $slaValue) {
+            return $slaHistory->getServiceName() === $serviceName
+                && $slaHistory->getSlaTimeframe() === $slaTimeframe
+                && $slaHistory->getSlaValue() === $slaValue;
+        }));
+
+        // expect entity manager flush call
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->monitoringManager->saveSLAHistory($serviceName, $slaTimeframe, $slaValue);
+    }
+
+    /**
+     * Test temporary disable monitoring with non-existent service
+     *
+     * @return void
+     */
+    public function testTemporaryDisableMonitoringWithNonExistentService(): void
+    {
+        // mock services list
+        $this->serviceManagerMock->expects($this->once())->method('getServicesList')->willReturn([
+            'nginx' => [
+                'monitoring' => true
+            ]
+        ]);
+
+        // expect error handler to be called
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'error to disable monitoring: service non-existent-service not found',
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->monitoringManager->temporaryDisableMonitoring('non-existent-service', 1);
     }
 }

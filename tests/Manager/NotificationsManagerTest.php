@@ -2,6 +2,7 @@
 
 namespace App\Tests\Manager;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
@@ -12,6 +13,7 @@ use App\Manager\NotificationsManager;
 use App\Entity\NotificationSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\HttpFoundation\Response;
 use App\Repository\NotificationSubscriberRepository;
 
 /**
@@ -265,5 +267,96 @@ class NotificationsManagerTest extends TestCase
 
         // call tested method
         $this->notificationsManager->sendNotification('Test Title', 'Test Message', null);
+    }
+
+    /**
+     * Test get notifications subscriber by user id with current logged user
+     *
+     * @return void
+     */
+    public function testGetNotificationsSubscriberByUserIdWithCurrentLoggedUser(): void
+    {
+        // mock current logged user ID
+        $userId = 123;
+        $this->authManagerMock->expects($this->once())
+            ->method('getLoggedUserId')
+            ->willReturn($userId);
+
+        // mock notification subscriber
+        $subscriber = new NotificationSubscriber();
+        $this->repositoryMock->expects($this->once())->method('findOneBy')
+            ->with(['user_id' => $userId, 'status' => 'open'])
+            ->willReturn($subscriber);
+
+        // call tested method
+        $result = $this->notificationsManager->getNotificationsSubscriberByUserId();
+
+        // assert result
+        $this->assertSame($subscriber, $result);
+    }
+
+    /**
+     * Test get subscriber id by endpoint when subscriber not found
+     *
+     * @return void
+     */
+    public function testGetSubscriberIdByEndpointWhenSubscriberNotFound(): void
+    {
+        // mock repository to return null
+        $this->repositoryMock->expects($this->once())
+            ->method('findOneBy')
+            ->with(['endpoint' => 'non-existent-endpoint'])
+            ->willReturn(null);
+
+        // call tested method
+        $result = $this->notificationsManager->getSubscriberIdByEndpoint('non-existent-endpoint');
+
+        // assert result
+        $this->assertNull($result);
+    }
+
+    /**
+     * Test update notifications subscriber status when no subscribers found
+     *
+     * @return void
+     */
+    public function testUpdateNotificationsSubscriberStatusWhenNoSubscribersFound(): void
+    {
+        // mock repository to return empty array
+        $this->repositoryMock->expects($this->once())->method('findBy')
+            ->with(['user_id' => 999])->willReturn([]);
+
+        // expect flush method not to be called
+        $this->entityManagerMock->expects($this->never())->method('flush');
+
+        // call tested method
+        $this->notificationsManager->updateNotificationsSubscriberStatus(999, 'closed');
+    }
+
+    /**
+     * Test update notifications subscriber status with exception
+     *
+     * @return void
+     */
+    public function testUpdateNotificationsSubscriberStatusWithException(): void
+    {
+        // mock subscriber
+        $subscriber = $this->createMock(NotificationSubscriber::class);
+        $subscriber->expects($this->once())->method('setStatus')->with('closed');
+
+        // mock repository
+        $this->repositoryMock->expects($this->once())->method('findBy')->willReturn([$subscriber]);
+
+        // mock entity manager to throw exception
+        $this->entityManagerMock->expects($this->once())->method('flush')->willThrowException(new Exception('Database error'));
+
+        // expect error handler to be called
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'error to update notifications subscriber status: Database error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->notificationsManager->updateNotificationsSubscriberStatus(1, 'closed');
     }
 }

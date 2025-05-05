@@ -145,4 +145,147 @@ class FileSystemUtilTest extends TestCase
         // assert result is string
         $this->assertIsString($result);
     }
+
+    /**
+     * Test save file content
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testSaveFileContent(): void
+    {
+        // create temporary text file
+        $textFile = tempnam(sys_get_temp_dir(), 'test_');
+        $originalContent = 'Original content';
+        file_put_contents($textFile, $originalContent);
+
+        // new content to save
+        $newContent = 'New content for testing';
+
+        // test saving content to file
+        $this->assertTrue($this->fileSystemUtil->saveFileContent($textFile, $newContent));
+
+        // verify content was saved
+        $this->assertEquals($newContent . "\n", file_get_contents($textFile));
+
+        // clean up
+        unlink($textFile);
+    }
+
+    /**
+     * Test delete file or directory
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testDeleteFileOrDirectory(): void
+    {
+        // create temporary text file
+        $textFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($textFile, 'Test content');
+
+        // create temporary directory
+        $tempDir = sys_get_temp_dir() . '/test_dir_' . uniqid();
+        mkdir($tempDir);
+
+        // test deleting file
+        $this->assertTrue($this->fileSystemUtil->deleteFileOrDirectory($textFile));
+        $this->assertFileDoesNotExist($textFile);
+
+        // test deleting directory
+        $this->assertTrue($this->fileSystemUtil->deleteFileOrDirectory($tempDir));
+        $this->assertDirectoryDoesNotExist($tempDir);
+    }
+
+    /**
+     * Test rename file or directory
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testRenameFileOrDirectory(): void
+    {
+        // create temporary text file
+        $textFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($textFile, 'Test content');
+
+        // new file name
+        $newFile = sys_get_temp_dir() . '/renamed_test_' . uniqid();
+
+        // test renaming file
+        $this->assertTrue($this->fileSystemUtil->renameFileOrDirectory($textFile, $newFile));
+        $this->assertFileDoesNotExist($textFile);
+        $this->assertFileExists($newFile);
+
+        // clean up
+        unlink($newFile);
+    }
+
+    /**
+     * Test calculate directory size
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testCalculateDirectorySize(): void
+    {
+        // create temporary directory
+        $tempDir = sys_get_temp_dir() . '/test_dir_' . uniqid();
+        mkdir($tempDir);
+
+        // create some files in the directory
+        file_put_contents($tempDir . '/file1.txt', str_repeat('a', 1000));
+        file_put_contents($tempDir . '/file2.txt', str_repeat('b', 2000));
+
+        // test calculating directory size
+        $size = $this->fileSystemUtil->calculateDirectorySize($tempDir);
+        $this->assertGreaterThanOrEqual(3000, $size);
+
+        // clean up
+        unlink($tempDir . '/file1.txt');
+        unlink($tempDir . '/file2.txt');
+        rmdir($tempDir);
+    }
+
+    /**
+     * Test format file size
+     *
+     * @return void
+     */
+    public function testFormatFileSize(): void
+    {
+        // test various file sizes
+        $this->assertEquals('0 B', $this->fileSystemUtil->formatFileSize(0));
+        $this->assertEquals('100 B', $this->fileSystemUtil->formatFileSize(100));
+        $this->assertEquals('1 KB', $this->fileSystemUtil->formatFileSize(1024));
+        $this->assertEquals('1.5 KB', $this->fileSystemUtil->formatFileSize(1536));
+        $this->assertEquals('1 MB', $this->fileSystemUtil->formatFileSize(1048576));
+        $this->assertEquals('1 GB', $this->fileSystemUtil->formatFileSize(1073741824));
+    }
+
+    /**
+     * Test move file or directory
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testMoveFileOrDirectory(): void
+    {
+        // create temporary text file
+        $textFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($textFile, 'Test content');
+
+        // create destination directory
+        $destDir = sys_get_temp_dir() . '/test_dest_' . uniqid();
+        mkdir($destDir);
+
+        // test moving file
+        $this->assertTrue($this->fileSystemUtil->moveFileOrDirectory($textFile, $destDir));
+        $this->assertFileDoesNotExist($textFile);
+        $this->assertFileExists($destDir . '/' . basename($textFile));
+
+        // clean up
+        unlink($destDir . '/' . basename($textFile));
+        rmdir($destDir);
+    }
 }

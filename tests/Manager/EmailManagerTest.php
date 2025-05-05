@@ -125,4 +125,28 @@ class EmailManagerTest extends TestCase
         // call tested method
         $this->emailManager->sendEmail($recipient, $subject, $context);
     }
+
+    /**
+     * Test send email with database down
+     *
+     * @return void
+     */
+    public function testSendEmailWithDatabaseDown(): void
+    {
+        // set mailer enabled to true
+        $_ENV['MAILER_ENABLED'] = 'true';
+        $_ENV['MAILER_USERNAME'] = 'test@example.com';
+
+        // mock database down
+        $this->databaseManager->method('isDatabaseDown')->willReturn(true);
+
+        // expect log manager to not be called
+        $this->logManagerMock->expects($this->never())->method('log');
+
+        // expect mailer to be called
+        $this->mailerMock->expects($this->once())->method('send');
+
+        // call tested method
+        $this->emailManager->sendEmail('recipient@example.com', 'Test Subject', ['key' => 'value']);
+    }
 }

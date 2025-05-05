@@ -57,4 +57,25 @@ class ActionRunnerControllerTest extends CustomTestCase
         $this->assertResponseRedirects('/dashboard');
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
+
+    /**
+     * Test submit service action runner with invalid method
+     *
+     * @return void
+     */
+    public function testSubmitServiceActionRunnerWithInvalidMethod(): void
+    {
+        // simulate user authentication
+        $this->simulateLogin($this->client);
+
+        // create request
+        $this->client->request('POST', '/service/action/runner', [
+            'service' => 'ufw',
+            'action' => 'enable',
+            'referer' => 'app_dashboard'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_METHOD_NOT_ALLOWED);
+    }
 }
