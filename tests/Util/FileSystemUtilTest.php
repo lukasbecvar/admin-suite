@@ -143,7 +143,7 @@ class FileSystemUtilTest extends TestCase
         $result = $this->fileSystemUtil->getFileContent('/usr/lib/os-release');
 
         // assert result is string
-        $this->assertIsString($result);
+        $this->assertIsString($result['content']);
     }
 
     /**

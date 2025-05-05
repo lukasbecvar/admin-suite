@@ -424,13 +424,13 @@ class LogManagerTest extends TestCase
     public function testGetSystemLogContent(): void
     {
         // mock get content
-        $this->fileSystemUtilMock->method('getFileContent')->willReturn('file content');
+        $this->fileSystemUtilMock->method('getFileContent')->willReturn(['content' => 'file content']);
 
         // call tested method
         $result = $this->logManager->getSystemLogContent('test.log');
 
         // assert result
-        $this->assertEquals('file content', $result);
+        $this->assertEquals('file content', $result['content']);
     }
 
     /**

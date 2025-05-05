@@ -104,6 +104,17 @@ class FileSystemBrowserController extends AbstractController
         // default file content value
         $mediaType = null;
         $fileContent = null;
+        $fileMetadata = null;
+
+        // get start line and max lines from request (for pagination)
+        $startLine = (int) $request->query->get('start_line', '1');
+        $maxLines = (int) $request->query->get('max_lines', '1000'); // default to 1000 lines
+        if ($startLine < 1) {
+            $startLine = 1;
+        }
+        if ($maxLines < 1) {
+            $maxLines = 1000;
+        }
 
         try {
             // check if file is executable but not a shell script
@@ -121,7 +132,21 @@ class FileSystemBrowserController extends AbstractController
 
                 // get file content
                 if ($mediaType == 'non-mediafile') {
-                    $fileContent = $this->fileSystemUtil->getFileContent($path);
+                    // get file content with metadata
+                    $fileData = $this->fileSystemUtil->getFileContent($path, $maxLines, $startLine);
+                    $fileContent = $fileData['content'];
+                    $fileMetadata = [
+                        'totalLines' => $fileData['totalLines'],
+                        'readLines' => $fileData['readLines'],
+                        'isTruncated' => $fileData['isTruncated'],
+                        'fileSize' => $fileData['fileSize'],
+                        'readSize' => $fileData['readSize'],
+                        'startLine' => $startLine,
+                        'endLine' => $startLine + $fileData['readLines'] - 1,
+                        'formattedSize' => $this->fileSystemUtil->formatFileSize($fileData['fileSize']),
+                        'formattedReadSize' => $this->fileSystemUtil->formatFileSize($fileData['readSize']),
+                        'maxLines' => $maxLines // store original max_lines value
+                    ];
 
                     // log file access
                     $this->logManager->log(
@@ -142,7 +167,8 @@ class FileSystemBrowserController extends AbstractController
         return $this->render('component/file-system/file-system-view.twig', [
             'currentPath' => $path,
             'mediaType' => $mediaType,
-            'fileContent' => $fileContent
+            'fileContent' => $fileContent,
+            'fileMetadata' => $fileMetadata
         ]);
     }
 
@@ -596,7 +622,8 @@ class FileSystemBrowserController extends AbstractController
             }
 
             // get resource content
-            $resourceContent = $this->fileSystemUtil->getFileContent($path);
+            $resourceData = $this->fileSystemUtil->getFileContent($path);
+            $resourceContent = $resourceData['content'];
 
             // log file access
             $this->logManager->log(
@@ -678,8 +705,8 @@ class FileSystemBrowserController extends AbstractController
                 );
             }
 
-            // get file content
-            $fileContent = $this->fileSystemUtil->getFileContent($path);
+            // get full file content without pagination for editing
+            $fileContent = $this->fileSystemUtil->getFullFileContent($path);
 
             // log file access
             $this->logManager->log(

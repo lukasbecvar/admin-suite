@@ -87,11 +87,43 @@
         {% endfor %}
     {% endfor %}
 
+    {# FILE METADATA AND NAVIGATION #}
+    {% if mediaType == 'non-mediafile' and fileMetadata is defined and fileMetadata is not null %}
+        <div class="flex flex-wrap justify-between items-center px-2 py-1 text-xs bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 border-b border-neutral-800 shadow">
+            <div class="flex items-center space-x-2">
+                <span class="text-gray-400">Size: <span class="text-white">{{ fileMetadata.formattedSize }}</span></span>
+                <span class="text-gray-400">Lines: <span class="text-white">{{ fileMetadata.totalLines }}</span></span>
+                {% if fileMetadata.isTruncated %}
+                    <span class="text-yellow-400 phone-none">
+                        Showing lines {{ fileMetadata.startLine }} to {{ fileMetadata.endLine }} of {{ fileMetadata.totalLines }}
+                        ({{ fileMetadata.formattedReadSize }} of {{ fileMetadata.formattedSize }})
+                    </span>
+                {% endif %}
+            </div>
+            {% if fileMetadata.isTruncated %}
+                <div class="flex items-center space-x-1 p-[1px] mr-[-5px] sm:mt-0">
+                    {% if fileMetadata.startLine > 1 %}
+                        <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': 1, 'max_lines': fileMetadata.maxLines}) }} class="px-2 py-[2px] bg-blue-700 hover:bg-blue-600 rounded text-white">First</a>
+                        <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, fileMetadata.startLine - fileMetadata.maxLines), 'max_lines': fileMetadata.maxLines}) }} class="px-2 py-[2px] bg-blue-700 hover:bg-blue-600 rounded text-white">Previous</a>
+                    {% endif %}
+                    {% if fileMetadata.endLine < fileMetadata.totalLines %}
+                        <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': fileMetadata.endLine + 1, 'max_lines': fileMetadata.maxLines}) }} class="px-2 py-[2px] bg-blue-700 hover:bg-blue-600 rounded text-white">Next</a>
+                        {% set lastPageStart = fileMetadata.totalLines - (fileMetadata.totalLines % fileMetadata.maxLines) %}
+                        {% if fileMetadata.totalLines % fileMetadata.maxLines == 0 %}
+                            {% set lastPageStart = fileMetadata.totalLines - fileMetadata.maxLines %}
+                        {% endif %}
+                        <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, lastPageStart + 1), 'max_lines': fileMetadata.maxLines}) }} class="px-2 py-[2px] bg-blue-700 hover:bg-blue-600 rounded text-white">Last</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
     {# FILE CONTENT VIEW #}
-    <div class="overflow-auto">
+    <div class="overflow-x-auto overflow-y-auto mb-[1px]">
         {# RAW FILE CONTENT VIEW #}
         {% if mediaType == 'non-mediafile' or mediaType == null %}
-            <pre class="text-sm text-cyan rounded overflow-auto p-1 text-green-400">{{ fileContent|e }}</pre>
+            <pre class="text-sm p-1 text-green-400 file-content h-full" data-path="{{ currentPath }}">{{ fileContent|e }}</pre>
         {% else %}
             {# IMAGE #}
             {% if mediaType starts with 'image/' %}
@@ -157,4 +189,7 @@
 
 {# FILESYSTEM VIEW FUNCTIONS (file delete) #}
 {{ encore_entry_script_tags('file-system-file-delete-js') }}
+
+{# SYNTAX HIGHLIGHTING #}
+{{ encore_entry_script_tags('file-system-syntax-highlight-js') }}
 {% endblock %}

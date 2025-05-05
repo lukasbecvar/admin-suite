@@ -161,6 +161,12 @@ class FileSystemUtil
             return false;
         }
 
+        // check if file is a log file (by extension or name)
+        $fileName = basename($path);
+        if (str_ends_with($fileName, '.log') || str_contains($fileName, 'log') || str_contains($fileName, 'exception') || str_contains($path, '/log/')) {
+            return false;
+        }
+
         // check if file has executable permissions
         $perms = fileperms($path);
         if ($perms !== false && ($perms & 0111)) {
@@ -176,6 +182,11 @@ class FileSystemUtil
                 message: 'error get file info: ' . $path . ' file info detection failed',
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
+        }
+
+        // check if file is a log file (by content detection)
+        if (strpos($fileInfo, 'text') !== false && (strpos($fileInfo, 'log') !== false || strpos($fileInfo, 'ASCII text') !== false)) {
+            return false;
         }
 
         // check if file is a shell script
@@ -241,10 +252,12 @@ class FileSystemUtil
      * Get content of file
      *
      * @param string $path The path to the file
+     * @param int|null $maxLines Maximum number of lines to read (null for all lines)
+     * @param int|null $startLine Line to start reading from (1-based, null for beginning)
      *
-     * @return string|null The file content or null if the file does not exist
+     * @return array{content: string, totalLines: int, readLines: int, isTruncated: bool, fileSize: int, readSize: int} Array with file content and metadata
      */
-    public function getFileContent(string $path): ?string
+    public function getFileContent(string $path, ?int $maxLines = null, ?int $startLine = null): array
     {
         try {
             // check if path is directory
@@ -255,16 +268,87 @@ class FileSystemUtil
                 );
             }
 
-            // get file content
-            $fileContent = shell_exec('sudo cat ' . escapeshellarg($path));
-
-            // check file content is set
-            if ($fileContent === null || $fileContent === false) {
-                $fileContent = '';
+            // get file size
+            $fileSize = filesize($path);
+            if ($fileSize === false) {
+                $fileSize = 0;
             }
 
-            // return file content
-            return $fileContent;
+            // default max lines if not specified (adjust as needed)
+            $defaultMaxLines = 1000;
+            if ($maxLines === null) {
+                $maxLines = $defaultMaxLines;
+            }
+
+            // default start line if not specified
+            if ($startLine === null) {
+                $startLine = 1;
+            }
+
+            // get total line count without loading the entire file
+            $totalLines = (int)shell_exec('sudo wc -l < ' . escapeshellarg($path));
+
+            // if file is too large (over 10MB) or has too many lines, use head/tail with sed
+            if ($fileSize > 10 * 1024 * 1024 || $totalLines > $defaultMaxLines) {
+                // alculate end line
+                $endLine = $startLine + $maxLines - 1;
+
+                // use sed to extract the specified range of lines
+                if ($startLine <= 1) {
+                    // if starting from the beginning, use head for better performance
+                    $command = 'sudo head -n ' . $maxLines . ' ' . escapeshellarg($path);
+                } elseif ($startLine > $totalLines - $maxLines) {
+                    // if near the end, use tail for better performance
+                    $linesToTake = $totalLines - $startLine + 1;
+                    $command = 'sudo tail -n ' . $linesToTake . ' ' . escapeshellarg($path);
+                } else {
+                    // use sed to extract lines from the middle
+                    $command = 'sudo sed -n \'' . $startLine . ',' . $endLine . 'p\' ' . escapeshellarg($path);
+                }
+
+                $fileContent = shell_exec($command);
+
+                // check if content was retrieved
+                if ($fileContent === null || $fileContent === false) {
+                    $fileContent = '';
+                }
+
+                // calculate how many lines were actually read
+                $readLines = min($maxLines, $totalLines - $startLine + 1);
+                if ($readLines < 0) {
+                    $readLines = 0;
+                }
+
+                // calculate approximate read size based on content length
+                $readSize = strlen($fileContent);
+
+                return [
+                    'content' => $fileContent,
+                    'totalLines' => $totalLines,
+                    'readLines' => $readLines,
+                    'isTruncated' => $readLines < $totalLines,
+                    'fileSize' => $fileSize,
+                    'readSize' => $readSize
+                ];
+            } else {
+                // for smaller files, read the entire content
+                $fileContent = shell_exec('sudo cat ' . escapeshellarg($path));
+
+                // check if content was retrieved
+                if ($fileContent === null || $fileContent === false) {
+                    $fileContent = '';
+                    $totalLines = 0;
+                }
+
+                return [
+                    'content' => $fileContent,
+                    'totalLines' => $totalLines,
+                    'readLines' => $totalLines,
+                    'isTruncated' => false,
+                    'fileSize' => $fileSize,
+                    'readSize' => $fileSize
+                ];
+            }
         } catch (Exception $e) {
             // log error to exception log
             $this->errorManager->logError(
@@ -272,8 +356,15 @@ class FileSystemUtil
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
 
-            // return error to file view
-            return $e->getMessage();
+            // return error with metadata
+            return [
+                'content' => $e->getMessage(),
+                'totalLines' => 0,
+                'readLines' => 0,
+                'isTruncated' => false,
+                'fileSize' => 0,
+                'readSize' => 0
+            ];
         }
     }
 
@@ -594,6 +685,45 @@ class FileSystemUtil
             return false;
         }
     }
+    /**
+     * Get full content of file without pagination for editing
+     *
+     * @param string $path The path to the file
+     *
+     * @return string The file content or error message
+     */
+    public function getFullFileContent(string $path): string
+    {
+        try {
+            // check if path is directory
+            if (is_dir($path) || is_link($path)) {
+                $this->errorManager->handleError(
+                    message: 'error opening file: ' . $path . ' is a directory or a link',
+                    code: Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // get file content using cat
+            $fileContent = shell_exec('sudo cat ' . escapeshellarg($path));
+
+            // check if content was retrieved
+            if ($fileContent === null || $fileContent === false) {
+                return '';
+            }
+
+            return $fileContent;
+        } catch (Exception $e) {
+            // log error to exception log
+            $this->errorManager->logError(
+                message: 'error to get file content: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            // return error message
+            return $e->getMessage();
+        }
+    }
+
     /**
      * Calculate the total size of a directory including all files and subdirectories
      *
