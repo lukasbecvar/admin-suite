@@ -98,7 +98,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
      *
      * @return void
      */
-    #[Group('file-save')]
+    #[Group('file-system')]
     public function testSaveFileContent(): void
     {
         // create a temporary file for testing
@@ -171,7 +171,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
      *
      * @return void
      */
-    #[Group('file-save')]
+    #[Group('file-system')]
     public function testCreateNewFile(): void
     {
         // create temporary directory for testing
@@ -203,7 +203,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
      *
      * @return void
      */
-    #[Group('file-save')]
+    #[Group('file-system')]
     public function testCreateNewDirectory(): void
     {
         // create temporary directory for testing
@@ -236,7 +236,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
      *
      * @return void
      */
-    #[Group('file-delete')]
+    #[Group('file-system')]
     public function testDeleteFile(): void
     {
         // create temporary file for testing
@@ -263,7 +263,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
      *
      * @return void
      */
-    #[Group('file-delete')]
+    #[Group('file-system')]
     public function testDeleteDirectory(): void
     {
         // create temporary directory for testing
@@ -290,7 +290,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
      *
      * @return void
      */
-    #[Group('file-rename')]
+    #[Group('file-system')]
     public function testRenameFileForm(): void
     {
         // create temporary file for testing
@@ -320,7 +320,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
      *
      * @return void
      */
-    #[Group('file-rename')]
+    #[Group('file-system')]
     public function testRenameFile(): void
     {
         // create temporary file for testing
@@ -354,7 +354,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
      *
      * @return void
      */
-    #[Group('file-rename')]
+    #[Group('file-system')]
     public function testRenameDirectory(): void
     {
         // create temporary directory for testing
