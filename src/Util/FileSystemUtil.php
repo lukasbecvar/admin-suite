@@ -23,6 +23,24 @@ class FileSystemUtil
     }
 
     /**
+     * Check if file exists
+     *
+     * @param string $path The path to the file
+     *
+     * @return bool True if the file exists, false otherwise
+     */
+    public function checkIfFileExist(string $path): bool
+    {
+        // use shell to check if file exists
+        $escapedPath = escapeshellarg($path);
+        $cmd = "sudo test -e $escapedPath";
+
+        // check exit status of the shell command
+        exec($cmd, $output, $exitCode);
+        return $exitCode === 0;
+    }
+
+    /**
      * Get list of files and directories in the specified path
      *
      * @param string $path The path to list files and directories
@@ -269,8 +287,10 @@ class FileSystemUtil
             }
 
             // get file size
-            $fileSize = filesize($path);
-            if ($fileSize === false) {
+            $cmd = 'sudo /usr/bin/stat -c %s ' . escapeshellarg($path);
+            $fileSize = (int) shell_exec($cmd);
+
+            if ($fileSize == false) {
                 $fileSize = 0;
             }
 

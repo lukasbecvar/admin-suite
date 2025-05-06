@@ -107,7 +107,7 @@
                                     </div>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-2 mt-1 sm:mt-0">
-                                    {% if true %}
+                                    {% if serviceStatus %}
                                         <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Restart service"><i class="fa fa-redo text-sm"></i></a>
                                         <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-red-600 hover:bg-red-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Stop service"><i class="fa fa-stop text-sm"></i></a>
                                     {% else %}

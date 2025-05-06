@@ -82,7 +82,7 @@ class FileSystemBrowserController extends AbstractController
         $path = (string) $request->query->get('path', '/');
 
         // check if file exists
-        if (!file_exists($path)) {
+        if (!$this->fileSystemUtil->checkIfFileExist($path)) {
             // get directory path for return link
             $directoryPath = dirname($path);
             if ($directoryPath === '.') {
