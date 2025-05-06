@@ -306,7 +306,19 @@ class FileSystemUtil
             }
 
             // get total line count without loading the entire file
-            $totalLines = (int)shell_exec('sudo wc -l < ' . escapeshellarg($path));
+            $totalLinesOutput = shell_exec('sudo wc -l ' . escapeshellarg($path));
+
+            // parse output to get just the number
+            if ($totalLinesOutput !== null && $totalLinesOutput !== false && preg_match('/^\s*(\d+)/', $totalLinesOutput, $matches)) {
+                $totalLines = (int)$matches[1];
+            } else {
+                // fallback if wc command fails
+                $this->errorManager->logError(
+                    message: 'failed to get line count for file: ' . $path,
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+                $totalLines = 0;
+            }
 
             // if file is too large (over 10MB) or has too many lines, use head/tail with sed
             if ($fileSize > 10 * 1024 * 1024 || $totalLines > $defaultMaxLines) {
