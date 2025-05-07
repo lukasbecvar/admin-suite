@@ -2,23 +2,54 @@
 document.addEventListener('DOMContentLoaded', function () {
     let currentTodoId = null
 
-    // handle mobile browser address bar visibility changes
+    // handle mobile browser address bar visibility changes and sidebar toggle
     const fixedFormContainer = document.querySelector('.fixed-form-container')
+    const sidebar = document.getElementById('sidebar')
+    const mainContent = document.getElementById('main-content')
 
-    // ensure form is visible on mobile browsers with collapsible address bar
-    if (fixedFormContainer && window.innerWidth <= 400) {
+    // ensure form is visible and properly sized
+    if (fixedFormContainer) {
         // initial position
         ensureFormVisibility()
 
-        // handle resize and scroll events
+        // handle resize, scroll events, and sidebar toggle
         window.addEventListener('resize', ensureFormVisibility)
         window.addEventListener('scroll', ensureFormVisibility)
 
-        // function to ensure form visibility
+        // listen for sidebar toggle
+        document.getElementById('menu-toggle')?.addEventListener('click', function() {
+            setTimeout(ensureFormVisibility, 50)
+        })
+
+        // function to ensure form visibility and proper width
         function ensureFormVisibility() {
             // force form to be at the bottom of the visible viewport
             fixedFormContainer.style.bottom = '0'
             fixedFormContainer.style.position = 'fixed'
+
+            // adjust width based on sidebar state
+            if (sidebar && mainContent) {
+                if (sidebar.classList.contains('active') && window.innerWidth > 400) {
+                    // sidebar is open on desktop
+                    fixedFormContainer.style.width = 'calc(100% - 180px)'
+                    fixedFormContainer.style.left = '180px'
+                } else {
+                    // sidebar is closed or on mobile
+                    fixedFormContainer.style.width = '100%'
+                    fixedFormContainer.style.left = '0'
+                }
+            }
+        }
+        // also observe sidebar class changes
+        if (sidebar) {
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.attributeName === 'class') {
+                        ensureFormVisibility()
+                    }
+                })
+            })
+            observer.observe(sidebar, { attributes: true })
         }
     }
 
