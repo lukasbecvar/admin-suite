@@ -2,6 +2,26 @@
 document.addEventListener('DOMContentLoaded', function () {
     let currentTodoId = null
 
+    // handle mobile browser address bar visibility changes
+    const fixedFormContainer = document.querySelector('.fixed-form-container')
+
+    // ensure form is visible on mobile browsers with collapsible address bar
+    if (fixedFormContainer && window.innerWidth <= 400) {
+        // initial position
+        ensureFormVisibility()
+
+        // handle resize and scroll events
+        window.addEventListener('resize', ensureFormVisibility)
+        window.addEventListener('scroll', ensureFormVisibility)
+
+        // function to ensure form visibility
+        function ensureFormVisibility() {
+            // force form to be at the bottom of the visible viewport
+            fixedFormContainer.style.bottom = '0'
+            fixedFormContainer.style.position = 'fixed'
+        }
+    }
+
     // get edit elements
     const editPopup = document.getElementById('editPopup')
     const editButtons = document.querySelectorAll('.fa-edit')
@@ -75,28 +95,28 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // handle line up/down move keys 
+    // handle line up/down move keys
     editTodoInput.addEventListener("keydown", function (event) {
         if (event.altKey && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
             event.preventDefault()
-    
+
             let textarea = event.target
             let text = textarea.value
             let start = textarea.selectionStart
-    
+
             // split text into lines
             let lines = text.split("\n")
             let cursorLine = text.substring(0, start).split("\n").length - 1
-    
+
             if ((event.key === "ArrowUp" && cursorLine > 0) || (event.key === "ArrowDown" && cursorLine < lines.length - 1)) {
                 let swapLine = event.key === "ArrowUp" ? cursorLine - 1 : cursorLine + 1;
                 [lines[cursorLine], lines[swapLine]] = [lines[swapLine], lines[cursorLine]] // swap lines
-    
+
                 // calculate new cursor position
                 let beforeCursor = lines.slice(0, swapLine).join("\n").length + 1
                 let cursorOffset = start - (text.substring(0, start).lastIndexOf("\n") + 1)
                 let newCursorPos = beforeCursor + cursorOffset
-    
+
                 // update textarea
                 textarea.value = lines.join("\n")
                 textarea.setSelectionRange(newCursorPos, newCursorPos)

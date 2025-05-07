@@ -1,5 +1,5 @@
 /* main app style */
-* { 
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -16,20 +16,20 @@ main {
 
 #main-content {
 	display: flex;
-	margin-left: 0; 
+	margin-left: 0;
 	position: relative;
 	flex-direction: column;
 	height: calc(100vh - 38px);
-	transition: margin-left 0.2s ease; 
+	transition: margin-left 0.2s ease;
 }
 
 #main-content.active {
-	margin-left: 180px; 
+	margin-left: 180px;
 }
 
 .component {
 	flex-grow: 1;
-	overflow-y: auto; 
+	overflow-y: auto;
 }
 
 .link {
@@ -127,11 +127,11 @@ main {
 
 /* sidebar element */
 #sidebar {
-	z-index: 0; 
+	z-index: 0;
 	width: 180px;
 	position: fixed;
-	overflow-y: auto; 
-	height: calc(100% - 30px); 
+	overflow-y: auto;
+	height: calc(100% - 30px);
 	transform: translateX(-100%);
 	transition: transform 0.2s ease;
 }
@@ -276,16 +276,18 @@ main {
 .todo-manager {
 	height: 100%;
 	background-color: rgb(23 23 23);
+	display: flex;
+	flex-direction: column;
 }
 
 .todo-manager .todo-list {
     overflow-y: auto;
-	height: calc(100% - 5.1rem);
+	flex: 1;
+	min-height: 0;
+	padding-bottom: 3rem;
 }
 
 .todo-manager form {
-    position: fixed;
-    bottom: 0;
     width: 100%;
     height: 2.9rem;
     background-color: #1f2937;
@@ -294,6 +296,15 @@ main {
 
 .todo-manager .add-todo-button {
 	height: 2.80rem !important;
+}
+
+.fixed-form-container {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	z-index: 100;
 }
 
 /* database browser component */
@@ -314,7 +325,7 @@ main {
 	width: 90%;
 	margin-top: 20px;
 	margin-bottom: 20px;
-	overflow-y: auto; 
+	overflow-y: auto;
 }
 
 .form-input:-webkit-autofill {
@@ -406,14 +417,14 @@ main {
 
 .metrics-component .percentage {
 	top: 48%;
-	left: 50%; 
+	left: 50%;
 	transform: translateX(-50%);
 }
 
 /* apply on mobile devices */
-@media screen and (max-width: 400px) { 
+@media screen and (max-width: 400px) {
 	main {
-		margin-top: 30px; 
+		margin-top: 30px;
 	}
 	#main-content {
 		height: calc(100vh - 30px);
@@ -486,7 +497,7 @@ main {
 		flex-grow: 1;
 		margin-top: 0;
 		margin-bottom: 0;
-		overflow-y: auto; 
+		overflow-y: auto;
 	}
 	.table-truncate-confirmation-phone {
 		border-top: 0px !important;
@@ -494,10 +505,22 @@ main {
 		border-right: none !important;
 		border-radius: 0px !important;
 	}
+	.todo-manager .todo-list {
+		min-height: 100px;
+		padding-bottom: 4rem;
+	}
+	.fixed-form-container {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		width: 100%;
+		z-index: 999;
+	}
 }
 
 /* fix component width on small devices */
-@media screen and (max-width: 460px) { 
+@media screen and (max-width: 460px) {
 	.m-w-95 {
 		max-width: 95%;
 	}
@@ -506,7 +529,7 @@ main {
 	}
 }
 
-/* apply only on non mobile devices */ 
+/* apply only on non mobile devices */
 @media screen and (min-width: 401px) {
 	.phone-only {
 		display: none;
@@ -517,7 +540,7 @@ main {
 }
 
 /* apply only on too small devices */
-@media screen and (max-width: 265px) { 
+@media screen and (max-width: 265px) {
 	.disable-on-small-devices {
 		display: none;
 	}
