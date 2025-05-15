@@ -69,6 +69,9 @@ class BannedCheckMiddleware
                 ]);
                 $response = new Response($content, Response::HTTP_FORBIDDEN);
                 $event->setResponse($response);
+
+                // logout banned user
+                $this->authManager->logout();
             }
         }
     }
