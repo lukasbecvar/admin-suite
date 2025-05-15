@@ -42,8 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // update network usage
             networkUsageElement.innerHTML = data.networkStats.networkUsagePercent + '%'
-            networkUsageDownloadElement.innerHTML = data.networkStats.downloadMbps + 'Mbps'
-            networkUsageUploadElement.innerHTML = data.networkStats.uploadMbps + 'Mbps'
+            networkUsageDownloadElement.innerHTML = data.networkStats.downloadMbps + 'M/s'
+            networkUsageUploadElement.innerHTML = data.networkStats.uploadMbps + 'M/s'
             networkUsagePingElement.innerHTML = data.networkStats.pingMs + 'ms'
             networkUsageInterfaceElement.innerHTML = data.networkStats.interface
             networkUsagePingServerElement.innerHTML = data.networkStats.pingToIp
