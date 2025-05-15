@@ -42,18 +42,6 @@
             "/etc/openvpn/server.conf"
         ]
     },
-    "minecraft": {
-        "service_name": "minecraft",
-        "display_name": "Minecraft",
-        "type": "systemd",
-        "monitoring": true,
-        "display": true,
-        "config_files": [
-            "/services/minecraft-server/server.properties",
-            "/etc/systemd/system/minecraft.service",
-            "/services/minecraft-server/spigot.yml"
-        ]
-    },
     "admin-suite-monitoring": {
         "service_name": "admin-suite-monitoring",
         "display_name": "Monitoring",
