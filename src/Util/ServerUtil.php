@@ -811,10 +811,12 @@ class ServerUtil
 
         // check if command was successful
         if ($returnVar !== 0 || empty($output)) {
-            $this->errorManager->handleError(
+            $this->errorManager->logError(
                 message: 'error to get directory size: ' . $output[0],
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
+
+            return false;
         }
 
         // extract size in KB
