@@ -16,6 +16,9 @@
 						Shell
 					</th>
 					<th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-800 z-10">
+						Locked
+					</th>
+					<th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 bg-neutral-800 z-10">
 						Sudo Permissions
 					</th>
 				</tr>
@@ -28,6 +31,9 @@
 						</td>
 						<td class="px-4 py-3 whitespace-nowrap">{{ user.home|e }}</td>
 						<td class="px-4 py-3 whitespace-nowrap">{{ user.shell|e }}</td>
+						<td class="px-4 py-3 whitespace-nowrap {% if user.is_locked %}text-red-400{% else %}text-green-400{% endif %}">
+							{{ user.is_locked ? 'Yes' : 'No' }}
+						</td>
 						<td class="px-4 py-3 whitespace-nowrap {% if user.has_sudo %}text-green-400{% else %}text-red-400{% endif %}">
 							{{ user.has_sudo ? 'Yes' : 'No' }}
 						</td>

@@ -739,7 +739,7 @@ class ServerUtil
     /**
      * Get list of Linux system users from /etc/passwd
      *
-     * @return array<array<mixed>> List of usernames
+     * @return array<array<mixed>> List of user info
      */
     public function getLinuxUsers(): array
     {
@@ -761,17 +761,32 @@ class ServerUtil
             }
         }
 
-        // format: username:x:UID:GID:comment:home:shell
         foreach ($passwdLines as $line) {
             $parts = explode(':', $line);
             if (count($parts) >= 7) {
+                $username = $parts[0];
+
+                // get user lock status via `passwd -S`
+                $isLocked = false;
+                $output = shell_exec('sudo passwd -S ' . escapeshellarg($username));
+                if (is_string($output)) {
+                    $statusParts = preg_split('/\s+/', trim($output));
+                    if ($statusParts !== false) {
+                        if (count($statusParts) >= 2 && $statusParts[0] === $username) {
+                            $statusFlag = $statusParts[1];
+                            $isLocked = in_array($statusFlag, ['L', 'LK']);
+                        }
+                    }
+                }
+
                 $users[] = [
-                    'username'   => $parts[0],
+                    'username'   => $username,
                     'uid'        => (int)$parts[2],
                     'gid'        => (int)$parts[3],
                     'home'       => $parts[5],
                     'shell'      => $parts[6],
-                    'has_sudo'   => in_array($parts[0], $sudoUsers),
+                    'has_sudo'   => in_array($username, $sudoUsers),
+                    'is_locked'  => $isLocked,
                 ];
             }
         }
