@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Log;
 
 use App\Manager\LogManager;
 use App\Manager\UserManager;
@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Command to get logs by status
  *
- * @package App\Command
+ * @package App\Command\Log
  */
 #[AsCommand(name: 'app:log:reader', description: 'Get logs by status')]
 class LogReaderCommand extends Command

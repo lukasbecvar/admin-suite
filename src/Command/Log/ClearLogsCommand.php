@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Log;
 
 use Exception;
 use App\Entity\Log;
@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Command for clearing all logs in database
  *
- * @package App\Command
+ * @package App\Command\Log
  */
 #[AsCommand(name: 'app:log:clear', description: 'Clear all logs in database')]
 class ClearLogsCommand extends Command

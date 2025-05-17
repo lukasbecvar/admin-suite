@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tests\Command;
+namespace App\Tests\Command\Log;
 
 use Exception;
 use App\Entity\Log;
 use App\Util\AppUtil;
 use PHPUnit\Framework\TestCase;
 use App\Manager\DatabaseManager;
-use App\Command\ClearLogsCommand;
+use App\Command\Log\ClearLogsCommand;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -17,7 +17,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * Test cases for the ClearLogsCommand
  *
- * @package App\Tests\Command
+ * @package App\Tests\Command\Log
  */
 class ClearLogsCommandTest extends TestCase
 {

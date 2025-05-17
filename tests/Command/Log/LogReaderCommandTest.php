@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Command;
+namespace App\Tests\Command\Log;
 
 use DateTime;
 use App\Entity\Log;
@@ -8,7 +8,7 @@ use App\Manager\LogManager;
 use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
 use PHPUnit\Framework\TestCase;
-use App\Command\LogReaderCommand;
+use App\Command\Log\LogReaderCommand;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -18,7 +18,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * Test cases for execute log reader command
  *
- * @package App\Tests\Command
+ * @package App\Tests\Command\Log
  */
 class LogReaderCommandTest extends TestCase
 {
