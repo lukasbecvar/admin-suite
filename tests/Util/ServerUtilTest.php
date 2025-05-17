@@ -381,6 +381,20 @@ class ServerUtilTest extends TestCase
     }
 
     /**
+     * Test check if directory is too big
+     *
+     * @return void
+     */
+    public function testCheckIfDirectoryIsTooBig(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->checkIfDirectoryIsTooBig('/var/log', 20);
+
+        // assert result
+        $this->assertIsBool($result);
+    }
+
+    /**
      * Test get diagnostic data
      *
      * @return void

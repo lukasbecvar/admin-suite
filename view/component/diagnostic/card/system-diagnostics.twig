@@ -26,6 +26,28 @@
 			</span>
 		{% endif %}
 	</div>
+	{# LOGS-SIZE CHECK #}
+	<div class="px-3 py-1">
+		{% if diagnosticData.isLogsTooBig %}
+			<span>
+				<span class="text-red-400">
+					<i class="fa fa-exclamation-triangle"></i>
+				</span>
+				<span class="text-red-400 ml-[1.8px]">
+					Logs size is too big, please clear logs (/var/log)
+				</span>
+			</span>
+		{% else %}
+			<span>
+				<span class="text-green-400">
+					<i class="fa fa-check"></i>
+				</span>
+				<span class="text-yellow-400 ml-1">
+					Logs size is normal
+				</span>
+			</span>
+		{% endif %}
+	</div>
 	{# STORAGE-SPACE CHECK #}
 	<div class="px-3 py-1">
 		{% if diagnosticData.driveSpace < 90 %}

@@ -780,6 +780,38 @@ class ServerUtil
     }
 
     /**
+     * Check if directory is too big
+     *
+     * @param string $directoryPath The directory path
+     * @param int $limitGB The limit in GB
+     *
+     * @return bool True if directory is too big, false otherwise
+     */
+    public function checkIfDirectoryIsTooBig(string $directoryPath, int $limitGB = 20): bool
+    {
+        // run command to get size in kilobytes
+        $output = [];
+        $returnVar = 0;
+        exec("du -sk {$directoryPath} 2>/dev/null", $output, $returnVar);
+
+        // check if command was successful
+        if ($returnVar !== 0 || empty($output)) {
+            $this->errorManager->handleError(
+                message: 'error to get directory size: ' . $output[0],
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // extract size in KB
+        $sizeKB = (int) explode("\t", $output[0])[0];
+
+        // convert limit to KB
+        $limitKB = $limitGB * 1024 * 1024;
+
+        return $sizeKB > $limitKB;
+    }
+
+    /**
      * Get diagnostic data
      *
      * @return array<string,mixed> The diagnostic data
@@ -798,6 +830,7 @@ class ServerUtil
         $driveSpace = $this->getDriveUsagePercentage();
         $lastMonitoringTime = $this->getLastMonitoringTime();
         $exceptionFilesList = $this->logManager->getExceptionFiles();
+        $isLogsTooBig = $this->checkIfDirectoryIsTooBig('/var/log', 20);
         $notInstalledRequirements = $this->getNotInstalledRequirements();
         $websiteCachePermissions = $this->checkIfDirectoryHas777Permissions($this->appUtil->getAppRootDir() . '/var');
 
@@ -814,6 +847,7 @@ class ServerUtil
             'isDevMode' => $isDevMode,
             'driveSpace' => $driveSpace,
             'webUsername' => $webUsername,
+            'isLogsTooBig' => $isLogsTooBig,
             'isWebUserSudo' => $isWebUserSudo,
             'rebootRequired' => $rebootRequired,
             'updateAvailable' => $updateAvailable,
