@@ -807,7 +807,7 @@ class ServerUtil
         // run command to get size in kilobytes
         $output = [];
         $returnVar = 0;
-        exec("du -sk {$directoryPath} 2>/dev/null", $output, $returnVar);
+        exec("sudo du -sk {$directoryPath} 2>/dev/null", $output, $returnVar);
 
         // check if command was successful
         if ($returnVar !== 0 || empty($output)) {
