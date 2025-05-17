@@ -63,6 +63,7 @@ class SystemResourcesApiControllerTest extends CustomTestCase
 
         /** @var array<mixed> $responseData */
         $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
+        dd($responseData);
 
         // assert response
         $this->assertArrayHasKey('ramUsage', $responseData);
