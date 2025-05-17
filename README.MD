@@ -156,4 +156,4 @@ Contributions are welcome! Please fork this repository and submit pull requests 
     * [Encore](https://symfony.com/doc/current/frontend/encore/index.html)
 
 ## License
-This software is licensed under the [MIT license](LICENSE).
+This software is licensed under the [MIT license](LICENSE). 
