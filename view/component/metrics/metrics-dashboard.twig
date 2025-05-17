@@ -55,7 +55,7 @@
     {# CURRENT USAGE CARD #}
     <div class="flex flex-col md:flex-row gap-4">
         <div class="w-full rounded border border-white/10 bg-neutral-400/5 backdrop-blur-lg shadow-2xl text-white overflow-hidden">
-            <div class="px-3 py-3 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
+            <div class="px-3 py-2 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
                 Current usage
             </div>
             <div class="grid grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
@@ -79,7 +79,7 @@
     {% for metricName, metricData in data.metrics %}
         <div class="flex flex-col md:flex-row gap-2">
             <div class="flex-1 p-0 shadow-lg rounded relative chart-container backdrop-blur-md bg-neutral-400/5 border border-white/15">
-                <div class="px-3 py-2 border-b border-white/10 text-white font-bold text-sm flex items-center justify-between mb-1">
+                <div class="px-3 py-[8px] border-b border-white/10 text-white font-bold text-sm flex items-center justify-between mb-1">
                     {{ metricName | replace({'_': ' '}) | capitalize }} (history)
                     <button class="deleteButton text-indigo-400 hover:text-indigo-300 text-l" data-metric-name={{ metricName|e }} data-service-name="host-system" data-referer="app_metrics_dashboard">
                         delete
