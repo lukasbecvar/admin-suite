@@ -273,45 +273,21 @@ main {
 }
 
 /* todo manager component */
-.todo-manager {
-	height: 100%;
-	background-color: rgb(23 23 23);
-	display: flex;
-	flex-direction: column;
-}
-
 .todo-manager .todo-list {
     overflow-y: auto;
-	flex: 1;
-	min-height: 0;
-	padding-bottom: 3rem;
+	height: calc(100% - 5.1rem);
 }
 
 .todo-manager form {
+    position: fixed;
+    bottom: 0;
     width: 100%;
     height: 2.9rem;
     background-color: #1f2937;
-    z-index: 50;
 }
 
 .todo-manager .add-todo-button {
 	height: 2.80rem !important;
-}
-
-.fixed-form-container {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	transition: width 0.2s ease, left 0.2s ease;
-}
-
-/* adjust form container when sidebar is active (on desktop) */
-@media screen and (min-width: 401px) {
-	#sidebar.active ~ #main-content ~ .fixed-form-container {
-		width: calc(100% - 180px);
-		left: 180px;
-	}
 }
 
 /* database browser component */
@@ -514,13 +490,6 @@ main {
 	}
 	.todo-manager .todo-list {
 		min-height: 100px;
-		padding-bottom: 4rem;
-	}
-	.fixed-form-container {
-		position: fixed;
-		bottom: 0;
-		left: 0 !important;
-		width: 100% !important;
 	}
 }
 

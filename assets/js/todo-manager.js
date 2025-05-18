@@ -2,57 +2,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     let currentTodoId = null
 
-    // handle mobile browser address bar visibility changes and sidebar toggle
-    const fixedFormContainer = document.querySelector('.fixed-form-container')
-    const sidebar = document.getElementById('sidebar')
-    const mainContent = document.getElementById('main-content')
-
-    // ensure form is visible and properly sized
-    if (fixedFormContainer) {
-        // initial position
-        ensureFormVisibility()
-
-        // handle resize, scroll events, and sidebar toggle
-        window.addEventListener('resize', ensureFormVisibility)
-        window.addEventListener('scroll', ensureFormVisibility)
-
-        // listen for sidebar toggle
-        document.getElementById('menu-toggle')?.addEventListener('click', function() {
-            setTimeout(ensureFormVisibility, 50)
-        })
-
-        // function to ensure form visibility and proper width
-        function ensureFormVisibility() {
-            // force form to be at the bottom of the visible viewport
-            fixedFormContainer.style.bottom = '0'
-            fixedFormContainer.style.position = 'fixed'
-
-            // adjust width based on sidebar state
-            if (sidebar && mainContent) {
-                if (sidebar.classList.contains('active') && window.innerWidth > 400) {
-                    // sidebar is open on desktop
-                    fixedFormContainer.style.width = 'calc(100% - 180px)'
-                    fixedFormContainer.style.left = '180px'
-                } else {
-                    // sidebar is closed or on mobile
-                    fixedFormContainer.style.width = '100%'
-                    fixedFormContainer.style.left = '0'
-                }
-            }
-        }
-        // also observe sidebar class changes
-        if (sidebar) {
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    if (mutation.attributeName === 'class') {
-                        ensureFormVisibility()
-                    }
-                })
-            })
-            observer.observe(sidebar, { attributes: true })
-        }
-    }
-
     // get edit elements
     const editPopup = document.getElementById('editPopup')
     const editButtons = document.querySelectorAll('.fa-edit')
@@ -126,28 +75,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // handle line up/down move keys
+    // handle line up/down move keys 
     editTodoInput.addEventListener("keydown", function (event) {
         if (event.altKey && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
             event.preventDefault()
-
+    
             let textarea = event.target
             let text = textarea.value
             let start = textarea.selectionStart
-
+            let end = textarea.selectionEnd
+    
             // split text into lines
             let lines = text.split("\n")
             let cursorLine = text.substring(0, start).split("\n").length - 1
-
+    
             if ((event.key === "ArrowUp" && cursorLine > 0) || (event.key === "ArrowDown" && cursorLine < lines.length - 1)) {
                 let swapLine = event.key === "ArrowUp" ? cursorLine - 1 : cursorLine + 1;
                 [lines[cursorLine], lines[swapLine]] = [lines[swapLine], lines[cursorLine]] // swap lines
-
+    
                 // calculate new cursor position
                 let beforeCursor = lines.slice(0, swapLine).join("\n").length + 1
                 let cursorOffset = start - (text.substring(0, start).lastIndexOf("\n") + 1)
                 let newCursorPos = beforeCursor + cursorOffset
-
+    
                 // update textarea
                 textarea.value = lines.join("\n")
                 textarea.setSelectionRange(newCursorPos, newCursorPos)
@@ -155,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     })
 
-    // handle click on info button
+    // for each todo item, attach a click event to its info button (if available)
     todoItems.forEach(item => {
         const infoButton = item.querySelector('.info-button')
         if (infoButton) {

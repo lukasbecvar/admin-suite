@@ -1,8 +1,8 @@
-{% extends 'common/layout.twig' %}
+{% extends 'common/layout.twig' %} 
 
 {# TODO LIST COMPONENT #}
-{% block component %}
-<div class="flex flex-col todo-manager overflow-hidden breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
+{% block component %} 
+<div class="flex flex-col todo-manager overflow-hidden breadcrumb component">
     {# SUB-NAVIGATION #}
     <div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
         {# BACK BUTTON #}
@@ -10,7 +10,7 @@
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
         {# STATUS FILTER LINK #}
-        {% if filter == 'closed' %}
+        {% if filter == 'closed' %}            
             <a href={{ path('app_todo_manager', {'filter': 'open'}) }} class="ml-1 border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="View open todos">
                 <i class="fa fa-tasks" aria-hidden="true"></i>
             </a>
@@ -23,12 +23,12 @@
     </div>
 
     {# TODO LIST #}
-    <div class="{{ filter == 'open' ? 'todo-list' : '' }} flex-1 overflow-y-auto card-component p-0 px-2 pb-16">
+    <div class="{{ filter == 'open' ? 'todo-list' : '' }} overflow-y-auto card-component p-0 px-2 pb-[2px]">
         <div class="divide-y divide-neutral-800">
 
             {# TODO LIST IS EMPTY INFORMATION #}
             {% if todos|length == 0 %}
-                <p class="flex items-center justify-center mt-10 mb-10 text-2xl text-white font-bold">This todo list is empty</p>
+                <p class="flex items-center justify-center mt-10 mb-20 text-2xl text-white font-bold">This todo list is empty</p>
             {% endif %}
 
             {# TODO ITEM #}
@@ -62,18 +62,18 @@
                             <i class="fas fa-info-circle text-gray-500"></i>
                         </button>
                     </div>
-                </div>
+                </div>                    
             {% endfor %}
         </div>
     </div>
-</div>
 
-{# INCLUDE CREATE TODO FORM - FIXED AT THE BOTTOM #}
-{% if filter == 'open' %}
-    <div class="fixed-form-container">
-        {% include "component/todo-manager/form/create-todo-form.twig" %}
-    </div>
-{% endif %}
+    {# INCLIUDE CREATE TODO FORM #}
+    {% if filter == 'open' %}
+        <div class="flex">
+            {% include "component/todo-manager/form/create-todo-form.twig" %}
+        </div>
+    {% endif %}
+</div>
 
 {# TODO INFO POPUP OVERLAY #}
 <div id="infoPopup" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden">
@@ -91,9 +91,9 @@
 
 {# TODO EDIT POPUP OVERLAY #}
 <div id="editPopup" class="fixed inset-0 bg-black bg-opacity-80 flex items-start justify-center pt-[10%] sm:items-center sm:pt-0 hidden">
-    <div class="backdrop-blur-md bg-white/5 rounded p-4 border border-neutral-800 w-full max-w-4xl animate-popin">
+    <div class="backdrop-blur-md bg-white/5 rounded p-6 border border-neutral-800 w-full max-w-xl animate-popin">
         <h2 class="text-lg font-bold mb-4 text-white">Edit Todo</h2>
-        <textarea id="editTodoInput" class="bg-white/5 text-white w-full p-3 border border-neutral-700 rounded focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" placeholder="New todo text" maxlength="2048" rows="7"></textarea>
+        <textarea id="editTodoInput" class="bg-white/5 text-white w-full p-3 border border-neutral-700 rounded focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" placeholder="New todo text" maxlength="2048" rows="6"></textarea>
         <div class="flex justify-end mt-4 space-x-2">
             <button id="cancelEditButton" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500">Cancel</button>
             <button id="confirmEditButton" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500">Save</button>
