@@ -1,0 +1,14 @@
+<div id="textPopup" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden">
+    <div class="backdrop-blur-md bg-white/5 rounded p-6 border border-neutral-800 w-full max-w-xl animate-popin">
+        <h2 class="text-lg font-bold mb-4 text-white">Raw value</h2>
+        <div class="max-h-96 overflow-y-auto flex">
+            <p id="popupText" class="text-white whitespace-pre-wrap break-all flex-1 pl-4"></p>
+            <div class="overflow-y-auto pr-2">
+                <div class="h-full w-1"></div>
+            </div>
+        </div>
+        <div class="flex justify-end mt-4 space-x-2">
+            <button id="closePopupButton" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500">Close</button>
+        </div>
+    </div>
+</div>
