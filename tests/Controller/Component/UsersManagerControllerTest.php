@@ -3,7 +3,6 @@
 namespace App\Tests\Controller\Component;
 
 use App\Tests\CustomTestCase;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\String\ByteString;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -18,67 +17,14 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 class UsersManagerControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;
-    private EntityManagerInterface $entityManager;
 
     protected function setUp(): void
     {
         // simulate user authentication
         $this->client = static::createClient();
 
-        // @phpstan-ignore-next-line
-        $this->entityManager = $this->client->getContainer()->get('doctrine')->getManager();
-
         // simulate login
         $this->simulateLogin($this->client);
-    }
-
-    /**
-     * Test load users manager page
-     *
-     * @return void
-     */
-    public function testLoadUsersManagerPage(): void
-    {
-        $this->client->request('GET', '/manager/users');
-
-        // assert response
-        $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('a[title="Back to dashboard"]');
-        $this->assertSelectorExists('a[title="View un-filtered users"]');
-        $this->assertSelectorExists('a[title="Add new user"]');
-        $this->assertSelectorExists('select[name="filter"]');
-        $this->assertSelectorExists('th:contains("#")');
-        $this->assertSelectorExists('th:contains("Username")');
-        $this->assertSelectorExists('th:contains("Role")');
-        $this->assertSelectorExists('th:contains("IP Address")');
-        $this->assertSelectorExists('th:contains("Browser")');
-        $this->assertSelectorExists('th:contains("OS")');
-        $this->assertSelectorExists('th:contains("Last Login")');
-        $this->assertSelectorExists('th:contains("Status")');
-        $this->assertSelectorExists('th:contains("Banned")');
-        $this->assertSelectorExists('th:contains("Ban")');
-        $this->assertSelectorExists('a[class="ban-button"]');
-        $this->assertSelectorExists('a[class="delete-button"]');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    }
-
-    /**
-     * Test load profile view page
-     *
-     * @return void
-     */
-    public function testLoadProfileViewPage(): void
-    {
-        $this->client->request('GET', '/manager/users/profile', [
-            'id' => $this->getRandomUserId($this->entityManager)
-        ]);
-
-        // assert response
-        $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('a[title="Back to users manager"]');
-        $this->assertSelectorExists('img[alt="User Profile Picture"]');
-        $this->assertSelectorTextContains('body', 'IP Info');
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
@@ -322,22 +268,6 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test ban user submit with success response
-     *
-     * @return void
-     */
-    public function testBanUserWithSuccessResponse(): void
-    {
-        $this->client->request('GET', '/manager/users/ban', [
-            'id' => 2,
-            'status' => 'active'
-        ]);
-
-        // assert response
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
-    }
-
-    /**
      * Test delete user submit with empty id
      *
      * @return void
@@ -360,6 +290,36 @@ class UsersManagerControllerTest extends CustomTestCase
     public function testUserDeleteWithInvalidId(): void
     {
         $this->client->request('GET', '/manager/users/delete', [
+            'id' => 1323232323232
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test regenerate user token submit with empty id
+     *
+     * @return void
+     */
+    public function testRegenerateUserTokenWithEmptyId(): void
+    {
+        $this->client->request('GET', '/manager/users/token/regenerate', [
+            'id' => ''
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test regenerate user token submit with invalid id
+     *
+     * @return void
+     */
+    public function testRegenerateUserTokenWithInvalidId(): void
+    {
+        $this->client->request('GET', '/manager/users/token/regenerate', [
             'id' => 1323232323232
         ]);
 

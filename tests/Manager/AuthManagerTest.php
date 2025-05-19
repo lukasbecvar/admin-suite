@@ -1039,6 +1039,23 @@ class AuthManagerTest extends TestCase
     }
 
     /**
+     * Test regenerate user token when user does not exist
+     *
+     * @return void
+     */
+    public function testRegenerateUserTokenWhenUserDoesNotExist(): void
+    {
+        // mock getUserRepository to return null (user not found)
+        $this->userManagerMock->method('getUserRepository')->willReturn(null);
+
+        // call tested method
+        $result = $this->authManager->regenerateSpecificUserToken(999);
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
      * Test cache online user
      *
      * @return void
