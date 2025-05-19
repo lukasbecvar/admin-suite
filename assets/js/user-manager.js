@@ -22,6 +22,20 @@ document.addEventListener('DOMContentLoaded', function() {
     var banConfirmButton = document.getElementById('ban-confirm-button')
     var banUrl = ''
 
+    // elements related to unban functionality
+    var unbanButtons = document.querySelectorAll('.unban-button')
+    var unbanPopupOverlay = document.getElementById('unban-popup-overlay')
+    var unbanCancelButton = document.getElementById('unban-cancel-button')
+    var unbanConfirmButton = document.getElementById('unban-confirm-button')
+    var unbanUrl = ''
+
+    // elements related to token regeneration functionality
+    var tokenRegenerateButtons = document.querySelectorAll('.token-regenerate-button')
+    var tokenRegeneratePopupOverlay = document.getElementById('token-regenerate-popup-overlay')
+    var tokenRegenerateCancelButton = document.getElementById('token-regenerate-cancel-button')
+    var tokenRegenerateConfirmButton = document.getElementById('token-regenerate-confirm-button')
+    var tokenRegenerateUrl = ''
+
     // show the ban confirmation popup
     function showBanPopup(url) {
         banUrl = url
@@ -50,13 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
         banPopupOverlay.classList.add('hidden')
     })
 
-    // elements related to unban functionality
-    var unbanButtons = document.querySelectorAll('.unban-button')
-    var unbanPopupOverlay = document.getElementById('unban-popup-overlay')
-    var unbanCancelButton = document.getElementById('unban-cancel-button')
-    var unbanConfirmButton = document.getElementById('unban-confirm-button')
-    var unbanUrl = ''
-
     // show the unban confirmation popup
     function showUnbanPopup(url) {
         unbanUrl = url
@@ -80,6 +87,31 @@ document.addEventListener('DOMContentLoaded', function() {
     // event listener for cancelling unban action
     unbanCancelButton.addEventListener('click', function() {
         unbanPopupOverlay.classList.add('hidden')
+    })
+
+    // show the token regeneration confirmation popup
+    function showTokenRegeneratePopup(url) {
+        tokenRegenerateUrl = url
+        tokenRegeneratePopupOverlay.classList.remove('hidden')
+    }
+
+    // event listeners to each token regenerate button
+    tokenRegenerateButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault()
+            var url = this.href
+            showTokenRegeneratePopup(url)
+        })
+    })
+
+    // event listener for confirming token regeneration action
+    tokenRegenerateConfirmButton.addEventListener('click', function() {
+        window.location.href = tokenRegenerateUrl
+    })
+
+    // event listener for cancelling token regeneration action
+    tokenRegenerateCancelButton.addEventListener('click', function() {
+        tokenRegeneratePopupOverlay.classList.add('hidden')
     })
 
     // show the role update popup with user data
@@ -163,32 +195,42 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!unbanPopupOverlay.classList.contains('hidden')) {
                 unbanPopupOverlay.classList.add('hidden')
             }
+            if (!tokenRegeneratePopupOverlay.classList.contains('hidden')) {
+                tokenRegeneratePopupOverlay.classList.add('hidden')
+            }
         }
     })
 
-    // close popup overlay when clicking outside of it 
+    // close popup overlay when clicking outside of it
     document.getElementById('popup-overlay').addEventListener('click', function (event) {
         if (event.target === this) {
             this.classList.add('hidden')
         }
     })
 
-    // close role update popup overlay when clicking outside of it 
+    // close role update popup overlay when clicking outside of it
     document.getElementById('role-update-popup-overlay').addEventListener('click', function (event) {
         if (event.target === this) {
             this.classList.add('hidden')
         }
     })
 
-    // close ban popup overlay when clicking outside of it 
+    // close ban popup overlay when clicking outside of it
     document.getElementById('ban-popup-overlay').addEventListener('click', function (event) {
         if (event.target === this) {
             this.classList.add('hidden')
         }
     })
 
-    // close unban popup overlay when clicking outside of it 
+    // close unban popup overlay when clicking outside of it
     document.getElementById('unban-popup-overlay').addEventListener('click', function (event) {
+        if (event.target === this) {
+            this.classList.add('hidden')
+        }
+    })
+
+    // close token regenerate popup overlay when clicking outside of it
+    document.getElementById('token-regenerate-popup-overlay').addEventListener('click', function (event) {
         if (event.target === this) {
             this.classList.add('hidden')
         }

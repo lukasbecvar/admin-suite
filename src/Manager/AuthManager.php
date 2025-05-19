@@ -637,6 +637,49 @@ class AuthManager
     }
 
     /**
+     * Regenerate authentication token for a specific user
+     *
+     * @param int $userId The ID of the user
+     *
+     * @return bool True if token was regenerated successfully, false otherwise
+     */
+    public function regenerateSpecificUserToken(int $userId): bool
+    {
+        // get user repository
+        $user = $this->userManager->getUserRepository(['id' => $userId]);
+
+        // check if user exists
+        if ($user == null) {
+            return false;
+        }
+
+        try {
+            // generate new auth token
+            $newToken = $this->generateUserToken();
+
+            // set new user token
+            $user->setToken($newToken);
+
+            // flush changes to database
+            $this->entityManager->flush();
+
+            // log token regeneration event
+            $this->logManager->log(
+                name: 'authenticator',
+                message: 'regenerated auth token for user: ' . $user->getUsername(),
+                level: LogManager::LEVEL_CRITICAL
+            );
+
+            return true;
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error regenerating user token: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
      * Store online user id in cache
      *
      * @param int $userId The id of user to store

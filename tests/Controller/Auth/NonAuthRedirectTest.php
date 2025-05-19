@@ -47,7 +47,8 @@ class NonAuthRedirectTest extends WebTestCase
             ['method' => 'GET', 'url' => '/manager/users/ban'],
             ['method' => 'GET', 'url' => '/manager/users/delete'],
             ['method' => 'GET', 'url' => '/manager/users/register'],
-            ['method' => 'POST', 'url' => '/manager/users/role/update']
+            ['method' => 'POST', 'url' => '/manager/users/role/update'],
+            ['method' => 'GET', 'url' => '/manager/users/token/regenerate']
         ],
         'account_settings' => [
             ['method' => 'GET', 'url' => '/account/settings'],

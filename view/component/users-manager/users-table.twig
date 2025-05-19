@@ -1,7 +1,7 @@
 {% extends 'common/layout.twig' %}
 
 {# USER MANAGER TABLE COMPONENT #}
-{% block component %} 
+{% block component %}
 <div class="users-manager">
     {# SUB-NAVIGATION #}
     <div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
@@ -9,12 +9,10 @@
         <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="Back to dashboard">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
-        
         {# LINK TO UNFILTERED LOGS #}
         <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': usersTableName}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="View un-filtered users">
             <i class="fa fa-database" aria-hidden="true"></i>
         </a>
-        
         {# LINK TO USER REGISTER FORM #}
         <a href={{ path('app_manager_users_register') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="Add new user">
             <i class="fa fa-plus" aria-hidden="true"></i>
@@ -32,7 +30,16 @@
             </form>
         </div>
     </div>
-    
+
+    {# FLASH MESSAGE #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="m-1 p-2 rounded-md {% if label == 'success' %}bg-green-600/20 text-green-400 border border-green-800{% else %}bg-red-600/20 text-red-400 border border-red-800{% endif %}">
+                {{ message|e }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     {# CHECK IF TABLE IS EMPTY #}
     {% if users|length == 0 %}
         <p class="flex items-center justify-center mt-20 mb-20 text-2xl text-white font-bold">This user list page is empty</p>
@@ -51,6 +58,7 @@
                         <th class="text-left text-white p-2">Status</th>
                         <th class="text-left text-white p-2">Banned</th>
                         <th class="text-left text-white p-2 text-center"><i class="fa fa-ban" aria-hidden="true"></th>
+                        <th class="text-left text-white p-2 text-center"><i class="fa fa-key" aria-hidden="true"></th>
                         <th class="text-left text-white p-2 text-center"><i class="fa fa-trash" aria-hidden="true"></th>
                     </tr>
                 </thead>
@@ -68,14 +76,14 @@
                         {% else %}
                             {% set currentStatus = 'offline' %}
                         {% endif %}
-    
+
                         {# USER ROW #}
                         <tr class="hover:bg-neutral-800 border-b border-neutral-700 text-lg bg-white/1">
                             <td class="text-white p-1 border-b border-neutral-700 pl-2">{{ row.id|e }}</td>
                             <td class="text-white p-1 border-b border-neutral-700">
                                 <a href={{ path('app_manager_users_profile', {'id': row.id}) }} class="profile-link">{{ row.username |e}}</a>
                             </td>
-                                    
+
                             {# ROLE VALUE #}
                             {% if userManager.isUserAdmin(row.id) %}
                                 <td class="text-red-400 p-1 border-b border-neutral-700">
@@ -86,24 +94,24 @@
                                     <a href="#" id="loading-blocker" class="role-update-button" data-username={{ row.username|e }} data-role={{ row.role|e }} data-id={{ row.id|e }}>{{ row.role|e }}</a>
                                 </td>
                             {% endif %}
-    
+
                             {# BROWSER VALUE #}
                             {% if row.userAgent == 'Unknown' or row.userAgent == 'DataFixtures-CLI' %}
                                 <td class="text-red-400 p-1 border-b border-neutral-700">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
                             {% else %}
                                 <td class="text-white p-1 border-b border-neutral-700">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
                             {% endif %}
-                                    
+
                             {# OS NAME VALUE #}
                             {% if visitorInfoUtil.getOs(row.userAgent) == 'Unknown OS' %}
                                 <td class="text-red-400 p-1 border-b border-neutral-700">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
                             {% else %}
                                 <td class="text-white p-1 border-b border-neutral-700">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
                             {% endif %}
-                                    
+
                             {# LAST LOGIN TIME #}
                             <td class="text-white p-1 border-b border-neutral-700">{{ row.lastLoginTime|date('Y-m-d H:i:s')|e }}</td>
-                                    
+
                             {# IP ADDRESS VALUE #}
                             {% if currentIp == row.ipAddress %}
                                 <td class="text-white p-1 border-b border-neutral-700 highlighter">{{ row.ipAddress|e }}</td>
@@ -121,7 +129,7 @@
                                     <p>{{currentStatus|e}}</p>
                                 </td>
                             {% endif %}
-    
+
                             {# BANNED STATUS #}
                             {% if banManager.isUserBanned(row.id) %}
                                 <td class="text-green-400 p-1 border-b border-neutral-700">
@@ -138,7 +146,12 @@
                                     <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'active', 'page': currentPage}) }} id="loading-blocker" class="ban-button"><i class="fa fa-ban" aria-hidden="true"></i></a>
                                 </td>
                             {% endif %}
-    
+
+                            {# TOKEN REGENERATION LINK #}
+                            <td class="text-blue-500 p-1 border-b border-neutral-700 text-center hover:text-blue-300">
+                                <a href={{ path('app_manager_users_token_regenerate', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="token-regenerate-button" title="Regenerate authentication token"><i class="fa fa-key" aria-hidden="true"></i></a>
+                            </td>
+
                             {# USER DELETE LINK #}
                             <td class="text-white p-1 border-b border-neutral-700 text-center">
                                 <a href={{ path('app_manager_users_delete', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="delete-button"><i class="fa fa-trash" aria-hidden="true"></i></a>
@@ -149,7 +162,7 @@
             </table>
         </div>
     {% endif %}
-    
+
     {# PAGINATION SYSTEM #}
     {% if (totalUsersCount > limitPerPage) and (filter == '') %}
         <div class="mt-2 flex justify-center mb-2">
@@ -190,15 +203,18 @@
 
     {# USER DELETE POPUP OVERLAY #}
     {% include "component/users-manager/popup/user-delete-confirmation-popup.twig" %}
-    
+
     {# USER ROLE UPDATE POPUP OVERLAY #}
     {% include "component/users-manager/popup/user-role-update-popup.twig" %}
-    
+
     {# BAN CONFIRMATION OVERLAY #}
     {% include "component/users-manager/popup/user-ban-confirmation-popup.twig" %}
-        
+
     {# UNBAN CONFIRMATION OVERLAY #}
     {% include "component/users-manager/popup/user-unban-confirmation-popup.twig" %}
+
+    {# TOKEN REGENERATION CONFIRMATION OVERLAY #}
+    {% include "component/users-manager/popup/user-token-regenerate-popup.twig" %}
 
     {# POPUP FUNCTIONS #}
     {{ encore_entry_script_tags('user-manager-js') }}

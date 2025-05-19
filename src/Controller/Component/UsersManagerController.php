@@ -449,4 +449,57 @@ class UsersManagerController extends AbstractController
             'page' => $page
         ]);
     }
+
+    /**
+     * Handle user token regeneration functionality
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The redirect back to users table page
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/manager/users/token/regenerate', methods:['GET'], name: 'app_manager_users_token_regenerate')]
+    public function regenerateUserToken(Request $request): Response
+    {
+        // get user id
+        $userId = (int) $request->query->get('id');
+
+        // get current page from request query params
+        $page = (int) $request->query->get('page', '1');
+
+        // check if user id is valid
+        if ($userId == 0) {
+            $this->errorManager->handleError(
+                message: 'invalid request user "id" parameter not found in query',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check if user exists in database
+        if (!$this->userManager->checkIfUserExistById($userId)) {
+            $this->errorManager->handleError(
+                message: 'invalid request user "id" parameter not found in database',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // regenerate user token
+        $result = $this->authManager->regenerateSpecificUserToken($userId);
+
+        // check if regeneration was successful
+        if (!$result) {
+            $this->errorManager->handleError(
+                message: 'failed to regenerate user token',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // add success flash message
+        $this->addFlash('success', 'User authentication token has been regenerated successfully.');
+
+        // redirect back to users table page
+        return $this->redirectToRoute('app_manager_users', [
+            'page' => $page
+        ]);
+    }
 }
