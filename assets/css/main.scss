@@ -290,6 +290,50 @@ main {
 	height: 2.80rem !important;
 }
 
+.todo-manager .drag-handle {
+    transition: opacity 0.2s ease;
+    cursor: grab;
+    opacity: 0.5;
+    padding: 5px;
+}
+
+.todo-manager .todo-item:hover .drag-handle {
+    opacity: 1;
+}
+
+.todo-manager .sortable-ghost {
+	background-color: #4b5563 !important;
+    border: 2px dashed #6b7280 !important;
+    opacity: 0.5;
+}
+
+.todo-manager .sortable-drag {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    background-color: #374151 !important;
+    cursor: grabbing;
+}
+
+@media screen and (max-width: 768px) {
+    .todo-manager .drag-handle {
+        display: none;
+    }
+    .todo-manager .todo-item {
+        cursor: move;
+        touch-action: pan-y;
+        user-select: none;
+    }
+    .todo-manager .todo-item::before {
+        background-color: transparent;
+        position: absolute;
+        content: '';
+        height: 100%;
+        width: 100%;
+        z-index: 1;
+        left: 0;
+        top: 0;
+    }
+}
+
 /* database browser component */
 .database-browser .database-link {
 	font-weight: bold;
@@ -417,6 +461,9 @@ main {
 	}
 	.phone-none {
 		display: none;
+	}
+	.phone-block {
+		display: block !important;
 	}
 	.phone-disable-border-top {
 		border-top: none !important;

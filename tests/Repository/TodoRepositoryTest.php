@@ -70,10 +70,10 @@ class TodoRepositoryTest extends KernelTestCase
 
         // assert result
         $this->assertCount(2, $result);
-        $this->assertSame('Test todo 2', $result[0]->getTodoText());
-        $this->assertSame('Test todo 1', $result[1]->getTodoText());
-        $this->assertSame('pending', $result[0]->getStatus());
+        $this->assertSame('Test todo 1', $result[0]->getTodoText());
+        $this->assertSame('Test todo 2', $result[1]->getTodoText());
         $this->assertSame('pending', $result[1]->getStatus());
+        $this->assertSame('pending', $result[0]->getStatus());
         $this->assertSame(1, $result[0]->getUserId());
         $this->assertSame(1, $result[1]->getUserId());
     }

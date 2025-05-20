@@ -40,6 +40,9 @@ class Todo
     #[ORM\Column]
     private ?int $user_id = null;
 
+    #[ORM\Column(options: ["default" => 0])]
+    private ?int $position = 0;
+
     /**
      * Get database ID of the todo
      *
@@ -166,6 +169,30 @@ class Todo
     public function setUserId(int $user_id): static
     {
         $this->user_id = $user_id;
+
+        return $this;
+    }
+
+    /**
+     * Get position of the todo in the list
+     *
+     * @return int|null The position of the todo or null if not found
+     */
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    /**
+     * Set position of the todo in the list
+     *
+     * @param int $position The position of the todo
+     *
+     * @return static The todo object
+     */
+    public function setPosition(int $position): static
+    {
+        $this->position = $position;
 
         return $this;
     }

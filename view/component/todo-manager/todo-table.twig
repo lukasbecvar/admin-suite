@@ -1,7 +1,7 @@
-{% extends 'common/layout.twig' %} 
+{% extends 'common/layout.twig' %}
 
 {# TODO LIST COMPONENT #}
-{% block component %} 
+{% block component %}
 <div class="flex flex-col todo-manager overflow-hidden breadcrumb component">
     {# SUB-NAVIGATION #}
     <div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
@@ -24,7 +24,7 @@
 
     {# TODO LIST #}
     <div class="{{ filter == 'open' ? 'todo-list' : '' }} overflow-y-auto card-component p-0 px-2 pb-[2px]">
-        <div class="divide-y divide-neutral-800">
+        <div id="todo-items-container" class="divide-y divide-neutral-800">
 
             {# TODO LIST IS EMPTY INFORMATION #}
             {% if todos|length == 0 %}
@@ -33,7 +33,12 @@
 
             {# TODO ITEM #}
             {% for todo in todos %}
-                <div class="flex items-center justify-between p-3 my-2 rounded bg-neutral-800/80 transition-colors duration-200 hover:bg-neutral-700/80" data-todo-id="{{ todo.id }}" data-todo-text="{{ todo.todoText|e('html_attr') }}">
+                <div class="todo-item flex items-center justify-between p-3 my-2 rounded bg-neutral-800/80 transition-colors duration-200 hover:bg-neutral-700/80 relative" data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} data-position={{ todo.position }}>
+                    {% if filter == 'open' %}
+                        <div class="drag-handle mr-2 cursor-move text-neutral-500 hover:text-white flex items-center justify-center">
+                            <i class="fas fa-grip-vertical text-lg"></i>
+                        </div>
+                    {% endif %}
                     <div class="flex-grow">
                         <span class="text-white whitespace-pre-line disable-select-on-phone">{{ todo.todoText|linkify }}</span>
                     </div>
@@ -58,11 +63,11 @@
                             </button>
                         {% endif %}
                         {# VIEW TODO INFO POPUP #}
-                        <button class="info-button phone-none" data-todo-id="1" title="View Info">
+                        <button class="info-button phone-none" data-todo-id={{ todo.id }} title="View Info">
                             <i class="fas fa-info-circle text-gray-500"></i>
                         </button>
                     </div>
-                </div>                    
+                </div>
             {% endfor %}
         </div>
     </div>
@@ -84,6 +89,6 @@
 {# DELETE CONFIRMATION POPUP OVERLAY #}
 {% include "component/todo-manager/popup/delete-confirmation-popup.twig" %}
 
-{# POPUP FUNCTIONS #}
+{# INCLUDE FRONTEND FUNCTIONALITY #}
 {{ encore_entry_script_tags('todo-manager-js') }}
 {% endblock %}

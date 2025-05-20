@@ -1,4 +1,6 @@
 /** todo manager component functionality */
+import Sortable from 'sortablejs';
+
 document.addEventListener('DOMContentLoaded', function () {
     let currentTodoId = null
 
@@ -75,29 +77,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // handle line up/down move keys 
+    // handle line up/down move keys
     editTodoInput.addEventListener("keydown", function (event) {
         if (event.altKey && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
             event.preventDefault()
-    
+
             let textarea = event.target
             let text = textarea.value
             let start = textarea.selectionStart
             let end = textarea.selectionEnd
-    
+
             // split text into lines
             let lines = text.split("\n")
             let cursorLine = text.substring(0, start).split("\n").length - 1
-    
+
             if ((event.key === "ArrowUp" && cursorLine > 0) || (event.key === "ArrowDown" && cursorLine < lines.length - 1)) {
                 let swapLine = event.key === "ArrowUp" ? cursorLine - 1 : cursorLine + 1;
                 [lines[cursorLine], lines[swapLine]] = [lines[swapLine], lines[cursorLine]] // swap lines
-    
+
                 // calculate new cursor position
                 let beforeCursor = lines.slice(0, swapLine).join("\n").length + 1
                 let cursorOffset = start - (text.substring(0, start).lastIndexOf("\n") + 1)
                 let newCursorPos = beforeCursor + cursorOffset
-    
+
                 // update textarea
                 textarea.value = lines.join("\n")
                 textarea.setSelectionRange(newCursorPos, newCursorPos)
@@ -181,4 +183,81 @@ document.addEventListener('DOMContentLoaded', function () {
             this.classList.add('hidden')
         }
     })
+
+    // initialize drag and drop functionality
+    const todoItemsContainer = document.getElementById('todo-items-container')
+    if (todoItemsContainer && document.querySelector('.todo-list')) {
+        // check if we are on a mobile device
+        const isMobile = window.innerWidth <= 768;
+
+        // initialize sortable with different options for mobile
+        new Sortable(todoItemsContainer, {
+            animation: 150,
+            handle: isMobile ? null : '.drag-handle', // on mobile
+            ghostClass: 'bg-neutral-600/80',
+            delay: isMobile ? 300 : 0, // add delay for mobile to distinguish between tap and drag
+            delayOnTouchOnly: true,    // only use delay on touch devices
+            onEnd: function(evt) {
+                // get all todo items
+                const todoItems = Array.from(todoItemsContainer.querySelectorAll('.todo-item'))
+
+                // create positions object
+                const positions = {}
+                todoItems.forEach((item, index) => {
+                    const todoId = parseInt(item.dataset.todoId)
+                    positions[todoId] = index + 1
+                })
+
+                // send positions to server
+                updatePositions(positions)
+            }
+        })
+    }
+
+    // function to update positions on the server
+    function updatePositions(positions) {
+        const todoItems = document.querySelectorAll('.todo-item')
+        todoItems.forEach(item => {
+            item.style.transition = 'background-color 0.3s ease'
+            item.style.backgroundColor = 'rgba(55, 65, 81, 0.9)'
+        })
+        fetch('/manager/todo/update-positions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(positions)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // show success feedback
+                todoItems.forEach(item => {
+                    item.style.backgroundColor = 'rgba(22, 101, 52, 0.5)'
+                    setTimeout(() => {
+                        item.style.backgroundColor = ''
+                    }, 500)
+                })
+            } else {
+                console.error('Error updating positions:', data.message)
+                // show error feedback
+                todoItems.forEach(item => {
+                    item.style.backgroundColor = 'rgba(153, 27, 27, 0.5)'
+                    setTimeout(() => {
+                        item.style.backgroundColor = ''
+                    }, 500)
+                })
+            }
+        })
+        .catch(error => {
+            console.error('Error updating positions:', error)
+            // show error feedback
+            todoItems.forEach(item => {
+                item.style.backgroundColor = 'rgba(153, 27, 27, 0.5)'
+                setTimeout(() => {
+                    item.style.backgroundColor = ''
+                }, 500)
+            })
+        })
+    }
 })

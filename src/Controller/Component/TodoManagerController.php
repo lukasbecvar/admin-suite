@@ -257,4 +257,44 @@ class TodoManagerController extends AbstractController
             );
         }
     }
+
+    /**
+     * Update todo positions
+     *
+     * @param Request $request The request object
+     *
+     * @return JsonResponse The response with success status
+     */
+    #[Route('/manager/todo/update-positions', methods:['POST'], name: 'app_todo_manager_update_positions')]
+    public function updateTodoPositions(Request $request): JsonResponse
+    {
+        try {
+            // get positions data from request
+            $positions = json_decode($request->getContent(), true);
+
+            // validate positions data
+            if (!is_array($positions) || empty($positions)) {
+                $this->errorManager->logError(
+                    message: 'invalid positions data',
+                    code: Response::HTTP_BAD_REQUEST
+                );
+                return $this->json(['success' => false, 'message' => 'Invalid positions data'], Response::HTTP_BAD_REQUEST);
+            }
+
+            // update positions
+            $this->todoManager->updateTodoPositions($positions);
+
+            // return success response
+            return $this->json(['success' => true], Response::HTTP_OK);
+        } catch (Exception $e) {
+            $this->errorManager->logError(
+                message: 'error updating positions: ' . $e->getMessage(),
+                code: $e->getCode()
+            );
+            return $this->json(
+                ['success' => false, 'message' => 'Error updating positions: ' . $e->getMessage()],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }

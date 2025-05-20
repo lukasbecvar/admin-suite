@@ -70,7 +70,8 @@ class TodoManager
                 'addedTime' => $todo->getAddedTime(),
                 'completedTime' => $todo->getCompletedTime(),
                 'status' => $todo->getStatus(),
-                'userId' => $todo->getUserId()
+                'userId' => $todo->getUserId(),
+                'position' => $todo->getPosition()
             ];
         }
 
@@ -179,13 +180,24 @@ class TodoManager
         // encrypt todo text
         $todoText = $this->securityUtil->encryptAes($todoText);
 
+        // get the highest position
+        $highestPosition = 0;
+        $userTodos = $this->todoRepository->findByUserIdAndStatus($this->authManager->getLoggedUserId(), 'open');
+        foreach ($userTodos as $userTodo) {
+            $position = $userTodo->getPosition();
+            if ($position > $highestPosition) {
+                $highestPosition = $position;
+            }
+        }
+
         // create new todo entity
         $todo = new Todo();
         $todo->setTodoText($todoText)
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
-            ->setUserId($this->authManager->getLoggedUserId());
+            ->setUserId($this->authManager->getLoggedUserId())
+            ->setPosition($highestPosition + 1);
 
         try {
             // save todo entity
@@ -441,5 +453,91 @@ class TodoManager
             message: 'todo deleted',
             level: LogManager::LEVEL_INFO
         );
+    }
+
+    /**
+     * Update todo position
+     *
+     * @param int $todoId The todo id
+     * @param int $newPosition The new position
+     *
+     * @return void
+     */
+    public function updateTodoPosition(int $todoId, int $newPosition): void
+    {
+        /** @var Todo $todo */
+        $todo = $this->todoRepository->find($todoId);
+
+        // check if todo is not null
+        if ($todo === null) {
+            $this->errorManager->handleError(
+                message: 'todo: ' . $todoId . ' not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // check if user is owner of todo
+        if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
+            $this->errorManager->handleError(
+                message: 'you are not the owner of the todo: ' . $todoId,
+                code: Response::HTTP_FORBIDDEN
+            );
+        }
+
+        // check if todo is open
+        if ($todo->getStatus() !== 'open') {
+            $this->errorManager->handleError(
+                message: 'todo: ' . $todoId . ' is not open',
+                code: Response::HTTP_FORBIDDEN
+            );
+        }
+
+        try {
+            // set new position
+            $todo->setPosition($newPosition);
+
+            // save todo entity
+            $this->entityManagerInterface->persist($todo);
+            $this->entityManagerInterface->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error updating todo position: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Update multiple todo positions
+     *
+     * @param array<int, int> $positions Array of todo IDs and their new positions
+     *
+     * @return void
+     */
+    public function updateTodoPositions(array $positions): void
+    {
+        try {
+            foreach ($positions as $todoId => $position) {
+                /** @var Todo $todo */
+                $todo = $this->todoRepository->find($todoId);
+
+                // skip if todo not found or user is not the owner
+                if ($todo === null || $todo->getUserId() !== $this->authManager->getLoggedUserId() || $todo->getStatus() !== 'open') {
+                    continue;
+                }
+
+                // update position
+                $todo->setPosition($position);
+                $this->entityManagerInterface->persist($todo);
+            }
+
+            // save all changes to database
+            $this->entityManagerInterface->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error updating todo positions: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 }

@@ -37,7 +37,7 @@ class TodoRepository extends ServiceEntityRepository
                 'user_id' => $userId,
                 'status' => $status,
             ],
-            ['id' => 'DESC']
+            ['position' => 'ASC']
         );
     }
 }
