@@ -163,4 +163,56 @@ class TodoManagerControllerTest extends CustomTestCase
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
+
+    /**
+     * Test update todo positions with valid data
+     *
+     * @return void
+     */
+    public function testUpdateTodoPositionsWithValidData(): void
+    {
+        $this->client->request(
+            method: 'POST',
+            uri: '/manager/todo/update-positions',
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: json_encode([
+                ['id' => 1, 'position' => 1],
+                ['id' => 2, 'position' => 2],
+                ['id' => 3, 'position' => 3]
+            ]) ?: '{}'
+        );
+
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertArrayHasKey('success', $responseData);
+        $this->assertTrue($responseData['success']);
+    }
+
+    /**
+     * Test update todo positions with invalid data
+     *
+     * @return void
+     */
+    public function testUpdateTodoPositionsWithInvalidData(): void
+    {
+        $this->client->request(
+            method: 'POST',
+            uri: '/manager/todo/update-positions',
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: json_encode([]) ?: '{}'
+        );
+
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        $this->assertArrayHasKey('success', $responseData);
+        $this->assertFalse($responseData['success']);
+        $this->assertArrayHasKey('message', $responseData);
+        $this->assertEquals('Invalid positions data', $responseData['message']);
+    }
 }

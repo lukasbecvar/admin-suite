@@ -337,4 +337,77 @@ class TodoManagerTest extends TestCase
         // call tested method
         $this->todoManager->deleteTodo($todoId);
     }
+
+    /**
+     * Test update todo position
+     *
+     * @return void
+     */
+    public function testUpdateTodoPosition(): void
+    {
+        $todoId = 1;
+        $newPosition = 2;
+
+        // mock todo entity
+        $todo = new Todo();
+        $todo->setTodoText('encrypted text')
+            ->setAddedTime(new DateTime())
+            ->setCompletedTime(null)
+            ->setStatus('open')
+            ->setUserId(1);
+        $this->todoRepositoryMock->method('find')->willReturn($todo);
+
+        // expect persist and flush methods to be called
+        $this->entityManagerMock->expects($this->once())->method('persist')
+            ->with($this->isInstanceOf(Todo::class));
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->todoManager->updateTodoPosition($todoId, $newPosition);
+    }
+
+    /**
+     * Test update todo positions
+     *
+     * @return void
+     */
+    public function testUpdateTodoPositions(): void
+    {
+        $positions = [
+            1 => 2,
+            2 => 1,
+            3 => 3
+        ];
+
+        // mock todo entities
+        $todo1 = new Todo();
+        $todo1->setTodoText('encrypted text')
+            ->setAddedTime(new DateTime())
+            ->setCompletedTime(null)
+            ->setStatus('open')
+            ->setUserId(1);
+        $todo2 = new Todo();
+        $todo2->setTodoText('encrypted text')
+            ->setAddedTime(new DateTime())
+            ->setCompletedTime(null)
+            ->setStatus('open')
+            ->setUserId(1);
+        $todo3 = new Todo();
+        $todo3->setTodoText('encrypted text')
+            ->setAddedTime(new DateTime())
+            ->setCompletedTime(null)
+            ->setStatus('open')
+            ->setUserId(1);
+        $this->todoRepositoryMock->method('find')->willReturnMap([
+            [1, $todo1],
+            [2, $todo2],
+            [3, $todo3]
+        ]);
+
+        // expect flush method to be called
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->todoManager->updateTodoPositions($positions);
+    }
 }
