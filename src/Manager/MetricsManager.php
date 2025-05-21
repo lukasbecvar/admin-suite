@@ -69,6 +69,7 @@ class MetricsManager
         }
 
         $metrics = [];
+        $sortedMetrics = [];
 
         // get all services with metrics collection is enabled
         foreach ($servicesList as $serviceName => $serviceConfig) {
@@ -77,7 +78,19 @@ class MetricsManager
             }
         }
 
-        return $metrics;
+        // first add host-system if it exists
+        if (isset($metrics['host-system'])) {
+            $sortedMetrics['host-system'] = $metrics['host-system'];
+        }
+
+        // then add any remaining services
+        foreach ($metrics as $serviceName => $serviceData) {
+            if ($serviceName !== 'host-system') {
+                $sortedMetrics[$serviceName] = $serviceData;
+            }
+        }
+
+        return $sortedMetrics;
     }
 
     /**
@@ -138,12 +151,145 @@ class MetricsManager
         }
 
         // round times in categories array for hour rounding
-        $categories = $this->appUtil->roundTimesInArray($categories);
+        if ($this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL') == 60) {
+            $categories = $this->appUtil->roundTimesInArray($categories);
+        }
+
+        // sort metrics order
+        $sortedMetrics = [];
+        $desiredOrder = ['cpu_usage', 'ram_usage', 'storage_usage', 'network_usage'];
+
+        // first add metrics in the desired order
+        foreach ($desiredOrder as $metricName) {
+            if (isset($metrics[$metricName])) {
+                $sortedMetrics[$metricName] = $metrics[$metricName];
+            }
+        }
+
+        // then add any remaining metrics
+        foreach ($metrics as $metricName => $metricData) {
+            if (!in_array($metricName, $desiredOrder)) {
+                $sortedMetrics[$metricName] = $metricData;
+            }
+        }
 
         // return metrics data with categories
         return [
             'categories' => $categories,
-            'metrics' => $metrics
+            'metrics' => $sortedMetrics
+        ];
+    }
+
+    /**
+     * Get raw metrics from cache for specific service
+     *
+     * @param string $serviceName The service name
+     *
+     * @return array<mixed> The raw metrics data from cache
+     */
+    public function getRawMetricsFromCache(string $serviceName = 'host-system'): array
+    {
+        // get monitored services list
+        $servicesList = $this->serviceManager->getServicesList();
+
+        // check if services list config data is loaded correctly
+        if ($serviceName != 'host-system' && $servicesList == null) {
+            $this->errorManager->handleError(
+                message: 'error to get monitored services config',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // check if service found in monitored services list
+        if ($serviceName != 'host-system' && !isset($servicesList[$serviceName])) {
+            $this->errorManager->handleError(
+                message: 'error service: ' . $serviceName . ' not found in monitored services list',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // check if service is configured to collect metrics
+        if ($serviceName !== 'host-system' && !($servicesList[$serviceName]['metrics_monitoring']['collect_metrics'] ?? false)) {
+            $this->errorManager->handleError(
+                message: 'error to get metrics: service is not configured to collect metrics',
+                code: Response::HTTP_FORBIDDEN
+            );
+        }
+
+        $metrics = [];
+        $categories = [];
+
+        // get all metrics for the service
+        if ($serviceName === 'host-system') {
+            $metricNames = ['cpu_usage', 'ram_usage', 'storage_usage', 'network_usage'];
+        } else {
+            $metricNames = [];
+        }
+
+        foreach ($metricNames as $metricName) {
+            $rawValuesKey = $metricName . '_' . $serviceName . '_raw_values';
+            $rawTimesKey = $metricName . '_' . $serviceName . '_raw_times';
+
+            // check if we have raw data in cache
+            if ($this->cacheUtil->isCatched($rawValuesKey) && $this->cacheUtil->isCatched($rawTimesKey)) {
+                $rawValues = $this->cacheUtil->getValue($rawValuesKey)->get() ?? [];
+                $rawTimes = $this->cacheUtil->getValue($rawTimesKey)->get() ?? [];
+
+                // remove seconds from times
+                $rawTimes = array_map(function ($time) {
+                    return (new DateTime($time))->format('H:i');
+                }, $rawTimes);
+
+                // only add if we have actual data
+                if (count($rawValues) > 0) {
+                    // format data for the chart
+                    $formattedValues = [];
+                    foreach ($rawValues as $index => $value) {
+                        if (isset($rawTimes[$index])) {
+                            $formattedValues[] = [
+                                'value' => round($value, 2),
+                                'time' => $rawTimes[$index]
+                            ];
+
+                            // add to categories if not already there
+                            if (!in_array($rawTimes[$index], $categories)) {
+                                $categories[] = $rawTimes[$index];
+                            }
+                        }
+                    }
+
+                    if (!empty($formattedValues)) {
+                        $metrics[$metricName] = $formattedValues;
+                    }
+                }
+            }
+        }
+
+        // sort categories chronologically
+        sort($categories);
+
+        // sort metrics in the desired order
+        $sortedMetrics = [];
+        $desiredOrder = ['cpu_usage', 'ram_usage', 'storage_usage', 'network_usage'];
+
+        // first add metrics in the desired order
+        foreach ($desiredOrder as $metricName) {
+            if (isset($metrics[$metricName])) {
+                $sortedMetrics[$metricName] = $metrics[$metricName];
+            }
+        }
+
+        // then add any remaining metrics
+        foreach ($metrics as $metricName => $metricData) {
+            if (!in_array($metricName, $desiredOrder)) {
+                $sortedMetrics[$metricName] = $metricData;
+            }
+        }
+
+        // return metrics data with categories
+        return [
+            'categories' => $categories,
+            'metrics' => $sortedMetrics
         ];
     }
 
@@ -210,44 +356,46 @@ class MetricsManager
      */
     public function saveMetricWithCacheSummary(string $metricName, int|float $value, string $serviceName = 'host-system'): void
     {
-        // get monitoring interval
+        // get monitoring interval and metrics save interval
         $monitoringInterval = (int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60;
         $metricsSaveInterval = (int) $this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL') * 60;
 
-        // calculate cache expiration
-        $cacheExpiration = $monitoringInterval * 2;
-
         // define cache keys
-        $metricKey = $metricName . '_' . $serviceName . '_sum';
-        $countKey = $metricName . '_' . $serviceName . '_count';
         $lastSaveKey = $metricName . '_' . $serviceName . '_last_save_time';
+        $rawValuesKey = $metricName . '_' . $serviceName . '_raw_values';
+        $rawTimesKey = $metricName . '_' . $serviceName . '_raw_times';
 
-        // get current sums and counts
-        $metricSum = $this->cacheUtil->getValue($metricKey)->get() ?? 0;
-        $count = $this->cacheUtil->getValue($countKey)->get() ?? 0;
+        // get current raw values and times arrays
+        $rawValues = $this->cacheUtil->getValue($rawValuesKey)->get() ?? [];
+        $rawTimes = $this->cacheUtil->getValue($rawTimesKey)->get() ?? [];
 
-        // calculate new sums
-        $metricSum += $value;
-        $count++;
+        // add new raw value and timestamp
+        $rawValues[] = $value;
+        $rawTimes[] = (new DateTime())->format('H:i:s');
 
-        // save updated values to cache
-        $this->cacheUtil->setValue($metricKey, $metricSum, $cacheExpiration);
-        $this->cacheUtil->setValue($countKey, $count, $cacheExpiration);
+        // limit arrays to values within the metrics save interval
+        // maximum number of values is based on monitoring interval
+        $maxValues = (int) ceil($metricsSaveInterval / $monitoringInterval);
+        if (count($rawValues) > $maxValues) {
+            $rawValues = array_slice($rawValues, -$maxValues);
+            $rawTimes = array_slice($rawTimes, -$maxValues);
+        }
+
+        // calculate average from raw values
+        $metricSum = array_sum($rawValues);
+        $count = count($rawValues);
+        $averageValue = $count > 0 ? round($metricSum / $count, 1) : 0;
+
+        // save raw values to cache with expiration set to metrics save interval
+        $this->cacheUtil->setValue($rawValuesKey, $rawValues, $metricsSaveInterval);
+        $this->cacheUtil->setValue($rawTimesKey, $rawTimes, $metricsSaveInterval);
 
         // check if metric can save to real database
         if (!$this->cacheUtil->isCatched($lastSaveKey)) {
-            $averageValue = round($metricSum / $count, 1);
-
-            // save average value (per metirc save interval) to database
+            // save average value to database
             $this->saveMetric($metricName, (string) $averageValue, $serviceName);
 
-            // reset metrics cache
-            $this->cacheUtil->setValue($metricKey, 0, $cacheExpiration);
-            $this->cacheUtil->setValue($countKey, 0, $cacheExpiration);
-        }
-
-        // set last save time if not catched (disable next save)
-        if (!$this->cacheUtil->isCatched($lastSaveKey)) {
+            // set last save time (disable next save until interval passes)
             $this->cacheUtil->setValue($lastSaveKey, time(), $metricsSaveInterval);
         }
     }

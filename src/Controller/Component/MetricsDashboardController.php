@@ -3,6 +3,7 @@
 namespace App\Controller\Component;
 
 use Exception;
+use App\Util\AppUtil;
 use App\Util\ServerUtil;
 use App\Manager\ErrorManager;
 use App\Manager\MetricsManager;
@@ -20,12 +21,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class MetricsDashboardController extends AbstractController
 {
+    private AppUtil $appUtil;
     private ServerUtil $serverUtil;
     private ErrorManager $errorManager;
     private MetricsManager $metricsManager;
 
-    public function __construct(ServerUtil $serverUtil, ErrorManager $errorManager, MetricsManager $metricsManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        ServerUtil $serverUtil,
+        ErrorManager $errorManager,
+        MetricsManager $metricsManager
+    ) {
+        $this->appUtil = $appUtil;
         $this->serverUtil = $serverUtil;
         $this->errorManager = $errorManager;
         $this->metricsManager = $metricsManager;
@@ -43,10 +50,20 @@ class MetricsDashboardController extends AbstractController
     {
         // get metrics time period from request parameter
         $timePeriod = (string) $request->query->get('time_period', 'last_24_hours');
+        $showRawMetrics = $timePeriod === 'raw_metrics';
+
+        // get metrics save interval
+        $metricsSaveInterval = (int) $this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL');
 
         try {
             // get metrics data
-            $data = $this->metricsManager->getServiceMetrics('host-system', $timePeriod);
+            if ($showRawMetrics) {
+                // get raw metrics from cache
+                $data = $this->metricsManager->getRawMetricsFromCache('host-system');
+            } else {
+                // get metrics history from database
+                $data = $this->metricsManager->getServiceMetrics('host-system', $timePeriod);
+            }
 
             // get current usages
             $currentCpuUsage = $this->serverUtil->getCpuUsage();
@@ -61,6 +78,8 @@ class MetricsDashboardController extends AbstractController
 
         // return metrics dashboard view
         return $this->render('component/metrics/metrics-dashboard.twig', [
+            'metricsSaveInterval' => $metricsSaveInterval,
+            'showRawMetrics' => $showRawMetrics,
             'current_usages' => [
                 'cpu' => $currentCpuUsage,
                 'ram' => $currentRamUsage,
@@ -83,10 +102,20 @@ class MetricsDashboardController extends AbstractController
         // get request parameters
         $serviceName = (string) $request->query->get('service_name', 'host-system');
         $timePeriod = (string) $request->query->get('time_period', 'last_24_hours');
+        $showRawMetrics = $timePeriod === 'raw_metrics';
+
+        // get metrics save interval
+        $metricsSaveInterval = (int) $this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL');
 
         // get metrics data
         try {
-            $data = $this->metricsManager->getServiceMetrics($serviceName, $timePeriod);
+            if ($showRawMetrics) {
+                // get raw metrics from cache
+                $data = $this->metricsManager->getRawMetricsFromCache($serviceName);
+            } else {
+                // get metrics history from database
+                $data = $this->metricsManager->getServiceMetrics($serviceName, $timePeriod);
+            }
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get metrics data: ' . $e->getMessage(),
@@ -96,6 +125,8 @@ class MetricsDashboardController extends AbstractController
 
         // return service metrics view
         return $this->render('component/metrics/service-metrics.twig', [
+            'metricsSaveInterval' => $metricsSaveInterval,
+            'showRawMetrics' => $showRawMetrics,
             'serviceName' => $serviceName,
             'data' => $data
         ]);
@@ -113,9 +144,14 @@ class MetricsDashboardController extends AbstractController
     {
         // get time period
         $timePeriod = (string) $request->query->get('time_period', 'last_24_hours');
+        $showRawMetrics = $timePeriod === 'raw_metrics';
+
+        // get metrics save interval
+        $metricsSaveInterval = (int) $this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL');
 
         // get metrics data
         try {
+            // get all services metrics
             $data = $this->metricsManager->getAllServicesMetrics($timePeriod);
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -126,6 +162,8 @@ class MetricsDashboardController extends AbstractController
 
         // return service metrics view
         return $this->render('component/metrics/service-metrics.twig', [
+            'metricsSaveInterval' => $metricsSaveInterval,
+            'showRawMetrics' => $showRawMetrics,
             'serviceName' => 'all-services',
             'data' => $data
         ]);

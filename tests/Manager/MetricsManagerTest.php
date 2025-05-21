@@ -12,6 +12,7 @@ use App\Manager\MetricsManager;
 use App\Manager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 use App\Manager\DatabaseManager;
+use Psr\Cache\CacheItemInterface;
 use App\Repository\MetricRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -131,6 +132,70 @@ class MetricsManagerTest extends TestCase
     }
 
     /**
+     * Test get raw metrics from cache
+     *
+     * @return void
+     */
+    public function testGetRawMetricsFromCache(): void
+    {
+        // mock service manager
+        $this->serviceManagerMock->method('getServicesList')->willReturn([
+            'host-system' => [
+                'type' => 'http',
+                'metrics_monitoring' => [
+                    'collect_metrics' => true
+                ]
+            ]
+        ]);
+
+        // create mock cache items for raw values and times
+        $cpuRawValuesCacheItem = $this->createMock(CacheItemInterface::class);
+        $cpuRawValuesCacheItem->method('get')->willReturn([45, 50, 55]);
+        $cpuRawTimesCacheItem = $this->createMock(CacheItemInterface::class);
+        $cpuRawTimesCacheItem->method('get')->willReturn(['10:00', '10:01', '10:02']);
+        $ramRawValuesCacheItem = $this->createMock(CacheItemInterface::class);
+        $ramRawValuesCacheItem->method('get')->willReturn([40, 45, 50]);
+        $ramRawTimesCacheItem = $this->createMock(CacheItemInterface::class);
+        $ramRawTimesCacheItem->method('get')->willReturn(['10:00', '10:01', '10:02']);
+
+        // mock cache util to return cache items
+        $this->cacheUtilMock->method('isCatched')->willReturnMap([
+            ['cpu_usage_host-system_raw_values', true],
+            ['cpu_usage_host-system_raw_times', true],
+            ['ram_usage_host-system_raw_values', true],
+            ['ram_usage_host-system_raw_times', true],
+            ['storage_usage_host-system_raw_values', false],
+            ['storage_usage_host-system_raw_times', false],
+            ['network_usage_host-system_raw_values', false],
+            ['network_usage_host-system_raw_times', false],
+        ]);
+
+        $this->cacheUtilMock->method('getValue')->willReturnMap([
+            ['cpu_usage_host-system_raw_values', $cpuRawValuesCacheItem],
+            ['cpu_usage_host-system_raw_times', $cpuRawTimesCacheItem],
+            ['ram_usage_host-system_raw_values', $ramRawValuesCacheItem],
+            ['ram_usage_host-system_raw_times', $ramRawTimesCacheItem],
+        ]);
+
+        // call tested method
+        $result = $this->metricsManager->getRawMetricsFromCache('host-system');
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('categories', $result);
+        $this->assertArrayHasKey('metrics', $result);
+        $this->assertArrayHasKey('cpu_usage', $result['metrics']);
+        $this->assertArrayHasKey('ram_usage', $result['metrics']);
+        $this->assertEquals(['10:00', '10:01', '10:02'], $result['categories']);
+        $this->assertEquals(45, $result['metrics']['cpu_usage'][0]['value']);
+        $this->assertEquals(50, $result['metrics']['cpu_usage'][1]['value']);
+        $this->assertEquals(55, $result['metrics']['cpu_usage'][2]['value']);
+        $this->assertEquals(40, $result['metrics']['ram_usage'][0]['value']);
+        $this->assertEquals(45, $result['metrics']['ram_usage'][1]['value']);
+        $this->assertEquals(50, $result['metrics']['ram_usage'][2]['value']);
+    }
+
+    /**
      * Test save metrics success
      *
      * @return void
@@ -147,6 +212,48 @@ class MetricsManagerTest extends TestCase
 
         // call tested method
         $this->metricsManager->saveMetric($metricName, $value);
+    }
+
+    /**
+     * Test save metric with cache summary
+     *
+     * @return void
+     */
+    public function testSaveMetricWithCacheSummary(): void
+    {
+        // testing data
+        $metricName = 'cpu_usage';
+        $value = 50.5;
+        $serviceName = 'host-system';
+
+        // mock environment values
+        $this->appUtilMock->method('getEnvValue')->willReturnMap([
+            ['MONITORING_INTERVAL', '1'],
+            ['METRICS_SAVE_INTERVAL', '5']
+        ]);
+
+        // mock cache items
+        $rawValuesCacheItem = $this->createMock(CacheItemInterface::class);
+        $rawValuesCacheItem->method('get')->willReturn([45, 55]);
+        $rawTimesCacheItem = $this->createMock(CacheItemInterface::class);
+        $rawTimesCacheItem->method('get')->willReturn(['10:00:00', '10:01:00']);
+
+        // mock cache util
+        $this->cacheUtilMock->method('getValue')->willReturnMap([
+            [$metricName . '_' . $serviceName . '_raw_values', $rawValuesCacheItem],
+            [$metricName . '_' . $serviceName . '_raw_times', $rawTimesCacheItem]
+        ]);
+        $this->cacheUtilMock->method('isCatched')->willReturn(false);
+
+        // expect setValue to be called for raw values and times
+        $this->cacheUtilMock->expects($this->exactly(3))->method('setValue');
+
+        // expect entity manager to be called
+        $this->entityManagerMock->expects($this->once())->method('persist');
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->metricsManager->saveMetricWithCacheSummary($metricName, $value, $serviceName);
     }
 
     /**

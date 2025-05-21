@@ -13,6 +13,7 @@
     <span >
         <label for="time-period" class="text-white">Time period:</label>
         <select id="time-period" onchange="updateTimePeriod()" class="bg-neutral-800 text-white border border-neutral-600 rounded">
+            <option value="raw_metrics">{% if metricsSaveInterval == 60 %}Last hour{% else %}Last {{ metricsSaveInterval }} minutes{% endif %}</option>
             <option value="last_24_hours" selected>Last 24 hours</option>
             <option value="last_week">Last week</option>
             <option value="last_month">Last month</option>
@@ -48,9 +49,21 @@
 
 {# METRICS-CHARTS #}
 {% if data is empty or (serviceName != 'all-services' and data['metrics'] is empty) %}
-<p class="flex items-center justify-center mt-20 mb-20 text-2xl text-white font-bold">
-    No metrics found for service: {{ serviceName|e }}
-</p>
+    {% if showRawMetrics %}
+    <div class="flex items-center justify-center mt-10 mb-10">
+        <div class="p-4 rounded-md bg-neutral-800/50 border border-neutral-700 text-white text-center">
+            <p class="text-xl font-bold mb-2">No raw metrics found in cache for service: {{ serviceName|e }}</p>
+            <p class="text-sm opacity-80">Raw metrics will appear here once the monitoring process collects some data for this service.</p>
+        </div>
+    </div>
+    {% else %}
+    <div class="flex items-center justify-center mt-10 mb-10">
+        <div class="p-4 rounded-md bg-neutral-800/50 border border-neutral-700 text-white text-center">
+            <p class="text-xl font-bold mb-2">No metrics found for service: {{ serviceName|e }}</p>
+            <p class="text-sm opacity-80">Metrics will appear here once the monitoring process collects and saves some data for this service.</p>
+        </div>
+    </div>
+    {% endif %}
 {% else %}
     {# RENDER METRICS CHARTS FOR SPECIFIC SERVICE #}
     {% if serviceName != 'all-services' %}
@@ -59,10 +72,12 @@
                 <div class="flex flex-col md:flex-row gap-2">
                     <div class="flex-1 p-0 shadow-lg rounded relative chart-container backdrop-blur-md bg-neutral-400/5 border border-white/15">
                         <div class="px-3 py-[8px] border-b border-white/10 text-white font-bold text-sm flex items-center justify-between mb-1">
-                            {{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}
+                            {{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }} {% if showRawMetrics %}(raw data - {% if metricsSaveInterval == 60 %}last hour{% else %}last {{ metricsSaveInterval }} minutes{% endif %}){% endif %}
+                            {% if not showRawMetrics %}
                             <button class="deleteButton text-indigo-400 hover:text-indigo-300 text-l" data-metric-name={{ metricName|e }} data-service-name={{ serviceName|e }} data-referer="app_metrics_service">
                                 delete
                             </button>
+                            {% endif %}
                         </div>
                         <div id="{{ (metricName ~ '-' ~ 'default')|replace({'.': '_', ' ': '_'}) }}-line"></div>
                     </div>
@@ -79,16 +94,18 @@
         {# RENDER METRICS CHARTS FOR ALL SERVICES #}
         {% for serviceName, serviceData in data %}
             {% if data[serviceName]['metrics'] is empty %}
-                <p class="flex items-center justify-center text-1xl text-white font-bold">
-                    No metrics found for service: {{ serviceName|e }}
-                </p>
+                <div class="flex items-center justify-center mt-4 mb-4">
+                    <div class="p-3 rounded-md bg-neutral-800/50 border border-neutral-700 text-white text-center">
+                        <p class="text-lg font-bold">No metrics found for service: {{ serviceName|e }}</p>
+                    </div>
+                </div>
             {% endif %}
                 <div class="p-2 space-y-2 metrics-component">
                     {% for metricName, metricData in serviceData.metrics %}
                         <div class="flex flex-col md:flex-row gap-2">
                             <div class="flex-1 p-0 shadow-lg rounded relative chart-container backdrop-blur-md bg-neutral-400/5 border border-white/15">
                                 <div class="px-3 py-[8px] border-b border-white/10 text-white font-bold text-sm flex items-center justify-between mb-1">
-                                    {{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}
+                                    {{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }} {% if showRawMetrics %}(raw data - {% if metricsSaveInterval == 60 %}last hour{% else %}last {{ metricsSaveInterval }} minutes{% endif %}){% endif %}
                                 </div>
                                 <div id="{{ (metricName ~ '-' ~ serviceName)|replace({'.': '_', ' ': '_'}) }}-line"></div>
                             </div>
