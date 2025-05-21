@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 /**
- * Class TerminalApiControllerTest
+ * Class SystemAuditControllerTest
  *
  * Test cases for system audit component
  *

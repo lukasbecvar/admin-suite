@@ -136,4 +136,24 @@ class ServiceManagerTest extends TestCase
         // assert result
         $this->assertIsBool($result);
     }
+
+    /**
+     * Test check website status
+     *
+     * @return void
+     */
+    public function testCheckWebsiteStatus(): void
+    {
+        // call tested method with a reliable website
+        $result = $this->serviceManager->checkWebsiteStatus('https://www.google.com');
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('isOnline', $result);
+        $this->assertArrayHasKey('responseTime', $result);
+        $this->assertArrayHasKey('responseCode', $result);
+        $this->assertIsBool($result['isOnline']);
+        $this->assertIsFloat($result['responseTime']);
+        $this->assertIsInt($result['responseCode']);
+    }
 }

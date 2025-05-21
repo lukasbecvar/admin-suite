@@ -434,7 +434,7 @@ class LogManagerTest extends TestCase
     }
 
     /**
-     * Test get ssh logins from journalctl
+     * Test get SSH logins from journalctl
      *
      * @return void
      */

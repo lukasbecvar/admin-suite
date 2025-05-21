@@ -288,4 +288,48 @@ class FileSystemUtilTest extends TestCase
         unlink($destDir . '/' . basename($textFile));
         rmdir($destDir);
     }
+
+    /**
+     * Test get full file content
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testGetFullFileContent(): void
+    {
+        // create temporary text file
+        $textFile = tempnam(sys_get_temp_dir(), 'test_');
+        $content = "Line 1\nLine 2\nLine 3";
+        file_put_contents($textFile, $content);
+
+        // call tested method
+        $result = $this->fileSystemUtil->getFullFileContent($textFile);
+
+        // assert result
+        $this->assertEquals($content, $result);
+
+        // clean up
+        unlink($textFile);
+    }
+
+    /**
+     * Test check if file exists
+     *
+     * @return void
+     */
+    public function testCheckIfFileExist(): void
+    {
+        // create temporary text file
+        $textFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($textFile, 'Test content');
+
+        // test existing file
+        $this->assertTrue($this->fileSystemUtil->checkIfFileExist($textFile));
+
+        // test non-existent file
+        $this->assertFalse($this->fileSystemUtil->checkIfFileExist('/non/existent/file'));
+
+        // clean up
+        unlink($textFile);
+    }
 }
