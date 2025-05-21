@@ -102,20 +102,14 @@ class MetricsDashboardController extends AbstractController
         // get request parameters
         $serviceName = (string) $request->query->get('service_name', 'host-system');
         $timePeriod = (string) $request->query->get('time_period', 'last_24_hours');
-        $showRawMetrics = $timePeriod === 'raw_metrics';
 
         // get metrics save interval
         $metricsSaveInterval = (int) $this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL');
 
         // get metrics data
         try {
-            if ($showRawMetrics) {
-                // get raw metrics from cache
-                $data = $this->metricsManager->getRawMetricsFromCache($serviceName);
-            } else {
-                // get metrics history from database
-                $data = $this->metricsManager->getServiceMetrics($serviceName, $timePeriod);
-            }
+            // get metrics history from database
+            $data = $this->metricsManager->getServiceMetrics($serviceName, $timePeriod);
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get metrics data: ' . $e->getMessage(),
@@ -126,7 +120,6 @@ class MetricsDashboardController extends AbstractController
         // return service metrics view
         return $this->render('component/metrics/service-metrics.twig', [
             'metricsSaveInterval' => $metricsSaveInterval,
-            'showRawMetrics' => $showRawMetrics,
             'serviceName' => $serviceName,
             'data' => $data
         ]);
@@ -144,7 +137,6 @@ class MetricsDashboardController extends AbstractController
     {
         // get time period
         $timePeriod = (string) $request->query->get('time_period', 'last_24_hours');
-        $showRawMetrics = $timePeriod === 'raw_metrics';
 
         // get metrics save interval
         $metricsSaveInterval = (int) $this->appUtil->getEnvValue('METRICS_SAVE_INTERVAL');
@@ -163,7 +155,6 @@ class MetricsDashboardController extends AbstractController
         // return service metrics view
         return $this->render('component/metrics/service-metrics.twig', [
             'metricsSaveInterval' => $metricsSaveInterval,
-            'showRawMetrics' => $showRawMetrics,
             'serviceName' => 'all-services',
             'data' => $data
         ]);
