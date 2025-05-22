@@ -48,6 +48,19 @@ class FileSystemBrowserController extends AbstractController
         // get filesystem path
         $path = (string) $request->query->get('path', '/');
 
+        // check if path exists
+        if (!file_exists($path)) {
+            return $this->render('component/file-system/file-system-error.twig', [
+                'errorTitle' => 'Path Not Found',
+                'errorMessage' => 'The path you are trying to access does not exist.',
+                'details' => 'Path: ' . $path,
+                'returnPath' => '/',
+                'actionPath' => null,
+                'actionText' => null,
+                'actionIcon' => null
+            ]);
+        }
+
         // get list of file in current path
         $filesystemList = $this->fileSystemUtil->getFilesList($path);
 

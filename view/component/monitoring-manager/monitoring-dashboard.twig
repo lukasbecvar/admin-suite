@@ -72,10 +72,10 @@
                     </div>
                     <div class="flex flex-wrap items-center gap-2 mt-1 sm:mt-0">
                         {% if serviceManager.isUfwRunning() %}
-                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'reload', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Reload firewall"><i class="fa fa-redo text-sm"></i></a>
-                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-red-600 hover:bg-red-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Disable firewall"><i class="fa fa-stop text-sm"></i></a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'reload', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Reload firewall"><i class="fa fa-redo text-sm mt-[4px]"></i></a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-red-600 hover:bg-red-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Disable firewall"><i class="fa fa-stop text-sm mt-[4px]"></i></a>
                         {% else %}
-                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-green-700 hover:bg-green-600 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Enable firewall"><i class="fa fa-play text-sm ml-[1px]"></i></a>
+                            <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-green-700 hover:bg-green-600 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Enable firewall"><i class="fa fa-play text-sm ml-[1px] mt-[4px]"></i></a>
                         {% endif %}
                     </div>
                 </div>
@@ -108,10 +108,10 @@
                                 </div>
                                 <div class="flex flex-wrap items-center gap-2 mt-1 sm:mt-0">
                                     {% if serviceStatus %}
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Restart service"><i class="fa fa-redo text-sm"></i></a>
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-red-600 hover:bg-red-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Stop service"><i class="fa fa-stop text-sm"></i></a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Restart service"><i class="fa fa-redo text-sm mt-[4px]"></i></a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-red-600 hover:bg-red-500 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Stop service"><i class="fa fa-stop text-sm mt-[4px]"></i></a>
                                     {% else %}
-                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-green-700 hover:bg-green-600 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Start service"><i class="fa fa-play text-sm ml-[1px]"></i></a>
+                                        <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="rounded-lg bg-green-700 hover:bg-green-600 text-white w-8 h-8 flex items-center justify-center shadow transition-colors" title="Start service"><i class="fa fa-play text-sm mt-[4px] ml-[1px]"></i></a>
                                     {% endif %}
                                 </div>
                             </div>

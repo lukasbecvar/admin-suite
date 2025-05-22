@@ -232,7 +232,7 @@ class ServerUtilTest extends TestCase
      *
      * @return void
      */
-    public function testCheckisServiceInstalled(): void
+    public function testCheckIsServiceInstalled(): void
     {
         // call tested method
         $result = $this->serverUtil->isServiceInstalled('nginx');
