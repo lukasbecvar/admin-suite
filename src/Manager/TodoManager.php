@@ -75,6 +75,13 @@ class TodoManager
             ];
         }
 
+        // sort completed todos by completed time
+        if ($filter == 'closed') {
+            usort($todoList, function ($a, $b) {
+                return $a['completedTime'] <=> $b['completedTime'];
+            });
+        }
+
         // return todo list
         return $todoList;
     }
