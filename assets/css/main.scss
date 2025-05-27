@@ -322,16 +322,6 @@ main {
         touch-action: pan-y;
         user-select: none;
     }
-    .todo-manager .todo-item::before {
-        background-color: transparent;
-        position: absolute;
-        content: '';
-        height: 100%;
-        width: 100%;
-        z-index: 1;
-        left: 0;
-        top: 0;
-    }
 }
 
 /* database browser component */
