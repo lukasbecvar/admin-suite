@@ -591,6 +591,9 @@ class MetricsManager
             $this->entityManagerInterface->flush();
             $this->entityManagerInterface->commit();
 
+            // recalculate record ids
+            $this->databaseManager->recalculateTableIds($this->databaseManager->getEntityTableName(Metric::class));
+
             // log aggregation event
             $this->logManager->log(
                 name: 'metrics-aggregation',

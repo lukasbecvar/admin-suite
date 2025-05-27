@@ -77,7 +77,7 @@ class AggregateOldMetricsCommand extends Command
             // get aggregation preview
             $preview = $this->metricsManager->getAggregationPreview($cutoffDate);
 
-            if (empty($preview['old_metrics'])) {
+            if ($preview['space_saved'] <= 0) {
                 $io->success('No old metrics found to aggregate.');
                 return Command::SUCCESS;
             }
