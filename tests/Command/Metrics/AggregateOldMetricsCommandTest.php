@@ -200,4 +200,83 @@ class AggregateOldMetricsCommandTest extends TestCase
         $this->assertStringContainsString('Error during metrics aggregation: Database connection error', $output);
         $this->assertSame(Command::FAILURE, $exitCode);
     }
+
+    /**
+     * Test execute command with force option
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithForceOption(): void
+    {
+        // create mock old metrics
+        $oldMetric = $this->createMock(Metric::class);
+        $oldMetrics = [$oldMetric];
+
+        // mock aggregation preview
+        $this->metricsManagerMock->method('getAggregationPreview')->willReturn([
+            'old_metrics' => $oldMetrics,
+            'recent_metrics' => [],
+            'grouped_metrics' => ['group1' => []],
+            'space_saved' => 1000
+        ]);
+
+        // mock aggregation result
+        $this->metricsManagerMock->method('aggregateOldMetrics')->willReturn([
+            'deleted' => 1,
+            'created' => 1,
+            'preserved' => 0,
+            'space_saved' => 1000
+        ]);
+
+        // mock format bytes
+        $this->appUtilMock->method('formatBytes')->with(1000)->willReturn('1000 B');
+
+        // expect log call
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            'metrics-aggregation',
+            'Aggregated 1 old metrics into 1 monthly averages',
+            LogManager::LEVEL_INFO
+        );
+
+        // execute the command with --force option (should skip confirmation)
+        $exitCode = $this->commandTester->execute(['--force' => true]);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert output contains expected messages
+        $this->assertStringContainsString('Running in FORCE mode - skipping confirmation prompt', $output);
+        $this->assertStringContainsString('Force mode enabled - proceeding without confirmation', $output);
+        $this->assertStringContainsString('Metrics aggregation completed successfully!', $output);
+        $this->assertStringNotContainsString('Continue?', $output); // should not show confirmation prompt
+        $this->assertSame(Command::SUCCESS, $exitCode);
+    }
+
+    /**
+     * Test execute command with force option and custom days
+     *
+     * @return void
+     */
+    public function testExecuteCommandWithForceOptionAndCustomDays(): void
+    {
+        // mock aggregation preview with no old metrics
+        $this->metricsManagerMock->method('getAggregationPreview')->willReturn([
+            'old_metrics' => [],
+            'recent_metrics' => [],
+            'grouped_metrics' => [],
+            'space_saved' => 0
+        ]);
+
+        // execute the command with both --force and --days options
+        $exitCode = $this->commandTester->execute(['--force' => true, '--days' => 60]);
+
+        // get command output
+        $output = $this->commandTester->getDisplay();
+
+        // assert output contains both force mode and custom days messages
+        $this->assertStringContainsString('Running in FORCE mode - skipping confirmation prompt', $output);
+        $this->assertStringContainsString('Aggregating metrics older than 60 days', $output);
+        $this->assertStringContainsString('No old metrics found to aggregate', $output);
+        $this->assertSame(Command::SUCCESS, $exitCode);
+    }
 }

@@ -43,7 +43,9 @@ class AggregateOldMetricsCommand extends Command
      */
     protected function configure(): void
     {
-        $this->addOption('days', 'd', InputOption::VALUE_OPTIONAL, 'Number of days to keep detailed metrics (default: 31)', 31);
+        $this
+            ->addOption('days', 'd', InputOption::VALUE_OPTIONAL, 'Number of days to keep detailed metrics (default: 31)', 31)
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Skip confirmation prompt and execute immediately');
     }
 
     /**
@@ -64,10 +66,15 @@ class AggregateOldMetricsCommand extends Command
 
         // get command arguments
         $daysToKeep = (int) $input->getOption('days');
+        $force = $input->getOption('force');
 
         // show command info
         $io->title('Metrics Aggregation Tool');
         $io->text('Aggregating metrics older than ' . $daysToKeep . ' days...');
+
+        if ($force) {
+            $io->note('Running in FORCE mode - skipping confirmation prompt');
+        }
 
         try {
             // calculate cutoff date
@@ -85,10 +92,14 @@ class AggregateOldMetricsCommand extends Command
             $io->text('Found ' . count($preview['old_metrics']) . ' old metric records to process');
             $io->text('Grouped into ' . count($preview['grouped_metrics']) . ' monthly aggregations');
 
-            // ask for confirmation
-            if (!$io->confirm('This will delete ' . count($preview['old_metrics']) . ' detailed records and create ' . count($preview['grouped_metrics']) . ' aggregated records. Continue?', false)) {
-                $io->error('Operation cancelled');
-                return Command::FAILURE;
+            // ask for confirmation unless force mode is enabled
+            if (!$force) {
+                if (!$io->confirm('This will delete ' . count($preview['old_metrics']) . ' detailed records and create ' . count($preview['grouped_metrics']) . ' aggregated records. Continue?', false)) {
+                    $io->error('Operation cancelled');
+                    return Command::FAILURE;
+                }
+            } else {
+                $io->text('Force mode enabled - proceeding without confirmation...');
             }
 
             // perform the aggregation
