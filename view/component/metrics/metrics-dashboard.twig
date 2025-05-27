@@ -13,6 +13,11 @@
         <i class="fa fa-eye" aria-hidden="true"></i>
     </a>
 
+    {# AGGREGATE METRICS BUTTON #}
+    <button id="aggregateButton" class="border border-neutral-600 font-bold px-1 py-0 rounded ml-1 text-white hover:bg-neutral-700" title="Aggregate old metrics">
+        <i class="fa fa-compress" aria-hidden="true"></i>
+    </button>
+
     {# METRICS TIME PERIOD SELECTOR #}
     <span class="mr-1"></span>
     <span>
@@ -118,6 +123,10 @@
 {# DELETE CONFIRMATION POPUP #}
 {% include "component/metrics/popup/delete-confirmation-popup.twig" %}
 {{ encore_entry_script_tags('metrics-delete-confirmaton-js') }}
+
+{# AGGREGATE CONFIRMATION POPUP #}
+{% include "component/metrics/popup/aggregate-confirmation-popup.twig" %}
+{{ encore_entry_script_tags('metrics-aggregate-confirmation-js') }}
 
 {# INCLUDE CHARTS SCRIPT #}
 {{ encore_entry_script_tags('metrics-charts-js') }}

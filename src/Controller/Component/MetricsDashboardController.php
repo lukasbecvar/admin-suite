@@ -2,9 +2,11 @@
 
 namespace App\Controller\Component;
 
+use DateTime;
 use Exception;
 use App\Util\AppUtil;
 use App\Util\ServerUtil;
+use App\Manager\LogManager;
 use App\Manager\ErrorManager;
 use App\Manager\MetricsManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,17 +25,20 @@ class MetricsDashboardController extends AbstractController
 {
     private AppUtil $appUtil;
     private ServerUtil $serverUtil;
+    private LogManager $logManager;
     private ErrorManager $errorManager;
     private MetricsManager $metricsManager;
 
     public function __construct(
         AppUtil $appUtil,
         ServerUtil $serverUtil,
+        LogManager $logManager,
         ErrorManager $errorManager,
         MetricsManager $metricsManager
     ) {
         $this->appUtil = $appUtil;
         $this->serverUtil = $serverUtil;
+        $this->logManager = $logManager;
         $this->errorManager = $errorManager;
         $this->metricsManager = $metricsManager;
     }
@@ -158,6 +163,46 @@ class MetricsDashboardController extends AbstractController
             'serviceName' => 'all-services',
             'data' => $data
         ]);
+    }
+
+    /**
+     * Aggregate old metrics and redirect back to dashboard
+     *
+     * @return Response The redirect response
+     */
+    #[Route('/metrics/aggregate', methods:['GET'], name: 'app_metrics_aggregate')]
+    public function aggregateMetrics(): Response
+    {
+        try {
+            // calculate cutoff date (31 days)
+            $cutoffDate = new DateTime('-31 days');
+
+            // get aggregation preview to check if there are metrics to aggregate
+            $preview = $this->metricsManager->getAggregationPreview($cutoffDate);
+
+            if (empty($preview['old_metrics'])) {
+                // no old metrics to aggregate
+                $this->addFlash('info', 'No old metrics found to aggregate.');
+            } else {
+                // perform the aggregation
+                $result = $this->metricsManager->aggregateOldMetrics($cutoffDate);
+
+                // log event to database
+                $this->logManager->log(
+                    name: 'metrics-aggregation-web',
+                    message: sprintf('Web-triggered aggregation: %d old metrics into %d monthly averages', $result['deleted'], $result['created']),
+                    level: LogManager::LEVEL_INFO
+                );
+            }
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error during metrics aggregation: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // redirect back to metrics dashboard
+        return $this->redirectToRoute('app_metrics_dashboard');
     }
 
     /**

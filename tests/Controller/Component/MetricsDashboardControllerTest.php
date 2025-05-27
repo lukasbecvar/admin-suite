@@ -38,6 +38,7 @@ class MetricsDashboardControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorExists('a[title="Go to monitoring"]');
+        $this->assertSelectorExists('button[title="Aggregate old metrics"]');
         $this->assertSelectorTextContains('body', 'Current usage');
         $this->assertSelectorTextContains('body', 'CPU');
         $this->assertSelectorTextContains('body', 'RAM');
@@ -77,5 +78,19 @@ class MetricsDashboardControllerTest extends CustomTestCase
 
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    /**
+     * Test aggregate metrics
+     *
+     * @return void
+     */
+    public function testAggregateMetrics(): void
+    {
+        $this->client->request('GET', '/metrics/aggregate');
+
+        // assert response is redirect back to dashboard
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+        $this->assertResponseRedirects('/metrics/dashboard');
     }
 }

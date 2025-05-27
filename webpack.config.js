@@ -29,6 +29,7 @@ Encore
     .addEntry('notification-subscriberr-js', './assets/js/component/notification/notification-subscriber.js')
     .addEntry('metrics-delete-confirmaton-js', './assets/js/component/metrics/metrics-delete-confirmaton.js')
     .addEntry('database-table-browser-js', './assets/js/component/database-browser/database-table-browser.js')
+    .addEntry('metrics-aggregate-confirmation-js', './assets/js/component/metrics/metrics-aggregate-confirmation.js')
     .addEntry('file-system-create-directory-js', './assets/js/component/file-system/file-system-create-directory.js')
     .addEntry('file-system-syntax-highlight-js', './assets/js/component/file-system/file-system-syntax-highlight.js')
     .addEntry('exception-log-delete-confirmation-js', './assets/js/component/file-system/exception-log-delete-confirmation.js')
