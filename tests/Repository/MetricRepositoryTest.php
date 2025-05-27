@@ -111,4 +111,131 @@ class MetricRepositoryTest extends KernelTestCase
         $this->assertArrayHasKey('value', $result['cpu-usage'][0]);
         $this->assertArrayHasKey('time', $result['cpu-usage'][0]);
     }
+
+    /**
+     * Test get old metrics method
+     *
+     * @return void
+     */
+    public function testGetOldMetrics(): void
+    {
+        // create cutoff date (should return metrics older than this date)
+        $cutoffDate = new DateTime('-1.5 days');
+
+        // call tested method
+        $result = $this->metricRepository->getOldMetrics($cutoffDate);
+
+        // assert result (should return metric2 which is 2 days old)
+        $this->assertIsArray($result);
+        $this->assertGreaterThanOrEqual(1, count($result));
+
+        // find the metric that is 2 days old
+        $oldMetric = null;
+        foreach ($result as $metric) {
+            if ($metric->getName() === 'cpu-usage' && $metric->getValue() === '70') {
+                $oldMetric = $metric;
+                break;
+            }
+        }
+
+        $this->assertNotNull($oldMetric, 'Should find the 2-day old metric');
+        $this->assertInstanceOf(Metric::class, $oldMetric);
+        $this->assertEquals('cpu-usage', $oldMetric->getName());
+        $this->assertEquals('70', $oldMetric->getValue());
+        $this->assertEquals('service-1', $oldMetric->getServiceName());
+    }
+
+    /**
+     * Test get old metrics with no results
+     *
+     * @return void
+     */
+    public function testGetOldMetricsWithNoResults(): void
+    {
+        // create cutoff date that should return no results (all metrics are newer)
+        $cutoffDate = new DateTime('-3 days');
+
+        // call tested method
+        $result = $this->metricRepository->getOldMetrics($cutoffDate);
+
+        // assert result is empty
+        $this->assertIsArray($result);
+        $this->assertEmpty($result);
+    }
+
+    /**
+     * Test get recent metrics method
+     *
+     * @return void
+     */
+    public function testGetRecentMetrics(): void
+    {
+        // create cutoff date (should return metrics newer than or equal to this date)
+        // Use -3 days to ensure we get all test metrics
+        $cutoffDate = new DateTime('-3 days');
+
+        // call tested method
+        $result = $this->metricRepository->getRecentMetrics($cutoffDate);
+
+        // assert result (should return all test metrics since they are all newer than -3 days)
+        $this->assertIsArray($result);
+        $this->assertGreaterThanOrEqual(1, count($result));
+
+        if (!empty($result)) {
+            // check first result structure
+            $this->assertArrayHasKey('name', $result[0]);
+            $this->assertArrayHasKey('value', $result[0]);
+            $this->assertArrayHasKey('service_name', $result[0]);
+            $this->assertArrayHasKey('time', $result[0]);
+
+            // check that we get some expected metrics
+            $names = array_column($result, 'name');
+            $this->assertTrue(
+                in_array('cpu-usage', $names) || in_array('ram-usage', $names),
+                'Should contain at least one of the expected recent metrics'
+            );
+        }
+    }
+
+    /**
+     * Test get recent metrics with no results
+     *
+     * @return void
+     */
+    public function testGetRecentMetricsWithNoResults(): void
+    {
+        // create cutoff date that should return no results (all metrics are older)
+        $cutoffDate = new DateTime('+1 day');
+
+        // call tested method
+        $result = $this->metricRepository->getRecentMetrics($cutoffDate);
+
+        // assert result is empty
+        $this->assertIsArray($result);
+        $this->assertEmpty($result);
+    }
+
+    /**
+     * Test get recent metrics returns array result
+     *
+     * @return void
+     */
+    public function testGetRecentMetricsReturnsArrayResult(): void
+    {
+        // create cutoff date
+        $cutoffDate = new DateTime('-1.5 days');
+
+        // call tested method
+        $result = $this->metricRepository->getRecentMetrics($cutoffDate);
+
+        // assert result structure (should be array of arrays, not entities)
+        $this->assertIsArray($result);
+        if (!empty($result)) {
+            $this->assertIsArray($result[0]);
+            $this->assertArrayHasKey('name', $result[0]);
+            $this->assertArrayHasKey('value', $result[0]);
+            $this->assertArrayHasKey('service_name', $result[0]);
+            $this->assertArrayHasKey('time', $result[0]);
+        }
+    }
 }

@@ -45,6 +45,47 @@ class MetricRepository extends ServiceEntityRepository
     }
 
     /**
+     * Get recent metrics that should be preserved
+     *
+     * @param DateTime $cutoffDate The cutoff date
+     *
+     * @return array<array<string, mixed>> Array of recent metrics data
+     */
+    public function getRecentMetrics(DateTime $cutoffDate): array
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        $recentMetrics = $qb
+            ->select('m.name', 'm.value', 'm.service_name', 'm.time')
+            ->where('m.time >= :cutoffDate')
+            ->setParameter('cutoffDate', $cutoffDate)
+            ->orderBy('m.time', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+
+        return $recentMetrics;
+    }
+
+    /**
+     * Get old metrics that need aggregation
+     *
+     * @param DateTime $cutoffDate The cutoff date
+     *
+     * @return array<Metric> Array of old metrics
+     */
+    public function getOldMetrics(DateTime $cutoffDate): array
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        return $qb
+            ->where('m.time < :cutoffDate')
+            ->setParameter('cutoffDate', $cutoffDate)
+            ->orderBy('m.time', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Get metrics by name and time period
      *
      * @param string $name The name of the metric

@@ -476,4 +476,206 @@ class MetricsManager
         // recalculate metrics database ids
         $this->databaseManager->recalculateTableIds($this->databaseManager->getEntityTableName(Metric::class));
     }
+
+    /**
+     * Group metrics by service name, metric name, and month
+     *
+     * @param array<Metric> $metrics Array of metrics to group
+     *
+     * @return array<string, array<string, mixed>> Grouped metrics
+     */
+    public function groupMetricsByMonth(array $metrics): array
+    {
+        $grouped = [];
+
+        foreach ($metrics as $metric) {
+            $serviceName = $metric->getServiceName();
+            $metricName = $metric->getName();
+            $time = $metric->getTime();
+
+            if ($time === null) {
+                continue;
+            }
+
+            $monthKey = $time->format('Y-m');
+            $groupKey = "{$serviceName}|{$metricName}|{$monthKey}";
+
+            if (!isset($grouped[$groupKey])) {
+                $grouped[$groupKey] = [
+                    'service_name' => $serviceName,
+                    'metric_name' => $metricName,
+                    'month' => $monthKey,
+                    'values' => [],
+                    'count' => 0,
+                    'sum' => 0
+                ];
+            }
+
+            $value = (float) $metric->getValue();
+            $grouped[$groupKey]['values'][] = $value;
+            $grouped[$groupKey]['sum'] += $value;
+            $grouped[$groupKey]['count']++;
+        }
+
+        return $grouped;
+    }
+
+    /**
+     * Perform metrics aggregation (restructure the entire table)
+     *
+     * @param DateTime $cutoffDate The cutoff date for aggregation
+     *
+     * @return array<string, int> Result statistics
+     */
+    public function aggregateOldMetrics(DateTime $cutoffDate): array
+    {
+        // get old and recent metrics
+        $oldMetrics = $this->metricRepository->getOldMetrics($cutoffDate);
+        $recentMetrics = $this->metricRepository->getRecentMetrics($cutoffDate);
+
+        if (empty($oldMetrics)) {
+            return [
+                'deleted' => 0,
+                'created' => 0,
+                'preserved' => count($recentMetrics),
+                'space_saved' => 0
+            ];
+        }
+
+        // group old metrics by month
+        $groupedMetrics = $this->groupMetricsByMonth($oldMetrics);
+
+        // start transaction
+        $this->entityManagerInterface->beginTransaction();
+
+        try {
+            // clear the entire metrics table
+            $qb = $this->entityManagerInterface->createQueryBuilder();
+            $qb->delete(Metric::class, 'm')->getQuery()->execute();
+
+            // re-insert recent metrics (preserve detailed data for recent period)
+            foreach ($recentMetrics as $recentMetric) {
+                $newMetric = new Metric();
+                $newMetric->setName($recentMetric['name'])
+                    ->setValue($recentMetric['value'])
+                    ->setServiceName($recentMetric['service_name'])
+                    ->setTime($recentMetric['time']);
+
+                $this->entityManagerInterface->persist($newMetric);
+            }
+
+            // insert aggregated metrics for old data (one record per month per service per metric)
+            $createdCount = 0;
+            foreach ($groupedMetrics as $group) {
+                $average = round($group['sum'] / $group['count'], 2);
+
+                // create new aggregated metric with first day of the month as timestamp
+                $monthDate = DateTime::createFromFormat('Y-m', $group['month']);
+                if ($monthDate === false) {
+                    continue;
+                }
+                $monthDate->setDate((int) $monthDate->format('Y'), (int) $monthDate->format('m'), 1);
+                $monthDate->setTime(0, 0, 0);
+
+                $aggregatedMetric = new Metric();
+                $aggregatedMetric->setName($group['metric_name'])
+                    ->setValue((string) $average)
+                    ->setServiceName($group['service_name'])
+                    ->setTime($monthDate);
+
+                $this->entityManagerInterface->persist($aggregatedMetric);
+                $createdCount++;
+            }
+
+            // flush all changes
+            $this->entityManagerInterface->flush();
+            $this->entityManagerInterface->commit();
+
+            // log aggregation event
+            $this->logManager->log(
+                name: 'metrics-aggregation',
+                message: 'Aggregated ' . count($oldMetrics) . ' old metrics into ' . $createdCount . ' monthly averages',
+                level: LogManager::LEVEL_INFO
+            );
+
+            return [
+                'deleted' => count($oldMetrics),
+                'created' => $createdCount,
+                'preserved' => count($recentMetrics),
+                'space_saved' => $this->estimateSpaceSavings($oldMetrics, $groupedMetrics)
+            ];
+        } catch (Exception $e) {
+            $this->entityManagerInterface->rollback();
+            $this->errorManager->handleError(
+                message: 'error during metrics aggregation: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Estimate space savings from aggregation
+     *
+     * @param array<Metric> $oldMetrics Old metrics
+     * @param array<string, array<string, mixed>> $groupedMetrics Grouped metrics
+     *
+     * @return int Estimated bytes saved
+     */
+    public function estimateSpaceSavings(array $oldMetrics, array $groupedMetrics): int
+    {
+        // rough estimate: each metric record is about 100 bytes
+        $bytesPerRecord = 100;
+
+        $oldRecordsSize = count($oldMetrics) * $bytesPerRecord;
+        $newRecordsSize = count($groupedMetrics) * $bytesPerRecord;
+
+        return max(0, $oldRecordsSize - $newRecordsSize);
+    }
+
+    /**
+     * Format aggregated metrics for display
+     *
+     * @param array<string, array<string, mixed>> $groupedMetrics Grouped metrics
+     * @param int $limit Maximum number of rows to return
+     *
+     * @return array<int, array<int, mixed>> Formatted table data
+     */
+    public function formatAggregatedMetricsForDisplay(array $groupedMetrics, int $limit = 20): array
+    {
+        $tableData = [];
+
+        foreach ($groupedMetrics as $group) {
+            $average = round($group['sum'] / $group['count'], 2);
+            $tableData[] = [
+                $group['service_name'],
+                $group['metric_name'],
+                $group['month'],
+                $group['count'],
+                $average
+            ];
+        }
+
+        return array_slice($tableData, 0, $limit);
+    }
+
+    /**
+     * Get aggregation preview data
+     *
+     * @param DateTime $cutoffDate The cutoff date
+     *
+     * @return array<string, mixed> Preview data
+     */
+    public function getAggregationPreview(DateTime $cutoffDate): array
+    {
+        $oldMetrics = $this->metricRepository->getOldMetrics($cutoffDate);
+        $recentMetrics = $this->metricRepository->getRecentMetrics($cutoffDate);
+        $groupedMetrics = $this->groupMetricsByMonth($oldMetrics);
+
+        return [
+            'old_metrics' => $oldMetrics,
+            'recent_metrics' => $recentMetrics,
+            'grouped_metrics' => $groupedMetrics,
+            'space_saved' => $this->estimateSpaceSavings($oldMetrics, $groupedMetrics)
+        ];
+    }
 }

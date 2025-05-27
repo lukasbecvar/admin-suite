@@ -274,4 +274,24 @@ class AppUtil
             return $value;
         }, $values);
     }
+
+    /**
+     * Format bytes into human readable format
+     *
+     * @param int $bytes Number of bytes
+     *
+     * @return string Formatted string
+     */
+    public function formatBytes(int $bytes): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB'];
+        $unitIndex = 0;
+
+        while ($bytes >= 1024 && $unitIndex < count($units) - 1) {
+            $bytes /= 1024;
+            $unitIndex++;
+        }
+
+        return round($bytes, 2) . ' ' . $units[$unitIndex];
+    }
 }

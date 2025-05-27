@@ -348,4 +348,27 @@ class AppUtilTest extends TestCase
         // assert results
         $this->assertSame($expectedResults, $result);
     }
+
+    /**
+     * Test format bytes
+     *
+     * @return void
+     */
+    public function testFormatBytes(): void
+    {
+        // test bytes
+        $this->assertEquals('512 B', $this->appUtil->formatBytes(512));
+
+        // test kilobytes
+        $this->assertEquals('1 KB', $this->appUtil->formatBytes(1024));
+        $this->assertEquals('1.5 KB', $this->appUtil->formatBytes(1536));
+
+        // test megabytes
+        $this->assertEquals('1 MB', $this->appUtil->formatBytes(1048576));
+        $this->assertEquals('2.5 MB', $this->appUtil->formatBytes(2621440));
+
+        // test gigabytes
+        $this->assertEquals('1 GB', $this->appUtil->formatBytes(1073741824));
+        $this->assertEquals('1.5 GB', $this->appUtil->formatBytes(1610612736));
+    }
 }

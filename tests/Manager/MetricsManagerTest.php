@@ -2,12 +2,15 @@
 
 namespace App\Tests\Manager;
 
+use DateTime;
 use Exception;
 use App\Util\AppUtil;
 use App\Entity\Metric;
 use App\Util\CacheUtil;
+use Doctrine\ORM\Query;
 use App\Manager\LogManager;
 use App\Manager\ErrorManager;
+use Doctrine\ORM\QueryBuilder;
 use App\Manager\MetricsManager;
 use App\Manager\ServiceManager;
 use PHPUnit\Framework\TestCase;
@@ -296,8 +299,7 @@ class MetricsManagerTest extends TestCase
         $this->appUtilMock->method('getEnvValue')->with('METRICS_SAVE_INTERVAL')->willReturn('10');
 
         // simulate value is catched
-        $this->cacheUtilMock->method('isCatched')
-            ->with($metricName . '_' . $serviceName . '_last_save_time')->willReturn(true);
+        $this->cacheUtilMock->method('isCatched')->with($metricName . '_' . $serviceName . '_last_save_time')->willReturn(true);
 
         // expect entity manager not to be flushed (skipped)
         $this->entityManagerMock->expects($this->never())->method('flush');
@@ -319,12 +321,10 @@ class MetricsManagerTest extends TestCase
         $serviceName = 'db-service';
 
         // simulate METRICS_SAVE_INTERVAL env value
-        $this->appUtilMock->method('getEnvValue')->with('METRICS_SAVE_INTERVAL')
-            ->willReturn('10');
+        $this->appUtilMock->method('getEnvValue')->with('METRICS_SAVE_INTERVAL')->willReturn('10');
 
         // simulate value is not catched
-        $this->cacheUtilMock->method('isCatched')->with($metricName . '_' . $serviceName . '_last_save_time')
-            ->willReturn(false);
+        $this->cacheUtilMock->method('isCatched')->with($metricName . '_' . $serviceName . '_last_save_time')->willReturn(false);
 
         // expect save value to cache call
         $this->cacheUtilMock->expects($this->once())->method('setValue');
@@ -366,5 +366,361 @@ class MetricsManagerTest extends TestCase
 
         // call tested method
         $this->metricsManager->deleteMetric($metricName, $serviceName);
+    }
+
+    /**
+     * Test group metrics by month
+     *
+     * @return void
+     */
+    public function testGroupMetricsByMonth(): void
+    {
+        // create mock metrics
+        $metric1 = $this->createMock(Metric::class);
+        $metric1->method('getServiceName')->willReturn('service1');
+        $metric1->method('getName')->willReturn('cpu_usage');
+        $metric1->method('getValue')->willReturn('50.5');
+        $metric1->method('getTime')->willReturn(new DateTime('2023-01-15'));
+        $metric2 = $this->createMock(Metric::class);
+        $metric2->method('getServiceName')->willReturn('service1');
+        $metric2->method('getName')->willReturn('cpu_usage');
+        $metric2->method('getValue')->willReturn('60.2');
+        $metric2->method('getTime')->willReturn(new DateTime('2023-01-20'));
+        $metric3 = $this->createMock(Metric::class);
+        $metric3->method('getServiceName')->willReturn('service2');
+        $metric3->method('getName')->willReturn('ram_usage');
+        $metric3->method('getValue')->willReturn('75.0');
+        $metric3->method('getTime')->willReturn(new DateTime('2023-02-10'));
+
+        $metrics = [$metric1, $metric2, $metric3];
+
+        // call tested method
+        $result = $this->metricsManager->groupMetricsByMonth($metrics);
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertCount(2, $result);
+
+        // check first group (service1|cpu_usage|2023-01)
+        $firstGroupKey = 'service1|cpu_usage|2023-01';
+        $this->assertArrayHasKey($firstGroupKey, $result);
+        $this->assertEquals('service1', $result[$firstGroupKey]['service_name']);
+        $this->assertEquals('cpu_usage', $result[$firstGroupKey]['metric_name']);
+        $this->assertEquals('2023-01', $result[$firstGroupKey]['month']);
+        $this->assertEquals(2, $result[$firstGroupKey]['count']);
+        $this->assertEquals(110.7, $result[$firstGroupKey]['sum']);
+        $this->assertEquals([50.5, 60.2], $result[$firstGroupKey]['values']);
+
+        // check second group (service2|ram_usage|2023-02)
+        $secondGroupKey = 'service2|ram_usage|2023-02';
+        $this->assertArrayHasKey($secondGroupKey, $result);
+        $this->assertEquals('service2', $result[$secondGroupKey]['service_name']);
+        $this->assertEquals('ram_usage', $result[$secondGroupKey]['metric_name']);
+        $this->assertEquals('2023-02', $result[$secondGroupKey]['month']);
+        $this->assertEquals(1, $result[$secondGroupKey]['count']);
+        $this->assertEquals(75.0, $result[$secondGroupKey]['sum']);
+        $this->assertEquals([75.0], $result[$secondGroupKey]['values']);
+    }
+
+    /**
+     * Test group metrics by month with null time
+     *
+     * @return void
+     */
+    public function testGroupMetricsByMonthWithNullTime(): void
+    {
+        // create mock metric with null time
+        $metric = $this->createMock(Metric::class);
+        $metric->method('getServiceName')->willReturn('service1');
+        $metric->method('getName')->willReturn('cpu_usage');
+        $metric->method('getValue')->willReturn('50.5');
+        $metric->method('getTime')->willReturn(null);
+
+        $metrics = [$metric];
+
+        // call tested method
+        $result = $this->metricsManager->groupMetricsByMonth($metrics);
+
+        // assert result is empty (metric with null time should be skipped)
+        $this->assertIsArray($result);
+        $this->assertEmpty($result);
+    }
+
+    /**
+     * Test estimate space savings
+     *
+     * @return void
+     */
+    public function testEstimateSpaceSavings(): void
+    {
+        // create mock old metrics (10 metrics)
+        $oldMetrics = [];
+        for ($i = 0; $i < 10; $i++) {
+            $oldMetrics[] = $this->createMock(Metric::class);
+        }
+
+        // create mock grouped metrics (2 groups)
+        $groupedMetrics = [
+            'group1' => ['service_name' => 'service1', 'metric_name' => 'cpu_usage'],
+            'group2' => ['service_name' => 'service2', 'metric_name' => 'ram_usage']
+        ];
+
+        // call tested method
+        $result = $this->metricsManager->estimateSpaceSavings($oldMetrics, $groupedMetrics);
+
+        // assert result (10 old records * 100 bytes - 2 new records * 100 bytes = 800 bytes saved)
+        $this->assertEquals(800, $result);
+    }
+
+    /**
+     * Test estimate space savings when no savings
+     *
+     * @return void
+     */
+    public function testEstimateSpaceSavingsWhenNoSavings(): void
+    {
+        // create mock old metrics (1 metric)
+        $oldMetrics = [$this->createMock(Metric::class)];
+
+        // create mock grouped metrics (2 groups - more than old metrics)
+        $groupedMetrics = [
+            'group1' => ['service_name' => 'service1'],
+            'group2' => ['service_name' => 'service2']
+        ];
+
+        // call tested method
+        $result = $this->metricsManager->estimateSpaceSavings($oldMetrics, $groupedMetrics);
+
+        // assert result is 0 (no negative savings)
+        $this->assertEquals(0, $result);
+    }
+
+    /**
+     * Test format aggregated metrics for display
+     *
+     * @return void
+     */
+    public function testFormatAggregatedMetricsForDisplay(): void
+    {
+        // create mock grouped metrics
+        $groupedMetrics = [
+            'service1|cpu_usage|2023-01' => [
+                'service_name' => 'service1',
+                'metric_name' => 'cpu_usage',
+                'month' => '2023-01',
+                'count' => 10,
+                'sum' => 550.5
+            ],
+            'service2|ram_usage|2023-01' => [
+                'service_name' => 'service2',
+                'metric_name' => 'ram_usage',
+                'month' => '2023-01',
+                'count' => 5,
+                'sum' => 375.0
+            ],
+            'service3|disk_usage|2023-02' => [
+                'service_name' => 'service3',
+                'metric_name' => 'disk_usage',
+                'month' => '2023-02',
+                'count' => 8,
+                'sum' => 640.0
+            ]
+        ];
+
+        // call tested method with limit
+        $result = $this->metricsManager->formatAggregatedMetricsForDisplay($groupedMetrics, 2);
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertCount(2, $result); // limited to 2 records
+
+        // check first record
+        $this->assertEquals('service1', $result[0][0]);
+        $this->assertEquals('cpu_usage', $result[0][1]);
+        $this->assertEquals('2023-01', $result[0][2]);
+        $this->assertEquals(10, $result[0][3]);
+        $this->assertEquals(55.05, $result[0][4]);
+
+        // check second record
+        $this->assertEquals('service2', $result[1][0]);
+        $this->assertEquals('ram_usage', $result[1][1]);
+        $this->assertEquals('2023-01', $result[1][2]);
+        $this->assertEquals(5, $result[1][3]);
+        $this->assertEquals(75.0, $result[1][4]);
+    }
+
+    /**
+     * Test format aggregated metrics for display with default limit
+     *
+     * @return void
+     */
+    public function testFormatAggregatedMetricsForDisplayWithDefaultLimit(): void
+    {
+        // create mock grouped metrics (just one for simplicity)
+        $groupedMetrics = [
+            'service1|cpu_usage|2023-01' => [
+                'service_name' => 'service1',
+                'metric_name' => 'cpu_usage',
+                'month' => '2023-01',
+                'count' => 4,
+                'sum' => 200.0
+            ]
+        ];
+
+        // call tested method without limit (should use default 20)
+        $result = $this->metricsManager->formatAggregatedMetricsForDisplay($groupedMetrics);
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertEquals(50.0, $result[0][4]);
+    }
+
+    /**
+     * Test get aggregation preview
+     *
+     * @return void
+     */
+    public function testGetAggregationPreview(): void
+    {
+        $cutoffDate = new DateTime('-30 days');
+
+        // mock old metrics
+        $oldMetric = $this->createMock(Metric::class);
+        $oldMetric->method('getServiceName')->willReturn('service1');
+        $oldMetric->method('getName')->willReturn('cpu_usage');
+        $oldMetric->method('getValue')->willReturn('50.0');
+        $oldMetric->method('getTime')->willReturn(new DateTime('2023-01-15'));
+        $oldMetrics = [$oldMetric];
+
+        // mock recent metrics
+        $recentMetrics = [
+            ['name' => 'cpu_usage', 'value' => '60.0', 'service_name' => 'service1', 'time' => new DateTime()]
+        ];
+
+        // mock repository calls
+        $this->metricRepositoryMock->expects($this->once())
+            ->method('getOldMetrics')
+            ->with($cutoffDate)
+            ->willReturn($oldMetrics);
+        $this->metricRepositoryMock->expects($this->once())
+            ->method('getRecentMetrics')
+            ->with($cutoffDate)
+            ->willReturn($recentMetrics);
+
+        // call tested method
+        $result = $this->metricsManager->getAggregationPreview($cutoffDate);
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('old_metrics', $result);
+        $this->assertArrayHasKey('recent_metrics', $result);
+        $this->assertArrayHasKey('grouped_metrics', $result);
+        $this->assertArrayHasKey('space_saved', $result);
+        $this->assertEquals($oldMetrics, $result['old_metrics']);
+        $this->assertEquals($recentMetrics, $result['recent_metrics']);
+        $this->assertIsArray($result['grouped_metrics']);
+        $this->assertIsInt($result['space_saved']);
+    }
+
+    /**
+     * Test aggregate old metrics when no old metrics exist
+     *
+     * @return void
+     */
+    public function testAggregateOldMetricsWhenNoOldMetricsExist(): void
+    {
+        $cutoffDate = new DateTime('-30 days');
+
+        // mock repository to return no old metrics
+        $this->metricRepositoryMock->expects($this->once())
+            ->method('getOldMetrics')
+            ->with($cutoffDate)
+            ->willReturn([]);
+
+        // mock repository to return some recent metrics
+        $recentMetrics = [
+            ['name' => 'cpu_usage', 'value' => '60.0', 'service_name' => 'service1', 'time' => new DateTime()]
+        ];
+        $this->metricRepositoryMock->expects($this->once())
+            ->method('getRecentMetrics')
+            ->with($cutoffDate)
+            ->willReturn($recentMetrics);
+
+        // call tested method
+        $result = $this->metricsManager->aggregateOldMetrics($cutoffDate);
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertEquals(0, $result['deleted']);
+        $this->assertEquals(0, $result['created']);
+        $this->assertEquals(1, $result['preserved']);
+        $this->assertEquals(0, $result['space_saved']);
+    }
+
+    /**
+     * Test aggregate old metrics success scenario (mocked)
+     *
+     * @return void
+     */
+    public function testAggregateOldMetricsSuccess(): void
+    {
+        $cutoffDate = new DateTime('-30 days');
+
+        // create mock old metrics
+        $oldMetric = $this->createMock(Metric::class);
+        $oldMetric->method('getServiceName')->willReturn('service1');
+        $oldMetric->method('getName')->willReturn('cpu_usage');
+        $oldMetric->method('getValue')->willReturn('50.0');
+        $oldMetric->method('getTime')->willReturn(new DateTime('2023-01-15'));
+        $oldMetrics = [$oldMetric];
+
+        // mock recent metrics
+        $recentMetrics = [
+            ['name' => 'cpu_usage', 'value' => '60.0', 'service_name' => 'service1', 'time' => new DateTime()]
+        ];
+
+        // mock repository calls
+        $this->metricRepositoryMock->expects($this->once())
+            ->method('getOldMetrics')
+            ->with($cutoffDate)
+            ->willReturn($oldMetrics);
+        $this->metricRepositoryMock->expects($this->once())
+            ->method('getRecentMetrics')
+            ->with($cutoffDate)
+            ->willReturn($recentMetrics);
+
+        // mock entity manager transaction methods
+        $this->entityManagerMock->expects($this->once())->method('beginTransaction');
+        $this->entityManagerMock->expects($this->once())->method('commit');
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // mock query builder for delete operation
+        $queryBuilderMock = $this->createMock(QueryBuilder::class);
+        $queryMock = $this->createMock(Query::class);
+        $queryBuilderMock->method('delete')->willReturnSelf();
+        $queryBuilderMock->method('getQuery')->willReturn($queryMock);
+        $queryMock->method('execute')->willReturn(1);
+        $this->entityManagerMock->method('createQueryBuilder')->willReturn($queryBuilderMock);
+
+        // expect persist calls for recent metrics and aggregated metrics
+        $this->entityManagerMock->expects($this->exactly(2))->method('persist');
+
+        // expect log call
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            'metrics-aggregation',
+            $this->stringContains('Aggregated 1 old metrics into'),
+            LogManager::LEVEL_INFO
+        );
+
+        // call tested method
+        $result = $this->metricsManager->aggregateOldMetrics($cutoffDate);
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertEquals(1, $result['deleted']);
+        $this->assertEquals(1, $result['created']);
+        $this->assertEquals(1, $result['preserved']);
+        $this->assertIsInt($result['space_saved']);
     }
 }
