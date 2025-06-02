@@ -99,7 +99,7 @@
     {% else %}
         {% for metricName, metricData in data.metrics %}
             <div class="flex flex-col md:flex-row gap-2">
-                <div class="flex-1 p-0 shadow-lg rounded relative chart-container backdrop-blur-md bg-neutral-400/5 border border-white/15">
+                <div class="flex-1 p-0 shadow-lg rounded relative chart-container backdrop-blur-md bg-neutral-400/5 border border-white/10">
                     <div class="px-3 py-[8px] border-b border-white/10 text-white font-bold text-sm flex items-center justify-between mb-1">
                         {{ metricName | replace({'_': ' '}) | capitalize }} {% if showRawMetrics %}(raw data - {% if metricsSaveInterval == 60 %}last hour{% else %}last {{ metricsSaveInterval }} minutes{% endif %}){% else %}(history){% endif %}
                         {% if not showRawMetrics %}

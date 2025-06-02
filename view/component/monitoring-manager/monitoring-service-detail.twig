@@ -15,7 +15,7 @@
     {# SERVICE DETAILS #}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2 pt-2">
         {# SERVICE INFO CARD #}
-        <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-lg overflow-hidden w-full card-component rounded">
+        <div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 shadow-lg overflow-hidden w-full card-component rounded">
             <div class="px-2 py-1 border-b border-white/10 text-white/80 font-bold">Service Information</div>
             <div class="p-2">
                 <div class="mb-2">
@@ -61,7 +61,7 @@
         </div>
 
         {# SERVICE CONFIG CARD #}
-        <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-lg overflow-hidden w-full card-component rounded">
+        <div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 shadow-lg overflow-hidden w-full card-component rounded">
             <div class="px-2 py-1 border-b border-white/10 text-white/80 font-bold">Configuration (raw)</div>
             <div>
                 <div class="bg-neutral-800/50 border border-white/5">
@@ -74,7 +74,7 @@
     {# CONFIG FILES CARD #}
     {% if serviceConfig.config_files is defined and serviceConfig.config_files|length > 0 %}
         <div class="grid grid-cols-1 gap-2 p-2 pt-2 mt-[-6px]">
-            <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-lg overflow-hidden w-full card-component rounded">
+            <div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 shadow-lg overflow-hidden w-full card-component rounded">
                 <div class="px-2 py-1 border-b border-white/10 text-white/80 font-bold">
                     Configuration Files
                 </div>
@@ -96,7 +96,7 @@
 
     {# SLA HISTORY CARD #}
     <div class="grid grid-cols-1 gap-2 p-2 pt-2 mt-[-6px]">
-        <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-lg overflow-hidden w-full card-component rounded">
+        <div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 shadow-lg overflow-hidden w-full card-component rounded">
             <div class="px-2 py-1 border-b border-white/10 text-white/80 font-bold">
                 SLA History
             </div>
@@ -132,7 +132,7 @@
     {# ADDITIONAL ACTIONS FOR SYSTEMD SERVICES #}
     {% if serviceConfig.type == 'systemd' %}
         <div class="grid grid-cols-1 gap-2 p-2 pt-2 mt-[-6px]">
-            <div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 shadow-lg overflow-hidden w-full card-component rounded">
+            <div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 shadow-lg overflow-hidden w-full card-component rounded">
                 <div class="px-2 py-1 border-b border-white/10 text-white/80 font-bold">Service Actions</div>
                 <div class="p-2 flex gap-2">
                     <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded px-4 py-2 text-sm transition-all duration-150 shadow hover:shadow-md">

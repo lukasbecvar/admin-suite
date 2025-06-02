@@ -1,11 +1,13 @@
 {% extends 'common/base.twig' %}
 
 {% block body %}
-<div class="flex flex-col justify-center items-center h-screen text-gray-200">
-    <div class="text-center">
+<div class="flex flex-col justify-center items-center h-screen bg-gradient-to-b from-zinc-900/100 to-zinc-950/100 text-gray-200">
+    <div class="text-center max-w-lg">
         <h2 class="text-3xl font-bold mb-2">Unknown error</h2>
         <p class="text-lg mb-6">Please contact the service administrator</p>
-        <a href={{ path('app_index') }} class="inline-block px-6 py-3 bg-blue-700 text-white text-lg font-semibold rounded-full shadow-lg hover:bg-blue-600 transition duration-300">Go to Homepage</a>
+        <a href={{ path('app_index') }} class="inline-block px-6 py-3 bg-blue-700 text-white text-lg font-semibold rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+            Go to Homepage
+        </a>
     </div>
 </div>
 {% endblock %}

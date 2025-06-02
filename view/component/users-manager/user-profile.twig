@@ -4,7 +4,7 @@
 {% block component %}
 {# USER PROFILE IMAGE VIEW MODAL #}
 <div id="user-profile-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
-    <div class="relative bg-zinc-900 rounded max-w-md w-full border border-white/15 m-2">
+    <div class="relative bg-zinc-900 rounded max-w-md w-full border border-white/10 m-2">
         <div class="px-4 py-[-50px] border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
             <span class="mb-2 mt-2">Profile picture</span>
             <button id="close-user-profile-modal" class="absolute top-0 right-2 text-white text-4xl leading-none hover:text-red-400">&times;</button>
@@ -112,14 +112,14 @@
 
 {# IP INFO TABLE #}
 {% if userIpInfo is defined and userIpInfo.status is defined %}
-<div class="phone-mt-disable disable-phone-border phone-max-h mx-auto md:w-5/12 backdrop-blur-md bg-white/10 border border-white/15 rounded shadow-xl mb-5 ipinfo-mb-disable">
+<div class="phone-mt-disable disable-phone-border phone-max-h mx-auto md:w-5/12 backdrop-blur-md bg-white/10 border border-white/10 rounded shadow-xl mb-5 ipinfo-mb-disable">
     <div class="text-white text-center border-b border-neutral-800">
         <div class="px-3 py-3 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
             <i class="fas fa-map-marker-alt text-white/70"></i>
             IP Info
         </div>
         <div class="overflow-x-auto">
-            <table class="table-auto w-full text-sm text-left text-white border border-neutral-700 bg-neutral-900/60">
+            <table class="table-auto w-full text-sm text-left text-white bg-neutral-900/60">
                 <thead class="bg-neutral-800 text-gray-300">
                     <tr>
                         <th class="px-4 py-2 border-b border-neutral-700">Key</th>
@@ -129,10 +129,10 @@
                 <tbody>
                     {% for key, value in userIpInfo %}
                         <tr class="hover:bg-neutral-700/60">
-                            <td class="px-4 py-2 border-b border-neutral-700 font-semibold">
+                            <td class="px-4 py-2 border-t border-neutral-700 font-semibold">
                                 {{ key|title|replace({'_': ' '}) }}
                             </td>
-                            <td class="px-4 py-2 border-b border-neutral-700">
+                            <td class="px-4 py-2 border-t border-neutral-700">
                                 {% if value is iterable %}
                                     [array]
                                 {% else %}

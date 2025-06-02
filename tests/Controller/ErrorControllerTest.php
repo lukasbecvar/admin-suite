@@ -32,8 +32,8 @@ class ErrorControllerTest extends WebTestCase
         $this->client->request('GET', '/error');
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Page not found');
-        $this->assertSelectorTextContains('p', "The page you are looking for doesn't exist or has been moved");
+        $this->assertSelectorTextContains('h2', '404 – Page Not Found');
+        $this->assertSelectorTextContains('p', "The page you’re looking for doesn’t exist, has been moved, or never existed at all.");
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
@@ -95,8 +95,8 @@ class ErrorControllerTest extends WebTestCase
         $this->client->request('GET', '/error?code=400');
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Bad request error');
-        $this->assertSelectorTextContains('p', 'Please try again later or contact the administrator');
+        $this->assertSelectorTextContains('h2', '400 – Bad Request');
+        $this->assertSelectorTextContains('p', 'Something went wrong with your request. Please try again or contact the administrator if the issue persists.');
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
@@ -111,8 +111,8 @@ class ErrorControllerTest extends WebTestCase
         $this->client->request('GET', '/error?code=401');
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Unauthorized');
-        $this->assertSelectorTextContains('p', 'You do not have permission to access this page');
+        $this->assertSelectorTextContains('h2', '401 – Unauthorized');
+        $this->assertSelectorTextContains('p', "You don’t have permission to access this page. If you believe this is an error, please contact the administrator.");
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
@@ -127,8 +127,8 @@ class ErrorControllerTest extends WebTestCase
         $this->client->request('GET', '/error?code=403');
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Forbidden');
-        $this->assertSelectorTextContains('p', 'You do not have permission to access this page');
+        $this->assertSelectorTextContains('h2', '403 – Forbidden');
+        $this->assertSelectorTextContains('p', "You don’t have permission to view this page.");
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
@@ -143,8 +143,8 @@ class ErrorControllerTest extends WebTestCase
         $this->client->request('GET', '/error?code=404');
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Page not found');
-        $this->assertSelectorTextContains('p', "The page you are looking for doesn't exist or has been moved");
+        $this->assertSelectorTextContains('h2', '404 – Page Not Found');
+        $this->assertSelectorTextContains('p', "The page you’re looking for doesn’t exist, has been moved, or never existed at all.");
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
@@ -159,8 +159,8 @@ class ErrorControllerTest extends WebTestCase
         $this->client->request('GET', '/error?code=426');
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Upgrade Required');
-        $this->assertSelectorTextContains('p', 'This website is not available over non-HTTPS connections, or your browser does not support JavaScript');
+        $this->assertSelectorTextContains('h2', '426 – Upgrade Required');
+        $this->assertSelectorTextContains('p', 'This website requires a secure HTTPS connection and modern browser JavaScript features.');
         $this->assertResponseStatusCodeSame(Response::HTTP_UPGRADE_REQUIRED);
     }
 
@@ -174,8 +174,8 @@ class ErrorControllerTest extends WebTestCase
         $this->client->request('GET', '/error?code=429');
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Too Many Requests');
-        $this->assertSelectorTextContains('p', 'Please try to wait and try again later');
+        $this->assertSelectorTextContains('h2', '429 – Too Many Requests');
+        $this->assertSelectorTextContains('p', "You've made too many requests in a short period of time. Please slow down and try again later.");
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_TOO_MANY_REQUESTS);
     }
@@ -190,8 +190,8 @@ class ErrorControllerTest extends WebTestCase
         $this->client->request('GET', '/error?code=500');
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Internal Server Error');
-        $this->assertSelectorTextContains('p', 'Unexpected server-side error');
+        $this->assertSelectorTextContains('h2', '500 – Internal Server Error');
+        $this->assertSelectorTextContains('p', 'Something went wrong on our side. Please try again later or contact support if the issue persists.');
         $this->assertSelectorExists('a[href="/"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_INTERNAL_SERVER_ERROR);
     }

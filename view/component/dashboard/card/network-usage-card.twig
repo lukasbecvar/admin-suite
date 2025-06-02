@@ -1,4 +1,4 @@
-<div class="backdrop-blur-md bg-neutral-400/5 border border-white/15 rounded shadow-xl text-white w-full overflow-hidden">
+<div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 rounded shadow-xl text-white w-full overflow-hidden">
     <div class="px-3 py-2 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center justify-between">
         <div class="flex items-center gap-2">
             <i class="fas fa-network-wired text-white/70"></i>
@@ -10,7 +10,10 @@
         {# LOADING STATE #}
         <div id="loading-network-stats" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-5xl">
             <div class="flex items-center">
-                <i class="fas fa-spinner fa-spin fa-2x text-cyan-200"></i>
+                <div class="relative w-16 h-16">
+                    <div class="absolute inset-0 rounded-full border-4 border-cyan-400 animate-ping opacity-50"></div>
+                    <div class="absolute inset-0 rounded-full border-4 border-cyan-300"></div>
+                </div>
             </div>
         </div>
         {# NETWORK DATA #}
