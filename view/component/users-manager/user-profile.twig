@@ -4,7 +4,7 @@
 {% block component %}
 {# USER PROFILE IMAGE VIEW MODAL #}
 <div id="user-profile-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
-    <div class="relative bg-zinc-900 rounded max-w-md w-full border border-white/10 m-2">
+    <div class="relative bg-zinc-900 rounded max-w-md w-full border border-white/10 m-2 animate-popin">
         <div class="px-4 py-[-50px] border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
             <span class="mb-2 mt-2">Profile picture</span>
             <button id="close-user-profile-modal" class="absolute top-0 right-2 text-white text-4xl leading-none hover:text-red-400">&times;</button>
@@ -28,9 +28,9 @@
 <div class="shadow-lg mt-5 mb-6 phone-mb-disable phone-mt-disable disable-phone-sides-border users-manager phone-max-h rounded mx-auto md:w-5/12 backdrop-blur-md bg-white/10 border border-white/5">
     <div class="text-white text-center py-3 border-b border-neutral-800">
         {% if userRepository.getProfilePic() == 'default_pic' %}
-            <img id="user-profile-photo" class="w-24 h-24 rounded-full mx-auto cursor-pointer" src={{ asset('/assets/images/default-profile.jpg') }} alt="User Profile Picture">
+            <img id="user-profile-photo" class="w-24 h-24 rounded-full mx-auto cursor-pointer hover:ring-2 hover:ring-emerald" src={{ asset('/assets/images/default-profile.jpg') }} alt="User Profile Picture">
         {% else %}
-            <img id="user-profile-photo" class="w-24 h-24 rounded-full mx-auto cursor-pointer" src="data:image/jpeg;base64,{{ userRepository.getProfilePic()|e }}" alt="User Profile Picture">
+            <img id="user-profile-photo" class="w-24 h-24 rounded-full mx-auto cursor-pointer hover:ring-2 hover:ring-emerald" src="data:image/jpeg;base64,{{ userRepository.getProfilePic()|e }}" alt="User Profile Picture">
         {% endif %}
         <h1 class="text-4xl font-semibold mt-2">
             {{ userRepository.getUsername()|e }}
