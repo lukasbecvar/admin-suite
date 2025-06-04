@@ -6,10 +6,17 @@
             <span class="phone-none sm:inline text-xl">Menu</span>
         </button>
 
-        {# LOGOUT BUTTON #}
-        <a href={{ path('app_auth_logout') }} class="inline-flex items-center justify-center rounded px-1 py-[2px] mt-[1px] text-sm font-medium text-zinc-300 transition-all hover:text-red-400 hover:bg-red-400/10 active:bg-red-400/20" title="Logout user">
-            <i class="fas fa-sign-out-alt text-lg logout-icon"></i>
-            <span class="phone-none sm:inline ml-1 text-xl logout-text">Logout</span>
-        </a>
+        {# RIGHT SIDEBAR BUTTONS #}
+        <div class="flex items-center gap-1">
+            {# ABOUT BUTTON #}
+            <a href={{ path('app_about') }} class="inline-flex items-center justify-center rounded px-1 py-[2px] mt-[1px] text-white hover:text-blue-400 hover:bg-blue-400/10 active:bg-blue-400/20 transition-all" title="About">
+                <i class="fas fa-circle-question text-lg"></i>
+            </a>
+            {# LOGOUT BUTTON #}
+            <a href={{ path('app_auth_logout') }} class="inline-flex items-center justify-center rounded px-1 py-[2px] mt-[1px] text-sm font-medium text-zinc-300 transition-all hover:text-red-400 hover:bg-red-400/10 active:bg-red-400/20" title="Logout user">
+                <i class="fas fa-sign-out-alt text-lg logout-icon"></i>
+                <span class="phone-none sm:inline ml-1 text-xl logout-text">Logout</span>
+            </a>
+        </div>
     </div>
 </nav>

@@ -39,6 +39,9 @@ class NonAuthRedirectTest extends WebTestCase
         'anti_log' => [
             ['method' => 'GET', 'url' => '/13378/antilog']
         ],
+        'app_about' => [
+            ['method' => 'GET', 'url' => '/about']
+        ],
         'admin_dashboard' => [
             ['method' => 'GET', 'url' => '/dashboard']
         ],
