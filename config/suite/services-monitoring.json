@@ -69,7 +69,7 @@
     },
     "pied-piper.xyz": {
         "service_name": "pied-piper.xyz",
-        "display_name": "https://pied-piper.xyz",
+        "display_name": "pied-piper.xyz",
         "url": "https://pied-piper.xyz",
         "accept_codes": [200],
         "max_response_time": 3000,
