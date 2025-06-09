@@ -67,6 +67,20 @@
             "metrics_collector_url": "https://becvar.xyz/metrics/export?time_period=H"
         }
     },
+    "pied-piper.xyz": {
+        "service_name": "pied-piper.xyz",
+        "display_name": "https://pied-piper.xyz",
+        "url": "https://pied-piper.xyz",
+        "accept_codes": [200],
+        "max_response_time": 3000,
+        "type": "http",
+        "monitoring": true,
+        "display": true,
+        "metrics_monitoring": {
+            "collect_metrics": false,
+            "metrics_collector_url": ""
+        }
+    },
     "paste.becvar.xyz": {
         "service_name": "paste.becvar.xyz",
         "display_name": "code-paste",
