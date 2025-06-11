@@ -1,168 +1,236 @@
 {% extends 'common/layout.twig' %}
 
 {# LOG MANAGER TABLE #}
-{% block component %} 
-{# SUB-NAVIGATION #}
-<div class="users-manager">
-    <div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
-        {# BACK BUTTON #}
-        <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="Back to dashboard">
-            <i class="fa fa-arrow-left" aria-hidden="true"></i>
-        </a>
+{% block component %}
+<div class="flex flex-col h-full">
+    {# SUB-NAVIGATION #}
+    <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+                    <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
+                </a>
+                <div class="hidden sm:block">
+                    <h1 class="text-lg font-bold text-white">Log Manager</h1>
+                    <p class="text-gray-400 text-xs">{{ logsCount|e }} logs found</p>
+                </div>
+            </div>
 
-        {# LINK TO UNFILTERED LOGS #}
-        <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': logsTableName}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="Go to unsorted logs">
-            <i class="fa fa-database" aria-hidden="true"></i>
-        </a>
+            <div class="flex items-center gap-1">
+                {# ANTI-LOG TOGGLE #}
+                {% if antiLogEnabled %}
+                    <a href={{ path('app_anti_log_enable', {'state': 'disable'}) }} class="w-8 h-8 bg-orange-500/20 hover:bg-orange-500/30 rounded-lg flex items-center justify-center transition-all duration-200 border border-orange-500/30" title="Disable anti-log">
+                        <i class="fas fa-toggle-on text-orange-400 text-xs"></i>
+                    </a>
+                {% else %}
+                    <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="w-8 h-8 bg-gray-500/20 hover:bg-gray-500/30 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-500/30" title="Enable anti-log">
+                        <i class="fas fa-toggle-off text-gray-400 text-xs"></i>
+                    </a>
+                {% endif %}
 
-        {# SET ALL LOGS READED #}
-        <a href={{ path('app_manager_logs_set_readed') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="set all logs readed">
-            <i class="fa fa-check" aria-hidden="true"></i>
-        </a>
+                {# QUICK ACTIONS #}
+                <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': logsTableName}) }} class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 rounded-lg flex items-center justify-center transition-all duration-200 border border-blue-500/30" title="Database view">
+                    <i class="fas fa-database text-blue-400 text-xs"></i>
+                </a>
+                <a href={{ path('app_manager_logs_set_readed') }} class="w-8 h-8 bg-green-500/20 hover:bg-green-500/30 rounded-lg flex items-center justify-center transition-all duration-200 border border-green-500/30" title="Mark all as read">
+                    <i class="fas fa-check text-green-400 text-xs"></i>
+                </a>
+                <a href={{ path('app_manager_logs_system') }} class="w-8 h-8 bg-purple-500/20 hover:bg-purple-500/30 rounded-lg flex items-center justify-center transition-all duration-200 border border-purple-500/30" title="System logs">
+                    <i class="fas fa-server text-purple-400 text-xs"></i>
+                </a>
+                <a href={{ path('app_manager_logs_exception_files') }} class="w-8 h-8 bg-red-500/20 hover:bg-red-500/30 rounded-lg flex items-center justify-center transition-all duration-200 border border-red-500/30" title="Exception files">
+                    <i class="fas fa-bomb text-red-400 text-xs"></i>
+                </a>
 
-        {# SYSTEM LOG READER #}
-        <a href={{ path('app_manager_logs_system') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="Server logs">
-            <i class="fas fa-server"></i>
-        </a>
-
-        {# WEB EXCEPTION LOG #}
-        <a href={{ path('app_manager_logs_exception_files') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="App exception files">
-            <i class="fa fa-bomb"></i>
-        </a>
-
-        {# ANTI-LOG SETTINGS LINK #}
-        {% if antiLogEnabled %}
-            <a href={{ path('app_anti_log_enable', {'state': 'disable'}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="Disable anti-log">
-                <i class="fa fa-toggle-on" aria-hidden="true"></i>
-            </a>
-        {% else %}
-            <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="Enable anti-log">
-                <i class="fa fa-toggle-off" aria-hidden="true"></i>
-            </a>
-        {% endif %}
-
-        {# PAGE SUBTITLE #}
-        <span class="mr-1 text-white phone-none">Logs: ({{ logsCount|e }})</span>
-
-        {# FILTER FORM #}
-        <span class="mr-1 phone-only"></span>
-        <div>
-            <form method="get" action={{ path('app_manager_logs') }}>
-                <select name="filter" onchange="this.form.submit()" class="bg-neutral-800 text-white border border-neutral-600 rounded">
-                    <option value="UNREADED">UNREADED</option>
-                    <option value="READED" {% if filter == 'READED' %}selected{% endif %}>READED</option>
-                    <option value="all" {% if filter == 'all' %}selected{% endif %}>ALL</option>
-                </select>
-            </form>
+                {# FILTER FORM #}
+                <form method="get" action={{ path('app_manager_logs') }} class="ml-1">
+                    <select name="filter" onchange="this.form.submit()" class="h-8 px-3 bg-gray-800/95 text-white border border-gray-600/80 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/90 focus:border-blue-500/90 hover:bg-gray-700/95 hover:border-gray-500/90 transition-all duration-200 cursor-pointer shadow-lg backdrop-blur-sm">
+                        <option value="UNREADED" class="bg-gray-800 text-white">Unread</option>
+                        <option value="READED" {% if filter == 'READED' %}selected{% endif %} class="bg-gray-800 text-white">Read</option>
+                        <option value="all" {% if filter == 'all' %}selected{% endif %} class="bg-gray-800 text-white">All</option>
+                    </select>
+                </form>
+            </div>
         </div>
     </div>
 
-    {# CHECK IF LOGS NOT EMPTY #}
-    {% if logsCount < 1 %}
-        <p class="flex items-center justify-center mt-20 mb-20 text-2xl text-white font-bold">No relative logs were found</p>
-    {% else %}
-        {# LOG VIEW TABLE #}
-        <div class="overflow-x-auto">
-            <table class="min-w-full text-white whitespace-nowrap bg-white/5">
-                <thead>
-                    <tr class="border-b border-neutral-700 bg-white/5">
-                        <th class="text-left text-white p-1 py-2">#</th>
-                        <th class="text-left text-white p-1 py-2">Name</th>
-                        <th class="text-left text-white p-1 py-2">Message</th>
-                        <th class="text-left text-white p-1 py-2">Time</th>
-                        <th class="text-left text-white p-1 py-2">Browser</th>
-                        <th class="text-left text-white p-3 py-2">OS</th>
-                        <th class="text-left text-white p-1 py-2">IP Address</th>
-                        <th class="text-left text-white p-1 py-2">User</th>
-                        {% if filter == 'UNREADED' %}
-                            <th class="text-left text-white p-1 py-2"><i class="fa fa-check" aria-hidden="true"></th>
-                        {% endif %}
-                        </tr>
-                </thead>
-                <tbody class="divide-y divide-white font-medium">
-                    {# LOG ROW #}
-                    {% for row in logs %}
+    {# MAIN CONTENT AREA #}
+    <div class="flex-1 flex flex-col min-h-0">
 
-                        {# SET LOG LINE COLOR #}
-                        {% if row.level == 1 %} {# CRITICAL #}
-                            {% set color = 'red-400' %}
-                        {% elseif row.level == 2 %} {# WARNING #}
-                            {% set color = 'yellow-400' %}
-                        {% elseif row.level == 3 %} {# NOTICE #}
-                            {% set color = 'blue-400' %}
-                        {% elseif row.level == 4 %} {# INFO #}
-                            {% set color = 'green-400' %}
-                        {% else %}
-                            {% set color = 'white' %}
-                        {% endif %}
-
-                        {# LOG LINE #}
-                        <tr class="hover:bg-neutral-700 border-b border-neutral-700 text-lg text-{{ color }}">
-                            {# LOG DATA #}
-                            <td class="p-1 border-b border-neutral-700">{{ row.id|e }}</td>
-                            <td class="p-1 border-b border-neutral-700">{{ row.name|e }}</td>
-                            <td class="p-1 border-b border-neutral-700">{{ row.message|e|linkify }}</td>
-                            <td class="p-1 border-b border-neutral-700">{{ row.time|date('Y-m-d H:i:s')|e }}</td>
-                            <td class="p-1 border-b border-neutral-700">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
-                            <td class="p-1 border-b border-neutral-700">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
-                            <td class="p-1 border-b border-neutral-700">{{ row.ipAddress|e }}</td>
-                            <td class="p-1 border-b border-neutral-700">
-                                {% if userManager.getUsernameById(row.userId) != null or authManager.isUsernameBlocked(row.name) %}
-                                    <a href={{ path('app_manager_users_profile', {'id': row.userId}) }} class="underline profile-link">{{ userManager.getUsernameById(row.userId) ?? 'system' }}</a>
-                                {% else %}
-                                    <span class="profile-link cursor-default">{{ userManager.getUsernameById(row.userId) ?? 'system' }}</span>
-                                {% endif %}
-                            </td>
-
-                            {# SET LOG READED LINK #}
+        {# CHECK IF LOGS NOT EMPTY #}
+        {% if logsCount < 1 %}
+            <div class="flex flex-col items-center justify-center flex-1">
+                <div class="w-16 h-16 bg-gray-700/50 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-clipboard-list text-gray-400 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">No logs found</h3>
+                <p class="text-gray-400 text-center">No logs match your current filter criteria</p>
+            </div>
+        {% else %}
+            {# LOG VIEW TABLE #}
+            <div class="overflow-x-auto border-b border-gray-600/60">
+                <table class="min-w-full text-white w-full bg-gray-800/50 border border-gray-700/50" style="min-width: 1200px;">
+                    <thead>
+                        <tr class="bg-gray-700/50">
+                            <th class="px-4 py-2 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">#</th>
+                            <th class="px-4 py-2 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Name</th>
+                            <th class="px-4 py-2 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Message</th>
+                            <th class="px-4 py-2 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Time</th>
+                            <th class="px-4 py-2 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Browser</th>
+                            <th class="px-4 py-2 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">OS</th>
+                            <th class="px-4 py-2 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">IP Address</th>
+                            <th class="px-4 py-2 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">User</th>
                             {% if filter == 'UNREADED' %}
-                                <td class="p-1 border-b border-neutral-700">
-                                    <a href={{ path('app_manager_logs_set_readed', {'id': row.id, 'page': currentPage, 'filter': filter, 'user_id': userId }) }} class="delete-button"><i class="fa fa-check" aria-hidden="true"></i></a>
-                                </td>
+                                <th class="px-4 py-2 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">
+                                    Action
+                                </th>
                             {% endif %}
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div> 
-    {% endif %}
+                    </thead>
+                    <tbody>
+                        {# LOG ROW #}
+                        {% for row in logs %}
 
-    {# PAGINATION SYSTEM #}
-    {% if (logsCount > limitPerPage) %}
-        <div class="mt-2 flex justify-center mb-2">
-            <div class="rounded overflow-hidden bg-neutral-800 border border-neutral-500/50">
-                <ul class="flex">
-                    {% set totalPages = (logsCount / limitPerPage)|round(0, 'ceil') %}
-                    {% set previousPage = currentPage > 1 ? currentPage - 1 : 1 %}
-                    {% set nextPage = currentPage < totalPages ? currentPage + 1 : totalPages %}
-                    {% set startPage = max(currentPage - 2, 1) %}
-                    {% set endPage = min(currentPage + 2, totalPages) %}
-                    {% if currentPage > 1 %}
-                        <li>
-                            <a href={{ path('app_manager_logs', {'page': previousPage, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white hover:bg-neutral-600">Previous</a>
-                        </li>
-                    {% else %}
-                        <li>
-                            <span class="block px-4 py-2 text-white bg-neutral-800 cursor-not-allowed opacity-50">Previous</span>
-                        </li>
-                    {% endif %}
-                    {% for page in startPage..endPage %}
-                        <li>
-                            <a href={{ path('app_manager_logs', {'page': page, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white {% if page == currentPage %}bg-neutral-600{% else %}hover:bg-neutral-600{% endif %}">{{ page }}</a>
-                        </li>
-                    {% endfor %}
-                    {% if currentPage < totalPages %}
-                        <li>
-                            <a href={{ path('app_manager_logs', {'page': nextPage, 'filter': filter, 'user_id': userId}) }} class="block px-4 py-2 text-white hover:bg-neutral-600">Next</a>
-                        </li>
-                    {% else %}
-                        <li>
-                            <span class="block px-4 py-2 text-white bg-neutral-800 cursor-not-allowed opacity-50">Next</span>
-                        </li>
-                    {% endif %}
-                </ul>
+                            {# SET LOG LINE COLOR AND ICON #}
+                            {% if row.level == 1 %} {# CRITICAL #}
+                                {% set color = 'red-400' %}
+                                {% set bgColor = 'red-500/10' %}
+                                {% set icon = 'fas fa-exclamation-circle' %}
+                            {% elseif row.level == 2 %} {# WARNING #}
+                                {% set color = 'yellow-400' %}
+                                {% set bgColor = 'yellow-500/10' %}
+                                {% set icon = 'fas fa-exclamation-triangle' %}
+                            {% elseif row.level == 3 %} {# NOTICE #}
+                                {% set color = 'blue-400' %}
+                                {% set bgColor = 'blue-500/10' %}
+                                {% set icon = 'fas fa-info-circle' %}
+                            {% elseif row.level == 4 %} {# INFO #}
+                                {% set color = 'green-400' %}
+                                {% set bgColor = 'green-500/10' %}
+                                {% set icon = 'fas fa-check-circle' %}
+                            {% else %}
+                                {% set color = 'gray-300' %}
+                                {% set bgColor = 'gray-500/10' %}
+                                {% set icon = 'fas fa-circle' %}
+                            {% endif %}
+
+                            {# LOG LINE #}
+                            <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300 bg-{{ bgColor }} group">
+                                {# LOG DATA #}
+                                <td class="px-4 py-1 border-b border-gray-600/60 text-{{ color }} font-mono text-sm whitespace-nowrap">{{ row.id|e }}</td>
+                                <td class="px-4 py-1 border-b border-gray-600/60 whitespace-nowrap">
+                                    <span class="text-white font-medium text-sm">{{ row.name|e }}</span>
+                                </td>
+                                <td class="px-4 py-1 border-b border-gray-600/60 text-gray-300 text-sm whitespace-nowrap overflow-hidden text-ellipsis max-w-xs">{{ row.message|e|linkify }}</td>
+                                <td class="px-4 py-1 border-b border-gray-600/60 text-gray-400 font-mono text-xs whitespace-nowrap">{{ row.time|date('Y-m-d H:i:s')|e }}</td>
+                                <td class="px-4 py-1 border-b border-gray-600/60 text-gray-300 text-sm whitespace-nowrap">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
+                                <td class="px-4 py-1 border-b border-gray-600/60 text-gray-300 text-sm whitespace-nowrap">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
+                                <td class="px-4 py-1 border-b border-gray-600/60 text-gray-400 font-mono text-sm whitespace-nowrap">{{ row.ipAddress|e }}</td>
+                                <td class="px-4 py-1 border-b border-gray-600/60 whitespace-nowrap">
+                                    {% if userManager.getUsernameById(row.userId) != null or authManager.isUsernameBlocked(row.name) %}
+                                        <a href={{ path('app_manager_users_profile', {'id': row.userId}) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200 text-sm font-medium">
+                                            {{ userManager.getUsernameById(row.userId) ?? 'system' }}
+                                        </a>
+                                    {% else %}
+                                        <span class="text-gray-400 text-sm">{{ userManager.getUsernameById(row.userId) ?? 'system' }}</span>
+                                    {% endif %}
+                                </td>
+
+                                {# SET LOG READED LINK #}
+                                {% if filter == 'UNREADED' %}
+                                    <td class="px-4 py-1 border-b border-gray-600/60 whitespace-nowrap">
+                                        <a href={{ path('app_manager_logs_set_readed', {'id': row.id, 'page': currentPage, 'filter': filter, 'user_id': userId }) }} class="px-2 py-1 bg-green-500/20 hover:bg-green-500/30 rounded text-green-400 text-xs transition-all duration-200 border border-green-500/30" title="Mark as read">
+                                            Read
+                                        </a>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-        </div>
-    {% endif %}
-</div> 
+
+            {# PAGINATION SYSTEM - only when needed #}
+            {% if logsCount > limitPerPage %}
+                {% set totalPages = (logsCount / limitPerPage)|round(0, 'ceil') %}
+                {% set previousPage = currentPage > 1 ? currentPage - 1 : 1 %}
+                {% set nextPage = currentPage < totalPages ? currentPage + 1 : totalPages %}
+                {% set startPage = max(currentPage - 1, 1) %}
+                {% set endPage = min(currentPage + 1, totalPages) %}
+                {% set startPageDesktop = max(currentPage - 3, 1) %}
+                {% set endPageDesktop = min(currentPage + 3, totalPages) %}
+
+                <div class="flex flex-col sm:flex-row justify-center items-center py-4 border-t border-gray-700/50 bg-gray-800/30 gap-3">
+                    <div class="flex items-center gap-2">
+                        {# FIRST PAGE - Hidden on mobile #}
+                        <div class="hidden sm:block">
+                            {% if currentPage == 1 %}
+                                <span class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-700/30 border border-gray-600/30 rounded-lg cursor-not-allowed opacity-50">
+                                    <i class="fas fa-angle-double-left text-xs"></i>
+                                </span>
+                            {% else %}
+                                <a href="{{ path('app_manager_logs', {page: 1, filter: filter, user_id: userId}) }}" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded-lg hover:bg-gray-600/50 hover:text-white transition-all duration-200" title="First page">
+                                    <i class="fas fa-angle-double-left text-xs"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+
+                        {# PREVIOUS PAGE #}
+                        {% if currentPage == 1 %}
+                            <span class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-700/30 border border-gray-600/30 rounded-lg cursor-not-allowed opacity-50">
+                                <i class="fas fa-chevron-left text-xs"></i>
+                            </span>
+                        {% else %}
+                            <a href="{{ path('app_manager_logs', {page: previousPage, filter: filter, user_id: userId}) }}" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded-lg hover:bg-gray-600/50 hover:text-white transition-all duration-200">
+                                <i class="fas fa-chevron-left text-xs"></i>
+                            </a>
+                        {% endif %}
+
+                        {# PAGE NUMBERS - Mobile version (fewer pages) #}
+                        <div class="flex items-center gap-2 sm:hidden">
+                            {% for page in startPage..endPage %}
+                                <a href="{{ path('app_manager_logs', {page: page, filter: filter, user_id: userId}) }}" class="px-3 py-2 text-sm font-medium {{ page == currentPage ? 'text-white bg-blue-500/20 border-blue-500/50' : 'text-gray-300 bg-gray-700/50 border-gray-600/50 hover:bg-gray-600/50 hover:text-white' }} border rounded-lg transition-all duration-200">
+                                    {{ page }}
+                                </a>
+                            {% endfor %}
+                        </div>
+
+                        {# PAGE NUMBERS - Desktop version (more pages) #}
+                        <div class="hidden sm:flex items-center gap-2">
+                            {% for page in startPageDesktop..endPageDesktop %}
+                                <a href="{{ path('app_manager_logs', {page: page, filter: filter, user_id: userId}) }}" class="px-3 py-2 text-sm font-medium {{ page == currentPage ? 'text-white bg-blue-500/20 border-blue-500/50' : 'text-gray-300 bg-gray-700/50 border-gray-600/50 hover:bg-gray-600/50 hover:text-white' }} border rounded-lg transition-all duration-200">
+                                    {{ page }}
+                                </a>
+                            {% endfor %}
+                        </div>
+
+                        {# NEXT PAGE #}
+                        {% if currentPage == totalPages %}
+                            <span class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-700/30 border border-gray-600/30 rounded-lg cursor-not-allowed opacity-50">
+                                <i class="fas fa-chevron-right text-xs"></i>
+                            </span>
+                        {% else %}
+                            <a href="{{ path('app_manager_logs', {page: nextPage, filter: filter, user_id: userId}) }}" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded-lg hover:bg-gray-600/50 hover:text-white transition-all duration-200">
+                                <i class="fas fa-chevron-right text-xs"></i>
+                            </a>
+                        {% endif %}
+
+                        {# LAST PAGE - Hidden on mobile #}
+                        <div class="hidden sm:block">
+                            {% if currentPage == totalPages %}
+                                <span class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-700/30 border border-gray-600/30 rounded-lg cursor-not-allowed opacity-50">
+                                    <i class="fas fa-angle-double-right text-xs"></i>
+                                </span>
+                            {% else %}
+                                <a href="{{ path('app_manager_logs', {page: totalPages, filter: filter, user_id: userId}) }}" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded-lg hover:bg-gray-600/50 hover:text-white transition-all duration-200" title="Last page">
+                                    <i class="fas fa-angle-double-right text-xs"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

@@ -2,31 +2,63 @@
 
 {# USER REGISTER COMPONENT #}
 {% block body %}
-<div class="auth-component flex justify-center items-center h-screen">
-	<div class="mt-5 max-w-md w-full px-6 py-6 mb-4 rounded-xl bg-black/20 backdrop-blur-md border border-white/10 shadow-2xl mr-2 ml-2">
-		<h2 class="text-3xl mb-6 text-center text-white font-semibold tracking-wide">Register</h2>
+<div class="auth-component flex justify-center items-center h-screen" style="background: transparent;">
+	<div class="mt-5 max-w-md w-full px-6 py-5 mb-5 rounded-lg backdrop-blur-sm bg-gray-800/50 border border-gray-700/50 shadow-2xl mx-4">
+		<div class="px-2 py-2 mb-6">
+			<div class="flex items-center justify-center">
+				<h2 class="text-2xl text-white font-bold tracking-wide">Register</h2>
+			</div>
+		</div>
 
         {# SUCCESS MESSAGE BOX #}
         {% for message in app.flashes('success') %}
-            <div class="bg-green-800 border border-green-600 text-white p-3 mb-2 rounded text-center animate-popin">{{ message|e }}</div>
+            <div class="bg-gray-700/40 border-l-4 border-green-400 text-white p-4 mb-4 rounded-r-lg backdrop-blur-sm">
+				<div class="flex items-start gap-3">
+					<div class="w-5 h-5 bg-green-400/20 rounded-full flex items-center justify-center mt-0.5">
+						<i class="fas fa-check text-green-400 text-xs"></i>
+					</div>
+					<div>
+						<h4 class="font-semibold text-sm mb-1">Success</h4>
+						<p class="text-sm text-gray-300">{{ message|e }}</p>
+					</div>
+				</div>
+			</div>
         {% endfor %}
 
         {# ERROR MESSAGE BOX #}
         {% for message in app.flashes('error') %}
-            <div class="bg-red-900 border border-red-600 text-white p-3 mb-3 rounded text-center animate-popin">{{ message|e }}</div>
+            <div class="bg-red-500/20 border-l-4 border-red-500 text-white p-4 mb-4 rounded-r-lg backdrop-blur-sm">
+				<div class="flex items-start gap-3">
+					<div class="w-5 h-5 bg-red-500/30 rounded-full flex items-center justify-center mt-0.5">
+						<i class="fas fa-times text-red-500 text-xs"></i>
+					</div>
+					<div>
+						<h4 class="font-semibold text-sm mb-1 text-red-200">Error</h4>
+						<p class="text-sm text-red-100">{{ message|e }}</p>
+					</div>
+				</div>
+			</div>
         {% endfor %}
 
         {# REGISTER FORM #}
         {{ form_start(registrationForm) }}
             {# FORM FIELDS #}
-            {{ form_row(registrationForm.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
-            {{ form_row(registrationForm.password.first, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
-            {{ form_row(registrationForm.password.second, {'attr': {'class': 'auth-form-input', 'placeholder': 'Confirm Password'}}) }}
+            <div class="space-y-4 mb-6">
+				{{ form_row(registrationForm.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
+				{{ form_row(registrationForm.password.first, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
+				{{ form_row(registrationForm.password.second, {'attr': {'class': 'auth-form-input', 'placeholder': 'Confirm Password'}}) }}
+			</div>
 
             {# FORM SUBMIT BUTTON #}
-            <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 mt-2 mb-1 rounded-md w-full transition duration-300 ease-in-out hover:shadow-lg hover:shadow-blue-900">Register</button>
+            <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-green-500/25 border border-green-500/30 mb-4">
+				<span>Register</span>
+			</button>
         {{ form_end(registrationForm) }}
-        <p class="text-white ml-1">You can login <a class="text-blue-400 font-bold hover:text-blue-500" href={{ path('app_auth_login') }}>here</a></p>
+
+        {# LOGIN LINK #}
+        <div class="bg-gray-700/30 rounded-lg p-3 border border-gray-600/30 text-center">
+			<p class="text-gray-300 text-sm">Already have an account? <a class="text-blue-400 font-semibold hover:text-blue-300 transition-colors duration-200" href={{ path('app_auth_login') }}>Login here</a></p>
+		</div>
     </div>
 </div>
 {% endblock %}

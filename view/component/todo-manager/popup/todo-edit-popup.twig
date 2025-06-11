@@ -1,10 +1,13 @@
-<div id="editPopup" class="fixed inset-0 bg-black bg-opacity-80 flex items-start justify-center pt-[10%] sm:items-center sm:pt-0 hidden">
-    <div class="backdrop-blur-md bg-white/5 rounded p-6 border border-neutral-800 w-full max-w-xl animate-popin">
-        <h2 class="text-lg font-bold mb-4 text-white">Edit Todo</h2>
-        <textarea id="editTodoInput" class="bg-white/5 text-white w-full p-3 border border-neutral-700 rounded focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" placeholder="New todo text" maxlength="2048" rows="6"></textarea>
-        <div class="flex justify-end mt-4 space-x-2">
-            <button id="cancelEditButton" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500">Cancel</button>
-            <button id="confirmEditButton" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500">Save</button>
+<div id="editPopup" class="fixed inset-0 bg-black bg-opacity-80 flex items-start justify-center pt-[10%] sm:items-center sm:pt-0 hidden z-50">
+    <div class="backdrop-blur-md bg-gray-800/95 rounded-lg p-6 border border-gray-700/50 w-full max-w-xl animate-popin">
+        <div class="flex items-center mb-4">
+            <i class="fas fa-edit text-blue-400 mr-3"></i>
+            <h2 class="text-lg font-bold text-white">Edit Task</h2>
+        </div>
+        <textarea id="editTodoInput" class="bg-gray-700/50 text-white w-full p-3 border border-gray-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 resize-none transition-all duration-200" placeholder="Enter task text..." maxlength="2048" rows="6"></textarea>
+        <div class="flex justify-end mt-6 gap-3">
+            <button id="cancelEditButton" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition-colors duration-200">Cancel</button>
+            <button id="confirmEditButton" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg transition-colors duration-200">Save Changes</button>
         </div>
     </div>
 </div>

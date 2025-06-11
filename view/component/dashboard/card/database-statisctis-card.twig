@@ -1,71 +1,47 @@
-<div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 rounded shadow-xl text-white w-full overflow-hidden">
-    <div class="px-3 py-2 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
-        <i class="fas fa-database text-white/70"></i>
-        Database statistics
+<div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden hover:bg-gray-800/60 transition-all duration-300 h-full flex flex-col">
+    <div class="px-2 py-2 border-b border-gray-700/50 font-semibold tracking-wide text-sm uppercase text-gray-200 flex items-center gap-2">
+        <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+            <i class="fas fa-database text-green-400 text-sm"></i>
+        </div>
+        <span>Database Statistics</span>
     </div>
-    <div class="divide-y divide-white/10 space-y-0">
+    <div class="p-2 flex-1 flex flex-col justify-between space-y-3">
         {# SECTION: LOGS #}
-        <div class="space-y-0">
-            <div class="flex items-center justify-between border-b border-white/10">
-                <div class="flex items-center gap-2 text-sm text-white/70 font-semibold p-2">
-                    <i class="fas fa-scroll text-white/50"></i>
-                    Logs
+        <div class="bg-gray-700/30 rounded-lg p-3 border border-gray-600/30">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-scroll text-orange-400 text-sm"></i>
+                    <span class="text-white font-medium text-sm">Logs</span>
                 </div>
-                <a href={{ path('app_manager_logs') }} class="text-indigo-400 hover:text-indigo-300 text-xs pr-2 font-semibold" title="Go to logs">View All</a>
+                <a href={{ path('app_manager_logs') }} class="inline-flex items-center gap-1 px-2 py-1 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 hover:text-blue-300 text-xs font-semibold rounded transition-all duration-200 border border-blue-500/30" title="Go to logs">
+                    <span>View All</span>
+                    <i class="fas fa-external-link-alt text-xs"></i>
+                </a>
             </div>
-
-            <div class="grid grid-cols-2 gap-x-4 col-span-2 p-2 pb-1">
-                <div>
-                    <p class="text-gray-300 mb-1">
-                        Logs count: <span class="text-white font-semibold">{{ allLogsCount|e }}</span>
-                    </p>
-                </div>
-                <div>
-                    <p class="text-gray-300 mb-1">
-                        Auth logs: <span class="text-white font-semibold">{{ authLogsCount|e }}</span>
-                    </p>
-                </div>
-                <div>
-                    <p class="text-gray-300 mb-1">
-                        Readed: <span class="text-white font-semibold">{{ readedLogsCount|e }}</span>
-                    </p>
-                </div>
-                <div>
-                    <p class="text-gray-300 mb-1">
-                        Unreaded: <span class="text-white font-semibold">{{ unreadedLogsCount|e }}</span>
-                    </p>
-                </div>
+            <div class="grid grid-cols-2 gap-2 text-xs text-gray-400">
+                <div>Total Logs: <span class="text-white font-semibold">{{ allLogsCount|e }}</span></div>
+                <div>Auth Logs: <span class="text-white font-semibold">{{ authLogsCount|e }}</span></div>
+                <div>Read: <span class="text-green-400 font-semibold">{{ readedLogsCount|e }}</span></div>
+                <div>Unread: <span class="text-red-400 font-semibold">{{ unreadedLogsCount|e }}</span></div>
             </div>
         </div>
+
         {# SECTION: USERS #}
-        <div class="space-y-2">
-            <div class="flex items-center justify-between border-b border-white/10">
-                <div class="flex items-center gap-2 text-sm text-white/70 font-semibold p-2">
-                    <i class="fas fa-users text-white/50"></i>
-                    Users
+        <div class="bg-gray-700/30 rounded-lg p-3 border border-gray-600/30">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-users text-purple-400 text-sm"></i>
+                    <span class="text-white font-medium text-sm">Users</span>
                 </div>
-                <a href={{ path('app_manager_users') }} class="text-indigo-400 hover:text-indigo-300 text-xs pr-2 font-semibold" title="Go to users manager">View All</a>
+                <a href={{ path('app_manager_users') }} class="inline-flex items-center gap-1 px-2 py-1 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 hover:text-blue-300 text-xs font-semibold rounded transition-all duration-200 border border-blue-500/30" title="Go to users manager">
+                    <span>View All</span>
+                    <i class="fas fa-external-link-alt text-xs"></i>
+                </a>
             </div>
-            <div class="grid grid-cols-2 gap-x-4 col-span-2 p-2 pb-1">
-                <div>
-                    <p class="text-gray-300 mb-1">
-                        Users count: <span class="text-white font-semibold">{{ usersCount|e }}</span>
-                    </p>
-                </div>
-                <div>
-                    <p class="text-gray-300 mb-1">
-                        Online: <span class="text-white font-semibold">
-                            {{ onlineUsersCount|e }} (<a href="{{ path('app_manager_users', {'filter': 'online'}) }}" class="text-blue-400 hover:text-blue-300">list</a>)
-                        </span>
-                    </p>
-                </div>
-                <div class="col-span-2">
-                    <p class="text-gray-300 mb-1">
-                        Banned: <span class="text-white font-semibold">
-                            {{ bannedUsersCount|e }} (<a href="{{ path('app_manager_users', {'filter': 'banned'}) }}" class="text-blue-400 hover:text-blue-300">list</a>)
-                        </span>
-                    </p>
-                </div>
+            <div class="grid grid-cols-2 gap-2 text-xs text-gray-400">
+                <div>Total Users: <span class="text-white font-semibold">{{ usersCount|e }}</span></div>
+                <div>Online: <span class="text-green-400 font-semibold">{{ onlineUsersCount|e }}</span> <a href="{{ path('app_manager_users', {'filter': 'online'}) }}" class="text-blue-400 hover:text-blue-300">(list)</a></div>
+                <div class="col-span-2">Banned: <span class="text-red-400 font-semibold">{{ bannedUsersCount|e }}</span> <a href="{{ path('app_manager_users', {'filter': 'banned'}) }}" class="text-blue-400 hover:text-blue-300">(list)</a></div>
             </div>
         </div>
     </div>

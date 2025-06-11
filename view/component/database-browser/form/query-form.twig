@@ -1,21 +1,26 @@
 {# DATABASE BROWSER COMPONENT - QUERY FORM #}
-<div class="p-2">
-    {{ form_start(queryForm, {'attr': {'class': 'space-y-3'}}) }}        
-        <div>
-            {{ form_row(queryForm.query, {
-                'label_attr': {'class': 'block text-sm font-medium text-gray-300'},
-                'attr': {
-                    'class': 'mt-1 block w-full p-2.5 rounded backdrop-blur-md bg-white/5 border border-white/5 text-white focus:border-blue-500 focus:ring-blue-500 resize-none outline-none',
-                    'style': 'resize: none;'
-                }}) 
-            }}
-        </div>
+<div class="bg-gray-800/50 border border-gray-700/50 sm:rounded">
+    <div class="bg-gray-700/50 px-4 py-3 border-b border-gray-600/50">
+        <h3 class="text-lg font-semibold text-gray-200">SQL Query</h3>
+    </div>
+    <div class="p-4">
+        {{ form_start(queryForm, {'attr': {'class': 'space-y-4'}}) }}
+            <div>
+                {{ form_row(queryForm.query, {
+                    'label_attr': {'class': 'block text-sm font-medium text-gray-200 mb-2'},
+                    'attr': {
+                        'class': 'mt-1 block w-full p-4 rounded-lg bg-gray-700/50 border border-gray-600/50 text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 resize-none outline-none transition-all duration-200',
+                        'style': 'resize: none; min-height: 120px;'
+                    }})
+                }}
+            </div>
 
-        {# FORM SUBMIT BUTTON #}
-        <div class="text-right">
-            <button type="submit" class="bg-blue-700 rounded text-white font-bold py-2 px-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 hover:shadow-lg hover:shadow-blue-900">
-                Execute Query
-            </button>
-        </div>
-    {{ form_end(queryForm) }}
+            {# FORM SUBMIT BUTTON #}
+            <div class="text-right">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold py-3 px-6 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200">
+                    Execute Query
+                </button>
+            </div>
+        {{ form_end(queryForm) }}
+    </div>
 </div>

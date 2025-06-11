@@ -2,52 +2,72 @@
 
 {# DATABASE BROWSER COMPONENT - DUMP DATABASE #}
 {% block component %}
-{# SUB-NAVIGATION #}
-<div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
-    {# BACK BUTTON #}
-    <a href={{ path('app_manager_database') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="Back to database browser">
-        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-    </a>
-    <span class="mr-1 text-white">Dump database</span>
-</div>
+<div class="flex flex-col h-full">
+    {# SUB-NAVIGATION #}
+    <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <a href={{ path('app_manager_database') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to database browser">
+                    <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
+                </a>
+                <div class="hidden sm:block">
+                    <h1 class="text-lg font-bold text-white">Database Dump</h1>
+                    <p class="text-gray-400 text-xs">Export database structure and data</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-{# DATABASE LIST #}
-<div class="database-browser md:p-4 component">
-    <div class="max-w-4xl mx-auto">
-        <div class="overflow-x-auto">
-                <table class="min-w-full text-white whitespace-nowrap backdrop-blur-md bg-white/5 border border-white/10">
-                <thead>
-                    <tr>
-                        <th class="px-4 py-2 border-b border-white/20 text-left">Database</th>
-                        <th class="px-4 py-2 border-b border-white/20 text-right">Structure</th>
-                        <th class="px-4 py-2 border-b border-white/20 text-right">Data</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for database in databases %}
-                        {# SHOW ONLY NON-SYSTEM DATABASES #}
-                        {% if database.name != 'information_schema' and database.name != 'performance_schema' and database.name != 'sys' %}
-                            <tr class="hover:bg-neutral-700">
-                                <td class="px-4 py-2 border-b border-white/10 text-left">
-                                    <a href={{ path('app_manager_database', {'database': database.name}) }} class="database-link">
-                                        {{ database.name|e }}
-                                    </a>
-                                </td>
-                                <td class="px-4 py-2 border-b border-white/10 text-right">
-                                    <a href={{ path('app_manager_database_dump', {'select': 'no', 'database': database.name, 'include_data': 'yes'}) }} id="loading-blocker" class="database-link">
-                                        Dump Structure
-                                    </a>
-                                </td>
-                                <td class="px-4 py-2 border-b border-white/10 text-right">
-                                <a href={{ path('app_manager_database_dump', {'select': 'no', 'database': database.name, 'include_data': 'no'}) }} id="loading-blocker" class="database-link">
-                                        Dump Data
-                                    </a>
-                                </td>
+    {# BREADCRUMB PANEL #}
+    <div class="px-2 py-1 bg-gray-800/30 border-b border-gray-700/50">
+        <div class="flex items-center gap-2 text-sm">
+            <i class="fas fa-database text-gray-400 text-xs"></i>
+            <a href={{ path('app_manager_database') }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">Databases</a>
+            <i class="fas fa-chevron-right text-gray-500 text-xs"></i>
+            <span class="text-gray-300">Database Dump</span>
+        </div>
+    </div>
+
+    {# MAIN CONTENT AREA #}
+    <div class="flex-1 flex flex-col min-h-0">
+        <div class="database-browser md:p-4 component">
+            <div class="max-w-4xl mx-auto">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-white w-full bg-gray-800/50 border border-gray-700/50 sm:rounded">
+                        <thead>
+                            <tr class="bg-gray-700/50">
+                                <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Database</th>
+                                <th class="px-4 py-3 border-b border-gray-600/50 text-right font-semibold text-gray-200 whitespace-nowrap">Structure</th>
+                                <th class="px-4 py-3 border-b border-gray-600/50 text-right font-semibold text-gray-200 whitespace-nowrap">Data</th>
                             </tr>
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                            {% for database in databases %}
+                                {# SHOW ONLY NON-SYSTEM DATABASES #}
+                                {% if database.name != 'information_schema' and database.name != 'performance_schema' and database.name != 'sys' %}
+                                    <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300">
+                                        <td class="px-4 py-2 border-b border-gray-600/60 text-left">
+                                            <a href={{ path('app_manager_database', {'database': database.name}) }} class="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200">
+                                                {{ database.name|e }}
+                                            </a>
+                                        </td>
+                                        <td class="px-4 py-2 border-b border-gray-600/60 text-right">
+                                            <a href={{ path('app_manager_database_dump', {'select': 'no', 'database': database.name, 'include_data': 'yes'}) }} id="loading-blocker" class="text-green-400 hover:text-green-300 font-medium transition-colors duration-200">
+                                                Dump Structure
+                                            </a>
+                                        </td>
+                                        <td class="px-4 py-2 border-b border-gray-600/60 text-right">
+                                            <a href={{ path('app_manager_database_dump', {'select': 'no', 'database': database.name, 'include_data': 'no'}) }} id="loading-blocker" class="text-orange-400 hover:text-orange-300 font-medium transition-colors duration-200">
+                                                Dump Data
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

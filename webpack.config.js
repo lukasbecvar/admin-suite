@@ -85,7 +85,8 @@ Encore
                         'text-blue-400',
                         'text-green-400',
                         'text-purple-400',
-                        'text-yellow-400'
+                        'text-yellow-400',
+                        'border-3'
                     ],
                 },
                 autoprefixer: {},

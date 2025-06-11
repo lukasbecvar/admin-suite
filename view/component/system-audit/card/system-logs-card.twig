@@ -1,18 +1,20 @@
-<div class="p-2 mt-[-8px]">
-    <div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 rounded shadow-xl text-white w-full overflow-hidden">
-        <div class="px-3 py-2 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center justify-between">
-            <span><i class="fas fa-file-alt text-white/70 mr-2"></i> System logs</span>
-        </div>
-        <div class="overflow-y-auto max-h-[320px] custom-scrollbar p-2">
-            <ul class="space-y-1 text-sm">
-                {% for logFile in logFiles %}
-                    <li>
-                        <a href={{ path('app_file_system_view', { path: logFile.path, referer: 'app_system_audit' }) }} class="block px-2 py-2 bg-neutral-800 hover:bg-blue-700 rounded transition-colors duration-150 break-words text-white/90">
-                            {{ logFile.name }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
+<div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded-lg shadow-xl text-white w-full overflow-hidden">
+    <div class="px-4 py-3 border-b border-gray-700/50 bg-gray-800/30">
+        <h3 class="text-sm font-semibold text-white flex items-center">
+            <i class="fas fa-file-alt text-red-400 mr-2"></i>
+            System Logs
+        </h3>
+    </div>
+    <div class="overflow-y-auto max-h-[320px] custom-scrollbar p-3">
+        <div class="space-y-2">
+            {% for logFile in logFiles %}
+                <a href={{ path('app_file_system_view', { path: logFile.path, referer: 'app_system_audit' }) }} class="block p-3 bg-gray-700/30 hover:bg-gray-700/50 rounded-lg transition-colors duration-200 text-white">
+                    <div class="flex items-center">
+                        <i class="fas fa-file-alt text-gray-400 mr-2"></i>
+                        <span class="font-medium">{{ logFile.name }}</span>
+                    </div>
+                </a>
+            {% endfor %}
         </div>
     </div>
 </div>

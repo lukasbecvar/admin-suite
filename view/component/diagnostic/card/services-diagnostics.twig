@@ -1,29 +1,33 @@
-<div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 rounded shadow-xl text-white w-full overflow-hidden">
-    <div class="px-3 py-2 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
-        <i class="fas fa-heartbeat text-white/70"></i>
-        Services diagnostics
+<div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
+    <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center">
+        <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center mr-2">
+            <i class="fas fa-heartbeat text-purple-400 text-sm"></i>
+        </div>
+        <span>Services Diagnostics</span>
     </div>
 	{# CHECK SERVICES EXCEPTION FILES #}
-	<div class="px-3 mb-1 mt-1">
-		{% if diagnosticData.exceptionFilesList == null %}
-			<span>
-				<span class="text-green-400">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					No exception files found
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					Exception files found:
-					{{ diagnosticData.exceptionFilesList|length }}
-				</span>
-			</span>
-		{% endif %}
-	</div>
+	<div class="flex items-center justify-between py-3 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1">
+			{% if diagnosticData.exceptionFilesList == null %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Exception Files</span>
+					<p class="text-gray-400 text-sm">No errors found</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-red-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Exception Files</span>
+					<p class="text-red-300 text-sm">{{ diagnosticData.exceptionFilesList|length }} files found</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if diagnosticData.exceptionFilesList == null %}
+				<i class="fas fa-check text-green-400"></i>
+			{% else %}
+				<i class="fas fa-exclamation-triangle text-red-400"></i>
+			{% endif %}
+		</div>
+    </div>
 </div>

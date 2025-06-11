@@ -2,108 +2,129 @@
 
 {# METRICS-DASHBOARD COMPONENT FOR SERVICE METRICS #}
 {% block component %}
-{# SUB-NAVIGATION #}
-<div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
-    <a href={{ path('app_manager_monitoring') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="Back to dashboard">
-        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-    </a>
-
-    {# METRICS TIME PERIOD SELECTOR #}
-    <span class="mr-1"></span>
-    <span >
-        <label for="time-period" class="text-white">Time period:</label>
-        <select id="time-period" onchange="updateTimePeriod()" class="bg-neutral-800 text-white border border-neutral-600 rounded">
-            <option value="last_24_hours" selected>Last 24 hours</option>
-            <option value="last_week">Last week</option>
-            <option value="last_month">Last month</option>
-            <option value="all_time">All time</option>
-        </select>
-
-        <script>
-            // update time period in url
-            function updateTimePeriod() {
-                const select = document.getElementById('time-period')
-                const selectedValue = select.value
-                const serviceName = "{{ serviceName|e('js') }}"
-                window.location.search = `?service_name=${serviceName}&time_period=${selectedValue}`
-            }
-
-            // select selecton value from url
-            function setSelectedValue() {
-                const urlParams = new URLSearchParams(window.location.search)
-                const timePeriod = urlParams.get('time_period')
-                const select = document.getElementById('time-period')
-
-                // set selected value
-                if (timePeriod) {
-                    select.value = timePeriod
-                }
-            }
-
-            // init select value
-            window.onload = setSelectedValue
-        </script>
-    </span>
-</div>
-
-{# METRICS-CHARTS #}
-{% if data is empty or (serviceName != 'all-services' and data['metrics'] is empty) %}
-<p class="flex items-center justify-center mt-20 mb-20 text-2xl text-white font-bold">
-    No metrics found for service: {{ serviceName|e }}
-</p>
-{% else %}
-    {# RENDER METRICS CHARTS FOR SPECIFIC SERVICE #}
-    {% if serviceName != 'all-services' %}
-        <div class="p-2 space-y-2 metrics-component">
-            {% for metricName, metricData in data.metrics %}
-                <div class="flex flex-col md:flex-row gap-2">
-                    <div class="flex-1 p-0 shadow-lg rounded relative chart-container backdrop-blur-md bg-neutral-400/5 border border-white/10">
-                        <div class="px-3 py-[8px] border-b border-white/10 text-white font-bold text-sm flex items-center justify-between mb-1">
-                            {{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}
-                            <button class="deleteButton text-indigo-400 hover:text-indigo-300 text-l" data-metric-name={{ metricName|e }} data-service-name={{ serviceName|e }} data-referer="app_metrics_service">
-                                delete
-                            </button>
-                        </div>
-                        <div id="{{ (metricName ~ '-' ~ 'default')|replace({'.': '_', ' ': '_'}) }}-line"></div>
-                    </div>
+<div class="flex flex-col h-full">
+    {# SUB-NAVIGATION #}
+    <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <a href={{ path('app_manager_monitoring') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to monitoring">
+                    <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
+                </a>
+                <div class="hidden sm:block">
+                    <h1 class="text-lg font-bold text-white">Service Metrics</h1>
+                    <p class="text-gray-400 text-xs">{{ serviceName|e }}</p>
                 </div>
-            {% endfor %}
+            </div>
+            <div class="flex items-center gap-2">
+                {# TIME PERIOD SELECTOR #}
+                <div class="flex items-center gap-2">
+                    <label for="time-period" class="text-xs text-gray-400 hidden sm:block">Period:</label>
+                    <select id="time-period" onchange="updateTimePeriod()" class="h-8 px-3 bg-gray-800/95 text-white border border-gray-600/80 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/90 focus:border-blue-500/90 hover:bg-gray-700/95 hover:border-gray-500/90 transition-all duration-200 cursor-pointer shadow-lg backdrop-blur-sm">
+                        <option value="last_24_hours" selected class="bg-gray-800 text-white">Last 24 hours</option>
+                        <option value="last_week" class="bg-gray-800 text-white">Last week</option>
+                        <option value="last_month" class="bg-gray-800 text-white">Last month</option>
+                        <option value="all_time" class="bg-gray-800 text-white">All time</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <script>
-            window.metricsData = {{ { categories: data.categories, metrics: data.metrics, serviceName: serviceName } | json_encode | raw }};
-        </script>
-        {# DELETE CONFIRMATION POPUP #}
-        {% include "component/metrics/popup/delete-confirmation-popup.twig" %}
-        {{ encore_entry_script_tags('metrics-delete-confirmaton-js') }}
-    {% else %}
-        {# RENDER METRICS CHARTS FOR ALL SERVICES #}
-        {% for serviceName, serviceData in data %}
-            {% if data[serviceName]['metrics'] is empty %}
-                <p class="flex items-center justify-center text-1xl text-white font-bold">
-                    No metrics found for service: {{ serviceName|e }}
-                </p>
-            {% endif %}
-                <div class="p-2 space-y-2 metrics-component">
-                    {% for metricName, metricData in serviceData.metrics %}
-                        <div class="flex flex-col md:flex-row gap-2">
-                            <div class="flex-1 p-0 shadow-lg rounded relative chart-container backdrop-blur-md bg-neutral-400/5 border border-white/10">
-                                <div class="px-3 py-[8px] border-b border-white/10 text-white font-bold text-sm flex items-center justify-between mb-1">
-                                    {{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}
-                                </div>
-                                <div id="{{ (metricName ~ '-' ~ serviceName)|replace({'.': '_', ' ': '_'}) }}-line"></div>
-                            </div>
+    </div>
+
+    {# MAIN CONTENT AREA #}
+    <div class="flex-1 flex flex-col min-h-0">
+        <div class="metrics-component p-2 component">
+            <div class="space-y-2">
+
+                {# METRICS-CHARTS #}
+                {% if data is empty or (serviceName != 'all-services' and data['metrics'] is empty) %}
+                    <div class="flex flex-col items-center justify-center py-12">
+                        <div class="w-16 h-16 bg-gray-700/50 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-chart-line text-gray-400 text-2xl"></i>
                         </div>
-                    {% endfor %}
-                </div>
-            <script>
-                if (!window.metricsData) {
-                    window.metricsData = {};
-                }
-                window.metricsData["{{ serviceName|replace({'.': '_', ' ': '_'}) }}"] = {{ { categories: serviceData.categories, metrics: serviceData.metrics } | json_encode | raw }};
-            </script>
+                        <h3 class="text-xl font-bold text-white mb-2">No metrics found</h3>
+                        <p class="text-gray-400 text-center">No metrics found for service: {{ serviceName|e }}</p>
+                    </div>
+                {% else %}
+                    {# RENDER METRICS CHARTS FOR SPECIFIC SERVICE #}
+                    {% if serviceName != 'all-services' %}
+                        {% for metricName, metricData in data.metrics %}
+                            <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden hover:bg-gray-800/60 transition-all duration-300">
+                                <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
+                                    <span>{{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}</span>
+                                    <button class="deleteButton inline-flex items-center gap-1 px-2 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 text-xs font-semibold rounded transition-all duration-200 border border-red-500/30" data-metric-name={{ metricName|e }} data-service-name={{ serviceName|e }} data-referer="app_metrics_service">
+                                        <span>Delete</span>
+                                        <i class="fas fa-trash text-xs"></i>
+                                    </button>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <div id="{{ (metricName ~ '-' ~ 'default')|replace({'.': '_', ' ': '_'}) }}-line" class="chart-container"></div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {# DELETE CONFIRMATION POPUP #}
+                        {% include "component/metrics/popup/delete-confirmation-popup.twig" %}
+                        {{ encore_entry_script_tags('metrics-delete-confirmaton-js') }}
+                    {% else %}
+                        {# RENDER METRICS CHARTS FOR ALL SERVICES #}
+                        {% for serviceName, serviceData in data %}
+                            {% if data[serviceName]['metrics'] is empty %}
+                                <div class="flex flex-col items-center justify-center py-8">
+                                    <h4 class="text-lg font-semibold text-white mb-2">No metrics found</h4>
+                                    <p class="text-gray-400">No metrics found for service: {{ serviceName|e }}</p>
+                                </div>
+                            {% else %}
+                                {% for metricName, metricData in serviceData.metrics %}
+                                    <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden hover:bg-gray-800/60 transition-all duration-300">
+                                        <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase">
+                                            <span>{{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}</span>
+                                        </div>
+                                        <div class="chart-wrapper">
+                                            <div id="{{ (metricName ~ '-' ~ serviceName)|replace({'.': '_', ' ': '_'}) }}-line" class="chart-container"></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            </div>
+
+<script>
+    // update time period in url
+    function updateTimePeriod() {
+        const select = document.getElementById('time-period')
+        const selectedValue = select.value
+        const serviceName = "{{ serviceName|e('js') }}"
+        window.location.search = `?service_name=${serviceName}&time_period=${selectedValue}`
+    }
+
+    // select selecton value from url
+    function setSelectedValue() {
+        const urlParams = new URLSearchParams(window.location.search)
+        const timePeriod = urlParams.get('time_period')
+        const select = document.getElementById('time-period')
+
+        // set selected value
+        if (timePeriod) {
+            select.value = timePeriod
+        }
+    }
+
+    // init select value
+    window.onload = setSelectedValue
+
+    {% if serviceName != 'all-services' %}
+        window.metricsData = {{ { categories: data.categories, metrics: data.metrics, serviceName: serviceName } | json_encode | raw }};
+    {% else %}
+        {% for serviceName, serviceData in data %}
+            if (!window.metricsData) {
+                window.metricsData = {};
+            }
+            window.metricsData["{{ serviceName|replace({'.': '_', ' ': '_'}) }}"] = {{ { categories: serviceData.categories, metrics: serviceData.metrics } | json_encode | raw }};
         {% endfor %}
     {% endif %}
-{% endif %}
+</script>
 
 {# INCLUDE CHARTS JS #}
 {{ encore_entry_script_tags('metrics-charts-js') }}

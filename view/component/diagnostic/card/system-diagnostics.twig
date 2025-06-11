@@ -1,161 +1,183 @@
-<div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 rounded shadow-xl text-white w-full overflow-hidden">
-    <div class="px-3 py-2 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
-        <i class="fas fa-heartbeat text-white/70"></i>
-        System diagnostics
+<div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
+    <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center">
+        <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2">
+            <i class="fas fa-heartbeat text-green-400 text-sm"></i>
+        </div>
+        <span>System Diagnostics</span>
     </div>
 	{# NOT-INSTALLED-REQUIREMENTS CHECK #}
-	<div class="px-3 py-1 mt-1">
-		{% if diagnosticData.notInstalledRequirements is empty %}
-			<span>
-				<span class="text-green-500">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					All requirements is installed
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					Not found requirements:
-					{{ diagnosticData.notInstalledRequirements|join(', ')|e }}
-				</span>
-			</span>
-		{% endif %}
+	<div class="flex items-center justify-between py-1 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1 py-1">
+			{% if diagnosticData.notInstalledRequirements is empty %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Requirements</span>
+					<p class="text-gray-400 text-sm">All packages installed</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-red-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Requirements</span>
+					<p class="text-red-300 text-sm">{{ diagnosticData.notInstalledRequirements|join(', ')|e }}</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if diagnosticData.notInstalledRequirements is empty %}
+				<i class="fas fa-check text-green-400"></i>
+			{% else %}
+				<i class="fas fa-times text-red-400"></i>
+			{% endif %}
+		</div>
 	</div>
 	{# LOGS-SIZE CHECK #}
-	<div class="px-3 py-1">
-		{% if diagnosticData.isLogsTooBig %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					Logs size is too big, please clear logs (/var/log)
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-green-400">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					Logs size is normal
-				</span>
-			</span>
-		{% endif %}
+	<div class="flex items-center justify-between py-3 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1">
+			{% if diagnosticData.isLogsTooBig %}
+				<div class="w-2 h-2 bg-red-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Log Files</span>
+					<p class="text-red-300 text-sm">Size critical - cleanup required</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Log Files</span>
+					<p class="text-gray-400 text-sm">Size normal</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if diagnosticData.isLogsTooBig %}
+				<i class="fas fa-times text-red-400"></i>
+			{% else %}
+				<i class="fas fa-check text-green-400"></i>
+			{% endif %}
+		</div>
 	</div>
 	{# STORAGE-SPACE CHECK #}
-	<div class="px-3 py-1">
-		{% if diagnosticData.driveSpace < 90 %}
-			<span>
-				<span class="text-green-500">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					Storage space
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					main storage storage is full, please delete some unnecessary data or increase storage space
-				</span>
-			</span>
-		{% endif %}
+	<div class="flex items-center justify-between py-3 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1">
+			{% if diagnosticData.driveSpace < 90 %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Storage</span>
+					<p class="text-gray-400 text-sm">{{ diagnosticData.driveSpace }}% used</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-red-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Storage</span>
+					<p class="text-red-300 text-sm">{{ diagnosticData.driveSpace }}% - critically full</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if diagnosticData.driveSpace < 90 %}
+				<i class="fas fa-check text-green-400"></i>
+			{% else %}
+				<i class="fas fa-times text-red-400"></i>
+			{% endif %}
+		</div>
 	</div>
 	{# CPU-OVERLOAD CHECK #}
-	<div class="px-3 py-1">
-		{% if diagnosticData.cpuUsage > 98.00 %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					CPU is overloaded, please check cpu usage
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-green-400">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					CPU is at normal values
-				</span>
-			</span>
-		{% endif %}
+	<div class="flex items-center justify-between py-3 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1">
+			{% if diagnosticData.cpuUsage > 98.00 %}
+				<div class="w-2 h-2 bg-red-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">CPU Usage</span>
+					<p class="text-red-300 text-sm">{{ diagnosticData.cpuUsage }}% - overloaded</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">CPU Usage</span>
+					<p class="text-gray-400 text-sm">{{ diagnosticData.cpuUsage }}%</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if diagnosticData.cpuUsage > 98.00 %}
+				<i class="fas fa-times text-red-400"></i>
+			{% else %}
+				<i class="fas fa-check text-green-400"></i>
+			{% endif %}
+		</div>
 	</div>
 	{# RAM-OVERLOAD CHECK #}
-	<div class="px-3 py-1">
-		{% if diagnosticData.ramUsage > 98.00 %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					RAM Memory is overloaded, please check usage
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-green-400">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					RAM Memory is available
-				</span>
-			</span>
-		{% endif %}
+	<div class="flex items-center justify-between py-3 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1">
+			{% if diagnosticData.ramUsage > 98.00 %}
+				<div class="w-2 h-2 bg-red-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">RAM Usage</span>
+					<p class="text-red-300 text-sm">{{ diagnosticData.ramUsage }}% - critically low</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">RAM Usage</span>
+					<p class="text-gray-400 text-sm">{{ diagnosticData.ramUsage }}%</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if diagnosticData.ramUsage > 98.00 %}
+				<i class="fas fa-times text-red-400"></i>
+			{% else %}
+				<i class="fas fa-check text-green-400"></i>
+			{% endif %}
+		</div>
 	</div>
 	{# REBOOT REQUIRED #}
-	<div class="px-3 py-1">
-		{% if diagnosticData.rebootRequired %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					Reboot is required
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-green-400">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					Reboot not required
-				</span>
-			</span>
-		{% endif %}
+	<div class="flex items-center justify-between py-3 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1">
+			{% if diagnosticData.rebootRequired %}
+				<div class="w-2 h-2 bg-orange-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">System Reboot</span>
+					<p class="text-orange-300 text-sm">Restart required</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">System Reboot</span>
+					<p class="text-gray-400 text-sm">Not required</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if diagnosticData.rebootRequired %}
+				<i class="fas fa-exclamation-triangle text-orange-400"></i>
+			{% else %}
+				<i class="fas fa-check text-green-400"></i>
+			{% endif %}
+		</div>
 	</div>
 	{# CHECK FOR UPDATES #}
-	<div class="px-3 py-1 mb-1">
-		{% if diagnosticData.updateAvailable %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					Update available (please update your repositories)
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-green-400">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					No updates available
-				</span>
-			</span>
-		{% endif %}
+	<div class="flex items-center justify-between py-3 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1">
+			{% if diagnosticData.updateAvailable %}
+				<div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">System Updates</span>
+					<p class="text-blue-300 text-sm">Updates available</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">System Updates</span>
+					<p class="text-gray-400 text-sm">Up to date</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if diagnosticData.updateAvailable %}
+				<i class="fas fa-download text-blue-400"></i>
+			{% else %}
+				<i class="fas fa-check text-green-400"></i>
+			{% endif %}
+		</div>
 	</div>
 </div>

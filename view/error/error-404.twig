@@ -1,16 +1,16 @@
 {% extends 'common/base.twig' %}
 
 {% block body %}
-<div class="flex flex-col justify-center items-center h-screen bg-gradient-to-b from-zinc-900/100 to-zinc-950/100 text-gray-200">
-    <div class="text-center px-6 animate-fade-in">
-        <div class="text-yellow-400 text-6xl mb-4">
+<div class="flex flex-col justify-center items-center h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-gray-100">
+    <div class="text-center px-8 animate-popin">
+        <div class="text-amber-400 text-8xl mb-6">
             <i class="fas fa-exclamation-triangle"></i>
         </div>
-        <h2 class="text-4xl font-extrabold mb-2">404 – Page Not Found</h2>
-        <p class="text-lg text-gray-400 mb-6 max-w-md mx-auto">
+        <h2 class="text-5xl font-bold mb-4 text-white">404 – Page Not Found</h2>
+        <p class="text-xl text-gray-300 mb-8 max-w-lg mx-auto leading-relaxed">
             The page you’re looking for doesn’t exist,<br> has been moved, or never existed at all.
         </p>
-        <a href={{ path('app_index') }} class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-700 to-blue-600 text-white text-lg font-semibold rounded-full shadow-lg hover:from-blue-600 hover:to-blue-500 transition-all duration-300">
+        <a href={{ path('app_index') }} class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-lg font-semibold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
             <i class="fas fa-arrow-left"></i> Back to Homepage
         </a>
     </div>

@@ -1,120 +1,136 @@
-<div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 rounded shadow-xl text-white w-full overflow-hidden">
-    <div class="px-3 py-2 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
-        <i class="fas fa-heartbeat text-white/70"></i>
-        Suite diagnostics
+<div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
+    <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center">
+        <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mr-2">
+            <i class="fas fa-heartbeat text-blue-400 text-sm"></i>
+        </div>
+        <span>Suite Diagnostics</span>
     </div>
 	{# LAST MONITORING TIME CHECK (check if monitoring process is running) #}
 	{% set now = "now"|date("Y-m-d H:i:s") %}
 	{% set lastTime = diagnosticData.lastMonitoringTime %}
 	{% set timeDiff = lastTime is not null ? (now|date("U") - lastTime|date("U")) : null %}
-	<div class="px-3 py-1 mt-1">
-		{% if lastTime is not null and timeDiff is not null and timeDiff <= monitoringInterval %}
-			<span>
-				<span class="text-green-500">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					Monitoring process is running
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					Monitoring process has been inactive for a long time
-				</span>
-			</span>
-		{% endif %}
+	<div class="flex items-center justify-between py-3 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1">
+			{% if lastTime is not null and timeDiff is not null and timeDiff <= monitoringInterval %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Monitoring Process</span>
+					<p class="text-gray-400 text-sm">Last check: {{ lastTime|date('H:i:s') }}</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-red-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Monitoring Process</span>
+					<p class="text-red-300 text-sm">Inactive for too long</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if lastTime is not null and timeDiff is not null and timeDiff <= monitoringInterval %}
+				<i class="fas fa-check text-green-400"></i>
+			{% else %}
+				<i class="fas fa-times text-red-400"></i>
+			{% endif %}
+		</div>
 	</div>
 	{# SSL-RUNNING CHECK #}
-	<div class="px-3 py-1">
-		{% if diagnosticData.isSSL %}
-			<span>
-				<span class="text-green-500">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					Page is secured with https
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					Session is running on http [non secure connction] please contact web admin for fix it
-				</span>
-			</span>
-		{% endif %}
+	<div class="flex items-center justify-between py-3 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1">
+			{% if diagnosticData.isSSL %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">SSL Security</span>
+					<p class="text-gray-400 text-sm">HTTPS enabled</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-red-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">SSL Security</span>
+					<p class="text-red-300 text-sm">HTTP only - insecure</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if diagnosticData.isSSL %}
+				<i class="fas fa-lock text-green-400"></i>
+			{% else %}
+				<i class="fas fa-unlock text-red-400"></i>
+			{% endif %}
+		</div>
 	</div>
 	{# DEV-MODE CHECK #}
-	<div class="px-3 py-1">
-		{% if diagnosticData.isDevMode %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					Developer mode is enabled, please set APP_ENV=prod in .env config file
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-green-500">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					Developer mode config is not enabled
-				</span>
-			</span>
-		{% endif %}
+	<div class="flex items-center justify-between py-3 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1">
+			{% if diagnosticData.isDevMode %}
+				<div class="w-2 h-2 bg-orange-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Environment</span>
+					<p class="text-orange-300 text-sm">Development mode</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Environment</span>
+					<p class="text-gray-400 text-sm">Production mode</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if diagnosticData.isDevMode %}
+				<i class="fas fa-code text-orange-400"></i>
+			{% else %}
+				<i class="fas fa-check text-green-400"></i>
+			{% endif %}
+		</div>
 	</div>
 	{# WEBSERVER USER PERMISSIONS CHECK #}
-	<div class="px-3 py-1 mb-1">
-		{% if diagnosticData.isWebUserSudo %}
-			<span>
-				<span class="text-green-400">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					Site permissions is root
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					Permissions error: please add "{{ diagnosticData.webUsername|e }}
-					ALL=NOPASSWD: ALL" to /etc/sudoers
-				</span>
-			</span>
-		{% endif %}
+	<div class="flex items-center justify-between py-3 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1">
+			{% if diagnosticData.isWebUserSudo %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Web Permissions</span>
+					<p class="text-gray-400 text-sm">Sudo access granted</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-red-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Web Permissions</span>
+					<p class="text-red-300 text-sm">Sudo access required</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if diagnosticData.isWebUserSudo %}
+				<i class="fas fa-check text-green-400"></i>
+			{% else %}
+				<i class="fas fa-times text-red-400"></i>
+			{% endif %}
+		</div>
 	</div>
 	{# CHECK WEBSITE CACHE FOLDER PERMISSIONS #}
-	<div class="px-3 mb-2">
-		{% if diagnosticData.websiteDirectoryPermissions %}
-			<span>
-				<span class="text-green-400">
-					<i class="fa fa-check"></i>
-				</span>
-				<span class="text-yellow-400 ml-1">
-					Website filesystem cache permissions is set
-				</span>
-			</span>
-		{% else %}
-			<span>
-				<span class="text-red-400">
-					<i class="fa fa-exclamation-triangle"></i>
-				</span>
-				<span class="text-red-400 ml-[1.8px]">
-					Permissions error: please add set root permissions to /var directory
-				</span>
-			</span>
-		{% endif %}
-	</div>
+	<div class="flex items-center justify-between py-3 border-b border-gray-600/30 last:border-b-0">
+		<div class="flex items-center gap-3 px-4 pt-1">
+			{% if diagnosticData.websiteDirectoryPermissions %}
+				<div class="w-2 h-2 bg-green-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Cache Permissions</span>
+					<p class="text-gray-400 text-sm">Filesystem access OK</p>
+				</div>
+			{% else %}
+				<div class="w-2 h-2 bg-red-400 rounded-full"></div>
+				<div>
+					<span class="text-white font-medium">Cache Permissions</span>
+					<p class="text-red-300 text-sm">Access denied</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="flex-shrink-0 px-4 pt-1">
+			{% if diagnosticData.websiteDirectoryPermissions %}
+				<i class="fas fa-check text-green-400"></i>
+			{% else %}
+				<i class="fas fa-times text-red-400"></i>
+			{% endif %}
+		</div>
+    </div>
 </div>

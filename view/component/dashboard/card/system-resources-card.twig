@@ -1,25 +1,57 @@
-<div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 rounded shadow-xl text-white w-full overflow-hidden">
-    <div class="px-3 py-2 border-b border-white/10 text-white/80 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
-        <span><i class="fas fa-cogs text-white/70"></i> <span class="ml-1">System resources</span></span>
-        <a href={{ path('app_metrics_dashboard') }} class="text-indigo-400 hover:text-indigo-300 text-xs font-semibold transition" title="Go to metrics view">View All</a>
+<div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden hover:bg-gray-800/60 transition-all duration-300 h-full flex flex-col">
+    <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
+        <span class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                <i class="fas fa-cogs text-blue-400 text-sm"></i>
+            </div>
+            <span>System Resources</span>
+        </span>
+        <a href={{ path('app_metrics_dashboard') }} class="inline-flex items-center gap-1 px-2 py-1 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 hover:text-blue-300 text-xs font-semibold rounded-md transition-all duration-200 border border-blue-500/30" title="Go to metrics view">
+            <span>View All</span>
+            <i class="fas fa-external-link-alt text-xs"></i>
+        </a>
     </div>
-    <div class="p-3 pt-2">
+    <div class="p-2 flex-1 flex flex-col justify-between space-y-3">
         {# CPU USAGE #}
-        <p class="text-white mb-[2px] mt-1" id="cpu-usage">CPU: {{ diagnosticData.cpuUsage|e }}%</p>
-        <div class="w-full h-4 bg-white/10 rounded overflow-hidden mb-1">
-            <div class="h-full bg-cyan-400 transition-all duration-300 ease-in-out" id="cpu-progress" style="min-width: 0.2%; width: {{ diagnosticData.cpuUsage|e }}%; background: {{ diagnosticData.cpuUsage > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)' }};"></div>
+        <div class="bg-gray-700/30 rounded-lg p-3 border border-gray-600/30">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-microchip text-blue-400 text-sm"></i>
+                    <span class="text-white font-medium text-sm">CPU Usage</span>
+                </div>
+                <span class="text-white font-semibold text-sm" id="cpu-usage">{{ diagnosticData.cpuUsage|e }}%</span>
+            </div>
+            <div class="w-full h-3 bg-gray-600/50 rounded-full overflow-hidden">
+                <div class="h-full transition-all duration-500 ease-in-out rounded-full" id="cpu-progress" style="min-width: 0.2%; width: {{ diagnosticData.cpuUsage|e }}%; background: {{ diagnosticData.cpuUsage > 80 ? 'linear-gradient(90deg, #ef4444, #f87171)' : 'linear-gradient(90deg, #3b82f6, #60a5fa)' }};"></div>
+            </div>
         </div>
 
         {# RAM USAGE #}
-        <p class="text-white mb-[2px] mt-[15px]" id="ram-usage">RAM: ({{ ramUsage.used|e }}G / {{ diagnosticData.ramUsage|e }}%)</p> 
-        <div class="w-full h-4 bg-white/10 rounded overflow-hidden mb-1">
-            <div class="h-full bg-cyan-400 transition-all duration-300 ease-in-out" id="ram-progress" style="min-width: 0.2%; width: {{ diagnosticData.ramUsage|e }}%; background: {{ diagnosticData.ramUsage > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)' }};"></div>
+        <div class="bg-gray-700/30 rounded-lg p-3 border border-gray-600/30">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-memory text-green-400 text-sm"></i>
+                    <span class="text-white font-medium text-sm">RAM Usage</span>
+                </div>
+                <span class="text-white font-semibold text-sm" id="ram-usage">{{ ramUsage.used|e }}G / {{ diagnosticData.ramUsage|e }}%</span>
+            </div>
+            <div class="w-full h-3 bg-gray-600/50 rounded-full overflow-hidden">
+                <div class="h-full transition-all duration-500 ease-in-out rounded-full" id="ram-progress" style="min-width: 0.2%; width: {{ diagnosticData.ramUsage|e }}%; background: {{ diagnosticData.ramUsage > 80 ? 'linear-gradient(90deg, #ef4444, #f87171)' : 'linear-gradient(90deg, #10b981, #34d399)' }};"></div>
+            </div>
         </div>
 
         {# STORAGE USAGE #}
-        <p class="text-white mb-[2px] mt-[14px]" id="drive-space">STORAGE: ({{ storageUsage|e }}G / {{ diagnosticData.driveSpace|e }}%)</p> 
-        <div class="w-full h-4 bg-white/10 rounded overflow-hidden mb-1">
-            <div class="h-full bg-cyan-400 transition-all duration-300 ease-in-out" id="drive-space-progress" style="min-width: 0.2%; width: {{ diagnosticData.driveSpace|e }}%; background: {{ diagnosticData.driveSpace > 80 ? 'linear-gradient(45deg, #f73925, #ff6b6b)' : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)' }};"></div>
+        <div class="bg-gray-700/30 rounded-lg p-3 border border-gray-600/30">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-hdd text-purple-400 text-sm"></i>
+                    <span class="text-white font-medium text-sm">Storage Usage</span>
+                </div>
+                <span class="text-white font-semibold text-sm" id="drive-space">{{ storageUsage|e }}G / {{ diagnosticData.driveSpace|e }}%</span>
+            </div>
+            <div class="w-full h-3 bg-gray-600/50 rounded-full overflow-hidden">
+                <div class="h-full transition-all duration-500 ease-in-out rounded-full" id="drive-space-progress" style="min-width: 0.2%; width: {{ diagnosticData.driveSpace|e }}%; background: {{ diagnosticData.driveSpace > 80 ? 'linear-gradient(90deg, #ef4444, #f87171)' : 'linear-gradient(90deg, #8b5cf6, #a78bfa)' }};"></div>
+            </div>
         </div>
     </div>
 </div>

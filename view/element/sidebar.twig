@@ -1,9 +1,9 @@
-<aside id="sidebar" class="text-white border-r border-zinc-200/10 bg-gradient-to-b from-zinc-900/100 to-zinc-950/100 backdrop-blur flex flex-col h-full w-64">
+<aside id="sidebar" class="text-white border-r border-gray-700/50 bg-gradient-to-b from-gray-900 via-gray-900/80 to-gray-900 backdrop-blur-sm flex flex-col h-full w-64 shadow-xl">
     <div class="px-6 py-2">
         {# USER INFO #}
         <div class="flex flex-col items-center space-y-0">
             {# PROFILE IMAGE #}
-            <div class="group h-20 w-20 rounded-full overflow-hidden border-2 border-zinc-700/50 cursor-pointer hover:ring-2 hover:ring-emerald-600 transition-all duration-300" id="open-profile-modal">
+            <div class="group h-20 w-20 rounded-full overflow-hidden border-2 border-gray-600/50 cursor-pointer hover:ring-2 hover:ring-emerald-600 transition-all duration-300" id="open-profile-modal">
                 {% if getUserData().getProfilePic == 'default_pic' %}
                     <img class="h-full w-full object-cover" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture">
                 {% else %}
@@ -13,7 +13,7 @@
 
             {# USERNAME AND ROLE #}
             <div class="text-center">
-                <h3 id="username" class="font-medium text-2xl text-zinc-100">{{ getUserData().username|e }}</h3>
+                <h3 id="username" class="font-medium text-2xl text-gray-100">{{ getUserData().username|e }}</h3>
                 <span id="role" class="inline-flex items-center gap-1 sm:mt-[5px] px-3 py-1 rounded-full text-xs font-semibold shadow-sm border transition-all duration-300
                     {% if isAdmin() %}
                         bg-red-500/10 text-red-400 border-red-400/20 hover:bg-red-500/20
@@ -35,7 +35,7 @@
             {% if currentUrl matches '/admin/' %}
                 {% set newUrl = currentUrl|replace({'admin.': ''}) %}
                 <li>
-                    <a href="{{ newUrl }}/admin" target="_blank" class="group flex items-center relative pl-1 px-1 py-[6px] rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-all duration-200">
+                    <a href="{{ newUrl }}/admin" target="_blank" class="group flex items-center relative pl-1 px-1 py-[6px] rounded text-gray-300 hover:text-white bg-gray-600/20 mb-[2px] transition-all duration-200">
                         <span class="absolute left-0 top-0 h-full w-[4px] bg-emerald-400 opacity-0 group-hover:opacity-100 rounded-r transition-all duration-200 phone-none"></span>
                         <i class="fas fa-globe h-5 w-5 mt-[8px] mr-1 ml-2 transition-all duration-200 group-hover:ml-3"></i>
                         <span class="transition-all duration-200">
@@ -63,13 +63,13 @@
 
             {% for item in menuItems %}
                 <li>
-                    <a href={{ path(item.route) }} class="group flex items-center relative pl-1 px-1 py-[6px] rounded text-zinc-300 hover:text-white bg-white/5 mb-[2px] transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-900/20 hover:to-transparent">
+                    <a href={{ path(item.route) }} class="group flex items-center relative pl-1 px-1 py-[6px] rounded text-gray-300 hover:text-white bg-gray-600/20 mb-[2px] transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-900/20 hover:to-transparent">
                         <span class="absolute left-0 top-0 h-full w-[4px] bg-emerald-400 opacity-0 group-hover:opacity-100 rounded-r transition-all duration-200 phone-none"></span>
                         <i class="{{ item.icon }} h-5 w-5 mt-[8px] mr-1 ml-2 transition-all duration-200 group-hover:ml-3"></i>
                         <span class="transition-all duration-200">
                             {{ item.label }}
                             {% if item.route == 'app_todo_manager' and getTodosCount() > 0 %}
-                                <span class="ml-1 px-2 py-0.5 text-xs rounded-full bg-zinc-700">
+                                <span class="ml-1 px-2 py-0.5 text-xs rounded-full bg-gray-600 border border-gray-700">
                                     {{ getTodosCount()|e }}
                                 </span>
                             {% endif %}

@@ -2,27 +2,31 @@
 
 {# USER MANAGER TABLE COMPONENT #}
 {% block component %}
-<div class="users-manager">
-    {# SUB-NAVIGATION #}
-    <div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
-        {# BACK BUTTON #}
-        <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="Back to dashboard">
-            <i class="fa fa-arrow-left" aria-hidden="true"></i>
-        </a>
-        {# LINK TO UNFILTERED LOGS #}
-        <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': usersTableName}) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="View un-filtered users">
-            <i class="fa fa-database" aria-hidden="true"></i>
-        </a>
-        {# LINK TO USER REGISTER FORM #}
-        <a href={{ path('app_manager_users_register') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 ml-1 text-white hover:bg-neutral-700" title="Add new user">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-        </a>
-
-        {# FILTER FORM #}
-        <span class="mr-1"></span>
-        <div>
+<div class="flex flex-col h-full">
+{# SUB-NAVIGATION #}
+<div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
+    <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-3">
+            <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+                <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
+            </a>
+            <div class="hidden sm:block">
+                <h1 class="text-lg font-bold text-white">Users Manager</h1>
+                <p class="text-gray-400 text-xs">Manage system users and permissions</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            {# DATABASE LINK #}
+            <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': usersTableName}) }} class="w-8 h-8 bg-gray-700/50 hover:bg-blue-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="View database table">
+                <i class="fas fa-database text-gray-300 text-xs"></i>
+            </a>
+            {# ADD USER LINK #}
+            <a href={{ path('app_manager_users_register') }} class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Add new user">
+                <i class="fas fa-plus text-gray-300 text-xs"></i>
+            </a>
+            {# FILTER FORM #}
             <form method="get" action={{ path('app_manager_users') }}>
-                <select name="filter" onchange="this.form.submit()" class="bg-neutral-800 text-white border border-neutral-600 rounded">
+                <select name="filter" onchange="this.form.submit()" class="bg-gray-700/50 text-white border border-gray-600/30 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50">
                     <option value="">All Users</option>
                     <option value="online" {% if filter == 'online' %}selected{% endif %}>Online</option>
                     <option value="banned" {% if filter == 'banned' %}selected{% endif %}>Banned</option>
@@ -30,11 +34,14 @@
             </form>
         </div>
     </div>
+</div>
+
+<div class="users-manager flex-1 flex flex-col min-h-0">
 
     {# FLASH MESSAGE #}
     {% for label, messages in app.flashes %}
         {% for message in messages %}
-            <div class="m-1 p-2 rounded-md {% if label == 'success' %}bg-green-600/20 text-green-400 border border-green-800{% else %}bg-red-600/20 text-red-400 border border-red-800{% endif %}">
+            <div class="m-2 p-3 rounded-lg {% if label == 'success' %}bg-green-600/20 text-green-300 border border-green-500/30{% else %}bg-red-600/20 text-red-300 border border-red-500/30{% endif %}">
                 {{ message|e }}
             </div>
         {% endfor %}
@@ -42,27 +49,34 @@
 
     {# CHECK IF TABLE IS EMPTY #}
     {% if users|length == 0 %}
-        <p class="flex items-center justify-center mt-20 mb-20 text-2xl text-white font-bold">This user list page is empty</p>
+        <div class="flex flex-col items-center justify-center flex-1">
+            <div class="w-16 h-16 bg-gray-700/50 rounded-full flex items-center justify-center mb-4">
+                <i class="fas fa-users text-gray-400 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">No users found</h3>
+            <p class="text-gray-400 text-center">No users match the current filter</p>
+        </div>
     {% else %}
+        {# TABLE VIEW #}
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-white whitespace-nowrap bg-white/5">
+            <table class="min-w-full text-white w-full bg-gray-800/50 border border-gray-700/50" style="min-width: 1200px;">
                 <thead>
-                    <tr class="border-b border-neutral-700 bg-white/5">
-                        <th class="text-left text-white p-2">#</th>
-                        <th class="text-left text-white p-2">Username</th>
-                        <th class="text-left text-white p-2">Role</th>
-                        <th class="text-left text-white p-2">Browser</th>
-                        <th class="text-left text-white p-2">OS</th>
-                        <th class="text-left text-white p-2">Last Login</th>
-                        <th class="text-left text-white p-2">IP Address</th>
-                        <th class="text-left text-white p-2">Status</th>
-                        <th class="text-left text-white p-2">Banned</th>
-                        <th class="text-left text-white p-2 text-center"><i class="fa fa-ban" aria-hidden="true"></th>
-                        <th class="text-left text-white p-2 text-center"><i class="fa fa-key" aria-hidden="true"></th>
-                        <th class="text-left text-white p-2 text-center"><i class="fa fa-trash" aria-hidden="true"></th>
+                    <tr class="bg-gray-700/50">
+                        <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">#</th>
+                        <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Username</th>
+                        <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Role</th>
+                        <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Browser</th>
+                        <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">OS</th>
+                        <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Last Login</th>
+                        <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">IP Address</th>
+                        <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Status</th>
+                        <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Banned</th>
+                        <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap"><i class="fas fa-ban"></i></th>
+                        <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap"><i class="fas fa-key"></i></th>
+                        <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap"><i class="fas fa-trash"></i></th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-white">
+                <tbody>
                     {% for row in users %}
                         {# GET ONLINE STATUS #}
                         {% set isOnline = false %}
@@ -78,83 +92,97 @@
                         {% endif %}
 
                         {# USER ROW #}
-                        <tr class="hover:bg-neutral-800 border-b border-neutral-700 text-lg bg-white/1">
-                            <td class="text-white p-1 border-b border-neutral-700 pl-2">{{ row.id|e }}</td>
-                            <td class="text-white p-1 border-b border-neutral-700">
-                                <a href={{ path('app_manager_users_profile', {'id': row.id}) }} class="profile-link">{{ row.username |e}}</a>
+                        <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300">
+                            <td class="px-4 py-3 border-b border-gray-600/50 text-white whitespace-nowrap">{{ row.id|e }}</td>
+                            <td class="px-4 py-3 border-b border-gray-600/50 text-white whitespace-nowrap">
+                                <a href={{ path('app_manager_users_profile', {'id': row.id}) }} class="profile-link text-blue-400 hover:text-blue-300 transition-colors duration-200">{{ row.username |e}}</a>
                             </td>
 
                             {# ROLE VALUE #}
                             {% if userManager.isUserAdmin(row.id) %}
-                                <td class="text-red-400 p-1 border-b border-neutral-700">
-                                    <a href="#" id="loading-blocker" class="role-update-button" data-username={{ row.username|e }} data-role={{ row.role|e }} data-id={{ row.id|e }}>{{ row.role|e }}</a>
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-red-400 whitespace-nowrap">
+                                    <a href="#" id="loading-blocker" class="role-update-button hover:text-red-300 transition-colors duration-200" data-username={{ row.username|e }} data-role={{ row.role|e }} data-id={{ row.id|e }}>{{ row.role|e }}</a>
                                 </td>
                             {% else %}
-                                <td class="text-green-400 p-1 border-b border-neutral-700">
-                                    <a href="#" id="loading-blocker" class="role-update-button" data-username={{ row.username|e }} data-role={{ row.role|e }} data-id={{ row.id|e }}>{{ row.role|e }}</a>
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-green-400 whitespace-nowrap">
+                                    <a href="#" id="loading-blocker" class="role-update-button hover:text-green-300 transition-colors duration-200" data-username={{ row.username|e }} data-role={{ row.role|e }} data-id={{ row.id|e }}>{{ row.role|e }}</a>
                                 </td>
                             {% endif %}
 
                             {# BROWSER VALUE #}
                             {% if row.userAgent == 'Unknown' or row.userAgent == 'DataFixtures-CLI' %}
-                                <td class="text-red-400 p-1 border-b border-neutral-700">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-red-400 whitespace-nowrap">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
                             {% else %}
-                                <td class="text-white p-1 border-b border-neutral-700">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-white whitespace-nowrap">{{ visitorInfoUtil.getBrowserShortify(row.userAgent)|e }}</td>
                             {% endif %}
 
                             {# OS NAME VALUE #}
                             {% if visitorInfoUtil.getOs(row.userAgent) == 'Unknown OS' %}
-                                <td class="text-red-400 p-1 border-b border-neutral-700">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-red-400 whitespace-nowrap">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
                             {% else %}
-                                <td class="text-white p-1 border-b border-neutral-700">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-white whitespace-nowrap">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
                             {% endif %}
 
                             {# LAST LOGIN TIME #}
-                            <td class="text-white p-1 border-b border-neutral-700">{{ row.lastLoginTime|date('Y-m-d H:i:s')|e }}</td>
+                            <td class="px-4 py-3 border-b border-gray-600/50 text-white whitespace-nowrap">{{ row.lastLoginTime|date('Y-m-d H:i:s')|e }}</td>
 
                             {# IP ADDRESS VALUE #}
                             {% if currentIp == row.ipAddress %}
-                                <td class="text-white p-1 border-b border-neutral-700 highlighter">{{ row.ipAddress|e }}</td>
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-yellow-400 font-medium whitespace-nowrap">{{ row.ipAddress|e }}</td>
                             {% else %}
-                                <td class="text-white p-1 border-b border-neutral-700">{{ row.ipAddress|e }}</td>
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-white whitespace-nowrap">{{ row.ipAddress|e }}</td>
                             {% endif %}
 
                             {# ONLINE STATUS #}
                             {% if currentStatus == 'online' %}
-                                <td class="text-green-400 p-1 border-b border-neutral-700">
-                                    <p>{{currentStatus|e}}</p>
+                                <td class="px-4 py-3 border-b border-gray-600/50 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-600/20 text-green-400">
+                                        <span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-1"></span>
+                                        {{currentStatus|e}}
+                                    </span>
                                 </td>
                             {% else %}
-                                <td class="text-red-400 p-1 border-b border-neutral-700">
-                                    <p>{{currentStatus|e}}</p>
+                                <td class="px-4 py-3 border-b border-gray-600/50 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-600/20 text-red-400">
+                                        <span class="w-1.5 h-1.5 bg-red-400 rounded-full mr-1"></span>
+                                        {{currentStatus|e}}
+                                    </span>
                                 </td>
                             {% endif %}
 
                             {# BANNED STATUS #}
                             {% if banManager.isUserBanned(row.id) %}
-                                <td class="text-green-400 p-1 border-b border-neutral-700">
-                                    <p>Yes</p>
+                                <td class="px-4 py-3 border-b border-gray-600/50 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-600/20 text-red-400">Yes</span>
                                 </td>
-                                <td class="text-white p-1 border-b border-neutral-700 text-center">
-                                    <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'inactive', 'page': currentPage}) }} id="loading-blocker" class="unban-button"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap">
+                                    <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'inactive', 'page': currentPage}) }} id="loading-blocker" class="unban-button w-7 h-7 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-colors duration-200">
+                                        <i class="fas fa-check text-xs text-gray-300 hover:text-white"></i>
+                                    </a>
                                 </td>
                             {% else %}
-                                <td class="text-red-400 p-1 border-b border-neutral-700">
-                                    <p>No</p>
+                                <td class="px-4 py-3 border-b border-gray-600/50 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-600/20 text-green-400">No</span>
                                 </td>
-                                <td class="text-white p-1 border-b border-neutral-700 text-center">
-                                    <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'active', 'page': currentPage}) }} id="loading-blocker" class="ban-button"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap">
+                                    <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'active', 'page': currentPage}) }} id="loading-blocker" class="ban-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-colors duration-200">
+                                        <i class="fas fa-ban text-xs text-gray-300 hover:text-white"></i>
+                                    </a>
                                 </td>
                             {% endif %}
 
                             {# TOKEN REGENERATION LINK #}
-                            <td class="text-blue-500 p-1 border-b border-neutral-700 text-center hover:text-blue-300">
-                                <a href={{ path('app_manager_users_token_regenerate', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="token-regenerate-button" title="Regenerate authentication token"><i class="fa fa-key" aria-hidden="true"></i></a>
+                            <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap">
+                                <a href={{ path('app_manager_users_token_regenerate', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="token-regenerate-button w-7 h-7 bg-gray-700/50 hover:bg-blue-600/50 rounded flex items-center justify-center transition-colors duration-200" title="Regenerate authentication token">
+                                    <i class="fas fa-key text-xs text-gray-300 hover:text-white"></i>
+                                </a>
                             </td>
 
                             {# USER DELETE LINK #}
-                            <td class="text-white p-1 border-b border-neutral-700 text-center">
-                                <a href={{ path('app_manager_users_delete', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="delete-button"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap">
+                                <a href={{ path('app_manager_users_delete', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="delete-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-colors duration-200">
+                                    <i class="fas fa-trash text-xs text-gray-300 hover:text-white"></i>
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -163,43 +191,49 @@
         </div>
     {% endif %}
 
-    {# PAGINATION SYSTEM #}
-    {% if (totalUsersCount > limitPerPage) and (filter == '') %}
-        <div class="mt-2 flex justify-center mb-2">
-            <div class="border border-neutral-800 rounded overflow-hidden bg-neutral-800 border border-neutral-500/50">
-                <ul class="flex">
-                    {% set totalPages = (totalUsersCount / limitPerPage)|round(0, 'ceil') %}
-                    {% set previousPage = currentPage > 1 ? currentPage - 1 : 1 %}
-                    {% set nextPage = currentPage < totalPages ? currentPage + 1 : totalPages %}
-                    {% set startPage = max(currentPage - 2, 1) %}
-                    {% set endPage = min(currentPage + 2, totalPages) %}
-                    {% if currentPage > 1 %}
-                        <li>
-                            <a href={{ path('app_manager_users', {'page': previousPage}) }} class="block px-4 py-2 text-white hover:bg-neutral-700">Previous</a>
-                        </li>
-                    {% else %}
-                        <li>
-                            <span class="block px-4 py-2 text-white bg-neutral-800 cursor-not-allowed opacity-50">Previous</span>
-                        </li>
-                    {% endif %}
-                    {% for page in startPage..endPage %}
-                        <li>
-                            <a href={{ path('app_manager_users', {'page': page}) }} class="block px-4 py-2 text-white {% if page == currentPage %}bg-neutral-700{% else %}hover:bg-neutral-700{% endif %}">{{ page }}</a>
-                        </li>
-                    {% endfor %}
-                    {% if currentPage < totalPages %}
-                        <li>
-                            <a href={{ path('app_manager_users', {'page': nextPage}) }} class="block px-4 py-2 text-white hover:bg-neutral-700">Next</a>
-                        </li>
-                    {% else %}
-                        <li>
-                            <span class="block px-4 py-2 text-white bg-neutral-800 cursor-not-allowed opacity-50">Next</span>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
+            {# PAGINATION SYSTEM #}
+            {% if (totalUsersCount > limitPerPage) and (filter == '') %}
+                <div class="px-4 py-3 border-t border-gray-700/50 bg-gray-800/30">
+                    <div class="flex justify-center">
+                        <div class="flex items-center gap-1">
+                            {% set totalPages = (totalUsersCount / limitPerPage)|round(0, 'ceil') %}
+                            {% set previousPage = currentPage > 1 ? currentPage - 1 : 1 %}
+                            {% set nextPage = currentPage < totalPages ? currentPage + 1 : totalPages %}
+                            {% set startPage = max(currentPage - 2, 1) %}
+                            {% set endPage = min(currentPage + 2, totalPages) %}
+
+                            {# Previous button #}
+                            {% if currentPage > 1 %}
+                                <a href={{ path('app_manager_users', {'page': previousPage}) }} class="px-3 py-2 text-sm text-white bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors duration-200">
+                                    <i class="fas fa-chevron-left text-xs mr-1"></i>Previous
+                                </a>
+                            {% else %}
+                                <span class="px-3 py-2 text-sm text-gray-500 bg-gray-800/50 rounded-lg cursor-not-allowed">
+                                    <i class="fas fa-chevron-left text-xs mr-1"></i>Previous
+                                </span>
+                            {% endif %}
+
+                            {# Page numbers #}
+                            {% for page in startPage..endPage %}
+                                <a href={{ path('app_manager_users', {'page': page}) }} class="px-3 py-2 text-sm text-white {% if page == currentPage %}bg-blue-600 hover:bg-blue-500{% else %}bg-gray-700/50 hover:bg-gray-600/50{% endif %} rounded-lg transition-colors duration-200">{{ page }}</a>
+                            {% endfor %}
+
+                            {# Next button #}
+                            {% if currentPage < totalPages %}
+                                <a href={{ path('app_manager_users', {'page': nextPage}) }} class="px-3 py-2 text-sm text-white bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors duration-200">
+                                    Next<i class="fas fa-chevron-right text-xs ml-1"></i>
+                                </a>
+                            {% else %}
+                                <span class="px-3 py-2 text-sm text-gray-500 bg-gray-800/50 rounded-lg cursor-not-allowed">
+                                    Next<i class="fas fa-chevron-right text-xs ml-1"></i>
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
-    {% endif %}
+    </div>
 
     {# USER DELETE POPUP OVERLAY #}
     {% include "component/users-manager/popup/user-delete-confirmation-popup.twig" %}
@@ -218,5 +252,6 @@
 
     {# POPUP FUNCTIONS #}
     {{ encore_entry_script_tags('user-manager-js') }}
+</div>
 </div>
 {% endblock %}

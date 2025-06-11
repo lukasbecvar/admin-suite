@@ -2,153 +2,181 @@
 
 {# FILE SYSTEM BROWSER COMPONENT - VIEW FILE #}
 {% block component %}
+<div class="flex flex-col h-full">
 {# SUB-NAVIGATION #}
-<div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40">
+<div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
     {# GET DIRECTORY PATH #}
     {% set parts = currentPath|split('/') %}
     {% set directoryPath = parts|slice(0, parts|length - 1)|join('/') %}
 
     {# BACK BUTTON #}
     {% set referer = app.request.get('referer') %}
-    {% if referer is empty %}
-        {% set backPath = path('app_file_system_browser', { 'path': directoryPath }) %}
-    {% elseif referer == 'log_manager_exception_files' %}
-        {% set backPath = path('app_manager_logs_exception_files') %}
-    {% elseif referer == 'log_manager_server_logs' %}
-        {% set backPath = path('app_manager_logs_system') %}
-    {% elseif referer == 'app_system_audit' %}
-        {% set backPath = path('app_system_audit') %}
-    {% elseif referer == 'monitoring_service_detail' %}
-        {% set backPath = path('app_manager_monitoring') %}
-    {% else %}
-        {% set backPath = path('app_file_system_browser', { 'path': directoryPath }) %}
-    {% endif %}
-    <a href={{ backPath }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white pt-[2px] px-[5px] hover:bg-neutral-700" title="Back to previous page">
-        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-    </a>
+    <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-3">
+            {# BACK BUTTON #}
+            {% if referer is empty %}
+                {% set backPath = path('app_file_system_browser', { 'path': directoryPath }) %}
+            {% elseif referer == 'log_manager_exception_files' %}
+                {% set backPath = path('app_manager_logs_exception_files') %}
+            {% elseif referer == 'log_manager_server_logs' %}
+                {% set backPath = path('app_manager_logs_system') %}
+            {% elseif referer == 'app_system_audit' %}
+                {% set backPath = path('app_system_audit') %}
+            {% elseif referer == 'monitoring_service_detail' %}
+                {% set backPath = path('app_manager_monitoring') %}
+            {% else %}
+                {% set backPath = path('app_file_system_browser', { 'path': directoryPath }) %}
+            {% endif %}
+            <a href={{ backPath }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to previous page">
+                <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
+            </a>
 
-    {# EDIT BUTTON (only for non-media files) #}
-    {% if mediaType == 'non-mediafile' or mediaType == null %}
-        <a href={{ path('app_file_system_edit', { 'path': currentPath }) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white pt-[2px] px-[5px] ml-1 hover:bg-neutral-700" title="Edit this file">
-            <i class="fa fa-pen" aria-hidden="true"></i>
-        </a>
-    {% endif %}
-
-    {# MOVE BUTTON #}
-    <a href={{ path('app_file_system_move', { 'path': currentPath }) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white pt-[2px] px-[5px] ml-1 hover:bg-neutral-700" title="Move this file">
-        <i class="fa fa-file-export" aria-hidden="true"></i>
-    </a>
-
-    {# DELETE FILE #}
-    {% if referer == 'log_manager_exception_files' %}
-        {% set service = app.request.get('service') %}
-        <button class="delete-button border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white pt-[2px] px-[5px] ml-1 hover:bg-neutral-700" data-file={{ service }} title="Delete this exception file">
-            <i class="fa fa-trash" aria-hidden="true"></i>
-        </button>
-    {% else %}
-        <div>
-            <button class="delete-file-button border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white pt-[2px] px-[5px] ml-1 hover:bg-neutral-700" data-path={{ currentPath }} data-is-dir="false" title="Delete this file">
-                <i class="fa fa-trash" aria-hidden="true"></i>
-            </button>
+            <div class="hidden sm:block">
+                <h1 class="text-lg font-bold text-white">{{ currentPath|split('/')|last }}</h1>
+                <p class="text-gray-400 text-xs">File viewer</p>
+            </div>
         </div>
-    {% endif %}
-    <span class="mr-1 text-white">{{ currentPath|split('/')|last }}</span>
+
+        <div class="flex items-center gap-2">
+            {# EDIT BUTTON (only for non-media files) #}
+            {% if mediaType == 'non-mediafile' or mediaType == null %}
+                <a href={{ path('app_file_system_edit', { 'path': currentPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-blue-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Edit this file">
+                    <i class="fas fa-pen text-gray-300 text-xs"></i>
+                </a>
+            {% endif %}
+
+            {# MOVE BUTTON #}
+            <a href={{ path('app_file_system_move', { 'path': currentPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-purple-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Move this file">
+                <i class="fas fa-arrows-alt text-gray-300 text-xs"></i>
+            </a>
+
+            {# DELETE FILE #}
+            {% if referer == 'log_manager_exception_files' %}
+                {% set service = app.request.get('service') %}
+                <button class="delete-button w-8 h-8 bg-gray-700/50 hover:bg-red-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" data-file={{ service }} title="Delete this exception file">
+                    <i class="fas fa-trash text-gray-300 text-xs"></i>
+                </button>
+            {% else %}
+                <button class="delete-file-button w-8 h-8 bg-gray-700/50 hover:bg-red-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" data-path={{ currentPath }} data-is-dir="false" title="Delete this file">
+                    <i class="fas fa-trash text-gray-300 text-xs"></i>
+                </button>
+            {% endif %}
+        </div>
+    </div>
 </div>
 
-{# FILESYSTEM BROWSER #}
-<div class="component bg-gradient-to-b from-zinc-900/40 to-zinc-950/40">
-    {# FILESYSTEM PATH BREADCRUMB #}
-    <div class="p-1 border-b border-neutral-800 shadow flex items-center space-x-2 bg-gradient-to-b from-zinc-900/40 to-zinc-950/40">
-        <span class="text-sm font-medium text-gray-300">Path:</span>
-        <span class="text-sm text-gray-100">
-            {% set parts = currentPath|split('/') %}
-            <a href={{ path('app_file_system_browser', { 'path': '/' }) }} class="text-blue-500 hover:underline">/base</a>
-            {% set accumulatedPath = '' %}
-            {% for part in parts|slice(0, parts|length - 1) %}
-                {% if part is not empty %}
-                    {% set accumulatedPath = accumulatedPath ~ '/' ~ part %}
-                    <span>/</span>
-                    <a href={{ path('app_file_system_browser', { 'path': accumulatedPath }) }} class="text-blue-500 hover:underline">{{ part }}</a>
-                {% endif %}
-            {% endfor %}
-            {% if parts|last is not empty %}
-                <span>/</span>
-                <span class="text-gray-100">{{ parts|last }}</span>
-            {% endif %}
-        </span>
-    </div>
-
-    {# FLASH MESSAGES #}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="m-1 p-2 rounded {% if label == 'success' %}bg-green-600/20 text-green-400 border border-green-800{% else %}bg-red-600/20 text-red-400 border border-red-800{% endif %}">
-                {{ message|e }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
-    {# FILE METADATA AND NAVIGATION #}
-    {% if mediaType == 'non-mediafile' and fileMetadata is defined and fileMetadata is not null %}
-        <div class="flex flex-wrap justify-between items-center px-2 py-1 text-xs bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 border-b border-neutral-800 shadow">
+{# MAIN CONTENT AREA #}
+<div class="flex-1 flex flex-col min-h-0">
+    <div class="component p-2">
+        {# FILESYSTEM PATH BREADCRUMB #}
+        <div class="mb-4 p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
             <div class="flex items-center space-x-2">
-                <span class="text-gray-400">Size: <span class="text-white">{{ fileMetadata.formattedSize }}</span></span>
-                <span class="text-gray-400">Lines: <span class="text-white">{{ fileMetadata.totalLines }}</span></span>
-                {% if fileMetadata.isTruncated %}
-                    <span class="text-yellow-400 phone-none">
-                        Showing lines {{ fileMetadata.startLine }} to {{ fileMetadata.endLine }} of {{ fileMetadata.totalLines }}
-                        ({{ fileMetadata.formattedReadSize }} of {{ fileMetadata.formattedSize }})
-                    </span>
+                <i class="fas fa-file text-blue-400 mr-2"></i>
+                <span class="text-sm font-medium text-gray-300">File Path:</span>
+                <div class="text-sm text-gray-100 flex items-center">
+                    {% set parts = currentPath|split('/') %}
+                    <a href={{ path('app_file_system_browser', { 'path': '/' }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">/root</a>
+                    {% set accumulatedPath = '' %}
+                    {% for part in parts|slice(0, parts|length - 1) %}
+                        {% if part is not empty %}
+                            {% set accumulatedPath = accumulatedPath ~ '/' ~ part %}
+                            <span class="text-gray-500 mx-1">/</span>
+                            <a href={{ path('app_file_system_browser', { 'path': accumulatedPath }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">{{ part }}</a>
+                        {% endif %}
+                    {% endfor %}
+                    {% if parts|last is not empty %}
+                        <span class="text-gray-500 mx-1">/</span>
+                        <span class="text-white font-medium">{{ parts|last }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {# FLASH MESSAGES #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-4 p-3 rounded-lg {% if label == 'success' %}bg-green-600/20 text-green-400 border border-green-700/50{% else %}bg-red-600/20 text-red-400 border border-red-700/50{% endif %}">
+                    {{ message|e }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {# FILE METADATA AND NAVIGATION #}
+        {% if mediaType == 'non-mediafile' and fileMetadata is defined and fileMetadata is not null %}
+            <div class="mb-4 p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
+                <div class="flex flex-wrap justify-between items-center text-sm">
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-400">Size: <span class="text-white font-medium">{{ fileMetadata.formattedSize }}</span></span>
+                        <span class="text-gray-400">Lines: <span class="text-white font-medium">{{ fileMetadata.totalLines }}</span></span>
+                        {% if fileMetadata.isTruncated %}
+                            <span class="text-yellow-400 hidden sm:block">
+                                Showing lines {{ fileMetadata.startLine }} to {{ fileMetadata.endLine }} of {{ fileMetadata.totalLines }}
+                                ({{ fileMetadata.formattedReadSize }} of {{ fileMetadata.formattedSize }})
+                            </span>
+                        {% endif %}
+                    </div>
+                    {% if fileMetadata.isTruncated %}
+                        <div class="flex items-center gap-2 mt-2 sm:mt-0">
+                            {% if fileMetadata.startLine > 1 %}
+                                <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': 1, 'max_lines': fileMetadata.maxLines}) }} class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white text-sm transition-colors duration-200">First</a>
+                                <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, fileMetadata.startLine - fileMetadata.maxLines), 'max_lines': fileMetadata.maxLines}) }} class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white text-sm transition-colors duration-200">Previous</a>
+                            {% endif %}
+                            {% if fileMetadata.endLine < fileMetadata.totalLines %}
+                                <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': fileMetadata.endLine + 1, 'max_lines': fileMetadata.maxLines}) }} class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white text-sm transition-colors duration-200">Next</a>
+                                {% set lastPageStart = fileMetadata.totalLines - (fileMetadata.totalLines % fileMetadata.maxLines) %}
+                                {% if fileMetadata.totalLines % fileMetadata.maxLines == 0 %}
+                                    {% set lastPageStart = fileMetadata.totalLines - fileMetadata.maxLines %}
+                                {% endif %}
+                                <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, lastPageStart + 1), 'max_lines': fileMetadata.maxLines}) }} class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white text-sm transition-colors duration-200">Last</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        {# FILE CONTENT VIEW #}
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-lg overflow-hidden">
+            <div class="px-4 py-3 border-b border-gray-700/50 bg-gray-800/30">
+                <h3 class="text-sm font-semibold text-white flex items-center">
+                    <i class="fas fa-file-code text-green-400 mr-2"></i>
+                    File Content
+                </h3>
+            </div>
+            <div class="overflow-x-auto overflow-y-auto">
+                {# RAW FILE CONTENT VIEW #}
+                {% if mediaType == 'non-mediafile' or mediaType == null %}
+                    <pre class="text-sm p-4 text-green-400 file-content bg-gray-900/50" data-path="{{ currentPath }}">{{ fileContent|e }}</pre>
+                {% else %}
+                    <div class="p-4">
+                        {# IMAGE #}
+                        {% if mediaType starts with 'image/' %}
+                            <div class="flex justify-center items-center w-full h-auto">
+                                <img src={{ path('app_file_system_get_resource', { 'path': currentPath }) }}
+                                    alt={{ currentPath|e }}
+                                    class="max-w-full max-h-[500px] shadow-lg rounded-lg object-contain">
+                            </div>
+                        {# VIDEO #}
+                        {% elseif mediaType starts with 'video/' %}
+                            <div class="flex justify-center items-center w-full h-auto">
+                                <video controls class="max-w-full max-h-[500px] shadow-lg rounded-lg object-contain">
+                                    <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        {# AUDIO #}
+                        {% elseif mediaType starts with 'audio/' %}
+                            <audio controls class="w-full shadow-lg rounded-lg">
+                                <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
+                                Your browser does not support the audio tag.
+                            </audio>
+                        {% endif %}
+                    </div>
                 {% endif %}
             </div>
-            {% if fileMetadata.isTruncated %}
-                <div class="flex items-center space-x-1 p-[1px] mr-[-5px] sm:mt-0">
-                    {% if fileMetadata.startLine > 1 %}
-                        <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': 1, 'max_lines': fileMetadata.maxLines}) }} class="px-2 py-[2px] bg-blue-700 hover:bg-blue-600 rounded text-white">First</a>
-                        <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, fileMetadata.startLine - fileMetadata.maxLines), 'max_lines': fileMetadata.maxLines}) }} class="px-2 py-[2px] bg-blue-700 hover:bg-blue-600 rounded text-white">Previous</a>
-                    {% endif %}
-                    {% if fileMetadata.endLine < fileMetadata.totalLines %}
-                        <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': fileMetadata.endLine + 1, 'max_lines': fileMetadata.maxLines}) }} class="px-2 py-[2px] bg-blue-700 hover:bg-blue-600 rounded text-white">Next</a>
-                        {% set lastPageStart = fileMetadata.totalLines - (fileMetadata.totalLines % fileMetadata.maxLines) %}
-                        {% if fileMetadata.totalLines % fileMetadata.maxLines == 0 %}
-                            {% set lastPageStart = fileMetadata.totalLines - fileMetadata.maxLines %}
-                        {% endif %}
-                        <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, lastPageStart + 1), 'max_lines': fileMetadata.maxLines}) }} class="px-2 py-[2px] bg-blue-700 hover:bg-blue-600 rounded text-white">Last</a>
-                    {% endif %}
-                </div>
-            {% endif %}
         </div>
-    {% endif %}
-
-    {# FILE CONTENT VIEW #}
-    <div class="overflow-x-auto overflow-y-auto mb-[1px]">
-        {# RAW FILE CONTENT VIEW #}
-        {% if mediaType == 'non-mediafile' or mediaType == null %}
-            <pre class="text-sm p-1 text-green-400 file-content h-full" data-path="{{ currentPath }}">{{ fileContent|e }}</pre>
-        {% else %}
-            {# IMAGE #}
-            {% if mediaType starts with 'image/' %}
-                <div class="flex justify-center items-center w-full h-auto mt-2 mb-4">
-                    <img src={{ path('app_file_system_get_resource', { 'path': currentPath }) }}
-                        alt={{ currentPath|e }}
-                        class="max-w-full max-h-[500px] shadow-lg rounded-lg object-contain">
-                </div>
-            {# VIDEO #}
-            {% elseif mediaType starts with 'video/' %}
-                <div class="flex justify-center items-center w-full h-auto mt-2 mb-4">
-                    <video controls class="max-w-full max-h-[500px] shadow-lg rounded-lg object-contain">
-                        <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            {# AUDIO #}
-            {% elseif mediaType starts with 'audio/' %}
-                <audio controls class="w-full shadow-lg rounded-lg mt-2 mb-4">
-                    <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
-                    Your browser does not support the audio tag.
-                </audio>
-            {% endif %}
-        {% endif %}
     </div>
+</div>
 </div>
 
 {# EXCEPTION FILE DELETE CONFIRMATION POPUP #}

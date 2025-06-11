@@ -8,6 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const networkProgress = document.getElementById('network-progress')
     const driveProgress = document.getElementById('drive-space-progress')
 
+    // get metrics current usages elements
+    const cpuPercentageElement = document.querySelector('.cpu-percentage')
+    const ramPercentageElement = document.querySelector('.ram-percentage')
+    const storagePercentageElement = document.querySelector('.storage-percentage')
+    const cpuBarElement = document.querySelector('.cpu-bar')
+    const ramBarElement = document.querySelector('.ram-bar')
+    const storageBarElement = document.querySelector('.storage-bar')
+
     // get info elements
     const cpuUsageElement = document.getElementById('cpu-usage')
     const ramUsageElement = document.getElementById('ram-usage')
@@ -56,18 +64,38 @@ document.addEventListener('DOMContentLoaded', function() {
             networkProgress.style.width = data.networkStats.networkUsagePercent + '%'
 
             // update progress bars background color
-            cpuProgress.style.background = data.diagnosticData.cpuUsage > 80 
-                ? 'linear-gradient(45deg, #f73925, #ff6b6b)' 
-                : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)'
-            ramProgress.style.background = data.diagnosticData.ramUsage > 80 
-                ? 'linear-gradient(45deg, #f73925, #ff6b6b)' 
-                : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)'
-            driveProgress.style.background = data.diagnosticData.driveSpace > 80 
-                ? 'linear-gradient(45deg, #f73925, #ff6b6b)' 
-                : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)'
-            networkProgress.style.background = data.networkStats.networkUsagePercent > 80 
-                ? 'linear-gradient(45deg, #f73925, #ff6b6b)' 
-                : 'linear-gradient(45deg, rgb(0, 182, 233), #0072ff)'
+            cpuProgress.style.background = data.diagnosticData.cpuUsage > 80
+                ? 'linear-gradient(45deg, #ef4444, #f87171)'
+                : 'linear-gradient(45deg, #3b82f6, #60a5fa)'
+            ramProgress.style.background = data.diagnosticData.ramUsage > 80
+                ? 'linear-gradient(45deg, #ef4444, #f87171)'
+                : 'linear-gradient(45deg, #10b981, #34d399)'
+            driveProgress.style.background = data.diagnosticData.driveSpace > 80
+                ? 'linear-gradient(45deg, #ef4444, #f87171)'
+                : 'linear-gradient(45deg, #8b5cf6, #a78bfa)'
+            networkProgress.style.background = data.networkStats.networkUsagePercent > 80
+                ? 'linear-gradient(45deg, #ef4444, #f87171)'
+                : 'linear-gradient(45deg, #06b6d4, #3b82f6)'
+
+            // update metrics current usages if elements exist
+            if (cpuPercentageElement) {
+                cpuPercentageElement.textContent = data.diagnosticData.cpuUsage + '%'
+            }
+            if (ramPercentageElement) {
+                ramPercentageElement.textContent = data.diagnosticData.ramUsage + '%'
+            }
+            if (storagePercentageElement) {
+                storagePercentageElement.textContent = data.diagnosticData.driveSpace + '%'
+            }
+            if (cpuBarElement) {
+                cpuBarElement.style.width = data.diagnosticData.cpuUsage + '%'
+            }
+            if (ramBarElement) {
+                ramBarElement.style.width = data.diagnosticData.ramUsage + '%'
+            }
+            if (storageBarElement) {
+                storageBarElement.style.width = data.diagnosticData.driveSpace + '%'
+            }
 
             // load stats only on first request
             if (firstRequest) {

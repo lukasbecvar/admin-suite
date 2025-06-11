@@ -7,7 +7,11 @@
 
 body {
     scroll-behavior: smooth;
-    background-color: #121214;
+    background-color: #111827;
+}
+
+#main-content {
+    background-color: #111827;
 }
 
 main {
@@ -27,6 +31,8 @@ main {
 	margin-left: 180px;
 }
 
+
+
 .component {
 	flex-grow: 1;
 	overflow-y: auto;
@@ -42,6 +48,10 @@ main {
 }
 
 /* auth component style */
+.auth-component {
+	background: transparent;
+}
+
 .auth-component::before {
 	top: 0;
 	left: 0;
@@ -50,33 +60,47 @@ main {
 	z-index: -1;
 	content: '';
 	position: fixed;
-	filter: blur(2px);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-image: url('../images/background.jpg');
+	opacity: 1;
+}
+
+.auth-component::after {
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: -1;
+	content: '';
+	position: fixed;
+	background: rgba(59, 130, 246, 0.03);
+	backdrop-filter: blur(0.5px);
 }
 
 .auth-form-input {
 	width: 100%;
-	margin: 6px 0;
-	font-size: 16px;
-	color: #f0f0f0;
-	padding: 10px 14px;
+	margin: 0;
+	font-size: 14px;
+	color: #e5e7eb;
+	padding: 12px 16px;
 	border-radius: 0.5rem;
-	transition: all 0.3s ease;
-	backdrop-filter: blur(6px);
+	transition: all 0.2s ease;
 	font-family: 'Inter', sans-serif;
-	background: rgba(26, 26, 29, 0.6);
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	background: rgba(31, 41, 55, 0.7);
+	border: 1px solid rgba(75, 85, 99, 0.6);
 }
 
 .auth-form-input:focus {
-	border-color: rgb(24, 132, 255);
+	background: rgba(31, 41, 55, 0.8);
+	border-color: rgba(107, 114, 128, 0.8);
+	box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.2);
+	outline: none;
 }
 
 .auth-form-input::placeholder {
-	color: #cccccc;
+	color: #9ca3af;
 }
 
 .auth-component .rememberme-checkbox {
@@ -86,16 +110,17 @@ main {
 	cursor: pointer;
 	appearance: none;
 	align-items: center;
-	border-radius: 0.25rem;
+	border-radius: 0.375rem;
 	justify-content: center;
-	background-color: rgba(255, 255, 255, 0.1);
-	border: 1px solid rgba(255, 255, 255, 0.4);
-	transition: background-color 0.2s ease, border-color 0.2s ease;
+	background-color: rgba(31, 41, 55, 0.8);
+	border: 2px solid rgba(107, 114, 128, 0.5);
+	transition: all 0.3s ease;
 }
 
 .auth-component .rememberme-checkbox:checked {
-	background-color: rgb(24, 132, 255);
-	border-color: rgb(24, 132, 255);
+	background-color: rgb(59, 130, 246);
+	border-color: rgb(59, 130, 246);
+	transform: scale(1.05);
 }
 
 .auth-component .rememberme-checkbox:checked::after {
@@ -106,23 +131,97 @@ main {
 }
 
 .auth-form-input:-webkit-autofill {
-	-webkit-text-fill-color: white !important;
+	-webkit-text-fill-color: #e5e7eb !important;
     transition: background-color 5000s ease-in-out 0s !important;
-    -webkit-box-shadow: 0 0 0 1000px rgba(26, 26, 29, 0.7) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px rgba(31, 41, 55, 0.7) inset !important;
 }
 
 .auth-form-input:-webkit-autofill:focus {
-    border-color: rgb(24, 132, 255) !important;
+    border-color: rgba(107, 114, 128, 0.8) !important;
 }
 
 .auth-form-input:-moz-autofill {
-    color: white !important;
-    box-shadow: 0 0 0 1000px rgba(26, 26, 29, 0.7) inset !important;
+    color: #e5e7eb !important;
+    box-shadow: 0 0 0 1000px rgba(31, 41, 55, 0.7) inset !important;
 }
 
 .auth-component li {
 	color: white;
 	margin-left: 1px;
+}
+
+/* Auth component - no animations */
+.auth-component {
+	/* No animations */
+}
+
+/* Mega krutý checkbox styling */
+.mega-checkbox {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	appearance: none;
+	position: relative;
+	border-radius: 6px;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	background: linear-gradient(135deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.9) 100%);
+	border: 2px solid rgba(75, 85, 99, 0.8);
+	box-shadow:
+		0 2px 4px rgba(0, 0, 0, 0.3),
+		inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.mega-checkbox:hover {
+	border-color: rgba(59, 130, 246, 0.6);
+	background: linear-gradient(135deg, rgba(31, 41, 55, 1) 0%, rgba(17, 24, 39, 1) 100%);
+	box-shadow:
+		0 4px 8px rgba(0, 0, 0, 0.4),
+		0 0 0 2px rgba(59, 130, 246, 0.2),
+		inset 0 1px 0 rgba(255, 255, 255, 0.15);
+	transform: translateY(-1px);
+}
+
+.mega-checkbox:checked {
+	background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+	border-color: #2563eb;
+	box-shadow:
+		0 4px 12px rgba(59, 130, 246, 0.4),
+		0 0 0 2px rgba(59, 130, 246, 0.3),
+		inset 0 1px 0 rgba(255, 255, 255, 0.2);
+	transform: scale(1.05);
+}
+
+.mega-checkbox:checked::after {
+	content: '✓';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: white;
+	font-size: 12px;
+	font-weight: bold;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.mega-checkbox:focus {
+	outline: none;
+	box-shadow:
+		0 4px 8px rgba(0, 0, 0, 0.4),
+		0 0 0 3px rgba(59, 130, 246, 0.3),
+		inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Database table styling - uses global scrollbar from scrollbar.scss */
+
+/* Form validation styles - subtle, no bright colors */
+.auth-form-input:invalid:not(:focus):not(:placeholder-shown) {
+	border-color: rgba(75, 85, 99, 0.8);
+	background: rgba(31, 41, 55, 0.7);
+}
+
+.auth-form-input:valid:not(:focus):not(:placeholder-shown) {
+	border-color: rgba(75, 85, 99, 0.8);
+	background: rgba(31, 41, 55, 0.7);
 }
 
 /* sidebar element */
@@ -133,7 +232,19 @@ main {
 	overflow-y: auto;
 	height: calc(100% - 30px);
 	transform: translateX(-100%);
-	transition: transform 0.2s ease;
+	transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* sidebar content animation */
+#sidebar > * {
+	opacity: 0;
+	transform: translateX(-20px);
+	transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+}
+
+#sidebar.active > * {
+	opacity: 1;
+	transform: translateX(0);
 }
 
 #sidebar ul {
@@ -152,8 +263,8 @@ main {
 }
 
 #sidebar a:hover {
-	color: #87dcf1e9;
-	background-color: rgba(87, 87, 87, 0.397);
+	color: #ffffff;
+	background: linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
 }
 
 /* top navigation */
@@ -165,6 +276,7 @@ main {
 	padding-top: 2px;
 	padding-bottom: 2px;
 	height: 38px;
+	backdrop-filter: blur(8px);
 }
 
 .nav-bar a .logout-text {
@@ -188,8 +300,11 @@ main {
 }
 
 .sub-navigation a:hover, .sub-navigation button:hover {
-    color: #24d3ff;
-    border: 1px solid #24d3ff;
+    color: #60a5fa;
+    border: 1px solid #60a5fa;
+    background: rgba(96, 165, 250, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(96, 165, 250, 0.3);
 }
 
 .breadcrumb-panel {
@@ -199,11 +314,12 @@ main {
 .breadcrumb-panel .breadcrumb-link {
 	border: none !important;
 	color: rgb(96, 165, 250) !important;
+	transition: all 0.2s ease;
 }
 
 .breadcrumb-panel .breadcrumb-link:hover {
 	text-decoration: underline;
-	color: rgb(147, 185, 231) !important;
+	color: rgb(147, 197, 253) !important;
 }
 
 .breadcrumb {
@@ -213,34 +329,40 @@ main {
 /* users-manager component */
 .users-manager .delete-button {
 	font-size: 15px;
-	font-weight: 400;
-	color: rgb(255, 70, 70);
+	font-weight: 500;
+	color: rgb(248, 113, 113);
+	transition: all 0.2s ease;
 }
 
 .users-manager .delete-button:hover {
-	color: rgb(71, 247, 71);
+	color: rgb(34, 197, 94);
+	transform: scale(1.1);
 }
 
 .users-manager .ban-button, .unban-button {
 	font-size: 15px;
-	font-weight: 400;
-	color: rgb(255, 255, 31);
+	font-weight: 500;
+	color: rgb(251, 191, 36);
+	transition: all 0.2s ease;
 }
 
 .users-manager .ban-button:hover, .unban-button:hover {
-	color: rgb(71, 247, 71);
+	color: rgb(34, 197, 94);
+	transform: scale(1.1);
 }
 
 .users-manager .highlighter {
-	color: rgb(255, 255, 7) !important;
+	color: rgb(250, 204, 21) !important;
 }
 
 .users-manager .profile-link:hover {
-	color: rgb(255, 255, 7) !important;
+	color: rgb(250, 204, 21) !important;
+	transition: color 0.2s ease;
 }
 
 .users-manager .role-update-button:hover {
-	color: rgb(255, 255, 7) !important;
+	color: rgb(250, 204, 21) !important;
+	transition: color 0.2s ease;
 }
 
 /* account-settings component */
@@ -275,19 +397,21 @@ main {
 /* todo manager component */
 .todo-manager .todo-list {
     overflow-y: auto;
-	height: calc(100% - 5.1rem);
+	height: calc(100% - 5.5rem);
 }
 
 .todo-manager form {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 2.9rem;
-    background-color: #1f2937;
+    height: 3.2rem;
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(107, 114, 128, 0.3);
 }
 
 .todo-manager .add-todo-button {
-	height: 2.80rem !important;
+	height: 3.0rem !important;
 }
 
 .todo-manager .drag-handle {
@@ -302,15 +426,18 @@ main {
 }
 
 .todo-manager .sortable-ghost {
-	background-color: #4b5563 !important;
-    border: 2px dashed #6b7280 !important;
-    opacity: 0.5;
+	background: rgba(75, 85, 99, 0.5) !important;
+    border: 2px dashed rgba(156, 163, 175, 0.5) !important;
+    opacity: 0.6;
+    border-radius: 0.5rem !important;
 }
 
 .todo-manager .sortable-drag {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    background-color: #374151 !important;
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+    background: rgba(55, 65, 81, 0.8) !important;
     cursor: grabbing;
+    border-radius: 0.5rem !important;
+    transform: rotate(2deg);
 }
 
 @media screen and (max-width: 768px) {
@@ -326,12 +453,13 @@ main {
 
 /* database browser component */
 .database-browser .database-link {
-	font-weight: bold;
+	font-weight: 600;
 	color: rgb(96, 165, 250);
+	transition: color 0.2s ease;
 }
 
 .database-browser .database-link:hover {
-	color: rgb(147, 185, 231);
+	color: rgb(147, 197, 253);
 }
 
 .database-console {
@@ -348,16 +476,17 @@ main {
 .form-input:-webkit-autofill {
 	-webkit-text-fill-color: white !important;
     transition: background-color 5000s ease-in-out 0s !important;
-    -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.009) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px rgba(55, 65, 81, 0.8) inset !important;
 }
 
 .form-input:-webkit-autofill:focus {
-    border-color: rgb(24, 132, 255) !important;
+    border-color: rgb(59, 130, 246) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
 }
 
 .form-input:-moz-autofill {
     color: white !important;
-    box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.009) inset !important;
+    box-shadow: 0 0 0 1000px rgba(55, 65, 81, 0.8) inset !important;
 }
 
 /** terminal component */
@@ -366,7 +495,7 @@ main {
     position: relative;
     font-size: 16px !important;
     font-family: monospace !important;
-    background-color: rgb(12, 12, 12);
+    background-color: rgba(12, 17, 28, 255);
 }
 
 .terminal-component #terminal {
@@ -392,7 +521,7 @@ main {
     position: sticky;
     align-items: center;
     padding-top: 0px !important;
-    background-color: rgb(12, 12, 12);
+    background-color: rgba(12, 17, 28, 255);
 }
 
 .terminal-component .command-history-prompt {
@@ -427,9 +556,128 @@ main {
     background-color: transparent;
 }
 
-.metrics-component .chart-container {
-	height: 300px;
+/* Chart wrapper - zero spacing */
+.metrics-component .chart-wrapper {
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
 	overflow: hidden;
+	position: relative;
+}
+
+.metrics-component .chart-container {
+	height: 250px !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	overflow: visible !important;
+	line-height: 0 !important;
+	width: 100% !important;
+}
+
+/* ApexCharts aggressive overrides */
+.metrics-component .chart-container .apexcharts-canvas,
+.metrics-component .chart-container .apexcharts-svg,
+.metrics-component .chart-container .apexcharts-inner,
+.metrics-component .chart-container .apexcharts-graphical,
+.metrics-component .chart-container div {
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	display: block !important;
+}
+
+.metrics-component .chart-container svg {
+	margin: 0 !important;
+	padding: 0 !important;
+	display: block !important;
+	vertical-align: top !important;
+}
+
+/* ApexCharts Toolbar Styling */
+.metrics-component .apexcharts-toolbar {
+	background: rgba(31, 41, 55, 0.85) !important;
+	backdrop-filter: blur(6px) !important;
+	border: 1px solid rgba(75, 85, 99, 0.3) !important;
+	border-radius: 6px !important;
+	padding: 4px 6px !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+	top: 10px !important;
+	right: 10px !important;
+	display: flex !important;
+	flex-direction: row !important;
+	align-items: center !important;
+	gap: 2px !important;
+}
+
+.metrics-component .apexcharts-toolbar svg {
+	fill: #9ca3af !important;
+	transition: all 0.2s ease !important;
+}
+
+.metrics-component .apexcharts-toolbar svg:hover {
+	fill: #60a5fa !important;
+}
+
+.metrics-component .apexcharts-zoomin-icon,
+.metrics-component .apexcharts-zoomout-icon,
+.metrics-component .apexcharts-reset-icon {
+	background: rgba(55, 65, 81, 0.7) !important;
+	border: 1px solid rgba(75, 85, 99, 0.5) !important;
+	border-radius: 4px !important;
+	margin: 0 !important;
+	padding: 3px !important;
+	transition: all 0.2s ease !important;
+	width: 24px !important;
+	height: 24px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	flex-shrink: 0 !important;
+}
+
+.metrics-component .apexcharts-zoomin-icon:hover,
+.metrics-component .apexcharts-zoomout-icon:hover,
+.metrics-component .apexcharts-reset-icon:hover {
+	background: rgba(59, 130, 246, 0.2) !important;
+	border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+/* No selected state needed since no selectable tools */
+
+/* Tooltip styling */
+.metrics-component .apexcharts-tooltip {
+	background: rgba(17, 24, 39, 0.95) !important;
+	border: 1px solid rgba(75, 85, 99, 0.4) !important;
+	border-radius: 8px !important;
+	backdrop-filter: blur(8px) !important;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+.metrics-component .apexcharts-tooltip-title {
+	background: rgba(31, 41, 55, 0.8) !important;
+	border-bottom: 1px solid rgba(75, 85, 99, 0.3) !important;
+	color: #e5e7eb !important;
+	font-weight: 600 !important;
+}
+
+.metrics-component .apexcharts-tooltip-series-group {
+	background: transparent !important;
+	color: #d1d5db !important;
+}
+
+/* Selection zoom styling */
+.metrics-component .apexcharts-selection-rect {
+	fill: rgba(59, 130, 246, 0.1) !important;
+	stroke: rgba(59, 130, 246, 0.6) !important;
+	stroke-width: 1px !important;
+	stroke-dasharray: 3,3 !important;
+}
+
+.metrics-component .apexcharts-zoom-rect {
+	fill: rgba(59, 130, 246, 0.1) !important;
+	stroke: rgba(59, 130, 246, 0.6) !important;
+	stroke-width: 1px !important;
 }
 
 .metrics-component .percentage {
@@ -495,6 +743,12 @@ main {
 		width: 100%;
         border-right: none;
 	}
+
+	/* mobile sidebar content animation */
+	#sidebar > * {
+		transition: opacity 0.25s ease 0.05s, transform 0.25s ease 0.05s;
+	}
+
 	#sidebar ul {
 		font-size: 17px !important;
 	}

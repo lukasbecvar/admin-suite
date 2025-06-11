@@ -1,56 +1,40 @@
-<div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 rounded shadow-xl text-white w-full overflow-hidden">
-    <div class="px-3 py-2 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center gap-2">
-        <i class="fas fa-desktop text-white/70"></i>
-        System information
+<div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden hover:bg-gray-800/60 transition-all duration-300 h-full flex flex-col">
+    <div class="px-2 py-2 border-b border-gray-700/50 font-semibold tracking-wide text-sm uppercase text-gray-200 flex items-center gap-2">
+        <div class="w-8 h-8 bg-teal-500/20 rounded-lg flex items-center justify-center">
+            <i class="fas fa-desktop text-teal-400 text-sm"></i>
+        </div>
+        <span>System Information</span>
     </div>
-    <div class="p-4 divide-y divide-white/10 space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {# HOST UPTIME #}
-            <div class="flex flex-col">
-                <span class="text-sm text-white/60 flex items-center gap-2">
-                    <i class="fas fa-clock text-white/50"></i>
-                    Uptime
-                </span>
-                <span class="text-base font-semibold text-white" id="system-uptime">{{ hostUptime|e }}</span>
-            </div>
-
-            {# HOST SYSTEM #}
-            <div class="flex flex-col">
-                <span class="text-sm text-white/60 flex items-center gap-2">
-                    <i class="fas fa-server text-white/50"></i>
-                    System
-                </span>
-                <span class="text-base font-semibold text-white">
+    <div class="p-2 flex-1 flex flex-col space-y-3">
+        {# SYSTEM & KERNEL INFO #}
+        <div class="bg-gray-700/30 rounded-lg p-3 border border-gray-600/30">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-server text-green-400 text-sm"></i>
+                    <span class="text-white font-medium text-sm">System Info</span>
+                </div>
+                <span class="text-white font-semibold text-sm">
                     {{ hostSystemInfo.operating_system|split('"')[1]|trim('" NAME')|e }}
                 </span>
             </div>
-
-            {# HOST KERNEL #}
-            <div class="flex flex-col">
-                <span class="text-sm text-white/60 flex items-center gap-2">
-                    <i class="fas fa-code-branch text-white/50"></i>
-                    Kernel
-                </span>
-                <span class="text-base font-semibold text-white">{{ hostSystemInfo.kernel_version|e }}</span>
+            <div class="space-y-2 text-xs text-gray-400">
+                <div class="flex justify-between items-center">
+                    <span>Uptime: <span class="text-white font-semibold" id="system-uptime">{{ hostUptime|e }}</span></span>
+                    <span class="text-right">Kernel: <span class="text-white font-semibold">{{ hostSystemInfo.kernel_version|e }}</span></span>
+                </div>
+                <div>Architecture: <span class="text-white font-semibold">{{ hostSystemInfo.kernel_arch|e }}</span></div>
             </div>
+        </div>
 
-            {# HOST ARCHITECTURE #}
-            <div class="flex flex-col">
-                <span class="text-sm text-white/60 flex items-center gap-2">
-                    <i class="fas fa-microchip text-white/50"></i>
-                    Architecture
-                </span>
-                <span class="text-base font-semibold text-white">{{ hostSystemInfo.kernel_arch|e }}</span>
+        {# INSTALLATION TIME #}
+        <div class="bg-gray-700/30 rounded-lg p-3 border border-gray-600/30">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-calendar-alt text-red-400 text-sm"></i>
+                    <span class="text-white font-medium text-sm">Installation Time</span>
+                </div>
             </div>
-
-            {# INSTALLATION TIME #}
-            <div class="flex flex-col md:col-span-2">
-                <span class="text-sm text-white/60 flex items-center gap-2">
-                    <i class="fas fa-calendar-alt text-white/50"></i>
-                    Installation Time
-                </span>
-                <span class="text-base font-semibold text-white">{{ systemInstallInfo|e }}</span>
-            </div>
+            <div class="text-white font-semibold text-sm">{{ systemInstallInfo|e }}</div>
         </div>
     </div>
 </div>
