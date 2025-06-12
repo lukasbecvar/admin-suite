@@ -37,10 +37,10 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Account Settings")');
+        $this->assertSelectorExists('h1:contains("Account Settings")');
+        $this->assertSelectorExists('div:contains("Profile Picture")');
         $this->assertSelectorExists('div:contains("Username")');
         $this->assertSelectorExists('div:contains("Password")');
-        $this->assertSelectorExists('div:contains("Profile Image")');
         $this->assertSelectorExists('a:contains("Change")');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -56,9 +56,9 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change picture")');
+        $this->assertSelectorExists('h1:contains("Change Profile Picture")');
         $this->assertSelectorExists('input[name="profile_pic_change_form[profile-pic]"]');
-        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertSelectorExists('button:contains("Update Profile Picture")');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -77,9 +77,9 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change picture")');
+        $this->assertSelectorExists('h1:contains("Change Profile Picture")');
         $this->assertSelectorExists('input[name="profile_pic_change_form[profile-pic]"]');
-        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertSelectorExists('button:contains("Update Profile Picture")');
         $this->assertSelectorTextContains('li:contains("Please add picture file.")', 'Please add picture file.');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -95,9 +95,9 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change username")');
+        $this->assertSelectorExists('h1:contains("Change Username")');
         $this->assertSelectorExists('input[name="username_change_form[username]"]');
-        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertSelectorExists('button:contains("Update Username")');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -116,9 +116,9 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change username")');
+        $this->assertSelectorExists('h1:contains("Change Username")');
         $this->assertSelectorExists('input[name="username_change_form[username]"]');
-        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertSelectorExists('button:contains("Update Username")');
         $this->assertSelectorTextContains('li:contains("Please enter a username")', 'Please enter a username');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -138,9 +138,9 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change username")');
+        $this->assertSelectorExists('h1:contains("Change Username")');
         $this->assertSelectorExists('input[name="username_change_form[username]"]');
-        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertSelectorExists('button:contains("Update Username")');
         $this->assertSelectorTextContains('li:contains("Your username should be at least 3 characters")', 'Your username should be at least 3 characters');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -161,9 +161,9 @@ class AccountSettingsControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change username")');
+        $this->assertSelectorExists('h1:contains("Change Username")');
         $this->assertSelectorExists('input[name="username_change_form[username]"]');
-        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertSelectorExists('button:contains("Update Username")');
         $this->assertSelectorTextContains('li:contains("Your username cannot be longer than 155 characters")', 'Your username cannot be longer than 155 characters');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -197,10 +197,10 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change Password")');
+        $this->assertSelectorExists('h1:contains("Change Password")');
         $this->assertSelectorExists('input[name="password_change_form[password][first]"]');
         $this->assertSelectorExists('input[name="password_change_form[password][second]"]');
-        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertSelectorExists('button:contains("Update Password")');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -222,10 +222,10 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change Password")');
+        $this->assertSelectorExists('h1:contains("Change Password")');
         $this->assertSelectorExists('input[name="password_change_form[password][first]"]');
         $this->assertSelectorExists('input[name="password_change_form[password][second]"]');
-        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertSelectorExists('button:contains("Update Password")');
         $this->assertSelectorTextContains('li:contains("Please enter a password")', 'Please enter a password');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -248,10 +248,10 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change Password")');
+        $this->assertSelectorExists('h1:contains("Change Password")');
         $this->assertSelectorExists('input[name="password_change_form[password][first]"]');
         $this->assertSelectorExists('input[name="password_change_form[password][second]"]');
-        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertSelectorExists('button:contains("Update Password")');
         $this->assertSelectorTextContains('li:contains("Your password should be at least 8 characters")', 'Your password should be at least 8 characters');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -274,10 +274,10 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change Password")');
+        $this->assertSelectorExists('h1:contains("Change Password")');
         $this->assertSelectorExists('input[name="password_change_form[password][first]"]');
         $this->assertSelectorExists('input[name="password_change_form[password][second]"]');
-        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertSelectorExists('button:contains("Update Password")');
         $this->assertSelectorTextContains('li:contains("Your password cannot be longer than 155 characters")', 'Your password cannot be longer than 155 characters');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -300,10 +300,10 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('h2:contains("Change Password")');
+        $this->assertSelectorExists('h1:contains("Change Password")');
         $this->assertSelectorExists('input[name="password_change_form[password][first]"]');
         $this->assertSelectorExists('input[name="password_change_form[password][second]"]');
-        $this->assertSelectorExists('button:contains("Change")');
+        $this->assertSelectorExists('button:contains("Update Password")');
         $this->assertSelectorTextContains('li:contains("The values do not match.")', 'The values do not match.');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }

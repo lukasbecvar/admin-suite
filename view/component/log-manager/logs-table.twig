@@ -7,7 +7,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+                <a href={{ path('app_dashboard') }} class="w-10 h-10 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -139,7 +139,7 @@
                                 {# SET LOG READED LINK #}
                                 {% if filter == 'UNREADED' %}
                                     <td class="px-4 py-3 border-b border-gray-600/60 whitespace-nowrap">
-                                        <a href={{ path('app_manager_logs_set_readed', {'id': row.id, 'page': currentPage, 'filter': filter, 'user_id': userId }) }} class="px-2 py-1 bg-green-500/20 hover:bg-green-500/30 rounded text-green-400 text-xs transition-all duration-200 border border-green-500/30" title="Mark as read">
+                                        <a href={{ path('app_manager_logs_set_readed', {'id': row.id, 'page': currentPage, 'filter': filter, 'user_id': userId }) }} class="px-2 py-1 bg-green-500/20 hover:bg-green-500/30 rounded text-green-400 text-xs transition-all duration-200 border border-green-500/30" title="Mark as readed">
                                             Read
                                         </a>
                                     </td>

@@ -7,7 +7,7 @@
 <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
     <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-3">
-            <a href={{ path('app_manager_users') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to users manager">
+            <a href={{ path('app_manager_users') }} class="w-10 h-10 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to users manager">
                 <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
             </a>
             <div class="hidden sm:block">
@@ -57,15 +57,15 @@
                         <div class="space-y-4 mb-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Username</label>
-                                {{ form_widget(registrationForm.username, {'attr': {'class': 'w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded-lg focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200', 'placeholder': 'Enter username'}}) }}
+                                {{ form_row(registrationForm.username, {'attr': {'class': 'w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded-lg focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200', 'placeholder': 'Enter username'}}) }}
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
-                                {{ form_widget(registrationForm.password.first, {'attr': {'class': 'w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded-lg focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200', 'placeholder': 'Enter password'}}) }}
+                                {{ form_row(registrationForm.password.first, {'attr': {'class': 'w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded-lg focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200', 'placeholder': 'Enter password'}}) }}
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Confirm Password</label>
-                                {{ form_widget(registrationForm.password.second, {'attr': {'class': 'w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded-lg focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200', 'placeholder': 'Confirm password'}}) }}
+                                {{ form_row(registrationForm.password.second, {'attr': {'class': 'w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded-lg focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200', 'placeholder': 'Confirm password'}}) }}
                             </div>
                         </div>
 

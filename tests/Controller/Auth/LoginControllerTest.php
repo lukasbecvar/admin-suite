@@ -94,7 +94,7 @@ class LoginControllerTest extends WebTestCase
         $this->assertSelectorExists('input[name="login_form[password]"]');
         $this->assertSelectorExists('input[name="login_form[remember]"]');
         $this->assertSelectorTextContains('button', 'Login');
-        $this->assertSelectorTextContains('.bg-red-900', 'Invalid username or password.');
+        $this->assertSelectorTextContains('.text-red-100', 'Invalid username or password.');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -124,7 +124,7 @@ class LoginControllerTest extends WebTestCase
         $this->assertSelectorExists('input[name="login_form[password]"]');
         $this->assertSelectorExists('input[name="login_form[remember]"]');
         $this->assertSelectorTextContains('button', 'Login');
-        $this->assertSelectorTextContains('.bg-red-900', 'Invalid username or password.');
+        $this->assertSelectorTextContains('.text-red-100', 'Invalid username or password.');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -154,7 +154,7 @@ class LoginControllerTest extends WebTestCase
         $this->assertSelectorExists('input[name="login_form[password]"]');
         $this->assertSelectorExists('input[name="login_form[remember]"]');
         $this->assertSelectorTextContains('button', 'Login');
-        $this->assertSelectorTextContains('.bg-red-900', 'Invalid username or password.');
+        $this->assertSelectorTextContains('.text-red-100', 'Invalid username or password.');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 

@@ -38,11 +38,11 @@ class MonitoringManagerControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'Monitoring');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
-        $this->assertSelectorExists('a[title="Go to unsorted logs"]');
-        $this->assertSelectorExists('a[title="Go to metrics dashboard"]');
-        $this->assertSelectorExists('a[title="View services config"]');
-        $this->assertSelectorTextContains('body', 'Internal services');
-        $this->assertSelectorTextContains('body', 'HTTP services');
+        $this->assertSelectorExists('a[title="Database status"]');
+        $this->assertSelectorExists('a[title="Metrics dashboard"]');
+        $this->assertSelectorExists('a[title="Services config"]');
+        $this->assertSelectorTextContains('body', 'Internal Services');
+        $this->assertSelectorTextContains('body', 'HTTP Services');
         $this->assertSelectorTextContains('body', 'SLA History');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -59,7 +59,7 @@ class MonitoringManagerControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[title="Back to monitoring dashboard"]');
-        $this->assertSelectorTextContains('body', 'Services config');
+        $this->assertSelectorTextContains('body', 'Services Configuration');
         $this->assertSelectorTextContains('body', 'Service Name:');
         $this->assertSelectorTextContains('body', 'Type:');
         $this->assertSelectorTextContains('body', 'Display Name:');
@@ -79,7 +79,7 @@ class MonitoringManagerControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[title="Back to monitoring dashboard"]');
-        $this->assertSelectorTextContains('body', 'Service Detail:');
+        $this->assertSelectorTextContains('body', 'Service monitoring details');
         $this->assertSelectorTextContains('body', 'Service Information');
         $this->assertSelectorTextContains('body', 'Configuration');
         $this->assertSelectorTextContains('body', 'SLA History');
@@ -100,7 +100,7 @@ class MonitoringManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Service Detail:');
+        $this->assertSelectorTextContains('body', 'Service monitoring details');
         $this->assertSelectorTextContains('body', 'HTTP Service Details');
         $this->assertSelectorTextContains('body', 'URL:');
         $this->assertSelectorTextContains('body', 'Max Response Time:');

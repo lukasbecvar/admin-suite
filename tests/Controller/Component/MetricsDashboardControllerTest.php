@@ -39,7 +39,7 @@ class MetricsDashboardControllerTest extends CustomTestCase
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorExists('a[title="Go to monitoring"]');
         $this->assertSelectorExists('button[title="Aggregate old metrics"]');
-        $this->assertSelectorTextContains('body', 'Current usage');
+        $this->assertSelectorTextContains('body', 'Current Usage');
         $this->assertSelectorTextContains('body', 'CPU');
         $this->assertSelectorTextContains('body', 'RAM');
         $this->assertSelectorTextContains('body', 'Storage');
@@ -60,7 +60,7 @@ class MetricsDashboardControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('a[title="Back to dashboard"]');
+        $this->assertSelectorExists('a[title="Back to monitoring"]');
         $this->assertSelectorTextContains('body', 'host-system - Cpu usage');
         $this->assertSelectorTextContains('body', 'host-system - Ram usage');
         $this->assertSelectorTextContains('body', 'host-system - Storage usage');

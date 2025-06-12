@@ -37,7 +37,7 @@ class TodoManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Todo list');
+        $this->assertSelectorTextContains('body', 'Todo Manager');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorExists('a[title="View closed todos"]');
         $this->assertSelectorExists('input[name="create_todo_form[todo_text]"]');
@@ -57,7 +57,7 @@ class TodoManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Todo list');
+        $this->assertSelectorTextContains('body', 'Todo Manager');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorExists('a[title="View open todos"]');
         $this->assertSelectorNotExists('input[name="create_todo_form[todo_text]"]');
@@ -100,7 +100,7 @@ class TodoManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Todo list');
+        $this->assertSelectorTextContains('body', 'Todo Manager');
         $this->assertSelectorTextContains('body', 'Please enter a todo text');
         $this->assertSelectorExists('input[name="create_todo_form[todo_text]"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -142,7 +142,7 @@ class TodoManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Todo list');
+        $this->assertSelectorTextContains('body', 'Todo Manager');
         $this->assertSelectorTextContains('body', 'Your todo text cannot be longer than 1024 characters');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
