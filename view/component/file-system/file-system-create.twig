@@ -2,90 +2,111 @@
 
 {# FILE SYSTEM BROWSER COMPONENT - CREATE FILE #}
 {% block component %}
+<div class="flex flex-col h-full">
 {# SUB-NAVIGATION #}
-<div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40">
-    {# BACK BUTTON #}
-    <a href={{ path('app_file_system_browser', { 'path': currentPath }) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="Back to directory">
-        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-    </a>
-    <span class="mr-1 text-white">Create New File</span>
+<div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
+    <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-3">
+            <a href={{ path('app_file_system_browser', { 'path': currentPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to directory">
+                <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
+            </a>
+            <div class="hidden sm:block">
+                <h1 class="text-lg font-bold text-white">Create File</h1>
+                <p class="text-gray-400 text-xs">Create a new file in the current location</p>
+            </div>
+        </div>
+    </div>
 </div>
 
-{# FILESYSTEM BROWSER - FULL WIDTH #}
-<div class="component bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 flex flex-col h-[calc(100vh-48px)]">
-    {# FILESYSTEM PATH BREADCRUMB #}
-    <div class="p-1 border-b border-neutral-800 shadow flex items-center space-x-2 bg-gradient-to-b from-zinc-900/40 to-zinc-950/40">
-        <span class="text-sm font-medium text-gray-300">Directory:</span>
-        <span class="text-sm text-gray-100">
-            {% set parts = currentPath|split('/') %}
-            <a href={{ path('app_file_system_browser', { 'path': '/' }) }} class="text-blue-500 hover:underline">/base</a>
-            {% set accumulatedPath = '' %}
-            {% for part in parts %}
-                {% if part is not empty %}
-                    {% set accumulatedPath = accumulatedPath ~ '/' ~ part %}
-                    <span>/</span>
-                    <a href={{ path('app_file_system_browser', { 'path': accumulatedPath }) }} class="text-blue-500 hover:underline">{{ part }}</a>
-                {% endif %}
-            {% endfor %}
-        </span>
-    </div>
-
-    {# FLASH MESSAGES #}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="m-2 p-2 rounded-md {% if label == 'success' %}bg-green-600/20 text-green-400 border border-green-800{% else %}bg-red-600/20 text-red-400 border border-red-800{% endif %}">
-                {{ message|e }}
+{# MAIN CONTENT AREA #}
+<div class="flex-1 flex flex-col min-h-0">
+    <div class="component flex flex-col h-full">
+        {# FILESYSTEM PATH BREADCRUMB #}
+        <div class="px-2 py-3 border-b border-gray-700/30 bg-gray-800/30">
+            <div class="flex items-center space-x-1 px-1">
+                <i class="fas fa-file text-blue-400 mr-1"></i>
+                <span class="text-sm font-medium text-gray-300">Path:</span>
+                <div class="text-sm text-gray-100 flex items-center">
+                    {% set parts = currentPath|split('/') %}
+                    <a href={{ path('app_file_system_browser', { 'path': '/' }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">/base</a>
+                    {% set accumulatedPath = '' %}
+                    {% for part in parts %}
+                        {% if part is not empty %}
+                            {% set accumulatedPath = accumulatedPath ~ '/' ~ part %}
+                            <span class="text-gray-500 mx-0">/</span>
+                            <a href={{ path('app_file_system_browser', { 'path': accumulatedPath }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">{{ part }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
             </div>
-        {% endfor %}
-    {% endfor %}
+        </div>
 
-    {# FILE CREATE FORM #}
-    <form action={{ path('app_file_system_create_save') }} method="post" class="flex flex-col flex-grow">
-        <input type="hidden" name="directory" value="{{ currentPath }}">
-        <div class="flex justify-between items-center p-1 border-b border-neutral-800 bg-gradient-to-b from-zinc-900/40 to-zinc-950/40">
-                    <div class="flex flex-col">
-                        <div class="flex items-center">
-                            <label for="filename" class="text-sm font-medium text-gray-300 mr-2">Filename:</label>
+        {# FLASH MESSAGES #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-4 p-3 rounded-lg {% if label == 'success' %}bg-green-500/20 text-green-300 border border-green-500/30{% else %}bg-red-500/20 text-red-300 border border-red-500/30{% endif %}">
+                    <i class="fas fa-{% if label == 'success' %}check-circle{% else %}exclamation-circle{% endif %} mr-2"></i>{{ message|e }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {# FILE CREATE FORM #}
+        <form action={{ path('app_file_system_create_save') }} method="post" class="flex flex-col flex-1">
+            <input type="hidden" name="directory" value="{{ currentPath }}">
+
+            {# FILENAME INPUT BAR #}
+            <div class="px-2 py-3 border-b border-gray-700/30 bg-gray-800/30">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-3 flex-1">
+                        <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file text-blue-400 text-sm"></i>
+                        </div>
+                        <div class="flex items-center gap-2 flex-1">
+                            <label for="filename" class="text-sm font-medium text-gray-300">Filename:</label>
                             <input
                                 type="text"
                                 id="filename"
                                 name="filename"
-                                class="bg-transparent text-white font-mono border-none outline-none"
-                                placeholder="Enter filename"
+                                class="flex-1 bg-gray-900/50 text-white font-mono px-3 py-2 border border-gray-600/50 rounded-lg focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200"
+                                placeholder="Enter filename (e.g. script.js, config.txt)"
                                 required
                                 autofocus
                             >
                         </div>
                     </div>
-            <div class="flex items-center gap-1">
-                <button type="submit" class="flex items-center gap-1 bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded px-4 py-1 text-sm transition-all duration-150 shadow hover:shadow-md">
-                    <i class="fa fa-plus"></i>
-                    Create
-                </button>
-                <a href={{ path('app_file_system_browser', { 'path': currentPath }) }} class="flex items-center gap-1 bg-gray-700 hover:bg-gray-800 text-white font-semibold rounded px-4 py-1 text-sm transition-all duration-150 shadow hover:shadow-md">
-                    <i class="fa fa-times"></i>
-                    Cancel
-                </a>
-            </div>
-        </div>
-
-        {# EDITOR TEXTAREA #}
-        <div class="w-full flex-grow h-full overflow-hidden relative">
-            <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none">
-                <div class="text-center opacity-10 pointer-events-none">
-                    <i class="fa fa-file-text text-blue-400 text-8xl mb-4"></i>
+                    <div class="flex items-center gap-2">
+                        <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 rounded-lg border border-blue-500/30 transition-all duration-200 text-sm font-medium">
+                            <i class="fas fa-plus text-xs"></i>
+                            <span>Create</span>
+                        </button>
+                        <a href={{ path('app_file_system_browser', { 'path': currentPath }) }} class="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded-lg border border-gray-600/30 transition-all duration-200 text-sm font-medium">
+                            <i class="fas fa-times text-xs"></i>
+                            <span>Cancel</span>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <textarea
-                name="content"
-                id="editor"
-                class="w-full h-full overflow-auto bg-transparent text-sm text-green-400 font-mono p-1 border-none outline-none resize-none relative z-10"
-                spellcheck="false"
-                wrap="off"
-                placeholder=""
-            ></textarea>
-        </div>
-    </form>
+
+            {# EDITOR TEXTAREA #}
+            <div class="flex-1 relative overflow-hidden">
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5">
+                    <div class="text-center">
+                        <i class="fas fa-file-code text-blue-400 text-8xl mb-4"></i>
+                        <p class="text-gray-400 text-lg">Start typing to create your file</p>
+                    </div>
+                </div>
+                <textarea
+                    name="content"
+                    id="editor"
+                    class="w-full h-full bg-gray-900/30 text-sm text-green-400 font-mono p-4 border-none outline-none resize-none relative z-10 file-content-container"
+                    spellcheck="false"
+                    wrap="off"
+                    placeholder=""
+                ></textarea>
+            </div>
+        </form>
+    </div>
+</div>
 </div>
 
 {# FILESYSTEM EDITOR FUNCTIONS #}

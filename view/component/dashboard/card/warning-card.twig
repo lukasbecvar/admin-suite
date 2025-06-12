@@ -8,8 +8,8 @@
                 Diagnostic Alerts
             </a>
         </div>
-        <button onclick="closeWarningBox()" class="group relative p-2 rounded-lg hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-all duration-200 cursor-pointer">
-            <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
+        <button onclick="closeWarningBox()" class="group relative w-7 h-7 rounded-lg hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-all duration-200 cursor-pointer flex items-center justify-center shrink-0">
+            <i class="fas fa-times text-xl transition-transform duration-200 leading-none absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
             <div class="absolute inset-0 rounded-lg border border-transparent group-hover:border-red-500/30 transition-colors duration-200"></div>
         </button>
     </div>
@@ -178,18 +178,23 @@ function closeWarningBox() {
         // Add closing animation class
         warningBox.classList.add('warning-closing');
 
-        // Apply closing styles with smooth transition
+        // Simple, elegant fade and slide animation
         warningBox.style.transition = 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)';
-        warningBox.style.transform = 'translateY(-15px) scale(0.95)';
-        warningBox.style.opacity = '0';
-        warningBox.style.filter = 'blur(1px)';
+        warningBox.style.transformOrigin = 'center center';
+
+        // Smooth fade out with gentle slide up
+        setTimeout(() => {
+            warningBox.style.transform = 'translateY(-20px) scale(0.95)';
+            warningBox.style.opacity = '0';
+            warningBox.style.filter = 'blur(1px)';
+        }, 30);
 
         // Remove element after animation completes
         setTimeout(() => {
             if (warningBox.parentNode) {
                 warningBox.parentNode.removeChild(warningBox);
             }
-        }, 250);
+        }, 280);
     }
 }
 

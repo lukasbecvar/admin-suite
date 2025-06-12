@@ -1,7 +1,7 @@
 <nav class="nav-bar w-full border-b border-gray-700/50 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 backdrop-blur-sm shadow-lg">
     <div class="px-0 flex items-center justify-between h-full">
         {# TOGGLE SIDEBAR BUTTON #}
-        <button id="menu-toggle" class="inline-flex items-center justify-center gap-3 rounded-lg px-4 py-1.5 text-sm font-semibold text-gray-300 transition-all duration-200 hover:text-white hover:bg-gray-700/50 active:bg-gray-600/50 hover:border-gray-500/50" title="open/close sidebar">
+        <button id="menu-toggle" class="inline-flex items-center justify-center gap-2 rounded-lg px-2 py-1.5 text-sm font-semibold text-gray-300 transition-all duration-200 hover:text-white hover:bg-gray-700/50 active:bg-gray-600/50 hover:border-gray-500/50" title="open/close sidebar">
             <i class="fas fa-bars text-base menu-icon"></i>
             <span class="phone-none sm:inline text-sm font-medium">Menu</span>
         </button>
@@ -14,7 +14,7 @@
                 <span class="phone-none sm:inline text-sm font-medium ml-2">About</span>
             </a>
             {# LOGOUT BUTTON #}
-            <a href={{ path('app_auth_logout') }} class="inline-flex items-center justify-center gap-2 rounded-lg px-3 py-1.5 text-sm font-semibold text-gray-300 transition-all duration-200 hover:text-red-400 hover:bg-red-500/10 active:bg-red-500/20 hover:border-red-500/30" title="Logout user">
+            <a href={{ path('app_auth_logout') }} class="inline-flex items-center justify-center gap-2 rounded-lg px-2 py-1.5 text-sm font-semibold text-gray-300 transition-all duration-200 hover:text-red-400 hover:bg-red-500/10 active:bg-red-500/20 hover:border-red-500/30" title="Logout user">
                 <i class="fas fa-sign-out-alt text-base logout-icon"></i>
                 <span class="phone-none sm:inline logout-text text-sm font-medium">Logout</span>
             </a>

@@ -17,19 +17,7 @@
 
 {# LOG FILES LIST #}
 <div class="component">
-    <div class="bg-gray-800/50 border border-gray-700/50 text-white w-full overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-700/50 bg-gray-800/30">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-server text-purple-400 text-lg"></i>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold text-white">System Log Files</h2>
-                    <p class="text-gray-400 text-sm">{{ logFiles|length }} log files found</p>
-                </div>
-            </div>
-        </div>
-        <div class="p-6">
+        <div class="p-4">
                 {% if logFiles|length < 1 %}
                     <div class="flex flex-col items-center justify-center py-12">
                         <div class="w-16 h-16 bg-gray-700/50 rounded-full flex items-center justify-center mb-4">
@@ -61,6 +49,5 @@
                     </div>
                 {% endif %}
             </div>
-        </div>
 </div>
 {% endblock %}

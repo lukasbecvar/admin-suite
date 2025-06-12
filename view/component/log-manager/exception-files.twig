@@ -16,26 +16,18 @@
 
 {# EXCEPTION FILES LIST #}
 <div class="component">
-    <div class="bg-gray-800/50 border border-gray-700/50 text-white w-full overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-700/50 bg-gray-800/30">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-bomb text-red-400 text-lg"></i>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold text-white">Exception Files</h2>
-                    <p class="text-gray-400 text-sm">{{ exceptionFiles|length }} exception files found</p>
-                </div>
-            </div>
-        </div>
-        <div class="p-6">
+        <div class="p-4">
                 {% if exceptionFiles|length < 1 %}
-                    <div class="flex flex-col items-center justify-center py-12">
-                        <div class="w-16 h-16 bg-gray-700/50 rounded-full flex items-center justify-center mb-4">
-                            <i class="fas fa-bomb text-gray-400 text-2xl"></i>
+                    <div class="flex flex-col items-center justify-center py-16">
+                        <p class="text-gray-300 text-center mb-2 font-medium">No exception files found</p>
+                        <p class="text-gray-500 text-center text-sm max-w-md">Your application is running smoothly without any logged exceptions.</p>
+
+                        <div class="mt-8 flex items-center gap-4">
+                            <a href="{{ path('app_manager_logs') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 rounded-lg border border-blue-500/30 transition-all duration-200 text-sm font-medium">
+                                <i class="fas fa-list text-xs"></i>
+                                <span>View All Logs</span>
+                            </a>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-2">No exception files found</h3>
-                        <p class="text-gray-400 text-center">No application exception files are available</p>
                     </div>
                 {% else %}
                     <div class="space-y-3">
@@ -60,7 +52,6 @@
                     </div>
                 {% endif %}
             </div>
-        </div>
 </div>
 
 {# DELETE CONFIRMATION POPUP #}

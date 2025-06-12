@@ -67,25 +67,25 @@
 
 {# MAIN CONTENT AREA #}
 <div class="flex-1 flex flex-col min-h-0">
-    <div class="component p-2">
+    <div class="component">
         {# FILESYSTEM PATH BREADCRUMB #}
-        <div class="mb-4 p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
-            <div class="flex items-center space-x-2">
-                <i class="fas fa-file text-blue-400 mr-2"></i>
-                <span class="text-sm font-medium text-gray-300">File Path:</span>
+        <div class="px-2 py-3 border-b border-gray-700/30 bg-gray-800/30">
+            <div class="flex items-center space-x-1 px-1">
+                <i class="fas fa-file text-blue-400 mr-1"></i>
+                <span class="text-sm font-medium text-gray-300">Path:</span>
                 <div class="text-sm text-gray-100 flex items-center">
                     {% set parts = currentPath|split('/') %}
-                    <a href={{ path('app_file_system_browser', { 'path': '/' }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">/root</a>
+                    <a href={{ path('app_file_system_browser', { 'path': '/' }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">/base</a>
                     {% set accumulatedPath = '' %}
                     {% for part in parts|slice(0, parts|length - 1) %}
                         {% if part is not empty %}
                             {% set accumulatedPath = accumulatedPath ~ '/' ~ part %}
-                            <span class="text-gray-500 mx-1">/</span>
+                            <span class="text-gray-500 mx-0">/</span>
                             <a href={{ path('app_file_system_browser', { 'path': accumulatedPath }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">{{ part }}</a>
                         {% endif %}
                     {% endfor %}
                     {% if parts|last is not empty %}
-                        <span class="text-gray-500 mx-1">/</span>
+                        <span class="text-gray-500 mx-0">/</span>
                         <span class="text-white font-medium">{{ parts|last }}</span>
                     {% endif %}
                 </div>
@@ -95,7 +95,7 @@
         {# FLASH MESSAGES #}
         {% for label, messages in app.flashes %}
             {% for message in messages %}
-                <div class="mb-4 p-3 rounded-lg {% if label == 'success' %}bg-green-600/20 text-green-400 border border-green-700/50{% else %}bg-red-600/20 text-red-400 border border-red-700/50{% endif %}">
+                <div class="p-2 {% if label == 'success' %}bg-green-600/20 text-green-400{% else %}bg-red-600/20 text-red-400 border border-red-700/50{% endif %}">
                     {{ message|e }}
                 </div>
             {% endfor %}
@@ -103,31 +103,49 @@
 
         {# FILE METADATA AND NAVIGATION #}
         {% if mediaType == 'non-mediafile' and fileMetadata is defined and fileMetadata is not null %}
-            <div class="mb-4 p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
+            <div class="px-2 py-3 border-b border-gray-700/30">
                 <div class="flex flex-wrap justify-between items-center text-sm">
-                    <div class="flex items-center space-x-4">
-                        <span class="text-gray-400">Size: <span class="text-white font-medium">{{ fileMetadata.formattedSize }}</span></span>
-                        <span class="text-gray-400">Lines: <span class="text-white font-medium">{{ fileMetadata.totalLines }}</span></span>
+                    <div class="flex items-center space-x-6">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-weight text-gray-400"></i>
+                            <span class="text-gray-400">Size:</span>
+                            <span class="text-white font-medium">{{ fileMetadata.formattedSize }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-list-ol text-gray-400"></i>
+                            <span class="text-gray-400">Lines:</span>
+                            <span class="text-white font-medium">{{ fileMetadata.totalLines }}</span>
+                        </div>
                         {% if fileMetadata.isTruncated %}
-                            <span class="text-yellow-400 hidden sm:block">
-                                Showing lines {{ fileMetadata.startLine }} to {{ fileMetadata.endLine }} of {{ fileMetadata.totalLines }}
-                                ({{ fileMetadata.formattedReadSize }} of {{ fileMetadata.formattedSize }})
-                            </span>
+                            <div class="flex items-center gap-2 hidden sm:flex">
+                                <i class="fas fa-info-circle text-yellow-400"></i>
+                                <span class="text-yellow-400 text-xs">
+                                    Showing {{ fileMetadata.startLine }}-{{ fileMetadata.endLine }} of {{ fileMetadata.totalLines }}
+                                </span>
+                            </div>
                         {% endif %}
                     </div>
                     {% if fileMetadata.isTruncated %}
-                        <div class="flex items-center gap-2 mt-2 sm:mt-0">
+                        <div class="flex items-center gap-1 mt-2 sm:mt-0">
                             {% if fileMetadata.startLine > 1 %}
-                                <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': 1, 'max_lines': fileMetadata.maxLines}) }} class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white text-sm transition-colors duration-200">First</a>
-                                <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, fileMetadata.startLine - fileMetadata.maxLines), 'max_lines': fileMetadata.maxLines}) }} class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white text-sm transition-colors duration-200">Previous</a>
+                                <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': 1, 'max_lines': fileMetadata.maxLines}) }} class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg flex items-center justify-center transition-all duration-200" title="First page">
+                                    <i class="fas fa-angle-double-left text-blue-300 text-xs"></i>
+                                </a>
+                                <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, fileMetadata.startLine - fileMetadata.maxLines), 'max_lines': fileMetadata.maxLines}) }} class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg flex items-center justify-center transition-all duration-200" title="Previous page">
+                                    <i class="fas fa-angle-left text-blue-300 text-xs"></i>
+                                </a>
                             {% endif %}
                             {% if fileMetadata.endLine < fileMetadata.totalLines %}
-                                <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': fileMetadata.endLine + 1, 'max_lines': fileMetadata.maxLines}) }} class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white text-sm transition-colors duration-200">Next</a>
+                                <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': fileMetadata.endLine + 1, 'max_lines': fileMetadata.maxLines}) }} class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg flex items-center justify-center transition-all duration-200" title="Next page">
+                                    <i class="fas fa-angle-right text-blue-300 text-xs"></i>
+                                </a>
                                 {% set lastPageStart = fileMetadata.totalLines - (fileMetadata.totalLines % fileMetadata.maxLines) %}
                                 {% if fileMetadata.totalLines % fileMetadata.maxLines == 0 %}
                                     {% set lastPageStart = fileMetadata.totalLines - fileMetadata.maxLines %}
                                 {% endif %}
-                                <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, lastPageStart + 1), 'max_lines': fileMetadata.maxLines}) }} class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white text-sm transition-colors duration-200">Last</a>
+                                <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, lastPageStart + 1), 'max_lines': fileMetadata.maxLines}) }} class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg flex items-center justify-center transition-all duration-200" title="Last page">
+                                    <i class="fas fa-angle-double-right text-blue-300 text-xs"></i>
+                                </a>
                             {% endif %}
                         </div>
                     {% endif %}
@@ -136,44 +154,40 @@
         {% endif %}
 
         {# FILE CONTENT VIEW #}
-        <div class="bg-gray-800/50 border border-gray-700/50 rounded-lg overflow-hidden">
-            <div class="px-4 py-3 border-b border-gray-700/50 bg-gray-800/30">
-                <h3 class="text-sm font-semibold text-white flex items-center">
-                    <i class="fas fa-file-code text-green-400 mr-2"></i>
-                    File Content
-                </h3>
-            </div>
-            <div class="overflow-x-auto overflow-y-auto">
-                {# RAW FILE CONTENT VIEW #}
-                {% if mediaType == 'non-mediafile' or mediaType == null %}
-                    <pre class="text-sm p-4 text-green-400 file-content bg-gray-900/50" data-path="{{ currentPath }}">{{ fileContent|e }}</pre>
-                {% else %}
-                    <div class="p-4">
-                        {# IMAGE #}
-                        {% if mediaType starts with 'image/' %}
-                            <div class="flex justify-center items-center w-full h-auto">
-                                <img src={{ path('app_file_system_get_resource', { 'path': currentPath }) }}
-                                    alt={{ currentPath|e }}
-                                    class="max-w-full max-h-[500px] shadow-lg rounded-lg object-contain">
-                            </div>
-                        {# VIDEO #}
-                        {% elseif mediaType starts with 'video/' %}
-                            <div class="flex justify-center items-center w-full h-auto">
-                                <video controls class="max-w-full max-h-[500px] shadow-lg rounded-lg object-contain">
-                                    <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
-                                    Your browser does not support the video tag.
-                                </video>
-                            </div>
-                        {# AUDIO #}
-                        {% elseif mediaType starts with 'audio/' %}
-                            <audio controls class="w-full shadow-lg rounded-lg">
+        <div class="flex-1 overflow-auto min-h-0">
+            {# RAW FILE CONTENT VIEW #}
+            {% if mediaType == 'non-mediafile' or mediaType == null %}
+                <div class="file-content-wrapper" style="min-width: 800px;">
+                    <pre class="text-sm p-4 text-green-400 file-content bg-gray-900/30 w-full" data-path="{{ currentPath }}">{{ fileContent|e }}</pre>
+                </div>
+            {% else %}
+                <div class="p-4 flex items-center justify-center">
+                    {# IMAGE #}
+                    {% if mediaType starts with 'image/' %}
+                        <div class="flex justify-center items-center w-full h-auto">
+                            <img src={{ path('app_file_system_get_resource', { 'path': currentPath }) }}
+                                alt={{ currentPath|e }}
+                                class="max-w-full max-h-[500px] shadow-lg rounded-lg object-contain border border-gray-600/30">
+                        </div>
+                    {# VIDEO #}
+                    {% elseif mediaType starts with 'video/' %}
+                        <div class="flex justify-center items-center w-full h-auto">
+                            <video controls class="max-w-full max-h-[500px] shadow-lg rounded-lg object-contain border border-gray-600/30">
+                                <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    {# AUDIO #}
+                    {% elseif mediaType starts with 'audio/' %}
+                        <div class="w-full max-w-md">
+                            <audio controls class="w-full shadow-lg rounded-lg border border-gray-600/30">
                                 <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
                                 Your browser does not support the audio tag.
                             </audio>
-                        {% endif %}
-                    </div>
-                {% endif %}
-            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -191,4 +205,17 @@
 
 {# SYNTAX HIGHLIGHTING #}
 {{ encore_entry_script_tags('file-system-syntax-highlight-js') }}
+
+<style>
+/* File content styling - simple like logs table */
+.file-content {
+    white-space: pre;
+    overflow-wrap: normal;
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.5;
+    display: block;
+    min-width: max-content;
+    width: fit-content;
+}
+</style>
 {% endblock %}

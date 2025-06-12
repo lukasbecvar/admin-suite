@@ -41,7 +41,7 @@
 
         {# TODO ITEM #}
         {% for todo in todos %}
-            <div class="todo-item flex items-center justify-between p-3 my-2 rounded bg-gray-800/50 transition-colors duration-200 hover:bg-gray-700/50 relative" data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} data-position={{ todo.position }}>
+            <div class="todo-item flex items-center justify-between p-3 my-2 rounded-lg bg-gradient-to-r from-slate-800/60 to-slate-700/40 border border-slate-600/30 transition-all duration-200 hover:from-slate-700/70 hover:to-slate-600/50 hover:border-slate-500/40 hover:shadow-lg hover:shadow-slate-900/20 relative" data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} data-position={{ todo.position }}>
                 {% if filter == 'open' %}
                     <div class="drag-handle mr-2 cursor-move text-gray-500 hover:text-white flex items-center justify-center">
                         <i class="fas fa-grip-vertical text-lg"></i>

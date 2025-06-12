@@ -26,57 +26,83 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
                     {# SERVICE INFO CARD #}
                     <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
-                        <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center">
-                            <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mr-2">
-                                <i class="fas fa-info-circle text-blue-400 text-sm"></i>
+                        <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-info-circle text-blue-400 text-sm"></i>
+                                </div>
+                                <span>Service Information</span>
                             </div>
-                            <span>Service Information</span>
                         </div>
-                        <div class="overflow-y-auto max-h-[320px]">
-                            <div class="bg-gray-700/30 p-2 text-sm transition">
-                                <div class="space-y-3">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-400 text-xs">Service Name</span>
-                                        <span class="text-white font-medium">{{ serviceName|e }}</span>
+                        <div class="p-4 overflow-y-auto max-h-[255px]">
+                            <div class="space-y-4">
+                                {# SERVICE NAME #}
+                                <div class="flex items-center justify-between py-2 border-b border-gray-600/30">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-tag text-blue-400"></i>
+                                        <span class="text-gray-300 font-medium">Service Name</span>
                                     </div>
+                                    <span class="text-white font-semibold">{{ serviceName|e }}</span>
+                                </div>
 
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-400 text-xs">Status</span>
-                                        {% if serviceStatus == 'running' or serviceStatus == 'online' %}
-                                            <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">
-                                                <i class="fas fa-circle text-xs mr-1"></i>
-                                                ONLINE
-                                            </span>
-                                        {% else %}
-                                            <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-red-500/20 text-red-400 border border-red-500/30">
-                                                <i class="fas fa-circle text-xs mr-1"></i>
-                                                OFFLINE
-                                            </span>
-                                        {% endif %}
+                                {# STATUS #}
+                                <div class="flex items-center justify-between py-2 border-b border-gray-600/30">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-heartbeat text-purple-400"></i>
+                                        <span class="text-gray-300 font-medium">Status</span>
                                     </div>
-
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-400 text-xs">Type</span>
-                                        <span class="text-blue-400 font-medium">{{ serviceConfig.type|e|upper }}</span>
-                                    </div>
-
-                                    {% if monitoringStatus %}
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-gray-400 text-xs">Last Update</span>
-                                            <span class="text-white font-medium text-xs">{{ monitoringStatus.getLastUpdateTime()|date('H:i:s')|e }}</span>
-                                        </div>
-
-                                        <div>
-                                            <span class="text-gray-400 text-xs block mb-1">Last Message</span>
-                                            <span class="text-white font-medium text-xs">{{ monitoringStatus.getMessage()|e }}</span>
-                                        </div>
-
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-gray-400 text-xs">Down Time</span>
-                                            <span class="text-white font-medium text-xs">{{ monitoringStatus.getDownTime()|e }}m</span>
-                                        </div>
+                                    {% if serviceStatus == 'running' or serviceStatus == 'online' %}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30">
+                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
+                                            ONLINE
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-500/20 text-red-300 border border-red-500/30">
+                                            <div class="w-1.5 h-1.5 bg-red-400 rounded-full mr-2"></div>
+                                            OFFLINE
+                                        </span>
                                     {% endif %}
                                 </div>
+
+                                {# TYPE #}
+                                <div class="flex items-center justify-between py-2 border-b border-gray-600/30">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-cogs text-cyan-400"></i>
+                                        <span class="text-gray-300 font-medium">Type</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-cyan-500/20 text-cyan-300 rounded-md text-xs font-medium border border-cyan-500/30">{{ serviceConfig.type|e|upper }}</span>
+                                </div>
+
+                                {% if monitoringStatus %}
+                                    {# LAST UPDATE #}
+                                    <div class="flex items-center justify-between py-2 border-b border-gray-600/30">
+                                        <div class="flex items-center gap-3">
+                                            <i class="fas fa-clock text-yellow-400"></i>
+                                            <span class="text-gray-300 font-medium">Last Update</span>
+                                        </div>
+                                        <span class="text-white font-mono text-sm">{{ monitoringStatus.getLastUpdateTime()|date('H:i:s')|e }}</span>
+                                    </div>
+
+                                    {# LAST MESSAGE #}
+                                    <div class="py-2 border-b border-gray-600/30">
+                                        <div class="flex items-start gap-3 mb-2">
+                                            <i class="fas fa-comment text-indigo-400 mt-1"></i>
+                                            <span class="text-gray-300 font-medium">Last Message</span>
+                                        </div>
+                                        <div class="ml-7">
+                                            <span class="text-white text-sm leading-relaxed">{{ monitoringStatus.getMessage()|e }}</span>
+                                        </div>
+                                    </div>
+
+                                    {# DOWN TIME #}
+                                    <div class="flex items-center justify-between py-2">
+                                        <div class="flex items-center gap-3">
+                                            <i class="fas fa-exclamation-triangle text-orange-400"></i>
+                                            <span class="text-gray-300 font-medium">Down Time</span>
+                                        </div>
+                                        <span class="px-2 py-1 bg-orange-500/20 text-orange-300 rounded-md text-xs font-medium border border-orange-500/30">{{ monitoringStatus.getDownTime()|e }}m</span>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -89,8 +115,8 @@
                             </div>
                             <span>Configuration (Raw)</span>
                         </div>
-                        <div class="bg-gray-700/30 overflow-y-auto max-h-[320px] ">
-                            <div class="bg-gray-700/30 text-sm transition">
+                        <div class="bg-gray-700/10 overflow-y-auto max-h-[265px] ">
+                            <div class="bg-gray-700/10 text-sm transition">
                                 <div class="bg-gray-900/50 overflow-hidden">
                                     <pre class="p-3 text-green-400 overflow-auto max-h-64 text-xs font-mono">{{ serviceConfig|json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_SLASHES'))|e }}</pre>
                                 </div>
@@ -108,10 +134,10 @@
                             </div>
                             <span>Configuration Files</span>
                         </div>
-                        <div class="p-1 py-0 overflow-y-auto max-h-[320px] pb-1 pt-[1px]">
+                        <div class="p-1 py-0 overflow-y-auto max-h-[320px] pb-[1px] pt-[1px]">
                             {% for configFile in serviceConfig.config_files %}
-                                <a href={{ path('app_file_system_view', {'path': configFile, 'referer': 'monitoring_service_detail'}) }} class="flex items-center gap-2 bg-gray-700/30 border border-gray-600/50 rounded p-2 text-sm hover:bg-gray-700/50 transition mb-1 mt-[4px] mr-[2px] ml-[2px]">
-                                    <div class="w-6 h-6 bg-gray-700/30 rounded flex items-center justify-center">
+                                <a href={{ path('app_file_system_view', {'path': configFile, 'referer': 'monitoring_service_detail'}) }} class="flex items-center gap-2 bg-gray-700/10 border border-gray-600/50 rounded p-2 text-sm hover:bg-gray-700/50 transition mb-1 mt-[4px] mr-[2px] ml-[2px]">
+                                    <div class="w-6 h-6 bg-gray-700/10 rounded flex items-center justify-center">
                                         <i class="fas fa-file text-blue-400 text-xs"></i>
                                     </div>
                                     <span class="text-white font-medium">{{ configFile|e }}</span>
@@ -131,7 +157,7 @@
                     </div>
                     <div class="overflow-y-auto max-h-[320px]">
                         {% if slaHistory|length > 0 %}
-                            <div class="bg-gray-700/30 text-sm transition">
+                            <div class="bg-gray-700/10 text-sm transition">
                                 <div class="overflow-x-auto">
                                     <table class="w-full text-xs">
                                         <thead>
@@ -178,7 +204,7 @@
                             <span>Service Actions</span>
                         </div>
                         <div class="overflow-y-auto max-h-[320px]">
-                            <div class="bg-gray-700/30 border border-gray-600/50 p-2 text-sm transition">
+                            <div class="bg-gray-700/10 border border-gray-600/50 p-2 text-sm transition">
                                 <div class="flex flex-wrap gap-2">
                                 <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200">
                                     <i class="fas fa-redo text-sm mr-2"></i>
@@ -211,7 +237,7 @@
                             <span>HTTP Service Details</span>
                         </div>
                         <div class="overflow-y-auto max-h-[320px]">
-                            <div class="bg-gray-700/30 p-2 text-sm transition">
+                            <div class="bg-gray-700/10 p-2 text-sm transition">
                                 <div class="space-y-2">
                                 <div>
                                     <span class="text-gray-400 text-sm">URL:</span>
@@ -255,7 +281,7 @@
                                 </div>
                             </div>
                             <div class="">
-                                <div class="bg-gray-700/30 text-sm transition">
+                                <div class="bg-gray-700/10 text-sm transition">
                                     <div class="space-y-0">
                                         {% for metricName, metricData in metricsData.metrics %}
                                             <div class="border-b border-gray-600/30 last:border-b-0">

@@ -69,20 +69,20 @@
 
 {# MAIN CONTENT AREA #}
 <div class="flex-1 flex flex-col min-h-0">
-    <div class="component p-2">
+    <div class="component">
         {# FILESYSTEM PATH BREADCRUMB #}
-        <div class="mb-4 p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
-            <div class="flex items-center space-x-2">
-                <i class="fas fa-folder-open text-blue-400 mr-2"></i>
-                <span class="text-sm font-medium text-gray-300">Current Path:</span>
+        <div class="px-2 py-3 border-b border-gray-700/30 bg-gray-800/30">
+            <div class="flex items-center space-x-1 px-1">
+                <i class="fas fa-folder-open text-blue-400 mr-1"></i>
+                <span class="text-sm font-medium text-gray-300">Path:</span>
                 <div class="text-sm text-gray-100 flex items-center">
                     {% set parts = currentPath|split('/') %}
-                    <a href={{ path('app_file_system_browser', { 'path': '/' }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">/root</a>
+                    <a href={{ path('app_file_system_browser', { 'path': '/' }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">/base</a>
                     {% set accumulatedPath = '' %}
                     {% for part in parts %}
                         {% if part is not empty %}
                             {% set accumulatedPath = accumulatedPath ~ '/' ~ part %}
-                            <span class="text-gray-500 mx-1">/</span>
+                            <span class="text-gray-500 mx-0">/</span>
                             <a href={{ path('app_file_system_browser', { 'path': accumulatedPath }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">{{ part }}</a>
                         {% endif %}
                     {% endfor %}
@@ -105,75 +105,79 @@
     {% endfor %}
 
         {# FILES LIST TABLE #}
-        <div class="bg-gray-800/50 border border-gray-700/50 rounded-lg overflow-hidden">
-            <div class="px-4 py-3 border-b border-gray-700/50 bg-gray-800/30">
-                <h3 class="text-sm font-semibold text-white flex items-center">
-                    <i class="fas fa-list text-green-400 mr-2"></i>
-                    Directory Contents
-                </h3>
-            </div>
-            <div class="overflow-auto">
-                <table class="min-w-full text-white text-sm">
-                    <thead>
-                        <tr class="border-b border-gray-700/50">
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-300 bg-gray-800/50">
+        <div class="overflow-auto">
+            <table class="min-w-full text-white text-sm border-b border-gray-700/50">
+                <thead class="bg-gray-700/50 backdrop-blur-sm">
+                    <tr class="border-b border-gray-600/50">
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-200">
+                            <div class="flex items-center">
+                                <i class="fas fa-file text-gray-400 mr-2"></i>
                                 Name
-                            </th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-300 bg-gray-800/50">
+                            </div>
+                        </th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-200">
+                            <div class="flex items-center">
+                                <i class="fas fa-weight text-gray-400 mr-2"></i>
                                 Size
-                            </th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-300 bg-gray-800/50">
+                            </div>
+                        </th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-200">
+                            <div class="flex items-center">
+                                <i class="fas fa-lock text-gray-400 mr-2"></i>
                                 Permissions
-                            </th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-300 bg-gray-800/50">
+                            </div>
+                        </th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-200">
+                            <div class="flex items-center">
+                                <i class="fas fa-clock text-gray-400 mr-2"></i>
                                 Modified
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for file in filesystemList %}
-                            <tr class="border-b border-gray-700/30 hover:bg-gray-700/30 transition-colors duration-200">
-                                <td class="px-4 py-3 text-left">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            {% if file.isDir %}
-                                                <i class="fas fa-folder text-yellow-400 mr-3"></i>
-                                                <a href={{ path('app_file_system_browser', { 'path': currentPath ~ '/' ~ file.name }) }} class="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200">
-                                                    {{ file.name|e }}
-                                                </a>
-                                            {% else %}
-                                                <i class="fas fa-file text-gray-400 mr-3"></i>
-                                                <a href={{ path('app_file_system_view', { 'path': currentPath ~ '/' ~ file.name }) }} class="text-white hover:text-blue-300 transition-colors duration-200">
-                                                    {{ file.name|e }}
-                                                </a>
-                                            {% endif %}
-                                        </div>
-                                        <div class="flex items-center gap-1">
-                                            {% if not file.isDir and file.isEditable %}
-                                                <a href={{ path('app_file_system_edit', { 'path': currentPath ~ '/' ~ file.name }) }} class="w-7 h-7 bg-gray-700/50 hover:bg-blue-600/50 rounded flex items-center justify-center transition-colors duration-200" title="Edit file">
-                                                    <i class="fas fa-edit text-xs text-gray-300 hover:text-white"></i>
-                                                </a>
-                                            {% endif %}
-                                            <a href={{ path('app_file_system_rename', { 'path': currentPath ~ '/' ~ file.name }) }} class="w-7 h-7 bg-gray-700/50 hover:bg-yellow-600/50 rounded flex items-center justify-center transition-colors duration-200" title="Rename {{ file.isDir ? 'directory' : 'file' }}">
-                                                <i class="fas fa-pen text-xs text-gray-300 hover:text-white"></i>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-600/30">
+                    {% for file in filesystemList %}
+                        <tr class="hover:bg-gradient-to-r hover:from-gray-600/20 hover:to-gray-500/20 transition-all duration-200 group">
+                            <td class="px-4 py-3 text-left">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        {% if file.isDir %}
+                                            <i class="fas fa-folder text-yellow-400 mr-3"></i>
+                                            <a href={{ path('app_file_system_browser', { 'path': currentPath ~ '/' ~ file.name }) }} class="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200">
+                                                {{ file.name|e }}
                                             </a>
-                                            <a href={{ path('app_file_system_move', { 'path': currentPath ~ '/' ~ file.name }) }} class="w-7 h-7 bg-gray-700/50 hover:bg-purple-600/50 rounded flex items-center justify-center transition-colors duration-200" title="Move {{ file.isDir ? 'directory' : 'file' }}">
-                                                <i class="fas fa-arrows-alt text-xs text-gray-300 hover:text-white"></i>
+                                        {% else %}
+                                            <i class="fas fa-file text-gray-400 mr-3"></i>
+                                            <a href={{ path('app_file_system_view', { 'path': currentPath ~ '/' ~ file.name }) }} class="text-white hover:text-blue-300 transition-colors duration-200">
+                                                {{ file.name|e }}
                                             </a>
-                                            <button class="delete-file-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-colors duration-200" data-path="{{ currentPath ~ '/' ~ file.name }}" data-is-dir="{{ file.isDir ? 'true' : 'false' }}" title="Delete {{ file.isDir ? 'directory' : 'file' }}">
-                                                <i class="fas fa-trash text-xs text-gray-300 hover:text-white"></i>
-                                            </button>
-                                        </div>
+                                        {% endif %}
                                     </div>
-                                </td>
-                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-300">{{ file.size|e }}</td>
-                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-300 font-mono">{{ file.permissions|e }}</td>
-                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-300">{{ file.creationTime|e }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                                    <div class="flex items-center gap-1">
+                                        {% if not file.isDir and file.isEditable %}
+                                            <a href={{ path('app_file_system_edit', { 'path': currentPath ~ '/' ~ file.name }) }} class="w-7 h-7 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded flex items-center justify-center transition-all duration-200" title="Edit file">
+                                                <i class="fas fa-edit text-xs text-blue-400"></i>
+                                            </a>
+                                        {% endif %}
+                                        <a href={{ path('app_file_system_rename', { 'path': currentPath ~ '/' ~ file.name }) }} class="w-7 h-7 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/30 rounded flex items-center justify-center transition-all duration-200" title="Rename {{ file.isDir ? 'directory' : 'file' }}">
+                                            <i class="fas fa-pen text-xs text-yellow-400"></i>
+                                        </a>
+                                        <a href={{ path('app_file_system_move', { 'path': currentPath ~ '/' ~ file.name }) }} class="w-7 h-7 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded flex items-center justify-center transition-all duration-200" title="Move {{ file.isDir ? 'directory' : 'file' }}">
+                                            <i class="fas fa-arrows-alt text-xs text-purple-400"></i>
+                                        </a>
+                                        <button class="delete-file-button w-7 h-7 bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded flex items-center justify-center transition-all duration-200" data-path="{{ currentPath ~ '/' ~ file.name }}" data-is-dir="{{ file.isDir ? 'true' : 'false' }}" title="Delete {{ file.isDir ? 'directory' : 'file' }}">
+                                            <i class="fas fa-trash text-xs text-red-400"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-300 group-hover:text-gray-200">{{ file.size|e }}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-400 font-mono group-hover:text-gray-300">{{ file.permissions|e }}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-400 group-hover:text-gray-300">{{ file.creationTime|e }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

@@ -75,7 +75,7 @@
                                 </div>
                             {% else %}
                                 {% for metricName, metricData in serviceData.metrics %}
-                                    <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden hover:bg-gray-800/60 transition-all duration-300">
+                                    <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
                                         <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase">
                                             <span>{{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}</span>
                                         </div>

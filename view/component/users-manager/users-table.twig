@@ -25,11 +25,11 @@
                 <i class="fas fa-plus text-gray-300 text-xs"></i>
             </a>
             {# FILTER FORM #}
-            <form method="get" action={{ path('app_manager_users') }}>
-                <select name="filter" onchange="this.form.submit()" class="bg-gray-700/50 text-white border border-gray-600/30 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50">
-                    <option value="">All Users</option>
-                    <option value="online" {% if filter == 'online' %}selected{% endif %}>Online</option>
-                    <option value="banned" {% if filter == 'banned' %}selected{% endif %}>Banned</option>
+            <form method="get" action={{ path('app_manager_users') }} class="ml-1">
+                <select name="filter" onchange="this.form.submit()" class="h-8 px-3 bg-gray-800/95 text-white border border-gray-600/80 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/90 focus:border-blue-500/90 hover:bg-gray-700/95 hover:border-gray-500/90 transition-all duration-200 cursor-pointer shadow-lg backdrop-blur-sm">
+                    <option value="" class="bg-gray-800 text-white">All Users</option>
+                    <option value="online" {% if filter == 'online' %}selected{% endif %} class="bg-gray-800 text-white">Online</option>
+                    <option value="banned" {% if filter == 'banned' %}selected{% endif %} class="bg-gray-800 text-white">Banned</option>
                 </select>
             </form>
         </div>
@@ -41,7 +41,7 @@
     {# FLASH MESSAGE #}
     {% for label, messages in app.flashes %}
         {% for message in messages %}
-            <div class="m-2 p-3 rounded-lg {% if label == 'success' %}bg-green-600/20 text-green-300 border border-green-500/30{% else %}bg-red-600/20 text-red-300 border border-red-500/30{% endif %}">
+            <div class="p-2 {% if label == 'success' %}bg-green-600/20 text-green-300{% else %}bg-red-600/20 text-red-300 border border-red-500/30{% endif %}">
                 {{ message|e }}
             </div>
         {% endfor %}
@@ -193,40 +193,79 @@
 
             {# PAGINATION SYSTEM #}
             {% if (totalUsersCount > limitPerPage) and (filter == '') %}
-                <div class="px-4 py-3 border-t border-gray-700/50 bg-gray-800/30">
-                    <div class="flex justify-center">
-                        <div class="flex items-center gap-1">
-                            {% set totalPages = (totalUsersCount / limitPerPage)|round(0, 'ceil') %}
-                            {% set previousPage = currentPage > 1 ? currentPage - 1 : 1 %}
-                            {% set nextPage = currentPage < totalPages ? currentPage + 1 : totalPages %}
-                            {% set startPage = max(currentPage - 2, 1) %}
-                            {% set endPage = min(currentPage + 2, totalPages) %}
+                {% set totalPages = (totalUsersCount / limitPerPage)|round(0, 'ceil') %}
+                {% set previousPage = currentPage > 1 ? currentPage - 1 : 1 %}
+                {% set nextPage = currentPage < totalPages ? currentPage + 1 : totalPages %}
+                {% set startPage = max(currentPage - 1, 1) %}
+                {% set endPage = min(currentPage + 1, totalPages) %}
+                {% set startPageDesktop = max(currentPage - 3, 1) %}
+                {% set endPageDesktop = min(currentPage + 3, totalPages) %}
 
-                            {# Previous button #}
-                            {% if currentPage > 1 %}
-                                <a href={{ path('app_manager_users', {'page': previousPage}) }} class="px-3 py-2 text-sm text-white bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors duration-200">
-                                    <i class="fas fa-chevron-left text-xs mr-1"></i>Previous
-                                </a>
-                            {% else %}
-                                <span class="px-3 py-2 text-sm text-gray-500 bg-gray-800/50 rounded-lg cursor-not-allowed">
-                                    <i class="fas fa-chevron-left text-xs mr-1"></i>Previous
+                <div class="flex flex-col sm:flex-row justify-center items-center py-4 border-t border-gray-700/50 bg-gray-900 gap-3">
+                    <div class="flex items-center gap-2">
+                        {# FIRST PAGE - Hidden on mobile #}
+                        <div class="hidden sm:block">
+                            {% if currentPage == 1 %}
+                                <span class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-700/30 border border-gray-600/30 rounded-lg cursor-not-allowed opacity-50">
+                                    <i class="fas fa-angle-double-left text-xs"></i>
                                 </span>
+                            {% else %}
+                                <a href="{{ path('app_manager_users', {page: 1}) }}" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded-lg hover:bg-gray-600/50 hover:text-white transition-all duration-200" title="First page">
+                                    <i class="fas fa-angle-double-left text-xs"></i>
+                                </a>
                             {% endif %}
+                        </div>
 
-                            {# Page numbers #}
+                        {# PREVIOUS PAGE #}
+                        {% if currentPage == 1 %}
+                            <span class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-700/30 border border-gray-600/30 rounded-lg cursor-not-allowed opacity-50">
+                                <i class="fas fa-chevron-left text-xs"></i>
+                            </span>
+                        {% else %}
+                            <a href="{{ path('app_manager_users', {page: previousPage}) }}" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded-lg hover:bg-gray-600/50 hover:text-white transition-all duration-200">
+                                <i class="fas fa-chevron-left text-xs"></i>
+                            </a>
+                        {% endif %}
+
+                        {# PAGE NUMBERS - Mobile version (fewer pages) #}
+                        <div class="flex items-center gap-2 sm:hidden">
                             {% for page in startPage..endPage %}
-                                <a href={{ path('app_manager_users', {'page': page}) }} class="px-3 py-2 text-sm text-white {% if page == currentPage %}bg-blue-600 hover:bg-blue-500{% else %}bg-gray-700/50 hover:bg-gray-600/50{% endif %} rounded-lg transition-colors duration-200">{{ page }}</a>
-                            {% endfor %}
-
-                            {# Next button #}
-                            {% if currentPage < totalPages %}
-                                <a href={{ path('app_manager_users', {'page': nextPage}) }} class="px-3 py-2 text-sm text-white bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors duration-200">
-                                    Next<i class="fas fa-chevron-right text-xs ml-1"></i>
+                                <a href="{{ path('app_manager_users', {page: page}) }}" class="px-3 py-2 text-sm font-medium {{ page == currentPage ? 'text-white bg-blue-500/20 border-blue-500/50' : 'text-gray-300 bg-gray-700/50 border-gray-600/50 hover:bg-gray-600/50 hover:text-white' }} border rounded-lg transition-all duration-200">
+                                    {{ page }}
                                 </a>
-                            {% else %}
-                                <span class="px-3 py-2 text-sm text-gray-500 bg-gray-800/50 rounded-lg cursor-not-allowed">
-                                    Next<i class="fas fa-chevron-right text-xs ml-1"></i>
+                            {% endfor %}
+                        </div>
+
+                        {# PAGE NUMBERS - Desktop version (more pages) #}
+                        <div class="hidden sm:flex items-center gap-2">
+                            {% for page in startPageDesktop..endPageDesktop %}
+                                <a href="{{ path('app_manager_users', {page: page}) }}" class="px-3 py-2 text-sm font-medium {{ page == currentPage ? 'text-white bg-blue-500/20 border-blue-500/50' : 'text-gray-300 bg-gray-700/50 border-gray-600/50 hover:bg-gray-600/50 hover:text-white' }} border rounded-lg transition-all duration-200">
+                                    {{ page }}
+                                </a>
+                            {% endfor %}
+                        </div>
+
+                        {# NEXT PAGE #}
+                        {% if currentPage == totalPages %}
+                            <span class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-700/30 border border-gray-600/30 rounded-lg cursor-not-allowed opacity-50">
+                                <i class="fas fa-chevron-right text-xs"></i>
+                            </span>
+                        {% else %}
+                            <a href="{{ path('app_manager_users', {page: nextPage}) }}" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded-lg hover:bg-gray-600/50 hover:text-white transition-all duration-200">
+                                <i class="fas fa-chevron-right text-xs"></i>
+                            </a>
+                        {% endif %}
+
+                        {# LAST PAGE - Hidden on mobile #}
+                        <div class="hidden sm:block">
+                            {% if currentPage == totalPages %}
+                                <span class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-700/30 border border-gray-600/30 rounded-lg cursor-not-allowed opacity-50">
+                                    <i class="fas fa-angle-double-right text-xs"></i>
                                 </span>
+                            {% else %}
+                                <a href="{{ path('app_manager_users', {page: totalPages}) }}" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded-lg hover:bg-gray-600/50 hover:text-white transition-all duration-200" title="Last page">
+                                    <i class="fas fa-angle-double-right text-xs"></i>
+                                </a>
                             {% endif %}
                         </div>
                     </div>

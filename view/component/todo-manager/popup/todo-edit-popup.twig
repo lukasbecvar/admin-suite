@@ -1,10 +1,10 @@
 <div id="editPopup" class="fixed inset-0 bg-black bg-opacity-80 flex items-start justify-center pt-[10%] sm:items-center sm:pt-0 hidden z-50">
-    <div class="backdrop-blur-md bg-gray-800/95 rounded-lg p-6 border border-gray-700/50 w-full max-w-xl animate-popin">
+    <div class="backdrop-blur-md bg-gradient-to-br from-slate-800/95 to-slate-900/95 rounded-lg p-6 border border-slate-600/50 w-full max-w-xl animate-popin">
         <div class="flex items-center mb-4">
-            <i class="fas fa-edit text-blue-400 mr-3"></i>
+            <i class="fas fa-edit text-indigo-400 mr-3"></i>
             <h2 class="text-lg font-bold text-white">Edit Task</h2>
         </div>
-        <textarea id="editTodoInput" class="bg-gray-700/50 text-white w-full p-3 border border-gray-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 resize-none transition-all duration-200" placeholder="Enter task text..." maxlength="2048" rows="6"></textarea>
+        <textarea id="editTodoInput" class="bg-slate-700/60 text-white w-full p-3 border border-slate-600/40 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400/50 focus:border-indigo-400/50 resize-none transition-all duration-200 placeholder-gray-400" placeholder="Enter task text..." maxlength="2048" rows="6"></textarea>
         <div class="flex justify-end mt-6 gap-3">
             <button id="cancelEditButton" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition-colors duration-200">Cancel</button>
             <button id="confirmEditButton" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg transition-colors duration-200">Save Changes</button>

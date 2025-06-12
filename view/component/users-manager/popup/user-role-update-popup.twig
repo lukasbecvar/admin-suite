@@ -1,19 +1,37 @@
-<div id="role-update-popup-overlay" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center hidden z-50">
-	<div class="backdrop-blur-md bg-white/5 rounded p-6 border border-neutral-800 animate-popin">
-		<p id="role-update-title" class="mb-4 text-white">Update role:
-			<span id="role-update-username"></span>
-		</p>
+<div id="role-update-popup-overlay" class="fixed inset-0 bg-black/80 flex justify-center items-center hidden z-50">
+	<div class="backdrop-blur-lg bg-gray-800/90 rounded-xl p-8 border border-gray-600/50 animate-popin shadow-2xl max-w-md w-full mx-4">
+		<div class="flex items-center gap-3 mb-6">
+			<div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+				<i class="fas fa-user-cog text-purple-400 text-lg"></i>
+			</div>
+			<div>
+				<h3 class="text-xl font-semibold text-white">Update User Role</h3>
+				<p class="text-gray-400 text-sm">Change role for: <span id="role-update-username" class="text-white font-medium"></span></p>
+			</div>
+		</div>
+
 		<form id="role-update-form" method="POST" action={{ path('app_manager_users_role_update', {'page': currentPage} ) }}>
 			<input type="hidden" name="id" id="role-update-user-id">
 			<input type="hidden" name="current-role" id="current-role">
-			<div class="mb-4">
-				<label for="new-role" class="block text-white mb-2">New Role:</label>
-				<input type="text" name="role" id="new-role" class="w-full px-4 py-2 border border-neutral-700 rounded bg-white/10 text-white">
+
+			<div class="mb-6">
+				<label for="new-role" class="block text-sm font-medium text-gray-300 mb-3">New Role</label>
+				<input type="text" name="role" id="new-role" class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded-lg focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all duration-200" placeholder="Enter new role (e.g., ADMIN, USER)">
 			</div>
-			<div id="role-error-message" class="text-red-500 mb-4 hidden">The new role must be different from the current role.</div>
-			<div class="flex justify-end">
-				<button type="button" id="role-update-cancel-button" class="bg-gray-700 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600">Close</button>
-				<button type="submit" id="role-update-submit-button" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-600" disabled>Update</button>
+
+			<div id="role-error-message" class="mb-4 p-3 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 hidden">
+				<i class="fas fa-exclamation-circle mr-2"></i>The new role must be different from the current role.
+			</div>
+
+			<div class="flex justify-end gap-3">
+				<button type="button" id="role-update-cancel-button" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded-lg border border-gray-600/30 transition-all duration-200 text-sm font-medium">
+					<i class="fas fa-times text-xs"></i>
+					<span>Cancel</span>
+				</button>
+				<button type="submit" id="role-update-submit-button" class="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 hover:text-purple-200 rounded-lg border border-purple-500/30 transition-all duration-200 text-sm font-medium" disabled>
+					<i class="fas fa-user-cog text-xs"></i>
+					<span>Update Role</span>
+				</button>
 			</div>
 		</form>
 	</div>

@@ -279,8 +279,15 @@ main {
 	backdrop-filter: blur(8px);
 }
 
-.nav-bar a .logout-text {
-	margin-top: -2px !important;
+/* Navigation icons consistency */
+.nav-bar i {
+	font-size: 16px !important;
+	vertical-align: middle;
+}
+
+/* Navigation text alignment */
+.nav-bar span {
+	vertical-align: middle;
 }
 
 /* sub navigation */
@@ -731,12 +738,8 @@ main {
 	.nav-bar {
 		height: 30px;
 	}
-	.nav-bar a .menu-icon {
-		font-size: 35px;
-	}
-	.nav-bar a .logout-icon {
-		font-size: 22px;
-		margin-top: -1.2px;
+	.nav-bar i {
+		font-size: 20px !important;
 	}
 	#sidebar {
 		top: 29.5px;
