@@ -40,14 +40,14 @@ class SystemAuditControllerTest extends CustomTestCase
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorExists('a[title="Go to diagnostics"]');
         $this->assertSelectorExists('a[title="Go to metrics dashboard"]');
-        $this->assertSelectorTextContains('body', 'Process list');
-        $this->assertSelectorTextContains('body', 'Linux system users');
-        $this->assertSelectorTextContains('body', 'Firewall open ports (UFW)');
-        $this->assertSelectorTextContains('body', 'System information');
-        $this->assertSelectorTextContains('body', 'SSH access history');
-        $this->assertSelectorTextContains('body', 'Journalctl live logs');
-        $this->assertSelectorTextContains('body', 'System logs');
-        $this->assertSelectorTextContains('body', 'System diagnostics');
+        $this->assertSelectorTextContains('body', 'Process List');
+        $this->assertSelectorTextContains('body', 'Linux System Users');
+        $this->assertSelectorTextContains('body', 'Firewall Open Ports (UFW)');
+        $this->assertSelectorTextContains('body', 'System Information');
+        $this->assertSelectorTextContains('body', 'SSH Access History');
+        $this->assertSelectorTextContains('body', 'Journalctl Live Logs');
+        $this->assertSelectorTextContains('body', 'System Logs');
+        $this->assertSelectorTextContains('body', 'System Diagnostics');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

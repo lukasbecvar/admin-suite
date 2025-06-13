@@ -1,8 +1,8 @@
 {% extends 'common/layout.twig' %}
 
 {# MAIN ADMIN-SUITE DASHBOARD #}
-{% block component %} 
-<div class="w-full dashbard-component">
+{% block component %}
+<div class="w-full dashbard-component bg-gray-900 min-h-screen">
     {# MAIN DASHBOARD CARDS #}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2 component">
         {# WARNINGS BOX CARD #}
@@ -38,7 +38,7 @@
         } else {
             divElement.style.display = 'block'
         }
-    });
+    })
 </script>
 
 {# SYSTEM RESOURCES UPDATER #}

@@ -2,42 +2,96 @@
 
 {# USER LOGIN COMPONENT #}
 {% block body %}
-<div class="auth-component flex justify-center items-center h-screen">
-	<div class="mt-5 max-w-md w-full px-6 py-6 mb-4 rounded-xl bg-black/20 backdrop-blur-md border border-white/10 shadow-2xl mr-2 ml-2">
-		<h2 class="text-3xl mb-6 text-center text-white font-semibold tracking-wide">Login</h2>
-
-        {# EMPTY USER LIST ALERT BOX (FIRST USER REGISTER) #}
-		{% if isUsersEmpty %}
-			<div class="bg-yellow-800 border border-yellow-600 text-white p-3 mb-4 rounded text-center animate-popin">
-				<p>Users table is empty you can register <a href={{ path('app_auth_register') }} class="text-blue-400 font-bold underline hover:text-blue-300">here</a></p>
-			</div>
-		{% endif %}
-
-        {# SUCCESS MESSAGE BOX #}
-		{% for message in app.flashes('success') %}
-			<div class="bg-green-800 border border-green-600 text-white p-3 mb-2 rounded text-center animate-popin">{{ message|e }}</div>
-		{% endfor %}
-
-        {# ERROR MESSAGE BOX #}
-		{% for message in app.flashes('error') %}
-			<div class="bg-red-900 border border-red-600 text-white p-3 mb-3 rounded text-center animate-popin">{{ message|e }}</div>
-		{% endfor %}
-
-        {# LOGIN FORM #}
-		{{ form_start(loginForm) }}
-            {# FORM FIELDS #}
-			{{ form_row(loginForm.username, {'attr': {'class': 'auth-form-input', 'placeholder': 'Username'}}) }}
-			{{ form_row(loginForm.password, {'attr': {'class': 'auth-form-input', 'placeholder': 'Password'}}) }}
-
-            {# REMEMBER ME CHECKBOX #}
-			<div class="flex items-center text-white mt-2 mb-2">
-				<label for="login_form_remember" class="mr-2">Remember me</label>
-				{{ form_widget(loginForm.remember, {'attr': {'class': 'rememberme-checkbox'}}) }}
+<div class="auth-component min-h-screen bg-gray-900 flex items-center justify-center p-4">
+	<div class="w-full max-w-lg">
+		{# MAIN LOGIN CARD #}
+		<div class="backdrop-blur-md bg-gray-800/60 border border-gray-700/60 rounded-lg shadow-2xl overflow-hidden">
+			{# HEADER WITH LOGO/TITLE #}
+			<div class="bg-gradient-to-r from-gray-800/80 to-gray-700/80 px-6 py-6 text-center border-b border-gray-600/50">
+				<div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
+					<i class="fas fa-shield-alt text-blue-400 text-2xl"></i>
+				</div>
+				<h1 class="text-2xl font-bold text-white mb-1">Admin Suite</h1>
+				<p class="text-gray-400 text-sm">Secure Authentication</p>
 			</div>
 
-            {# FORM SUBMIT BUTTON #}
-			<button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-md w-full transition duration-300 ease-in-out hover:shadow-lg hover:shadow-blue-900">Login</button>
-		{{ form_end(loginForm) }}
+			{# CONTENT AREA #}
+			<div class="p-6 space-y-5">
+				{# ALERTS SECTION #}
+				{% if isUsersEmpty %}
+					<div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
+						<div class="flex items-center gap-3">
+							<i class="fas fa-info-circle text-orange-400 text-lg"></i>
+							<div>
+								<h4 class="font-medium text-orange-200 mb-1">First Time Setup</h4>
+								<p class="text-sm text-gray-300">No users found. <a href="{{ path('app_auth_register') }}" class="text-blue-400 hover:text-blue-300 underline font-medium">Create your account</a></p>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+
+				{# FLASH SUCCESS MESSAGES #}
+				{% for message in app.flashes('success') %}
+					<div class="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+						<div class="flex items-center gap-3">
+							<i class="fas fa-check-circle text-green-400 text-lg"></i>
+							<div>
+								<h4 class="font-medium text-green-200 mb-1">Success</h4>
+								<p class="text-sm text-gray-300">{{ message|e }}</p>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+
+				{# FLASH ERROR MESSAGES #}
+				{% for message in app.flashes('error') %}
+					<div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+						<div class="flex items-center gap-3">
+							<i class="fas fa-exclamation-circle text-red-400 text-lg"></i>
+							<div>
+								<h4 class="font-medium text-red-200 mb-1">Error</h4>
+								<p class="text-sm text-gray-300">{{ message|e }}</p>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+
+				{# LOGIN FORM #}
+				{{ form_start(loginForm) }}
+					<div class="space-y-4">
+						{# USERNAME FIELD #}
+						<div>
+							<label class="block text-sm font-medium text-gray-300 mb-2">
+								<i class="fas fa-user mr-2 text-blue-400"></i>Username
+							</label>
+							{{ form_row(loginForm.username, {'attr': {'class': 'w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200', 'placeholder': 'Enter your username'}}) }}
+						</div>
+
+						{# PASSWORD FIELD #}
+						<div>
+							<label class="block text-sm font-medium text-gray-300 mb-2">
+								<i class="fas fa-lock mr-2 text-blue-400"></i>Password
+							</label>
+							{{ form_row(loginForm.password, {'attr': {'class': 'w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200', 'placeholder': 'Enter your password'}}) }}
+						</div>
+
+						{# REMEMBER ME #}
+						<div class="flex items-center pt-2">
+							<label class="flex items-center gap-3 cursor-pointer group">
+								{{ form_widget(loginForm.remember, {'attr': {'class': 'modern-checkbox'}}) }}
+								<span class="text-sm text-gray-300 group-hover:text-white transition-colors duration-200">Remember me</span>
+							</label>
+						</div>
+
+						{# SUBMIT BUTTON #}
+						<button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/25 focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+							<i class="fas fa-sign-in-alt mr-2"></i>
+							Sign In
+						</button>
+					</div>
+				{{ form_end(loginForm) }}
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}

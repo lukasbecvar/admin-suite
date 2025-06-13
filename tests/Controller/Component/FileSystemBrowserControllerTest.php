@@ -131,8 +131,8 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[href="/filesystem?path=/tmp"]');
         $this->assertSelectorExists('a[title="Back to directory"]');
-        $this->assertSelectorTextContains('body', 'Create New File');
-        $this->assertSelectorTextContains('body', 'Directory');
+        $this->assertSelectorTextContains('body', 'Create File');
+        $this->assertSelectorTextContains('body', 'Path:');
         $this->assertSelectorExists('form[action="/filesystem/create/save"]');
         $this->assertSelectorExists('input[id="filename"]');
         $this->assertSelectorExists('label[for="filename"]');
@@ -156,13 +156,13 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[href="/filesystem?path=/tmp"]');
         $this->assertSelectorExists('a[title="Back to directory"]');
-        $this->assertSelectorTextContains('body', 'Create New Directory');
+        $this->assertSelectorTextContains('body', 'Create Directory');
         $this->assertSelectorExists('form[action="/filesystem/create/directory/save"]');
         $this->assertSelectorExists('input[id="directoryname"]');
         $this->assertSelectorExists('label[for="directoryname"]');
-        $this->assertSelectorTextContains('label[for="directoryname"]', 'Folder Name:');
+        $this->assertSelectorTextContains('label[for="directoryname"]', 'Directory Name');
         $this->assertSelectorExists('button[type="submit"]');
-        $this->assertSelectorTextContains('button[type="submit"]', 'Create Folder');
+        $this->assertSelectorTextContains('button[type="submit"]', 'Create Directory');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 

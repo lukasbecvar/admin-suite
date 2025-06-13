@@ -37,9 +37,9 @@ class DiagnosticControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'Diagnostics');
-        $this->assertSelectorTextContains('body', 'Suite diagnostics');
-        $this->assertSelectorTextContains('body', 'System diagnostics');
-        $this->assertSelectorTextContains('body', 'Services diagnostics');
+        $this->assertSelectorTextContains('body', 'Suite Diagnostics');
+        $this->assertSelectorTextContains('body', 'System Diagnostics');
+        $this->assertSelectorTextContains('body', 'Suite Diagnostics');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

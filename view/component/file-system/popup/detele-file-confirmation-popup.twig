@@ -1,9 +1,12 @@
-<div id="delete-file-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="backdrop-blur-md bg-white/5 rounded p-6 border border-neutral-800 animate-popin">
-        <h3 class="text-xl font-semibold text-white mb-4">Confirm Delete</h3>
+<div id="delete-file-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+    <div class="backdrop-blur-lg bg-gray-800/90 rounded-xl p-8 border border-gray-600/50 animate-popin shadow-2xl max-w-md w-full mx-4">
+        <h3 class="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+            <i class="fas fa-exclamation-triangle text-red-400"></i>
+            Confirm Delete
+        </h3>
         <p id="delete-confirmation-text" class="text-gray-300 mb-6">Are you sure you want to delete this item? This action cannot be undone.</p>
-        <div class="flex justify-end space-x-4">
-            <button id="cancel-delete" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+        <div class="flex justify-end gap-3">
+            <button id="cancel-delete" class="bg-gray-600/80 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded transition-all duration-200">
                 Cancel
             </button>
             <form id="delete-file-form" action={{ path('app_file_system_delete') }} method="post">

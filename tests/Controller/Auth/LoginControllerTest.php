@@ -32,12 +32,12 @@ class LoginControllerTest extends WebTestCase
         $this->client->request('GET', '/login');
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Login');
+        $this->assertSelectorTextContains('p', 'Secure Authentication');
         $this->assertSelectorExists('form[name="login_form"]');
         $this->assertSelectorExists('input[name="login_form[username]"]');
         $this->assertSelectorExists('input[name="login_form[password]"]');
         $this->assertSelectorExists('input[name="login_form[remember]"]');
-        $this->assertSelectorTextContains('button', 'Login');
+        $this->assertSelectorTextContains('button', 'Sign In');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -51,18 +51,18 @@ class LoginControllerTest extends WebTestCase
         $crawler = $this->client->request('POST', '/login');
 
         // get the form
-        $form = $crawler->selectButton('Login')->form();
+        $form = $crawler->selectButton('Sign In')->form();
 
         // submit the form
         $this->client->submit($form);
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Login');
+        $this->assertSelectorTextContains('p', 'Secure Authentication');
         $this->assertSelectorExists('form[name="login_form"]');
         $this->assertSelectorExists('input[name="login_form[username]"]');
         $this->assertSelectorExists('input[name="login_form[password]"]');
         $this->assertSelectorExists('input[name="login_form[remember]"]');
-        $this->assertSelectorTextContains('button', 'Login');
+        $this->assertSelectorTextContains('button', 'Sign In');
         $this->assertSelectorTextContains('li:contains("Please enter a username")', 'Please enter a username');
         $this->assertSelectorTextContains('li:contains("Please enter a password")', 'Please enter a password');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -78,7 +78,7 @@ class LoginControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/login');
 
         // get the form
-        $form = $crawler->selectButton('Login')->form();
+        $form = $crawler->selectButton('Sign In')->form();
 
         // fill form inputs
         $form['login_form[username]'] = 'invalid_username';
@@ -88,13 +88,13 @@ class LoginControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Login');
+        $this->assertSelectorTextContains('p', 'Secure Authentication');
         $this->assertSelectorExists('form[name="login_form"]');
         $this->assertSelectorExists('input[name="login_form[username]"]');
         $this->assertSelectorExists('input[name="login_form[password]"]');
         $this->assertSelectorExists('input[name="login_form[remember]"]');
-        $this->assertSelectorTextContains('button', 'Login');
-        $this->assertSelectorTextContains('.bg-red-900', 'Invalid username or password.');
+        $this->assertSelectorTextContains('button', 'Sign In');
+        $this->assertSelectorTextContains('.text-gray-300', 'Invalid username or password.');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -108,7 +108,7 @@ class LoginControllerTest extends WebTestCase
         $crawler = $this->client->request('POST', '/login');
 
         // get the form
-        $form = $crawler->selectButton('Login')->form();
+        $form = $crawler->selectButton('Sign In')->form();
 
         // fill form inputs
         $form['login_form[username]'] = 'test';
@@ -118,13 +118,13 @@ class LoginControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Login');
+        $this->assertSelectorTextContains('p', 'Secure Authentication');
         $this->assertSelectorExists('form[name="login_form"]');
         $this->assertSelectorExists('input[name="login_form[username]"]');
         $this->assertSelectorExists('input[name="login_form[password]"]');
         $this->assertSelectorExists('input[name="login_form[remember]"]');
-        $this->assertSelectorTextContains('button', 'Login');
-        $this->assertSelectorTextContains('.bg-red-900', 'Invalid username or password.');
+        $this->assertSelectorTextContains('button', 'Sign In');
+        $this->assertSelectorTextContains('.text-gray-300', 'Invalid username or password.');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -138,7 +138,7 @@ class LoginControllerTest extends WebTestCase
         $crawler = $this->client->request('POST', '/login');
 
         // get the form
-        $form = $crawler->selectButton('Login')->form();
+        $form = $crawler->selectButton('Sign In')->form();
 
         // fill form inputs
         $form['login_form[username]'] = 'fwewfwfwfewfewf';
@@ -148,13 +148,13 @@ class LoginControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Login');
+        $this->assertSelectorTextContains('p', 'Secure Authentication');
         $this->assertSelectorExists('form[name="login_form"]');
         $this->assertSelectorExists('input[name="login_form[username]"]');
         $this->assertSelectorExists('input[name="login_form[password]"]');
         $this->assertSelectorExists('input[name="login_form[remember]"]');
-        $this->assertSelectorTextContains('button', 'Login');
-        $this->assertSelectorTextContains('.bg-red-900', 'Invalid username or password.');
+        $this->assertSelectorTextContains('button', 'Sign In');
+        $this->assertSelectorTextContains('.text-gray-300', 'Invalid username or password.');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -168,7 +168,7 @@ class LoginControllerTest extends WebTestCase
         $crawler = $this->client->request('POST', '/login');
 
         // get the form
-        $form = $crawler->selectButton('Login')->form();
+        $form = $crawler->selectButton('Sign In')->form();
 
         // fill form inputs
         $form['login_form[username]'] = 'test';

@@ -49,7 +49,7 @@ class LogsManagerControllerTest extends CustomTestCase
         $this->assertSelectorExists('th:contains("OS")');
         $this->assertSelectorExists('th:contains("IP Address")');
         $this->assertSelectorExists('th:contains("User")');
-        $this->assertSelectorExists('a[class="delete-button"]');
+        $this->assertSelectorExists('a[title="Mark as readed"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -65,7 +65,7 @@ class LogsManagerControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[href="/manager/logs"]');
-        $this->assertSelectorTextContains('body', 'Exception files');
+        $this->assertSelectorTextContains('body', 'Exception Files');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -81,7 +81,7 @@ class LogsManagerControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[href="/manager/logs"]');
-        $this->assertSelectorTextContains('body', 'System logs');
+        $this->assertSelectorTextContains('body', 'System Logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 

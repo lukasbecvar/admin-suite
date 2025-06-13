@@ -2,43 +2,68 @@
 
 {# FILE SYSTEM ERROR PAGE #}
 {% block component %}
-{# SUB-NAVIGATION #}
-<div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40">
-    {# BACK BUTTON #}
-    <a href={{ path('app_file_system_browser', { 'path': returnPath }) }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="Back to directory">
-        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-    </a>
-    <span class="mr-1 text-white">File System Error</span>
-</div>
-
-{# ERROR CONTENT #}
-<div class="component bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 flex flex-col h-[calc(100vh-48px)]">
-    <div class="flex-grow flex items-center justify-center">
-        <div class="bg-gradient-to-b from-zinc-800/60 to-zinc-900/60 border border-neutral-700 rounded-lg p-8 w-full max-w-lg shadow-lg">
-            <div class="mb-6 text-center">
-                <i class="fa fa-exclamation-triangle text-red-500 text-5xl mb-4"></i>
-                <h2 class="text-xl font-bold text-white mb-2">{{ errorTitle }}</h2>
-                <p class="text-gray-300">{{ errorMessage }}</p>
-                
-                {% if details %}
-                <div class="mt-4 p-3 bg-gray-900 rounded border border-gray-700 text-left">
-                    <p class="text-gray-400 text-sm font-mono">{{ details }}</p>
+<div class="flex flex-col h-full">
+    {# SUB-NAVIGATION #}
+    <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <a href={{ path('app_file_system_browser', { 'path': returnPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to directory">
+                    <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
+                </a>
+                <div class="hidden sm:block">
+                    <h1 class="text-xm font-bold text-white">File System Error</h1>
+                    <p class="text-gray-400 text-xs">An error occurred while processing your request</p>
                 </div>
-                {% endif %}
             </div>
-            
-            <div class="flex justify-center space-x-4">
-                <a href={{ path('app_file_system_browser', { 'path': returnPath }) }} class="flex items-center gap-1 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded px-4 py-2 transition-all duration-150">
-                    <i class="fa fa-arrow-left"></i>
-                    Back to Directory
-                </a>
-                
-                {% if actionPath %}
-                <a href={{ actionPath }} class="flex items-center gap-1 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded px-4 py-2 transition-all duration-150">
-                    <i class="fa fa-{{ actionIcon|default('refresh') }}"></i>
-                    {{ actionText|default('Try Again') }}
-                </a>
-                {% endif %}
+        </div>
+    </div>
+
+    {# MAIN CONTENT AREA #}
+    <div class="flex-1 flex flex-col min-h-0">
+        <div class="component flex items-center justify-center p-8">
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-gray-800/50 border border-gray-700/50 rounded overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-700/50 bg-gray-800/30">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-red-500/20 rounded flex items-center justify-center">
+                                <i class="fas fa-exclamation-triangle text-red-400 text-lg"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white">{{ errorTitle }}</h2>
+                                <p class="text-gray-400 text-sm">File system operation failed</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="mb-6">
+                            <p class="text-gray-300 text-lg leading-relaxed">{{ errorMessage }}</p>
+                            {% if details %}
+                                <div class="mt-4 p-4 bg-gray-900/50 border border-gray-600/50 rounded">
+                                    <div class="flex items-start gap-2 mb-2">
+                                        <i class="fas fa-info-circle text-blue-400 text-sm mt-0.5"></i>
+                                        <span class="text-gray-300 text-sm font-medium">Technical Details</span>
+                                    </div>
+                                    <p class="text-gray-400 text-sm font-mono leading-relaxed ml-6">{{ details }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="flex items-center justify-between gap-4">
+                            <a href={{ path('app_file_system_browser', { 'path': returnPath }) }} class="inline-flex items-center gap-2 px-6 py-2 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded border border-gray-600/30 transition-all duration-200 text-sm font-medium">
+                                <i class="fas fa-arrow-left text-xs"></i>
+                                <span>Back to Directory</span>
+                            </a>
+
+                            {% if actionPath %}
+                                <a href={{ actionPath }} class="inline-flex items-center gap-2 px-6 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 rounded border border-blue-500/30 transition-all duration-200 text-sm font-medium">
+                                    <i class="fas fa-{{ actionIcon|default('refresh') }} text-xs"></i>
+                                    <span>{{ actionText|default('Try Again') }}</span>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

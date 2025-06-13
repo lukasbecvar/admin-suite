@@ -7,7 +7,11 @@
 
 body {
     scroll-behavior: smooth;
-    background-color: #121214;
+    background-color: #111827;
+}
+
+#main-content {
+    background-color: #111827;
 }
 
 main {
@@ -42,7 +46,26 @@ main {
 }
 
 /* auth component style */
+.auth-component {
+	background: transparent;
+}
+
 .auth-component::before {
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	opacity: 1;
+	z-index: -1;
+	content: '';
+	position: fixed;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-image: url('../images/background.jpg');
+}
+
+.auth-component::after {
 	top: 0;
 	left: 0;
 	right: 0;
@@ -50,33 +73,32 @@ main {
 	z-index: -1;
 	content: '';
 	position: fixed;
-	filter: blur(2px);
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-image: url('../images/background.jpg');
+	backdrop-filter: blur(0.5px);
+	background: rgba(59, 130, 246, 0.03);
 }
 
 .auth-form-input {
 	width: 100%;
-	margin: 6px 0;
-	font-size: 16px;
-	color: #f0f0f0;
-	padding: 10px 14px;
+	margin: 0;
+	font-size: 14px;
+	color: #e5e7eb;
+	padding: 12px 16px;
 	border-radius: 0.5rem;
-	transition: all 0.3s ease;
-	backdrop-filter: blur(6px);
+	transition: all 0.2s ease;
 	font-family: 'Inter', sans-serif;
-	background: rgba(26, 26, 29, 0.6);
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	background: rgba(31, 41, 55, 0.7);
+	border: 1px solid rgba(75, 85, 99, 0.6);
 }
 
 .auth-form-input:focus {
-	border-color: rgb(24, 132, 255);
+	outline: none;
+	background: rgba(31, 41, 55, 0.8);
+	border-color: rgba(107, 114, 128, 0.8);
+	box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.2);
 }
 
 .auth-form-input::placeholder {
-	color: #cccccc;
+	color: #9ca3af;
 }
 
 .auth-component .rememberme-checkbox {
@@ -86,16 +108,17 @@ main {
 	cursor: pointer;
 	appearance: none;
 	align-items: center;
-	border-radius: 0.25rem;
+	border-radius: 0.375rem;
 	justify-content: center;
-	background-color: rgba(255, 255, 255, 0.1);
-	border: 1px solid rgba(255, 255, 255, 0.4);
-	transition: background-color 0.2s ease, border-color 0.2s ease;
+	transition: all 0.3s ease;
+	background-color: rgba(31, 41, 55, 0.8);
+	border: 2px solid rgba(107, 114, 128, 0.5);
 }
 
 .auth-component .rememberme-checkbox:checked {
-	background-color: rgb(24, 132, 255);
-	border-color: rgb(24, 132, 255);
+	transform: scale(1.05);
+	border-color: rgb(59, 130, 246);
+	background-color: rgb(59, 130, 246);
 }
 
 .auth-component .rememberme-checkbox:checked::after {
@@ -106,23 +129,177 @@ main {
 }
 
 .auth-form-input:-webkit-autofill {
-	-webkit-text-fill-color: white !important;
+	-webkit-text-fill-color: #e5e7eb !important;
     transition: background-color 5000s ease-in-out 0s !important;
-    -webkit-box-shadow: 0 0 0 1000px rgba(26, 26, 29, 0.7) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px rgba(31, 41, 55, 0.7) inset !important;
 }
 
 .auth-form-input:-webkit-autofill:focus {
-    border-color: rgb(24, 132, 255) !important;
+    border-color: rgba(107, 114, 128, 0.8) !important;
 }
 
 .auth-form-input:-moz-autofill {
-    color: white !important;
-    box-shadow: 0 0 0 1000px rgba(26, 26, 29, 0.7) inset !important;
+    color: #e5e7eb !important;
+    box-shadow: 0 0 0 1000px rgba(31, 41, 55, 0.7) inset !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+    -webkit-text-fill-color: #e5e7eb !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+    box-shadow: 0 0 0 1000px rgba(55, 65, 81, 0.6) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px rgba(55, 65, 81, 0.6) inset !important;
+}
+
+input:-moz-autofill,
+textarea:-moz-autofill,
+select:-moz-autofill {
+    color: #e5e7eb !important;
+    background-color: rgba(55, 65, 81, 0.6) !important;
+    box-shadow: 0 0 0 1000px rgba(55, 65, 81, 0.6) inset !important;
+}
+
+.bg-gray-900\/50 input:-webkit-autofill,
+.bg-gray-700\/50 input:-webkit-autofill {
+    box-shadow: 0 0 0 1000px rgba(31, 41, 55, 0.8) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px rgba(31, 41, 55, 0.8) inset !important;
+}
+
+input[class*="bg-gray-700/50"]:-webkit-autofill,
+input[class*="bg-gray-900/50"]:-webkit-autofill {
+    -webkit-text-fill-color: #ffffff !important;
+    box-shadow: 0 0 0 1000px rgba(55, 65, 81, 0.5) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px rgba(55, 65, 81, 0.5) inset !important;
+}
+
+input[class*="bg-gray-700/50"]:-webkit-autofill:focus,
+input[class*="bg-gray-900/50"]:-webkit-autofill:focus {
+	box-shadow: 0 0 0 1000px rgba(55, 65, 81, 0.5) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px rgba(55, 65, 81, 0.5) inset !important;
+}
+
+input[class*="bg-gray-700/50"]:-moz-autofill,
+input[class*="bg-gray-900/50"]:-moz-autofill {
+    color: #ffffff !important;
+    background-color: rgba(55, 65, 81, 0.5) !important;
 }
 
 .auth-component li {
 	color: white;
 	margin-left: 1px;
+}
+
+.mega-checkbox {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	appearance: none;
+	position: relative;
+	border-radius: 6px;
+	border: 2px solid rgba(75, 85, 99, 0.8);
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+	background: linear-gradient(135deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.9) 100%);
+}
+
+.mega-checkbox:hover {
+	transform: translateY(-1px);
+	border-color: rgba(59, 130, 246, 0.6);
+	background: linear-gradient(135deg, rgba(31, 41, 55, 1) 0%, rgba(17, 24, 39, 1) 100%);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.mega-checkbox:checked {
+	transform: scale(1.05);
+	border-color: #2563eb;
+	background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+	box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4), 0 0 0 2px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.mega-checkbox:checked::after {
+	content: '✓';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	color: white;
+	font-size: 12px;
+	font-weight: bold;
+	transform: translate(-50%, -50%);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.mega-checkbox:focus {
+	outline: none;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 0 0 3px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.modern-checkbox {
+	width: 18px;
+	height: 18px;
+	cursor: pointer;
+	appearance: none;
+	position: relative;
+	border-radius: 4px;
+	backdrop-filter: blur(4px);
+	background: rgba(55, 65, 81, 0.6);
+	border: 2px solid rgba(75, 85, 99, 0.6);
+	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modern-checkbox:hover {
+	transform: translateY(-1px);
+	background: rgba(55, 65, 81, 0.8);
+	border-color: rgba(59, 130, 246, 0.7);
+	box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.modern-checkbox:checked {
+	border-color: #2563eb;
+	transform: scale(1.05);
+	background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+	box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3), 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.modern-checkbox:checked::after {
+	content: '';
+	position: absolute;
+	top: 1px;
+	left: 5px;
+	width: 4px;
+	opacity: 1;
+	height: 8px;
+	border: solid white;
+	transform: rotate(45deg);
+	border-width: 0 2px 2px 0;
+}
+
+.modern-checkbox:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3), 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.modern-checkbox:focus:checked {
+	box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3), 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+.auth-form-input:invalid:not(:focus):not(:placeholder-shown) {
+	border-color: rgba(75, 85, 99, 0.8);
+	background: rgba(31, 41, 55, 0.7);
+}
+
+.auth-form-input:valid:not(:focus):not(:placeholder-shown) {
+	border-color: rgba(75, 85, 99, 0.8);
+	background: rgba(31, 41, 55, 0.7);
 }
 
 /* sidebar element */
@@ -133,7 +310,18 @@ main {
 	overflow-y: auto;
 	height: calc(100% - 30px);
 	transform: translateX(-100%);
-	transition: transform 0.2s ease;
+	transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#sidebar > * {
+	opacity: 0;
+	transform: translateX(-20px);
+	transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+}
+
+#sidebar.active > * {
+	opacity: 1;
+	transform: translateX(0);
 }
 
 #sidebar ul {
@@ -152,23 +340,29 @@ main {
 }
 
 #sidebar a:hover {
-	color: #87dcf1e9;
-	background-color: rgba(87, 87, 87, 0.397);
+	color: #ffffff;
+	background: linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
 }
 
 /* top navigation */
 .nav-bar {
 	top: 0;
 	width: 100%;
+	height: 38px;
 	z-index: 1000;
 	position: fixed;
 	padding-top: 2px;
 	padding-bottom: 2px;
-	height: 38px;
+	backdrop-filter: blur(8px);
 }
 
-.nav-bar a .logout-text {
-	margin-top: -2px !important;
+.nav-bar i {
+	font-size: 16px !important;
+	vertical-align: middle;
+}
+
+.nav-bar span {
+	vertical-align: middle;
 }
 
 /* sub navigation */
@@ -188,8 +382,11 @@ main {
 }
 
 .sub-navigation a:hover, .sub-navigation button:hover {
-    color: #24d3ff;
-    border: 1px solid #24d3ff;
+    color: #60a5fa;
+    border: 1px solid #60a5fa;
+    transform: translateY(-1px);
+    background: rgba(96, 165, 250, 0.15);
+    box-shadow: 0 4px 8px rgba(96, 165, 250, 0.3);
 }
 
 .breadcrumb-panel {
@@ -198,12 +395,13 @@ main {
 
 .breadcrumb-panel .breadcrumb-link {
 	border: none !important;
+	transition: all 0.2s ease;
 	color: rgb(96, 165, 250) !important;
 }
 
 .breadcrumb-panel .breadcrumb-link:hover {
 	text-decoration: underline;
-	color: rgb(147, 185, 231) !important;
+	color: rgb(147, 197, 253) !important;
 }
 
 .breadcrumb {
@@ -213,34 +411,40 @@ main {
 /* users-manager component */
 .users-manager .delete-button {
 	font-size: 15px;
-	font-weight: 400;
-	color: rgb(255, 70, 70);
+	font-weight: 500;
+	transition: all 0.2s ease;
+	color: rgb(248, 113, 113);
 }
 
 .users-manager .delete-button:hover {
-	color: rgb(71, 247, 71);
+	color: rgb(34, 197, 94);
+	transform: scale(1.1);
 }
 
 .users-manager .ban-button, .unban-button {
 	font-size: 15px;
-	font-weight: 400;
-	color: rgb(255, 255, 31);
+	font-weight: 500;
+	transition: all 0.2s ease;
+	color: rgb(251, 191, 36);
 }
 
 .users-manager .ban-button:hover, .unban-button:hover {
-	color: rgb(71, 247, 71);
+	color: rgb(34, 197, 94);
+	transform: scale(1.1);
 }
 
 .users-manager .highlighter {
-	color: rgb(255, 255, 7) !important;
+	color: rgb(250, 204, 21) !important;
 }
 
 .users-manager .profile-link:hover {
-	color: rgb(255, 255, 7) !important;
+	color: rgb(250, 204, 21) !important;
+	transition: color 0.2s ease;
 }
 
 .users-manager .role-update-button:hover {
-	color: rgb(255, 255, 7) !important;
+	color: rgb(250, 204, 21) !important;
+	transition: color 0.2s ease;
 }
 
 /* account-settings component */
@@ -259,6 +463,7 @@ main {
 	max-height: 200px;
 }
 
+/* dashboard component */
 .dashbard-component .card-text {
 	font-size: 14px !important;
 }
@@ -272,22 +477,43 @@ main {
 	color: rgb(52, 116, 255) !important;
 }
 
+.warning-closing {
+    pointer-events: none;
+}
+
+#warning-box {
+    will-change: transform, opacity, filter;
+}
+
+/* file system browser component */
+.file-content {
+    white-space: pre;
+    overflow-wrap: normal;
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.5;
+    display: block;
+    min-width: max-content;
+    width: fit-content;
+}
+
 /* todo manager component */
 .todo-manager .todo-list {
     overflow-y: auto;
-	height: calc(100% - 5.1rem);
+	height: calc(100% - 5.5rem);
 }
 
 .todo-manager form {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 2.9rem;
-    background-color: #1f2937;
+    height: 3.2rem;
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(107, 114, 128, 0.3);
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
 }
 
 .todo-manager .add-todo-button {
-	height: 2.80rem !important;
+	height: 3.0rem !important;
 }
 
 .todo-manager .drag-handle {
@@ -302,14 +528,17 @@ main {
 }
 
 .todo-manager .sortable-ghost {
-	background-color: #4b5563 !important;
-    border: 2px dashed #6b7280 !important;
-    opacity: 0.5;
+	opacity: 0.6;
+    border-radius: 0.5rem !important;
+	background: rgba(75, 85, 99, 0.5) !important;
+    border: 2px dashed rgba(156, 163, 175, 0.5) !important;
 }
 
 .todo-manager .sortable-drag {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    background-color: #374151 !important;
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+    background: rgba(55, 65, 81, 0.8) !important;
+    border-radius: 0.5rem !important;
+    transform: rotate(2deg);
     cursor: grabbing;
 }
 
@@ -326,12 +555,13 @@ main {
 
 /* database browser component */
 .database-browser .database-link {
-	font-weight: bold;
+	font-weight: 600;
 	color: rgb(96, 165, 250);
+	transition: color 0.2s ease;
 }
 
 .database-browser .database-link:hover {
-	color: rgb(147, 185, 231);
+	color: rgb(147, 197, 253);
 }
 
 .database-console {
@@ -340,24 +570,25 @@ main {
 
 .add-row-input {
 	width: 90%;
+	overflow-y: auto;
 	margin-top: 20px;
 	margin-bottom: 20px;
-	overflow-y: auto;
 }
 
 .form-input:-webkit-autofill {
 	-webkit-text-fill-color: white !important;
     transition: background-color 5000s ease-in-out 0s !important;
-    -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.009) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px rgba(55, 65, 81, 0.8) inset !important;
 }
 
 .form-input:-webkit-autofill:focus {
-    border-color: rgb(24, 132, 255) !important;
+    border-color: rgb(59, 130, 246) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
 }
 
 .form-input:-moz-autofill {
     color: white !important;
-    box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.009) inset !important;
+    box-shadow: 0 0 0 1000px rgba(55, 65, 81, 0.8) inset !important;
 }
 
 /** terminal component */
@@ -366,7 +597,7 @@ main {
     position: relative;
     font-size: 16px !important;
     font-family: monospace !important;
-    background-color: rgb(12, 12, 12);
+    background-color: rgba(12, 17, 28, 255);
 }
 
 .terminal-component #terminal {
@@ -392,7 +623,7 @@ main {
     position: sticky;
     align-items: center;
     padding-top: 0px !important;
-    background-color: rgb(12, 12, 12);
+    background-color: rgba(12, 17, 28, 255);
 }
 
 .terminal-component .command-history-prompt {
@@ -427,15 +658,137 @@ main {
     background-color: transparent;
 }
 
-.metrics-component .chart-container {
-	height: 300px;
+/* metrics component */
+.metrics-component .chart-wrapper {
 	overflow: hidden;
+	position: relative;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+}
+
+.metrics-component .chart-container {
+	margin: 0 !important;
+	padding: 0 !important;
+	width: 100% !important;
+	border: none !important;
+	height: 250px !important;
+	line-height: 0 !important;
+	overflow: visible !important;
+}
+
+.metrics-component .chart-container .apexcharts-canvas,
+.metrics-component .chart-container .apexcharts-svg,
+.metrics-component .chart-container .apexcharts-inner,
+.metrics-component .chart-container .apexcharts-graphical,
+.metrics-component .chart-container div {
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	display: block !important;
+}
+
+.metrics-component .chart-container svg {
+	margin: 0 !important;
+	padding: 0 !important;
+	display: block !important;
+	vertical-align: top !important;
+}
+
+.metrics-component .apexcharts-toolbar {
+	gap: 2px !important;
+	top: 10px !important;
+	right: 10px !important;
+	display: flex !important;
+	padding: 4px 6px !important;
+	border-radius: 6px !important;
+	flex-direction: row !important;
+	align-items: center !important;
+	backdrop-filter: blur(6px) !important;
+	background: rgba(31, 41, 55, 0.85) !important;
+	border: 1px solid rgba(75, 85, 99, 0.3) !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.metrics-component .apexcharts-toolbar svg {
+	fill: #9ca3af !important;
+	transition: all 0.2s ease !important;
+}
+
+.metrics-component .apexcharts-toolbar svg:hover {
+	fill: #60a5fa !important;
+}
+
+.metrics-component .apexcharts-zoomin-icon,
+.metrics-component .apexcharts-zoomout-icon,
+.metrics-component .apexcharts-reset-icon {
+	margin: 0 !important;
+	width: 24px !important;
+	padding: 3px !important;
+	height: 24px !important;
+	flex-shrink: 0 !important;
+	border-radius: 4px !important;
+	align-items: center !important;
+	display: inline-flex !important;
+	justify-content: center !important;
+	transition: all 0.2s ease !important;
+	background: rgba(55, 65, 81, 0.7) !important;
+	border: 1px solid rgba(75, 85, 99, 0.5) !important;
+}
+
+.metrics-component .apexcharts-zoomin-icon:hover,
+.metrics-component .apexcharts-zoomout-icon:hover,
+.metrics-component .apexcharts-reset-icon:hover {
+	background: rgba(59, 130, 246, 0.2) !important;
+	border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+.metrics-component .apexcharts-tooltip {
+	border-radius: 8px !important;
+	backdrop-filter: blur(8px) !important;
+	background: rgba(17, 24, 39, 0.95) !important;
+	border: 1px solid rgba(75, 85, 99, 0.4) !important;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+.metrics-component .apexcharts-tooltip-title {
+	color: #e5e7eb !important;
+	font-weight: 600 !important;
+	background: rgba(31, 41, 55, 0.8) !important;
+	border-bottom: 1px solid rgba(75, 85, 99, 0.3) !important;
+}
+
+.metrics-component .apexcharts-tooltip-series-group {
+	color: #d1d5db !important;
+	background: transparent !important;
+}
+
+.metrics-component .apexcharts-selection-rect {
+	stroke-width: 1px !important;
+	stroke-dasharray: 3,3 !important;
+	fill: rgba(59, 130, 246, 0.1) !important;
+	stroke: rgba(59, 130, 246, 0.6) !important;
+}
+
+.metrics-component .apexcharts-zoom-rect {
+	stroke-width: 1px !important;
+	fill: rgba(59, 130, 246, 0.1) !important;
+	stroke: rgba(59, 130, 246, 0.6) !important;
 }
 
 .metrics-component .percentage {
 	top: 48%;
 	left: 50%;
 	transform: translateX(-50%);
+}
+
+/* user manager component */
+.user-manager-input {
+    background-color: rgba(31, 41, 55, 0.8) !important;
+}
+
+.user-manager-input:focus {
+    background-color: rgba(31, 41, 55, 0.9) !important;
 }
 
 /* apply on mobile devices */
@@ -463,8 +816,8 @@ main {
 		border-radius: 0px !important;
 	}
 	.phone-mt-disable {
-		margin-top: 0px !important;
 		width: 100% !important;
+		margin-top: 0px !important;
 	}
 	.phone-mb-disable {
 		margin-bottom: 0px !important;
@@ -483,17 +836,16 @@ main {
 	.nav-bar {
 		height: 30px;
 	}
-	.nav-bar a .menu-icon {
-		font-size: 35px;
-	}
-	.nav-bar a .logout-icon {
-		font-size: 22px;
-		margin-top: -1.2px;
+	.nav-bar i {
+		font-size: 20px !important;
 	}
 	#sidebar {
 		top: 29.5px;
 		width: 100%;
         border-right: none;
+	}
+	#sidebar > * {
+		transition: opacity 0.25s ease 0.05s, transform 0.25s ease 0.05s;
 	}
 	#sidebar ul {
 		font-size: 17px !important;

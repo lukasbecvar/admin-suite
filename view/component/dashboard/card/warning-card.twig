@@ -1,68 +1,219 @@
-<div class="backdrop-blur-md bg-neutral-400/5 border border-white/10 rounded shadow-xl text-white w-full overflow-hidden w-full sm:col-span-2" id="wrarning-box">
-    <div class="px-3 py-1 border-b border-white/10 font-semibold tracking-wide text-sm uppercase text-white/80 flex items-center justify-between">
-        <span><i class="fas fa-desktop text-white/70 mr-2"></i>
-            <a href={{ path('app_diagnostic') }} class="text-sm text-white/70 hover:text-white/100 transition-colors duration-200" title="Go to diagnostic">
-                Diagnostic alerts
+<div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden w-full sm:col-span-2 transition-all duration-500 ease-in-out transform" id="warning-box">
+    <div class="px-2 py-2 border-b border-gray-700/50 font-semibold tracking-wide text-sm uppercase text-gray-200 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-amber-500/20 rounded flex items-center justify-center">
+                <i class="fas fa-exclamation-triangle text-amber-400 text-sm"></i>
+            </div>
+            <a href={{ path('app_diagnostic') }} class="text-sm text-gray-200 hover:text-white transition-colors duration-200" title="Go to diagnostic">
+                Diagnostic Alerts
             </a>
-        </span>
-        <button onclick="document.getElementById('wrarning-box').style.display='none'" class="text-white hover:text-cyan-300 transition-colors duration-200 cursor-pointer text-lg">
-            <i class="fas fa-times"></i>
+        </div>
+        <button onclick="closeWarningBox()" class="group relative w-7 h-7 rounded hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-all duration-200 cursor-pointer flex items-center justify-center shrink-0">
+            <i class="fas fa-times text-xl transition-transform duration-200 leading-none absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
+            <div class="absolute inset-0 rounded border border-transparent group-hover:border-red-500/30 transition-colors duration-200"></div>
         </button>
     </div>
-    <div class="p-2 card-text" id="wraning-elements">
+    <div class="p-2 space-y-2" id="wraning-elements">
         {# CHECK IF EXCEPTION FILES IS FOUND #}
-        {% if exceptionFiles|length > 0 %} 
-            <p class="text-yellow-400">Exception found in monitored application <a href={{ path('app_manager_logs_exception_files') }}  class="link">view</a></p>
+        {% if exceptionFiles|length > 0 %}
+            <div class="bg-amber-500/10 border border-amber-500/30 rounded p-2 flex items-start gap-3 hover:bg-amber-500/15 transition-colors duration-200">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-bomb text-amber-400 text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-amber-300 font-semibold text-sm mb-1">Exception Found</h4>
+                    <p class="text-gray-300 text-sm">Exception found in monitored application</p>
+                    <a href={{ path('app_manager_logs_exception_files') }} class="inline-flex items-center gap-1 mt-2 text-amber-400 hover:text-amber-300 text-sm font-medium transition-colors duration-200">
+                        <span>View Details</span>
+                        <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
         {% endif %}
 
         {# ANGLOG STATUS ALERT #}
         {% if antiLogStatus == false %}
-            <p class="text-yellow-400">Logging for your browser is enabled you can disable <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="link">here</a></p>
+            <div class="bg-yellow-500/10 border border-yellow-500/30 rounded p-2 flex items-start gap-3 hover:bg-yellow-500/15 transition-colors duration-200">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-eye text-yellow-400 text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-yellow-300 font-semibold text-sm mb-1">Browser Logging Enabled</h4>
+                    <p class="text-gray-300 text-sm">Logging for your browser is currently enabled</p>
+                    <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="inline-flex items-center gap-1 mt-2 text-yellow-400 hover:text-yellow-300 text-sm font-medium transition-colors duration-200">
+                        <span>Disable Logging</span>
+                        <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
         {% endif %}
 
         {# LOGS COUNT ALERT #}
         {% if unreadedLogsCount > 0 %}
-            <p class="text-yellow-400">New logs found you can see it <a href={{ path('app_manager_logs') }} class="link">here</a></p>
+            <div class="bg-blue-500/10 border border-blue-500/30 rounded p-2 flex items-start gap-3 hover:bg-blue-500/15 transition-colors duration-200">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-bell text-blue-400 text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-blue-300 font-semibold text-sm mb-1">New Logs Available</h4>
+                    <p class="text-gray-300 text-sm">{{ unreadedLogsCount }} unread log entries found</p>
+                    <a href={{ path('app_manager_logs') }} class="inline-flex items-center gap-1 mt-2 text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors duration-200">
+                        <span>View Logs</span>
+                        <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
         {% endif %}
 
         {# MONITORING TIME CACHE EXPIRED ALERT #}
         {% if diagnosticData.isLastMonitoringTimeCached == false %}
-            <p class="text-red-400">Monitroing time is expired, maybe process is stuck, please check it.</p>
+            <div class="bg-red-500/10 border border-red-500/30 rounded p-2 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-clock text-red-400 text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-red-300 font-semibold text-sm mb-1">Monitoring Expired</h4>
+                    <p class="text-gray-300 text-sm">Monitoring time is expired, process may be stuck</p>
+                </div>
+            </div>
         {% endif %}
 
         {# NOT INSTALLED REQUIREMENTS ALERT #}
         {% if diagnosticData.notInstalledRequirements|length > 0 %}
-            <p class="text-red-400">Not found requirements: {{ diagnosticData.notInstalledRequirements|join(', ')|e }}.</p>
+            <div class="bg-red-500/10 border border-red-500/30 rounded p-2 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-circle text-red-400 text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-red-300 font-semibold text-sm mb-1">Missing Requirements</h4>
+                    <p class="text-gray-300 text-sm">Not found requirements: {{ diagnosticData.notInstalledRequirements|join(', ')|e }}</p>
+                </div>
+            </div>
         {% endif %}
 
         {# DEV MODE ALERT #}
         {% if diagnosticData.isDevMode %}
-            <p class="text-red-400">developer mode is enabled, please set APP_ENV=prod in .env config file.</p>
+            <div class="bg-orange-500/10 border border-orange-500/30 rounded p-2 flex items-start gap-3 hover:bg-orange-500/15 transition-colors duration-200">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-code text-orange-400 text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-orange-300 font-semibold text-sm mb-1">Development Mode</h4>
+                    <p class="text-gray-300 text-sm">Developer mode is enabled, set APP_ENV=prod in .env config</p>
+                </div>
+            </div>
         {% endif %}
 
         {# SSL ALERT #}
         {% if diagnosticData.isSSL == false %}
-            <p class="text-red-400">session is running on http [non secure connction] please contact web admin for fix it.</p>
+            <div class="bg-red-500/10 border border-red-500/30 rounded p-3 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-shield-alt text-red-400 text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-red-300 font-semibold text-sm mb-1">Insecure Connection</h4>
+                    <p class="text-gray-300 text-sm">Session running on HTTP, contact admin to enable SSL</p>
+                </div>
+            </div>
         {% endif %}
 
         {# WEB USER PERMISSIONS ALERT #}
         {% if diagnosticData.isWebUserSudo == false %}
-            <p class="text-red-400">Permissions error: please add "{{ diagnosticData.webUsername|e }} ALL=NOPASSWD: ALL" to /etc/sudoers.</p>
+            <div class="bg-red-500/10 border border-red-500/30 rounded p-2 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-user-lock text-red-400 text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-red-300 font-semibold text-sm mb-1">Permission Error</h4>
+                    <p class="text-gray-300 text-sm">Add "{{ diagnosticData.webUsername|e }} ALL=NOPASSWD: ALL" to /etc/sudoers</p>
+                </div>
+            </div>
         {% endif %}
 
         {# STORAGE SPACE ALERT #}
         {% if diagnosticData.driveSpace > 90 %}
-            <p class="text-red-400"> main storage is full, please delete some unnecessary data or increase storage space.</p>
+            <div class="bg-red-500/10 border border-red-500/30 rounded p-2 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-hdd text-red-400 text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-red-300 font-semibold text-sm mb-1">Storage Full</h4>
+                    <p class="text-gray-300 text-sm">Main storage is {{ diagnosticData.driveSpace }}% full, delete unnecessary data</p>
+                </div>
+            </div>
         {% endif %}
 
         {# CPU OVERLOAD ALERT #}
         {% if diagnosticData.cpuUsage > 98.00 %}
-            <p class="text-red-400">CPU is overloaded, please check cpu usage.</p>
+            <div class="bg-red-500/10 border border-red-500/30 rounded p-2 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-microchip text-red-400 text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-red-300 font-semibold text-sm mb-1">CPU Overloaded</h4>
+                    <p class="text-gray-300 text-sm">CPU usage is {{ diagnosticData.cpuUsage }}%, check system processes</p>
+                </div>
+            </div>
         {% endif %}
 
         {# RAM OVERLOAD ALERT #}
         {% if diagnosticData.ramUsage > 98.00 %}
-            <p class="text-red-400">RAM Memory is overloaded, please check usage.</p>
+            <div class="bg-red-500/10 border border-red-500/30 rounded p-2 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-memory text-red-400 text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-red-300 font-semibold text-sm mb-1">RAM Overloaded</h4>
+                    <p class="text-gray-300 text-sm">RAM usage is {{ diagnosticData.ramUsage }}%, check memory consumption</p>
+                </div>
+            </div>
         {% endif %}
     </div>
 </div>
+
+<script>
+function closeWarningBox() {
+    const warningBox = document.getElementById('warning-box');
+    if (warningBox) {
+        // add closing animation class
+        warningBox.classList.add('warning-closing')
+
+        // simple, elegant fade and slide animation
+        warningBox.style.transition = 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+        warningBox.style.transformOrigin = 'center center'
+
+        // smooth fade out with gentle slide up
+        setTimeout(() => {
+            warningBox.style.transform = 'translateY(-20px) scale(0.95)'
+            warningBox.style.opacity = '0'
+            warningBox.style.filter = 'blur(1px)'
+        }, 30)
+
+        // remove element after animation completes
+        setTimeout(() => {
+            if (warningBox.parentNode) {
+                warningBox.parentNode.removeChild(warningBox)
+            }
+        }, 280)
+    }
+}
+
+// add smooth entrance animation on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const warningBox = document.getElementById('warning-box')
+    if (warningBox) {
+        // start with hidden state
+        warningBox.style.opacity = '0'
+        warningBox.style.transform = 'translateY(-20px) scale(0.95)'
+        warningBox.style.filter = 'blur(2px)'
+
+        // animate to visible state
+        setTimeout(() => {
+            warningBox.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+            warningBox.style.opacity = '1'
+            warningBox.style.transform = 'translateY(0) scale(1)'
+            warningBox.style.filter = 'blur(0px)'
+        }, 100)
+    }
+})
+</script>

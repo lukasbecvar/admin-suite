@@ -1,39 +1,41 @@
-/* custom dark scrollbar */ 
+/* custom dark scrollbar */
 ::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
-} 
+	width: 12px;
+	height: 12px;
+}
 
 ::-webkit-scrollbar-track {
-	background: #252627 !important;
+	background: #1f2937 !important;
 }
- 
+
 .card-component ::-webkit-scrollbar-track {
-	background: #252627 !important;
+	background: #374151 !important;
 }
 
 ::-webkit-scrollbar-corner {
-    background: #252627 !important;
+    background: #1f2937 !important;
 }
 
 ::-webkit-scrollbar-thumb {
-	-webkit-transition: all 0.2s ease;
-	transition: all 0.2s ease;
-	background: #474c55;
 	min-height: 40px;
-} 
+	transition: all 0.3s ease;
+	border: 2px solid #1f2937;
+	-webkit-transition: all 0.3s ease;
+	background: linear-gradient(135deg, #6b7280, #4b5563);
+}
 
 ::-webkit-scrollbar-thumb:hover {
-	background: rgb(99, 106, 112);
+	background: linear-gradient(135deg, #9ca3af, #6b7280);
+	transform: scale(1.1);
 }
 
 /* mobile devices style */
-@media screen and (max-width: 800px) { 
+@media screen and (max-width: 800px) {
 	::-webkit-scrollbar {
-		width: 10px;
-		height: 10px;
+		width: 8px;
+		height: 8px;
 	}
     ::-webkit-scrollbar-thumb {
         min-height: 40px;
-    } 
+    }
 }

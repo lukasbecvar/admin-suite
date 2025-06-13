@@ -5,6 +5,7 @@ namespace App\Form\AccountSettings;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -38,12 +39,24 @@ class ProfilePicChangeFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please add picture file.',
+                    ]),
+                    new File([
+                        'maxSize' => '5M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/jpg',
+                            'image/png',
+                            'image/gif',
+                            'image/webp'
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image file (JPG, PNG, GIF, or WebP).',
+                        'maxSizeMessage' => 'The file is too large ({{ size }} {{ suffix }}). Maximum allowed size is {{ limit }} {{ suffix }}.'
                     ])
                 ],
                 'attr' => [
                     'class' => 'file-input-control profile-pic-change',
                     'placeholder' => 'Profile picture',
-                    'accept' => 'image/*',
+                    'accept' => 'image/jpeg,image/jpg,image/png,image/gif,image/webp',
                     'image_property' => 'image'
                 ],
                 'translation_domain' => false

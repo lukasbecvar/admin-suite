@@ -40,12 +40,12 @@ class RegisterControllerTest extends WebTestCase
         $this->client->request('GET', '/register');
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Register');
+        $this->assertSelectorTextContains('h1', 'Create Account');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
         $this->assertSelectorExists('input[name="registration_form[password][first]"]');
         $this->assertSelectorExists('input[name="registration_form[password][second]"]');
-        $this->assertSelectorTextContains('button', 'Register');
+        $this->assertSelectorTextContains('button', 'Create Account');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -59,7 +59,7 @@ class RegisterControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/register');
 
         // get the form
-        $form = $crawler->selectButton('Register')->form();
+        $form = $crawler->selectButton('Create Account')->form();
 
         // fill form inputs
         $form['registration_form[username]'] = 'a';
@@ -70,12 +70,12 @@ class RegisterControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Register');
+        $this->assertSelectorTextContains('h1', 'Create Account');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
         $this->assertSelectorExists('input[name="registration_form[password][first]"]');
         $this->assertSelectorExists('input[name="registration_form[password][second]"]');
-        $this->assertSelectorTextContains('button', 'Register');
+        $this->assertSelectorTextContains('button', 'Create Account');
         $this->assertSelectorTextContains('li:contains("Your username should be at least 3 characters")', 'Your username should be at least 3 characters');
         $this->assertSelectorTextContains('li:contains("Your password should be at least 8 characters")', 'Your password should be at least 8 characters');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -91,7 +91,7 @@ class RegisterControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/register');
 
         // get the form
-        $form = $crawler->selectButton('Register')->form();
+        $form = $crawler->selectButton('Create Account')->form();
 
         // fill form inputs
         $form['registration_form[username]'] = 'valid-testing-username';
@@ -102,12 +102,12 @@ class RegisterControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Register');
+        $this->assertSelectorTextContains('h1', 'Create Account');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
         $this->assertSelectorExists('input[name="registration_form[password][first]"]');
         $this->assertSelectorExists('input[name="registration_form[password][second]"]');
-        $this->assertSelectorTextContains('button', 'Register');
+        $this->assertSelectorTextContains('button', 'Create Account');
         $this->assertSelectorTextContains('li:contains("The values do not match.")', 'The values do not match.');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -122,7 +122,7 @@ class RegisterControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/register');
 
         // get the form
-        $form = $crawler->selectButton('Register')->form();
+        $form = $crawler->selectButton('Create Account')->form();
 
         // fill form inputs
         $form['registration_form[username]'] = '';
@@ -133,12 +133,12 @@ class RegisterControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // assert response
-        $this->assertSelectorTextContains('h2', 'Register');
+        $this->assertSelectorTextContains('h1', 'Create Account');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');
         $this->assertSelectorExists('input[name="registration_form[password][first]"]');
         $this->assertSelectorExists('input[name="registration_form[password][second]"]');
-        $this->assertSelectorTextContains('button', 'Register');
+        $this->assertSelectorTextContains('button', 'Create Account');
         $this->assertSelectorTextContains('li:contains("Please enter a username")', 'Please enter a username');
         $this->assertSelectorTextContains('li:contains("Please enter a password")', 'Please enter a password');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -154,7 +154,7 @@ class RegisterControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/register');
 
         // get the form
-        $form = $crawler->selectButton('Register')->form();
+        $form = $crawler->selectButton('Create Account')->form();
 
         // fill form with valid credentials
         $form['registration_form[username]'] = ByteString::fromRandom(10)->toString();

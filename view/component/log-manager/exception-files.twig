@@ -2,30 +2,55 @@
 
 {% block component %}
 {# SUB-NAVIGATION #}
-<div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
-    <a href={{ path('app_manager_logs') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="Back to log browser">
-        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-    </a>
-    <span class="mr-1 text-white">Exception files</span>
+<div class="px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
+    <div class="flex items-center gap-3">
+        <a href={{ path('app_manager_logs') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to log manager">
+            <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
+        </a>
+        <div>
+            <h1 class="text-xm font-bold text-white">Exception Files</h1>
+            <p class="text-gray-400 text-xs">Application exception logs</p>
+        </div>
+    </div>
 </div>
 
-{# LOG SELECT BOX #}
-<div class="text-white p-6 component">
-    <ul class="space-y-2">
+{# EXCEPTION FILES LIST #}
+<div class="component">
+    <div class="p-4">
         {% if exceptionFiles|length < 1 %}
-            <h1 class="text-center mt-5 text-xl">No exception files found</h1>
+            <div class="flex flex-col items-center justify-center py-16">
+                <p class="text-gray-300 text-center mb-2 font-medium">No exception files found</p>
+                <p class="text-gray-500 text-center text-sm max-w-md">Your application is running smoothly without any logged exceptions.</p>
+                <div class="mt-8 flex items-center gap-4">
+                    <a href={{ path('app_manager_logs') }} class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 rounded border border-blue-500/30 transition-all duration-200 text-sm font-medium">
+                        <i class="fas fa-list text-xs"></i>
+                        <span>View All Logs</span>
+                    </a>
+                </div>
+            </div>
         {% else %}
-            <h3 class="text-2xl font-semibold text-white mb-4">Exception Files</h3>
-            {% for exceptionFile in exceptionFiles %}
-                <li class="flex justify-between items-center">
-                    <a href={{ path('app_file_system_view', { path: exceptionFile.path, referer: 'log_manager_exception_files', service: exceptionFile.name }) }} class="block p-3 bg-neutral-800 hover:bg-blue-600 flex-grow">{{ exceptionFile.name }}</a>
-                    <button class="delete-button block p-3 text-red-500 bg-neutral-800 ml-2 hover:text-red-700" data-file={{ exceptionFile.name }}>
-                        <i class="fa fa-trash" aria-hidden="true"></i>
-                    </button>
-                </li>
-            {% endfor %}
+            <div class="space-y-3">
+                {% for exceptionFile in exceptionFiles %}
+                    <div class="bg-gray-700/30 rounded p-4 border border-gray-600/30 hover:bg-gray-700/40 transition-all duration-200">
+                        <div class="flex items-center justify-between">
+                            <a href={{ path('app_file_system_view', { path: exceptionFile.path, referer: 'log_manager_exception_files', service: exceptionFile.name }) }} class="flex items-center gap-3 flex-grow group">
+                                <div class="w-8 h-8 bg-red-500/20 rounded flex items-center justify-center">
+                                    <i class="fas fa-exclamation-triangle text-red-400 text-sm"></i>
+                                </div>
+                                <div>
+                                    <div class="text-white font-medium text-sm group-hover:text-red-300 transition-colors duration-200">{{ exceptionFile.name }}</div>
+                                    <div class="text-gray-400 text-xs">{{ exceptionFile.path }}</div>
+                                </div>
+                            </a>
+                            <button class="delete-button w-8 h-8 bg-red-500/20 hover:bg-red-500/30 rounded flex items-center justify-center transition-all duration-200 border border-red-500/30 ml-3" data-file={{ exceptionFile.name }} title="Delete exception file">
+                                <i class="fas fa-trash text-red-400 text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         {% endif %}
-    </ul>
+    </div>
 </div>
 
 {# DELETE CONFIRMATION POPUP #}

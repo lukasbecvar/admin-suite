@@ -1,13 +1,15 @@
 {% extends 'common/base.twig' %}
 
 {% block body %}
-<div class="flex flex-col justify-center items-center h-screen bg-gradient-to-b from-zinc-900/100 to-zinc-950/100 text-gray-200">
-    <div class="text-center max-w-lg animate-fade-in">
-        <div class="text-yellow-400 text-6xl mb-4">
+<div class="flex flex-col justify-center items-center h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-gray-100">
+    <div class="text-center px-8 animate-popin">
+        <div class="text-amber-400 text-8xl mb-6">
             <i class="fas fa-tools"></i>
         </div>
-        <h2 class="text-3xl font-bold mb-2">Service Unavailable</h2>
-        <p class="text-lg mb-6">We're currently performing scheduled maintenance. Please try again later.</p>
+        <h2 class="text-5xl font-bold mb-4 text-white">Service Unavailable</h2>
+        <p class="text-xl text-gray-300 mb-8 max-w-lg mx-auto leading-relaxed">
+            We're currently performing scheduled maintenance.<br> Please try again later.
+        </p>
     </div>
 </div>
 {% endblock %}

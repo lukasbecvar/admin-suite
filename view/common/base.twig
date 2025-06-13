@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,17 +13,17 @@
     {{ encore_entry_link_tags('index-css') }}
     <title>Admin suite</title>
 </head>
-<body>
+<body class="bg-gray-900 text-gray-100 antialiased">
     {# MAIN COMPONENT WRAPPER #}
     {% block body %}{% endblock %}
-    
+
     {# SCREEN TOO SMALL ERROR MESSAGE #}
-    <div class="fixed inset-0 flex items-center justify-center bg-black/80 text-white hidden xs:flex short:flex p-4 z-50">
-        <div class="bg-neutral-900 border border-neutral-700 rounded-xl shadow-2xl max-w-md w-full p-6 text-center space-y-4">
+    <div class="fixed inset-0 flex items-center justify-center bg-black/90 text-white hidden xs:flex short:flex p-4 z-50">
+        <div class="bg-gray-800 border border-gray-600 rounded-xl shadow-2xl max-w-md w-full p-6 text-center space-y-4">
             <div class="flex justify-center">
-                <i class="fas fa-exclamation-triangle text-yellow-400 text-4xl"></i>
+                <i class="fas fa-exclamation-triangle text-amber-400 text-4xl"></i>
             </div>
-            <h2 class="text-xl font-semibold">Screen too small</h2>
+            <h2 class="text-xl font-semibold text-white">Screen too small</h2>
             <p class="text-sm text-gray-300">
                 Your screen width is too small to display this application properly. <br/>
                 Please enlarge your window or use a larger device.

@@ -2,29 +2,37 @@
 
 {# TODO LIST COMPONENT #}
 {% block component %}
-<div class="flex flex-col todo-manager overflow-hidden breadcrumb component">
+<div class="flex flex-col h-full">
     {# SUB-NAVIGATION #}
-    <div class="sub-navigation border-b border-neutral-800 text-white breadcrumb bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/50">
-        {# BACK BUTTON #}
-        <a href={{ path('app_dashboard') }} class="border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="Back to dashboard">
-            <i class="fa fa-arrow-left" aria-hidden="true"></i>
-        </a>
-        {# STATUS FILTER LINK #}
-        {% if filter == 'closed' %}            
-            <a href={{ path('app_todo_manager', {'filter': 'open'}) }} class="ml-1 border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="View open todos">
-                <i class="fa fa-tasks" aria-hidden="true"></i>
-            </a>
-        {% else %}
-            <a href={{ path('app_todo_manager', {'filter': 'closed'}) }} class="ml-1 border border-neutral-600 font-bold px-1 py-0 rounded mr-2 text-white hover:bg-neutral-700" title="View closed todos">
-                <i class="fa fa-check" aria-hidden="true"></i>
-            </a>
-        {% endif %}
-        <span class="mr-1 text-white">Todo list</span>
+    <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+                    <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
+                </a>
+                <div class="hidden sm:block">
+                    <h1 class="text-xm font-bold text-white">Todo Manager</h1>
+                    <p class="text-gray-400 text-xs">Manage your tasks and todos</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                {# STATUS FILTER BUTTONS #}
+                {% if filter == 'closed' %}
+                    <a href={{ path('app_todo_manager', {'filter': 'open'}) }} class="w-8 h-8 bg-gray-700/50 hover:bg-blue-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="View open todos">
+                        <i class="fas fa-tasks text-gray-300 text-xs"></i>
+                    </a>
+                {% else %}
+                    <a href={{ path('app_todo_manager', {'filter': 'closed'}) }} class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="View closed todos">
+                        <i class="fas fa-check text-gray-300 text-xs"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
     {# TODO LIST #}
-    <div class="{{ filter == 'open' ? 'todo-list' : '' }} overflow-y-auto card-component p-0 px-2 pb-[2px]">
-        <div id="todo-items-container" class="divide-y divide-neutral-800">
+    <div class="{{ filter == 'open' ? 'todo-list' : '' }} overflow-y-auto card-component p-0 px-2 pb-[2px] todo-manager overflow-hidden breadcrumb component">
+        <div id="todo-items-container" class="divide-y divide-gray-700/50">
 
             {# TODO LIST IS EMPTY INFORMATION #}
             {% if todos|length == 0 %}
@@ -33,9 +41,9 @@
 
             {# TODO ITEM #}
             {% for todo in todos %}
-                <div class="todo-item flex items-center justify-between p-3 my-2 rounded bg-neutral-800/80 transition-colors duration-200 hover:bg-neutral-700/80 relative" data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} data-position={{ todo.position }}>
+                <div class="todo-item flex items-center justify-between p-3 my-2 rounded bg-gradient-to-r from-slate-800/60 to-slate-700/40 border border-slate-600/30 transition-all duration-200 hover:from-slate-700/70 hover:to-slate-600/50 hover:border-slate-500/40 hover:shadow-lg hover:shadow-slate-900/20 relative" data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} data-position={{ todo.position }}>
                     {% if filter == 'open' %}
-                        <div class="drag-handle mr-2 cursor-move text-neutral-500 hover:text-white flex items-center justify-center">
+                        <div class="drag-handle mr-2 cursor-move text-gray-500 hover:text-white flex items-center justify-center">
                             <i class="fas fa-grip-vertical text-lg"></i>
                         </div>
                     {% endif %}
@@ -44,27 +52,27 @@
                     </div>
                     <div class="flex space-x-2 ml-1">
                         {% if filter == 'open' %}
-                            {# VIEW EDIT POPUP #}
-                            <button data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} class="ml-1 text-neutral-400 text-xl hover:text-white focus:outline-none">
+                            {# EDIT BUTTON #}
+                            <button data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} class="edit-button text-blue-400 text-xl hover:text-blue-300 focus:outline-none">
                                 <i class="fa fa-edit" aria-hidden="true"></i>
                             </button>
-                            {# CLOSE TODO #}
-                            <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} class="delete-link text-green-500 text-xl hover:text-green-200 focus:outline-none mr-0.5">
+                            {# COMPLETE BUTTON #}
+                            <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} class="delete-link text-green-400 text-xl hover:text-green-300 focus:outline-none mr-0.5">
                                 <i class="fa fa-check" aria-hidden="true"></i>
                             </a>
                         {% else %}
-                            {# REOPEN TODO #}
-                            <a href={{ path('app_todo_manager_reopen', {'id': todo.id}) }} class="delete-link text-green-500 text-xl hover:text-green-200 focus:outline-none mr-0.5">
+                            {# REOPEN BUTTON #}
+                            <a href={{ path('app_todo_manager_reopen', {'id': todo.id}) }} class="delete-link text-green-400 text-xl hover:text-green-300 focus:outline-none mr-0.5">
                                 <i class="fa fa-undo" aria-hidden="true"></i>
                             </a>
-                            {#  DELETE TODO #}
-                            <button data-delete-url={{ path('app_todo_manager_delete', {'id': todo.id}) }} class="delete-button delete-link text-red-500 text-xl hover:text-red-200 focus:outline-none mr-0.5">
+                            {# DELETE BUTTON #}
+                            <button data-delete-url={{ path('app_todo_manager_delete', {'id': todo.id}) }} class="delete-button delete-link text-red-400 text-xl hover:text-red-300 focus:outline-none mr-0.5">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </button>
                         {% endif %}
-                        {# VIEW TODO INFO POPUP #}
+                        {# INFO BUTTON #}
                         <button class="info-button phone-none" data-todo-id={{ todo.id }} title="View Info">
-                            <i class="fas fa-info-circle text-gray-500"></i>
+                            <i class="fas fa-info-circle text-gray-400"></i>
                         </button>
                     </div>
                 </div>
@@ -72,11 +80,9 @@
         </div>
     </div>
 
-    {# INCLIUDE CREATE TODO FORM #}
+    {# INCLUDE CREATE TODO FORM #}
     {% if filter == 'open' %}
-        <div class="flex">
-            {% include "component/todo-manager/form/create-todo-form.twig" %}
-        </div>
+        {% include "component/todo-manager/form/create-todo-form.twig" %}
     {% endif %}
 </div>
 

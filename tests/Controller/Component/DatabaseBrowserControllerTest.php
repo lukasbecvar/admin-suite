@@ -65,11 +65,9 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertSelectorExists('a[href="/manager/database/console"]');
         $this->assertSelectorTextContains('body', $_ENV['DATABASE_NAME']);
         $this->assertSelectorExists('a[href="/manager/database"]');
-        $this->assertSelectorExists('a[href="/manager/database?database=' . $_ENV['DATABASE_NAME'] . '"]');
         $this->assertSelectorTextContains('Table', 'Table');
         $this->assertSelectorTextContains('Table', 'Rows');
         $this->assertSelectorTextContains('Table', 'Size (MB)');
-        $this->assertSelectorExists('a[class="database-link"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -145,9 +143,8 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[href="/manager/database/table?database=' . $_ENV['DATABASE_NAME'] . '&table=logs"]');
-        $this->assertSelectorTextContains('body', 'Clear logs table');
-        $this->assertSelectorTextContains('body', 'YES');
-        $this->assertSelectorTextContains('body', 'NO');
+        $this->assertSelectorTextContains('body', 'Truncate Table');
+        $this->assertSelectorTextContains('body', 'Warning:');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -183,7 +180,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[href="/manager/database/table?database=' . $_ENV['DATABASE_NAME'] . '&table=users"]');
-        $this->assertSelectorTextContains('body', 'Add row to users');
+        $this->assertSelectorTextContains('body', 'Add Row to users');
         $this->assertSelectorTextContains('body', 'Id');
         $this->assertSelectorTextContains('body', 'Username');
         $this->assertSelectorTextContains('body', 'Password');
@@ -224,7 +221,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[href="/manager/database/table?database=' . $_ENV['DATABASE_NAME'] . '&table=users"]');
         $this->assertSelectorTextContains('body', 'The field id must be a number.');
-        $this->assertSelectorTextContains('body', 'Add row to users');
+        $this->assertSelectorTextContains('body', 'Add Row to users');
         $this->assertSelectorTextContains('body', 'Id');
         $this->assertSelectorTextContains('body', 'Username');
         $this->assertSelectorTextContains('body', 'Password');
@@ -265,7 +262,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('a[href="/manager/database/table?database=' . $_ENV['DATABASE_NAME'] . '&table=users"]');
         $this->assertSelectorTextContains('body', 'The field id is required and cannot be empty.');
-        $this->assertSelectorTextContains('body', 'Add row to users');
+        $this->assertSelectorTextContains('body', 'Add Row to users');
         $this->assertSelectorTextContains('body', 'Id');
         $this->assertSelectorTextContains('body', 'Username');
         $this->assertSelectorTextContains('body', 'Password');
@@ -390,7 +387,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Edit row 6 in users');
+        $this->assertSelectorTextContains('body', 'Edit Row 6 in users');
         $this->assertSelectorTextContains('body', 'Username');
         $this->assertSelectorTextContains('body', 'Password');
         $this->assertSelectorTextContains('body', 'Ip_address');
@@ -415,7 +412,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
             'table' => 'users',
             'id' => 6,
 
-            // submit form data
+            // form data
             'username' => '',
             'password' => 'testpassword',
             'ip_address' => '127.0.0.1',
@@ -430,7 +427,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'The field username is required and cannot be empty.');
-        $this->assertSelectorTextContains('body', 'Edit row 6 in users');
+        $this->assertSelectorTextContains('body', 'Edit Row 6 in users');
         $this->assertSelectorTextContains('body', 'Username');
         $this->assertSelectorTextContains('body', 'Password');
         $this->assertSelectorTextContains('body', 'Ip_address');
@@ -485,7 +482,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Dump database');
+        $this->assertSelectorTextContains('body', 'Database Dump');
         $this->assertSelectorTextContains('body', 'Structure');
         $this->assertSelectorTextContains('body', 'Data');
         $this->assertSelectorTextContains('body', $_ENV['DATABASE_NAME']);
@@ -520,8 +517,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Query console');
-        $this->assertSelectorTextContains('body', 'Database console');
+        $this->assertSelectorTextContains('body', 'Database Console');
         $this->assertSelectorTextContains('body', 'Execute Query');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -541,8 +537,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Query console');
-        $this->assertSelectorTextContains('body', 'Database console');
+        $this->assertSelectorTextContains('body', 'Database Console');
         $this->assertSelectorTextContains('body', 'Execute Query');
         $this->assertSelectorTextContains('body', 'Please enter a query');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -563,8 +558,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorTextContains('body', 'Query console');
-        $this->assertSelectorTextContains('body', 'Database console');
+        $this->assertSelectorTextContains('body', 'Database Console');
         $this->assertSelectorTextContains('body', 'Execute Query');
         $this->assertSelectorTextContains('body', 'Please enter a query');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);

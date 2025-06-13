@@ -1,21 +1,22 @@
-<nav class="nav-bar w-full border-b border-zinc-200/10 bg-gradient-to-t from-zinc-900/50 to-zinc-950/50 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/1000">
-    <div class="px-1 flex items-center justify-between">
+<nav class="nav-bar w-full border-b border-gray-700/50 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 backdrop-blur-sm shadow-lg">
+    <div class="px-0 flex items-center justify-between h-full">
         {# TOGGLE SIDEBAR BUTTON #}
-        <button id="menu-toggle" class="inline-flex items-center justify-center gap-1 rounded px-1 py-[2px] mt-[1px] text-sm font-medium text-zinc-300 transition-all hover:text-white hover:bg-white/10 active:bg-white/20" title="open/close sidebar">
-            <i class="fas fa-bars text-lg menu-icon"></i>
-            <span class="phone-none sm:inline text-xl">Menu</span>
+        <button id="menu-toggle" class="inline-flex items-center justify-center gap-2 rounded px-2 py-1.5 text-sm font-semibold text-gray-300 transition-all duration-200 hover:text-white hover:bg-gray-700/50 active:bg-gray-600/50 hover:border-gray-500/50" title="open/close sidebar">
+            <i class="fas fa-bars text-base menu-icon"></i>
+            <span class="phone-none sm:inline text-sm font-medium">Menu</span>
         </button>
 
         {# RIGHT SIDEBAR BUTTONS #}
-        <div class="flex items-center gap-1">
+        <div class="flex items-center">
             {# ABOUT BUTTON #}
-            <a href={{ path('app_about') }} class="inline-flex items-center justify-center rounded px-1 py-[2px] mt-[1px] text-zinc-300 hover:text-blue-400 hover:bg-blue-400/10 active:bg-blue-400/20 transition-all" title="About">
-                <i class="fas fa-circle-question text-lg"></i>
+            <a href={{ path('app_about') }} class="inline-flex items-center justify-center rounded px-3 py-1.5 text-gray-300 hover:text-blue-400 hover:bg-blue-500/10 active:bg-blue-500/20 transition-all duration-200 hover:border-blue-500/30 mr-[-10px]" title="About">
+                <i class="fas fa-circle-question text-base"></i>
+                <span class="phone-none sm:inline text-sm font-medium ml-2">About</span>
             </a>
             {# LOGOUT BUTTON #}
-            <a href={{ path('app_auth_logout') }} class="inline-flex items-center justify-center rounded px-1 py-[2px] mt-[1px] text-sm font-medium text-zinc-300 transition-all hover:text-red-400 hover:bg-red-400/10 active:bg-red-400/20" title="Logout user">
-                <i class="fas fa-sign-out-alt text-lg logout-icon"></i>
-                <span class="phone-none sm:inline ml-1 text-xl logout-text">Logout</span>
+            <a href={{ path('app_auth_logout') }} class="inline-flex items-center justify-center gap-2 rounded px-2 py-1.5 text-sm font-semibold text-gray-300 transition-all duration-200 hover:text-red-400 hover:bg-red-500/10 active:bg-red-500/20 hover:border-red-500/30" title="Logout user">
+                <i class="fas fa-sign-out-alt text-base logout-icon"></i>
+                <span class="phone-none sm:inline logout-text text-sm font-medium">Logout</span>
             </a>
         </div>
     </div>

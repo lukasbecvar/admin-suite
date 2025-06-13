@@ -1,20 +1,17 @@
 {% extends 'common/base.twig' %}
 
 {% block body %}
-<div class="flex flex-col justify-center items-center h-screen bg-gradient-to-b from-zinc-900/100 to-zinc-950/100 text-gray-200">
-    <div class="text-center animate-fade-in">
-        <div class="text-yellow-400 text-6xl mb-4">
-            <i class="fas fa-exclamation-triangle"></i>
+<div class="flex flex-col justify-center items-center h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-gray-100">
+    <div class="text-center px-8 animate-popin">
+        <div class="text-amber-400 text-8xl mb-6">
+            <i class="fas fa-clock"></i>
         </div>
-        <h2 class="text-4xl font-bold mb-2">429 – Too Many Requests</h2>
-        <p class="text-lg text-gray-400 mb-6 max-w-xl mx-auto">
-            You've made too many requests in a short period of time. Please slow down and try again later.
+        <h2 class="text-5xl font-bold mb-4 text-white">429 – Too Many Requests</h2>
+        <p class="text-xl text-gray-300 mb-8 max-w-lg mx-auto leading-relaxed">
+            You've made too many requests in a short period.<br> Please slow down and try again later.
         </p>
-        <div class="text-sm text-gray-500 mb-6">
-            <p>This limit helps keep our servers healthy and fair for all users.</p>
-        </div>
-        <a href={{ path('app_index') }} class="inline-block px-6 py-3 bg-blue-700 text-white text-lg font-semibold rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
-            Go to Homepage
+        <a href={{ path('app_index') }} class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-lg font-semibold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+            <i class="fas fa-arrow-left"></i> Back to Homepage
         </a>
     </div>
 </div>
