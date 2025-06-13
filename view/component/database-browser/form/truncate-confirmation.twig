@@ -7,11 +7,11 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="w-10 h-10 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to table browser">
+                <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to table browser">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
-                    <h1 class="text-lg font-bold text-white">Truncate Table</h1>
+                    <h1 class="text-xm font-bold text-white">Truncate Table</h1>
                     <p class="text-gray-400 text-xs">{{ tableName|e }}</p>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                 <div class="bg-gray-800/50 border border-gray-700/50 sm:rounded">
                     <div class="bg-red-500/20 border-b border-red-500/30 px-6 py-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-red-500/30 rounded-full flex items-center justify-center">
+                            <div class="w-8 h-8 bg-red-500/30 rounded-full flex items-center justify-center">
                                 <i class="fas fa-exclamation-triangle text-red-400"></i>
                             </div>
                             <h2 class="text-xl font-semibold text-white">Truncate Table</h2>

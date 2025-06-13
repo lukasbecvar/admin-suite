@@ -27,12 +27,12 @@
             {% else %}
                 {% set backPath = path('app_file_system_browser', { 'path': directoryPath }) %}
             {% endif %}
-            <a href={{ backPath }} class="w-10 h-10 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to previous page">
+            <a href={{ backPath }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to previous page">
                 <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
             </a>
 
             <div class="hidden sm:block">
-                <h1 class="text-lg font-bold text-white">{{ currentPath|split('/')|last }}</h1>
+                <h1 class="text-xm font-bold text-white">{{ currentPath|split('/')|last }}</h1>
                 <p class="text-gray-400 text-xs">File viewer</p>
             </div>
         </div>
