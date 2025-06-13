@@ -7,7 +7,7 @@
 <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
     <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-3">
-            <a href={{ path('app_file_system_view', { 'path': currentPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to file view">
+            <a href={{ path('app_file_system_view', { 'path': currentPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to file view">
                 <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
             </a>
             <div class="hidden sm:block">
@@ -53,7 +53,7 @@
             <div class="px-2 py-3 border-b border-gray-700/30 bg-gray-800/30">
                 <div class="flex items-center justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+                        <div class="w-8 h-8 bg-green-500/20 rounded flex items-center justify-center">
                             <i class="fas fa-edit text-green-400 text-sm"></i>
                         </div>
                         <div>
@@ -62,11 +62,11 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 hover:bg-green-500/30 text-green-300 hover:text-green-200 rounded-lg border border-green-500/30 transition-all duration-200 text-sm font-medium">
+                        <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 hover:bg-green-500/30 text-green-300 hover:text-green-200 rounded border border-green-500/30 transition-all duration-200 text-sm font-medium">
                             <i class="fas fa-save text-xs"></i>
                             <span>Save</span>
                         </button>
-                        <a href={{ path('app_file_system_view', { 'path': currentPath }) }} class="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded-lg border border-gray-600/30 transition-all duration-200 text-sm font-medium">
+                        <a href={{ path('app_file_system_view', { 'path': currentPath }) }} class="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded border border-gray-600/30 transition-all duration-200 text-sm font-medium">
                             <i class="fas fa-times text-xs"></i>
                             <span>Cancel</span>
                         </a>

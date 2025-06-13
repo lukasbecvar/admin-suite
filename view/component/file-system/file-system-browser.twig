@@ -23,11 +23,11 @@
         <div class="flex items-center gap-3">
             {# BACK BUTTON #}
             {% if backPath == '/' and currentPath == '/' %}
-                <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+                <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
             {% else %}
-                <a href={{ path('app_file_system_browser', { 'path': backPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to previous directory">
+                <a href={{ path('app_file_system_browser', { 'path': backPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to previous directory">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
             {% endif %}
@@ -41,10 +41,10 @@
         <div class="flex items-center gap-2">
             {# CREATE MENU BUTTON #}
             <div class="relative inline-block">
-                <button id="create-menu-button" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Create new item">
+                <button id="create-menu-button" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Create new item">
                     <i class="fas fa-plus text-gray-300 text-xs"></i>
                 </button>
-                <div id="create-menu" class="absolute right-0 mt-1 w-56 rounded-lg shadow-lg bg-gray-800/95 backdrop-blur-sm border border-gray-700/50 z-10 hidden overflow-hidden">
+                <div id="create-menu" class="absolute right-0 mt-1 w-56 rounded shadow-lg bg-gray-800/95 backdrop-blur-sm border border-gray-700/50 z-10 hidden overflow-hidden">
                     <div class="py-1">
                         <a href={{ path('app_file_system_create', { 'path': currentPath == '' ? '/' : currentPath }) }} class="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700/50 transition-colors duration-200">
                             <i class="fas fa-file text-blue-400 mr-3 w-4 text-center"></i>
@@ -59,7 +59,7 @@
             </div>
 
             {# TERMINAL BUTTON #}
-            <a href={{ path('app_terminal') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Open terminal">
+            <a href={{ path('app_terminal') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Open terminal">
                 <i class="fas fa-terminal text-gray-300 text-xs"></i>
             </a>
         </div>

@@ -7,7 +7,7 @@
 <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
     <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-3">
-            <a href={{ path('app_file_system_browser', { 'path': directoryPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to directory">
+            <a href={{ path('app_file_system_browser', { 'path': directoryPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to directory">
                 <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
             </a>
             <div class="hidden sm:block">
@@ -44,20 +44,20 @@
         {# FLASH MESSAGES #}
         {% for label, messages in app.flashes %}
             {% for message in messages %}
-                <div class="mb-4 p-3 rounded-lg {% if label == 'success' %}bg-green-500/20 text-green-300 border border-green-500/30{% else %}bg-red-500/20 text-red-300 border border-red-500/30{% endif %}">
+                <div class="mb-4 p-3 rounded {% if label == 'success' %}bg-green-500/20 text-green-300 border border-green-500/30{% else %}bg-red-500/20 text-red-300 border border-red-500/30{% endif %}">
                     <i class="fas fa-{% if label == 'success' %}check-circle{% else %}exclamation-circle{% endif %} mr-2"></i>{{ message|e }}
                 </div>
             {% endfor %}
         {% endfor %}
 
         {# MOVE FORM #}
-        <form action={{ path('app_file_system_move_save') }} method="post" class="max-w-3xl mx-auto mt-10">
+        <form action={{ path('app_file_system_move_save') }} method="post" class="max-w-3xl mx-auto sm:mt-10">
             <input type="hidden" name="sourcePath" value="{{ currentPath }}">
 
-            <div class="bg-gray-800/50 border border-gray-700/50 rounded-lg overflow-hidden">
+            <div class="bg-gray-800/50 border border-gray-700/50 sm:rounded overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-700/50 bg-gray-800/30">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 {% if isDirectory %}bg-yellow-500/20{% else %}bg-blue-500/20{% endif %} rounded-lg flex items-center justify-center">
+                        <div class="w-8 h-8 {% if isDirectory %}bg-yellow-500/20{% else %}bg-blue-500/20{% endif %} rounded flex items-center justify-center">
                             {% if isDirectory %}
                                 <i class="fas fa-folder text-yellow-400 text-lg"></i>
                             {% else %}
@@ -74,7 +74,7 @@
                 <div class="p-6 space-y-6">
 
                     {# SOURCE INFO #}
-                    <div class="bg-gray-700/30 border border-gray-600/50 rounded-lg p-4">
+                    <div class="bg-gray-700/30 border border-gray-600/50 rounded p-4">
                         <h3 class="text-sm font-medium text-gray-300 mb-2 flex items-center">
                             <i class="fas fa-info-circle text-blue-400 mr-2"></i>
                             Source Information
@@ -110,7 +110,7 @@
                             <select
                                 id="destinationPath"
                                 name="destinationPath"
-                                class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded-lg focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200"
+                                class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200"
                             >
                                 {% for folder in availableFolders %}
                                     <option value="{{ folder.path }}" {% if folder.path == directoryPath %}selected{% endif %}>
@@ -126,7 +126,7 @@
                                 type="text"
                                 id="customDestinationPath"
                                 name="customDestinationPath"
-                                class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded-lg focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200 font-mono"
+                                class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200 font-mono"
                                 placeholder="e.g. /var/www/html"
                             >
                             <div id="customPathError" class="text-red-400 text-xs mt-2 hidden flex items-center">
@@ -143,11 +143,11 @@
 
                     {# FORM SUBMIT BUTTONS #}
                     <div class="flex items-center justify-between gap-4 pt-4 border-t border-gray-700/50">
-                        <a href={{ path('app_file_system_browser', { 'path': directoryPath }) }} class="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded-lg border border-gray-600/30 transition-all duration-200 text-sm font-medium">
+                        <a href={{ path('app_file_system_browser', { 'path': directoryPath }) }} class="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded border border-gray-600/30 transition-all duration-200 text-sm font-medium">
                             <i class="fas fa-arrow-left text-xs"></i>
                             <span>Cancel</span>
                         </a>
-                        <button type="submit" class="inline-flex items-center gap-2 px-6 py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 hover:text-purple-200 rounded-lg border border-purple-500/30 transition-all duration-200 text-sm font-medium">
+                        <button type="submit" class="inline-flex items-center gap-2 px-6 py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 hover:text-purple-200 rounded border border-purple-500/30 transition-all duration-200 text-sm font-medium">
                             <i class="fas fa-arrows-alt text-xs"></i>
                             <span>Move {{ isDirectory ? 'Directory' : 'File' }}</span>
                         </button>

@@ -7,7 +7,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to table browser">
+                <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to table browser">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -50,17 +50,17 @@
                             Are you sure you want to delete <strong class="text-white">all data</strong> from the table:
                         </p>
                         <p class="text-center text-xl font-semibold text-blue-400 mb-4">{{ tableName|e }}</p>
-                        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mb-6">
+                        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded p-4 mb-6">
                             <p class="text-yellow-300 text-sm">
                                 <i class="fas fa-warning text-yellow-400 mr-2"></i>
                                 <strong>Warning:</strong> This action cannot be undone. All data in this table will be permanently deleted.
                             </p>
                         </div>
                         <div class="flex justify-center gap-4">
-                            <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold transition-colors duration-200">
+                            <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded font-semibold transition-colors duration-200">
                                 Cancel
                             </a>
-                            <a href={{ path('app_manager_database_truncate', {'database': databaseName, 'table': tableName, 'confirm': 'yes'}) }} class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors duration-200">
+                            <a href={{ path('app_manager_database_truncate', {'database': databaseName, 'table': tableName, 'confirm': 'yes'}) }} class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded font-semibold transition-colors duration-200">
                                 Truncate Table
                             </a>
                         </div>

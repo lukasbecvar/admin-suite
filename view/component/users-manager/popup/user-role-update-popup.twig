@@ -1,7 +1,7 @@
 <div id="role-update-popup-overlay" class="fixed inset-0 bg-black/80 flex justify-center items-center hidden z-50">
 	<div class="backdrop-blur-lg bg-gray-800/90 rounded-xl p-8 border border-gray-600/50 animate-popin shadow-2xl max-w-md w-full mx-4">
 		<div class="flex items-center gap-3 mb-6">
-			<div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+			<div class="w-8 h-8 bg-purple-500/20 rounded flex items-center justify-center">
 				<i class="fas fa-user-cog text-purple-400 text-lg"></i>
 			</div>
 			<div>
@@ -16,19 +16,19 @@
 
 			<div class="mb-6">
 				<label for="new-role" class="block text-sm font-medium text-gray-300 mb-3">New Role</label>
-				<input type="text" name="role" id="new-role" class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded-lg focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all duration-200" placeholder="Enter new role (e.g., ADMIN, USER)">
+				<input type="text" name="role" id="new-role" class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all duration-200" placeholder="Enter new role (e.g., ADMIN, USER)">
 			</div>
 
-			<div id="role-error-message" class="mb-4 p-3 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 hidden">
+			<div id="role-error-message" class="mb-4 p-3 rounded bg-red-500/20 text-red-300 border border-red-500/30 hidden">
 				<i class="fas fa-exclamation-circle mr-2"></i>The new role must be different from the current role.
 			</div>
 
 			<div class="flex justify-end gap-3">
-				<button type="button" id="role-update-cancel-button" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded-lg border border-gray-600/30 transition-all duration-200 text-sm font-medium">
+				<button type="button" id="role-update-cancel-button" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded border border-gray-600/30 transition-all duration-200 text-sm font-medium">
 					<i class="fas fa-times text-xs"></i>
 					<span>Cancel</span>
 				</button>
-				<button type="submit" id="role-update-submit-button" class="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 hover:text-purple-200 rounded-lg border border-purple-500/30 transition-all duration-200 text-sm font-medium" disabled>
+				<button type="submit" id="role-update-submit-button" class="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 hover:text-purple-200 rounded border border-purple-500/30 transition-all duration-200 text-sm font-medium" disabled>
 					<i class="fas fa-user-cog text-xs"></i>
 					<span>Update Role</span>
 				</button>

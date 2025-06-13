@@ -7,7 +7,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_manager_monitoring') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to monitoring">
+                <a href={{ path('app_manager_monitoring') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to monitoring">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -19,7 +19,7 @@
                 {# TIME PERIOD SELECTOR #}
                 <div class="flex items-center gap-2">
                     <label for="time-period" class="text-xs text-gray-400 hidden sm:block">Period:</label>
-                    <select id="time-period" onchange="updateTimePeriod()" class="h-8 px-3 bg-gray-800/95 text-white border border-gray-600/80 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/90 focus:border-blue-500/90 hover:bg-gray-700/95 hover:border-gray-500/90 transition-all duration-200 cursor-pointer shadow-lg backdrop-blur-sm">
+                    <select id="time-period" onchange="updateTimePeriod()" class="h-8 px-3 bg-gray-800/95 text-white border border-gray-600/80 rounded text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/90 focus:border-blue-500/90 hover:bg-gray-700/95 hover:border-gray-500/90 transition-all duration-200 cursor-pointer shadow-lg backdrop-blur-sm">
                         <option value="last_24_hours" selected class="bg-gray-800 text-white">Last 24 hours</option>
                         <option value="last_week" class="bg-gray-800 text-white">Last week</option>
                         <option value="last_month" class="bg-gray-800 text-white">Last month</option>

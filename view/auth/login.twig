@@ -3,7 +3,7 @@
 {# USER LOGIN COMPONENT #}
 {% block body %}
 <div class="auth-component flex justify-center items-center h-screen" style="background: transparent;">
-	<div class="mt-5 max-w-md w-full px-6 py-5 mb-5 rounded-lg backdrop-blur-sm bg-gray-800/50 border border-gray-700/50 shadow-2xl mx-4">
+	<div class="mt-5 max-w-md w-full px-6 py-5 mb-5 rounded backdrop-blur-sm bg-gray-800/50 border border-gray-700/50 shadow-2xl mx-4">
 		<div class="px-2 py-2 mb-6">
 			<div class="flex items-center justify-center">
 				<h2 class="text-2xl text-white font-bold tracking-wide">Login</h2>
@@ -70,7 +70,7 @@
 			</div>
 
             {# FORM SUBMIT BUTTON #}
-			<button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/30">
+			<button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/30">
 				<span>Login</span>
 			</button>
 		{{ form_end(loginForm) }}

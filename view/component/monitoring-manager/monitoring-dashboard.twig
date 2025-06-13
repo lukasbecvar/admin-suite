@@ -7,7 +7,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+                <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -21,13 +21,13 @@
             </div>
             <div class="flex items-center gap-2">
                 {# ACTION BUTTONS #}
-                <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': monitoringStatusTable}) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Database status">
+                <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': monitoringStatusTable}) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Database status">
                     <i class="fas fa-database text-gray-300 text-xs"></i>
                 </a>
-                <a href={{ path('app_metrics_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Metrics dashboard">
+                <a href={{ path('app_metrics_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Metrics dashboard">
                     <i class="fas fa-chart-line text-gray-300 text-xs"></i>
                 </a>
-                <a href={{ path('app_manager_monitoring_config') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Services config">
+                <a href={{ path('app_manager_monitoring_config') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Services config">
                     <i class="fas fa-cog text-gray-300 text-xs"></i>
                 </a>
             </div>
@@ -43,7 +43,7 @@
                     <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300 mb-[-8px]">
                         <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <div class="w-8 h-8 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                                <div class="w-8 h-8 bg-yellow-500/20 rounded flex items-center justify-center">
                                     <i class="fas fa-list text-yellow-400 text-sm"></i>
                                 </div>
                                 <span>Status Log</span>
@@ -56,7 +56,7 @@
                         <div class="px-[2px] py-[5px] pt-[5px] overflow-y-auto max-h-[280px]">
                             <div class="space-y-[5px]">
                                 {% for log in monitoringLogs %}
-                                    <div class="flex items-start gap-3 p-3 bg-gradient-to-r from-gray-700/20 to-gray-600/20 border border-gray-600/40 rounded-lg text-sm hover:from-gray-600/30 hover:to-gray-500/30 hover:border-gray-500/50 transition-all duration-200 backdrop-blur-sm mx-1">
+                                    <div class="flex items-start gap-3 p-3 bg-gradient-to-r from-gray-700/20 to-gray-600/20 border border-gray-600/40 rounded text-sm hover:from-gray-600/30 hover:to-gray-500/30 hover:border-gray-500/50 transition-all duration-200 backdrop-blur-sm mx-1">
                                         <div class="w-2 h-2 bg-yellow-400 rounded-full mt-2 flex-shrink-0 shadow-lg shadow-yellow-400/50"></div>
                                         <div class="flex-1 min-w-0">
                                             <p class="text-gray-300 text-sm leading-relaxed">{{ log.message|e }}</p>
@@ -75,7 +75,7 @@
                 <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
                     <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+                            <div class="w-8 h-8 bg-green-500/20 rounded flex items-center justify-center">
                                 <i class="fas fa-server text-green-400 text-sm"></i>
                             </div>
                             <span>Internal Services</span>
@@ -84,7 +84,7 @@
                     <div class="p-[3px] overflow-y-auto max-h-[320px]">
 
                         {# UFW SERVICE #}
-                        <div class="flex justify-between items-center bg-gradient-to-r from-gray-700/20 to-gray-600/20 border border-gray-600/40 rounded-lg p-2 text-sm hover:from-gray-600/30 hover:to-gray-500/30 hover:border-gray-500/50 transition-all duration-200 mb-1 mt-1 mx-1 backdrop-blur-sm">
+                        <div class="flex justify-between items-center bg-gradient-to-r from-gray-700/20 to-gray-600/20 border border-gray-600/40 rounded p-2 text-sm hover:from-gray-600/30 hover:to-gray-500/30 hover:border-gray-500/50 transition-all duration-200 mb-1 mt-1 mx-1 backdrop-blur-sm">
                             <div class="flex items-center gap-3">
                                 <div class="flex items-center gap-2">
                                     <div class="w-2 h-2 rounded-full {% if serviceManager.isUfwRunning() %}bg-green-400 shadow-lg shadow-green-400/50{% else %}bg-red-400 shadow-lg shadow-red-400/50{% endif %}"></div>
@@ -108,7 +108,7 @@
                             {% if service.display %}
                                 {% if service.type == 'systemd' %}
                                     {% set serviceStatus = serviceManager.isServiceRunning(service.service_name) %}
-                                    <div class="flex justify-between items-center bg-gradient-to-r from-gray-700/20 to-gray-600/20 border border-gray-600/40 rounded-lg p-2 text-sm hover:from-gray-600/30 hover:to-gray-500/30 hover:border-gray-500/50 transition-all duration-200 mb-1 mt-1 mx-1 backdrop-blur-sm">
+                                    <div class="flex justify-between items-center bg-gradient-to-r from-gray-700/20 to-gray-600/20 border border-gray-600/40 rounded p-2 text-sm hover:from-gray-600/30 hover:to-gray-500/30 hover:border-gray-500/50 transition-all duration-200 mb-1 mt-1 mx-1 backdrop-blur-sm">
                                         <div class="flex items-center gap-3">
                                             <div class="flex items-center gap-2">
                                                 <div class="w-2 h-2 rounded-full {% if serviceStatus %}bg-green-400 shadow-lg shadow-green-400/50{% else %}bg-red-400 shadow-lg shadow-red-400/50{% endif %}"></div>
@@ -136,7 +136,7 @@
                 <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
                     <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+                            <div class="w-8 h-8 bg-cyan-500/20 rounded flex items-center justify-center">
                                 <i class="fas fa-globe text-cyan-400 text-sm"></i>
                             </div>
                             <span>HTTP Services</span>
@@ -156,7 +156,7 @@
                                     {% set serviceStatus = serviceManager.checkWebsiteStatus(service.url) %}
 
                                     {# SERVICE ITEM #}
-                                    <div class="flex justify-between items-center bg-gradient-to-r from-gray-700/20 to-gray-600/20 border border-gray-600/40 rounded-lg p-2 text-sm hover:from-gray-600/30 hover:to-gray-500/30 hover:border-gray-500/50 transition-all duration-200 mb-1 mt-1 mx-1 backdrop-blur-sm">
+                                    <div class="flex justify-between items-center bg-gradient-to-r from-gray-700/20 to-gray-600/20 border border-gray-600/40 rounded p-2 text-sm hover:from-gray-600/30 hover:to-gray-500/30 hover:border-gray-500/50 transition-all duration-200 mb-1 mt-1 mx-1 backdrop-blur-sm">
                                         <div class="flex items-center gap-3">
                                             <div class="flex items-center gap-2">
                                                 <div class="w-2 h-2 rounded-full {% if serviceStatus.responseCode in service.accept_codes %}bg-green-400 shadow-lg shadow-green-400/50{% else %}bg-red-400 shadow-lg shadow-red-400/50{% endif %}"></div>
@@ -188,7 +188,7 @@
             <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
                 <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center">
+                        <div class="w-8 h-8 bg-indigo-500/20 rounded flex items-center justify-center">
                             <i class="fas fa-chart-bar text-indigo-400 text-sm"></i>
                         </div>
                         <span>SLA History</span>

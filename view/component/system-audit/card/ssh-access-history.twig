@@ -1,4 +1,4 @@
-<div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded-lg shadow-xl text-white w-full overflow-hidden">
+<div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden">
     <div class="px-4 py-3 border-b border-gray-700/50 bg-gray-800/30">
         <h3 class="text-sm font-semibold text-white flex items-center">
             <i class="fas fa-terminal text-purple-400 mr-2"></i>
@@ -11,7 +11,7 @@
             {% else %}
                 <div class="space-y-1 p-2">
                     {% for login in sshAccessHistory %}
-                        <div class="flex items-center justify-between p-3 bg-gray-700/30 hover:bg-gray-700/50 rounded-lg transition-colors duration-200">
+                        <div class="flex items-center justify-between p-3 bg-gray-700/30 hover:bg-gray-700/50 rounded transition-colors duration-200">
                             <div class="flex flex-col">
                                 <div class="text-sm font-medium text-white">{{ login.user }}</div>
                                 <div class="text-xs text-green-400">{{ login.date }}</div>

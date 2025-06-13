@@ -7,7 +7,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_manager_monitoring') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to monitoring dashboard">
+                <a href={{ path('app_manager_monitoring') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to monitoring dashboard">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -28,7 +28,7 @@
                     <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
                         <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                <div class="w-8 h-8 bg-blue-500/20 rounded flex items-center justify-center">
                                     <i class="fas fa-info-circle text-blue-400 text-sm"></i>
                                 </div>
                                 <span>Service Information</span>
@@ -110,7 +110,7 @@
                     {# SERVICE CONFIG CARD #}
                     <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
                         <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center">
-                            <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2">
+                            <div class="w-8 h-8 bg-green-500/20 rounded flex items-center justify-center mr-2">
                                 <i class="fas fa-code text-green-400 text-sm"></i>
                             </div>
                             <span>Configuration (Raw)</span>
@@ -129,7 +129,7 @@
                 {% if serviceConfig.config_files is defined and serviceConfig.config_files|length > 0 %}
                     <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
                         <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center">
-                            <div class="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center mr-2">
+                            <div class="w-8 h-8 bg-orange-500/20 rounded flex items-center justify-center mr-2">
                                 <i class="fas fa-file-alt text-orange-400 text-sm"></i>
                             </div>
                             <span>Configuration Files</span>
@@ -150,7 +150,7 @@
                 {# SLA HISTORY CARD #}
                 <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
                     <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center">
-                        <div class="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center mr-2">
+                        <div class="w-8 h-8 bg-indigo-500/20 rounded flex items-center justify-center mr-2">
                             <i class="fas fa-chart-bar text-indigo-400 text-sm"></i>
                         </div>
                         <span>SLA History</span>
@@ -198,7 +198,7 @@
                 {% if serviceConfig.type == 'systemd' %}
                     <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
                         <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center">
-                            <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center mr-2">
+                            <div class="w-8 h-8 bg-purple-500/20 rounded flex items-center justify-center mr-2">
                                 <i class="fas fa-tools text-purple-400 text-sm"></i>
                             </div>
                             <span>Service Actions</span>
@@ -206,17 +206,17 @@
                         <div class="overflow-y-auto max-h-[320px]">
                             <div class="bg-gray-700/10 border border-gray-600/50 p-2 text-sm transition">
                                 <div class="flex flex-wrap gap-2">
-                                <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200">
+                                <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded transition-all duration-200">
                                     <i class="fas fa-redo text-sm mr-2"></i>
                                     Restart Service
                                 </a>
                                 {% if serviceStatus == 'running' %}
-                                    <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all duration-200">
+                                    <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded transition-all duration-200">
                                         <i class="fas fa-stop text-sm mr-2"></i>
                                         Stop Service
                                     </a>
                                 {% else %}
-                                    <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-all duration-200">
+                                    <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded transition-all duration-200">
                                         <i class="fas fa-play text-sm mr-2"></i>
                                         Start Service
                                     </a>
@@ -231,7 +231,7 @@
                 {% if serviceConfig.type == 'http' %}
                     <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
                         <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center">
-                            <div class="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center mr-2">
+                            <div class="w-8 h-8 bg-cyan-500/20 rounded flex items-center justify-center mr-2">
                                 <i class="fas fa-globe text-cyan-400 text-sm"></i>
                             </div>
                             <span>HTTP Service Details</span>
@@ -269,7 +269,7 @@
                         <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300" id="metrics-section">
                             <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
                                 <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mr-2">
+                                    <div class="w-8 h-8 bg-blue-500/20 rounded flex items-center justify-center mr-2">
                                         <i class="fas fa-chart-line text-blue-400 text-sm"></i>
                                     </div>
                                     <span>Service Metrics</span>

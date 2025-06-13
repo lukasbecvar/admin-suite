@@ -9,11 +9,11 @@
         <div class="flex items-center gap-3 px-2 py-1">
             {# BACK BUTTON #}
             {% if databaseName == '' %}
-                <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+                <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
             {% else %}
-                <a href={{ path('app_manager_database') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to database browser">
+                <a href={{ path('app_manager_database') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to database browser">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
             {% endif %}
@@ -31,10 +31,10 @@
 
         <div class="flex items-center gap-2 px-2 py-1">
             {# QUICK ACTIONS #}
-            <a href={{ path('app_manager_database_dump') }} class="w-8 h-8 bg-green-500/20 hover:bg-green-500/30 rounded-lg flex items-center justify-center transition-all duration-200 border border-green-500/30" title="Database dumper">
+            <a href={{ path('app_manager_database_dump') }} class="w-8 h-8 bg-green-500/20 hover:bg-green-500/30 rounded flex items-center justify-center transition-all duration-200 border border-green-500/30" title="Database dumper">
                 <i class="fas fa-download text-green-400 text-xs"></i>
             </a>
-            <a href={{ path('app_manager_database_console') }} class="w-8 h-8 bg-purple-500/20 hover:bg-purple-500/30 rounded-lg flex items-center justify-center transition-all duration-200 border border-purple-500/30" title="Database query console">
+            <a href={{ path('app_manager_database_console') }} class="w-8 h-8 bg-purple-500/20 hover:bg-purple-500/30 rounded flex items-center justify-center transition-all duration-200 border border-purple-500/30" title="Database query console">
                 <i class="fas fa-terminal text-purple-400 text-xs"></i>
             </a>
         </div>

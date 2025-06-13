@@ -4,7 +4,7 @@
 {# SUB-NAVIGATION #}
 <div class="px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
     <div class="flex items-center gap-3">
-        <a href={{ path('app_manager_logs') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to log manager">
+        <a href={{ path('app_manager_logs') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to log manager">
             <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
         </a>
         <div>
@@ -23,7 +23,7 @@
                         <p class="text-gray-500 text-center text-sm max-w-md">Your application is running smoothly without any logged exceptions.</p>
 
                         <div class="mt-8 flex items-center gap-4">
-                            <a href="{{ path('app_manager_logs') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 rounded-lg border border-blue-500/30 transition-all duration-200 text-sm font-medium">
+                            <a href="{{ path('app_manager_logs') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 rounded border border-blue-500/30 transition-all duration-200 text-sm font-medium">
                                 <i class="fas fa-list text-xs"></i>
                                 <span>View All Logs</span>
                             </a>
@@ -32,10 +32,10 @@
                 {% else %}
                     <div class="space-y-3">
                         {% for exceptionFile in exceptionFiles %}
-                            <div class="bg-gray-700/30 rounded-lg p-4 border border-gray-600/30 hover:bg-gray-700/40 transition-all duration-200">
+                            <div class="bg-gray-700/30 rounded p-4 border border-gray-600/30 hover:bg-gray-700/40 transition-all duration-200">
                                 <div class="flex items-center justify-between">
                                     <a href={{ path('app_file_system_view', { path: exceptionFile.path, referer: 'log_manager_exception_files', service: exceptionFile.name }) }} class="flex items-center gap-3 flex-grow group">
-                                        <div class="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                        <div class="w-8 h-8 bg-red-500/20 rounded flex items-center justify-center">
                                             <i class="fas fa-exclamation-triangle text-red-400 text-sm"></i>
                                         </div>
                                         <div>
@@ -43,7 +43,7 @@
                                             <div class="text-gray-400 text-xs">{{ exceptionFile.path }}</div>
                                         </div>
                                     </a>
-                                    <button class="delete-button w-8 h-8 bg-red-500/20 hover:bg-red-500/30 rounded-lg flex items-center justify-center transition-all duration-200 border border-red-500/30 ml-3" data-file={{ exceptionFile.name }} title="Delete exception file">
+                                    <button class="delete-button w-8 h-8 bg-red-500/20 hover:bg-red-500/30 rounded flex items-center justify-center transition-all duration-200 border border-red-500/30 ml-3" data-file={{ exceptionFile.name }} title="Delete exception file">
                                         <i class="fas fa-trash text-red-400 text-xs"></i>
                                     </button>
                                 </div>
