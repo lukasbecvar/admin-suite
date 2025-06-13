@@ -105,9 +105,21 @@
                             <div class="p-3 bg-gray-700/30 rounded">
                                 <div class="flex items-center">
                                     <i class="fas fa-globe text-gray-400 mr-3"></i>
-                                    <div>
+                                    <div class="flex-1 min-w-0">
                                         <p class="text-xs text-gray-400 uppercase tracking-wider">IP Address</p>
-                                        <p class="text-white font-medium">{{ userRepository.getIpAddress()|e }}</p>
+                                        {% set ipAddress = userRepository.getIpAddress() %}
+                                        {% if ipAddress|length > 20 %}
+                                            <div class="relative">
+                                                <p id="ip-short" class="text-white font-medium cursor-pointer hover:text-blue-400 transition-colors duration-200" onclick="toggleIpDisplay()" title="Click to show full IP address">
+                                                    {{ ipAddress|slice(0, 17) }}...
+                                                </p>
+                                                <p id="ip-full" class="text-white font-medium cursor-pointer hover:text-blue-400 transition-colors duration-200 hidden break-all" onclick="toggleIpDisplay()" title="Click to shorten IP address">
+                                                    {{ ipAddress|e }}
+                                                </p>
+                                            </div>
+                                        {% else %}
+                                            <p class="text-white font-medium">{{ ipAddress|e }}</p>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -235,5 +247,21 @@
             this.classList.remove('flex')
         }
     });
+
+    // IP address toggle function
+    function toggleIpDisplay() {
+        const ipShort = document.getElementById('ip-short');
+        const ipFull = document.getElementById('ip-full');
+
+        if (ipShort && ipFull) {
+            if (ipShort.classList.contains('hidden')) {
+                ipShort.classList.remove('hidden');
+                ipFull.classList.add('hidden');
+            } else {
+                ipShort.classList.add('hidden');
+                ipFull.classList.remove('hidden');
+            }
+        }
+    }
 </script>
 {% endblock %}
