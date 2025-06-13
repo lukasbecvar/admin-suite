@@ -250,16 +250,16 @@
 
     // IP address toggle function
     function toggleIpDisplay() {
-        const ipShort = document.getElementById('ip-short');
-        const ipFull = document.getElementById('ip-full');
+        const ipShort = document.getElementById('ip-short')
+        const ipFull = document.getElementById('ip-full')
 
         if (ipShort && ipFull) {
             if (ipShort.classList.contains('hidden')) {
-                ipShort.classList.remove('hidden');
-                ipFull.classList.add('hidden');
+                ipShort.classList.remove('hidden')
+                ipFull.classList.add('hidden')
             } else {
-                ipShort.classList.add('hidden');
-                ipFull.classList.remove('hidden');
+                ipShort.classList.add('hidden')
+                ipFull.classList.remove('hidden')
             }
         }
     }
