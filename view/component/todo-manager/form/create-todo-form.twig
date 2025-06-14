@@ -1,6 +1,6 @@
 {# CREATE NEW TODO FORM #}
 {{ form_start(createTodoForm, {'attr': {'onsubmit': 'disableSubmitButton(this)'}}) }}
-    <div class="bg-slate-800/40 flex-none backdrop-blur-sm border-t border-slate-600/30">
+    <div class="bg-slate-800/40 flex-none backdrop-blur-sm">
 
         {# SUBMIT ERROR MESSAGE #}
         {% if createTodoForm.todo_text.vars.errors|length > 0 %}
@@ -17,7 +17,7 @@
                     'placeholder': 'Enter new todo...'
                 }})}}
                 {# ADD TODO BUTTON #}
-                <button type="submit" class="bg-green-600/80 hover:bg-green-500/90 text-white px-6 py-3 focus:outline-none flex items-center add-todo-button transition-all duration-200 hover:shadow-md hover:shadow-green-500/20">
+                <button type="submit" class="bg-green-600/80 hover:bg-green-500/90 text-white px-6 py-4 sm:py-3 focus:outline-none flex items-center add-todo-button transition-all duration-200 hover:shadow-md hover:shadow-green-500/20">
                     <i class="fa fa-plus text-lg" aria-hidden="true"></i>
                     <span class="hidden sm:inline ml-2 font-medium">Add Todo</span>
                 </button>
