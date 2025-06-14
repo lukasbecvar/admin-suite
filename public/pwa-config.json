@@ -4,8 +4,8 @@
     "description": "Solution for Linux server with services administration and monitoring",
     "start_url": "/dashboard",
     "display": "standalone",
-    "background_color": "#2e2e2e",
-    "theme_color": "#2e2e2e",
+    "background_color": "#111927",
+    "theme_color": "#111927",
     "icons": [
         {
             "src": "/assets/images/pwa-icon.webp",

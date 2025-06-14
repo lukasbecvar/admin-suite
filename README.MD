@@ -6,7 +6,7 @@
 </p>
 
 ## Dashboard preview
-![Dashboard](.github/assets/preview.png)
+![Dashboard](.github/assets/preview.gif)
 
 ## Description
 Simple & user-friendly solution for monitoring and managing Linux servers, primarily designed for single server instances debian-based systems.
