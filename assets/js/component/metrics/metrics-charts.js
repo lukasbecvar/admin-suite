@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 yaxis: {
                     title: {
-                        text: metricName.replace(/_/g, ' ').toUpperCase(),
+                        text: '',
                         style: {
                             color: '#9ca3af',
                             fontSize: '12px',
