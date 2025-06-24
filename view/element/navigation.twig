@@ -3,20 +3,20 @@
         {# TOGGLE SIDEBAR BUTTON #}
         <button id="menu-toggle" class="inline-flex items-center justify-center gap-2 rounded px-2 py-1.5 text-sm font-semibold text-gray-300 transition-all duration-200 hover:text-white hover:bg-gray-700/50 active:bg-gray-600/50 hover:border-gray-500/50" title="open/close sidebar">
             <i class="fas fa-bars text-base menu-icon"></i>
-            <span class="phone-none sm:inline text-sm font-medium">Menu</span>
+            <span class="phone-none sm:inline text-sm font-medium sm:mt-[1.9px]">Menu</span>
         </button>
 
         {# RIGHT SIDEBAR BUTTONS #}
         <div class="flex items-center">
             {# ABOUT BUTTON #}
-            <a href={{ path('app_about') }} class="inline-flex items-center justify-center rounded px-3 py-1.5 text-gray-300 hover:text-blue-400 hover:bg-blue-500/10 active:bg-blue-500/20 transition-all duration-200 hover:border-blue-500/30 mr-[-10px]" title="About">
+            <a href={{ path('app_about') }} class="inline-flex items-center justify-center rounded px-2 py-1.5 text-gray-300 hover:text-blue-400 hover:bg-blue-500/10 active:bg-blue-500/20 transition-all duration-200 hover:border-blue-500/30 mr-[-8px]" title="About">
                 <i class="fas fa-circle-question text-base"></i>
-                <span class="phone-none sm:inline text-sm font-medium ml-2">About</span>
+                <span class="phone-none sm:inline text-sm font-medium ml-2 mb-[1.2px] sm:mt-[1.9px]">About</span>
             </a>
             {# LOGOUT BUTTON #}
             <a href={{ path('app_auth_logout') }} class="inline-flex items-center justify-center gap-2 rounded px-2 py-1.5 text-sm font-semibold text-gray-300 transition-all duration-200 hover:text-red-400 hover:bg-red-500/10 active:bg-red-500/20 hover:border-red-500/30" title="Logout user">
                 <i class="fas fa-sign-out-alt text-base logout-icon"></i>
-                <span class="phone-none sm:inline logout-text text-sm font-medium">Logout</span>
+                <span class="phone-none sm:inline logout-text text-sm font-medium mb-[1px] sm:mt-[2px]">Logout</span>
             </a>
         </div>
     </div>

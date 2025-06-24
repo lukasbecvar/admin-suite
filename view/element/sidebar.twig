@@ -1,5 +1,5 @@
 <aside id="sidebar" class="text-white border-r border-gray-700/50 bg-gradient-to-b from-gray-900 via-gray-900/80 to-gray-900 backdrop-blur-sm flex flex-col h-full w-64 shadow-xl">
-    <div class="px-6 py-2">
+    <div class="px-6 py-1">
         {# USER INFO #}
         <div class="flex flex-col items-center space-y-0">
             {# PROFILE IMAGE #}
@@ -29,7 +29,7 @@
 
     {# NAVIGATION #}
     <nav class="px-1 space-y-0">
-        <ul class="pb-[3px]">
+        <ul class="pb-[2px] mb-2">
             {# MAIN SITE LINK #}
             {% set currentUrl = app.request.getSchemeAndHttpHost() %}
             {% if currentUrl matches '/admin/' %}
