@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\Sequentially;
 
 /**
  * Class ProfilePicChangeFormType
@@ -31,37 +32,33 @@ class ProfilePicChangeFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('profile-pic', FileType::class, [
-                'label' => false,
-                'multiple' => false,
-                'mapped' => false,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please add picture file.',
-                    ]),
-                    new File([
-                        'maxSize' => '5M',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/jpg',
-                            'image/png',
-                            'image/gif',
-                            'image/webp'
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image file (JPG, PNG, GIF, or WebP).',
-                        'maxSizeMessage' => 'The file is too large ({{ size }} {{ suffix }}). Maximum allowed size is {{ limit }} {{ suffix }}.'
-                    ])
-                ],
-                'attr' => [
-                    'class' => 'file-input-control profile-pic-change',
-                    'placeholder' => 'Profile picture',
-                    'accept' => 'image/jpeg,image/jpg,image/png,image/gif,image/webp',
-                    'image_property' => 'image'
-                ],
-                'translation_domain' => false
-            ])
-        ;
+        $builder->add('profile-pic', FileType::class, [
+            'label' => false,
+            'multiple' => false,
+            'mapped' => false,
+            'constraints' => new Sequentially([
+                new NotBlank(message: 'Please add picture file.'),
+                new File(
+                    maxSize: '5M',
+                    mimeTypes: [
+                        'image/jpeg',
+                        'image/jpg',
+                        'image/png',
+                        'image/gif',
+                        'image/webp'
+                    ],
+                    mimeTypesMessage: 'Please upload a valid image file (JPG, PNG, GIF, or WebP).',
+                    maxSizeMessage: 'The file is too large ({{ size }} {{ suffix }}). Maximum allowed size is {{ limit }} {{ suffix }}.'
+                )
+            ]),
+            'attr' => [
+                'class' => 'file-input-control profile-pic-change',
+                'placeholder' => 'Profile picture',
+                'accept' => 'image/jpeg,image/jpg,image/png,image/gif,image/webp',
+                'image_property' => 'image'
+            ],
+            'translation_domain' => false
+        ]);
     }
 
     /**

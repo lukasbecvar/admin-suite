@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\Sequentially;
 
 /**
  * Class UsernameChangeFormType
@@ -31,20 +32,18 @@ class UsernameChangeFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('username', TextType::class, [
-                'label' => false,
-                'constraints' => [
-                    new NotBlank(['message' => 'Please enter a username']),
-                    new Length([
-                        'min' => 3,
-                        'max' => 155,
-                        'minMessage' => 'Your username should be at least {{ limit }} characters',
-                        'maxMessage' => 'Your username cannot be longer than {{ limit }} characters'
-                    ])
-                ]
+        $builder->add('username', TextType::class, [
+            'label' => false,
+            'constraints' => new Sequentially([
+                new NotBlank(message: 'Please enter a username'),
+                new Length(
+                    min: 3,
+                    max: 155,
+                    minMessage: 'Your username should be at least {{ limit }} characters',
+                    maxMessage: 'Your username cannot be longer than {{ limit }} characters'
+                )
             ])
-        ;
+        ]);
     }
 
     /**

@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\Sequentially;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
@@ -35,15 +36,15 @@ class LoginFormType extends AbstractType
         $builder
             ->add('username', TextType::class, [
                 'label' => false,
-                'constraints' => [
-                    new NotBlank(['message' => 'Please enter a username'])
-                ]
+                'constraints' => new Sequentially([
+                    new NotBlank(message: 'Please enter a username')
+                ])
             ])
             ->add('password', PasswordType::class, [
                 'label' => false,
-                'constraints' => [
-                    new NotBlank(['message' => 'Please enter a password'])
-                ]
+                'constraints' => new Sequentially([
+                    new NotBlank(message: 'Please enter a password')
+                ])
             ])
             ->add('remember', CheckboxType::class, [
                 'label' => false,

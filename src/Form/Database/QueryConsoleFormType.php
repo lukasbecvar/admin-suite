@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Sequentially;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
@@ -29,24 +30,22 @@ class QueryConsoleFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('query', TextareaType::class, [
-                'label' => false,
-                'attr' => [
-                    'autocomplete' => 'off',
-                    'cols' => 125,
-                    'rows' => 10
-                ],
-                'constraints' => [
-                    new NotBlank(['message' => 'Please enter a query']),
-                    new Length([
-                        'min' => 1,
-                        'max' => 100000000,
-                        'minMessage' => 'Your query should be at least {{ limit }} characters',
-                        'maxMessage' => 'Your query cannot be longer than {{ limit }} characters'
-                    ])
-                ]
+        $builder->add('query', TextareaType::class, [
+            'label' => false,
+            'attr' => [
+                'autocomplete' => 'off',
+                'cols' => 125,
+                'rows' => 10
+            ],
+            'constraints' => new Sequentially([
+                new NotBlank(message: 'Please enter a query'),
+                new Length(
+                    min: 1,
+                    max: 100000000,
+                    minMessage: 'Your query should be at least {{ limit }} characters',
+                    maxMessage: 'Your query cannot be longer than {{ limit }} characters'
+                )
             ])
-        ;
+        ]);
     }
 }

@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Sequentially;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
@@ -32,24 +33,22 @@ class PasswordChangeForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'first_options' => [
-                    'label' => false,
-                    'constraints' => [
-                        new NotBlank(['message' => 'Please enter a password']),
-                        new Length([
-                            'min' => 8,
-                            'max' => 155,
-                            'minMessage' => 'Your password should be at least {{ limit }} characters',
-                            'maxMessage' => 'Your password cannot be longer than {{ limit }} characters'
-                        ])
-                    ],
-                ],
-                'second_options' => ['label' => false]
-            ])
-        ;
+        $builder->add('password', RepeatedType::class, [
+            'type' => PasswordType::class,
+            'first_options' => [
+                'label' => false,
+                'constraints' => new Sequentially([
+                    new NotBlank(message: 'Please enter a password'),
+                    new Length(
+                        min: 8,
+                        max: 155,
+                        minMessage: 'Your password should be at least {{ limit }} characters',
+                        maxMessage: 'Your password cannot be longer than {{ limit }} characters'
+                    )
+                ]),
+            ],
+            'second_options' => ['label' => false]
+        ]);
     }
 
     /**
