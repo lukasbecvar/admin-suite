@@ -34,8 +34,5 @@
         "@babel/preset-env": "^7.27.2",
         "regenerator-runtime": "^0.14.1",
         "@symfony/webpack-encore": "^5.1.0"
-    },
-    "overrides": {
-        "css-select": "5.1.0"
     }
 }
