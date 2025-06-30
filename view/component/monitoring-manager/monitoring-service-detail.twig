@@ -57,14 +57,13 @@
                                     </div>
                                     {% if serviceStatus == 'running' or serviceStatus == 'online' %}
                                         <div class="flex items-center gap-2">
-                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30">
+                                            <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30">
                                                 ONLINE
                                             </span>
                                         </div>
                                     {% else %}
                                         <div class="flex items-center gap-2">
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-red-500/20 text-red-300 border border-red-500/30">
+                                            <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-red-500/20 text-red-300 border border-red-500/30">
                                                 OFFLINE
                                             </span>
                                         </div>
@@ -79,7 +78,7 @@
                                         </div>
                                         <span class="text-gray-300 font-medium text-sm">Type</span>
                                     </div>
-                                    <span class="px-2.5 py-1 bg-cyan-500/20 text-cyan-300 rounded-md text-xs font-medium border border-cyan-500/30">{{ serviceConfig.type|e|upper }}</span>
+                                    <span class="px-2 py-1 bg-cyan-500/20 text-cyan-300 rounded-md text-xs font-medium border border-cyan-500/30">{{ serviceConfig.type|e|upper }}</span>
                                 </div>
 
                                 {% if monitoringStatus %}
@@ -102,7 +101,7 @@
                                             </div>
                                             <span class="text-gray-300 font-medium text-sm">Down Time</span>
                                         </div>
-                                        <span class="px-2.5 py-1 bg-orange-500/20 text-orange-300 rounded-md text-xs font-medium border border-orange-500/30">{{ monitoringStatus.getDownTime()|e }}m</span>
+                                        <span class="px-2 py-1 bg-orange-500/20 text-orange-300 rounded-md text-xs font-medium border border-orange-500/30">{{ monitoringStatus.getDownTime()|e }}m</span>
                                     </div>
 
                                     {# LAST MESSAGE #}
