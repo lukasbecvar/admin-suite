@@ -1,6 +1,6 @@
 {# CREATE NEW TODO FORM #}
 {{ form_start(createTodoForm, {'attr': {'onsubmit': 'disableSubmitButton(this)'}}) }}
-    <div class="bg-slate-800/40 flex-none backdrop-blur-sm">
+    <div class="bg-slate-800/80 flex-none backdrop-blur-sm">
 
         {# SUBMIT ERROR MESSAGE #}
         {% if createTodoForm.todo_text.vars.errors|length > 0 %}

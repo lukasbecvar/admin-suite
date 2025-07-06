@@ -30,59 +30,62 @@
         </div>
     </div>
 
-    {# TODO LIST #}
-    <div class="{{ filter == 'open' ? 'todo-list' : '' }} overflow-y-auto card-component p-0 px-2 pb-[2px] todo-manager overflow-hidden breadcrumb component">
-        <div id="todo-items-container" class="divide-y divide-gray-700/50">
+    <div class="flex-grow overflow-y-auto">
+        <div class="{{ filter == 'open' ? 'todo-list' : '' }} card-component p-0 px-2 pb-[2px] todo-manager overflow-hidden breadcrumb component">
+            <div id="todo-items-container" class="divide-y divide-gray-700/50">
 
-            {# TODO LIST IS EMPTY INFORMATION #}
-            {% if todos|length == 0 %}
-                <p class="flex items-center justify-center mt-10 mb-20 text-2xl text-white font-bold">This todo list is empty</p>
-            {% endif %}
+                {# TODO LIST IS EMPTY INFORMATION #}
+                {% if todos|length == 0 %}
+                    <p class="flex items-center justify-center mt-10 mb-20 text-2xl text-white font-bold">This todo list is empty</p>
+                {% endif %}
 
-            {# TODO ITEM #}
-            {% for todo in todos %}
-                <div class="todo-item flex items-center justify-between p-3 my-2 rounded bg-gradient-to-r from-slate-800/60 to-slate-700/40 border border-slate-600/30 transition-all duration-200 hover:from-slate-700/70 hover:to-slate-600/50 hover:border-slate-500/40 hover:shadow-lg hover:shadow-slate-900/20 relative" data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} data-position={{ todo.position }}>
-                    {% if filter == 'open' %}
-                        <div class="drag-handle mr-2 cursor-move text-gray-500 hover:text-white flex items-center justify-center">
-                            <i class="fas fa-grip-vertical text-lg"></i>
-                        </div>
-                    {% endif %}
-                    <div class="flex-grow">
-                        <span class="text-white whitespace-pre-line disable-select-on-phone">{{ todo.todoText|linkify }}</span>
-                    </div>
-                    <div class="flex space-x-2 ml-1">
+                {# TODO ITEM #}
+                {% for todo in todos %}
+                    <div class="todo-item flex items-center justify-between p-3 my-2 rounded bg-gradient-to-r from-slate-800/60 to-slate-700/40 border border-slate-600/30 transition-all duration-200 hover:from-slate-700/70 hover:to-slate-600/50 hover:border-slate-500/40 hover:shadow-lg hover:shadow-slate-900/20 relative" data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} data-position={{ todo.position }}>
                         {% if filter == 'open' %}
-                            {# EDIT BUTTON #}
-                            <button data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} class="edit-button text-blue-400 text-xl hover:text-blue-300 focus:outline-none">
-                                <i class="fa fa-edit" aria-hidden="true"></i>
-                            </button>
-                            {# COMPLETE BUTTON #}
-                            <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} class="delete-link text-green-400 text-xl hover:text-green-300 focus:outline-none mr-0.5">
-                                <i class="fa fa-check" aria-hidden="true"></i>
-                            </a>
-                        {% else %}
-                            {# REOPEN BUTTON #}
-                            <a href={{ path('app_todo_manager_reopen', {'id': todo.id}) }} class="delete-link text-green-400 text-xl hover:text-green-300 focus:outline-none mr-0.5">
-                                <i class="fa fa-undo" aria-hidden="true"></i>
-                            </a>
-                            {# DELETE BUTTON #}
-                            <button data-delete-url={{ path('app_todo_manager_delete', {'id': todo.id}) }} class="delete-button delete-link text-red-400 text-xl hover:text-red-300 focus:outline-none mr-0.5">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                            </button>
+                            <div class="drag-handle mr-2 cursor-move text-gray-500 hover:text-white flex items-center justify-center">
+                                <i class="fas fa-grip-vertical text-lg"></i>
+                            </div>
                         {% endif %}
-                        {# INFO BUTTON #}
-                        <button class="info-button phone-none" data-todo-id={{ todo.id }} title="View Info">
-                            <i class="fas fa-info-circle text-gray-400"></i>
-                        </button>
+                        <div class="flex-grow">
+                            <span class="text-white whitespace-pre-line disable-select-on-phone">{{ todo.todoText|linkify }}</span>
+                        </div>
+                        <div class="flex space-x-2 ml-1">
+                            {% if filter == 'open' %}
+                                {# EDIT BUTTON #}
+                                <button data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} class="edit-button text-blue-400 text-xl hover:text-blue-300 focus:outline-none">
+                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                </button>
+                                {# COMPLETE BUTTON #}
+                                <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} class="delete-link text-green-400 text-xl hover:text-green-300 focus:outline-none mr-0.5">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </a>
+                            {% else %}
+                                {# REOPEN BUTTON #}
+                                <a href={{ path('app_todo_manager_reopen', {'id': todo.id}) }} class="delete-link text-green-400 text-xl hover:text-green-300 focus:outline-none mr-0.5">
+                                    <i class="fa fa-undo" aria-hidden="true"></i>
+                                </a>
+                                {# DELETE BUTTON #}
+                                <button data-delete-url={{ path('app_todo_manager_delete', {'id': todo.id}) }} class="delete-button delete-link text-red-400 text-xl hover:text-red-300 focus:outline-none mr-0.5">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            {% endif %}
+                            {# INFO BUTTON #}
+                            <button class="info-button phone-none" data-todo-id={{ todo.id }} title="View Info">
+                                <i class="fas fa-info-circle text-gray-400"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
     </div>
 
     {# INCLUDE CREATE TODO FORM #}
     {% if filter == 'open' %}
-        {% include "component/todo-manager/form/create-todo-form.twig" %}
+        <div class="flex-shrink-0 sticky bottom-0 z-10">
+            {% include "component/todo-manager/form/create-todo-form.twig" %}
+        </div>
     {% endif %}
 </div>
 
