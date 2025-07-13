@@ -481,8 +481,8 @@ class LogManager
 
                 // delete exception file
                 if (file_exists($exceptionFile)) {
-                    // unlink exception file
-                    unlink($exceptionFile);
+                    // delete exception file
+                    $this->fileSystemUtil->deleteFileOrDirectory($exceptionFile);
 
                     // log exception file deleted event
                     $this->log(
