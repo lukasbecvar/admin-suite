@@ -6,7 +6,7 @@ use App\Tests\CustomTestCase;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class FileSystemBrowserControllerTest
@@ -71,6 +71,28 @@ class FileSystemBrowserControllerTest extends CustomTestCase
     }
 
     /**
+     * Test file view with non-existent file
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testFileViewNonExistentFile(): void
+    {
+        $nonExistentFile = '/tmp/non_existent_file_' . uniqid() . '.txt';
+
+        // request view of non-existent file
+        $this->client->request('GET', '/filesystem/view', [
+            'path' => $nonExistentFile
+        ]);
+
+        // assert response is successful (should show error page)
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        // assert error message is displayed
+        $this->assertSelectorTextContains('body', 'File Not Found');
+    }
+
+    /**
      * Test load file system edit page
      *
      * @return void
@@ -89,6 +111,28 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorExists('button[type="submit"]');
         $this->assertSelectorTextContains('button[type="submit"]', 'Save');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test file edit with non-existent file
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testFileEditNonExistentFile(): void
+    {
+        $nonExistentFile = '/tmp/non_existent_file_' . uniqid() . '.txt';
+
+        // request edit of non-existent file
+        $this->client->request('GET', '/filesystem/edit', [
+            'path' => $nonExistentFile
+        ]);
+
+        // assert response is successful (should show error page)
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        // assert file editor is displayed (controller creates empty file for non-existent files)
+        $this->assertSelectorExists('textarea[name="content"]');
     }
 
     /**
@@ -164,131 +208,63 @@ class FileSystemBrowserControllerTest extends CustomTestCase
     }
 
     /**
-     * Test create new file
+     * Test create file with empty filename
      *
      * @return void
      */
     #[Group('file-system')]
-    public function testCreateNewFile(): void
+    public function testCreateFileEmptyFilename(): void
     {
         // create temporary directory for testing
         $tempDir = sys_get_temp_dir() . '/test_' . uniqid();
         mkdir($tempDir);
 
-        // new file path
-        $newFilePath = $tempDir . '/test_file.txt';
-
-        // submit form to create new file
+        // submit form with empty filename
         $this->client->request('POST', '/filesystem/create/save', [
             'directory' => $tempDir,
-            'filename' => 'test_file.txt',
+            'filename' => '',
             'content' => 'Test content'
         ]);
 
-        // assert redirect to file view
-        $this->assertResponseRedirects('/filesystem/view?path=' . $newFilePath);
+        // assert response shows error (400 Bad Request expected)
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
 
         // clean up
-        if (file_exists($newFilePath)) {
-            unlink($newFilePath);
-        }
         rmdir($tempDir);
     }
 
     /**
-     * Test create new directory
+     * Test create directory with empty name
      *
      * @return void
      */
     #[Group('file-system')]
-    public function testCreateNewDirectory(): void
+    public function testCreateDirectoryEmptyName(): void
     {
         // create temporary directory for testing
         $tempDir = sys_get_temp_dir() . '/test_' . uniqid();
         mkdir($tempDir);
 
-        // new directory path
-        $newDirName = 'test_dir_' . uniqid();
-        $newDirPath = $tempDir . '/' . $newDirName;
-
-        // submit form to create new directory
+        // submit form with empty directory name
         $this->client->request('POST', '/filesystem/create/directory/save', [
             'directory' => $tempDir,
-            'directoryname' => $newDirName
+            'directoryname' => ''
         ]);
 
-        // assert redirect to directory
-        $this->assertResponseRedirects('/filesystem?path=' . $newDirPath);
-
-        // assert directory was created
-        $this->assertDirectoryExists($newDirPath);
+        // assert response shows error (400 Bad Request expected)
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
 
         // clean up
-        rmdir($newDirPath);
         rmdir($tempDir);
     }
 
     /**
-     * Test delete file
+     * Test load rename file form
      *
      * @return void
      */
     #[Group('file-system')]
-    public function testDeleteFile(): void
-    {
-        // create temporary file for testing
-        $tempFile = tempnam(sys_get_temp_dir(), 'test_');
-        file_put_contents($tempFile, 'Test content');
-
-        // get directory path
-        $directoryPath = dirname($tempFile);
-
-        // submit form to delete file
-        $this->client->request('POST', '/filesystem/delete', [
-            'path' => $tempFile
-        ]);
-
-        // assert redirect to directory
-        $this->assertResponseRedirects('/filesystem?path=' . $directoryPath);
-
-        // assert file was deleted
-        $this->assertFileDoesNotExist($tempFile);
-    }
-
-    /**
-     * Test delete directory
-     *
-     * @return void
-     */
-    #[Group('file-system')]
-    public function testDeleteDirectory(): void
-    {
-        // create temporary directory for testing
-        $tempDir = sys_get_temp_dir() . '/test_' . uniqid();
-        mkdir($tempDir);
-
-        // get parent directory path
-        $parentDir = dirname($tempDir);
-
-        // submit form to delete directory
-        $this->client->request('POST', '/filesystem/delete', [
-            'path' => $tempDir
-        ]);
-
-        // assert redirect to parent directory
-        $this->assertResponseRedirects('/filesystem?path=' . $parentDir);
-
-        // assert directory was deleted
-        $this->assertDirectoryDoesNotExist($tempDir);
-    }
-
-    /**
-     * Test rename file form
-     *
-     * @return void
-     */
-    #[Group('file-system')]
-    public function testRenameFileForm(): void
+    public function testLoadRenameFileForm(): void
     {
         // create temporary file for testing
         $tempFile = tempnam(sys_get_temp_dir(), 'test_');
@@ -381,6 +357,143 @@ class FileSystemBrowserControllerTest extends CustomTestCase
     }
 
     /**
+     * Test create new file
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testCreateNewFile(): void
+    {
+        // create temporary directory for testing
+        $tempDir = sys_get_temp_dir() . '/test_' . uniqid();
+        mkdir($tempDir);
+
+        // new file path
+        $newFilePath = $tempDir . '/test_file.txt';
+
+        // submit form to create new file
+        $this->client->request('POST', '/filesystem/create/save', [
+            'directory' => $tempDir,
+            'filename' => 'test_file.txt',
+            'content' => 'Test content'
+        ]);
+
+        // assert redirect to file view
+        $this->assertResponseRedirects('/filesystem/view?path=' . $newFilePath);
+
+        // clean up
+        if (file_exists($newFilePath)) {
+            unlink($newFilePath);
+        }
+        rmdir($tempDir);
+    }
+
+    /**
+     * Test create new directory
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testCreateNewDirectory(): void
+    {
+        // create temporary directory for testing
+        $tempDir = sys_get_temp_dir() . '/test_' . uniqid();
+        mkdir($tempDir);
+
+        // new directory path
+        $newDirName = 'test_dir_' . uniqid();
+        $newDirPath = $tempDir . '/' . $newDirName;
+
+        // submit form to create new directory
+        $this->client->request('POST', '/filesystem/create/directory/save', [
+            'directory' => $tempDir,
+            'directoryname' => $newDirName
+        ]);
+
+        // assert redirect to directory
+        $this->assertResponseRedirects('/filesystem?path=' . $newDirPath);
+
+        // assert directory was created
+        $this->assertDirectoryExists($newDirPath);
+
+        // clean up
+        rmdir($newDirPath);
+        rmdir($tempDir);
+    }
+
+    /**
+     * Test load file move page
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testLoadFileMoveForm(): void
+    {
+        // create temporary file for testing
+        $tempFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($tempFile, 'Test content');
+
+        // request move form
+        $this->client->request('GET', '/filesystem/move', [
+            'path' => $tempFile
+        ]);
+
+        // assert response is successful
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        // assert form exists
+        $this->assertSelectorExists('form[action="/filesystem/move/save"]');
+        $this->assertSelectorExists('input[name="sourcePath"]');
+        $this->assertSelectorExists('select[name="destinationPath"]');
+        $this->assertSelectorExists('button[type="submit"]');
+
+        // clean up
+        unlink($tempFile);
+    }
+
+    /**
+     * Test move file to different directory
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testMoveFile(): void
+    {
+        // create temporary directories for testing
+        $sourceDir = sys_get_temp_dir() . '/test_source_' . uniqid();
+        $targetDir = sys_get_temp_dir() . '/test_target_' . uniqid();
+        mkdir($sourceDir);
+        mkdir($targetDir);
+
+        // create test file in source directory
+        $sourceFile = $sourceDir . '/test_file.txt';
+        file_put_contents($sourceFile, 'Test content');
+
+        // target file path
+        $targetFile = $targetDir . '/test_file.txt';
+
+        // submit form to move file
+        $this->client->request('POST', '/filesystem/move/save', [
+            'sourcePath' => $sourceFile,
+            'destinationPathType' => 'custom',
+            'customDestinationPath' => $targetDir
+        ]);
+
+        // assert redirect to target directory
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+        $this->assertResponseRedirects('/filesystem?path=' . $targetDir);
+
+        // assert file was moved
+        $this->assertFileExists($targetFile);
+        $this->assertFileDoesNotExist($sourceFile);
+
+        // clean up
+        unlink($targetFile);
+        rmdir($sourceDir);
+        rmdir($targetDir);
+    }
+
+    /**
      * Test load file upload page
      *
      * @return void
@@ -394,5 +507,102 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('h1', 'Upload Files');
         $this->assertSelectorTextContains('body', 'Select Files to Upload');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test upload to non-existent directory
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testUploadToNonExistentDirectory(): void
+    {
+        $nonExistentDir = '/tmp/non_existent_dir_' . uniqid();
+
+        // request upload page for non-existent directory
+        $this->client->request('GET', '/filesystem/upload', [
+            'path' => $nonExistentDir
+        ]);
+
+        // assert response is successful (should show error page)
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        // assert error message is displayed
+        $this->assertSelectorTextContains('body', 'Directory Not Found');
+    }
+
+    /**
+     * Test delete file
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testDeleteFile(): void
+    {
+        // create temporary file for testing
+        $tempFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($tempFile, 'Test content');
+
+        // get directory path
+        $directoryPath = dirname($tempFile);
+
+        // submit form to delete file
+        $this->client->request('POST', '/filesystem/delete', [
+            'path' => $tempFile
+        ]);
+
+        // assert redirect to directory
+        $this->assertResponseRedirects('/filesystem?path=' . $directoryPath);
+
+        // assert file was deleted
+        $this->assertFileDoesNotExist($tempFile);
+    }
+
+    /**
+     * Test delete directory
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testDeleteDirectory(): void
+    {
+        // create temporary directory for testing
+        $tempDir = sys_get_temp_dir() . '/test_' . uniqid();
+        mkdir($tempDir);
+
+        // get parent directory path
+        $parentDir = dirname($tempDir);
+
+        // submit form to delete directory
+        $this->client->request('POST', '/filesystem/delete', [
+            'path' => $tempDir
+        ]);
+
+        // assert redirect to parent directory
+        $this->assertResponseRedirects('/filesystem?path=' . $parentDir);
+
+        // assert directory was deleted
+        $this->assertDirectoryDoesNotExist($tempDir);
+    }
+
+    /**
+     * Test get resource for non-existent file
+     *
+     * @return void
+     */
+    #[Group('file-system')]
+    public function testGetResourceNonExistentFile(): void
+    {
+        $nonExistentFile = '/tmp/non_existent_file_' . uniqid() . '.jpg';
+
+        // request resource for non-existent file
+        $this->client->request('GET', '/filesystem/get/resource', [
+            'path' => $nonExistentFile
+        ]);
+
+        // assert response is JSON error (400 Bad Request expected)
+        $this->assertResponseStatusCodeSame(JsonResponse::HTTP_BAD_REQUEST);
+        $response = $this->client->getResponse();
+        $this->assertInstanceOf(JsonResponse::class, $response);
     }
 }
