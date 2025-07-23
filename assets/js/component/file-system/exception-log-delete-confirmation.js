@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // handle cancel button click
     cancelDeleteButton.addEventListener('click', function () {
-        console.log('cancel delete')
         deletePopup.classList.add('hidden')
         fileToDelete = null
     })

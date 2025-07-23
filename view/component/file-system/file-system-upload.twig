@@ -1,0 +1,129 @@
+{% extends 'common/layout.twig' %}
+
+{# FILE SYSTEM BROWSER COMPONENT - UPLOAD FILES #}
+{% block component %}
+<div class="flex flex-col h-full">
+    {# SUB-NAVIGATION #}
+    <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <a href={{ path('app_file_system_browser', { 'path': currentPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to directory">
+                    <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
+                </a>
+                <div class="hidden sm:block">
+                    <h1 class="text-xm font-bold text-white">Upload Files</h1>
+                    <p class="text-gray-400 text-xs">Upload files to directory</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# MAIN CONTENT AREA #}
+    <div class="flex-1 flex flex-col min-h-0">
+        <div class="component">
+            {# FILESYSTEM PATH BREADCRUMB #}
+            <div class="px-1 py-2 border-b border-gray-700/30 bg-gray-800/30 overflow-x-auto">
+                <div class="flex items-center space-x-1 px-1 whitespace-nowrap">
+                    <i class="fas fa-folder-open text-blue-400 mr-1"></i>
+                    <div class="text-sm text-gray-100 flex items-center">
+                        {% set parts = currentPath|split('/') %}
+                        <a href={{ path('app_file_system_browser', { 'path': '/' }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">/base</a>
+                        {% set accumulatedPath = '' %}
+                        {% for part in parts %}
+                            {% if part is not empty %}
+                                {% set accumulatedPath = accumulatedPath ~ '/' ~ part %}
+                                <span class="text-gray-500 mx-0">/</span>
+                                <a href={{ path('app_file_system_browser', { 'path': accumulatedPath }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">{{ part }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {# FLASH MESSAGES #}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="mb-4 p-3 rounded {% if label == 'success' %}bg-green-500/20 text-green-300 border border-green-500/30{% else %}bg-red-500/20 text-red-300 border border-red-500/30{% endif %}">
+                        <i class="fas fa-{% if label == 'success' %}check-circle{% else %}exclamation-circle{% endif %} mr-2"></i>{{ message|e }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {# FILE UPLOAD FORM #}
+            <div class="p-6">
+                <form action={{ path('app_file_system_upload_save') }} method="post" enctype="multipart/form-data" class="space-y-2" id="upload-form">
+                    <input type="hidden" name="directory" value="{{ currentPath }}" id="directory-input">
+
+                    {# UPLOAD AREA #}
+                    <div class="border-2 border-dashed border-gray-600/50 rounded-lg p-8 text-center bg-gray-800/30 hover:bg-gray-800/50 transition-all duration-200" id="upload-area">
+                        <div class="space-y-4">
+                            <div class="flex justify-center">
+                                <div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-cloud-upload-alt text-blue-400 text-2xl"></i>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-medium text-white mb-2">Select Files to Upload</h3>
+                                <p class="text-gray-400 text-sm mb-4">Choose one or more files to upload to this directory</p>
+                            </div>
+
+                            {# FILE INPUT #}
+                            <div class="flex justify-center">
+                                <label class="cursor-pointer inline-flex items-center px-6 py-3 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 rounded border border-blue-500/30 transition-all duration-200" id="file-input-label">
+                                    <i class="fas fa-plus mr-3"></i>
+                                    <span>Choose Files</span>
+                                    <input type="file" name="files[]" multiple class="hidden" id="file-input" onchange="handleFileSelection(this)" required>
+                                </label>
+                            </div>
+
+                            {# SELECTED FILES LIST #}
+                            <div id="file-list" class="hidden mt-4">
+                                <h4 class="text-sm font-medium text-gray-300 mb-2">Selected Files:</h4>
+                                <div id="file-list-content" class="space-y-2 text-left max-h-64 overflow-y-auto pr-2" style="scrollbar-gutter: stable;"></div>
+                            </div>
+
+                            {# UPLOAD PROGRESS #}
+                            <div id="upload-progress" class="hidden mt-4">
+                                <h4 class="text-sm font-medium text-gray-300 mb-2">Upload Progress:</h4>
+                                <div id="progress-content" class="space-y-2"></div>
+                                <div class="mt-4">
+                                    <div class="bg-gray-700/50 rounded-full h-2">
+                                        <div id="overall-progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                                    </div>
+                                    <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                        <span id="progress-text">0% complete</span>
+                                        <span id="upload-speed"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {# FORM BUTTONS #}
+                        <div class="flex items-center justify-between gap-4 mt-2">
+                            <a href={{ path('app_file_system_browser', { 'path': currentPath }) }} class="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded border border-gray-600/30 transition-all duration-200 text-sm font-medium" id="cancel-button">
+                                <i class="fas fa-times text-xs"></i>
+                                <span>Cancel</span>
+                            </a>
+                            
+                            <button type="button" class="inline-flex items-center gap-2 px-6 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 rounded border border-blue-500/30 transition-all duration-200 text-sm font-medium" id="upload-button" disabled onclick="startUpload()">
+                                <i class="fas fa-upload text-xs"></i>
+                                <span>Upload Files</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// send upload configuration to JavaScript
+window.uploadConfig = {
+    chunkUploadUrl: '{{ path('app_file_system_upload_chunk') }}',
+    redirectUrl: '{{ path('app_file_system_browser', { 'path': currentPath }) }}'
+}
+</script>
+{# FILESYSTEM UPLOAD FUNCTIONS #}
+{{ encore_entry_script_tags('file-system-upload-js') }}
+{% endblock %}

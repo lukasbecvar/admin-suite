@@ -5,6 +5,7 @@ namespace App\Controller\Component;
 use Exception;
 use App\Manager\LogManager;
 use App\Util\FileSystemUtil;
+use App\Util\FileUploadUtil;
 use App\Manager\ErrorManager;
 use App\Annotation\Authorization;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,12 +27,18 @@ class FileSystemBrowserController extends AbstractController
     private LogManager $logManager;
     private ErrorManager $errorManager;
     private FileSystemUtil $fileSystemUtil;
+    private FileUploadUtil $fileUploadUtil;
 
-    public function __construct(LogManager $logManager, ErrorManager $errorManager, FileSystemUtil $fileSystemUtil)
-    {
+    public function __construct(
+        LogManager $logManager,
+        ErrorManager $errorManager,
+        FileSystemUtil $fileSystemUtil,
+        FileUploadUtil $fileUploadUtil
+    ) {
         $this->logManager = $logManager;
         $this->errorManager = $errorManager;
         $this->fileSystemUtil = $fileSystemUtil;
+        $this->fileUploadUtil = $fileUploadUtil;
     }
 
     /**
@@ -49,7 +56,7 @@ class FileSystemBrowserController extends AbstractController
         $path = (string) $request->query->get('path', '/');
 
         // check if path exists
-        if (!file_exists($path)) {
+        if (!$this->fileSystemUtil->checkIfFileExist($path)) {
             return $this->render('component/file-system/file-system-error.twig', [
                 'errorTitle' => 'Path Not Found',
                 'errorMessage' => 'The path you are trying to access does not exist.',
@@ -200,7 +207,7 @@ class FileSystemBrowserController extends AbstractController
         $path = (string) $request->query->get('path', '/');
 
         // ensure path is a directory
-        if (file_exists($path) && !is_dir($path)) {
+        if ($this->fileSystemUtil->checkIfFileExist($path) && !$this->fileSystemUtil->isPathDirectory($path)) {
             // if path is a file, use its directory
             $path = dirname($path);
         }
@@ -226,7 +233,7 @@ class FileSystemBrowserController extends AbstractController
         $path = (string) $request->query->get('path', '/');
 
         // ensure path is a directory
-        if (file_exists($path) && !is_dir($path)) {
+        if ($this->fileSystemUtil->checkIfFileExist($path) && !$this->fileSystemUtil->isPathDirectory($path)) {
             // if path is a file, use its directory
             $path = dirname($path);
         }
@@ -254,7 +261,7 @@ class FileSystemBrowserController extends AbstractController
         $content = (string) $request->request->get('content', '');
 
         // check if directory exists
-        if (!file_exists($directoryPath)) {
+        if (!$this->fileSystemUtil->checkIfFileExist($directoryPath)) {
             $this->errorManager->handleError(
                 message: 'directory does not exist: ' . $directoryPath,
                 code: Response::HTTP_BAD_REQUEST
@@ -290,7 +297,7 @@ class FileSystemBrowserController extends AbstractController
 
         try {
             // check if file already exists
-            if (file_exists($filePath)) {
+            if ($this->fileSystemUtil->checkIfFileExist($filePath)) {
                 // render error page instead of throwing an exception
                 return $this->render('component/file-system/file-system-error.twig', [
                     'errorTitle' => 'File Already Exists',
@@ -305,7 +312,7 @@ class FileSystemBrowserController extends AbstractController
 
             // ensure parent directory exists
             $parentDir = dirname($filePath);
-            if (!file_exists($parentDir)) {
+            if (!$this->fileSystemUtil->checkIfFileExist($parentDir)) {
                 $this->errorManager->handleError(
                     message: 'parent directory does not exist: ' . $parentDir,
                     code: Response::HTTP_BAD_REQUEST
@@ -384,7 +391,7 @@ class FileSystemBrowserController extends AbstractController
         $directoryName = (string) $request->request->get('directoryname', '');
 
         // check if parent directory exists
-        if (!file_exists($parentPath)) {
+        if (!$this->fileSystemUtil->checkIfFileExist($parentPath)) {
             $this->errorManager->handleError(
                 message: 'parent directory does not exist: ' . $parentPath,
                 code: Response::HTTP_BAD_REQUEST
@@ -420,7 +427,7 @@ class FileSystemBrowserController extends AbstractController
 
         try {
             // check if directory already exists
-            if (file_exists($directoryPath)) {
+            if ($this->fileSystemUtil->checkIfFileExist($directoryPath)) {
                 // render error page instead of throwing an exception
                 return $this->render('component/file-system/file-system-error.twig', [
                     'errorTitle' => 'Directory Already Exists',
@@ -479,7 +486,7 @@ class FileSystemBrowserController extends AbstractController
         $path = (string) $request->query->get('path', '/');
 
         // check if path exists
-        if (!file_exists($path)) {
+        if (!$this->fileSystemUtil->checkIfFileExist($path)) {
             $this->errorManager->handleError(
                 message: 'error renaming file: ' . $path . ' does not exist',
                 code: Response::HTTP_BAD_REQUEST
@@ -487,7 +494,7 @@ class FileSystemBrowserController extends AbstractController
         }
 
         // get current name and directory path
-        $isDirectory = is_dir($path);
+        $isDirectory = $this->fileSystemUtil->isPathDirectory($path);
         $directoryPath = dirname($path);
         if ($directoryPath === '.') {
             $directoryPath = '/';
@@ -521,7 +528,7 @@ class FileSystemBrowserController extends AbstractController
         $newName = (string) $request->request->get('newName', '');
 
         // additional validation for the old path
-        if (!file_exists($oldPath)) {
+        if (!$this->fileSystemUtil->checkIfFileExist($oldPath)) {
             $this->errorManager->handleError(
                 message: 'the file or directory to rename does not exist: ' . $oldPath,
                 code: Response::HTTP_BAD_REQUEST
@@ -581,7 +588,7 @@ class FileSystemBrowserController extends AbstractController
             );
 
             // add flash message
-            $this->addFlash('success', (is_dir($oldPath) ? 'Directory' : 'File') . ' renamed successfully');
+            $this->addFlash('success', ($this->fileSystemUtil->isPathDirectory($oldPath) ? 'Directory' : 'File') . ' renamed successfully');
 
             // redirect to directory
             return $this->redirectToRoute('app_file_system_browser', ['path' => $directoryPath]);
@@ -609,7 +616,7 @@ class FileSystemBrowserController extends AbstractController
     }
 
     /**
-     * Get media file resource
+     * Get media file resource with Range support
      *
      * @param Request $request The request object
      *
@@ -634,38 +641,91 @@ class FileSystemBrowserController extends AbstractController
                 ], Response::HTTP_BAD_REQUEST);
             }
 
-            // get resource content
-            $resourceData = $this->fileSystemUtil->getFileContent($path);
-            $resourceContent = $resourceData['content'];
+            // get file size
+            $fileSize = filesize($path);
+            if ($fileSize === false) {
+                return $this->json([
+                    'status' => 'error',
+                    'message' => 'Cannot determine file size'
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
 
             // log file access
             $this->logManager->log(
                 name: 'file-browser',
-                message: 'file: ' . $path . ' was accessed',
+                message: 'file: ' . $path . ' was accessed as media resource',
                 level: LogManager::LEVEL_INFO
             );
 
-            // check if file content is empty
-            if ($resourceContent == null) {
-                return $this->json([
-                    'status' => 'error',
-                    'message' => 'The resource content is null'
-                ], Response::HTTP_BAD_REQUEST);
+            // handle range requests for video/audio streaming
+            $rangeHeader = $request->headers->get('Range');
+            $start = 0;
+            $end = $fileSize - 1;
+            $length = $fileSize;
+            $statusCode = Response::HTTP_OK;
+
+            if ($rangeHeader) {
+                // parse range header (e.g., "bytes=0-1023", "bytes=1024-", "bytes=-1024")
+                if (preg_match('/bytes=(\d*)-(\d*)/', $rangeHeader, $matches)) {
+                    $rangeStart = $matches[1];
+                    $rangeEnd = $matches[2];
+
+                    // handle different range formats
+                    if ($rangeStart !== '' && $rangeEnd !== '') {
+                        // bytes=start-end
+                        $start = (int) $rangeStart;
+                        $end = (int) $rangeEnd;
+                    } elseif ($rangeStart !== '' && $rangeEnd === '') {
+                        // bytes=start- (from start to end of file)
+                        $start = (int) $rangeStart;
+                        $end = $fileSize - 1;
+                    } elseif ($rangeStart === '' && $rangeEnd !== '') {
+                        // bytes=-end (last N bytes)
+                        $start = $fileSize - (int) $rangeEnd;
+                        $end = $fileSize - 1;
+                    }
+
+                    // validate and fix range bounds
+                    $start = max(0, min($start, $fileSize - 1));
+                    $end = max($start, min($end, $fileSize - 1));
+
+                    $length = $end - $start + 1;
+                    $statusCode = Response::HTTP_PARTIAL_CONTENT;
+                }
             }
 
-            // create a streamed response file content
-            $response = new StreamedResponse(function () use ($resourceContent) {
-                echo $resourceContent;
-            });
+            // create streamed response with range support
+            $response = new StreamedResponse(function () use ($path, $start, $length) {
+                $this->fileUploadUtil->streamFileRange($path, $start, $length);
+            }, $statusCode);
 
-            // set response headers
+            // set essential headers for video streaming
             $response->headers->set('Content-Type', $mediaType);
-            $response->headers->set('Content-Disposition', 'inline; filename="' . $path . '"');
-            $response->headers->set('Cache-Control', 'public, max-age=3600');
             $response->headers->set('Accept-Ranges', 'bytes');
-            $response->headers->set('Content-Length', (string) strlen($resourceContent));
+            $response->headers->set('Content-Length', (string) $length);
 
-            // return file content response
+            // better cache headers for video streaming
+            $response->headers->set('Cache-Control', 'public, max-age=3600'); // cache for 1 hour
+            $response->headers->set('Expires', gmdate('D, d M Y H:i:s', time() + 3600) . ' GMT');
+
+            // add ETag for better caching
+            $etag = md5($path . filemtime($path) . $fileSize);
+            $response->headers->set('ETag', '"' . $etag . '"');
+
+            // add Last-Modified header
+            $lastModTime = filemtime($path);
+            if ($lastModTime !== false) {
+                $response->headers->set('Last-Modified', gmdate('D, d M Y H:i:s', $lastModTime) . ' GMT');
+            }
+
+            if ($statusCode === Response::HTTP_PARTIAL_CONTENT) {
+                $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
+            }
+
+            // set filename for inline display
+            $filename = basename($path);
+            $response->headers->set('Content-Disposition', 'inline; filename="' . $filename . '"');
+
             return $response;
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -831,7 +891,7 @@ class FileSystemBrowserController extends AbstractController
         $path = (string) $request->request->get('path', '/');
 
         // additional validation for the path
-        if (!file_exists($path)) {
+        if (!$this->fileSystemUtil->checkIfFileExist($path)) {
             $this->errorManager->handleError(
                 message: 'the file or directory to delete does not exist: ' . $path,
                 code: Response::HTTP_BAD_REQUEST
@@ -864,7 +924,7 @@ class FileSystemBrowserController extends AbstractController
             );
 
             // add flash message
-            $this->addFlash('success', (is_dir($path) ? 'Directory' : 'File') . ' deleted successfully');
+            $this->addFlash('success', ($this->fileSystemUtil->isPathDirectory($path) ? 'Directory' : 'File') . ' deleted successfully');
 
             // redirect to directory
             return $this->redirectToRoute('app_file_system_browser', ['path' => $directoryPath]);
@@ -891,7 +951,7 @@ class FileSystemBrowserController extends AbstractController
         $path = (string) $request->query->get('path', '/');
 
         // check if path exists
-        if (!file_exists($path)) {
+        if (!$this->fileSystemUtil->checkIfFileExist($path)) {
             $this->errorManager->handleError(
                 message: 'error moving file: ' . $path . ' does not exist',
                 code: Response::HTTP_BAD_REQUEST
@@ -899,7 +959,7 @@ class FileSystemBrowserController extends AbstractController
         }
 
         // get current name and directory path
-        $isDirectory = is_dir($path);
+        $isDirectory = $this->fileSystemUtil->isPathDirectory($path);
         $directoryPath = dirname($path);
         if ($directoryPath === '.') {
             $directoryPath = '/';
@@ -920,7 +980,7 @@ class FileSystemBrowserController extends AbstractController
         // add common directories
         $commonDirs = ['/var', '/var/www', '/var/www/html', '/home', '/tmp', '/opt'];
         foreach ($commonDirs as $dir) {
-            if (file_exists($dir) && is_dir($dir) && $dir !== $path && !str_starts_with($path, $dir . '/')) {
+            if ($this->fileSystemUtil->checkIfFileExist($dir) && $this->fileSystemUtil->isPathDirectory($dir) && $dir !== $path && !str_starts_with($path, $dir . '/')) {
                 $availableFolders[] = [
                     'path' => $dir,
                     'displayPath' => $dir
@@ -970,7 +1030,7 @@ class FileSystemBrowserController extends AbstractController
         }
 
         // additional validation for the source path
-        if (!file_exists($sourcePath)) {
+        if (!$this->fileSystemUtil->checkIfFileExist($sourcePath)) {
             $this->errorManager->handleError(
                 message: 'the file or directory to move does not exist: ' . $sourcePath,
                 code: Response::HTTP_BAD_REQUEST
@@ -996,7 +1056,7 @@ class FileSystemBrowserController extends AbstractController
             }
 
             // check if destination path exists and is a directory
-            if (!file_exists($destinationPath) || !is_dir($destinationPath)) {
+            if (!$this->fileSystemUtil->checkIfFileExist($destinationPath) || !$this->fileSystemUtil->isPathDirectory($destinationPath)) {
                 // render error page instead of throwing an exception
                 return $this->render('component/file-system/file-system-error.twig', [
                     'errorTitle' => 'Invalid Destination',
@@ -1039,7 +1099,7 @@ class FileSystemBrowserController extends AbstractController
             );
 
             // add flash message
-            $this->addFlash('success', (is_dir($destinationPath . '/' . $basename) ? 'Directory' : 'File') . ' moved successfully');
+            $this->addFlash('success', ($this->fileSystemUtil->isPathDirectory($destinationPath . '/' . $basename) ? 'Directory' : 'File') . ' moved successfully');
 
             // redirect to destination directory
             return $this->redirectToRoute('app_file_system_browser', ['path' => $destinationPath]);
@@ -1072,6 +1132,370 @@ class FileSystemBrowserController extends AbstractController
             // handle other errors
             $this->errorManager->handleError(
                 message: 'error moving file or directory: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Download file
+     *
+     * @param Request $request The request object
+     *
+     * @return StreamedResponse The file download response
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/filesystem/download', methods:['GET'], name: 'app_file_system_download')]
+    public function filesystemDownload(Request $request): StreamedResponse
+    {
+        // get file path
+        $path = (string) $request->query->get('path', '/');
+
+        try {
+            // check if path exists
+            if (!$this->fileSystemUtil->checkIfFileExist($path)) {
+                $this->errorManager->handleError(
+                    message: 'file does not exist: ' . $path,
+                    code: Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // get file size
+            $fileSize = filesize($path);
+            if ($fileSize === false) {
+                $this->errorManager->handleError(
+                    message: 'cannot determine file size: ' . $path,
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+
+            // get filename for download
+            $filename = basename($path);
+
+            // detect media type for proper content-type header
+            $mediaType = $this->fileSystemUtil->detectMediaType($path);
+            if ($mediaType === 'non-mediafile') {
+                $mediaType = 'application/octet-stream';
+            }
+
+            // log file download
+            $this->logManager->log(
+                name: 'file-browser',
+                message: 'file: ' . $path . ' was downloaded',
+                level: LogManager::LEVEL_INFO
+            );
+
+            // create streamed response for file download with chunked streaming
+            $response = new StreamedResponse(function () use ($path, $fileSize) {
+                $this->fileUploadUtil->streamFileRange($path, 0, $fileSize);
+            });
+
+            // set response headers for download
+            $response->headers->set('Content-Type', $mediaType);
+            $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+            $response->headers->set('Content-Length', (string) $fileSize);
+            $response->headers->set('Cache-Control', 'no-cache, must-revalidate');
+            $response->headers->set('Pragma', 'no-cache');
+            $response->headers->set('Expires', '0');
+
+            return $response;
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error downloading file: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Render file upload component
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The file upload view response
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/filesystem/upload', methods:['GET'], name: 'app_file_system_upload')]
+    public function filesystemUpload(Request $request): Response
+    {
+        // get directory path
+        $path = (string) $request->query->get('path', '/');
+
+        // ensure path is a directory
+        if ($this->fileSystemUtil->checkIfFileExist($path) && !$this->fileSystemUtil->isPathDirectory($path)) {
+            // if path is a file, use its directory
+            $path = dirname($path);
+        }
+
+        // check if directory exists
+        if (!$this->fileSystemUtil->checkIfFileExist($path)) {
+            return $this->render('component/file-system/file-system-error.twig', [
+                'errorTitle' => 'Directory Not Found',
+                'errorMessage' => 'The directory you are trying to upload to does not exist.',
+                'details' => 'Path: ' . $path,
+                'returnPath' => '/',
+                'actionPath' => null,
+                'actionText' => null,
+                'actionIcon' => null
+            ]);
+        }
+
+        // render file upload view
+        return $this->render('component/file-system/file-system-upload.twig', [
+            'currentPath' => $path
+        ]);
+    }
+
+    /**
+     * Process chunked file upload
+     *
+     * @param Request $request The request object
+     *
+     * @return JsonResponse The upload status response
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/filesystem/upload/chunk', methods:['POST'], name: 'app_file_system_upload_chunk')]
+    public function filesystemUploadChunk(Request $request): JsonResponse
+    {
+        try {
+            // get request parameters
+            $directoryPath = (string) $request->request->get('directory', '/');
+            $filename = (string) $request->request->get('filename', '');
+            $chunkIndex = (int) $request->request->get('chunkIndex', 0);
+            $totalChunks = (int) $request->request->get('totalChunks', 1);
+            $fileId = (string) $request->request->get('fileId', '');
+
+            // validate parameters
+            if (empty($filename) || empty($fileId)) {
+                return $this->json([
+                    'success' => false,
+                    'error' => 'Missing required parameters'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            // check if directory exists
+            if (!$this->fileSystemUtil->checkIfFileExist($directoryPath) || !$this->fileSystemUtil->isPathDirectory($directoryPath)) {
+                return $this->json([
+                    'success' => false,
+                    'error' => 'Directory does not exist: ' . $directoryPath
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            // validate filename
+            if (str_contains($filename, '/') || strlen($filename) > 255) {
+                return $this->json([
+                    'success' => false,
+                    'error' => 'Invalid filename'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            // get uploaded chunk
+            $uploadedFile = $request->files->get('chunk');
+            if (!$uploadedFile) {
+                return $this->json([
+                    'success' => false,
+                    'error' => 'No chunk data received'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            // create temp directory for chunks
+            $tempDir = sys_get_temp_dir() . '/admin_suite_upload_' . $fileId;
+            if (!$this->fileSystemUtil->isPathDirectory($tempDir)) {
+                mkdir($tempDir, 0755, true);
+            }
+
+            // save chunk to temp file
+            $uploadedFile->move($tempDir, 'chunk_' . $chunkIndex);
+
+            // check if all chunks are uploaded
+            $uploadedChunks = glob($tempDir . '/chunk_*');
+
+            // check if glob returned false
+            if ($uploadedChunks === false) {
+                return $this->json([
+                    'success' => false,
+                    'error' => 'Failed to check uploaded chunks'
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            if (count($uploadedChunks) === $totalChunks) {
+                // combine all chunks
+                $targetPath = rtrim($directoryPath, '/') . '/' . $filename;
+
+                // check if file already exists
+                if ($this->fileSystemUtil->checkIfFileExist($targetPath)) {
+                    // cleanup temp directory
+                    $this->fileUploadUtil->cleanupTempDirectory($tempDir);
+                    return $this->json([
+                        'success' => false,
+                        'error' => 'File already exists: ' . $filename
+                    ], Response::HTTP_CONFLICT);
+                }
+
+                // combine chunks into final file
+                $result = $this->fileUploadUtil->combineChunks($tempDir, $targetPath, $totalChunks);
+
+                if ($result) {
+                    // log file upload
+                    $this->logManager->log(
+                        name: 'file-browser',
+                        message: 'file: ' . $targetPath . ' was uploaded via chunked upload',
+                        level: LogManager::LEVEL_INFO
+                    );
+
+                    // cleanup temp directory
+                    $this->fileUploadUtil->cleanupTempDirectory($tempDir);
+
+                    // return success response
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'File uploaded successfully',
+                        'filename' => $filename
+                    ]);
+                } else {
+                    // cleanup temp directory
+                    $this->fileUploadUtil->cleanupTempDirectory($tempDir);
+                    return $this->json([
+                        'success' => false,
+                        'error' => 'Failed to combine chunks'
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+            }
+
+            // return progress status
+            return $this->json([
+                'success' => true,
+                'progress' => round((count($uploadedChunks) / $totalChunks) * 100, 2),
+                'chunksUploaded' => count($uploadedChunks),
+                'totalChunks' => $totalChunks
+            ]);
+        } catch (Exception $e) {
+            return $this->json([
+                'success' => false,
+                'error' => 'Upload error: ' . $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Process file upload (fallback for non-JS clients)
+     *
+     * @param Request $request The request object
+     *
+     * @return Response The redirect response
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/filesystem/upload/save', methods:['POST'], name: 'app_file_system_upload_save')]
+    public function filesystemUploadSave(Request $request): Response
+    {
+        // get directory path
+        $directoryPath = (string) $request->request->get('directory', '/');
+
+        // check if directory exists
+        if (!$this->fileSystemUtil->checkIfFileExist($directoryPath)) {
+            $this->errorManager->handleError(
+                message: 'directory does not exist: ' . $directoryPath,
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check if directory is writable
+        if (!$this->fileSystemUtil->isPathDirectory($directoryPath)) {
+            $this->errorManager->handleError(
+                message: 'path is not a directory: ' . $directoryPath,
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        try {
+            // get uploaded files
+            $uploadedFiles = $request->files->get('files', []);
+
+            // check if files were uploaded
+            if (empty($uploadedFiles)) {
+                $this->addFlash('error', 'No files were selected for upload');
+                return $this->redirectToRoute('app_file_system_upload', ['path' => $directoryPath]);
+            }
+
+            $uploadedCount = 0;
+            $errors = [];
+
+            // process each uploaded file
+            foreach ($uploadedFiles as $uploadedFile) {
+                if ($uploadedFile === null) {
+                    continue;
+                }
+
+                // get original filename
+                $originalFilename = $uploadedFile->getClientOriginalName();
+                if (empty($originalFilename)) {
+                    $errors[] = 'File with empty name was skipped';
+                    continue;
+                }
+
+                // validate filename
+                if (str_contains($originalFilename, '/')) {
+                    $errors[] = 'File "' . $originalFilename . '" contains invalid characters';
+                    continue;
+                }
+
+                // check filename length
+                if (strlen($originalFilename) > 255) {
+                    $errors[] = 'File "' . $originalFilename . '" name is too long (max 255 characters)';
+                    continue;
+                }
+
+                // build target file path
+                $targetPath = rtrim($directoryPath, '/') . '/' . $originalFilename;
+
+                // check if file already exists
+                if ($this->fileSystemUtil->checkIfFileExist($targetPath)) {
+                    $errors[] = 'File "' . $originalFilename . '" already exists';
+                    continue;
+                }
+
+                // get file content
+                $fileContent = file_get_contents($uploadedFile->getPathname());
+                if ($fileContent === false) {
+                    $errors[] = 'Failed to read content of file "' . $originalFilename . '"';
+                    continue;
+                }
+
+                // save file
+                $result = $this->fileSystemUtil->saveFileContent($targetPath, $fileContent);
+
+                // check if save was successful
+                if ($result) {
+                    $uploadedCount++;
+
+                    // log file upload
+                    $this->logManager->log(
+                        name: 'file-browser',
+                        message: 'file: ' . $targetPath . ' was uploaded',
+                        level: LogManager::LEVEL_INFO
+                    );
+                } else {
+                    $errors[] = 'Failed to save file "' . $originalFilename . '"';
+                }
+            }
+
+            // add flash messages
+            if ($uploadedCount > 0) {
+                $this->addFlash('success', $uploadedCount . ' file(s) uploaded successfully');
+            }
+
+            // show errors as flash messages
+            if (!empty($errors)) {
+                foreach ($errors as $error) {
+                    $this->addFlash('error', $error);
+                }
+            }
+
+            // redirect back to directory view
+            return $this->redirectToRoute('app_file_system_browser', ['path' => $directoryPath]);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error uploading files: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

@@ -1,23 +1,23 @@
 /** file-system syntax highlighting functionality */
 document.addEventListener('DOMContentLoaded', function() {
     // import highlight.js core
-    const hljs = require('highlight.js/lib/core');
+    const hljs = require('highlight.js/lib/core')
 
     // import common languages
-    hljs.registerLanguage('bash', require('highlight.js/lib/languages/bash'));
-    hljs.registerLanguage('xml', require('highlight.js/lib/languages/xml'));
-    hljs.registerLanguage('css', require('highlight.js/lib/languages/css'));
-    hljs.registerLanguage('javascript', require('highlight.js/lib/languages/javascript'));
-    hljs.registerLanguage('json', require('highlight.js/lib/languages/json'));
-    hljs.registerLanguage('markdown', require('highlight.js/lib/languages/markdown'));
-    hljs.registerLanguage('php', require('highlight.js/lib/languages/php'));
-    hljs.registerLanguage('python', require('highlight.js/lib/languages/python'));
-    hljs.registerLanguage('sql', require('highlight.js/lib/languages/sql'));
-    hljs.registerLanguage('yaml', require('highlight.js/lib/languages/yaml'));
-    hljs.registerLanguage('ini', require('highlight.js/lib/languages/ini'));
-    hljs.registerLanguage('nginx', require('highlight.js/lib/languages/nginx'));
-    hljs.registerLanguage('apache', require('highlight.js/lib/languages/apache'));
-    hljs.registerLanguage('dockerfile', require('highlight.js/lib/languages/dockerfile'));
+    hljs.registerLanguage('xml', require('highlight.js/lib/languages/xml'))
+    hljs.registerLanguage('css', require('highlight.js/lib/languages/css'))
+    hljs.registerLanguage('php', require('highlight.js/lib/languages/php'))
+    hljs.registerLanguage('sql', require('highlight.js/lib/languages/sql'))
+    hljs.registerLanguage('ini', require('highlight.js/lib/languages/ini'))
+    hljs.registerLanguage('bash', require('highlight.js/lib/languages/bash'))
+    hljs.registerLanguage('json', require('highlight.js/lib/languages/json'))
+    hljs.registerLanguage('yaml', require('highlight.js/lib/languages/yaml'))
+    hljs.registerLanguage('nginx', require('highlight.js/lib/languages/nginx'))
+    hljs.registerLanguage('apache', require('highlight.js/lib/languages/apache'))
+    hljs.registerLanguage('python', require('highlight.js/lib/languages/python'))
+    hljs.registerLanguage('markdown', require('highlight.js/lib/languages/markdown'))
+    hljs.registerLanguage('javascript', require('highlight.js/lib/languages/javascript'))
+    hljs.registerLanguage('dockerfile', require('highlight.js/lib/languages/dockerfile'))
 
     // register custom language for logs and general text files
     hljs.registerLanguage('general-log', function() {
@@ -75,49 +75,49 @@ document.addEventListener('DOMContentLoaded', function() {
                     begin: /(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/
                 }
             ]
-        };
-    });
+        }
+    })
 
     // get element containing file content
-    const codeElement = document.querySelector('pre.file-content');
+    const codeElement = document.querySelector('pre.file-content')
 
     if (codeElement) {
         // get file path from data attribute
-        const filePath = codeElement.getAttribute('data-path');
+        const filePath = codeElement.getAttribute('data-path')
 
         if (filePath) {
             // detect language based on file extension
-            const language = detectLanguage(filePath);
+            const language = detectLanguage(filePath)
 
             if (language) {
                 // add language class to the pre element
-                codeElement.classList.add(`language-${language}`);
+                codeElement.classList.add(`language-${language}`)
 
                 // apply syntax highlighting
-                hljs.highlightElement(codeElement);
+                hljs.highlightElement(codeElement)
             } else {
                 // apply general log highlighting for files without a specific language
-                applyGeneralHighlighting(codeElement);
+                applyGeneralHighlighting(codeElement)
             }
         } else {
             // apply general log highlighting if no file path is available
-            applyGeneralHighlighting(codeElement);
+            applyGeneralHighlighting(codeElement)
         }
     }
 
     // apply general highlighting to a code element
     function applyGeneralHighlighting(element) {
         // add general-log class
-        element.classList.add('language-general-log');
+        element.classList.add('language-general-log')
 
         // apply highlighting
-        hljs.highlightElement(element);
+        hljs.highlightElement(element)
     }
 
     // detect language based on file extension
     function detectLanguage(filePath) {
         // extract file extension
-        const extension = filePath.split('.').pop().toLowerCase();
+        const extension = filePath.split('.').pop().toLowerCase()
 
         // map file extensions to highlight.js languages
         const extensionMap = {
@@ -168,15 +168,15 @@ document.addEventListener('DOMContentLoaded', function() {
             'sql': 'sql',
             'go': 'go',
             'c': 'c'
-        };
+        }
 
         // check if the extension is in the map
         if (extension in extensionMap) {
-            return extensionMap[extension];
+            return extensionMap[extension]
         }
 
         // check for special filenames without extensions
-        const fileName = filePath.split('/').pop().toLowerCase();
+        const fileName = filePath.split('/').pop().toLowerCase()
         const specialFiles = {
             'docker-compose.yaml': 'yaml',
             'docker-compose.yml': 'yaml',
@@ -187,10 +187,10 @@ document.addEventListener('DOMContentLoaded', function() {
             '.editorconfig': 'ini',
             '.gitignore': 'bash',
             '.env': 'bash'
-        };
+        }
 
         if (fileName in specialFiles) {
-            return specialFiles[fileName];
+            return specialFiles[fileName]
         }
 
         // check for common log file patterns in the filename
@@ -201,10 +201,10 @@ document.addEventListener('DOMContentLoaded', function() {
             fileName.includes('journal') ||
             fileName.includes('syslog') ||
             fileName.includes('messages')) {
-            return 'general-log';
+            return 'general-log'
         }
 
         // no matching language found
-        return null;
+        return null
     }
-});
+})

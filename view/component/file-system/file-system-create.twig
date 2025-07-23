@@ -22,10 +22,9 @@
     <div class="flex-1 flex flex-col min-h-0">
         <div class="component flex flex-col h-full">
             {# FILESYSTEM PATH BREADCRUMB #}
-            <div class="px-2 py-3 border-b border-gray-700/30 bg-gray-800/30">
+            <div class="px-1 py-2 border-b border-gray-700/30 bg-gray-800/30">
                 <div class="flex items-center space-x-1 px-1">
                     <i class="fas fa-file text-blue-400 mr-1"></i>
-                    <span class="text-sm font-medium text-gray-300">Path:</span>
                     <div class="text-sm text-gray-100 flex items-center">
                         {% set parts = currentPath|split('/') %}
                         <a href={{ path('app_file_system_browser', { 'path': '/' }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">/base</a>
@@ -55,7 +54,7 @@
                 <input type="hidden" name="directory" value="{{ currentPath }}">
 
                 {# FILENAME INPUT BAR #}
-                <div class="px-2 py-3 border-b border-gray-700/30 bg-gray-800/30">
+                <div class="px-2 py-2 border-b border-gray-700/30 bg-gray-800/30 overflow-x-auto">
                     <div class="flex items-center justify-between gap-4">
                         <div class="flex items-center gap-3 flex-1">
                             <div class="w-8 h-8 bg-blue-500/20 rounded flex items-center justify-center">

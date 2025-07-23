@@ -37,9 +37,19 @@ class EscapeRequestDataMiddleware
 
         // excluded controller paths from escaping
         if (
+            // database console controller
             $request->getPathInfo() == $this->urlGenerator->generate('app_manager_database_console') ||
+
+            // file system controllers
             $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_create_save') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_edit')
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_upload_save') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_upload_chunk') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_get_resource') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_download') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_delete') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_save') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_edit') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_view')
         ) {
             return;
         }

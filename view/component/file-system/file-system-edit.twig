@@ -22,10 +22,9 @@
     <div class="flex-1 flex flex-col min-h-0">
         <div class="component flex flex-col h-full">
             {# FILESYSTEM PATH BREADCRUMB #}
-            <div class="px-2 py-3 border-b border-gray-700/30 bg-gray-800/30">
+            <div class="px-1 py-2 border-b border-gray-700/30 bg-gray-800/30">
                 <div class="flex items-center space-x-1 px-1">
                     <i class="fas fa-file-code text-blue-400 mr-1"></i>
-                    <span class="text-sm font-medium text-gray-300">Path:</span>
                     <div class="text-sm text-gray-100 flex items-center">
                         {% set parts = currentPath|split('/') %}
                         <a href={{ path('app_file_system_browser', { 'path': '/' }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">/base</a>
@@ -47,10 +46,10 @@
 
             {# FILE EDITOR FORM #}
             <form action={{ path('app_file_system_save') }} method="post" class="flex flex-col flex-1">
-                <input type="hidden" name="path" value={{ currentPath|e }}>
+                <input type="hidden" name="path" value="{{ currentPath|e }}">
 
                 {# EDITOR HEADER BAR #}
-                <div class="px-2 py-3 border-b border-gray-700/30 bg-gray-800/30">
+                <div class="px-2 py-2 border-b border-gray-700/30 bg-gray-800/30">
                     <div class="flex items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-green-500/20 rounded flex items-center justify-center">
@@ -58,7 +57,7 @@
                             </div>
                             <div>
                                 <h2 class="text-lg font-semibold text-white">Editing: {{ parts|last }}</h2>
-                                <p class="text-gray-400 text-xs">Use Ctrl+S to save changes</p>
+                                <p class="text-gray-400 text-xs">Use Ctrl+S to save</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
@@ -76,13 +75,7 @@
 
                 {# EDITOR TEXTAREA #}
                 <div class="flex-1 relative overflow-hidden">
-                    <textarea
-                        name="content"
-                        id="editor"
-                        class="w-full h-full bg-gray-900/30 text-sm text-green-400 font-mono p-4 border-none outline-none resize-none file-content-container"
-                        spellcheck="false"
-                        wrap="off"
-                    >{{ fileContent|raw }}</textarea>
+                    <textarea name="content" id="editor" class="w-full h-full bg-gray-900/30 text-sm text-green-400 font-mono p-4 border-none outline-none resize-none file-content-container" spellcheck="false" wrap="off">{{ fileContent|raw }}</textarea>
                 </div>
             </form>
         </div>

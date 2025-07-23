@@ -29,6 +29,48 @@ class FileSystemUtilTest extends TestCase
     }
 
     /**
+     * Test check if file exists
+     *
+     * @return void
+     */
+    public function testCheckIfFileExist(): void
+    {
+        // create temporary text file
+        $textFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($textFile, 'Test content');
+
+        // test existing file
+        $this->assertTrue($this->fileSystemUtil->checkIfFileExist($textFile));
+
+        // test non-existent file
+        $this->assertFalse($this->fileSystemUtil->checkIfFileExist('/non/existent/file'));
+
+        // clean up
+        unlink($textFile);
+    }
+
+    /**
+     * Test is path directory
+     *
+     * @return void
+     */
+    public function testIsPathDirectory(): void
+    {
+        // create temporary directory
+        $tempDir = sys_get_temp_dir() . '/test_dir_' . uniqid();
+        mkdir($tempDir);
+
+        // test directory
+        $this->assertTrue($this->fileSystemUtil->isPathDirectory($tempDir));
+
+        // test non-directory
+        $this->assertFalse($this->fileSystemUtil->isPathDirectory('/etc/os-release'));
+
+        // clean up
+        rmdir($tempDir);
+    }
+
+    /**
      * Test get file list
      *
      * @return void
@@ -307,27 +349,6 @@ class FileSystemUtilTest extends TestCase
 
         // assert result
         $this->assertEquals($content, $result);
-
-        // clean up
-        unlink($textFile);
-    }
-
-    /**
-     * Test check if file exists
-     *
-     * @return void
-     */
-    public function testCheckIfFileExist(): void
-    {
-        // create temporary text file
-        $textFile = tempnam(sys_get_temp_dir(), 'test_');
-        file_put_contents($textFile, 'Test content');
-
-        // test existing file
-        $this->assertTrue($this->fileSystemUtil->checkIfFileExist($textFile));
-
-        // test non-existent file
-        $this->assertFalse($this->fileSystemUtil->checkIfFileExist('/non/existent/file'));
 
         // clean up
         unlink($textFile);

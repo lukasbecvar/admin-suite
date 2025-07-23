@@ -38,6 +38,11 @@
             </div>
 
             <div class="flex items-center gap-2">
+                {# DOWNLOAD BUTTON #}
+                <a href={{ path('app_file_system_download', { 'path': currentPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" id="loading-blocker" title="Download this file">
+                    <i class="fas fa-download text-gray-300 text-xs"></i>
+                </a>
+
                 {# EDIT BUTTON (only for non-media files) #}
                 {% if mediaType == 'non-mediafile' or mediaType == null %}
                     <a href={{ path('app_file_system_edit', { 'path': currentPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-blue-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Edit this file">
@@ -57,7 +62,7 @@
                         <i class="fas fa-trash text-gray-300 text-xs"></i>
                     </button>
                 {% else %}
-                    <button class="delete-file-button w-8 h-8 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" data-path={{ currentPath }} data-is-dir="false" title="Delete this file">
+                    <button class="delete-file-button w-8 h-8 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" data-path="{{ currentPath }}" data-is-dir="false" title="Delete this file">
                         <i class="fas fa-trash text-gray-300 text-xs"></i>
                     </button>
                 {% endif %}
@@ -69,10 +74,9 @@
     <div class="flex-1 flex flex-col min-h-0">
         <div class="component">
             {# FILESYSTEM PATH BREADCRUMB #}
-            <div class="px-2 py-3 border-b border-gray-700/30 bg-gray-800/30 overflow-x-auto">
+            <div class="px-1 py-2 border-b border-gray-700/30 bg-gray-800/30 overflow-x-auto">
                 <div class="flex items-center space-x-1 px-1 whitespace-nowrap">
                     <i class="fas fa-file text-blue-400 mr-1"></i>
-                    <span class="text-sm font-medium text-gray-300 phn:hidden">Path:</span>
                     <div class="text-sm text-gray-100 flex items-center">
                         {% set parts = currentPath|split('/') %}
                         <a href={{ path('app_file_system_browser', { 'path': '/' }) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200">/base</a>
@@ -153,6 +157,33 @@
                 </div>
             {% endif %}
 
+            {# MEDIA FILE METADATA #}
+            {% if mediaType and mediaType != 'non-mediafile' and fileMetadata is defined and fileMetadata is not null %}
+                <div class="px-2 py-3 border-b border-gray-700/30">
+                    <div class="flex flex-wrap justify-between items-center text-sm">
+                        <div class="flex items-center space-x-6">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-weight text-gray-400"></i>
+                                <span class="text-gray-400">Size:</span>
+                                <span class="text-white font-medium">{{ fileMetadata.formattedSize }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-file-alt text-gray-400"></i>
+                                <span class="text-gray-400">Type:</span>
+                                <span class="text-white font-medium">{{ mediaType }}</span>
+                            </div>
+                            {% if mediaType starts with 'image/' %}
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-expand-arrows-alt text-gray-400"></i>
+                                    <span class="text-gray-400">Dimensions:</span>
+                                    <span class="text-white font-medium" id="file-dimensions">Loading...</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             {# FILE CONTENT VIEW #}
             <div class="flex-1 overflow-auto min-h-0">
                 {# RAW FILE CONTENT VIEW #}
@@ -161,29 +192,151 @@
                         <pre class="text-sm p-4 text-green-400 file-content bg-gray-900/30 w-full" data-path="{{ currentPath }}">{{ fileContent|e }}</pre>
                     </div>
                 {% else %}
-                    <div class="p-4 flex items-center justify-center">
-                        {# IMAGE #}
+                    {# MEDIA FILE VIEWER #}
+                    <div class="flex-1 flex flex-col">
+                        {# IMAGE VIEWER #}
                         {% if mediaType starts with 'image/' %}
-                            <div class="flex justify-center items-center w-full h-auto">
-                                <img src={{ path('app_file_system_get_resource', { 'path': currentPath }) }}
-                                    alt={{ currentPath|e }}
-                                    class="max-w-full max-h-[500px] shadow-lg rounded object-contain border border-gray-600/30">
+                            <div class="flex-1 flex flex-col bg-gray-900/20">
+                                {# IMAGE CONTROLS BAR #}
+                                <div class="px-2 py-1 border-b border-gray-700/30 bg-gray-800/30">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-4">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-image text-blue-400"></i>
+                                                <span class="text-sm font-medium text-gray-300">Image Viewer</span>
+                                            </div>
+                                            <div class="text-xs text-gray-400" id="image-info">
+                                                Loading...
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <button onclick="resetImageZoom()" class="px-3 py-1 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded text-xs border border-gray-600/30 transition-all duration-200 phone-none">
+                                                <i class="fas fa-search-minus mr-1"></i>
+                                                Reset
+                                            </button>
+                                            <button onclick="toggleImageFullscreen()" class="px-3 py-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 rounded text-xs border border-blue-500/30 transition-all duration-200">
+                                                <i class="fas fa-expand mr-1"></i>
+                                                Fullscreen
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {# IMAGE CONTAINER #}
+                                <div class="p-4 overflow-hidden relative" id="image-container">
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <img src={{ path('app_file_system_get_resource', { 'path': currentPath }) }}
+                                            alt={{ currentPath|e }}
+                                            id="main-image"
+                                            class="max-w-full max-h-full object-contain shadow-2xl rounded-lg border border-gray-600/30 cursor-zoom-in transition-transform duration-200"
+                                            onload="updateImageInfo(this)">
+                                    </div>
+
+                                    {# LOADING SPINNER #}
+                                    <div id="image-loading" class="absolute inset-0 flex items-center justify-center bg-gray-800/50 rounded-lg">
+                                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+                                    </div>
+                                </div>
                             </div>
-                        {# VIDEO #}
+
+                        {# VIDEO VIEWER #}
                         {% elseif mediaType starts with 'video/' %}
-                            <div class="flex justify-center items-center w-full h-auto">
-                                <video controls class="max-w-full max-h-[500px] shadow-lg rounded object-contain border border-gray-600/30">
-                                    <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
-                                    Your browser does not support the video tag.
-                                </video>
+                            <div class="flex-1 flex flex-col bg-gray-900/20">
+                                {# VIDEO CONTROLS BAR #}
+                                <div class="px-2 py-1 border-b border-gray-700/30 bg-gray-800/30">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-4">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-video text-purple-400"></i>
+                                                <span class="text-sm font-medium text-gray-300">Video Player</span>
+                                            </div>
+                                            <div class="text-xs text-gray-400" id="video-info">
+                                                {{ mediaType }}
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <button onclick="toggleVideoFullscreen()" class="px-3 py-1 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 hover:text-purple-200 rounded text-xs border border-purple-500/30 transition-all duration-200">
+                                                <i class="fas fa-expand mr-1"></i>
+                                                Fullscreen
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {# VIDEO CONTAINER #}
+                                <div class="flex-1 flex items-center justify-center p-6">
+                                    <div class="w-full max-w-6xl">
+                                        <video id="main-video" controls preload="metadata"
+                                               class="w-full shadow-2xl rounded-lg border border-gray-600/30 bg-black"
+                                               onloadedmetadata="updateVideoInfo(this)"
+                                               onerror="handleVideoError(this)"
+                                               onwaiting="handleVideoWaiting(this)"
+                                               oncanplay="handleVideoCanPlay(this)"
+                                               onstalled="handleVideoStalled(this)">
+                                            <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
+                                            <div class="p-4 text-center text-gray-400">
+                                                <i class="fas fa-exclamation-triangle mb-2"></i>
+                                                <p>Your browser does not support the video tag.</p>
+                                            </div>
+                                        </video>
+
+                                        {# VIDEO STATUS INDICATOR #}
+                                        <div id="video-status" class="hidden mt-2 text-center text-sm">
+                                            <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-800/50 rounded">
+                                                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-400"></div>
+                                                <span class="text-gray-300">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        {# AUDIO #}
+
+                        {# AUDIO VIEWER #}
                         {% elseif mediaType starts with 'audio/' %}
-                            <div class="w-full max-w-md">
-                                <audio controls class="w-full shadow-lg rounded border border-gray-600/30">
-                                    <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
-                                    Your browser does not support the audio tag.
-                                </audio>
+                            <div class="flex-1 flex flex-col bg-gray-900/20">
+                                {# AUDIO CONTROLS BAR #}
+                                <div class="px-2 py-1 border-b border-gray-700/30 bg-gray-800/30">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-4">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-music text-green-400"></i>
+                                                <span class="text-sm font-medium text-gray-300">Audio Player</span>
+                                            </div>
+                                            <div class="text-xs text-gray-400" id="audio-info">
+                                                {{ mediaType }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {# AUDIO CONTAINER #}
+                                <div class="flex-1 flex items-center justify-center p-6">
+                                    <div class="w-full max-w-2xl">
+                                        {# AUDIO VISUALIZER PLACEHOLDER #}
+                                        <div class="bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-lg p-8 mb-6 border border-gray-600/30">
+                                            <div class="flex items-center justify-center mb-4">
+                                                <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-music text-green-400 text-2xl"></i>
+                                                </div>
+                                            </div>
+                                            <div class="text-center">
+                                                <h3 class="text-lg font-medium text-white mb-2">{{ currentPath|split('/')|last }}</h3>
+                                                <p class="text-gray-400 text-sm" id="audio-duration">Loading...</p>
+                                            </div>
+                                        </div>
+
+                                        {# AUDIO PLAYER #}
+                                        <audio id="main-audio" controls preload="metadata"
+                                               class="w-full shadow-lg rounded-lg border border-gray-600/30"
+                                               onloadedmetadata="updateAudioInfo(this)">
+                                            <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
+                                            <div class="p-4 text-center text-gray-400">
+                                                <i class="fas fa-exclamation-triangle mb-2"></i>
+                                                <p>Your browser does not support the audio tag.</p>
+                                            </div>
+                                        </audio>
+                                    </div>
+                                </div>
                             </div>
                         {% endif %}
                     </div>
@@ -205,5 +358,10 @@
 
 {# SYNTAX HIGHLIGHTING #}
 {{ encore_entry_script_tags('file-system-syntax-highlight-js') }}
+
+{# MEDIA VIEWER FUNCTIONALITY #}
+{% if mediaType and mediaType != 'non-mediafile' %}
+    {{ encore_entry_script_tags('file-system-media-viewer-js') }}
+{% endif %}
 
 {% endblock %}

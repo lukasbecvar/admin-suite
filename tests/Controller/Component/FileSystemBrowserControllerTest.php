@@ -6,6 +6,7 @@ use App\Tests\CustomTestCase;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Class FileSystemBrowserControllerTest
@@ -40,7 +41,6 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'Filesystem');
         $this->assertSelectorExists('a[href="/dashboard"]');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
-        $this->assertSelectorTextContains('body', 'Path');
         $this->assertSelectorExists('a[href="/filesystem?path=/"]');
         $this->assertSelectorTextContains('body', 'Name');
         $this->assertSelectorTextContains('body', 'Size');
@@ -66,7 +66,6 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorExists('a[href="/filesystem/edit?path=/usr/lib/os-release"]');
         $this->assertSelectorExists('a[title="Edit this file"]');
         $this->assertSelectorTextContains('body', 'os-release');
-        $this->assertSelectorTextContains('body', 'Path');
         $this->assertSelectorExists('pre');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -85,7 +84,6 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorExists('a[href="/filesystem/view?path=/usr/lib/os-release"]');
         $this->assertSelectorExists('a[title="Back to file view"]');
         $this->assertSelectorTextContains('body', 'File Editor');
-        $this->assertSelectorTextContains('body', 'Path');
         $this->assertSelectorExists('form[action="/filesystem/save"]');
         $this->assertSelectorExists('textarea[id="editor"]');
         $this->assertSelectorExists('button[type="submit"]');
@@ -132,7 +130,6 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorExists('a[href="/filesystem?path=/tmp"]');
         $this->assertSelectorExists('a[title="Back to directory"]');
         $this->assertSelectorTextContains('body', 'Create File');
-        $this->assertSelectorTextContains('body', 'Path:');
         $this->assertSelectorExists('form[action="/filesystem/create/save"]');
         $this->assertSelectorExists('input[id="filename"]');
         $this->assertSelectorExists('label[for="filename"]');
@@ -381,5 +378,21 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // clean up
         rmdir($newPath);
+    }
+
+    /**
+     * Test load file upload page
+     *
+     * @return void
+     */
+    public function testLoadFileUploadPage(): void
+    {
+        $this->client->request('GET', '/filesystem/upload?path=/tmp');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('h1', 'Upload Files');
+        $this->assertSelectorTextContains('body', 'Select Files to Upload');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

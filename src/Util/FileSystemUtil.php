@@ -41,6 +41,24 @@ class FileSystemUtil
     }
 
     /**
+     * Check if path is a directory
+     *
+     * @param string $path The path to check
+     *
+     * @return bool True if the path is a directory, false otherwise
+     */
+    public function isPathDirectory(string $path): bool
+    {
+        // use shell to check if path is a directory
+        $escapedPath = escapeshellarg($path);
+        $cmd = "sudo test -d $escapedPath";
+
+        // check exit status of the shell command
+        exec($cmd, $output, $exitCode);
+        return $exitCode === 0;
+    }
+
+    /**
      * Get list of files and directories in the specified path
      *
      * @param string $path The path to list files and directories
@@ -175,7 +193,7 @@ class FileSystemUtil
         }
 
         // check if path is directory
-        if (is_dir($path) || is_link($path)) {
+        if ($this->isPathDirectory($path) || is_link($path)) {
             return false;
         }
 
@@ -235,7 +253,7 @@ class FileSystemUtil
         }
 
         // check if path is a directory or symbolic link
-        if (is_dir($path) || is_link($path)) {
+        if ($this->isPathDirectory($path) || is_link($path)) {
             return 'non-mediafile';
         }
 
@@ -279,7 +297,7 @@ class FileSystemUtil
     {
         try {
             // check if path is directory
-            if (is_dir($path) || is_link($path)) {
+            if ($this->isPathDirectory($path) || is_link($path)) {
                 $this->errorManager->handleError(
                     message: 'error opening file: ' . $path . ' is a directory or a link',
                     code: Response::HTTP_BAD_REQUEST
@@ -412,7 +430,7 @@ class FileSystemUtil
     {
         try {
             // check if path is directory
-            if (is_dir($path) || is_link($path)) {
+            if ($this->isPathDirectory($path) || is_link($path)) {
                 $this->errorManager->handleError(
                     message: 'error saving file: ' . $path . ' is a directory or a link',
                     code: Response::HTTP_BAD_REQUEST
@@ -531,7 +549,7 @@ class FileSystemUtil
         }
 
         // check if path is directory or link
-        if (is_dir($path) || is_link($path)) {
+        if ($this->isPathDirectory($path) || is_link($path)) {
             return false;
         }
 
@@ -601,7 +619,7 @@ class FileSystemUtil
             }
 
             // check if path is a directory
-            if (is_dir($path)) {
+            if ($this->isPathDirectory($path)) {
                 // always use rm -rf for directories (empty or not)
                 $command = 'sudo rm -rf ' . escapeshellarg($path);
             } else {
@@ -728,7 +746,7 @@ class FileSystemUtil
     {
         try {
             // check if path is directory
-            if (is_dir($path) || is_link($path)) {
+            if ($this->isPathDirectory($path) || is_link($path)) {
                 $this->errorManager->handleError(
                     message: 'error opening file: ' . $path . ' is a directory or a link',
                     code: Response::HTTP_BAD_REQUEST
@@ -767,7 +785,7 @@ class FileSystemUtil
     {
         try {
             // check if path exists and is a directory
-            if (!file_exists($path) || !is_dir($path)) {
+            if (!file_exists($path) || !$this->isPathDirectory($path)) {
                 return 0;
             }
 
@@ -837,7 +855,7 @@ class FileSystemUtil
             }
 
             // check if destination path exists and is a directory
-            if (!file_exists($destinationPath) || !is_dir($destinationPath)) {
+            if (!file_exists($destinationPath) || !$this->isPathDirectory($destinationPath)) {
                 $this->errorManager->handleError(
                     message: 'Error moving file: Destination ' . $destinationPath . ' is not a valid directory',
                     code: Response::HTTP_BAD_REQUEST
@@ -860,7 +878,7 @@ class FileSystemUtil
             }
 
             // check if source is a subdirectory of destination (for directories)
-            if (is_dir($sourcePath) && strpos($destinationPath, $sourcePath . '/') === 0) {
+            if ($this->isPathDirectory($sourcePath) && strpos($destinationPath, $sourcePath . '/') === 0) {
                 throw new Exception('Cannot move a directory into its own subdirectory');
             }
 

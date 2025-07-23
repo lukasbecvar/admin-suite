@@ -192,7 +192,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             commandInput.focus()
                         }
                     } else {
-                        console.log(xhr.responseText)
                         terminal.innerHTML += '<div class="text-yellow-400">Error communicating with the API.</div>'
                         
                         // focus on the command input

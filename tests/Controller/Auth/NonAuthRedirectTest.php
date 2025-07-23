@@ -104,11 +104,15 @@ class NonAuthRedirectTest extends WebTestCase
             ['method' => 'POST', 'url' => '/filesystem/save'],
             ['method' => 'GET', 'url' => '/filesystem/create'],
             ['method' => 'GET', 'url' => '/filesystem/rename'],
+            ['method' => 'GET', 'url' => '/filesystem/upload'],
             ['method' => 'POST', 'url' => '/filesystem/delete'],
+            ['method' => 'GET', 'url' => '/filesystem/download'],
             ['method' => 'POST', 'url' => '/filesystem/move/save'],
             ['method' => 'POST', 'url' => '/filesystem/rename/save'],
             ['method' => 'POST', 'url' => '/filesystem/create/save'],
-            ['method' => 'GET', 'url' => '/filesystem/get/resource']
+            ['method' => 'GET', 'url' => '/filesystem/get/resource'],
+            ['method' => 'POST', 'url' => '/filesystem/upload/save'],
+            ['method' => 'POST', 'url' => '/filesystem/upload/chunk']
         ],
         'terminal' => [
             ['method' => 'GET', 'url' => '/terminal']
