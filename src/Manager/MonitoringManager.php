@@ -708,9 +708,10 @@ class MonitoringManager
                                 // handle error
                                 $errorMessage = 'error to get metrics from ' . $service['metrics_monitoring']['metrics_collector_url'];
                                 $io->error($errorMessage);
-                                $this->errorManager->logError(
+                                $this->logManager->log(
+                                    name: 'monitoring',
                                     message: $errorMessage,
-                                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                                    level: LogManager::LEVEL_WARNING
                                 );
                             } else {
                                 // collect service metrics
