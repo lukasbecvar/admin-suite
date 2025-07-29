@@ -95,6 +95,19 @@
             "metrics_collector_url": "https://paste.becvar.xyz/metrics/export?time_period=H"
         }
     },
+    "passgen.becvar.xyz": {
+        "service_name": "passgen.becvar.xyz",
+        "display_name": "password-and-hash-generator",
+        "url": "https://passgen.becvar.xyz",
+        "accept_codes": [200],
+        "max_response_time": 3000,
+        "type": "http",
+        "monitoring": true,
+        "display": true,
+        "metrics_monitoring": {
+            "collect_metrics": false
+        }
+    },
     "admin-suite": {
         "service_name": "admin-suite",
         "display_name": "admin-suite",
