@@ -43,16 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     foreColor: '#9ca3af',
                     toolbar: {
                         show: true,
-                        offsetX: -10,
-                        offsetY: 0,
                         tools: {
-                            download: false,
-                            selection: false,
-                            zoom: false,
-                            zoomin: true,
-                            zoomout: true,
                             pan: false,
-                            reset: true
+                            reset: true,
+                            zoomin: false,
+                            zoomout: false,
+                            selection: true,
+                            download: false,
                         }
                     },
                     zoom: {
@@ -63,39 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         zoomedArea: {
                             fill: {
                                 color: '#60a5fa',
-                                opacity: 0.1
+                                opacity: 0.9
                             },
                             stroke: {
                                 color: '#60a5fa',
-                                opacity: 0.6,
+                                opacity: 0.8,
                                 width: 1
-                            }
-                        }
-                    },
-                    selection: {
-                        enabled: true,
-                        type: 'x',
-                        fill: {
-                            color: '#60a5fa',
-                            opacity: 0.1
-                        },
-                        stroke: {
-                            width: 1,
-                            color: '#60a5fa',
-                            opacity: 0.6,
-                            dashArray: 3
-                        }
-                    },
-                    events: {
-                        selection: function(chartContext, { xaxis, yaxis }) {
-                            // automatically zoom to selected area
-                            if (xaxis && xaxis.min !== undefined && xaxis.max !== undefined) {
-                                chartContext.updateOptions({
-                                    xaxis: {
-                                        min: xaxis.min,
-                                        max: xaxis.max
-                                    }
-                                }, false, true, false)
                             }
                         }
                     },

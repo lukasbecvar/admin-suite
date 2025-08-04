@@ -45,6 +45,11 @@ main {
 	text-decoration: underline;
 }
 
+/* fix profiler toolbar position */
+.sf-toolbar {
+	position: absolute !important;
+}
+
 /* auth component style */
 .auth-component {
 	background: transparent;
@@ -677,22 +682,10 @@ input[class*="bg-gray-900/50"]:-moz-autofill {
 	overflow: visible !important;
 }
 
-.metrics-component .chart-container .apexcharts-canvas,
-.metrics-component .chart-container .apexcharts-svg,
-.metrics-component .chart-container .apexcharts-inner,
-.metrics-component .chart-container .apexcharts-graphical,
-.metrics-component .chart-container div {
-	margin: 0 !important;
-	padding: 0 !important;
-	border: none !important;
-	display: block !important;
-}
-
 .metrics-component .chart-container svg {
 	margin: 0 !important;
 	padding: 0 !important;
 	display: block !important;
-	vertical-align: top !important;
 }
 
 .metrics-component .apexcharts-toolbar {

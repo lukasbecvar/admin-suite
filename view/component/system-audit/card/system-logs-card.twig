@@ -5,8 +5,8 @@
             System Logs
         </h3>
     </div>
-    <div class="overflow-y-auto max-h-[320px] custom-scrollbar p-2">
-        <div class="space-y-2">
+    <div class="overflow-y-auto max-h-[320px] custom-scrollbar p-1">
+        <div class="space-y-1">
             {% for logFile in logFiles %}
                 <a href={{ path('app_file_system_view', { path: logFile.path, referer: 'app_system_audit' }) }} class="block p-3 bg-gray-700/30 hover:bg-gray-700/50 rounded transition-colors duration-200 text-white">
                     <div class="flex items-center">

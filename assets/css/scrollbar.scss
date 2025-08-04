@@ -21,11 +21,11 @@
 	transition: all 0.3s ease;
 	border: 2px solid #1f2937;
 	-webkit-transition: all 0.3s ease;
-	background: linear-gradient(135deg, #6b7280, #4b5563);
+	background: linear-gradient(135deg, #4b5563, #4b5563);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: linear-gradient(135deg, #9ca3af, #6b7280);
+	background: linear-gradient(135deg, #6b7280, #6b7280);
 	transform: scale(1.1);
 }
 
