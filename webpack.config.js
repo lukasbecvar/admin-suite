@@ -65,7 +65,7 @@ Encore
                         extend: {
                             screens: {
                                 'phn': '340px',
-                                'xs': { max: "265px" },
+                                'xs': { max: "220px" },
                                 'short': { raw: "(max-height: 160px)" }
                             },
 
