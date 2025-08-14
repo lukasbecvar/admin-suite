@@ -48,17 +48,16 @@
             {# MENU ITEMS #}
             {% set menuItems = [
                 {'route': 'app_dashboard', 'icon': 'fas fa-desktop', 'label': 'Dashboard'},
-                {'route': 'app_manager_logs', 'icon': 'fas fa-list', 'label': 'Logs'},
-                {'route': 'app_manager_database', 'icon': 'fas fa-database', 'label': 'Database'},
-                {'route': 'app_metrics_dashboard', 'icon': 'fas fa-chart-line', 'label': 'Metrics'},
                 {'route': 'app_manager_monitoring', 'icon': 'fa fa-briefcase-medical', 'label': 'Monitoring'},
+                {'route': 'app_metrics_dashboard', 'icon': 'fas fa-chart-line', 'label': 'Metrics'},
+                {'route': 'app_manager_database', 'icon': 'fas fa-database', 'label': 'Database'},
+                {'route': 'app_manager_logs', 'icon': 'fas fa-list', 'label': 'Logs'},
                 {'route': 'app_file_system_browser', 'icon': 'fas fa-file-export', 'label': 'Filesystem'},
                 {'route': 'app_terminal', 'icon': 'fas fa-terminal', 'label': 'Terminal'},
                 {'route': 'app_diagnostic', 'icon': 'fas fa-check', 'label': 'Diagnostics'},
                 {'route': 'app_system_audit', 'icon': 'fas fa-columns', 'label': 'System audit'},
                 {'route': 'app_todo_manager', 'icon': 'fas fa-tasks', 'label': 'Todos'},
-                {'route': 'app_manager_users', 'icon': 'fas fa-users', 'label': 'Users'},
-                {'route': 'app_account_settings_table', 'icon': 'fas fa-user-cog', 'label': 'Account settings'}
+                {'route': 'app_manager_users', 'icon': 'fas fa-users', 'label': 'Users manager'}
             ] %}
 
             {% for item in menuItems %}

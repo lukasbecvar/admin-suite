@@ -1,0 +1,42 @@
+{% extends "common/layout.twig" %}
+
+{# SETTINGS SELECTOR COMPONENT #}
+{% block component %}
+{# SUB-NAVIGATION #}
+<div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
+	<div class="flex items-center justify-between gap-2">
+		<div class="flex items-center gap-3">
+			<a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+				<i class="fas fa-arrow-left text-gray-300 text-xs"></i>
+			</a>
+			<div class="hidden sm:block">
+				<h1 class="text-xm font-bold text-white">Settings</h1>
+				<p class="text-gray-400 text-xs">Select settings category</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+{# SETTINGS CATEGORY SELECTOR #}
+<div class="sm:p-6">
+	<div class="w-full max-w-4xl mx-auto">
+	    <div class="backdrop-blur-md bg-gray-800/50 sm:border-t sm:border-l sm:border-r border-gray-700/50 sm:rounded shadow-xl text-white w-full overflow-hidden">
+            {# LINK TO ACCOUNT SETTINGS #}
+			<a href={{ path('app_account_settings_table') }} class="block w-full p-4 transition-all duration-200 hover:bg-gray-700/40 border-b border-gray-700/50">
+				<div class="flex items-center justify-between">
+					<div class="flex items-center gap-3">
+						<div class="w-8 h-8 bg-blue-500/20 rounded flex items-center justify-center">
+							<i class="fas fa-user-circle text-blue-400 text-sm"></i>
+						</div>
+						<div>
+							<div class="text-white font-medium text-sm">Account Settings</div>
+							<div class="text-gray-400 text-xs">Manage your account preferences and security</div>
+						</div>
+					</div>
+					<i class="fas fa-chevron-right text-gray-500 text-sm"></i>
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
+{% endblock %}

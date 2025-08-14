@@ -38,6 +38,8 @@ class DashboardControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('button[id="menu-toggle"]');
         $this->assertSelectorExists('a[title="Logout user"]');
+        $this->assertSelectorExists('a[href="/settings"]');
+        $this->assertSelectorExists('a[href="/about"]');
         $this->assertSelectorExists('a[href="/logout"]');
         $this->assertSelectorExists('aside[id="sidebar"]');
         $this->assertSelectorExists('img[alt="profile picture"]');
@@ -53,7 +55,6 @@ class DashboardControllerTest extends CustomTestCase
         $this->assertSelectorExists('a[href="/terminal"]');
         $this->assertSelectorExists('a[href="/manager/todo"]');
         $this->assertSelectorExists('a[href="/manager/users"]');
-        $this->assertSelectorExists('a[href="/account/settings"]');
         $this->assertSelectorExists('main[id="main-content"]');
         $this->assertSelectorTextContains('body', 'Diagnostic Alerts');
         $this->assertSelectorTextContains('body', 'Process List');
