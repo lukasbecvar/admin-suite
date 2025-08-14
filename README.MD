@@ -101,12 +101,12 @@ The environment variables are loaded from .env file. You can create .env file in
 | PUSH_NOTIFICATIONS_VAPID_PRIVATE_KEY | Private key for push notifications | 12938747T6T6R236 |
 #### Suite configuration
 The default admin suite configuration is stored in json files in config/suite directory. You can create your own configuration files in app root and override default configuration.
-* config/suite/blocked-usernames.json - list of blocked usernames
-* config/suite/exceptions-monitoring.json - list of paths to exception log files
-* config/suite/package-requirements.json - list of packages and php extensions to be installed
-* config/suite/services-monitoring.json - list of services to be monitored
-* config/suite/terminal-aliases.json - list of terminal aliases
-* config/suite/terminal-blocked-commands.json - list of blocked terminal commands
+* ``config/suite/blocked-usernames.json`` - list of blocked usernames
+* ``config/suite/exceptions-monitoring.json`` - list of paths to exception log files
+* ``config/suite/package-requirements.json`` - list of packages and php extensions to be installed
+* ``config/suite/services-monitoring.json`` - list of services to be monitored
+* ``config/suite/terminal-aliases.json`` - list of terminal aliases
+* ``config/suite/terminal-blocked-commands.json`` - list of blocked terminal commands
 
 ## Authentication
 Authentication uses a completely custom user system with a username and password, managed by the application user manager. Only the first user can use the registration form to create admin user. Login uses standard PHP session and cookie for the 'remember me' feature.
