@@ -28,7 +28,7 @@ services:
 
     # database container
     mysql:
-        image: mysql:latest
+        image: mysql:8.0.43
         container_name: admin_suite_mysql
         restart: always
         environment:

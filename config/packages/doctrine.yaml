@@ -10,7 +10,7 @@ doctrine:
 
         # server configuration
         charset: utf8mb4
-        server_version: '8.0.31'
+        server_version: '%env(DATABASE_VERSION)%'
         profiling_collect_backtrace: '%kernel.debug%'
     orm:
         auto_generate_proxy_classes: true
