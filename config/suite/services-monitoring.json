@@ -104,7 +104,7 @@
             "collect_metrics": false,
             "metrics_collector_url": "https://paste.becvar.xyz/metrics/export?time_period=H"
         },
-        "exception_file": "/services/website/admin-suite/var/log/exception.log"
+        "exception_file": "/services/website/code-paste/var/log/exception.log"
     },
     "passgen.becvar.xyz": {
         "service_name": "passgen.becvar.xyz",
