@@ -7,6 +7,7 @@ use App\Util\AppUtil;
 use App\Util\CacheUtil;
 use App\Util\ExportUtil;
 use App\Manager\LogManager;
+use App\Util\FileSystemUtil;
 use App\Manager\ErrorManager;
 use App\Manager\MetricsManager;
 use App\Manager\ServiceManager;
@@ -33,6 +34,7 @@ class MonitoringManagerController extends AbstractController
     private ExportUtil $exportUtil;
     private LogManager $logManager;
     private ErrorManager $errorManager;
+    private FileSystemUtil $fileSystemUtil;
     private MetricsManager $metricsManager;
     private ServiceManager $serviceManager;
     private DatabaseManager $databaseManager;
@@ -44,6 +46,7 @@ class MonitoringManagerController extends AbstractController
         ExportUtil $exportUtil,
         LogManager $logManager,
         ErrorManager $errorManager,
+        FileSystemUtil $fileSystemUtil,
         MetricsManager $metricsManager,
         ServiceManager $serviceManager,
         DatabaseManager $databaseManager,
@@ -54,6 +57,7 @@ class MonitoringManagerController extends AbstractController
         $this->exportUtil = $exportUtil;
         $this->logManager = $logManager;
         $this->errorManager = $errorManager;
+        $this->fileSystemUtil = $fileSystemUtil;
         $this->metricsManager = $metricsManager;
         $this->serviceManager = $serviceManager;
         $this->databaseManager = $databaseManager;
@@ -188,11 +192,9 @@ class MonitoringManagerController extends AbstractController
                 $serviceSlaHistory = $slaHistory[$serviceName];
             }
 
-            // get metrics data if available
+            // check if service has metrics
             $metricsData = null;
             $hasMetrics = false;
-
-            // check if service has metrics
             if ($serviceConfig['type'] === 'http' && isset($serviceConfig['metrics_monitoring']) && $serviceConfig['metrics_monitoring']['collect_metrics']) {
                 try {
                     // get metrics data
@@ -206,24 +208,34 @@ class MonitoringManagerController extends AbstractController
                 }
             }
 
-            // return service details view
-            return $this->render('component/monitoring-manager/monitoring-service-detail.twig', [
-                'serviceName' => $serviceName,
-                'serviceConfig' => $serviceConfig,
-                'serviceStatus' => $serviceStatus,
-                'monitoringStatus' => $monitoringStatus,
-                'slaHistory' => $serviceSlaHistory,
-                'serviceManager' => $this->serviceManager,
-                'metricsData' => $metricsData,
-                'hasMetrics' => $hasMetrics,
-                'timePeriod' => $timePeriod
-            ]);
+            // check if service has detected exception file
+            $exceptionFilePath = null;
+            if ($serviceConfig['type'] === 'http' && isset($serviceConfig['exception_file']) && $serviceConfig['exception_file'] != '') {
+                $exceptionFile = $serviceConfig['exception_file'];
+                if ($this->fileSystemUtil->checkIfFileExist($exceptionFile)) {
+                    $exceptionFilePath = $exceptionFile;
+                }
+            }
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error getting service details: ' . $e->getMessage(),
                 code: $e->getCode()
             );
         }
+
+        // return service details view
+        return $this->render('component/monitoring-manager/monitoring-service-detail.twig', [
+            'serviceName' => $serviceName,
+            'serviceConfig' => $serviceConfig,
+            'serviceStatus' => $serviceStatus,
+            'monitoringStatus' => $monitoringStatus,
+            'exceptionFilePath' => $exceptionFilePath,
+            'slaHistory' => $serviceSlaHistory,
+            'serviceManager' => $this->serviceManager,
+            'metricsData' => $metricsData,
+            'hasMetrics' => $hasMetrics,
+            'timePeriod' => $timePeriod
+        ]);
     }
 
     /**

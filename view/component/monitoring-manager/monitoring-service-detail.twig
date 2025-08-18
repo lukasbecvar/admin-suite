@@ -139,6 +139,27 @@
                     </div>
                 </div>
 
+                {# DETECTED EXCEPTION FILE CARD #}
+                {% if exceptionFilePath %}
+                    <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
+                        <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center">
+                            <div class="w-8 h-8 bg-red-500/20 rounded flex items-center justify-center mr-2">
+                                <i class="fas fa-exclamation-triangle text-red-400 text-sm"></i>
+                            </div>
+                            <span>Detected Exception File</span>
+                        </div>
+                        {# LINK TO EXCEPTION FILE #}
+                        <div class="p-1 overflow-y-auto max-h-[400px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+                            <a href={{ path('app_file_system_view', {'path': exceptionFilePath, 'referer': 'monitoring_service_detail'}) }} class="flex items-center gap-2 bg-gray-700/10 border border-gray-600/40 rounded p-2 text-sm hover:bg-gray-700/50 transition mb-1 mt-[4px] mr-[2px] ml-[2px]">
+                                <div class="w-6 h-6 bg-gray-700/10 rounded flex items-center justify-center">
+                                    <i class="fas fa-file text-blue-400 text-xs"></i>
+                                </div>
+                                <span class="text-red-300 font-medium">{{ exceptionFilePath|e }}</span>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+
                 {# CONFIG FILES CARD #}
                 {% if serviceConfig.config_files is defined and serviceConfig.config_files|length > 0 %}
                     <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden transition-all duration-300">
