@@ -52,15 +52,6 @@ class RequirementsCheckCommand extends Command
             $io->error('The following requirements are not installed: ' . implode(', ', $notInstalledRequirements));
         }
 
-        // exception files config file exist check
-        if (file_exists(__DIR__ . '/../../exceptions-monitoring.json')) {
-            $io->success('exception files config file found in /exceptions-monitoring.json');
-        } elseif (file_exists(__DIR__ . '/../../config/suite/exceptions-monitoring.json')) {
-            $io->success('exception files config file found in /config/suite/exceptions-monitoring.json');
-        } else {
-            $io->error('exceptions-monitoring.json config file not found');
-        }
-
         // package requirements config file exist check
         if (file_exists(__DIR__ . '/../../package-requirements.json')) {
             $io->success('requirements config file found in /package-requirements.json');

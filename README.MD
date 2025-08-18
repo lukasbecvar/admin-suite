@@ -102,7 +102,6 @@ The environment variables are loaded from .env file. You can create .env file in
 #### Suite configuration
 The default admin suite configuration is stored in json files in config/suite directory. You can create your own configuration files in app root and override default configuration.
 * ``config/suite/blocked-usernames.json`` - list of blocked usernames
-* ``config/suite/exceptions-monitoring.json`` - list of paths to exception log files
 * ``config/suite/package-requirements.json`` - list of packages and php extensions to be installed
 * ``config/suite/services-monitoring.json`` - list of services to be monitored
 * ``config/suite/terminal-aliases.json`` - list of terminal aliases
@@ -114,8 +113,6 @@ Authentication uses a completely custom user system with a username and password
 ## Monitoring
 #### Services monitoring
 HTTP and systemd services monitoring is ensured by a console command (infinite loop) ``console app:monitoring:process``. This command needs to be run as a service, and the monitored services should be defined in the services config file in config/suite/services-monitoring.json. it is necessary to set the monitoring interval and the SMTP server or push notifications in the environment variables for sending alerts. The status and monitoring data can then be viewed in the web dashboard page.
-#### Exceptions monitoring
-In config exceptions-monitoring.json it is possible to set paths to exception files and track exceptions from your applications via log manager
 #### Metrics
 The metrics component stores data during the monitoring process, so its function requires the monitoring process to be running. The metrics store average usage values for CPU, RAM, and storage during the interval set in ``.env`` as ``METRICS_SAVE_INTERVAL``.
 #### Metrics Collector for HTTP services

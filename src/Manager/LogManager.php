@@ -435,21 +435,27 @@ class LogManager
         $files = [];
 
         try {
-            /** @var array<string,array<string,string>> $exceptionFiles list of exception files */
-            $exceptionFiles = $this->appUtil->loadConfig('exceptions-monitoring.json');
+            /** @var array<string,array<string,mixed>> $services list of services */
+            $services = $this->appUtil->loadConfig('services-monitoring.json');
 
-            // check if exception files config is array
-            if (!is_array($exceptionFiles)) {
+            // check if services config is array
+            if (!is_array($services)) {
                 $this->errorManager->handleError(
-                    message: 'error to get exception files: exception files config is not an array',
+                    message: 'error to get exception files: services config is not an array',
                     code: Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
 
-            // check if exception files exist and add them to the files array
-            foreach ($exceptionFiles as $exceptionFile) {
-                if (file_exists($exceptionFile['path'])) {
-                    $files[$exceptionFile['name']] = $exceptionFile;
+            // iterate services and collect exception files
+            foreach ($services as $service) {
+                if (isset($service['exception_file']) && is_string($service['exception_file'])) {
+                    $path = $service['exception_file'];
+                    if ($this->fileSystemUtil->checkIfFileExist($path)) {
+                        $files[$service['service_name']] = [
+                            'name' => $service['service_name'],
+                            'path' => $path,
+                        ];
+                    }
                 }
             }
         } catch (Exception $e) {

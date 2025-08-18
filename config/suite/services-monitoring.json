@@ -10,16 +10,14 @@
             "/etc/ssh/sshd_config"
         ]
     },
-    "apache2": {
-        "service_name": "apache2",
-        "display_name": "Apache2",
+    "openvpn": {
+        "service_name": "openvpn",
+        "display_name": "OpenVPN",
         "type": "systemd",
         "monitoring": true,
         "display": true,
         "config_files": [
-            "/etc/apache2/sites-available/default-suite.conf",
-            "/lib/systemd/system/apache2.service",
-            "/etc/apache2/apache2.conf"
+            "/etc/openvpn/server.conf"
         ]
     },
     "mysql": {
@@ -32,14 +30,16 @@
             "/etc/mysql/mysql.conf.d/mysqld.cnf"
         ]
     },
-    "openvpn": {
-        "service_name": "openvpn",
-        "display_name": "OpenVPN",
+    "apache2": {
+        "service_name": "apache2",
+        "display_name": "Apache2",
         "type": "systemd",
         "monitoring": true,
         "display": true,
         "config_files": [
-            "/etc/openvpn/server.conf"
+            "/etc/apache2/sites-available/default-suite.conf",
+            "/lib/systemd/system/apache2.service",
+            "/etc/apache2/apache2.conf"
         ]
     },
     "admin-suite-monitoring": {
@@ -65,48 +65,8 @@
         "metrics_monitoring": {
             "collect_metrics": true,
             "metrics_collector_url": "https://becvar.xyz/metrics/export?time_period=H"
-        }
-    },
-    "pied-piper.xyz": {
-        "service_name": "pied-piper.xyz",
-        "display_name": "pied-piper.xyz",
-        "url": "https://pied-piper.xyz",
-        "accept_codes": [200],
-        "max_response_time": 3000,
-        "type": "http",
-        "monitoring": true,
-        "display": true,
-        "metrics_monitoring": {
-            "collect_metrics": false,
-            "metrics_collector_url": ""
-        }
-    },
-    "paste.becvar.xyz": {
-        "service_name": "paste.becvar.xyz",
-        "display_name": "code-paste",
-        "url": "https://paste.becvar.xyz",
-        "accept_codes": [200],
-        "max_response_time": 3000,
-        "type": "http",
-        "monitoring": true,
-        "display": true,
-        "metrics_monitoring": {
-            "collect_metrics": false,
-            "metrics_collector_url": "https://paste.becvar.xyz/metrics/export?time_period=H"
-        }
-    },
-    "passgen.becvar.xyz": {
-        "service_name": "passgen.becvar.xyz",
-        "display_name": "password-and-hash-generator",
-        "url": "https://passgen.becvar.xyz",
-        "accept_codes": [200],
-        "max_response_time": 3000,
-        "type": "http",
-        "monitoring": true,
-        "display": true,
-        "metrics_monitoring": {
-            "collect_metrics": false
-        }
+        },
+        "exception_file": "/services/website/becvar-site/var/log/exception.log"
     },
     "admin-suite": {
         "service_name": "admin-suite",
@@ -121,6 +81,7 @@
             "collect_metrics": false,
             "metrics_collector_url": ""
         },
+        "exception_file": "/services/website/admin-suite/var/log/exception.log",
         "config_files": [
             "/services/website/admin-suite/config/suite/terminal-blocked-commands.json",
             "/services/website/admin-suite/config/suite/exceptions-monitoring.json",
@@ -129,5 +90,61 @@
             "/services/website/admin-suite/config/suite/blocked-usernames.json",
             "/services/website/admin-suite/config/suite/terminal-aliases.json"
         ]
+    },
+    "paste.becvar.xyz": {
+        "service_name": "paste.becvar.xyz",
+        "display_name": "code-paste",
+        "url": "https://paste.becvar.xyz",
+        "accept_codes": [200],
+        "max_response_time": 3000,
+        "type": "http",
+        "monitoring": true,
+        "display": true,
+        "metrics_monitoring": {
+            "collect_metrics": false,
+            "metrics_collector_url": "https://paste.becvar.xyz/metrics/export?time_period=H"
+        },
+        "exception_file": "/services/website/admin-suite/var/log/exception.log"
+    },
+    "passgen.becvar.xyz": {
+        "service_name": "passgen.becvar.xyz",
+        "display_name": "password-and-hash-generator",
+        "url": "https://passgen.becvar.xyz",
+        "accept_codes": [200],
+        "max_response_time": 3000,
+        "type": "http",
+        "monitoring": true,
+        "display": true,
+        "metrics_monitoring": {
+            "collect_metrics": false
+        }
+    },
+    "speed-test.becvar.xyz": {
+        "service_name": "speed-test.becvar.xyz",
+        "display_name": "speed-test",
+        "url": "https://speed-test.becvar.xyz",
+        "accept_codes": [200],
+        "max_response_time": 3000,
+        "type": "http",
+        "monitoring": true,
+        "display": true,
+        "metrics_monitoring": {
+            "collect_metrics": false
+        },
+        "exception_file": "/services/website/speed-test/var/log/exception.log"
+    },
+    "pied-piper.xyz": {
+        "service_name": "pied-piper.xyz",
+        "display_name": "pied-piper.xyz",
+        "url": "https://pied-piper.xyz",
+        "accept_codes": [200],
+        "max_response_time": 3000,
+        "type": "http",
+        "monitoring": true,
+        "display": true,
+        "metrics_monitoring": {
+            "collect_metrics": false,
+            "metrics_collector_url": ""
+        }
     }
 }
