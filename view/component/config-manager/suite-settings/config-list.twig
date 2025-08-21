@@ -18,8 +18,8 @@
 </div>
 
 {# SUITE CONFIGURATION LIST TABLE #}
-<div class="p-4">
-    <div class="bg-gray-800/90 rounded shadow-lg">
+<div class="sm:p-4">
+    <div class="bg-gray-800/90 sm:rounded shadow-lg">
         <table class="min-w-full divide-y divide-gray-700">
             <thead class="bg-gray-900/50">
                 <tr>
@@ -32,8 +32,8 @@
             <tbody class="bg-gray-800 divide-y divide-gray-700">
                 {% for config in configs %}
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{{ config.filename }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <td class="px-6 py-4 text-sm font-medium text-white">{{ config.filename }}</td>
+                        <td class="px-6 py-4 text-sm">
                             {% if config.is_custom %}
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-600 text-green-100">Custom</span>
                             {% else %}
