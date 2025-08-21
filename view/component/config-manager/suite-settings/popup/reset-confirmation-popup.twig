@@ -1,0 +1,13 @@
+<div id="reset-popup-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center hidden z-50">
+	<div class="backdrop-blur-md bg-gray-800/95 rounded p-6 border border-gray-700/50 w-full max-w-md animate-popin">
+		<div class="flex items-center mb-4">
+			<i class="fas fa-exclamation-triangle text-red-400 mr-3"></i>
+			<h2 class="text-lg font-bold text-white">Reset Configuration</h2>
+		</div>
+		<p class="mb-6 text-gray-300">Are you sure you want to reset this configuration to default? This will delete your custom configuration file.</p>
+		<div class="flex justify-end gap-3">
+			<button id="reset-cancel-button" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded transition-colors duration-200">Cancel</button>
+			<button id="reset-confirm-button" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded transition-colors duration-200">Reset Config</button>
+		</div>
+	</div>
+</div>

@@ -49,4 +49,17 @@ class JsonUtil
             return null;
         }
     }
+
+    /**
+     * Check if string is valid JSON format
+     *
+     * @param string $string The string to check
+     *
+     * @return bool True if string is valid JSON format, false otherwise
+     */
+    public function isJson(string $string): bool
+    {
+        json_decode($string);
+        return json_last_error() === JSON_ERROR_NONE;
+    }
 }

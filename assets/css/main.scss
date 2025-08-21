@@ -45,6 +45,11 @@ main {
 	text-decoration: underline;
 }
 
+/* disable textarea resizing */
+textarea {
+    resize: none;
+}
+
 /* fix profiler toolbar position */
 .sf-toolbar {
 	position: absolute !important;

@@ -1,5 +1,5 @@
 /** todo manager component functionality */
-import Sortable from 'sortablejs';
+import Sortable from 'sortablejs'
 
 document.addEventListener('DOMContentLoaded', function () {
     let currentTodoId = null
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const todoItemsContainer = document.getElementById('todo-items-container')
     if (todoItemsContainer && document.querySelector('.todo-list')) {
         // check if we are on a mobile device
-        const isMobile = window.innerWidth <= 768;
+        const isMobile = window.innerWidth <= 768
 
         // initialize sortable with different options for mobile
         new Sortable(todoItemsContainer, {

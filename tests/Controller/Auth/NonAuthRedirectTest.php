@@ -54,7 +54,12 @@ class NonAuthRedirectTest extends WebTestCase
             ['method' => 'GET', 'url' => '/manager/users/token/regenerate']
         ],
         'config_manager' => [
-            ['method' => 'GET', 'url' => '/settings']
+            ['method' => 'GET', 'url' => '/settings'],
+            ['method' => 'GET', 'url' => '/settings/suite'],
+            ['method' => 'GET', 'url' => '/settings/suite/show'],
+            ['method' => 'GET', 'url' => '/settings/suite/create'],
+            ['method' => 'GET', 'url' => '/settings/suite/delete'],
+            ['method' => 'POST', 'url' => '/settings/suite/update']
         ],
         'account_settings' => [
             ['method' => 'GET', 'url' => '/account/settings'],

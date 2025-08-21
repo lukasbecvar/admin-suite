@@ -1,0 +1,55 @@
+{% extends 'common/layout.twig' %}
+
+{# EDITING SUITE CONFIGURATION FILES COMPONENT #}
+{% block component %}
+{# SUB-NAVIGATION #}
+<div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
+	<div class="flex items-center justify-between gap-2">
+		<div class="flex items-center gap-3">
+			<a href={{ path('app_suite_config_index') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to view configuration">
+				<i class="fas fa-arrow-left text-gray-300 text-xs"></i>
+			</a>
+			<div class="hidden sm:block">
+				<h1 class="text-xm font-bold text-white">Edit Configuration</h1>
+				<p class="text-gray-400 text-xs">{{ filename }}</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+{# CONFIG EDITOR FORM #}
+<div class="h-full">
+    <div class="backdrop-blur-md bg-gray-800/50 p-4 h-full flex flex-col">
+        <form action={{ path('app_suite_config_update', {'filename': filename}) }} method="POST" class="h-full flex flex-col">
+            <div class="mb-2 flex-1 flex flex-col">
+                <label for="content" class="block text-sm font-medium text-gray-300">{{ filename }} configuration</label>
+                {# FLASH ERROR MESSAGES #}
+                {% for message in app.flashes('error') %}
+					<div class="bg-red-500/10 border border-red-500/30 rounded p-2 my-1">
+						<div class="flex items-center gap-3">
+							<i class="fas fa-exclamation-circle text-red-400 text-lg"></i>
+							<div>
+								<p class="text-sm text-gray-300"><span class="text-white">Update error:</span> {{ message|e }}</p>
+							</div>
+						</div>
+					</div>
+                {% endfor %}
+                {# CONTENT EDITOR #}
+                <textarea name="content" id="content" class="focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 mt-1 p-1 block w-full h-full rounded bg-gray-900/100 border-gray-700 text-white shadow-sm sm:text-sm resize-none">{{ content }}</textarea>
+            </div>
+            <div class="mt-2 text-right">
+                <button type="button" class="reset-button bg-yellow-600 hover:bg-yellow-500 text-white font-bold rounded text-sm px-2 py-2 sm:text-md sm:py-2 sm:px-4" data-url={{ path('app_suite_config_delete', {'filename': filename}) }}>
+                    <i class="fas fa-undo"></i> Reset to Default
+                </button>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold rounded text-sm px-2 py-2 sm:text-md sm:py-2 sm:px-4">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{# INCLUDE POPUP FOR RESETTING CONFIG TO DEFAULT #}
+{% include "component/config-manager/suite-settings/popup/reset-confirmation-popup.twig" %}
+{{ encore_entry_script_tags('suite-config-manager-js') }}
+{% endblock %}

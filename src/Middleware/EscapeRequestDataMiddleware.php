@@ -37,7 +37,11 @@ class EscapeRequestDataMiddleware
 
         // excluded controller paths from escaping
         if (
-            // database console controller
+            // suite config file update controller
+            $request->getPathInfo() == $this->urlGenerator->generate('app_suite_config_update') ||
+
+            // config manager controllers
+            $request->getPathInfo() == $this->urlGenerator->generate('app_suite_config_show') ||
             $request->getPathInfo() == $this->urlGenerator->generate('app_manager_database_console') ||
 
             // file system controllers
