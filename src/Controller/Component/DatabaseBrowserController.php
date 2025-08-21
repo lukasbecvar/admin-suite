@@ -62,8 +62,12 @@ class DatabaseBrowserController extends AbstractController
             $databases = null;
         }
 
+        // get database stats
+        $stats = $this->databaseManager->getDatabaseStats();
+
         // render render database browser page view
         return $this->render('component/database-browser/database-browser.twig', [
+            'stats' => $stats,
             'tables' => $tables,
             'databases' => $databases,
             'databaseName' => $databaseName

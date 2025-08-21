@@ -44,6 +44,13 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'Tables');
         $this->assertSelectorTextContains('body', 'Size (MB)');
         $this->assertSelectorTextContains('body', $_ENV['DATABASE_NAME']);
+        $this->assertSelectorTextContains('body', 'Version');
+        $this->assertSelectorTextContains('body', 'Uptime');
+        $this->assertSelectorTextContains('body', 'Threads connected');
+        $this->assertSelectorTextContains('body', 'Max connections');
+        $this->assertSelectorTextContains('body', 'Queries');
+        $this->assertSelectorTextContains('body', 'Slow queries');
+        $this->assertSelectorTextContains('body', 'InnoDB buffer pool');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 

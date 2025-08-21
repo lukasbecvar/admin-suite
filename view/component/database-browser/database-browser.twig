@@ -56,6 +56,7 @@
     <div class="flex-1 flex flex-col min-h-0">
         <div class="database-browser md:p-4 component">
             <div class="max-w-4xl mx-auto">
+                {# DATABASE LIST #}
                 <div class="overflow-x-auto md:rounded-t">
                     {% if databaseName == '' %}
                         {# DATABASE LIST #}
@@ -120,6 +121,78 @@
                             </table>
                         {% endif %}
                     {% endif %}
+                </div>
+
+                {# DATABASE STATS #}
+                <div class="sm:mt-4 md:rounded-b">
+                    <div class="overflow-x-auto md:rounded-t">
+                        <table class="min-w-full text-white w-full bg-gray-800/50 border border-gray-700/50">
+                            <thead>
+                                <tr class="bg-gray-700/50">
+                                    <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Stat</th>
+                                    <th class="px-4 py-3 border-b border-gray-600/50 text-right font-semibold text-gray-200 whitespace-nowrap">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300">
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-left">
+                                        Version
+                                    </td>
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-right">
+                                        {{ stats.version|e }}
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300">
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-left">
+                                        Uptime
+                                    </td>
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-right">
+                                        {{ stats.uptime|number_format(2)|e }} seconds
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300">
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-left">
+                                        Threads connected
+                                    </td>
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-right">
+                                        {{ stats.threads_connected|e }}
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300">
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-left">
+                                        Max connections
+                                    </td>
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-right">
+                                        {{ stats.max_connections|e }}
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300">
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-left">
+                                        Queries
+                                    </td>
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-right">
+                                        {{ stats.queries|e }}
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300">
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-left">
+                                        Slow queries
+                                    </td>
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-right">
+                                        {{ stats.slow_queries|e }}
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300">
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-left">
+                                        InnoDB buffer pool
+                                    </td>
+                                    <td class="px-4 py-2 border-b border-gray-600/60 text-right">
+                                        {{ stats.innodb_buffer_pool_size|number_format(2)|e }} MB
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

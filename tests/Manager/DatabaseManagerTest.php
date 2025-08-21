@@ -82,6 +82,27 @@ class DatabaseManagerTest extends TestCase
     }
 
     /**
+     * Test get database stats
+     *
+     * @return void
+     */
+    public function testGetDatabaseStats(): void
+    {
+        // call tested method
+        $result = $this->databaseManager->getDatabaseStats();
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('version', $result);
+        $this->assertArrayHasKey('uptime', $result);
+        $this->assertArrayHasKey('threads_connected', $result);
+        $this->assertArrayHasKey('max_connections', $result);
+        $this->assertArrayHasKey('queries', $result);
+        $this->assertArrayHasKey('slow_queries', $result);
+        $this->assertArrayHasKey('innodb_buffer_pool_size', $result);
+    }
+
+    /**
      * Test get databases list
      *
      * @return void

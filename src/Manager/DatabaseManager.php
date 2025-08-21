@@ -67,6 +67,52 @@ class DatabaseManager
     }
 
     /**
+     * Get MySQL database info and stats
+     *
+     * @return array<string, mixed>
+     */
+    public function getDatabaseStats(): array
+    {
+        $stats = [];
+
+        try {
+            $conn = $this->connection;
+
+            // basic server info
+            $stats['version'] = $conn->fetchOne('SELECT VERSION()');
+
+            // uptime
+            $row = $conn->fetchAssociative("SHOW GLOBAL STATUS LIKE 'Uptime'");
+            $stats['uptime'] = $row['Value'] ?? 0;
+
+            // connections
+            $row = $conn->fetchAssociative("SHOW STATUS LIKE 'Threads_connected'");
+            $stats['threads_connected'] = $row['Value'] ?? 0;
+
+            $row = $conn->fetchAssociative("SHOW VARIABLES LIKE 'max_connections'");
+            $stats['max_connections'] = $row['Value'] ?? 0;
+
+            // queries
+            $row = $conn->fetchAssociative("SHOW GLOBAL STATUS LIKE 'Queries'");
+            $stats['queries'] = $row['Value'] ?? 0;
+
+            $row = $conn->fetchAssociative("SHOW GLOBAL STATUS LIKE 'Slow_queries'");
+            $stats['slow_queries'] = $row['Value'] ?? 0;
+
+            // inno-db buffer pool
+            $row = $conn->fetchAssociative("SHOW VARIABLES LIKE 'innodb_buffer_pool_size'");
+            $stats['innodb_buffer_pool_size'] = $row['Value'] ?? 0;
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get database stats: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return $stats;
+    }
+
+    /**
      * Get list of databases
      *
      * @return array<int,array<string,mixed>> The list of databases
