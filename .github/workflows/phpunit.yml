@@ -15,7 +15,7 @@ jobs:
     # define mysql service
     services:
       mysql:
-        image: mysql:latest
+        image: mysql:8.0.43
         env:
           MYSQL_ROOT_PASSWORD: root
         ports:
