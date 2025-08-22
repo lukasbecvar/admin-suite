@@ -2,8 +2,10 @@
 
 namespace App\Manager;
 
+use Exception;
 use App\Util\AppUtil;
 use App\Util\FileSystemUtil;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ConfigManager
@@ -16,12 +18,18 @@ class ConfigManager
 {
     private AppUtil $appUtil;
     private LogManager $logManager;
+    private ErrorManager $errorManager;
     private FileSystemUtil $fileSystemUtil;
 
-    public function __construct(AppUtil $appUtil, LogManager $logManager, FileSystemUtil $fileSystemUtil)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        LogManager $logManager,
+        ErrorManager $errorManager,
+        FileSystemUtil $fileSystemUtil
+    ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
+        $this->errorManager = $errorManager;
         $this->fileSystemUtil = $fileSystemUtil;
     }
 
@@ -176,5 +184,60 @@ class ConfigManager
         }
 
         return false;
+    }
+
+    /**
+     * Update specific feature flag in feature-flags.json
+     *
+     * @param string $feature The feature flag key
+     * @param bool $value New value
+     *
+     * @throws Exception If config cannot be read or written
+     */
+    public function updateFeatureFlag(string $feature, bool $value): void
+    {
+        $configFilename = 'feature-flags.json';
+
+        // read current config
+        $content = $this->readConfig($configFilename);
+        if ($content === null) {
+            $this->errorManager->handleError(
+                message: 'error updating feature flag: ' . $configFilename . ' not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // decode json
+        $config = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+
+        // check if feature exists
+        if (!array_key_exists($feature, $config)) {
+            $this->errorManager->handleError(
+                message: 'error updating feature flag: ' . $feature . ' does not exist in ' . $configFilename,
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // update feature flag value
+        $config[$feature] = $value;
+
+        // encode back to json (pretty for readability)
+        $newContent = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+
+        // write updated config
+        $result = $this->writeConfig($configFilename, $newContent);
+        if (!$result) {
+            $this->errorManager->handleError(
+                message: 'error updating feature flag: failed to write updated config to ' . $configFilename,
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // log update
+        $this->logManager->log(
+            name: 'feature-flag',
+            message: 'Feature flag ' . $feature . ' set to ' . ($value ? 'true' : 'false'),
+            level: LogManager::LEVEL_INFO
+        );
     }
 }

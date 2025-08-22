@@ -5,9 +5,11 @@ namespace App\Tests\Manager;
 use App\Util\AppUtil;
 use App\Manager\LogManager;
 use App\Util\FileSystemUtil;
+use App\Manager\ErrorManager;
 use App\Manager\ConfigManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ConfigManagerTest
@@ -21,17 +23,20 @@ class ConfigManagerTest extends TestCase
     private ConfigManager $configManager;
     private AppUtil & MockObject $appUtilMock;
     private LogManager & MockObject $logManagerMock;
+    private ErrorManager & MockObject $errorManagerMock;
     private FileSystemUtil & MockObject $fileSystemUtilMock;
 
     protected function setUp(): void
     {
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->logManagerMock = $this->createMock(LogManager::class);
+        $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->fileSystemUtilMock = $this->createMock(FileSystemUtil::class);
 
         $this->configManager = new ConfigManager(
             $this->appUtilMock,
             $this->logManagerMock,
+            $this->errorManagerMock,
             $this->fileSystemUtilMock
         );
 
@@ -355,5 +360,88 @@ class ConfigManagerTest extends TestCase
 
         // assert result
         $this->assertFalse($this->configManager->deleteConfig($filename));
+    }
+
+    /**
+     * Test update feature flag with success status
+     *
+     * @return void
+     */
+    public function testUpdateFeatureFlagSuccess(): void
+    {
+        $feature = 'metrics';
+        $content = json_encode([$feature => false], JSON_PRETTY_PRINT);
+
+        // mock config file exist check
+        $this->fileSystemUtilMock->method('checkIfFileExist')->willReturn(true);
+
+        // mock config file content
+        $this->fileSystemUtilMock->method('getFullFileContent')->willReturn($content);
+
+        // mock config file write
+        $this->fileSystemUtilMock->method('saveFileContent')->willReturn(true);
+
+        // expect log will be called twice (once from writeConfig, once from updateFeatureFlag)
+        $this->logManagerMock->expects($this->exactly(2))->method('log');
+
+        // call tested method
+        $this->configManager->updateFeatureFlag($feature, true);
+    }
+
+    /**
+     * Test update feature flag when feature flag does not exist
+     *
+     * @return void
+     */
+    public function testUpdateFeatureFlagWhenFeatureDoesNotExist(): void
+    {
+        $content = json_encode(['other-feature' => true], JSON_PRETTY_PRINT);
+
+        // mock config file exist check
+        $this->fileSystemUtilMock->method('checkIfFileExist')->willReturn(true);
+
+        // mock config file content
+        $this->fileSystemUtilMock->method('getFullFileContent')->willReturn($content);
+
+        // mock config file write
+        $this->fileSystemUtilMock->method('saveFileContent')->willReturn(true);
+
+        // expect log will be called
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            $this->stringContains('does not exist'),
+            Response::HTTP_NOT_FOUND
+        );
+
+        // call tested method
+        $this->configManager->updateFeatureFlag('metrics', true);
+    }
+
+    /**
+     * Test update feature flag when config file does not exist
+     *
+     * @return void
+     */
+    public function testUpdateFeatureFlagWhenWriteFails(): void
+    {
+        $feature = 'metrics';
+        $content = json_encode([$feature => false], JSON_PRETTY_PRINT);
+
+        // mock config file exist check
+        $this->fileSystemUtilMock->method('checkIfFileExist')->willReturn(true);
+
+        // mock config file content
+        $this->fileSystemUtilMock->method('getFullFileContent')->willReturn($content);
+
+        // simulate write failure
+        $this->fileSystemUtilMock->method('saveFileContent')->willReturn(false);
+
+        // expect log will be called
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            $this->stringContains('failed to write updated config'),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->configManager->updateFeatureFlag($feature, true);
     }
 }

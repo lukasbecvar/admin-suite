@@ -23,6 +23,7 @@
 /package-lock.json
 
 # custom suite configs
+feature-flags.json
 terminal-aliases.json
 blocked-usernames.json
 services-monitoring.json

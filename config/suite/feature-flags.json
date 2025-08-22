@@ -3,8 +3,8 @@
     "terminal": true,
     "monitoring": true,
     "diagnostics": true,
-    "todo-manager": true,
     "system-audit": true,
+    "todo-manager": true,
     "database-manager": true,
     "file-system-manager": true
 }

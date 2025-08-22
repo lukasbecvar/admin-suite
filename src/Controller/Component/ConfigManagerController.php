@@ -2,6 +2,8 @@
 
 namespace App\Controller\Component;
 
+use Exception;
+use App\Util\AppUtil;
 use App\Util\JsonUtil;
 use App\Manager\ErrorManager;
 use App\Manager\ConfigManager;
@@ -19,12 +21,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class ConfigManagerController extends AbstractController
 {
+    private AppUtil $appUtil;
     private JsonUtil $jsonUtil;
     private ErrorManager $errorManager;
     private ConfigManager $configManager;
 
-    public function __construct(JsonUtil $jsonUtil, ErrorManager $errorManager, ConfigManager $configManager)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        JsonUtil $jsonUtil,
+        ErrorManager $errorManager,
+        ConfigManager $configManager
+    ) {
+        $this->appUtil = $appUtil;
         $this->jsonUtil = $jsonUtil;
         $this->errorManager = $errorManager;
         $this->configManager = $configManager;
@@ -116,6 +124,9 @@ class ConfigManagerController extends AbstractController
     #[Route('/settings/suite/create', methods: ['GET'], name: 'app_suite_config_create')]
     public function suiteConfigCreate(Request $request): Response
     {
+        // get referer parameter from query string
+        $referer = $request->query->get('referer');
+
         // get config filename parameter from query string
         $filename = $request->query->get('filename');
 
@@ -136,6 +147,11 @@ class ConfigManagerController extends AbstractController
                 message: 'failed to create custom config file',
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
+        }
+
+        // redirect to referer page
+        if ($referer !== null) {
+            return $this->redirectToRoute($referer);
         }
 
         // redirect to config show page
@@ -221,5 +237,75 @@ class ConfigManagerController extends AbstractController
 
         // redirect back to config index page
         return $this->redirectToRoute('app_suite_config_index');
+    }
+
+    /**
+     * Render feature flags list page
+     *
+     * @return Response The feature flags list page view
+     */
+    #[Route('/settings/feature-flags', methods: ['GET'], name: 'app_feature_flags')]
+    public function featureFlagsList(): Response
+    {
+        // get feature flags config
+        $featureFlagsConfig = $this->appUtil->loadConfig('feature-flags.json');
+
+        // check if config is custom
+        $isConfigCustom = $this->configManager->isCustomConfig('feature-flags.json');
+
+        // render feature flags list page view
+        return $this->render('component/config-manager/feature-flags/flags-list.twig', [
+            'featureFlagsConfig' => $featureFlagsConfig,
+            'isConfigCustom' => $isConfigCustom,
+        ]);
+    }
+
+    /**
+     * Update feature flag value
+     *
+     * @param Request $request The request object
+     *
+     * @return Response Redirect to feature flags list page
+     */
+    #[Route('/settings/feature-flags/update', methods: ['GET'], name: 'app_feature_flags_update')]
+    public function featureFlagsUpdate(Request $request): Response
+    {
+        // get feature flag name from query string
+        $feature = (string) $request->request->get('feature');
+
+        // get feature flag value from query string
+        $value = (string) $request->request->get('value');
+
+        // check if feature flag name and value are set
+        if (empty($feature) || empty($value)) {
+            $this->errorManager->handleError(
+                message: 'feature flag name and value cannot be empty',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check if value is valid
+        if ($value !== 'enable' && $value !== 'disable') {
+            $this->errorManager->handleError(
+                message: 'invalid feature flag value',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // convert value to boolean
+        $value = ($value === 'enable') ? true : false;
+
+        // update feature flag value
+        try {
+            $this->configManager->updateFeatureFlag($feature, $value);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error updating feature flag: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // redirect back to feature flags list page
+        return $this->redirectToRoute('app_feature_flags');
     }
 }

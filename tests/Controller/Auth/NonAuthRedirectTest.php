@@ -59,7 +59,9 @@ class NonAuthRedirectTest extends WebTestCase
             ['method' => 'GET', 'url' => '/settings/suite/show'],
             ['method' => 'GET', 'url' => '/settings/suite/create'],
             ['method' => 'GET', 'url' => '/settings/suite/delete'],
-            ['method' => 'POST', 'url' => '/settings/suite/update']
+            ['method' => 'POST', 'url' => '/settings/suite/update'],
+            ['method' => 'GET', 'url' => '/settings/feature-flags'],
+            ['method' => 'GET', 'url' => '/settings/feature-flags/update']
         ],
         'account_settings' => [
             ['method' => 'GET', 'url' => '/account/settings'],

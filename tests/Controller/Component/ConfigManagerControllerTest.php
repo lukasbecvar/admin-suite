@@ -33,6 +33,11 @@ class ConfigManagerControllerTest extends CustomTestCase
         if (!file_exists('terminal-blocked-commands.json')) {
             file_put_contents('terminal-blocked-commands.json', '{}');
         }
+
+        // create feature flag config file
+        if (!file_exists('feature-flags.json')) {
+            file_put_contents('feature-flags.json', '{"test-feature": false}');
+        }
     }
 
     protected function tearDown(): void
@@ -45,6 +50,11 @@ class ConfigManagerControllerTest extends CustomTestCase
         // unlink config file after test
         if (file_exists('terminal-blocked-commands.json')) {
             unlink('terminal-blocked-commands.json');
+        }
+
+        // unlink config file after test
+        if (file_exists('feature-flags.json')) {
+            unlink('feature-flags.json');
         }
 
         parent::tearDown();
@@ -78,6 +88,8 @@ class ConfigManagerControllerTest extends CustomTestCase
         $this->assertSelectorExists('a[href="/account/settings"]');
         $this->assertSelectorTextContains('body', 'Manage main admin-suite configuration files');
         $this->assertSelectorExists('a[href="/settings/suite"]');
+        $this->assertSelectorTextContains('body', 'Manage feature flags');
+        $this->assertSelectorExists('a[href="/settings/feature-flags"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -166,6 +178,39 @@ class ConfigManagerControllerTest extends CustomTestCase
     {
         $this->client->request('GET', '/settings/suite/delete', [
             'filename' => 'terminal-blocked-commands.json'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    /**
+     * Test load feature flags list page
+     *
+     * @return void
+     */
+    public function testLoadFeatureFlagsListPage(): void
+    {
+        $this->client->request('GET', '/settings/feature-flags');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('button[id="menu-toggle"]');
+        $this->assertSelectorTextContains('body', 'Feature Flags');
+        $this->assertSelectorTextContains('body', 'Manage feature flags');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test update feature flag value
+     *
+     * @return void
+     */
+    public function testUpdateFeatureFlagValue(): void
+    {
+        $this->client->request('GET', '/settings/feature-flags/update', [
+            'feature' => 'test-feature',
+            'value' => 'enable'
         ]);
 
         // assert response
