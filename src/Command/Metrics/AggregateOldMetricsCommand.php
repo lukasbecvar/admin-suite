@@ -60,6 +60,12 @@ class AggregateOldMetricsCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        // check if metrics future is enabled
+        if ($this->appUtil->isFeatureFlagDisabled('metrics')) {
+            $io->error('Metrics future is disabled');
+            return Command::FAILURE;
+        }
+
         // set server headers for cli console
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';

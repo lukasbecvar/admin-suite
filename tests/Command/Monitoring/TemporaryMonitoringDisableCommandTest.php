@@ -3,6 +3,7 @@
 namespace App\Tests\Command\Monitoring;
 
 use Exception;
+use App\Util\AppUtil;
 use PHPUnit\Framework\TestCase;
 use App\Manager\MonitoringManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,17 +21,40 @@ use App\Command\Monitoring\TemporaryMonitoringDisableCommand;
 class TemporaryMonitoringDisableCommandTest extends TestCase
 {
     private CommandTester $commandTester;
+    private AppUtil & MockObject $appUtil;
     private TemporaryMonitoringDisableCommand $command;
     private MonitoringManager & MockObject $monitoringManager;
 
     protected function setUp(): void
     {
         // mock the dependencies
+        $this->appUtil = $this->createMock(AppUtil::class);
         $this->monitoringManager = $this->createMock(MonitoringManager::class);
 
         // initialize the command instance
-        $this->command = new TemporaryMonitoringDisableCommand($this->monitoringManager);
+        $this->command = new TemporaryMonitoringDisableCommand($this->appUtil, $this->monitoringManager);
         $this->commandTester = new CommandTester($this->command);
+    }
+
+    /**
+     * Test execute command when monitoring future is disabled
+     *
+     * @return void
+     */
+    public function testExecuteCommandWhenMonitoringFutureIsDisabled(): void
+    {
+        // mock isFeatureFlagDisabled method
+        $this->appUtil->method('isFeatureFlagDisabled')->willReturn(true);
+
+        // execute command
+        $exitCode = $this->commandTester->execute(['service-name' => 'test', 'time' => '1']);
+
+        // get command output
+        $commandOutput = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Monitoring future is disabled', $commandOutput);
+        $this->assertSame(Command::FAILURE, $exitCode);
     }
 
     /**

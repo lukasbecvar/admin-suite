@@ -45,6 +45,12 @@ class MonitoringProcessCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        // check if monitoring future is disabled
+        if ($this->appUtil->isFeatureFlagDisabled('monitoring')) {
+            $io->error('Monitoring future is disabled');
+            return Command::FAILURE;
+        }
+
         // set server headers for cli console
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'console';

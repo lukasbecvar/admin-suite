@@ -314,6 +314,20 @@ class AppUtilTest extends TestCase
     }
 
     /**
+     * Test check if future is disabled
+     *
+     * @return void
+     */
+    public function testCheckIfFutureIsDisabled(): void
+    {
+        // call tested method
+        $result = $this->appUtil->isFeatureFlagDisabled('monitoring');
+
+        // assert result
+        $this->assertIsBool($result);
+    }
+
+    /**
      * Test round times in array
      *
      * @return void

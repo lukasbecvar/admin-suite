@@ -3,6 +3,7 @@
 namespace App\Command\Monitoring;
 
 use Exception;
+use App\Util\AppUtil;
 use App\Manager\MonitoringManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -21,10 +22,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:monitoring:temporary:disable', description: 'Temporary disable monitoring process')]
 class TemporaryMonitoringDisableCommand extends Command
 {
+    private AppUtil $appUtil;
     private MonitoringManager $monitoringManager;
 
-    public function __construct(MonitoringManager $monitoringManager)
+    public function __construct(AppUtil $appUtil, MonitoringManager $monitoringManager)
     {
+        $this->appUtil = $appUtil;
         $this->monitoringManager = $monitoringManager;
         parent::__construct();
     }
@@ -51,6 +54,12 @@ class TemporaryMonitoringDisableCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+
+        // check if monitoring future is disabled
+        if ($this->appUtil->isFeatureFlagDisabled('monitoring')) {
+            $io->error('Monitoring future is disabled');
+            return Command::FAILURE;
+        }
 
         // get cli arguments
         $serviceName = $input->getArgument('service-name');

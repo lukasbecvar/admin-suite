@@ -48,33 +48,35 @@
             {# MENU ITEMS #}
             {% set menuItems = [
                 {'route': 'app_dashboard', 'icon': 'fas fa-desktop', 'label': 'Dashboard'},
-                {'route': 'app_manager_monitoring', 'icon': 'fa fa-briefcase-medical', 'label': 'Monitoring'},
-                {'route': 'app_metrics_dashboard', 'icon': 'fas fa-chart-line', 'label': 'Metrics'},
-                {'route': 'app_manager_database', 'icon': 'fas fa-database', 'label': 'Database'},
+                {'route': 'app_manager_monitoring', 'icon': 'fa fa-briefcase-medical', 'label': 'Monitoring', 'featureFlag': 'monitoring'},
+                {'route': 'app_metrics_dashboard', 'icon': 'fas fa-chart-line', 'label': 'Metrics', 'featureFlag': 'metrics'},
+                {'route': 'app_manager_database', 'icon': 'fas fa-database', 'label': 'Database', 'featureFlag': 'database-manager'},
                 {'route': 'app_manager_logs', 'icon': 'fas fa-list', 'label': 'Logs'},
-                {'route': 'app_file_system_browser', 'icon': 'fas fa-file-export', 'label': 'Filesystem'},
-                {'route': 'app_terminal', 'icon': 'fas fa-terminal', 'label': 'Terminal'},
-                {'route': 'app_diagnostic', 'icon': 'fas fa-check', 'label': 'Diagnostics'},
-                {'route': 'app_system_audit', 'icon': 'fas fa-columns', 'label': 'System audit'},
-                {'route': 'app_todo_manager', 'icon': 'fas fa-tasks', 'label': 'Todos'},
+                {'route': 'app_file_system_browser', 'icon': 'fas fa-file-export', 'label': 'Filesystem', 'featureFlag': 'file-system-manager'},
+                {'route': 'app_terminal', 'icon': 'fas fa-terminal', 'label': 'Terminal', 'featureFlag': 'terminal'},
+                {'route': 'app_diagnostic', 'icon': 'fas fa-check', 'label': 'Diagnostics', 'featureFlag': 'diagnostics'},
+                {'route': 'app_system_audit', 'icon': 'fas fa-columns', 'label': 'System audit', 'featureFlag': 'system-audit'},
+                {'route': 'app_todo_manager', 'icon': 'fas fa-tasks', 'label': 'Todos', 'featureFlag': 'todo-manager'},
                 {'route': 'app_manager_users', 'icon': 'fas fa-users', 'label': 'Users manager'}
             ] %}
 
             {% for item in menuItems %}
-                <li>
-                    <a href={{ path(item.route) }} class="group flex items-center relative pl-1 px-1 py-[6px] rounded text-gray-300 hover:text-white bg-gray-600/20 mb-[2px] transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-900/20 hover:to-transparent">
-                        <span class="absolute left-0 top-0 h-full w-[4px] bg-emerald-400 opacity-0 group-hover:opacity-100 rounded-r transition-all duration-200 phone-none"></span>
-                        <i class="{{ item.icon }} h-5 w-5 mt-[8px] mr-1 ml-2 transition-all duration-200 group-hover:ml-2.5"></i>
-                        <span class="transition-all duration-200">
-                            {{ item.label }}
-                            {% if item.route == 'app_todo_manager' and getTodosCount() > 0 %}
-                                <span class="ml-1 px-2 py-0.5 text-xs rounded-full bg-gray-600 border border-gray-700">
-                                    {{ getTodosCount()|e }}
-                                </span>
-                            {% endif %}
-                        </span>
-                    </a>
-                </li>
+                {% if item.featureFlag is not defined or not isFeatureFlagDisabled(item.featureFlag) %}
+                    <li>
+                        <a href={{ path(item.route) }} class="group flex items-center relative pl-1 px-1 py-[6px] rounded text-gray-300 hover:text-white bg-gray-600/20 mb-[2px] transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-900/20 hover:to-transparent">
+                            <span class="absolute left-0 top-0 h-full w-[4px] bg-emerald-400 opacity-0 group-hover:opacity-100 rounded-r transition-all duration-200 phone-none"></span>
+                            <i class="{{ item.icon }} h-5 w-5 mt-[8px] mr-1 ml-2 transition-all duration-200 group-hover:ml-2.5"></i>
+                            <span class="transition-all duration-200">
+                                {{ item.label }}
+                                {% if item.route == 'app_todo_manager' and getTodosCount() > 0 %}
+                                    <span class="ml-1 px-2 py-0.5 text-xs rounded-full bg-gray-600 border border-gray-700">
+                                        {{ getTodosCount()|e }}
+                                    </span>
+                                {% endif %}
+                            </span>
+                        </a>
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
     </nav>

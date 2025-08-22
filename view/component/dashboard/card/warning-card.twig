@@ -15,7 +15,7 @@
     </div>
     <div class="p-[5px] space-y-[5px]" id="wraning-elements">
         {# CHECK IF EXCEPTION FILES IS FOUND #}
-        {% if exceptionFiles|length > 0 %}
+        {% if exceptionFiles|length > 0 and isFeatureFlagDisabled('monitoring') == false %}
             <div class="bg-amber-500/10 border border-amber-500/25 rounded p-2 flex items-start gap-3 hover:bg-amber-500/15 transition-colors duration-200">
                 <div class="flex-shrink-0"
                     <i class="fas fa-bomb text-amber-400 text-lg"></i>
@@ -66,7 +66,7 @@
         {% endif %}
 
         {# MONITORING TIME CACHE EXPIRED ALERT #}
-        {% if diagnosticData.isLastMonitoringTimeCached == false %}
+        {% if diagnosticData.isLastMonitoringTimeCached == false and isFeatureFlagDisabled('monitoring') == false %}
             <div class="bg-red-500/10 border border-red-500/25 rounded p-2 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
                 <div class="flex-shrink-0">
                     <i class="fas fa-clock text-red-400 text-lg"></i>
@@ -79,7 +79,7 @@
         {% endif %}
 
         {# NOT INSTALLED REQUIREMENTS ALERT #}
-        {% if diagnosticData.notInstalledRequirements|length > 0 %}
+        {% if diagnosticData.notInstalledRequirements|length > 0 and isFeatureFlagDisabled('monitoring') == false %}
             <div class="bg-red-500/10 border border-red-500/25 rounded p-2 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
                 <div class="flex-shrink-0">
                     <i class="fas fa-exclamation-circle text-red-400 text-lg"></i>
@@ -118,7 +118,7 @@
         {% endif %}
 
         {# WEB USER PERMISSIONS ALERT #}
-        {% if diagnosticData.isWebUserSudo == false %}
+        {% if diagnosticData.isWebUserSudo == false and isFeatureFlagDisabled('monitoring') == false %}
             <div class="bg-red-500/10 border border-red-500/25 rounded p-2 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
                 <div class="flex-shrink-0">
                     <i class="fas fa-user-lock text-red-400 text-lg"></i>
@@ -131,7 +131,7 @@
         {% endif %}
 
         {# STORAGE SPACE ALERT #}
-        {% if diagnosticData.driveSpace > 90 %}
+        {% if diagnosticData.driveSpace > 90 and isFeatureFlagDisabled('monitoring') == false %}
             <div class="bg-red-500/10 border border-red-500/25 rounded p-2 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
                 <div class="flex-shrink-0">
                     <i class="fas fa-hdd text-red-400 text-lg"></i>
@@ -144,7 +144,7 @@
         {% endif %}
 
         {# CPU OVERLOAD ALERT #}
-        {% if diagnosticData.cpuUsage > 98.00 %}
+        {% if diagnosticData.cpuUsage > 98.00 and isFeatureFlagDisabled('monitoring') == false %}
             <div class="bg-red-500/10 border border-red-500/25 rounded p-2 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
                 <div class="flex-shrink-0">
                     <i class="fas fa-microchip text-red-400 text-lg"></i>
@@ -157,7 +157,7 @@
         {% endif %}
 
         {# RAM OVERLOAD ALERT #}
-        {% if diagnosticData.ramUsage > 98.00 %}
+        {% if diagnosticData.ramUsage > 98.00 and isFeatureFlagDisabled('monitoring') == false %}
             <div class="bg-red-500/10 border border-red-500/25 rounded p-2 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
                 <div class="flex-shrink-0">
                     <i class="fas fa-memory text-red-400 text-lg"></i>

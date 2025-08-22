@@ -184,6 +184,22 @@ class AppUtil
     }
 
     /**
+     * Check if feature flag is disabled
+     *
+     * @param string $featureFlag The feature flag to check
+     *
+     * @return bool True if feature flag is disabled, false otherwise
+     */
+    public function isFeatureFlagDisabled(string $featureFlag): bool
+    {
+        // get feature flags config
+        $disabledFeatureFlags = $this->loadConfig('feature-flags.json');
+
+        // check if feature flag is disabled
+        return isset($disabledFeatureFlags[$featureFlag]) && $disabledFeatureFlags[$featureFlag] === false;
+    }
+
+    /**
      * Update environment variable value
      *
      * @param string $key The environment variable key

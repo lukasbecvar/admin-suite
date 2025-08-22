@@ -25,6 +25,12 @@ services:
         tags:
             - { name: 'twig.extension' }
 
+    # app util extension
+    App\Twig\AppUtilExtension:
+        arguments:
+            $appUtil: '@App\Util\AppUtil'
+        tags: [ 'twig.extension' ]
+
     # auth manager extension
     App\Twig\AuthManagerExtension:
         arguments:
@@ -39,6 +45,11 @@ services:
 
     # request middlewares
     # --------------------------------------------------------------------------------- #
+    # disable controller if feature flag is disabled
+    App\Middleware\FeatureFlagsMiddleware:
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.controller', priority: 11 }
+
     # check if assets is builded
     App\Middleware\AssetsCheckMiddleware:
         tags:

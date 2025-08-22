@@ -1,0 +1,10 @@
+{
+    "metrics": true,
+    "terminal": true,
+    "monitoring": true,
+    "diagnostics": true,
+    "todo-manager": true,
+    "system-audit": true,
+    "database-manager": true,
+    "file-system-manager": true
+}

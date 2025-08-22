@@ -41,6 +41,27 @@ class AggregateOldMetricsCommandTest extends TestCase
     }
 
     /**
+     * Test execute command when metrics future is disabled
+     *
+     * @return void
+     */
+    public function testExecuteCommandWhenMetricsFutureIsDisabled(): void
+    {
+        // mock isFeatureFlagDisabled method
+        $this->appUtilMock->method('isFeatureFlagDisabled')->willReturn(true);
+
+        // execute command
+        $exitCode = $this->commandTester->execute([]);
+
+        // get command output
+        $commandOutput = $this->commandTester->getDisplay();
+
+        // assert result
+        $this->assertStringContainsString('Metrics future is disabled', $commandOutput);
+        $this->assertSame(Command::FAILURE, $exitCode);
+    }
+
+    /**
      * Test execute command when no old metrics found
      *
      * @return void

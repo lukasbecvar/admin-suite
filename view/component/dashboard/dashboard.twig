@@ -9,22 +9,30 @@
         {% include "component/dashboard/card/warning-card.twig" %}
 
         {# SERVICES DASHBOARD CARD #}
-        {% include "component/dashboard/card/services-card.twig" %}
+        {% if isFeatureFlagDisabled('monitoring') == false %}
+            {% include "component/dashboard/card/services-card.twig" %}
+        {% endif %}
 
         {# PROCESS LIST DASHBOARD CARD #}
         {% include "component/dashboard/card/process-list-card.twig" %}
 
         {# NETWORK USAGE #}
-        {% include "component/dashboard/card/network-usage-card.twig" %}
+        {% if isFeatureFlagDisabled('monitoring') == false %}
+            {% include "component/dashboard/card/network-usage-card.twig" %}
+        {% endif %}
 
         {# HOST SYSTEM RESOURCES #}
-        {% include "component/dashboard/card/system-resources-card.twig" %}
-
+        {% if isFeatureFlagDisabled('monitoring') == false %}
+            {% include "component/dashboard/card/system-resources-card.twig" %}
+        {% endif %}
+        
         {# HOST SYSTEM INFO #}
         {% include "component/dashboard/card/system-info-card.twig" %}
 
         {# DATABASE STATISTICS #}
-        {% include "component/dashboard/card/database-statisctis-card.twig" %}
+        {% if isFeatureFlagDisabled('database-manager') == false %}
+            {% include "component/dashboard/card/database-statisctis-card.twig" %}
+        {% endif %}
     </div>
 </div>
 
