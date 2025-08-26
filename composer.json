@@ -11,7 +11,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.4",
         "minishlink/web-push": "^9.0",
-        "phpoffice/phpspreadsheet": "^4.4",
+        "phpoffice/phpspreadsheet": "^5.0",
         "symfony/console": "7.3.*",
         "symfony/dotenv": "7.3.*",
         "symfony/flex": "^2.7",
