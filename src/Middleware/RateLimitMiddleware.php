@@ -55,7 +55,16 @@ class RateLimitMiddleware
             $request->getPathInfo() == $this->urlGenerator->generate('api_notifications_subscriber') ||
             $request->getPathInfo() == $this->urlGenerator->generate('api_notifications_check_push_subscription') ||
             $request->getPathInfo() == $this->urlGenerator->generate('api_system_resources') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('api_terminal')
+            $request->getPathInfo() == $this->urlGenerator->generate('api_terminal') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_create_save') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_create_directory_save') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_save') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_delete') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_move_save') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_upload_chunk') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_upload_save') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_delete') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_delete')
         ) {
             return;
         }
