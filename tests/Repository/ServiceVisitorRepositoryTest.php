@@ -107,7 +107,8 @@ class ServiceVisitorRepositoryTest extends KernelTestCase
 
         // assert results
         $this->assertNotEmpty($referers);
-        $this->assertSame('https://google.com', $referers[0]['referer'] ?? $referers[1]['referer']);
+        $this->assertContains('https://google.com', array_column($referers, 'referer'));
+        $this->assertContains('https://bing.com', array_column($referers, 'referer'));
     }
 
     /**
