@@ -216,6 +216,13 @@ class MonitoringManagerController extends AbstractController
                     $exceptionFilePath = $exceptionFile;
                 }
             }
+
+            // get service visitors data
+            $page = (int) $request->query->get('page', '1');
+            $serviceVisitors = $this->metricsManager->getVisitorsByServiceName($serviceName, $page);
+
+            // get referers list
+            $referers = $this->metricsManager->getReferersByServiceName($serviceName);
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error getting service details: ' . $e->getMessage(),
@@ -225,16 +232,18 @@ class MonitoringManagerController extends AbstractController
 
         // return service details view
         return $this->render('component/monitoring-manager/monitoring-service-detail.twig', [
-            'serviceName' => $serviceName,
-            'serviceConfig' => $serviceConfig,
-            'serviceStatus' => $serviceStatus,
-            'monitoringStatus' => $monitoringStatus,
             'exceptionFilePath' => $exceptionFilePath,
-            'slaHistory' => $serviceSlaHistory,
             'serviceManager' => $this->serviceManager,
+            'monitoringStatus' => $monitoringStatus,
+            'serviceVisitors' => $serviceVisitors,
+            'slaHistory' => $serviceSlaHistory,
+            'serviceStatus' => $serviceStatus,
+            'serviceConfig' => $serviceConfig,
+            'serviceName' => $serviceName,
             'metricsData' => $metricsData,
             'hasMetrics' => $hasMetrics,
-            'timePeriod' => $timePeriod
+            'timePeriod' => $timePeriod,
+            'referers' => $referers
         ]);
     }
 

@@ -341,6 +341,136 @@
                         </script>
                         {{ encore_entry_script_tags('metrics-charts-js') }}
                     {% endif %}
+
+                    {# SERVICE VISITORS TABLE #}
+                    {% if serviceVisitors.count > 0 %}
+                        <div id="service-visitors-card" class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full transition-all duration-300">
+                            <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 bg-green-500/20 rounded flex items-center justify-center">
+                                        <i class="fas fa-users text-green-400 text-sm"></i>
+                                    </div>
+                                    <span>Service Visitors</span>
+                                </div>
+
+                                <div class="flex items-center gap-2 p-1">
+                                    <span class="text-gray-400 text-sm">Total Visitors:</span>
+                                    <p class="text-white text-md">{{ serviceVisitors.count }}</p>
+                                </div>
+                            </div>
+                            <div class="overflow-y-auto max-h-[600px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+                                <div class=" text-sm transition">
+                                    <div class="">
+                                        <table class="w-full text-xs">
+                                            <thead>
+                                                <tr class="bg-gray-600/30">
+                                                    <th class="py-2 px-3 text-left text-gray-300 text-lg">#</th>
+                                                    <th class="py-2 px-3 text-left text-gray-300 text-lg">Last Visit Time</th>
+                                                    <th class="py-2 px-3 text-left text-gray-300 text-lg">IP Address</th>
+                                                    <th class="py-2 px-3 text-left text-gray-300 text-lg">Location</th>
+                                                    <th class="py-2 px-3 text-left text-gray-300 text-lg">Referer</th>
+                                                    <th class="py-2 px-3 text-left text-gray-300 text-lg">Browser</th>
+                                                    <th class="py-2 px-3 text-left text-gray-300 text-lg">OS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for visitor in serviceVisitors.visitors %}
+                                                    <tr class="border-t border-gray-600/30 hover:bg-gray-600/20 transition-colors duration-200 whitespace-nowrap text-lg">
+                                                        <td class="px-2 py-2 text-gray-300">{{ visitor.id }}</td>
+                                                        <td class="px-2 py-2 text-gray-300">{{ visitor.last_visit_time }}</td>
+                                                        <td class="px-2 py-2 text-gray-300">{{ visitor.ip_address }}</td>
+                                                        <td class="px-2 py-2 text-gray-300">{{ visitor.location is defined ? visitor.location|replace({'/': ' - '}) : '' }}</td>
+                                                        <td class="px-2 py-2 text-gray-300">
+                                                            {% if visitor.referer|length > 30 %}
+                                                                <a href={{ visitor.referer }} target="_blank" class="link transition-colors duration-200">
+                                                                    {{ visitor.referer|slice(0, 27) }}...
+                                                                </a>
+                                                            {% else %}
+                                                                {{ visitor.referer|linkify }}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td class="px-2 py-2 text-gray-300">{{ visitor.browser }}</td>
+                                                        <td class="px-2 py-2 text-gray-300">{{ visitor.os }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            {# PAGINATION #}
+                            {% if serviceVisitors.pagination and serviceVisitors.pagination.totalPages > 1 %}
+                                <div class="flex items-center justify-between p-2 border-t border-gray-700/50">
+                                    {% if serviceVisitors.pagination.currentPage > 1 %}
+                                        <a href="{{ path('app_manager_monitoring_service_detail', {'service_name': serviceName, 'page': serviceVisitors.pagination.currentPage - 1}) ~ '#service-visitors-card' }}" 
+                                           class="px-3 py-1 text-sm font-medium rounded-md transition-colors duration-200 bg-gray-700 hover:bg-gray-600 text-white">
+                                            Previous
+                                        </a>
+                                    {% else %}
+                                        <span class="px-3 py-1 text-sm font-medium rounded-md transition-colors duration-200 bg-gray-600 text-gray-400 cursor-not-allowed">
+                                            Previous
+                                        </span>
+                                    {% endif %}
+                                    
+                                    <span class="text-sm text-gray-300">
+                                        Page {{ serviceVisitors.pagination.currentPage }} of {{ serviceVisitors.pagination.totalPages }}
+                                    </span>
+                                    
+                                    {% if serviceVisitors.pagination.currentPage < serviceVisitors.pagination.totalPages %}
+                                        <a href="{{ path('app_manager_monitoring_service_detail', {'service_name': serviceName, 'page': serviceVisitors.pagination.currentPage + 1}) ~ '#service-visitors-card' }}" 
+                                           class="px-3 py-1 text-sm font-medium rounded-md transition-colors duration-200 bg-gray-700 hover:bg-gray-600 text-white">
+                                            Next
+                                        </a>
+                                    {% else %}
+                                        <span class="px-3 py-1 text-sm font-medium rounded-md transition-colors duration-200 bg-gray-600 text-gray-400 cursor-not-allowed">
+                                            Next
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {# REFERERS #}
+                    {% if referers|length > 0 %}
+                        <div id="referers-card" class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full transition-all duration-300">
+                            <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 bg-green-500/20 rounded flex items-center justify-center">
+                                        <i class="fas fa-link text-green-400 text-sm"></i>
+                                    </div>
+                                    <span>Referers</span>
+                                </div>
+                            </div>
+                            <div class="overflow-y-auto max-h-[600px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+                                <div class=" text-sm transition">
+                                    <div class="">
+                                        <table class="w-full text-xs">
+                                            <thead>
+                                                <tr class="bg-gray-600/30 whitespace-nowrap">
+                                                    <th class="py-2 px-3 text-left text-gray-300 text-lg">#</th>
+                                                    <th class="py-2 px-3 text-left text-gray-300 text-lg">Referer</th>
+                                                    <th class="py-2 px-3 text-left text-gray-300 text-lg">Total Visitors</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for referer, count in referers %}
+                                                    <tr class="border-t border-gray-600/30 hover:bg-gray-600/20 transition-colors duration-200 text-lg whitespace-nowrap">
+                                                        <td class="px-2 py-2 text-gray-300">{{ loop.index }}</td>
+                                                        <td class="px-2 py-2 text-gray-300">
+                                                            {{ referer|linkify }}
+                                                        </td>
+                                                        <td class="px-2 py-2 text-gray-300">{{ count }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                    {% endif %}
+
                 {% endif %}
             </div>
         </div>

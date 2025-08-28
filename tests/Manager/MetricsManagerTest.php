@@ -10,6 +10,7 @@ use App\Util\CacheUtil;
 use Doctrine\ORM\Query;
 use App\Manager\LogManager;
 use App\Manager\ErrorManager;
+use App\Util\VisitorInfoUtil;
 use Doctrine\ORM\QueryBuilder;
 use App\Manager\MetricsManager;
 use App\Manager\ServiceManager;
@@ -18,6 +19,7 @@ use App\Manager\DatabaseManager;
 use Psr\Cache\CacheItemInterface;
 use App\Repository\MetricRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ServiceVisitorRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,9 +38,11 @@ class MetricsManagerTest extends TestCase
     private LogManager & MockObject $logManagerMock;
     private ErrorManager & MockObject $errorManagerMock;
     private ServiceManager & MockObject $serviceManagerMock;
+    private VisitorInfoUtil & MockObject $visitorInfoUtilMock;
     private DatabaseManager & MockObject $databaseManagerMock;
     private MetricRepository & MockObject $metricRepositoryMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
+    private ServiceVisitorRepository & MockObject $serviceVisitorRepositoryMock;
 
     protected function setUp(): void
     {
@@ -48,9 +52,11 @@ class MetricsManagerTest extends TestCase
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
+        $this->visitorInfoUtilMock = $this->createMock(VisitorInfoUtil::class);
         $this->databaseManagerMock = $this->createMock(DatabaseManager::class);
         $this->metricRepositoryMock = $this->createMock(MetricRepository::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
+        $this->serviceVisitorRepositoryMock = $this->createMock(ServiceVisitorRepository::class);
 
         // init metrics manager instance
         $this->metricsManager = new MetricsManager(
@@ -59,9 +65,11 @@ class MetricsManagerTest extends TestCase
             $this->logManagerMock,
             $this->errorManagerMock,
             $this->serviceManagerMock,
+            $this->visitorInfoUtilMock,
             $this->databaseManagerMock,
             $this->metricRepositoryMock,
-            $this->entityManagerMock
+            $this->entityManagerMock,
+            $this->serviceVisitorRepositoryMock
         );
     }
 
@@ -722,5 +730,39 @@ class MetricsManagerTest extends TestCase
         $this->assertEquals(1, $result['created']);
         $this->assertEquals(1, $result['preserved']);
         $this->assertIsInt($result['space_saved']);
+    }
+
+    /**
+     * Test service visitors data
+     *
+     * @return void
+     */
+    public function testGetVisitorsByServiceName(): void
+    {
+        // call tested method
+        $result = $this->metricsManager->getVisitorsByServiceName('pied-piper.xyz');
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('count', $result);
+        $this->assertArrayHasKey('visitors', $result);
+        $this->assertArrayHasKey('pagination', $result);
+        $this->assertEquals(0, $result['count']);
+        $this->assertCount(0, $result['visitors']);
+        $this->assertNull($result['pagination']);
+    }
+
+    /**
+     * Test get referers by service name
+     *
+     * @return void
+     */
+    public function testGetReferersByServiceName(): void
+    {
+        // call tested method
+        $result = $this->metricsManager->getReferersByServiceName('pied-piper.xyz');
+
+        // assert result
+        $this->assertIsArray($result);
     }
 }
