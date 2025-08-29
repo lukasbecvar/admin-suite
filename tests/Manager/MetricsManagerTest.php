@@ -11,6 +11,7 @@ use Doctrine\ORM\Query;
 use App\Manager\LogManager;
 use App\Manager\ErrorManager;
 use App\Util\VisitorInfoUtil;
+use App\Entity\ServiceVisitor;
 use Doctrine\ORM\QueryBuilder;
 use App\Manager\MetricsManager;
 use App\Manager\ServiceManager;
@@ -22,6 +23,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ServiceVisitorRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class MetricsManagerTest
@@ -730,6 +732,338 @@ class MetricsManagerTest extends TestCase
         $this->assertEquals(1, $result['created']);
         $this->assertEquals(1, $result['preserved']);
         $this->assertIsInt($result['space_saved']);
+    }
+
+    /**
+     * Test register service visitor success
+     *
+     * @return void
+     */
+    public function testRegisterServiceVisitorSuccess(): void
+    {
+        // simulate service visitor not exists
+        $serviceVisitorRepositoryMock = $this->createMock(ServiceVisitorRepository::class);
+        $this->entityManagerMock->method('getRepository')->willReturn($serviceVisitorRepositoryMock);
+        $serviceVisitorRepositoryMock->method('findOneBy')->willReturn(null);
+
+        // expect persist and flush methods to be called
+        $this->entityManagerMock->expects($this->once())->method('persist')->with($this->isInstanceOf(ServiceVisitor::class));
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->metricsManager->registerServiceVisitor(
+            serviceName: 'pied-piper.xyz',
+            ipAddress: '127.0.0.5',
+            location: 'New York',
+            referer: 'https://pied-piper.xyz',
+            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/103.0.0.0 Safari/537.36'
+        );
+    }
+
+    /**
+     * Test register service visitor service visitor already exists
+     *
+     * @return void
+     */
+    public function testRegisterServiceVisitorServiceVisitorAlreadyExists(): void
+    {
+        // simulate service visitor already exists
+        $serviceVisitorMock = $this->createMock(ServiceVisitor::class);
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn($serviceVisitorMock);
+
+        // expect error handling
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'error to register service visitor: service visitor already exists',
+            Response::HTTP_NOT_FOUND
+        );
+
+        // call tested method
+        $this->metricsManager->registerServiceVisitor(
+            serviceName: 'pied-piper.xyz',
+            ipAddress: '127.0.0.5',
+            location: 'New York',
+            referer: 'https://pied-piper.xyz',
+            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/103.0.0.0 Safari/537.36'
+        );
+    }
+
+    /**
+     * Test register service visitor flush throws exception
+     *
+     * @return void
+     */
+    public function testRegisterServiceVisitorFlushThrowsException(): void
+    {
+        // simulate visitor not exists
+        $serviceVisitorRepositoryMock = $this->createMock(ServiceVisitorRepository::class);
+        $this->entityManagerMock->method('getRepository')->willReturn($serviceVisitorRepositoryMock);
+        $serviceVisitorRepositoryMock->method('findOneBy')->willReturn(null);
+
+        // expect persist and flush methods to be called
+        $this->entityManagerMock->expects($this->once())->method('persist')->with($this->isInstanceOf(ServiceVisitor::class));
+
+        // simulate flush throws exception
+        $this->entityManagerMock->method('flush')->willThrowException(new Exception('DB error'));
+
+        // expect error handling
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'error to register service visitor: DB error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->metricsManager->registerServiceVisitor(
+            serviceName: 'pied-piper.xyz',
+            ipAddress: '127.0.0.5',
+            location: 'New York',
+            referer: 'https://pied-piper.xyz',
+            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/103.0.0.0 Safari/537.36'
+        );
+    }
+
+    /**
+     * Test update service visitor last visit time success
+     *
+     * @return void
+     */
+    public function testUpdateServiceVisitorLastVisitTimeSuccess(): void
+    {
+        // mock service visitor
+        $serviceVisitorMock = $this->createMock(ServiceVisitor::class);
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn($serviceVisitorMock);
+        $serviceVisitorMock->method('getId')->willReturn(1);
+
+        // expect setLastVisitTime to be called
+        $serviceVisitorMock->expects($this->once())->method('setLastVisitTime')->with($this->isInstanceOf(DateTime::class));
+
+        // expect flush to be called
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->metricsManager->updateServiceVisitorLastVisitTime('127.0.0.5', 'pied-piper.xyz');
+    }
+
+    /**
+     * Test update service visitor last visit time service visitor not found
+     *
+     * @return void
+     */
+    public function testUpdateServiceVisitorLastVisitTimeServiceVisitorNotFound(): void
+    {
+        // simulate service visitor not exists
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn(null);
+
+        // simulate error handling
+        $this->errorManagerMock->method('handleError')->willThrowException(new HttpException(
+            Response::HTTP_NOT_FOUND,
+            'error to update service visitor last visit time: visitor not found'
+        ));
+
+        // expect exception
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('error to update service visitor last visit time: visitor not found');
+
+        // call tested method
+        $this->metricsManager->updateServiceVisitorLastVisitTime('123.123.123.123', 'not-found-service.xyz');
+    }
+
+    /**
+     * Test update service visitor last visit time flush throws exception
+     *
+     * @return void
+     */
+    public function testUpdateServiceVisitorLastVisitTimeFlushThrowsException(): void
+    {
+        // mock service visitor
+        $serviceVisitorMock = $this->createMock(ServiceVisitor::class);
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn($serviceVisitorMock);
+        $serviceVisitorMock->method('getId')->willReturn(1);
+
+        // expect setLastVisitTime to be called
+        $serviceVisitorMock->expects($this->once())->method('setLastVisitTime')->with($this->isInstanceOf(DateTime::class));
+
+        // simulate flush throws exception
+        $this->entityManagerMock->expects($this->once())->method('flush')->willThrowException(new Exception('DB error'));
+
+        // expect error handling
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'error to update service visitor last visit time: DB error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->metricsManager->updateServiceVisitorLastVisitTime('127.0.0.5', 'pied-piper.xyz');
+    }
+
+    /**
+     * Test update service visitor user agent success
+     *
+     * @return void
+     */
+    public function testUpdateServiceVisitorUserAgentSuccess(): void
+    {
+        // mock service visitor
+        $serviceVisitorMock = $this->createMock(ServiceVisitor::class);
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn($serviceVisitorMock);
+        $serviceVisitorMock->method('getId')->willReturn(1);
+
+        // expect setUserAgent to be called
+        $serviceVisitorMock->expects($this->once())->method('setUserAgent')->with('new-user-agent');
+
+        // expect flush to be called
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->metricsManager->updateServiceVisitorUserAgent('127.0.0.5', 'pied-piper.xyz', 'new-user-agent');
+    }
+
+    /**
+     * Test update service visitor user agent service visitor not found
+     *
+     * @return void
+     */
+    public function testUpdateServiceVisitorUserAgentServiceVisitorNotFound(): void
+    {
+        // simulate service visitor not exists
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn(null);
+
+        // simulate error handling
+        $this->errorManagerMock->method('handleError')->willThrowException(new HttpException(
+            Response::HTTP_NOT_FOUND,
+            'error to update service visitor user agent: visitor not found'
+        ));
+
+        // expect exception
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('error to update service visitor user agent: visitor not found');
+
+        // call tested method
+        $this->metricsManager->updateServiceVisitorUserAgent('123.123.123.123', 'not-found-service.xyz', 'new-user-agent');
+    }
+
+    /**
+     * Test update service visitor user agent flush throws exception
+     *
+     * @return void
+     */
+    public function testUpdateServiceVisitorUserAgentFlushThrowsException(): void
+    {
+        // mock service visitor
+        $serviceVisitorMock = $this->createMock(ServiceVisitor::class);
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn($serviceVisitorMock);
+        $serviceVisitorMock->method('getId')->willReturn(1);
+
+        // expect setUserAgent to be called
+        $serviceVisitorMock->expects($this->once())->method('setUserAgent')->with('new-user-agent');
+
+        // simulate flush throws exception
+        $this->entityManagerMock->expects($this->once())->method('flush')->willThrowException(new Exception('DB error'));
+
+        // expect error handling
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'error to update service visitor user agent: DB error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->metricsManager->updateServiceVisitorUserAgent('127.0.0.5', 'pied-piper.xyz', 'new-user-agent');
+    }
+
+    /**
+     * Test update service visitor referer success
+     *
+     * @return void
+     */
+    public function testUpdateServiceVisitorRefererSuccess(): void
+    {
+        // mock service visitor
+        $serviceVisitorMock = $this->createMock(ServiceVisitor::class);
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn($serviceVisitorMock);
+        $serviceVisitorMock->method('getReferer')->willReturn('Unknown');
+
+        // expect setReferer to be called
+        $serviceVisitorMock->expects($this->once())->method('setReferer')->with('new-referer.com');
+
+        // expect flush to be called
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        $this->metricsManager->updateServiceVisitorReferer('127.0.0.5', 'pied-piper.xyz', 'new-referer.com');
+    }
+
+    /**
+     * Test update service visitor referer does not overwrite known referer
+     *
+     * @return void
+     */
+    public function testUpdateServiceVisitorRefererDoesNotOverwriteKnownReferer(): void
+    {
+        // mock service visitor
+        $serviceVisitorMock = $this->createMock(ServiceVisitor::class);
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn($serviceVisitorMock);
+        $serviceVisitorMock->method('getReferer')->willReturn('http://existing-referer.com');
+
+        // expect setReferer and flush not to be called
+        $serviceVisitorMock->expects($this->never())->method('setReferer');
+        $this->entityManagerMock->expects($this->never())->method('flush');
+
+        // call tested method
+        $this->metricsManager->updateServiceVisitorReferer('127.0.0.5', 'pied-piper.xyz', 'new-referer.com');
+    }
+
+    /**
+     * Test update service visitor referer service visitor not found
+     *
+     * @return void
+     */
+    public function testUpdateServiceVisitorRefererServiceVisitorNotFound(): void
+    {
+        // simulate service visitor not exists
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn(null);
+
+        // simulate error handling
+        $this->errorManagerMock->method('handleError')->willThrowException(new HttpException(
+            Response::HTTP_NOT_FOUND,
+            'error to update service visitor referer: service visitor not found'
+        ));
+
+        // expect exception
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('error to update service visitor referer: service visitor not found');
+
+        // call tested method
+        $this->metricsManager->updateServiceVisitorReferer('123.123.123.123', 'not-found-service.xyz', 'new-referer.com');
+    }
+
+    /**
+     * Test update service visitor referer flush throws exception
+     *
+     * @return void
+     */
+    public function testUpdateServiceVisitorRefererFlushThrowsException(): void
+    {
+        // mock service visitor
+        $serviceVisitorMock = $this->createMock(ServiceVisitor::class);
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn($serviceVisitorMock);
+        $serviceVisitorMock->method('getReferer')->willReturn('Unknown');
+
+        // expect setReferer to be called
+        $serviceVisitorMock->expects($this->once())->method('setReferer')->with('new-referer.com');
+
+        // simulate flush throws exception
+        $this->entityManagerMock->expects($this->once())->method('flush')->willThrowException(new Exception('DB error'));
+
+        // expect error handling
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'error to update service visitor referer: DB error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->metricsManager->updateServiceVisitorReferer(
+            '127.0.0.5',
+            'pied-piper.xyz',
+            'new-referer.com'
+        );
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Util\AppUtil;
 use App\Entity\Metric;
 use App\Util\CacheUtil;
 use App\Util\VisitorInfoUtil;
+use App\Entity\ServiceVisitor;
 use App\Repository\MetricRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ServiceVisitorRepository;
@@ -688,6 +689,177 @@ class MetricsManager
             'grouped_metrics' => $groupedMetrics,
             'space_saved' => $this->estimateSpaceSavings($oldMetrics, $groupedMetrics)
         ];
+    }
+
+    /**
+     * Register new service visitor
+     *
+     * @param string $serviceName The service name
+     * @param string $ipAddress The ip address
+     * @param string $location The location
+     * @param string $referer The referer
+     * @param string $userAgent The user agent
+     *
+     * @return void
+     */
+    public function registerServiceVisitor(string $serviceName, string $ipAddress, string $location, string $referer, string $userAgent): void
+    {
+        // check if service visitor already exists
+        $serviceVisitor = $this->serviceVisitorRepository->findOneBy([
+            'ip_address' => $ipAddress,
+            'service_name' => $serviceName
+        ]);
+
+        // check if service visitor found
+        if ($serviceVisitor != null) {
+            $this->errorManager->handleError(
+                message: 'error to register service visitor: service visitor already exists',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // create service visitor entity
+        $serviceVisitor = new ServiceVisitor();
+        $serviceVisitor->setServiceName($serviceName)
+            ->setLastVisitTime(new DateTime())
+            ->setIpAddress($ipAddress)
+            ->setLocation($location)
+            ->setReferer($referer)
+            ->setUserAgent($userAgent);
+
+        // persist service visitor entity
+        $this->entityManagerInterface->persist($serviceVisitor);
+
+        try {
+            // flush service visitor to database
+            $this->entityManagerInterface->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to register service visitor: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Update service visitor last visit time to current time
+     *
+     * @param string $ipAddress The ip address
+     * @param string $serviceName The service name
+     *
+     * @return void
+     */
+    public function updateServiceVisitorLastVisitTime(string $ipAddress, string $serviceName): void
+    {
+        // get service visitor entity
+        $serviceVisitor = $this->serviceVisitorRepository->findOneBy([
+            'ip_address' => $ipAddress,
+            'service_name' => $serviceName
+        ]);
+
+        // check if service visitor found
+        if ($serviceVisitor == null) {
+            $this->errorManager->handleError(
+                message: 'error to update service visitor last visit time: visitor not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // update service visitor last visit time
+        $serviceVisitor->setLastVisitTime(new DateTime());
+
+        try {
+            // flush service visitor to database
+            $this->entityManagerInterface->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to update service visitor last visit time: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Update service visitor user agent
+     *
+     * @param string $ipAddress The ip address
+     * @param string $serviceName The service name
+     * @param string $userAgent The new user agent
+     *
+     * @return void
+     */
+    public function updateServiceVisitorUserAgent(string $ipAddress, string $serviceName, string $userAgent): void
+    {
+        // get service visitor entity
+        $serviceVisitor = $this->serviceVisitorRepository->findOneBy([
+            'ip_address' => $ipAddress,
+            'service_name' => $serviceName
+        ]);
+
+        // check if service visitor found
+        if ($serviceVisitor == null) {
+            $this->errorManager->handleError(
+                message: 'error to update service visitor user agent: service visitor not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // update service visitor user agent
+        $serviceVisitor->setUserAgent($userAgent);
+
+        try {
+            // flush service visitor to database
+            $this->entityManagerInterface->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to update service visitor user agent: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Update service visitor referer
+     *
+     * @param string $ipAddress The ip address
+     * @param string $serviceName The service name
+     * @param string $referer The new referer
+     *
+     * @return void
+     */
+    public function updateServiceVisitorReferer(string $ipAddress, string $serviceName, string $referer): void
+    {
+        // get service visitor entity
+        $serviceVisitor = $this->serviceVisitorRepository->findOneBy([
+            'ip_address' => $ipAddress,
+            'service_name' => $serviceName
+        ]);
+
+        // check if service visitor found
+        if ($serviceVisitor == null) {
+            $this->errorManager->handleError(
+                message: 'error to update service visitor referer: service visitor not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // check if referer is already known
+        if ($serviceVisitor->getReferer() != 'Unknown') {
+            return;
+        }
+
+        // update service visitor referer
+        $serviceVisitor->setReferer($referer);
+
+        try {
+            // flush service visitor to database
+            $this->entityManagerInterface->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to update service visitor referer: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     /**
