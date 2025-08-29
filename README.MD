@@ -125,6 +125,22 @@ The Metric Collector allows you to collect metrics from monitored HTTP web appli
   "storage_usage": 10,
 }
 ```
+#### Visitor tracking
+The visitor tracking feature allows you to monitor visitors to HTTP-based services. To enable tracking, you need to configure the service in the ([services-monitoring.json](config/suite/services-monitoring.json)) file. The service name and URL must be specified (the URL is used for verification as `HTTP_ORIGIN`). Tracking is performed via an API that needs to be called from your application.
+```javascript
+const visitorReferer = document.referrer || 'Unknown'
+
+fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        service_name: 'monitored-service-name',
+        referer: visitorReferer
+    })
+})
+```
 
 ## Notifications
 Notifications from application are sent to admin users via web push notifications if the admin enables them. It also allows sending alerts directly to the admin's email.

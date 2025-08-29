@@ -14,6 +14,7 @@ use App\Controller\Component\DatabaseBrowserController;
 use App\Controller\Component\MetricsDashboardController;
 use App\Controller\Component\FileSystemBrowserController;
 use App\Controller\Component\MonitoringManagerController;
+use App\Controller\Api\ServiceVisitorTrackingApiController;
 
 /**
  * Class FeatureFlagsMiddleware
@@ -49,7 +50,7 @@ class FeatureFlagsMiddleware
             $controllerObject = $controller[0];
 
             // disable monitoring if feature flag is disabled
-            if ($controllerObject instanceof MonitoringManagerController) {
+            if ($controllerObject instanceof MonitoringManagerController || $controllerObject instanceof ServiceVisitorTrackingApiController) {
                 if ($this->appUtil->isFeatureFlagDisabled('monitoring')) {
                     $this->errorManager->handleError(
                         message: 'monitoring is disabled',
