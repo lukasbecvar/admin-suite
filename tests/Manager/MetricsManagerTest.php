@@ -822,6 +822,75 @@ class MetricsManagerTest extends TestCase
     }
 
     /**
+     * Test check if visitor is already registered when found
+     *
+     * @return void
+     */
+    public function testCheckIfVisitorAlreadyRegisteredWhenFound(): void
+    {
+        // mock service visitor
+        $serviceVisitorMock = $this->createMock(ServiceVisitor::class);
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn($serviceVisitorMock);
+
+        // call tested method
+        $result = $this->metricsManager->checkIfVisitorAlreadyRegistered('127.0.0.5', 'pied-piper.xyz');
+
+        // assert result
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Test check if visitor is already registered when found
+     *
+     * @return void
+     */
+    public function testCheckIfVisitorAlreadyRegisteredWhenNotFound(): void
+    {
+        // mock service visitor
+        $this->serviceVisitorRepositoryMock->method('findOneBy')->willReturn(null);
+
+        // call tested method
+        $result = $this->metricsManager->checkIfVisitorAlreadyRegistered('127.0.0.5', 'pied-piper.xyz');
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test service visitors data
+     *
+     * @return void
+     */
+    public function testGetVisitorsByServiceName(): void
+    {
+        // call tested method
+        $result = $this->metricsManager->getVisitorsByServiceName('pied-piper.xyz');
+
+        // assert result
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('count', $result);
+        $this->assertArrayHasKey('visitors', $result);
+        $this->assertArrayHasKey('pagination', $result);
+        $this->assertEquals(0, $result['count']);
+        $this->assertCount(0, $result['visitors']);
+        $this->assertNull($result['pagination']);
+    }
+
+    /**
+     * Test get referers by service name
+     *
+     * @return void
+     */
+    public function testGetReferersByServiceName(): void
+    {
+        // call tested method
+        $result = $this->metricsManager->getReferersByServiceName('pied-piper.xyz');
+
+        // assert result
+        $this->assertIsArray($result);
+    }
+
+    /**
      * Test update service visitor last visit time success
      *
      * @return void
@@ -1059,44 +1128,6 @@ class MetricsManagerTest extends TestCase
         );
 
         // call tested method
-        $this->metricsManager->updateServiceVisitorReferer(
-            '127.0.0.5',
-            'pied-piper.xyz',
-            'new-referer.com'
-        );
-    }
-
-    /**
-     * Test service visitors data
-     *
-     * @return void
-     */
-    public function testGetVisitorsByServiceName(): void
-    {
-        // call tested method
-        $result = $this->metricsManager->getVisitorsByServiceName('pied-piper.xyz');
-
-        // assert result
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('count', $result);
-        $this->assertArrayHasKey('visitors', $result);
-        $this->assertArrayHasKey('pagination', $result);
-        $this->assertEquals(0, $result['count']);
-        $this->assertCount(0, $result['visitors']);
-        $this->assertNull($result['pagination']);
-    }
-
-    /**
-     * Test get referers by service name
-     *
-     * @return void
-     */
-    public function testGetReferersByServiceName(): void
-    {
-        // call tested method
-        $result = $this->metricsManager->getReferersByServiceName('pied-piper.xyz');
-
-        // assert result
-        $this->assertIsArray($result);
+        $this->metricsManager->updateServiceVisitorReferer('127.0.0.5', 'pied-piper.xyz', 'new-referer.com');
     }
 }

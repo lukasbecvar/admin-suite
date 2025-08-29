@@ -704,14 +704,8 @@ class MetricsManager
      */
     public function registerServiceVisitor(string $serviceName, string $ipAddress, string $location, string $referer, string $userAgent): void
     {
-        // check if service visitor already exists
-        $serviceVisitor = $this->serviceVisitorRepository->findOneBy([
-            'ip_address' => $ipAddress,
-            'service_name' => $serviceName
-        ]);
-
         // check if service visitor found
-        if ($serviceVisitor != null) {
+        if ($this->checkIfVisitorAlreadyRegistered($ipAddress, $serviceName)) {
             $this->errorManager->handleError(
                 message: 'error to register service visitor: service visitor already exists',
                 code: Response::HTTP_NOT_FOUND
@@ -739,6 +733,142 @@ class MetricsManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+    }
+
+    /**
+     * Check if visitor is already registered
+     *
+     * @param string $ipAddress The ip address
+     * @param string $serviceName The service name
+     *
+     * @return bool True if visitor is already registered, false if not
+     */
+    public function checkIfVisitorAlreadyRegistered(string $ipAddress, string $serviceName): bool
+    {
+        // get service visitor
+        $serviceVisitor = $this->serviceVisitorRepository->findOneBy([
+            'ip_address' => $ipAddress,
+            'service_name' => $serviceName
+        ]);
+
+        // check if service visitor found
+        if ($serviceVisitor != null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get service visitors by service name
+     *
+     * @param string $serviceName The service name
+     * @param int $page The page number
+     *
+     * @return array<string, mixed> The service visitors data
+     */
+    public function getVisitorsByServiceName(string $serviceName, int $page = 1): array
+    {
+        $limit = 100;
+        $offset = ($page - 1) * $limit;
+
+        // get total count of service visitors
+        try {
+            $count = $this->serviceVisitorRepository->getCountByServiceName($serviceName);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error getting service visitors count: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // check if service visitors found
+        if ($count == 0) {
+            return [
+                'count' => 0,
+                'visitors' => [],
+                'pagination' => null
+            ];
+        }
+
+        // get service visitors
+        try {
+            $serviceVisitors = $this->serviceVisitorRepository->findByServiceName($serviceName, $limit, $offset);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error getting service visitors: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // format service visitors
+        $formattedServiceVisitors = [];
+        foreach ($serviceVisitors as $serviceVisitor) {
+            $lastVisitTime = $serviceVisitor->getLastVisitTime();
+            $formattedServiceVisitors[] = [
+                'id' => $serviceVisitor->getId(),
+                'ip_address' => $serviceVisitor->getIpAddress(),
+                'location' => $serviceVisitor->getLocation(),
+                'referer' => $serviceVisitor->getReferer(),
+                'browser' => $this->visitorInfoUtil->getBrowserShortify($serviceVisitor->getUserAgent() ?? 'Unknown'),
+                'os' => $this->visitorInfoUtil->getOs($serviceVisitor->getUserAgent() ?? 'Unknown'),
+                'last_visit_time' => $lastVisitTime ? $lastVisitTime->format('Y-m-d H:i:s') : 'Unknown',
+            ];
+        }
+
+        // calculate total pages
+        $totalPages = ceil($count / $limit);
+
+        // return service visitors data
+        return [
+            'count' => $count,
+            'visitors' => $formattedServiceVisitors,
+            'pagination' => [
+                'currentPage' => $page,
+                'totalPages' => $totalPages,
+                'limit' => $limit
+            ]
+        ];
+    }
+
+    /**
+     * Get referers with count for a given service name
+     *
+     * @param string $serviceName The service name to search for
+     *
+     * @return array<string, int> The referers with count
+     */
+    public function getReferersByServiceName(string $serviceName): array
+    {
+        $referers = [];
+
+        // get service visitors
+        try {
+            $serviceVisitors = $this->serviceVisitorRepository->findByServiceName($serviceName);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error getting service visitors: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // check if service visitors found
+        if ($serviceVisitors == null) {
+            return $referers;
+        }
+
+        // get referers with count for a given service name
+        foreach ($serviceVisitors as $serviceVisitor) {
+            if (!isset($referers[$serviceVisitor->getReferer()])) {
+                $referers[$serviceVisitor->getReferer()] = 0;
+            }
+            $referers[$serviceVisitor->getReferer()]++;
+        }
+
+        // sort referers by count
+        arsort($referers);
+
+        return $referers;
     }
 
     /**
@@ -860,117 +990,5 @@ class MetricsManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-    }
-
-    /**
-     * Get service visitors by service name
-     *
-     * @param string $serviceName The service name
-     * @param int $page The page number
-     *
-     * @return array<string, mixed> The service visitors data
-     */
-    public function getVisitorsByServiceName(string $serviceName, int $page = 1): array
-    {
-        $limit = 100;
-        $offset = ($page - 1) * $limit;
-
-        // get total count of service visitors
-        try {
-            $count = $this->serviceVisitorRepository->getCountByServiceName($serviceName);
-        } catch (Exception $e) {
-            $this->errorManager->handleError(
-                message: 'error getting service visitors count: ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
-
-        // check if service visitors found
-        if ($count == 0) {
-            return [
-                'count' => 0,
-                'visitors' => [],
-                'pagination' => null
-            ];
-        }
-
-        // get service visitors
-        try {
-            $serviceVisitors = $this->serviceVisitorRepository->findByServiceName($serviceName, $limit, $offset);
-        } catch (Exception $e) {
-            $this->errorManager->handleError(
-                message: 'error getting service visitors: ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
-
-        // format service visitors
-        $formattedServiceVisitors = [];
-        foreach ($serviceVisitors as $serviceVisitor) {
-            $lastVisitTime = $serviceVisitor->getLastVisitTime();
-            $formattedServiceVisitors[] = [
-                'id' => $serviceVisitor->getId(),
-                'ip_address' => $serviceVisitor->getIpAddress(),
-                'location' => $serviceVisitor->getLocation(),
-                'referer' => $serviceVisitor->getReferer(),
-                'browser' => $this->visitorInfoUtil->getBrowserShortify($serviceVisitor->getUserAgent() ?? 'Unknown'),
-                'os' => $this->visitorInfoUtil->getOs($serviceVisitor->getUserAgent() ?? 'Unknown'),
-                'last_visit_time' => $lastVisitTime ? $lastVisitTime->format('Y-m-d H:i:s') : 'Unknown',
-            ];
-        }
-
-        // calculate total pages
-        $totalPages = ceil($count / $limit);
-
-        // return service visitors data
-        return [
-            'count' => $count,
-            'visitors' => $formattedServiceVisitors,
-            'pagination' => [
-                'currentPage' => $page,
-                'totalPages' => $totalPages,
-                'limit' => $limit
-            ]
-        ];
-    }
-
-    /**
-     * Get referers with count for a given service name
-     *
-     * @param string $serviceName The service name to search for
-     *
-     * @return array<string, int> The referers with count
-     */
-    public function getReferersByServiceName(string $serviceName): array
-    {
-        $referers = [];
-
-        // get service visitors
-        try {
-            $serviceVisitors = $this->serviceVisitorRepository->findByServiceName($serviceName);
-        } catch (Exception $e) {
-            $this->errorManager->handleError(
-                message: 'error getting service visitors: ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
-
-        // check if service visitors found
-        if ($serviceVisitors == null) {
-            return $referers;
-        }
-
-        // get referers with count for a given service name
-        foreach ($serviceVisitors as $serviceVisitor) {
-            if (!isset($referers[$serviceVisitor->getReferer()])) {
-                $referers[$serviceVisitor->getReferer()] = 0;
-            }
-            $referers[$serviceVisitor->getReferer()]++;
-        }
-
-        // sort referers by count
-        arsort($referers);
-
-        return $referers;
     }
 }

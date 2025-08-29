@@ -39,9 +39,10 @@ class AuthenticatedCheckMiddleware
 
         // check if route is excluded from authentication check
         if (
+            $pathInfo !== '/api/monitoring/visitor/tracking' &&
             $pathInfo !== '/api/external/log' &&
-            $pathInfo !== '/login' &&
             $pathInfo !== '/register' &&
+            $pathInfo !== '/login' &&
             $pathInfo !== '/' &&
             !str_starts_with($pathInfo, '/error') &&
             !preg_match('#^/(_profiler|_wdt)#', $pathInfo)
