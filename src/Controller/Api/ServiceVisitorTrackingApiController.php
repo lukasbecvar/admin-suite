@@ -3,7 +3,6 @@
 namespace App\Controller\Api;
 
 use Exception;
-use App\Manager\ErrorManager;
 use App\Util\VisitorInfoUtil;
 use App\Manager\MetricsManager;
 use App\Manager\ServiceManager;
@@ -22,21 +21,31 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class ServiceVisitorTrackingApiController extends AbstractController
 {
-    private ErrorManager $errorManager;
     private ServiceManager $serviceManager;
     private MetricsManager $metricsManager;
     private VisitorInfoUtil $visitorInfoUtil;
 
-    public function __construct(
-        ErrorManager $errorManager,
-        ServiceManager $serviceManager,
-        MetricsManager $metricsManager,
-        VisitorInfoUtil $visitorInfoUtil
-    ) {
-        $this->errorManager = $errorManager;
+    public function __construct(ServiceManager $serviceManager, MetricsManager $metricsManager, VisitorInfoUtil $visitorInfoUtil)
+    {
         $this->serviceManager = $serviceManager;
         $this->metricsManager = $metricsManager;
         $this->visitorInfoUtil = $visitorInfoUtil;
+    }
+
+    /**
+     * CORS preflight request
+     *
+     * @return Response The response object
+     */
+    #[Route('/api/monitoring/visitor/tracking', methods: ['OPTIONS'])]
+    public function preflight(): Response
+    {
+        $response = new Response();
+        $response->setStatusCode(Response::HTTP_NO_CONTENT);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->headers->set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        return $response;
     }
 
     /**
@@ -49,15 +58,24 @@ class ServiceVisitorTrackingApiController extends AbstractController
     #[Route('/api/monitoring/visitor/tracking', methods:['POST'], name: 'app_api_monitoring_visitor_tracking')]
     public function visitorTracking(Request $request): JsonResponse
     {
+        $response = new JsonResponse();
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->headers->set('Access-Control-Allow-Methods', 'POST');
+
+        // get request data
+        $data = json_decode($request->getContent(), true);
+
         // get service name
-        $serviceName = (string) $request->get('service_name');
+        $serviceName = $data['service_name'] ?? null;
 
         // check if service name is set
         if (empty($serviceName)) {
-            return $this->json([
+            $response->setStatusCode(JsonResponse::HTTP_BAD_REQUEST);
+            $response->setContent((string) json_encode([
                 'status' => 'error',
                 'message' => 'Parameter "service_name" is required'
-            ], JsonResponse::HTTP_BAD_REQUEST);
+            ], JSON_THROW_ON_ERROR));
+            return $response;
         }
 
         // get service config
@@ -65,45 +83,65 @@ class ServiceVisitorTrackingApiController extends AbstractController
 
         // check if service config is loaded
         if ($serviceConfig === null) {
-            return $this->json([
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $response->setContent((string) json_encode([
                 'status' => 'error',
                 'message' => 'Service config is not loaded'
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            ], JSON_THROW_ON_ERROR));
+            return $response;
         }
 
         // check if service config found
         if (!array_key_exists($serviceName, $serviceConfig)) {
-            return $this->json([
+            $response->setStatusCode(JsonResponse::HTTP_NOT_FOUND);
+            $response->setContent((string) json_encode([
                 'status' => 'error',
                 'message' => 'Service not found'
-            ], JsonResponse::HTTP_NOT_FOUND);
+            ], JSON_THROW_ON_ERROR));
+            return $response;
         }
 
         // check if service is web http type
         if ($serviceConfig[$serviceName]['type'] != 'http') {
-            return $this->json([
+            $response->setStatusCode(JsonResponse::HTTP_BAD_REQUEST);
+            $response->setContent((string) json_encode([
                 'status' => 'error',
                 'message' => 'Service is not web http type'
-            ], JsonResponse::HTTP_BAD_REQUEST);
+            ], JSON_THROW_ON_ERROR));
+            return $response;
         }
 
         // check if service config is set
         if ($serviceConfig == null) {
-            return $this->json([
+            $response->setStatusCode(JsonResponse::HTTP_NOT_FOUND);
+            $response->setContent((string) json_encode([
                 'status' => 'error',
                 'message' => 'Unknown service'
-            ], JsonResponse::HTTP_NOT_FOUND);
+            ], JSON_THROW_ON_ERROR));
+            return $response;
         }
 
-        // get request uri
-        $requestUri = $request->getUri();
+        // get request origin
+        $requestOrigin = $request->headers->get('Origin');
 
-        // check if request uri is allowed
-        if (!str_contains($serviceConfig[$serviceName]['url'], $requestUri)) {
-            $this->errorManager->handleError(
-                message: 'error to init visitor tracking: request uri is not allowed',
-                code: Response::HTTP_FORBIDDEN
-            );
+        // check if request origin is set
+        if (empty($requestOrigin)) {
+            $response->setStatusCode(JsonResponse::HTTP_BAD_REQUEST);
+            $response->setContent((string) json_encode([
+                'status' => 'error',
+                'message' => 'Request header origin is required'
+            ], JSON_THROW_ON_ERROR));
+            return $response;
+        }
+
+        // check if request origin is allowed
+        if (!str_contains($serviceConfig[$serviceName]['url'], $requestOrigin)) {
+            $response->setStatusCode(JsonResponse::HTTP_FORBIDDEN);
+            $response->setContent((string) json_encode([
+                'status' => 'error',
+                'message' => 'Request origin is not allowed'
+            ], JSON_THROW_ON_ERROR));
+            return $response;
         }
 
         // get visitor ip address
@@ -111,10 +149,12 @@ class ServiceVisitorTrackingApiController extends AbstractController
 
         // check if ip address is detected
         if ($ipAddress === null) {
-            return $this->json([
+            $response->setStatusCode(JsonResponse::HTTP_BAD_REQUEST);
+            $response->setContent((string) json_encode([
                 'status' => 'error',
                 'message' => 'Visitor ip cannot be detected'
-            ], JsonResponse::HTTP_BAD_REQUEST);
+            ], JSON_THROW_ON_ERROR));
+            return $response;
         }
 
         // get visitor user agent
@@ -126,7 +166,7 @@ class ServiceVisitorTrackingApiController extends AbstractController
         }
 
         // get visitor referer
-        $referer = $this->visitorInfoUtil->getReferer();
+        $referer = $data['referer'] ?? 'Unknown';
 
         // check if visitor is already registered
         if ($this->metricsManager->checkIfVisitorAlreadyRegistered($ipAddress, $serviceName)) {
@@ -137,15 +177,19 @@ class ServiceVisitorTrackingApiController extends AbstractController
                 $this->metricsManager->updateServiceVisitorReferer($ipAddress, $serviceName, $referer);
 
                 // return success response
-                return $this->json([
+                $response->setStatusCode(JsonResponse::HTTP_OK);
+                $response->setContent((string) json_encode([
                     'status' => 'success',
                     'message' => 'Visitor data updated'
-                ], JsonResponse::HTTP_OK);
+                ], JSON_THROW_ON_ERROR));
+                return $response;
             } catch (Exception $e) {
-                $this->errorManager->handleError(
-                    message: 'error to update service visitor data: ' . $e->getMessage(),
-                    code: Response::HTTP_INTERNAL_SERVER_ERROR
-                );
+                $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                $response->setContent((string) json_encode([
+                    'status' => 'error',
+                    'message' => 'Error to update service visitor data: ' . $e->getMessage()
+                ], JSON_THROW_ON_ERROR));
+                return $response;
             }
         }
 
@@ -153,10 +197,7 @@ class ServiceVisitorTrackingApiController extends AbstractController
         $ipInfo = (array) $this->visitorInfoUtil->getIpInfo($ipAddress);
 
         // check if ip info is valid
-        if (
-            !empty($ipInfo['status']) && $ipInfo['status'] === 'success' &&
-            !empty($ipInfo['countryCode']) && !empty($ipInfo['city'])
-        ) {
+        if (!empty($ipInfo['status']) && $ipInfo['status'] === 'success' && !empty($ipInfo['countryCode']) && !empty($ipInfo['city'])) {
             $location = $ipInfo['countryCode'] . '/' . $ipInfo['city'];
         } else {
             $location = 'Unknown';
@@ -173,15 +214,19 @@ class ServiceVisitorTrackingApiController extends AbstractController
             );
 
             // return success response
-            return $this->json([
+            $response->setStatusCode(JsonResponse::HTTP_OK);
+            $response->setContent((string) json_encode([
                 'status' => 'success',
                 'message' => 'Visitor registered'
-            ], JsonResponse::HTTP_OK);
+            ], JSON_THROW_ON_ERROR));
+            return $response;
         } catch (Exception $e) {
-            $this->errorManager->handleError(
-                message: 'error to register service visitor: ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $response->setContent((string) json_encode([
+                'status' => 'error',
+                'message' => 'Error to register service visitor: ' . $e->getMessage()
+            ], JSON_THROW_ON_ERROR));
+            return $response;
         }
     }
 }

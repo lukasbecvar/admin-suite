@@ -3,7 +3,6 @@
 namespace App\Tests\Controller\Api;
 
 use App\Tests\CustomTestCase;
-use App\Manager\ErrorManager;
 use App\Util\VisitorInfoUtil;
 use App\Manager\MetricsManager;
 use App\Manager\ServiceManager;
@@ -21,7 +20,6 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 class ServiceVisitorTrackingApiControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;
-    private MockObject $errorManagerMock;
     private MockObject $serviceManagerMock;
     private MockObject $metricsManagerMock;
     private MockObject $visitorInfoUtilMock;
@@ -31,13 +29,11 @@ class ServiceVisitorTrackingApiControllerTest extends CustomTestCase
         $this->client = static::createClient();
 
         // mock dependencies
-        $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
         $this->metricsManagerMock = $this->createMock(MetricsManager::class);
         $this->visitorInfoUtilMock = $this->createMock(VisitorInfoUtil::class);
 
         // set mocks in container
-        self::getContainer()->set(ErrorManager::class, $this->errorManagerMock);
         self::getContainer()->set(ServiceManager::class, $this->serviceManagerMock);
         self::getContainer()->set(MetricsManager::class, $this->metricsManagerMock);
         self::getContainer()->set(VisitorInfoUtil::class, $this->visitorInfoUtilMock);
@@ -84,7 +80,11 @@ class ServiceVisitorTrackingApiControllerTest extends CustomTestCase
         // mock service list
         $this->serviceManagerMock->method('getServicesList')->willReturn(['some-other-service' => []]);
 
-        $this->client->request('POST', '/api/monitoring/visitor/tracking', ['service_name' => 'test-service']);
+        $this->client->request('POST', '/api/monitoring/visitor/tracking', [], [], [
+            'CONTENT_TYPE' => 'application/json'
+        ], json_encode([
+            'service_name' => 'test-service'
+        ]) ?: null);
 
         /** @var array<mixed> $responseData */
         $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
@@ -105,7 +105,11 @@ class ServiceVisitorTrackingApiControllerTest extends CustomTestCase
         // mock service list
         $this->serviceManagerMock->method('getServicesList')->willReturn(['test-service' => ['type' => 'tcp']]);
 
-        $this->client->request('POST', '/api/monitoring/visitor/tracking', ['service_name' => 'test-service']);
+        $this->client->request('POST', '/api/monitoring/visitor/tracking', [], [], [
+            'CONTENT_TYPE' => 'application/json'
+        ], json_encode([
+            'service_name' => 'test-service'
+        ]) ?: null);
 
         /** @var array<mixed> $responseData */
         $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
@@ -126,7 +130,11 @@ class ServiceVisitorTrackingApiControllerTest extends CustomTestCase
         // mock service list
         $this->serviceManagerMock->method('getServicesList')->willReturn(['some-other-service' => []]);
 
-        $this->client->request('POST', '/api/monitoring/visitor/tracking', ['service_name' => 'unknown-service-name']);
+        $this->client->request('POST', '/api/monitoring/visitor/tracking', [], [], [
+            'CONTENT_TYPE' => 'application/json'
+        ], json_encode([
+            'service_name' => 'unknown-service-name'
+        ]) ?: null);
 
         /** @var array<mixed> $responseData */
         $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
@@ -138,22 +146,29 @@ class ServiceVisitorTrackingApiControllerTest extends CustomTestCase
     }
 
     /**
-     * Test visitor tracking when request uri is not valid
+     * Test visitor tracking when request origin is not valid
      *
      * @return void
      */
-    public function testVisitorTrackingWithInvalidRequestUri(): void
+    public function testVisitorTrackingWithInvalidRequestOrigin(): void
     {
         // mock service list
         $this->serviceManagerMock->method('getServicesList')->willReturn(['test-service' => ['type' => 'http', 'url' => 'http://allowed-domain.com']]);
 
-        // expect error handling
-        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            'error to init visitor tracking: request uri is not allowed',
-            Response::HTTP_FORBIDDEN
-        );
+        $this->client->request('POST', '/api/monitoring/visitor/tracking', [], [], [
+            'CONTENT_TYPE' => 'application/json',
+            'HTTP_ORIGIN' => 'http://test.xyz'
+        ], json_encode([
+            'service_name' => 'test-service'
+        ]) ?: null);
 
-        $this->client->request('POST', '/api/monitoring/visitor/tracking', ['service_name' => 'test-service']);
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        $this->assertSame('error', $responseData['status']);
+        $this->assertStringContainsString('Request origin is not allowed', $responseData['message']);
     }
 
     /**
@@ -167,14 +182,19 @@ class ServiceVisitorTrackingApiControllerTest extends CustomTestCase
         $this->serviceManagerMock->method('getServicesList')->willReturn([
             'test-service' => [
                 'type' => 'http',
-                'url' => 'http://localhost/api/monitoring/visitor/tracking'
+                'url' => 'http://test.xyz'
             ]
         ]);
 
         // simulate ip detection failure
         $this->visitorInfoUtilMock->method('getIP')->willReturn(null);
 
-        $this->client->request('POST', '/api/monitoring/visitor/tracking', ['service_name' => 'test-service']);
+        $this->client->request('POST', '/api/monitoring/visitor/tracking', [], [], [
+            'CONTENT_TYPE' => 'application/json',
+            'HTTP_ORIGIN' => 'http://test.xyz'
+        ], json_encode([
+            'service_name' => 'test-service'
+        ]) ?: null);
 
         /** @var array<mixed> $responseData */
         $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
@@ -202,14 +222,13 @@ class ServiceVisitorTrackingApiControllerTest extends CustomTestCase
         $this->serviceManagerMock->method('getServicesList')->willReturn([
             $serviceName => [
                 'type' => 'http',
-                'url' => 'http://localhost/api/monitoring/visitor/tracking'
+                'url' => 'http://test.xyz'
             ]
         ]);
 
         // mock visitor info
         $this->visitorInfoUtilMock->method('getIP')->willReturn($ipAddress);
         $this->visitorInfoUtilMock->method('getUserAgent')->willReturn($userAgent);
-        $this->visitorInfoUtilMock->method('getReferer')->willReturn($referer);
         $this->metricsManagerMock->method('checkIfVisitorAlreadyRegistered')->willReturn(false);
         $this->visitorInfoUtilMock->method('getIpInfo')->willReturn((object)['status' => 'success', 'countryCode' => 'TS', 'city' => 'Testville']);
 
@@ -217,7 +236,13 @@ class ServiceVisitorTrackingApiControllerTest extends CustomTestCase
         $this->metricsManagerMock->expects($this->once())->method('registerServiceVisitor')
             ->with($serviceName, $ipAddress, 'TS/Testville', $referer, $userAgent);
 
-        $this->client->request('POST', '/api/monitoring/visitor/tracking', ['service_name' => $serviceName]);
+        $this->client->request('POST', '/api/monitoring/visitor/tracking', [], [], [
+            'CONTENT_TYPE' => 'application/json',
+            'HTTP_ORIGIN' => 'http://test.xyz'
+        ], json_encode([
+            'service_name' => $serviceName,
+            'referer' => $referer
+        ]) ?: null);
 
         /** @var array<mixed> $responseData */
         $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
@@ -245,14 +270,13 @@ class ServiceVisitorTrackingApiControllerTest extends CustomTestCase
         $this->serviceManagerMock->method('getServicesList')->willReturn([
             $serviceName => [
                 'type' => 'http',
-                'url' => 'http://localhost/api/monitoring/visitor/tracking'
+                'url' => 'http://test.xyz'
             ]
         ]);
 
         // mock visitor info
         $this->visitorInfoUtilMock->method('getIP')->willReturn($ipAddress);
         $this->visitorInfoUtilMock->method('getUserAgent')->willReturn($userAgent);
-        $this->visitorInfoUtilMock->method('getReferer')->willReturn($referer);
         $this->metricsManagerMock->method('checkIfVisitorAlreadyRegistered')->willReturn(true);
 
         // expect visitor data update calls
@@ -260,7 +284,13 @@ class ServiceVisitorTrackingApiControllerTest extends CustomTestCase
         $this->metricsManagerMock->expects($this->once())->method('updateServiceVisitorUserAgent')->with($ipAddress, $serviceName, $userAgent);
         $this->metricsManagerMock->expects($this->once())->method('updateServiceVisitorReferer')->with($ipAddress, $serviceName, $referer);
 
-        $this->client->request('POST', '/api/monitoring/visitor/tracking', ['service_name' => $serviceName]);
+        $this->client->request('POST', '/api/monitoring/visitor/tracking', [], [], [
+            'CONTENT_TYPE' => 'application/json',
+            'HTTP_ORIGIN' => 'http://test.xyz'
+        ], json_encode([
+            'service_name' => $serviceName,
+            'referer' => $referer
+        ]) ?: null);
 
         /** @var array<mixed> $responseData */
         $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);

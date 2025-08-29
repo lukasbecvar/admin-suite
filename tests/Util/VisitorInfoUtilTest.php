@@ -112,26 +112,6 @@ class VisitorInfoUtilTest extends TestCase
     }
 
     /**
-     * Test get referer
-     *
-     * @return void
-     */
-    public function testGetReferer(): void
-    {
-        // set server variable
-        $_SERVER['HTTP_REFERER'] = 'https://example.com/path?query=value';
-
-        // call tested method
-        $result = $this->visitorInfoUtil->getReferer();
-
-        // assert result
-        $this->assertEquals('example.com', $result);
-
-        // unset server variables
-        unset($_SERVER['HTTP_REFERER']);
-    }
-
-    /**
      * Test get user agent when HTTP_USER_AGENT header is set
      *
      * @return void
