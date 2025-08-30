@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package App\Command
  */
-#[AsCommand(name: 'app:validate:visitors', description: 'Validate service visitors data')]
+#[AsCommand(name: 'app:metrics:visitors:validate', description: 'Validate service visitors data')]
 class ValidateServiceVisitorsCommand extends Command
 {
     private MetricsManager $metricsManager;
