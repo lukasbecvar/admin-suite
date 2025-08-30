@@ -101,7 +101,8 @@ class DatabaseManager
 
             // inno-db buffer pool
             $row = $conn->fetchAssociative("SHOW VARIABLES LIKE 'innodb_buffer_pool_size'");
-            $stats['innodb_buffer_pool_size'] = $row['Value'] ?? 0;
+            $bytes = (int)($row['Value'] ?? 0);
+            $stats['innodb_buffer_pool_size'] = round($bytes / 1024 / 1024 / 1024, 2); // GB
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get database stats: ' . $e->getMessage(),

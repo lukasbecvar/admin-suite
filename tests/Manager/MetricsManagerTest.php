@@ -9,6 +9,8 @@ use App\Entity\Metric;
 use App\Util\CacheUtil;
 use Doctrine\ORM\Query;
 use App\Manager\LogManager;
+use Doctrine\DBAL\Statement;
+use Doctrine\DBAL\Connection;
 use App\Manager\ErrorManager;
 use App\Util\VisitorInfoUtil;
 use App\Entity\ServiceVisitor;
@@ -1129,5 +1131,48 @@ class MetricsManagerTest extends TestCase
 
         // call tested method
         $this->metricsManager->updateServiceVisitorReferer('127.0.0.5', 'pied-piper.xyz', 'new-referer.com');
+    }
+
+    /**
+     * Test validate service visitors
+     *
+     * @return void
+     */
+    public function testValidateServiceVisitors(): void
+    {
+        // mock services list
+        $this->serviceManagerMock->method('getServicesList')->willReturn([
+            'service1' => [],
+            'service2' => []
+        ]);
+
+        // mock visitors
+        $visitor1 = $this->createMock(ServiceVisitor::class);
+        $visitor1->method('getServiceName')->willReturn('service1');
+        $visitor2 = $this->createMock(ServiceVisitor::class);
+        $visitor2->method('getServiceName')->willReturn('orphaned_service');
+        $this->serviceVisitorRepositoryMock->method('findAll')->willReturn([$visitor1, $visitor2]);
+
+        // mock entity manager
+        $this->entityManagerMock->expects($this->once())->method('remove')->with($visitor2);
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // mock database manager
+        $tableName = 'service_visitor';
+        $this->databaseManagerMock->method('getEntityTableName')->willReturn($tableName);
+        $this->databaseManagerMock->expects($this->once())->method('recalculateTableIds')->with($tableName);
+
+        // mock connection and statement for duplicate removal
+        $connectionMock = $this->createMock(Connection::class);
+        $statementMock = $this->createMock(Statement::class);
+        $this->entityManagerMock->method('getConnection')->willReturn($connectionMock);
+        $connectionMock->method('prepare')->willReturn($statementMock);
+        $statementMock->method('executeStatement')->willReturn(1);
+
+        // call the method
+        $result = $this->metricsManager->validateServiceVisitors();
+
+        // assert the result
+        $this->assertEquals(['orphaned_removed' => 1, 'duplicates_removed' => 1], $result);
     }
 }

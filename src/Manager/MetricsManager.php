@@ -991,4 +991,60 @@ class MetricsManager
             );
         }
     }
+
+    /**
+     * Validate service visitors data
+     *
+     * @return array<string, int> The validation result
+     */
+    public function validateServiceVisitors(): array
+    {
+        $orphanedRemoved = 0;
+        $duplicatesRemoved = 0;
+
+        // get all services from config
+        $services = $this->serviceManager->getServicesList();
+        if ($services == null) {
+            $this->errorManager->handleError(
+                message: 'error to get monitored services config',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+        $serviceNames = array_keys($services);
+
+        // get all service visitors
+        $allVisitors = $this->serviceVisitorRepository->findAll();
+
+        // identify and remove orphaned visitors
+        $orphans = [];
+        foreach ($allVisitors as $visitor) {
+            if (!in_array($visitor->getServiceName(), $serviceNames)) {
+                $orphans[] = $visitor->getId();
+                $this->entityManagerInterface->remove($visitor);
+                $orphanedRemoved++;
+            }
+        }
+        if ($orphanedRemoved > 0) {
+            $this->entityManagerInterface->flush();
+        }
+
+        // get table name
+        $tableName = $this->databaseManager->getEntityTableName(ServiceVisitor::class);
+
+        // remove duplicate visitors using a raw SQL query
+        $connection = $this->entityManagerInterface->getConnection();
+        $sql = 'DELETE v1 FROM ' . $tableName . ' v1 INNER JOIN ' . $tableName . ' v2 WHERE v1.id < v2.id AND v1.ip_address = v2.ip_address AND v1.service_name = v2.service_name;';
+        $statement = $connection->prepare($sql);
+        $result = $statement->executeStatement();
+        $duplicatesRemoved = (int) $result;
+
+        // recalculate table IDs (reindex)
+        $this->databaseManager->recalculateTableIds($tableName);
+
+        // return validation results
+        return [
+            'orphaned_removed' => $orphanedRemoved,
+            'duplicates_removed' => $duplicatesRemoved,
+        ];
+    }
 }
