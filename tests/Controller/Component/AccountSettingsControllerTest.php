@@ -78,6 +78,7 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Update your account profile image');
         $this->assertSelectorExists('h1:contains("Change Profile Picture")');
         $this->assertSelectorExists('input[name="profile_pic_change_form[profile-pic]"]');
         $this->assertSelectorExists('button:contains("Update Profile Picture")');
@@ -96,6 +97,7 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Update your account username');
         $this->assertSelectorExists('h1:contains("Change Username")');
         $this->assertSelectorExists('input[name="username_change_form[username]"]');
         $this->assertSelectorExists('button:contains("Update Username")');
@@ -198,6 +200,7 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Update your account security password');
         $this->assertSelectorExists('h1:contains("Change Password")');
         $this->assertSelectorExists('input[name="password_change_form[password][first]"]');
         $this->assertSelectorExists('input[name="password_change_form[password][second]"]');

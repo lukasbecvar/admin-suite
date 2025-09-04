@@ -36,6 +36,7 @@ class TerminalControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Interactive command line interface');
         $this->assertSelectorTextContains('body', 'Terminal');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorExists('input[id="command"]');

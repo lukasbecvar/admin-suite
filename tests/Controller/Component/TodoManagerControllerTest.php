@@ -37,6 +37,7 @@ class TodoManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Manage your tasks and todos');
         $this->assertSelectorTextContains('body', 'Todo Manager');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorExists('a[title="View closed todos"]');
@@ -57,6 +58,7 @@ class TodoManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Manage your tasks and todos');
         $this->assertSelectorTextContains('body', 'Todo Manager');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorExists('a[title="View open todos"]');

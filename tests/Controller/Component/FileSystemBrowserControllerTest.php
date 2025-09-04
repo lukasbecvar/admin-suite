@@ -38,6 +38,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Browse and manage system files');
         $this->assertSelectorTextContains('body', 'Filesystem');
         $this->assertSelectorExists('a[href="/dashboard"]');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
@@ -61,6 +62,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'File viewer');
         $this->assertSelectorExists('a[href="/filesystem?path=/usr/lib"]');
         $this->assertSelectorExists('a[title="Back to previous page"]');
         $this->assertSelectorExists('a[href="/filesystem/edit?path=/usr/lib/os-release"]');

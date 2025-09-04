@@ -1074,6 +1074,20 @@ class AuthManagerTest extends TestCase
     }
 
     /**
+     * Test get online users list
+     *
+     * @return void
+     */
+    public function testGetOnlineUsersList(): void
+    {
+        // call tested method
+        $result = $this->authManager->getOnlineUsersList();
+
+        // assert result
+        $this->assertIsArray($result);
+    }
+
+    /**
      * Test get user status with online cache
      *
      * @return void

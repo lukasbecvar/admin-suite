@@ -512,6 +512,20 @@ class DatabaseManagerTest extends TestCase
     }
 
     /**
+     * Test recalculate table IDs
+     *
+     * @return void
+     */
+    public function testRecalculateTableIds(): void
+    {
+        // expect executeQuery call
+        $this->connectionMock->expects($this->exactly(3))->method('executeQuery');
+
+        // call tested method
+        $this->databaseManager->recalculateTableIds('users');
+    }
+
+    /**
      * Test get database dump
      *
      * @return void
@@ -523,6 +537,20 @@ class DatabaseManagerTest extends TestCase
 
         // call tested method
         $result = $this->databaseManager->getDatabaseDump($_ENV['DATABASE_NAME'], true);
+
+        // assert result
+        $this->assertIsString($result);
+    }
+
+    /**
+     * Test execute query
+     *
+     * @return void
+     */
+    public function testExecuteQuery(): void
+    {
+        // call tested method
+        $result = $this->databaseManager->executeQuery('SELECT * FROM users');
 
         // assert result
         $this->assertIsString($result);

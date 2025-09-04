@@ -36,6 +36,7 @@ class SystemAuditControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'System security and audit information');
         $this->assertSelectorTextContains('body', 'System Audit');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorExists('a[title="Go to diagnostics"]');

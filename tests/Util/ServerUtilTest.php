@@ -354,6 +354,20 @@ class ServerUtilTest extends TestCase
     }
 
     /**
+     * Test get ufw open ports
+     *
+     * @return void
+     */
+    public function testGetUfwOpenPorts(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->getUfwOpenPorts();
+
+        // assert result
+        $this->assertIsArray($result);
+    }
+
+    /**
      * Test get linux users
      *
      * @return void

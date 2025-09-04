@@ -72,10 +72,10 @@ class ExceptionEventSubscriberTest extends TestCase
             'monolog' => [
                 'handlers' => [
                     'filtered' => [
-                        'excluded_http_codes' => [404],
-                    ],
-                ],
-            ],
+                        'excluded_http_codes' => [404]
+                    ]
+                ]
+            ]
         ]);
 
         // create exception event
@@ -100,10 +100,10 @@ class ExceptionEventSubscriberTest extends TestCase
             'monolog' => [
                 'handlers' => [
                     'filtered' => [
-                        'excluded_http_codes' => [404],
-                    ],
-                ],
-            ],
+                        'excluded_http_codes' => [404]
+                    ]
+                ]
+            ]
         ]);
 
         // create exception event
@@ -130,10 +130,10 @@ class ExceptionEventSubscriberTest extends TestCase
             'monolog' => [
                 'handlers' => [
                     'filtered' => [
-                        'excluded_http_codes' => [],
-                    ],
-                ],
-            ],
+                        'excluded_http_codes' => []
+                    ]
+                ]
+            ]
         ]);
 
         // create exception event

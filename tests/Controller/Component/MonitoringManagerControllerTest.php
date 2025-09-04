@@ -36,6 +36,7 @@ class MonitoringManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Service monitoring and status');
         $this->assertSelectorTextContains('body', 'Monitoring');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorExists('a[title="Database status"]');
@@ -58,6 +59,7 @@ class MonitoringManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Service monitoring settings');
         $this->assertSelectorExists('a[title="Back to monitoring dashboard"]');
         $this->assertSelectorTextContains('body', 'Services Configuration');
         $this->assertSelectorTextContains('body', 'Service Name:');
@@ -78,6 +80,7 @@ class MonitoringManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Service monitoring details');
         $this->assertSelectorExists('a[title="Back to monitoring dashboard"]');
         $this->assertSelectorTextContains('body', 'Service monitoring details');
         $this->assertSelectorTextContains('body', 'Service Information');

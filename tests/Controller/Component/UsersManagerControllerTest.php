@@ -28,6 +28,33 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
+     * Test load users manager page
+     *
+     * @return void
+     */
+    public function testLoadUsersManagerPage(): void
+    {
+        $this->client->request('GET', '/manager/users');
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Manage system users and permissions');
+        $this->assertSelectorTextContains('body', 'Users Manager');
+        $this->assertSelectorExists('a[title="Back to dashboard"]');
+        $this->assertSelectorExists('a[title="Add new user"]');
+        $this->assertAnySelectorTextContains('body', '#');
+        $this->assertAnySelectorTextContains('body', 'Username');
+        $this->assertAnySelectorTextContains('body', 'Role');
+        $this->assertAnySelectorTextContains('body', 'Browser');
+        $this->assertAnySelectorTextContains('body', 'OS');
+        $this->assertAnySelectorTextContains('body', 'Last Login');
+        $this->assertAnySelectorTextContains('body', 'IP Address');
+        $this->assertAnySelectorTextContains('body', 'Status');
+        $this->assertAnySelectorTextContains('body', 'Banned');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
      * Test load user register page
      *
      * @return void
@@ -38,6 +65,7 @@ class UsersManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Create a new system user account');
         $this->assertSelectorExists('a[title="Back to users manager"]');
         $this->assertSelectorExists('form[name="registration_form"]');
         $this->assertSelectorExists('input[name="registration_form[username]"]');

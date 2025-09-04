@@ -36,6 +36,7 @@ class MetricsDashboardControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'System performance metrics');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorExists('a[title="Go to monitoring"]');
         $this->assertSelectorExists('button[title="Aggregate old metrics"]');
