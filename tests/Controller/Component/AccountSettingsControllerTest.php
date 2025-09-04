@@ -37,6 +37,7 @@ class AccountSettingsControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorTextContains('p', 'Manage your account preferences and security');
         $this->assertSelectorExists('h1:contains("Account Settings")');
         $this->assertSelectorExists('div:contains("Profile Picture")');
         $this->assertSelectorExists('div:contains("Username")');

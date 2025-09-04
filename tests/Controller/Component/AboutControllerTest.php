@@ -37,6 +37,10 @@ class AboutControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertAnySelectorTextContains('p', 'Simple & user-friendly solution for monitoring and managing Linux servers, primarily designed for single server instances on Debian-based systems.');
+        $this->assertAnySelectorTextContains('h3', 'Quick Links');
+        $this->assertAnySelectorTextContains('h3', 'Contact');
+        $this->assertAnySelectorTextContains('h3', 'License');
         $this->assertSelectorExists('img[alt="Admin Suite Icon"]');
         $this->assertSelectorExists('a:contains("GitHub")');
         $this->assertSelectorExists('a:contains("Author")');
