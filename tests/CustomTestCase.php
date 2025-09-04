@@ -55,32 +55,4 @@ class CustomTestCase extends WebTestCase
         // set mock AuthManager instance to the container
         $client->getContainer()->set(AuthManager::class, $authManager);
     }
-
-    /**
-     * Get random user id from database
-     *
-     * @param EntityManagerInterface $entityManager The entity manager
-     *
-     * @throws Exception If no users found in the database
-     *
-     * @return int The user id
-     */
-    protected function getRandomUserId(EntityManagerInterface $entityManager): int
-    {
-        $userRepository = $entityManager->getRepository(User::class);
-
-        /** @var array<int, array{id: int}> $userIds */
-        $userIds = $userRepository->createQueryBuilder('u')
-            ->select('u.id')
-            ->getQuery()
-            ->getArrayResult();
-
-        // check if no users found in the database
-        if (count($userIds) === 0) {
-            throw new Exception('No users found in the database.');
-        }
-
-        // return a random user id from the array of user ids
-        return $userIds[array_rand($userIds)]['id'];
-    }
 }

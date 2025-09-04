@@ -17,8 +17,8 @@
         {# CHECK IF EXCEPTION FILES IS FOUND #}
         {% if exceptionFiles|length > 0 and isFeatureFlagDisabled('monitoring') == false %}
             <div class="bg-amber-500/10 border border-amber-500/25 rounded p-2 flex items-start gap-3 hover:bg-amber-500/15 transition-colors duration-200">
-                <div class="flex-shrink-0"
-                    <i class="fas fa-bomb text-amber-400 text-lg"></i>
+                <div class="flex-shrink-0">
+                    <i class="fas fa-bug text-amber-400 text-lg"></i>
                 </div>
                 <div class="flex-1">
                     <h4 class="text-amber-300 font-semibold text-sm mb-1">Exception Found</h4>

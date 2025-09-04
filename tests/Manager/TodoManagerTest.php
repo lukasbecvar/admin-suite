@@ -100,11 +100,12 @@ class TodoManagerTest extends TestCase
      *
      * @return void
      */
-    public function getTodoStatus(): void
+    public function testGetTodoStatus(): void
     {
-        // expect find method call
-        $this->todoRepositoryMock->expects($this->once())->method('find')->with(1)
-            ->willReturn($this->createMock(Todo::class));
+        // mock todo entity
+        $todoMock = $this->createMock(Todo::class);
+        $todoMock->method('getStatus')->willReturn('done');
+        $this->todoRepositoryMock->expects($this->once())->method('find')->with(1)->willReturn($todoMock);
 
         // call tested method
         $result = $this->todoManager->getTodoStatus(1);

@@ -680,19 +680,6 @@ class AuthManager
     }
 
     /**
-     * Store online user id in cache
-     *
-     * @param int $userId The id of user to store
-     *
-     * @return void
-     */
-    public function cacheOnlineUser(int $userId): void
-    {
-        // cache online visitor
-        $this->cacheUtil->setValue('online_user_' . $userId, 'online', 300);
-    }
-
-    /**
      * Get online users list
      *
      * @return array<mixed> The list of online users
@@ -758,5 +745,18 @@ class AuthManager
         }
 
         return 'offline';
+    }
+
+    /**
+     * Store online user id in cache
+     *
+     * @param int $userId The id of user to store
+     *
+     * @return void
+     */
+    public function cacheOnlineUser(int $userId): void
+    {
+        // cache online visitor
+        $this->cacheUtil->setValue('online_user_' . $userId, 'online', 300);
     }
 }

@@ -472,8 +472,8 @@ class DatabaseManager
         // select count query
         $sql = sprintf(
             "SELECT COUNT(*) AS count FROM %s.%s WHERE id = :id",
-            $this->connection->quoteIdentifier($databaseName),
-            $this->connection->quoteIdentifier($tableName)
+            $this->connection->quoteSingleIdentifier($databaseName),
+            $this->connection->quoteSingleIdentifier($tableName)
         );
 
         try {
@@ -735,7 +735,7 @@ class DatabaseManager
     public function getDatabaseDump(string $dbName, bool $includeData = false): string
     {
         // get tables list
-        $tables = $this->connection->fetchAllAssociative('SHOW TABLES FROM ' . $this->connection->quoteIdentifier($dbName));
+        $tables = $this->connection->fetchAllAssociative('SHOW TABLES FROM ' . $this->connection->quoteSingleIdentifier($dbName));
 
         // build database dump header
         $dump = '-- Database: ' . $dbName . " dumped at: " . date('Y-m-d H:i:s') . " with admin-suite\n\n";
@@ -748,7 +748,7 @@ class DatabaseManager
             foreach ($tables as $table) {
                 /** @var string $tableName */
                 $tableName = $table['Tables_in_' . $dbName];
-                $createTableStmt = $this->connection->fetchAssociative('SHOW CREATE TABLE ' . $dbName . '.' . $this->connection->quoteIdentifier($tableName));
+                $createTableStmt = $this->connection->fetchAssociative('SHOW CREATE TABLE ' . $dbName . '.' . $this->connection->quoteSingleIdentifier($tableName));
 
                 if (!$createTableStmt) {
                     $this->errorManager->handleError(
@@ -760,7 +760,7 @@ class DatabaseManager
                 $dump .= $createTableStmt['Create Table'] . ";\n\n";
 
                 if (!$includeData) {
-                    $rows = $this->connection->fetchAllAssociative('SELECT * FROM ' . $dbName . '.' . $this->connection->quoteIdentifier($tableName));
+                    $rows = $this->connection->fetchAllAssociative('SELECT * FROM ' . $dbName . '.' . $this->connection->quoteSingleIdentifier($tableName));
                     foreach ($rows as $row) {
                         $values = [];
                         foreach ($row as $value) {
@@ -773,7 +773,7 @@ class DatabaseManager
                             }
                         }
                         $values = implode(', ', $values);
-                        $dump .= 'INSERT INTO ' . $this->connection->quoteIdentifier($tableName) . ' VALUES (' . $values . ");\n";
+                        $dump .= 'INSERT INTO ' . $this->connection->quoteSingleIdentifier($tableName) . ' VALUES (' . $values . ");\n";
                     }
                     $dump .= "\n";
                 }

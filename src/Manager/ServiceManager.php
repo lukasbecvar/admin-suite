@@ -130,41 +130,6 @@ class ServiceManager
     }
 
     /**
-     * Check if socket is open (if service is running on ip:port)
-     *
-     * @param string $ip The IP address
-     * @param int $port The port number
-     * @param int $timeout The maximal timeout in seconds (default: 5)
-     *
-     * @return string Online if the socket is open, Offline otherwise
-     */
-    public function isSocktOpen(string $ip, int $port, int $timeout = 5): string
-    {
-        $status = 'Offline';
-        $service = null;
-
-        // open socket connection
-        try {
-            $service = @fsockopen($ip, $port, timeout: $timeout);
-        } catch (Exception $e) {
-            $this->errorManager->handleError(
-                message: 'error to check socket: ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
-
-        // check if service is not null
-        if ($service != null) {
-            // check if service is online
-            if ($service >= 1) {
-                $status = 'Online';
-            }
-        }
-
-        return $status;
-    }
-
-    /**
      * Check if process is running
      *
      * @param string $process The name of the process
