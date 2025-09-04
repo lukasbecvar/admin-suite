@@ -76,7 +76,7 @@ class UsersManagerController extends AbstractController
         $filter = $request->query->get('filter', '');
 
         // get current visitor ip (for highlight current user)
-        $currentVisitorIp = $this->visitorInfoUtil->getIp();
+        $currentVisitorIp = $this->visitorInfoUtil->getIP();
 
         try {
             // get total users count from database

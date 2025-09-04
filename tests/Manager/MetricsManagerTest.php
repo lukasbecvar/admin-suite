@@ -182,14 +182,14 @@ class MetricsManagerTest extends TestCase
             ['storage_usage_host-system_raw_values', false],
             ['storage_usage_host-system_raw_times', false],
             ['network_usage_host-system_raw_values', false],
-            ['network_usage_host-system_raw_times', false],
+            ['network_usage_host-system_raw_times', false]
         ]);
 
         $this->cacheUtilMock->method('getValue')->willReturnMap([
             ['cpu_usage_host-system_raw_values', $cpuRawValuesCacheItem],
             ['cpu_usage_host-system_raw_times', $cpuRawTimesCacheItem],
             ['ram_usage_host-system_raw_values', $ramRawValuesCacheItem],
-            ['ram_usage_host-system_raw_times', $ramRawTimesCacheItem],
+            ['ram_usage_host-system_raw_times', $ramRawTimesCacheItem]
         ]);
 
         // call tested method

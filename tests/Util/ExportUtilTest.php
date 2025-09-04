@@ -33,10 +33,10 @@ class ExportUtilTest extends TestCase
         $slaHistory = [
             'Service A' => [
                 '2024-01' => 98.5,
-                '2024-02' => 99.2,
+                '2024-02' => 99.2
             ],
             'Service B' => [
-                '2024-01' => 97.8,
+                '2024-01' => 97.8
             ]
         ];
 
@@ -59,8 +59,8 @@ class ExportUtilTest extends TestCase
         $fileName = 'custom-sla-history';
         $slaHistory = [
             'Service A' => [
-                '2024-01' => 98.5,
-            ],
+                '2024-01' => 98.5
+            ]
         ];
 
         // call tested method

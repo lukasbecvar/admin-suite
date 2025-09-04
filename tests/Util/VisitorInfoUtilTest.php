@@ -188,7 +188,7 @@ class VisitorInfoUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.9999.999 Safari/537.36';
 
         // call tested method
-        $result = $this->visitorInfoUtil->getOS();
+        $result = $this->visitorInfoUtil->getOs();
 
         // assert result
         $this->assertEquals('Windows 10', $result);

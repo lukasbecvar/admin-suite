@@ -1,5 +1,6 @@
 /** file-system move functionality */
 document.addEventListener('DOMContentLoaded', function() {
+    // get form elements
     const form = document.querySelector('form')
     const customPathError = document.getElementById('customPathError')
     const destinationPathSelect = document.getElementById('destinationPath')
@@ -10,9 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const destinationTypeRadios = document.querySelectorAll('input[name="destinationPathType"]')
 
     // get directory part of the source path
-    const sourceDir = sourcePath.lastIndexOf('/') > 0 ?
-        sourcePath.substring(0, sourcePath.lastIndexOf('/')) :
-        '/'
+    const sourceDir = sourcePath.lastIndexOf('/') > 0 ? sourcePath.substring(0, sourcePath.lastIndexOf('/')) : '/'
 
     // toggle between select and custom path inputs
     destinationTypeRadios.forEach(radio => {

@@ -89,7 +89,7 @@ class UserBanCommand extends Command
             // check if user is already banned
             if ($this->banManager->isUserBanned($userId)) {
                 // unban user
-                $this->banManager->unbanUser($userId);
+                $this->banManager->unBanUser($userId);
                 $io->success('User: ' . $username . ' is unbanned successfully');
             } else {
                 // ban user

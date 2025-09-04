@@ -666,17 +666,11 @@ class MonitoringManagerTest extends TestCase
     public function testHandleDatabaseDownWhenDatabaseIsDownForTheFirstTime(): void
     {
         // Expect email to be sent
-        $this->emailManagerMock->expects($this->once())
-            ->method('sendMonitoringStatusEmail')
-            ->with(
-                $this->anything(),
-                'Mysql',
-                'Mysql server is down'
-            );
+        $this->emailManagerMock->expects($this->once())->method('sendMonitoringStatusEmail')
+            ->with($this->anything(), 'Mysql', 'Mysql server is down');
 
         // Expect console output
-        $this->symfonyStyleMock->expects($this->once())
-            ->method('writeln')
+        $this->symfonyStyleMock->expects($this->once())->method('writeln')
             ->with($this->stringContains('database is down'));
 
         // Call the method

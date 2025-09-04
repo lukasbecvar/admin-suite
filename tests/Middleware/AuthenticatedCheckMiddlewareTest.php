@@ -110,7 +110,7 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
             '/register',
             '/',
             '/error',
-            '/_profiler',
+            '/_profiler'
         ];
 
         // expect auth manager not called

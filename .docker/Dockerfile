@@ -1,4 +1,4 @@
-# define base php-apache image
+# define base php-apache image (development environment)
 FROM php:8.4-apache
 
 # set container working directory

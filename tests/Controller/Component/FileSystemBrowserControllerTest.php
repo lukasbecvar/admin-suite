@@ -32,6 +32,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
      *
      * @return void
      */
+    #[Group('file-system')]
     public function testLoadFileSystemBrowserPage(): void
     {
         $this->client->request('GET', '/filesystem');
@@ -56,6 +57,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
      *
      * @return void
      */
+    #[Group('file-system')]
     public function testLoadFileSystemViewPage(): void
     {
         $this->client->request('GET', '/filesystem/view?path=/usr/lib/os-release');

@@ -50,14 +50,7 @@ class MonologTimeFormatterTest extends TestCase
     {
         // create log record with a known date
         $dateTime = new DateTimeImmutable('2023-01-01 12:34:56');
-        $record = new LogRecord(
-            $dateTime,
-            'test-channel',
-            Level::Info,
-            'Test message',
-            [],
-            []
-        );
+        $record = new LogRecord($dateTime, 'test-channel', Level::Info, 'Test message', [], []);
 
         // format record
         $formattedRecord = $this->formatter->format($record);
@@ -74,14 +67,7 @@ class MonologTimeFormatterTest extends TestCase
     public function testFormatterFormatsMessageCorrectly(): void
     {
         // create log record with a test message
-        $record = new LogRecord(
-            new DateTimeImmutable(),
-            'test-channel',
-            Level::Info,
-            'Test message',
-            [],
-            []
-        );
+        $record = new LogRecord(new DateTimeImmutable(), 'test-channel', Level::Info, 'Test message', [], []);
 
         // format record
         $formattedRecord = $this->formatter->format($record);
@@ -98,14 +84,7 @@ class MonologTimeFormatterTest extends TestCase
     public function testFormatterFormatsLevelCorrectly(): void
     {
         // create log record with a specific level
-        $record = new LogRecord(
-            new DateTimeImmutable(),
-            'test-channel',
-            Level::Error,
-            'Test message',
-            [],
-            []
-        );
+        $record = new LogRecord(new DateTimeImmutable(), 'test-channel', Level::Error, 'Test message', [], []);
 
         // format record
         $formattedRecord = $this->formatter->format($record);
@@ -122,14 +101,7 @@ class MonologTimeFormatterTest extends TestCase
     public function testFormatterFormatsChannelCorrectly(): void
     {
         // create a log record with a specific channel
-        $record = new LogRecord(
-            new DateTimeImmutable(),
-            'test-channel',
-            Level::Info,
-            'Test message',
-            [],
-            []
-        );
+        $record = new LogRecord(new DateTimeImmutable(), 'test-channel', Level::Info, 'Test message', [], []);
 
         // format record
         $formattedRecord = $this->formatter->format($record);

@@ -45,6 +45,13 @@ class FileUploadUtilTest extends TestCase
         }
     }
 
+    /**
+     * Recursively remove directory
+     *
+     * @param string $dir The directory to remove
+     *
+     * @return void
+     */
     private function recursiveRemoveDirectory(string $dir): void
     {
         if (!is_dir($dir)) {
