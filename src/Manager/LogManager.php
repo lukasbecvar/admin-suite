@@ -214,9 +214,7 @@ class LogManager
      */
     public function getAuthLogsCount(): int
     {
-        $count = $this->logRepository->count(
-            ['name' => 'authenticator', 'status' => 'UNREADED']
-        );
+        $count = $this->logRepository->count(['name' => 'authenticator', 'status' => 'UNREADED']);
 
         return $count;
     }
@@ -411,7 +409,7 @@ class LogManager
                             'method'   => $matches[3],
                             'user'     => $matches[4],
                             'ip'       => $matches[5],
-                            'port'     => $matches[6],
+                            'port'     => $matches[6]
                         ];
                     }
                 }
@@ -453,7 +451,7 @@ class LogManager
                     if ($this->fileSystemUtil->checkIfFileExist($path)) {
                         $files[$service['service_name']] = [
                             'name' => $service['service_name'],
-                            'path' => $path,
+                            'path' => $path
                         ];
                     }
                 }

@@ -66,6 +66,9 @@
             "collect_metrics": true,
             "metrics_collector_url": "https://becvar.xyz/metrics/export?time_period=H"
         },
+        "config_files": [
+            "/etc/apache2/sites-available/000-becvar-site.conf"
+        ],
         "exception_file": "/services/website/becvar-site/var/log/exception.log"
     },
     "admin-suite": {
@@ -88,7 +91,8 @@
             "/services/website/admin-suite/config/suite/package-requirements.json",
             "/services/website/admin-suite/config/suite/services-monitoring.json",
             "/services/website/admin-suite/config/suite/blocked-usernames.json",
-            "/services/website/admin-suite/config/suite/terminal-aliases.json"
+            "/services/website/admin-suite/config/suite/terminal-aliases.json",
+            "/etc/apache2/sites-available/admin-suite.conf"
         ]
     },
     "paste.becvar.xyz": {
@@ -104,6 +108,9 @@
             "collect_metrics": false,
             "metrics_collector_url": "https://paste.becvar.xyz/metrics/export?time_period=H"
         },
+        "config_files": [
+            "/etc/apache2/sites-available/code-paste.conf"
+        ],
         "exception_file": "/services/website/code-paste/var/log/exception.log"
     },
     "passgen.becvar.xyz": {
@@ -117,7 +124,10 @@
         "display": true,
         "metrics_monitoring": {
             "collect_metrics": false
-        }
+        },
+        "config_files": [
+            "/etc/apache2/sites-available/password-and-hash-generator.conf"
+        ]
     },
     "speed-test.becvar.xyz": {
         "service_name": "speed-test.becvar.xyz",
@@ -131,6 +141,9 @@
         "metrics_monitoring": {
             "collect_metrics": false
         },
+        "config_files": [
+            "/etc/apache2/sites-available/speed-test.conf"
+        ],
         "exception_file": "/services/website/speed-test/var/log/exception.log"
     },
     "pied-piper.xyz": {
@@ -145,6 +158,9 @@
         "metrics_monitoring": {
             "collect_metrics": false,
             "metrics_collector_url": ""
-        }
+        },
+        "config_files": [
+            "/etc/apache2/sites-available/pied-piper.xyz.conf"
+        ]
     }
 }

@@ -123,8 +123,7 @@ class MetricRepository extends ServiceEntityRepository
 
         // add time filter only if $date is not null
         if ($date) {
-            $qb->andWhere('m.time >= :date')
-                ->setParameter('date', $date);
+            $qb->andWhere('m.time >= :date')->setParameter('date', $date);
         }
 
         // order by time, from newest to oldest
@@ -180,8 +179,7 @@ class MetricRepository extends ServiceEntityRepository
      */
     public function getMetricsByServiceName(string $serviceName, string $timePeriod = 'last_24_hours'): array
     {
-        $qb = $this->createQueryBuilder('m')
-            ->where('m.service_name = :service_name')
+        $qb = $this->createQueryBuilder('m')->where('m.service_name = :service_name')
             ->setParameter('service_name', $serviceName);
 
         // define time filter based on time period

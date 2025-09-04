@@ -39,7 +39,7 @@ class ExportUtil
             'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
             'fill' => ['fillType' => 'solid', 'startColor' => ['rgb' => '333333']],
             'alignment' => ['horizontal' => 'center', 'vertical' => 'center'],
-            'borders' => ['allBorders' => ['borderStyle' => 'thin', 'color' => ['rgb' => '666666']]],
+            'borders' => ['allBorders' => ['borderStyle' => 'thin', 'color' => ['rgb' => '666666']]]
         ];
 
         // set data row style
@@ -47,7 +47,7 @@ class ExportUtil
             'font' => ['color' => ['rgb' => 'CCCCCC']],
             'alignment' => ['horizontal' => 'center', 'vertical' => 'center'],
             'fill' => ['fillType' => 'solid', 'startColor' => ['rgb' => '1E1E1E']],
-            'borders' => ['allBorders' => ['borderStyle' => 'thin', 'color' => ['rgb' => '444444']]],
+            'borders' => ['allBorders' => ['borderStyle' => 'thin', 'color' => ['rgb' => '444444']]]
         ];
 
         // add headers

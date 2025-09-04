@@ -35,7 +35,7 @@ class TodoRepository extends ServiceEntityRepository
         return $this->findBy(
             [
                 'user_id' => $userId,
-                'status' => $status,
+                'status' => $status
             ],
             ['position' => 'ASC']
         );

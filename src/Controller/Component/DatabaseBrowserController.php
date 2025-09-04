@@ -121,7 +121,7 @@ class DatabaseBrowserController extends AbstractController
 
             // table data
             'tableData' => $tableData,
-            'tableDataCount' => $tableDataCount,
+            'tableDataCount' => $tableDataCount
         ]);
     }
 
@@ -510,7 +510,7 @@ class DatabaseBrowserController extends AbstractController
 
             // render database dump page view
             return $this->render('component/database-browser/database-dump.twig', [
-                'databases' => $databases,
+                'databases' => $databases
             ]);
         }
 
@@ -548,7 +548,7 @@ class DatabaseBrowserController extends AbstractController
         return new Response(
             content: $databaseDump,
             status: Response::HTTP_OK,
-            headers:[
+            headers: [
                 'Content-Type' => 'application/sql',
                 'Content-Disposition' => 'attachment; filename="' . $dumpFileName . '"'
             ]

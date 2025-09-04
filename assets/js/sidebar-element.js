@@ -33,24 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return false
     }
 
-    // handle swipe gestures
-    function handleSwipeGesture() {
-        const swipeThreshold = 80
-        if (!hasHorizontalOverflow() || hasHorizontalOverflowAtStart()) {
-            if (isHorizontalSwipe) {
-                if (touchEndX - touchStartX > swipeThreshold) {
-                    // enable sidebar
-                    sidebar.classList.add('active')
-                    mainContent.classList.add('active')
-                } else if (touchStartX - touchEndX > swipeThreshold) {
-                    // disable sidebar
-                    sidebar.classList.remove('active')
-                    mainContent.classList.remove('active')
-                }
-            }
-        }
-    }
-
     // setup swipe detection for an element
     function setupSwipeDetection(element) {
         let touchedElement = null

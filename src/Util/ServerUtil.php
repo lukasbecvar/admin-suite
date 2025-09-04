@@ -301,6 +301,7 @@ class ServerUtil
             $currentTime = time();
             $daysAgo = floor(($currentTime - $installDate) / (60 * 60 * 24));
 
+            // return formatted date
             return $formattedDate . " (" . $daysAgo . " days ago)";
         }
 
@@ -434,7 +435,7 @@ class ServerUtil
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_TIMEOUT => 2,
                 CURLOPT_CONNECTTIMEOUT => 2,
-                CURLOPT_FAILONERROR => true,
+                CURLOPT_FAILONERROR => true
             ]);
 
             $ip = (string) curl_exec($ch);
@@ -552,7 +553,7 @@ class ServerUtil
                 $processes[] = [
                     'pid' => $pid,
                     'user' => $user,
-                    'process' => $processName,
+                    'process' => $processName
                 ];
             }
         } catch (Exception $e) {
@@ -728,7 +729,7 @@ class ServerUtil
                 $result[] = [
                     'port_service' => $parts[0],
                     'action' => $parts[1],
-                    'from' => $parts[2],
+                    'from' => $parts[2]
                 ];
             }
         }
@@ -786,7 +787,7 @@ class ServerUtil
                     'home'       => $parts[5],
                     'shell'      => $parts[6],
                     'has_sudo'   => in_array($username, $sudoUsers),
-                    'is_locked'  => $isLocked,
+                    'is_locked'  => $isLocked
                 ];
             }
         }

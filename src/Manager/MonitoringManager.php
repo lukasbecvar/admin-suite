@@ -179,9 +179,9 @@ class MonitoringManager
         if ($this->cacheUtil->getValue('monitoring-status-' . $serviceName)->get() != $currentStatus) {
             // store current status in cache
             $this->cacheUtil->setValue(
-                'monitoring-status-' . $serviceName,
-                $currentStatus,
-                ($monitoringInterval + ($monitoringInterval / 2))
+                key: 'monitoring-status-' . $serviceName,
+                value: $currentStatus,
+                expiration: ($monitoringInterval + ($monitoringInterval / 2))
             );
             return;
         }

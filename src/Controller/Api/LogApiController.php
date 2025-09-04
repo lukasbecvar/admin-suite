@@ -109,7 +109,7 @@ class LogApiController extends AbstractController
         } catch (Exception $e) {
             // log error to exception log
             $this->errorManager->logError(
-                message: $message,
+                message: 'error to log external message: ' . $e->getMessage(),
                 code: JsonResponse::HTTP_INTERNAL_SERVER_ERROR
             );
 
@@ -169,7 +169,7 @@ class LogApiController extends AbstractController
         return $this->json([
             'from' => $lastTimestamp,
             'to' => $now,
-            'logs' => explode("\n", trim($output)),
+            'logs' => explode("\n", trim($output))
         ], Response::HTTP_OK);
     }
 }

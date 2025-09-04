@@ -63,7 +63,7 @@ class ConfigManagerController extends AbstractController
 
         // render suite configurations list view
         return $this->render('component/config-manager/suite-settings/config-list.twig', [
-            'configs' => $configs,
+            'configs' => $configs
         ]);
     }
 
@@ -110,7 +110,7 @@ class ConfigManagerController extends AbstractController
         // render suite configuration file view/edit
         return $this->render($isCustom ? 'component/config-manager/suite-settings/config-edit.twig' : 'component/config-manager/suite-settings/config-view.twig', [
             'filename' => $filename,
-            'content' => $content,
+            'content' => $content
         ]);
     }
 
@@ -256,7 +256,7 @@ class ConfigManagerController extends AbstractController
         // render feature flags list page view
         return $this->render('component/config-manager/feature-flags/flags-list.twig', [
             'featureFlagsConfig' => $featureFlagsConfig,
-            'isConfigCustom' => $isConfigCustom,
+            'isConfigCustom' => $isConfigCustom
         ]);
     }
 

@@ -132,8 +132,8 @@ class PushNotificationsApiController extends AbstractController
                 'endpoint' => $data['endpoint'],
                 'keys' => [
                     'p256dh' => $data['keys']['p256dh'],
-                    'auth' => $data['keys']['auth'],
-                ],
+                    'auth' => $data['keys']['auth']
+                ]
             ];
 
             // save subscription to database

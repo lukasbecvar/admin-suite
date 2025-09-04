@@ -41,9 +41,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             const response = await fetch('/api/notifications/subscribe', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(subscription),
+                body: JSON.stringify(subscription)
             })
 
             const data = await response.json()
@@ -98,9 +98,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch('/api/notifications/check-push-subscription', { 
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ endpoint }),
+            body: JSON.stringify({ endpoint })
         })
 
         const data = await response.json()

@@ -151,7 +151,7 @@ class FileSystemUtil
                     'permissions' => $permissions,
                     'isDir' => $isDir,
                     'path' => $realPath,
-                    'creationTime' => date('Y-m-d H:i:s', (int)$creationTime),
+                    'creationTime' => date('Y-m-d H:i:s', (int)$creationTime)
                 ];
             }
 
@@ -282,7 +282,6 @@ class FileSystemUtil
 
         return 'non-mediafile';
     }
-
 
     /**
      * Get content of file

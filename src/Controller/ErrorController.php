@@ -50,7 +50,7 @@ class ErrorController extends AbstractController
 
         // convert to integer for response code
         if (!is_numeric($code)) {
-            $responseCode = 500;
+            $responseCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         } else {
             $responseCode = intval($code);
         }

@@ -8,7 +8,7 @@ WORKDIR /var/www
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libjpeg62-turbo-dev \
-    libfreetype6-dev \ 
+    libfreetype6-dev \
     iputils-ping \
     libicu-dev \
     libgmp-dev \

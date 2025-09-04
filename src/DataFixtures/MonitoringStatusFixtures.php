@@ -32,7 +32,7 @@ class MonitoringStatusFixtures extends Fixture
             ['system-storage-usage', 'storage usage is ok', 'ok', '2024-07-08 15:17:38'],
             ['sshd', 'SSHD is not running', 'not-running', '2024-07-08 15:18:57'],
             ['docker', 'Docker is running', 'running', '2024-07-08 15:18:57'],
-            ['becvar-site', 'Becvar site is online', 'online', '2024-07-08 16:12:28'],
+            ['becvar-site', 'Becvar site is online', 'online', '2024-07-08 16:12:28']
         ];
 
         // create monitoring status

@@ -45,7 +45,7 @@ class PasswordChangeForm extends AbstractType
                         minMessage: 'Your password should be at least {{ limit }} characters',
                         maxMessage: 'Your password cannot be longer than {{ limit }} characters'
                     )
-                ]),
+                ])
             ],
             'second_options' => ['label' => false]
         ]);

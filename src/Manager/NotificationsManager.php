@@ -273,8 +273,8 @@ class NotificationsManager
             'VAPID' => [
                 'subject' => 'subject',
                 'publicKey' => $this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_VAPID_PUBLIC_KEY'),
-                'privateKey' => $this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_VAPID_PRIVATE_KEY'),
-            ],
+                'privateKey' => $this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_VAPID_PRIVATE_KEY')
+            ]
         ]);
 
         // check if recivers are set
@@ -285,7 +285,7 @@ class NotificationsManager
                     'endpoint' => $reciver->getEndpoint(),
                     'publicKey' => $reciver->getPublicKey(),
                     'authToken' => $reciver->getAuthToken(),
-                    'contentEncoding' => $this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_CONTENT_ENCODING'),
+                    'contentEncoding' => $this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_CONTENT_ENCODING')
                 ]);
 
                 // create notification payload

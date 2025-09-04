@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             zoomin: false,
                             zoomout: false,
                             selection: true,
-                            download: false,
+                            download: false
                         }
                     },
                     zoom: {
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 series: [{
                     name: metricName.replace(/_/g, ' ').toUpperCase(),
-                    data: metricData.map(m => m.value),
+                    data: metricData.map(m => m.value)
                 }],
                 stroke: {
                     width: 3,
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     strokeColors: [dynamicColor],
                     strokeWidth: 2,
                     hover: {
-                        size: 7,
+                        size: 7
                     }
                 },
                 fill: {
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 grid: {
                     borderColor: 'rgba(156, 163, 175, 0.2)',
-                    strokeDashArray: 2,
+                    strokeDashArray: 2
                 },
                 xaxis: {
                     categories: categories,
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 colors: [dynamicColor],
                 theme: {
-                    mode: 'dark',
+                    mode: 'dark'
                 },
                 tooltip: {
                     theme: 'dark',
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     style: {
                         color: '#d1d5db',
                         fontSize: '14px',
-                        fontFamily: 'Inter, system-ui, sans-serif',
+                        fontFamily: 'Inter, system-ui, sans-serif'
                     }
                 },
                 dataLabels: {

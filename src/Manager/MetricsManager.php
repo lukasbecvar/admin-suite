@@ -812,7 +812,7 @@ class MetricsManager
                 'referer' => $serviceVisitor->getReferer(),
                 'browser' => $this->visitorInfoUtil->getBrowserShortify($serviceVisitor->getUserAgent() ?? 'Unknown'),
                 'os' => $this->visitorInfoUtil->getOs($serviceVisitor->getUserAgent() ?? 'Unknown'),
-                'last_visit_time' => $lastVisitTime ? $lastVisitTime->format('Y-m-d H:i:s') : 'Unknown',
+                'last_visit_time' => $lastVisitTime ? $lastVisitTime->format('Y-m-d H:i:s') : 'Unknown'
             ];
         }
 
@@ -1044,7 +1044,7 @@ class MetricsManager
         // return validation results
         return [
             'orphaned_removed' => $orphanedRemoved,
-            'duplicates_removed' => $duplicatesRemoved,
+            'duplicates_removed' => $duplicatesRemoved
         ];
     }
 }

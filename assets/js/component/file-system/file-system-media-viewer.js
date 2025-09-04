@@ -186,7 +186,7 @@ function calculateContainerHeight() {
     if (controlBar) usedHeight += controlBar.offsetHeight
 
     // add padding and margin buffer
-    usedHeight += 110 // buffer for padding, margins, etc.
+    usedHeight += 110
 
     return Math.max(400, viewportHeight - usedHeight)
 }
@@ -194,6 +194,7 @@ function calculateContainerHeight() {
 // drag/pan functionality
 let imageViewerInitialized = false
 
+// initialize image drag functionality
 function initializeImageDrag() {
     const img = document.getElementById('main-image')
     const container = document.getElementById('image-container')
@@ -577,14 +578,14 @@ document.addEventListener('keydown', function (e) {
 })
 
 // expose functions globally for access in template
+window.resetImageZoom = resetImageZoom
 window.updateImageInfo = updateImageInfo
 window.toggleImageZoom = toggleImageZoom
-window.resetImageZoom = resetImageZoom
-window.toggleImageFullscreen = toggleImageFullscreen
 window.updateVideoInfo = updateVideoInfo
-window.toggleVideoFullscreen = toggleVideoFullscreen
 window.updateAudioInfo = updateAudioInfo
 window.handleVideoError = handleVideoError
 window.handleVideoWaiting = handleVideoWaiting
 window.handleVideoCanPlay = handleVideoCanPlay
 window.handleVideoStalled = handleVideoStalled
+window.toggleImageFullscreen = toggleImageFullscreen
+window.toggleVideoFullscreen = toggleVideoFullscreen

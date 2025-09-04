@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const deleteButtons = document.querySelectorAll('.delete-button')
     const cancelDeleteButton = document.getElementById('cancelDeleteButton')
     const confirmDeleteButton = document.getElementById('confirmDeleteButton')
-    
+
     // handle delete confirmation popup show
     deleteButtons.forEach(button => {
         button.addEventListener('click', function () {

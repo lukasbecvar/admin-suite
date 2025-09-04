@@ -52,7 +52,7 @@ class ConfigManager
             $isCustom = $this->isCustomConfig($filename);
             $configs[] = [
                 'filename' => $filename,
-                'is_custom' => $isCustom,
+                'is_custom' => $isCustom
             ];
         }
 

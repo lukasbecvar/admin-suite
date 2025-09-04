@@ -29,7 +29,7 @@ class SLAHistoryFixtures extends Fixture
             'becvar.xyz',
             'code-paste',
             'admin-suite',
-            'nonlizard.xyz',
+            'nonlizard.xyz'
         ];
 
         $currentYear = (int) date('Y');
