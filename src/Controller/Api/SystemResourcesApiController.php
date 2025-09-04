@@ -26,6 +26,8 @@ class SystemResourcesApiController extends AbstractController
 
     /**
      * API to get system resources data
+     * 
+     * This endpoint is used in system dashboard
      *
      * @return JsonResponse The system resources data
      */

@@ -46,6 +46,14 @@ class LogApiController extends AbstractController
 
     /**
      * Handle log from external service
+     * 
+     * This endpoint is used in external services
+     * 
+     * Request query parameters:
+     *  - token: api access token (string)
+     *  - name: log name (string)
+     *  - message: log message (string)
+     *  - level: log level (int)
      *
      * @param Request $request The request object
      *
@@ -114,7 +122,9 @@ class LogApiController extends AbstractController
     }
 
     /**
-     * Get system logs with journalctl command execute
+     * Get system logs from journalctl
+     * 
+     * This endpoint is used in system audit component
      *
      * @return JsonResponse The JSON response with system logs
      */
