@@ -60,7 +60,7 @@ Encore
                 tailwindcss: {
                     content: [
                         "./assets/**/*.js",
-                        "./view/**/*.twig",
+                        "./view/**/*.twig"
                     ],
                     theme: {
                         extend: {
@@ -74,13 +74,13 @@ Encore
                             keyframes: {
                                 popIn: {
                                     "0%": { opacity: "0", transform: "scale(0.5)" },
-                                    "100%": { opacity: "1", transform: "scale(1)" },
-                                },
+                                    "100%": { opacity: "1", transform: "scale(1)" }
+                                }
                             },
                             animation: {
-                                popin: "popIn 0.1s ease-out",
-                            },
-                        },
+                                popin: "popIn 0.1s ease-out"
+                            }
+                        }
                     },
                     plugins: [],
                     safelist: [
@@ -90,9 +90,9 @@ Encore
                         'text-green-400',
                         'text-purple-400',
                         'text-yellow-400'
-                    ],
+                    ]
                 },
-                autoprefixer: {},
+                autoprefixer: {}
             }
         };
     })

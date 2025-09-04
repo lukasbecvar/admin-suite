@@ -54,6 +54,7 @@ Installation is very simple like any other PHP project.
 * Migrate database ``php bin/console doctrine:migrations:migrate --no-interaction``
 * Create systemd service for monitoring process (console command infinite loop) ([systemd-config](.docker/configs/monitoring-systemd.service))
 * Create main admin user using console command or web interface (webinterface allows to create user if users table is empty)
+* Create your custom suite configuration files in root directory (see [Configuration](#configuration))
 
 ## Configuration
 #### Environment variables
@@ -71,6 +72,9 @@ The environment variables are loaded from .env file. You can create .env file in
 | AUTHOR_WEBSITE_URL | The system maintener contact email | https://becvar.xyz |
 | PROJECT_GITHUB_URL | The system maintener contact email | https://github.com/lukasbecvar/admin-suite |
 | IP_INFO_API | API for get information about visitor ip | http://ip-api.com |
+| RATE_LIMIT_ENABLED | Enable rate limit | false |
+| RATE_LIMIT_INTERVAL | Rate limit interval | 60 |
+| RATE_LIMIT_LIMIT | Rate limit limit | 100 |
 | EXTERNAL_API_LOG_TOKEN | Token for external api logging | 1234567890 |
 | ANTI_LOG_TOKEN | Token for disable logging | 1234567890 |
 | SYSTEM_LOGS_DIR | System logs directory | /var/log |
