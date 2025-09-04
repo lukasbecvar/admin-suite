@@ -33,7 +33,7 @@ class PushNotificationsApiController extends AbstractController
 
     /**
      * API to get push notifications enabled/disabled status
-     * 
+     *
      * This endpoint is used in account settings
      *
      * @return JsonResponse The status response in json
@@ -53,7 +53,7 @@ class PushNotificationsApiController extends AbstractController
 
     /**
      * API to get VAPID public key
-     * 
+     *
      * This endpoint is used in account settings
      *
      * @return JsonResponse The json response with the public key
@@ -92,9 +92,9 @@ class PushNotificationsApiController extends AbstractController
 
     /**
      * API to subscribe push notifications
-     * 
+     *
      * This endpoint is used in account settings
-     * 
+     *
      * Request body parameters:
      *  - endpoint: push notifications endpoint (string)
      *  - keys.p256dh: push notifications p256dh key (string)
@@ -168,9 +168,9 @@ class PushNotificationsApiController extends AbstractController
 
     /**
      * API to check if push notifications subscription is active
-     * 
+     *
      * This endpoint is used in account settings
-     * 
+     *
      * Request body parameters:
      *  - endpoint: push notifications endpoint (string)
      *

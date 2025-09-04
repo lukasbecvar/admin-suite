@@ -1,19 +1,35 @@
 #!/bin/bash
 
-# delete composer files
-sudo rm -rf composer.lock
-sudo rm -rf vendor/
+# colors
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[1;33m"
+RESET="\033[0m"
 
-# delete npm packages
-sudo rm -rf package-lock.json
-sudo rm -rf node_modules/
+# function to remove file/dir
+remove_item() {
+    local target=$1
 
-# delete builded assets
-sudo rm -rf public/bundles/
-sudo rm -rf public/assets/
+    # check if target exists
+    if [ -e "$target" ]; then
+        echo "${YELLOW}Removing $target...${RESET}"
+        sudo rm -rf "$target"
+        # check if target removed
+        if [ ! -e "$target" ]; then
+            echo "${GREEN}✔ Successfully removed $target${RESET}"
+        else
+            echo "${RED}✘ Failed to remove $target${RESET}"
+        fi
+    else
+        echo "${GREEN}✔ $target not found, nothing to remove${RESET}"
+    fi
+}
 
-# delete symfony cache folder
-sudo rm -rf var/
-
-# delete docker services data
-sudo rm -rf .docker/services/
+remove_item "composer.lock"
+remove_item "vendor/"
+remove_item "package-lock.json"
+remove_item "node_modules/"
+remove_item "public/bundles/"
+remove_item "public/assets/"
+remove_item "var/"
+remove_item ".docker/services/"

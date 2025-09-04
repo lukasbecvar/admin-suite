@@ -34,7 +34,7 @@ class ServiceVisitorTrackingApiController extends AbstractController
 
     /**
      * CORS preflight request
-     * 
+     *
      * This endpoint is used in external services
      *
      * @return Response The response object
@@ -52,9 +52,9 @@ class ServiceVisitorTrackingApiController extends AbstractController
 
     /**
      * Handle external service visitor tracking
-     * 
+     *
      * This endpoint is used in external services
-     * 
+     *
      * Request body parameters:
      *  - service_name: service name (string)
      *  - referer: visitor referer (string)

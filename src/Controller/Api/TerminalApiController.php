@@ -49,9 +49,9 @@ class TerminalApiController extends AbstractController
 
     /**
      * API to execute terminal command
-     * 
+     *
      * This endpoint is used in terminal component
-     * 
+     *
      * Request body parameters:
      *  - command: command to execute (string)
      *
