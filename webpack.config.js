@@ -1,6 +1,6 @@
 /* admin-suite frontend webpack builder */
 const Encore = require('@symfony/webpack-encore');
-
+ 
 Encore
     // set build path
     .setOutputPath('public/assets/')
