@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/images/favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <title>Admin Suite Documentation</title>
+</head>
+<body>
+    <!-- navbar -->
+    <nav id="navbar">
+        <div class="mobile-nav-header">
+            <span class="mobile-menu-title">Menu</span>
+            <button class="menu-toggle" id="menu-toggle">
+                <span class="icon-bars">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </span>
+                <span class="close-text">Close</span>
+            </button>
+        </div>
+        <ul id="nav-list">
+            <li><a href="#description">Description</a></li>
+            <li><a href="#open-source">Open Source</a></li>
+            <li><a href="#tech-stack">Tech Stack</a></li>
+            <li><a href="#requirements">Requirements</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#configuration">Configuration</a></li>
+            <li><a href="#authentication">Authentication</a></li>
+            <li><a href="#security">Security</a></li>
+            <li><a href="#monitoring">Monitoring</a></li>
+            <li><a href="#notifications">Notifications</a></li>
+            <li><a href="#logging">Logging</a></li>
+            <li><a href="#gallery">Image Gallery</a></li>
+        </ul>
+    </nav>
+    <!-- landing page -->
+    <section id="hero-section" class="fade-in no-border">
+        <h3 align="center">Solution for administration and monitoring linux servers</h3>
+        <div class="hero-buttons">
+            <a href="#description" class="button">More Information</a>
+        </div>
+    </section>
+    <div class="container">
+        <main id="main-content">
+            <!-- description -->
+            <section id="description" class="fade-in">
+                <h2>Description</h2>
+                <p>The Admin Suite is a comprehensive, yet remarkably simple and user-friendly solution meticulously
+                    crafted for the efficient monitoring and management of Linux servers. It is primarily designed to
+                    cater to the needs of single server instances, making it an ideal choice for small to medium-sized
+                    deployments or dedicated server environments. While optimized for Debian-based systems, its core
+                    functionalities are broadly applicable across various Linux distributions.</p>
+                <p>This suite empowers administrators with a centralized dashboard to oversee critical server
+                    operations, track performance metrics, manage services, and ensure the overall health and stability
+                    of their infrastructure. Its intuitive interface simplifies complex administrative tasks, making
+                    server management accessible even to those with limited command-line experience, while still
+                    providing powerful tools for seasoned professionals.</p>
+            </section>
+
+            <!-- open source -->
+            <section id="open-source" class="fade-in">
+                <h2>Open Source</h2>
+                <p>Admin Suite is an open-source project, and its entire codebase is available on GitHub. We welcome
+                    contributions from the community to help improve and expand its functionalities.</p>
+                <p>
+                    <a href="https://github.com/lukasbecvar/admin-suite" target="_blank" class="github-button">
+                        View on GitHub
+                    </a>
+                </p>
+            </section>
+
+            <!-- tech stack -->
+            <section id="tech-stack" class="fade-in">
+                <h2>Tech Stack</h2>
+                <p>The Admin Suite is engineered with a robust and efficient tech stack, prioritizing performance,
+                    stability, and ease of deployment. A key architectural decision was to design the application for
+                    bare-metal deployment rather than as a containerized solution. This approach minimizes overhead,
+                    provides direct access to server resources, and simplifies the operational footprint, making it
+                    exceptionally straightforward to install and manage without the complexities often associated with
+                    container orchestration.</p>
+                <p>At its core, the application leverages PHP 8+ (specifically Symfony, as identified from the GitHub
+                    repository analysis) for its powerful backend logic and API functionalities. For data persistence,
+                    the metrics component and other critical data are stored in a MySQL database, chosen for its
+                    reliability, widespread adoption, and robust feature set. Furthermore, the application utilizes the
+                    filesystem for caching mechanisms instead of external solutions like Redis, further reducing
+                    external dependencies and simplifying the overall system architecture. This streamlined approach
+                    ensures that Admin Suite remains lightweight, highly performant, and easy to maintain.</p>
+            </section>
+
+            <!-- requirements -->
+            <section id="requirements" class="fade-in">
+                <h2>Requirements</h2>
+                <p>To ensure optimal performance and compatibility, the Admin Suite requires the following software and
+                    PHP extensions to be installed on your server environment:</p>
+                <h4>Software</h4>
+                <ul>
+                    <li><b>PHP:</b> The core scripting language for the application's backend
+                        logic. Ensure your PHP installation is up-to-date for security and performance benefits.</li>
+                    <li><b>Compatible Web Server (Apache or Nginx recommended):</b> A web server is necessary to serve
+                        the application's files and handle incoming HTTP requests. Both Apache and Nginx are fully
+                        supported and widely used.</li>
+                    <li><b>MySQL Database Server (version 8.0 or higher):</b> A robust relational database management
+                        system used for storing application data, including monitoring metrics, user information, and
+                        configuration settings.</li>
+                    <li><b>Composer (Backend Package Manager):</b> Essential for managing PHP dependencies and
+                        autoloading classes. Composer simplifies the process of integrating third-party libraries.</li>
+                    <li><b>NPM (Node Package Manager):</b> Used for managing frontend dependencies and build processes,
+                        such as compiling CSS and JavaScript assets.</li>
+                </ul>
+                <h4>PHP Extensions</h4>
+                <p>The following PHP extensions are crucial for various functionalities within the Admin Suite:</p>
+                <ul>
+                    <li><b>PHP-PDO (PHP Data Objects):</b> Provides a lightweight, consistent interface for accessing
+                        databases, crucial for database interactions.</li>
+                    <li><b>PHP-OpenSSL:</b> Enables strong cryptography capabilities, vital for secure communication and
+                        data encryption.</li>
+                    <li><b>PHP-Intl (Internationalization Functions):</b> Supports internationalized formatting, crucial
+                        for handling diverse character sets and locales.</li>
+                    <li><b>PHP-Curl (Client URL Library):</b> Allows the application to make HTTP requests to external
+                        services, used for various monitoring and integration features.</li>
+                    <li><b>PHP-DOM (Document Object Model):</b> Provides an API for working with XML and HTML documents,
+                        used for parsing and manipulating web content.</li>
+                    <li><b>PHP-GMP (GNU Multiple Precision):</b> Offers functions for arbitrary-precision arithmetic,
+                        potentially used in cryptographic operations or complex calculations.</li>
+                    <li><b>PHP-GD (Graphics Draw):</b> Enables image manipulation capabilities, which might be used for
+                        generating charts or processing visual data within the application.</li>
+                </ul>
+            </section>
+
+            <!-- installation -->
+            <section id="installation" class="fade-in">
+                <h2>Installation</h2>
+                <p>Installing the Admin Suite is designed to be a straightforward process, mirroring the simplicity of
+                    deploying any standard PHP project. Follow these detailed steps to get your Admin Suite up and
+                    running:</p>
+                <ol>
+                    <li><b>Clone the Repository:</b> Begin by cloning the Admin Suite source code from its GitHub
+                        repository to your server. This command will fetch all necessary files:
+                        <pre><code>git clone git@github.com:lukasbecvar/admin-suite.git</code></pre>
+                    </li>
+                    <li><b>Configure Web Server:</b> Set up an Apache Virtual Host or Nginx server block to point to the
+                        application's <code>public/</code> directory. This configures your web server to serve the Admin
+                        Suite application.
+                    </li>
+                    <li><b>Create Environment File:</b> Duplicate the <code>.env.prod</code> file to <code>.env</code>
+                        in the root directory of the project. This file will contain your specific environment
+                        configurations, such as database credentials and application settings. Customize it according to
+                        your server environment.
+                    </li>
+                    <li><b>Install Dependencies:</b> Navigate to the project root in your terminal and install both
+                        frontend and backend dependencies using the respective package managers:
+                        <pre><code>npm install && composer install</code></pre>
+                        This command will install all required Node.js packages for frontend assets and PHP packages
+                        managed by Composer.
+                    </li>
+                    <li><b>Build Frontend Assets:</b> Compile the frontend assets (CSS, JavaScript) for production. This
+                        step ensures that all styles and scripts are optimized and ready for deployment:
+                        <pre><code>npm run build</code></pre>
+                    </li>
+                    <li><b>Create Database:</b> Create the necessary database for the Admin Suite. This command will
+                        create the database if it doesn't already exist, based on your <code>.env</code> configuration:
+                        <pre><code>php bin/console doctrine:database:create --if-not-exists</code></pre>
+                    </li>
+                    <li><b>Migrate Database:</b> Apply all pending database migrations to set up the required tables and
+                        schema. The <code>--no-interaction</code> flag ensures the process runs non-interactively:
+                        <pre><code>php bin/console doctrine:migrations:migrate --no-interaction</code></pre>
+                    </li>
+                    <li><b>Create Systemd Service for Monitoring:</b> For continuous monitoring, it is crucial to set up
+                        a systemd service that runs the monitoring console command in an infinite loop. Refer to the
+                        <code>systemd-config</code> documentation within the repository for detailed instructions on
+                        configuring this service.
+                    </li>
+                    <li><b>Create Main Admin User:</b> Establish the initial administrator account. You can do this
+                        either via a console command or through the web interface. The web interface will automatically
+                        allow user creation if the user table is empty, guiding you through the process.
+                    </li>
+                    <li><b>Configure Custom Suite Settings:</b> Optionally, create your custom suite configuration files
+                        in the application's root directory. These files allow you to override default settings and
+                        tailor the Admin Suite to your specific operational needs. Refer to the <a
+                            href="#configuration">Configuration</a> section for more details.
+                    </li>
+                </ol>
+            </section>
+
+            <!-- configuration -->
+            <section id="configuration" class="fade-in">
+                <h2>Configuration</h2>
+                <p>The Admin Suite offers flexible configuration options, allowing you to tailor its behavior to your
+                    specific environment and operational requirements. Configuration is primarily managed through
+                    environment variables and dedicated suite configuration files.</p>
+                <h4>Environment Variables</h4>
+                <p>Environment variables are crucial for defining sensitive settings and environment-specific parameters
+                    without hardcoding them into the application. These variables are loaded from the <code>.env</code>
+                    file located in the root directory of your project. You should create this file and populate it with
+                    your unique configurations, such as database connection strings, API keys, and other critical
+                    settings. This approach ensures that sensitive information is kept separate from the codebase and
+                    can be easily managed across different deployment environments (e.g., development, staging,
+                    production).</p>
+                <h4>Suite Configuration</h4>
+                <p>Beyond environment variables, the Admin Suite utilizes a system of JSON-based suite configuration
+                    files to manage various application-specific settings. The default configurations are stored in the
+                    <code>config/suite</code> directory. A powerful feature of the Admin Suite is its ability to allow
+                    you to override these default configurations by creating your own custom configuration files
+                    directly in the application's root directory. This provides immense flexibility, enabling you to
+                    customize behaviors without modifying the core application files.</p>
+                <p>Key suite configuration files include:</p>
+                <ul>
+                    <li><code>config/suite/blocked-usernames.json</code>: A comprehensive list of usernames that are
+                        reserved or blocked from being registered within the Admin Suite, enhancing security and
+                        preventing conflicts.</li>
+                    <li><code>config/suite/package-requirements.json</code>: Defines a list of required system packages
+                        and PHP extensions that the Admin Suite depends on for full functionality. This file is crucial
+                        for diagnostic checks and ensuring all prerequisites are met.</li>
+                    <li><code>config/suite/services-monitoring.json</code>: This file is central to the monitoring
+                        capabilities, specifying the services (HTTP, systemd) that the Admin Suite should actively
+                        monitor, along with their respective health check parameters and alert thresholds.</li>
+                    <li><code>config/suite/terminal-aliases.json</code>: Allows you to define custom command aliases for
+                        the integrated terminal component, streamlining frequently used commands and improving
+                        efficiency for administrators.</li>
+                    <li><code>config/suite/terminal-blocked-commands.json</code>: A critical security feature that lists
+                        commands that are explicitly blocked from execution within the integrated terminal, preventing
+                        potentially dangerous operations.</li>
+                </ul>
+                <div class="phone-none">
+                    <h4>Environment variables</h4>
+                    <p>The environment variables are loaded from .env file. You can create .env file in root directory with your configuration.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>Description</th>
+                                <th>Example value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>APP_ENV</td>
+                                <td>Application environment</td>
+                                <td>prod</td>
+                            </tr>
+                            <tr>
+                                <td>APP_SECRET</td>
+                                <td>Secret encryption key</td>
+                                <td>0cb9325e8b4b59a90249865085</td>
+                            </tr>
+                            <tr>
+                                <td>TRUSTED_HOSTS</td>
+                                <td>Trusted url hosts</td>
+                                <td>becvar.xyz,becvar.test</td>
+                            </tr>
+                            <tr>
+                                <td>SSL_ONLY</td>
+                                <td>Enable only ssl traffic</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>MAINTENANCE_MODE</td>
+                                <td>Enable maintenance mode</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>PWA_APP_SUPPORT</td>
+                                <td>Enable pwa app support</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>ADMIN_CONTACT</td>
+                                <td>The system maintener contact email</td>
+                                <td>admin@becvar.xyz</td>
+                            </tr>
+                            <tr>
+                                <td>IP_APIS</td>
+                                <td>The list of APIs to get host server pulic ip</td>
+                                <td>IP_APIS=IP_APIS=https://ifconfig.me,url2,url2</td>
+                            </tr>
+                            <tr>
+                                <td>AUTHOR_WEBSITE_URL</td>
+                                <td>The system maintener contact email</td>
+                                <td>https://becvar.xyz</td>
+                            </tr>
+                            <tr>
+                                <td>PROJECT_GITHUB_URL</td>
+                                <td>The system maintener contact email</td>
+                                <td>https://github.com/lukasbecvar/admin-suite</td>
+                            </tr>
+                            <tr>
+                                <td>IP_INFO_API</td>
+                                <td>API for get information about visitor ip</td>
+                                <td>http://ip-api.com</td>
+                            </tr>
+                            <tr>
+                                <td>RATE_LIMIT_ENABLED</td>
+                                <td>Enable rate limit</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td>RATE_LIMIT_INTERVAL</td>
+                                <td>Rate limit interval</td>
+                                <td>60</td>
+                            </tr>
+                            <tr>
+                                <td>RATE_LIMIT_LIMIT</td>
+                                <td>Rate limit limit</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>EXTERNAL_API_LOG_TOKEN</td>
+                                <td>Token for external api logging</td>
+                                <td>1234567890</td>
+                            </tr>
+                            <tr>
+                                <td>ANTI_LOG_TOKEN</td>
+                                <td>Token for disable logging</td>
+                                <td>1234567890</td>
+                            </tr>
+                            <tr>
+                                <td>SYSTEM_LOGS_DIR</td>
+                                <td>System logs directory</td>
+                                <td>/var/log</td>
+                            </tr>
+                            <tr>
+                                <td>DATABASE_LOGGING</td>
+                                <td>Enable database logging</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>LOG_LEVEL</td>
+                                <td>Log level</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>MEMORY_COST</td>
+                                <td>Hash memory cost</td>
+                                <td>1024</td>
+                            </tr>
+                            <tr>
+                                <td>TIME_COST</td>
+                                <td>Hash time cost</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td>THREADS</td>
+                                <td>Hash threads</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>LIMIT_CONTENT_PER_PAGE</td>
+                                <td>Limit items per page</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td>MONITORING_INTERVAL</td>
+                                <td>Monitoring interval</td>
+                                <td>60</td>
+                            </tr>
+                            <tr>
+                                <td>METRICS_SAVE_INTERVAL</td>
+                                <td>Metrics save interval</td>
+                                <td>60</td>
+                            </tr>
+                            <tr>
+                                <td>NETWORK_SPEED_MAX</td>
+                                <td>Network speed (Mbps) limit for usage calculation</td>
+                                <td>1000</td>
+                            </tr>
+                            <tr>
+                                <td>DATABASE_DRIVER</td>
+                                <td>Database driver</td>
+                                <td>pdo_mysql</td>
+                            </tr>
+                            <tr>
+                                <td>DATABASE_HOST</td>
+                                <td>Database host</td>
+                                <td>localhost</td>
+                            </tr>
+                            <tr>
+                                <td>DATABASE_PORT</td>
+                                <td>Database port</td>
+                                <td>3306</td>
+                            </tr>
+                            <tr>
+                                <td>DATABASE_NAME</td>
+                                <td>Database name</td>
+                                <td>admin_suite</td>
+                            </tr>
+                            <tr>
+                                <td>DATABASE_USERNAME</td>
+                                <td>Database user</td>
+                                <td>root</td>
+                            </tr>
+                            <tr>
+                                <td>DATABASE_PASSWORD</td>
+                                <td>Database password</td>
+                                <td>root</td>
+                            </tr>
+                            <tr>
+                                <td>MAILER_ENABLED</td>
+                                <td>Enable mailer</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>MAILER_HOST</td>
+                                <td>Mailer host</td>
+                                <td>localhost</td>
+                            </tr>
+                            <tr>
+                                <td>MAILER_PORT</td>
+                                <td>Mailer port</td>
+                                <td>25</td>
+                            </tr>
+                            <tr>
+                                <td>MAILER_USERNAME</td>
+                                <td>Mailer username</td>
+                                <td>service@becvar.xyz</td>
+                                </tr>
+                            <tr>
+                                <td>MAILER_PASSWORD</td>
+                                <td>Mailer password</td>
+                                <td>password</td>
+                            </tr>
+                            <tr>
+                                <td>PUSH_NOTIFICATIONS_ENABLED</td>
+                                <td>Enable push notifications</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>PUSH_NOTIFICATIONS_MAX_TTL</td>
+                                <td>Push notifications max ttl</td>
+                                <td>86400</td>
+                            </tr>
+                            <tr>
+                                <td>PUSH_NOTIFICATIONS_CONTENT_ENCODING</td>
+                                <td>Push notifications content encoding</td>
+                                <td>aes-256-gcm</td>
+                            </tr>
+                            <tr>
+                                <td>PUSH_NOTIFICATIONS_VAPID_PUBLIC_KEY</td>
+                                <td>Public key for push notifications</td>
+                                <td>12938747T6T6R236</td>
+                            </tr>
+                            <tr>
+                                <td>PUSH_NOTIFICATIONS_VAPID_PRIVATE_KEY</td>
+                                <td>Private key for push notifications</td>
+                                <td>12938747T6T6R236</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- authentication -->
+            <section id="authentication" class="fade-in">
+                <h2>Authentication</h2>
+                <p>The Admin Suite employs a meticulously designed, completely custom user authentication system, built
+                    from the ground up to ensure robust security and seamless user management. This bespoke system
+                    handles user registration, login, and permission management, providing a tailored experience that
+                    integrates perfectly with the application's functionalities.</p>
+                <p>A unique aspect of the initial setup is that only the very first user attempting to register through
+                    the application's web interface will be granted administrative privileges. This mechanism ensures a
+                    secure initial deployment, preventing unauthorized access during the critical setup phase.
+                    Subsequent user registrations can then be managed and assigned roles by the primary administrator.
+                </p>
+                <p>For user sessions, the Admin Suite utilizes standard PHP sessions, ensuring secure and stateful
+                    interactions. Additionally, a 'remember me' feature is implemented using secure cookies, allowing
+                    users to maintain their login status across browser sessions for enhanced convenience, while
+                    adhering to best practices for secure cookie handling.</p>
+            </section>
+
+            <!-- security -->
+            <section id="security" class="fade-in">
+                <h2>Security</h2>
+                <p>The Admin Suite application is designed with a strong focus on security to protect sensitive data and
+                    ensure system integrity. Key security features include:</p>
+                <ul>
+                    <li><b>High-Level Data Encryption:</b> Sensitive data stored in the database is encrypted using AES
+                        (Advanced Encryption Standard) to prevent unauthorized access.</li>
+                    <li><b>XSS Protection:</b> The application incorporates various protections against Cross-Site
+                        Scripting (XSS) attacks, sanitizing user inputs and outputs to mitigate common web
+                        vulnerabilities.</li>
+                    <li><b>Production Environment Checks:</b> Includes checks to prevent running in production
+                        environments without SSL (Secure Sockets Layer) enabled, ensuring encrypted communication.</li>
+                    <li><b>Robust Authentication:</b> Utilizes a custom, secure user management system with strong
+                        password handling and session management.</li>
+                </ul>
+            </section>
+
+            <!-- monitoring -->
+            <section id="monitoring" class="fade-in">
+                <h2>Monitoring</h2>
+                <p>The Admin Suite provides a comprehensive and flexible monitoring system designed to keep you informed
+                    about the health and performance of your server and its services. It encompasses various monitoring
+                    facets, from service uptime to detailed system metrics and visitor tracking for web applications.
+                </p>
+                <h4>Services Monitoring</h4>
+                <p>The core of the service monitoring functionality relies on a dedicated console command
+                    (<code>console app:monitoring:process</code>) that runs continuously in an infinite loop. This
+                    command actively checks the status of both HTTP-based services and systemd services. For robust
+                    operation, this command should be configured to run as a persistent systemd service on your server.
+                </p>
+                <p>Monitored services are meticulously defined within the
+                    <code>config/suite/services-monitoring.json</code> configuration file, allowing for granular control
+                    over what is monitored. To ensure timely alerts, it is essential to configure the monitoring
+                    interval and specify an SMTP server or push notification settings via environment variables. The
+                    real-time status and historical monitoring data for all configured services are then intuitively
+                    displayed on the web dashboard page, providing a clear overview of your infrastructure's health.</p>
+                <h4>Metrics Collection</h4>
+                <p>The metrics component is an integral part of the monitoring process, designed to collect and store
+                    vital performance data. Its operation is directly tied to the running monitoring process, ensuring
+                    continuous data capture. This component diligently records average usage values for critical system
+                    resources such as CPU, RAM, and storage, based on the interval defined in your <code>.env</code>
+                    file (<code>METRICS_SAVE_INTERVAL</code>). This historical data is invaluable for analyzing
+                    long-term performance trends, identifying bottlenecks, and planning resource allocation.</p>
+                <h4>Metrics Collector for HTTP Services</h4>
+                <p>For web applications, the Admin Suite offers a specialized Metric Collector, enabling you to gather
+                    custom metrics directly from your monitored HTTP services. This feature allows for a deeper insight
+                    into application-specific performance indicators. You can easily enable the metric collector within
+                    the <code>services-monitoring.json</code> file by setting <code>collect_metrics</code> to
+                    <code>true</code> and specifying the <code>metrics_collector_url</code>. The Metric Collector is
+                    designed to accept simple key-value pairs (<code>key</code> as a string, <code>value</code> as an
+                    integer or float), making it highly adaptable for various custom metrics.</p>
+                <h4>Example Response from the Metric Collector URL:</h4>
+                <pre><code>{
+  "cpu_usage": 64,
+  "ram_usage": 77,
+  "storage_usage": 10,
+}</code></pre>
+                <p>This example demonstrates how your application can expose its internal metrics for collection by the
+                    Admin Suite.</p>
+                <h4>Visitor Tracking</h4>
+                <p>The visitor tracking feature provides valuable insights into the usage of your HTTP-based services.
+                    It allows you to monitor visitor activity, helping you understand user engagement and traffic
+                    patterns. To activate this feature, you need to configure the specific service within the
+                    <code>services-monitoring.json</code> file. It's crucial to specify both the service name and its
+                    URL (the URL is used for verification against the <code>HTTP_ORIGIN</code> header).</p>
+                <p>Tracking is performed via a simple API call that needs to be integrated into your web application's
+                    frontend. Below is an example of how to implement this API call using JavaScript:</p>
+                <pre><code>const visitorReferer = document.referrer || 'Unknown'
+
+fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        service_name: 'monitored-service-name',
+        referer: visitorReferer
+    })
+})</code></pre>
+                <p>This snippet demonstrates how your web application can send visitor data to the Admin Suite for
+                    comprehensive tracking and analysis.</p>
+            </section>
+
+            <!-- notifications -->
+            <section id="notifications" class="fade-in">
+                <h2>Notifications</h2>
+                <p>The Admin Suite ensures that administrators are always informed about critical events and system
+                    statuses through a robust notification system. This system is designed to deliver timely alerts,
+                    allowing for proactive management and rapid response to potential issues.</p>
+                <p>Notifications are primarily delivered through two channels:</p>
+                <ul>
+                    <li><b>Web Push Notifications:</b> For immediate, in-browser alerts, the application supports web
+                        push notifications. Administrators can enable these directly within their user settings,
+                        ensuring they receive real-time updates and critical alerts even when not actively browsing the
+                        Admin Suite dashboard. This provides a seamless and persistent notification experience.</li>
+                    <li><b>Email Alerts:</b> In addition to web push, the system is capable of sending detailed alerts
+                        directly to the administrator's email address. This serves as a reliable fallback and a
+                        comprehensive record of significant events, such as service outages, critical system errors, or
+                        security warnings. Email notifications can be configured to provide detailed context, helping
+                        administrators quickly understand and address the reported issues.</li>
+                </ul>
+                <p>The flexibility of these notification methods ensures that administrators can choose their preferred
+                    way to stay updated, guaranteeing that no critical event goes unnoticed.</p>
+            </section>
+
+            <!-- logging -->
+            <section id="logging" class="fade-in">
+                <h2>Logging</h2>
+                <p>The Admin Suite incorporates a comprehensive logging system designed to provide deep insights into
+                    both internal application activities and external events. This dual-purpose logging capability is
+                    crucial for auditing, debugging, and maintaining a secure and transparent operational environment.
+                </p>
+                <p>The system facilitates two primary types of log storage, both managed efficiently within the
+                    database:</p>
+                <ul>
+                    <li><b>User Action Tracking:</b> All significant actions performed by Admin Suite users are
+                        meticulously recorded in the database. This includes login attempts, configuration changes,
+                        command executions, and any other administrative operations. This detailed audit trail is
+                        invaluable for security analysis, accountability, and understanding user behavior within the
+                        application.</li>
+                    <li><b>External Application Logs via API:</b> The Admin Suite provides a dedicated API endpoint that
+                        allows external applications to send their logs directly to the suite's centralized logging
+                        system. This feature enables you to consolidate logs from various services and applications into
+                        a single, easily searchable repository. By centralizing logs, administrators can gain a holistic
+                        view of their entire ecosystem, simplifying troubleshooting, performance analysis, and security
+                        incident response across their infrastructure.</li>
+                </ul>
+                <p>By storing logs directly in the database, the Admin Suite ensures data integrity, facilitates complex
+                    querying, and provides a persistent record of all events, making it an indispensable tool for system
+                    administrators.</p>
+            </section>
+
+            <!-- gallery -->
+            <section id="gallery" class="fade-in">
+                <h2>Image Gallery</h2>
+                <p>Explore a visual preview of the Admin Suite in action. This gallery showcases various modules and
+                    functionalities as they appear in a production environment, offering a glimpse into the intuitive
+                    user interface and comprehensive features designed for efficient server administration and
+                    monitoring.</p>
+                <div id="gallery-container"></div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- footer -->
+    <footer class="site-footer">
+        <p>This documentation page is for the Admin Suite application. Created by <a href="https://becvar.xyz" target="_blank">Lukas Becvar</a>.</p>
+    </footer>
+
+    <!-- lightbox -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <a class="lightbox-prev">&#10094;</a>
+        <a class="lightbox-next">&#10095;</a>
+        <div class="lightbox-content">
+            <img id="lightbox-img" class="lightbox-img">
+            <div id="lightbox-caption" class="lightbox-caption"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <button id="scrollToTopBtn" title="Go to top">⬆</button>
+</body>
+</html>
