@@ -8,6 +8,9 @@
     <title>Admin Suite Documentation</title>
 </head>
 <body>
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
     <!-- navbar -->
     <nav id="navbar">
         <div class="mobile-nav-header">
@@ -23,16 +26,11 @@
         </div>
         <ul id="nav-list">
             <li><a href="#description">Description</a></li>
-            <li><a href="#open-source">Open Source</a></li>
             <li><a href="#tech-stack">Tech Stack</a></li>
             <li><a href="#requirements">Requirements</a></li>
             <li><a href="#installation">Installation</a></li>
             <li><a href="#configuration">Configuration</a></li>
-            <li><a href="#authentication">Authentication</a></li>
-            <li><a href="#security">Security</a></li>
             <li><a href="#monitoring">Monitoring</a></li>
-            <li><a href="#notifications">Notifications</a></li>
-            <li><a href="#logging">Logging</a></li>
             <li><a href="#gallery">Image Gallery</a></li>
         </ul>
     </nav>
@@ -630,6 +628,11 @@ fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
         </div>
     </div>
     <script src="script.js"></script>
-    <button id="scrollToTopBtn" title="Go to top">⬆</button>
+    <button id="scrollToTopBtn" title="Go to top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"></line>
+            <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+    </button>
 </body>
 </html>

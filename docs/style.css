@@ -6,7 +6,7 @@
     --secondary-bg: #161b22;
     --accent-hover: #79b8ff;
     --border-color: #30363d;
-    --accent-color: #4e87c8ff;
+    --accent-color: #6186b1ff;
     --shadow-color: rgba(0, 0, 0, 0.4);
     --font-family: 'Poppins', sans-serif;
 }
@@ -79,13 +79,13 @@ header h1 {
 }
 
 #hero-section {
-    background: linear-gradient(rgba(13, 17, 23, 0.6), rgba(13, 17, 23, 0.6));
-    padding: 15vh 20px;
+    background: radial-gradient(ellipse at center, rgba(13, 17, 23, 0.4) 0%, rgba(13, 17, 23, 0.8) 100%);
+    padding: 0 20px;
     text-align: center;
     color: #fff;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     min-height: 100vh;
     border-bottom: 1px solid var(--border-color);
@@ -104,14 +104,14 @@ header h1 {
     background: url('assets/admin-suite-preview/1-dashboard.png') no-repeat center center/cover;
     filter: blur(5px);
     z-index: -1;
-    transform: scale(1.05);
+    animation: kenburns 20s ease-out infinite alternate;
 }
 
 #hero-section h3 {
     font-size: 2.5em;
     font-weight: 300;
     color: #ced8e2ff;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .hero-buttons {
@@ -154,11 +154,10 @@ h1, h2, h3, h4 {
 
 h2 {
     font-size: 2.5em;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
     display: inline-block;
     color: var(--accent-color);
-    border-bottom: 1px solid var(--border-color);
 }
 
 #navbar {
@@ -254,7 +253,7 @@ main {
 
 section {
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 5px;
     margin-bottom: 20px;
     scroll-margin-top: 90px;
     transition: all 0.3s ease;
@@ -295,6 +294,20 @@ section:hover {
     background-color: rgba(22, 27, 34, 0.6);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    position: relative;
+}
+
+.gallery-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-25deg);
+    transition: left 0.6s ease;
+    z-index: 1;
 }
 
 .gallery-item:hover {
@@ -303,19 +316,31 @@ section:hover {
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
 }
 
+.gallery-item:hover::before {
+    left: 100%;
+}
+
 .gallery-item img {
     width: 100%;
     display: block;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
 }
 
 .caption {
     padding: 20px;
     flex-grow: 1;
+    position: relative;
+    z-index: 2;
 }
 
 .caption h3 {
     margin: 0 0 10px 0;
     color: var(--accent-color);
+    text-decoration: none;
 }
 
 .caption p {
@@ -469,13 +494,12 @@ pre code {
     z-index: 99;
     width: 50px;
     height: 50px;
-    font-size: 24px;
-    line-height: 50px;
     border-radius: 50%;
-    text-align: center;
     background-color: var(--accent-color);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s, transform 0.3s;
+    align-items: center;
+    justify-content: center;
 }
 
 #scrollToTopBtn:hover {
@@ -580,5 +604,43 @@ td {
     .caption {
         transform: translateY(0);
         background: var(--secondary-bg);
+    }
+}
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-bg);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--border-color);
+    border-top-color: var(--accent-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes kenburns {
+    0% {
+        transform: scale(1.05) translate(0, 0);
+    }
+    100% {
+        transform: scale(1.2) translate(-5%, -5%);
     }
 }

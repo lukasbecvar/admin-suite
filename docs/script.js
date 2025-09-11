@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function scrollFunction() {
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            mybutton.style.display = "block"
+            mybutton.style.display = "flex"
         } else {
             mybutton.style.display = "none"
         }
@@ -214,7 +214,17 @@ document.addEventListener('DOMContentLoaded', () => {
     mybutton.addEventListener("click", topFunction)
 
     function topFunction() {
-        document.body.scrollTop = 0
-        document.documentElement.scrollTop = 0
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        })
     }
 })
+
+window.onload = function() {
+    const preloader = document.getElementById('preloader')
+    preloader.style.opacity = '0'
+    setTimeout(() => {
+        preloader.style.display = 'none'
+    }, 500)
+}
