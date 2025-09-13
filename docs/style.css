@@ -268,7 +268,7 @@ section:hover {
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
 }
 
-#gallery {
+#preview {
     backdrop-filter: none !important;
     bordet-radius: none !important;
     box-shadow: none !important;
@@ -276,14 +276,14 @@ section:hover {
     border: none !important;
 }
 
-#gallery-container {
+#preview-container {
     gap: 25px;
     display: grid;
     align-items: stretch;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
-.gallery-item {
+.preview-item {
     display: flex;
     cursor: pointer;
     overflow: hidden;
@@ -297,7 +297,7 @@ section:hover {
     position: relative;
 }
 
-.gallery-item::before {
+.preview-item::before {
     content: '';
     position: absolute;
     top: 0;
@@ -310,23 +310,23 @@ section:hover {
     z-index: 1;
 }
 
-.gallery-item:hover {
+.preview-item:hover {
     transform: translateY(-10px);
     border-color: var(--accent-color);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
 }
 
-.gallery-item:hover::before {
+.preview-item:hover::before {
     left: 100%;
 }
 
-.gallery-item img {
+.preview-item img {
     width: 100%;
     display: block;
     transition: transform 0.3s ease;
 }
 
-.gallery-item:hover img {
+.preview-item:hover img {
     transform: scale(1.05);
 }
 

@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ]
 
-    const galleryContainer = document.getElementById('gallery-container')
+    const galleryContainer = document.getElementById('preview-container')
     const lightbox = document.getElementById('lightbox')
     const lightboxImg = document.getElementById('lightbox-img')
     const lightboxCaption = document.getElementById('lightbox-caption')
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     documentationData.forEach((item, index) => {
         const galleryItem = document.createElement('div')
-        galleryItem.classList.add('gallery-item')
+        galleryItem.classList.add('preview-item')
         galleryItem.dataset.index = index
 
         const image = document.createElement('img')
