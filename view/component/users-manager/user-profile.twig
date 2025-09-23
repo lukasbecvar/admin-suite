@@ -6,13 +6,13 @@
     {# USER PROFILE IMAGE VIEW MODAL #}
     <div id="user-profile-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
         <div class="relative bg-gray-800/95 rounded max-w-md w-full border border-gray-700/50 m-2 animate-popin backdrop-blur-md">
-            <div class="px-4 py-3 border-b border-gray-700/50 bg-gray-800/30 flex items-center justify-between">
+            <div class="px-4 py-2 phn:py-1 border-b border-gray-700/50 bg-gray-800/30 flex items-center justify-between">
                 <div class="flex items-center">
                     <i class="fas fa-user-circle text-blue-400 mr-2"></i>
                     <span class="font-semibold text-white">Profile Picture</span>
                 </div>
                 <button id="close-user-profile-modal" class="text-gray-400 hover:text-red-400 transition-colors duration-200">
-                    <i class="fas fa-times text-lg"></i>
+                    <i class="fas fa-times text-2xl mt-[5px]"></i>
                 </button>
             </div>
             {% if userRepository.getProfilePic() == 'default_pic' %}
