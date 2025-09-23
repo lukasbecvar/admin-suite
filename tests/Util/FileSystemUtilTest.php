@@ -12,6 +12,7 @@ use PHPUnit\Framework\Attributes\Group;
  *
  * @package App\Tests\Util
  */
+#[Group('file-system')]
 class FileSystemUtilTest extends TestCase
 {
     private FileSystemUtil $fileSystemUtil;
@@ -123,7 +124,6 @@ class FileSystemUtilTest extends TestCase
      *
      * @return void
      */
-    #[Group('file-system')]
     public function testIsFileEditable(): void
     {
         // Create a temporary text file
@@ -153,7 +153,6 @@ class FileSystemUtilTest extends TestCase
      *
      * @return void
      */
-    #[Group('file-system')]
     public function testCreateDirectory(): void
     {
         // create a temporary directory path
@@ -193,7 +192,6 @@ class FileSystemUtilTest extends TestCase
      *
      * @return void
      */
-    #[Group('file-system')]
     public function testSaveFileContent(): void
     {
         // create temporary text file
@@ -219,7 +217,6 @@ class FileSystemUtilTest extends TestCase
      *
      * @return void
      */
-    #[Group('file-system')]
     public function testDeleteFileOrDirectory(): void
     {
         // create temporary text file
@@ -244,7 +241,6 @@ class FileSystemUtilTest extends TestCase
      *
      * @return void
      */
-    #[Group('file-system')]
     public function testRenameFileOrDirectory(): void
     {
         // create temporary text file
@@ -268,7 +264,6 @@ class FileSystemUtilTest extends TestCase
      *
      * @return void
      */
-    #[Group('file-system')]
     public function testCalculateDirectorySize(): void
     {
         // create temporary directory
@@ -310,7 +305,6 @@ class FileSystemUtilTest extends TestCase
      *
      * @return void
      */
-    #[Group('file-system')]
     public function testMoveFileOrDirectory(): void
     {
         // create temporary text file
@@ -336,7 +330,6 @@ class FileSystemUtilTest extends TestCase
      *
      * @return void
      */
-    #[Group('file-system')]
     public function testGetFullFileContent(): void
     {
         // create temporary text file
