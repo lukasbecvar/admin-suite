@@ -411,4 +411,55 @@ class TodoManagerTest extends TestCase
         // call tested method
         $this->todoManager->updateTodoPositions($positions);
     }
+
+    /**
+     * Test re-encrypt todos
+     *
+     * @return void
+     */
+    public function testReEncryptTodos(): void
+    {
+        $oldKey = 'old_secret';
+        $newKey = 'new_secret';
+
+        // mock todo entities
+        $todo1 = new Todo();
+        $todo1->setTodoText('oldEnc1');
+        $todo2 = new Todo();
+        $todo2->setTodoText('oldEnc2');
+        $todos = [$todo1, $todo2];
+        $this->todoRepositoryMock->expects($this->once())->method('findAll')->willReturn($todos);
+
+        // mock decrypt
+        $this->securityUtilMock->method('decryptAes')->willReturnCallback(function ($encryptedData) {
+            return match ($encryptedData) {
+                'oldEnc1' => 'plain1',
+                'oldEnc2' => 'plain2',
+                default => null
+            };
+        });
+
+        // mock encrypt
+        $this->securityUtilMock->method('encryptAes')->willReturnCallback(function ($plainText) {
+            return match ($plainText) {
+                'plain1' => 'newEnc1',
+                'plain2' => 'newEnc2',
+                default => 'newEncDefault'
+            };
+        });
+
+        // expect entity manager persist calls
+        $this->entityManagerMock->expects($this->exactly(2))->method('persist')
+            ->with($this->isInstanceOf(Todo::class));
+
+        // expect entity manager flush call
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call method under test
+        $this->todoManager->reEncryptTodos($oldKey, $newKey);
+
+        // assert that todos got updated
+        $this->assertEquals('newEnc1', $todo1->getTodoText());
+        $this->assertEquals('newEnc2', $todo2->getTodoText());
+    }
 }

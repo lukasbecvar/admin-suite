@@ -547,4 +547,45 @@ class TodoManager
             );
         }
     }
+
+    /**
+     * Re-encrypt all todos
+     *
+     * @param string $oldKey The old encryption key
+     * @param string $newKey The new encryption key
+     *
+     * @return void
+     */
+    public function reEncryptTodos(string $oldKey, string $newKey): void
+    {
+        // get all todos
+        $todos = $this->todoRepository->findAll();
+
+        foreach ($todos as $todo) {
+            // get todo text
+            $todoText = $todo->getTodoText();
+            if ($todoText === null) {
+                continue;
+            }
+
+            // decrypt todo text
+            $todoText = $this->securityUtil->decryptAes(encryptedData: $todoText, key: $oldKey);
+            if ($todoText === null) {
+                $this->errorManager->handleError(
+                    message: 'error decrypting todo text',
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+
+            // encrypt todo text
+            $todoText = $this->securityUtil->encryptAes(plainText: $todoText, key: $newKey);
+
+            // set new todo text
+            $todo->setTodoText($todoText);
+            $this->entityManagerInterface->persist($todo);
+        }
+
+        // save all changes to database
+        $this->entityManagerInterface->flush();
+    }
 }

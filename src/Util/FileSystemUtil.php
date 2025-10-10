@@ -828,7 +828,7 @@ class FileSystemUtil
 
         $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         $base = 1024;
-        $exponent = floor(log($bytes, $base));
+        $exponent = (int) floor(log($bytes, $base));
         $value = $bytes / pow($base, $exponent);
 
         return round($value, $precision) . ' ' . $units[$exponent];
