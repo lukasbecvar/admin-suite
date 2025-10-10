@@ -18,30 +18,15 @@ The complete stack for development is in Docker Compose, including PHP, Node, an
 The application is designed to run on bare-metal rather than as a containerized application. For this reason, it requires minimal software to operate, making it easy to install and manage. For example, the metrics component stores data in MySQL, and the cache uses the filesystem instead of Redis.
 
 ## Index
-- [Requirements](#requirements)
 - [Installation](#installation)
 - [Configuration](#configuration)
+- [Requirements](#requirements)
 - [Authentication](#authentication)
 - [Monitoring](#monitoring)
 - [Notifications](#notifications)
 - [Logging](#logging)
 - [Dependencies](#dependencies)
 - [License](#license)
-
-## Requirements
-#### Software
-* PHP 8.4 and compatible web server
-* MySQL 8 or higher
-* Composer
-* NPM
-#### PHP extensions
-* PHP-PDO extension (db driver)
-* PHP-OpenSSL extension
-* PHP-Intl extension
-* PHP-Curl extension
-* PHP-DOM extension
-* PHP-GMP extension
-* PHP-GD extension
 
 ## Installation
 Installation is very simple like any other PHP project.
@@ -110,6 +95,21 @@ The default admin suite configuration is stored in json files in config/suite di
 * ``config/suite/services-monitoring.json`` - list of services to be monitored
 * ``config/suite/terminal-aliases.json`` - list of terminal aliases
 * ``config/suite/terminal-blocked-commands.json`` - list of blocked terminal commands
+
+## Requirements
+#### Software
+* PHP 8.4 and compatible web server
+* MySQL 8 or higher
+* Composer
+* NPM
+#### PHP extensions
+* PHP-PDO extension (db driver)
+* PHP-OpenSSL extension
+* PHP-Intl extension
+* PHP-Curl extension
+* PHP-DOM extension
+* PHP-GMP extension
+* PHP-GD extension
 
 ## Authentication
 Authentication uses a completely custom user system with a username and password, managed by the application user manager. Only the first user can use the registration form to create admin user. Login uses standard PHP session and cookie for the 'remember me' feature.
