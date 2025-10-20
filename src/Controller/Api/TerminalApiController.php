@@ -10,9 +10,11 @@ use App\Manager\LogManager;
 use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
 use App\Annotation\Authorization;
+use App\Manager\TerminalJobManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -30,6 +32,7 @@ class TerminalApiController extends AbstractController
     private AuthManager $authManager;
     private ErrorManager $errorManager;
     private SecurityUtil $securityUtil;
+    private TerminalJobManager $terminalJobManager;
 
     public function __construct(
         AppUtil $appUtil,
@@ -38,6 +41,7 @@ class TerminalApiController extends AbstractController
         SessionUtil $sessionUtil,
         ErrorManager $errorManager,
         SecurityUtil $securityUtil,
+        TerminalJobManager $terminalJobManager,
     ) {
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
@@ -45,6 +49,7 @@ class TerminalApiController extends AbstractController
         $this->authManager = $authManager;
         $this->errorManager = $errorManager;
         $this->securityUtil = $securityUtil;
+        $this->terminalJobManager = $terminalJobManager;
     }
 
     /**
@@ -94,13 +99,27 @@ class TerminalApiController extends AbstractController
             $command = $this->securityUtil->escapeString($command);
 
             // load terminal config files
-            $blockedCommands = $this->appUtil->loadConfig('terminal-blocked-commands.json');
+            $blockedCommandsConfig = $this->appUtil->loadConfig('terminal-blocked-commands.json');
             $aliases = $this->appUtil->loadConfig('terminal-aliases.json');
 
             // check if config files are iterable
-            if (!is_iterable($blockedCommands) || !is_iterable($aliases)) {
+            if (!is_iterable($blockedCommandsConfig) || !is_iterable($aliases)) {
                 return new Response('Error to load terminal config files', Response::HTTP_INTERNAL_SERVER_ERROR);
             }
+
+            // normalize blocked commands
+            $normalized = [];
+            foreach ($blockedCommandsConfig as $key => $blockedCommand) {
+                if (is_string($blockedCommand) && $blockedCommand !== '') {
+                    $normalized[] = $blockedCommand;
+                    continue;
+                }
+
+                if (is_string($key) && $blockedCommand) {
+                    $normalized[] = $key;
+                }
+            }
+            $blockedCommands = array_values(array_unique($normalized));
 
             // check if command is blocked
             foreach ($blockedCommands as $blockedCommand) {
@@ -227,6 +246,273 @@ class TerminalApiController extends AbstractController
                 content: 'Error to execute command: ' . $command . ' with error: ' . $e->getMessage(),
                 status: Response::HTTP_OK
             );
+        }
+    }
+
+    /**
+     * Start background terminal job
+     *
+     * Request body parameters:
+     *  - command: command to execute (string)
+     *
+     * @param Request $request The request object
+     *
+     * @return JsonResponse The JSON response
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/api/system/terminal/job', methods: ['POST'], name: 'api_terminal_job_start')]
+    public function startTerminalJob(Request $request): JsonResponse
+    {
+        // get current username
+        $username = $this->authManager->getLoggedUsername();
+
+        // get raw command from request
+        $rawCommand = trim((string) $request->request->get('command', ''));
+        if ($rawCommand === '') {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => 'Error: command is not set'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        try {
+            $blockedCommandsConfig = $this->appUtil->loadConfig('terminal-blocked-commands.json');
+            $aliases = $this->appUtil->loadConfig('terminal-aliases.json');
+
+            // check if configs are iterable
+            if (!is_iterable($blockedCommandsConfig) || !is_iterable($aliases)) {
+                return new JsonResponse([
+                    'status' => 'error',
+                    'message' => 'Error to load terminal config files'
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            // normalize blocked commands
+            $normalized = [];
+            foreach ($blockedCommandsConfig as $key => $blockedCommand) {
+                if (is_string($blockedCommand) && $blockedCommand !== '') {
+                    $normalized[] = $blockedCommand;
+                    continue;
+                }
+
+                if (is_string($key) && $blockedCommand) {
+                    $normalized[] = $key;
+                }
+            }
+            $blockedCommands = array_values(array_unique($normalized));
+
+            // translate aliases to commands
+            foreach ($aliases as $alias => $value) {
+                if ($rawCommand === (string) $alias) {
+                    $rawCommand = (string) $value;
+                    break;
+                }
+            }
+
+            // check if command is blocked
+            foreach ($blockedCommands as $blockedCommand) {
+                /** @var string $blockedCommand */
+                if (
+                    str_starts_with($rawCommand, $blockedCommand) ||
+                    str_starts_with($rawCommand, 'sudo ' . $blockedCommand)
+                ) {
+                    return new JsonResponse([
+                        'status' => 'blocked',
+                        'message' => 'Command: ' . $rawCommand . ' is not allowed',
+                    ], Response::HTTP_OK);
+                }
+            }
+
+            // resolve working directory
+            $workingDirectory = '/';
+            if ($this->sessionUtil->checkSession('terminal-dir')) {
+                /** @var string $currentDir */
+                $currentDir = (string) $this->sessionUtil->getSessionValue('terminal-dir');
+
+                if ($currentDir !== '' && file_exists($currentDir)) {
+                    $workingDirectory = $currentDir;
+                }
+            }
+
+            // resolve terminal user
+            $sudoUser = (string) $this->sessionUtil->getSessionValue('terminal-user', 'root');
+            if ($sudoUser === '') {
+                $sudoUser = 'root';
+            }
+
+            // start terminal job
+            $job = $this->terminalJobManager->startJob($rawCommand, $sudoUser, $workingDirectory);
+
+            // log terminal job start
+            $this->logManager->log(
+                name: 'terminal',
+                message: $username . ' started background command: ' . $rawCommand . ' (job: ' . $job['jobId'] . ')',
+                level: LogManager::LEVEL_WARNING
+            );
+
+            // return terminal job status
+            return new JsonResponse([
+                'status' => 'running',
+                'jobId' => $job['jobId'],
+                'offset' => 0,
+                'chunk' => '',
+                'isRunning' => true,
+                'startedAt' => $job['startedAt'],
+                'mode' => $job['mode'] ?? null
+            ], Response::HTTP_OK);
+        } catch (Exception $exception) {
+            $this->errorManager->logError(
+                message: 'error to start background command: ' . $rawCommand . ' with error: ' . $exception->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            // return error response
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => 'Error to start command: ' . $rawCommand,
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Get background job output chunk
+     *
+     * Request body parameters:
+     *  - jobId: job ID (string)
+     *
+     * @param Request $request The request object
+     *
+     * @return JsonResponse The JSON response
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/api/system/terminal/job', methods: ['GET'], name: 'api_terminal_job_status')]
+    public function getTerminalJobStatus(Request $request): JsonResponse
+    {
+        // get job ID from request
+        $jobId = (string) $request->query->get('jobId', '');
+        if ($jobId === '') {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => 'Error: job ID is not set'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        // get limit and offset from request
+        $offset = (int) $request->query->get('offset', '0');
+        $limit = $request->query->has('limit') ? (int) $request->query->get('limit') : null;
+
+        try {
+            // get terminal job output
+            $output = $this->terminalJobManager->getOutput($jobId, $offset, $limit);
+
+            // return job output
+            return new JsonResponse([
+                'status' => $output['isRunning'] ? 'running' : 'finished',
+                'chunk' => $output['chunk'],
+                'offset' => $output['offset'],
+                'isRunning' => $output['isRunning'],
+                'exitCode' => $output['exitCode'],
+                'startedAt' => $output['startedAt'],
+                'mode' => $output['executionMode'] ?? null
+            ], Response::HTTP_OK);
+        } catch (Exception $exception) {
+            // log error
+            $this->errorManager->logError(
+                message: 'error getting terminal job output: ' . $exception->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            // return error response
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * Stop background terminal job
+     *
+     * Request body parameters:
+     *  - jobId: job ID (string)
+     *
+     * @param Request $request The request object
+     *
+     * @return JsonResponse The JSON response
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/api/system/terminal/job/stop', methods: ['POST'], name: 'api_terminal_job_stop')]
+    public function stopTerminalJob(Request $request): JsonResponse
+    {
+        // get job ID from request
+        $jobId = (string) $request->request->get('jobId', '');
+        if ($jobId === '') {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => 'Error: job ID is not set'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        try {
+            // stop job
+            $this->terminalJobManager->stopJob($jobId);
+
+            return new JsonResponse([
+                'status' => 'stopped'
+            ], Response::HTTP_OK);
+        } catch (Exception $exception) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * Send interactive input to running terminal job
+     *
+     * Request body parameters:
+     *  - jobId: job ID (string)
+     *  - input: input value (string)
+     *
+     * @param Request $request The request object
+     *
+     * @return JsonResponse The JSON response
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/api/system/terminal/job/input', methods: ['POST'], name: 'api_terminal_job_input')]
+    public function sendTerminalJobInput(Request $request): JsonResponse
+    {
+        // get job ID from request
+        $jobId = (string) $request->request->get('jobId', '');
+        if ($jobId === '') {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => 'Error: job ID is not set'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        // get input from request
+        if (!$request->request->has('input')) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => 'Error: input value is required'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        $input = (string) $request->request->get('input');
+
+        try {
+            // append input to job
+            $this->terminalJobManager->appendInput($jobId, $input);
+
+            return new JsonResponse([
+                'status' => 'ok'
+            ], Response::HTTP_OK);
+        } catch (Exception $exception) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 }

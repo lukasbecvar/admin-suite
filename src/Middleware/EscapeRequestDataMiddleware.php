@@ -37,6 +37,11 @@ class EscapeRequestDataMiddleware
 
         // excluded controller paths from escaping
         if (
+            // terminal controllers
+            $request->getPathInfo() == $this->urlGenerator->generate('api_terminal') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('api_terminal_job_start') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('api_terminal_job_input') ||
+
             // suite config file update controller
             $request->getPathInfo() == $this->urlGenerator->generate('app_suite_config_update') ||
 

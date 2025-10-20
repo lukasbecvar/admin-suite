@@ -1,18 +1,8 @@
 [
-    "mysqldump",
-    "sudo apt",
-    "install",
     "bpytop",
-    "python",
-    "passwd",
     "nload",
-    "mysql",
-    "make",
-    "kill",
     "htop",
     "nano",
     "java",
-    "vim",
-    "gcc",
-    "apt"
+    "vim"
 ]

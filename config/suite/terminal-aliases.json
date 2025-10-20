@@ -1,5 +1,10 @@
 {
+    "update": "sudo apt-get autoremove -y && sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y",
+    "monit": "sudo journalctl -fu admin-suite-monitoring",
+    "panel": "sh /services/x-panel.sh",
+    "tlog": "sudo journalctl -f",
     "srv": "cd /services/",
+    "gs": "git status",
     "ll": "ls -alF -v",
     "space": "df -BG"
 }

@@ -668,6 +668,22 @@ input[class*="bg-gray-900/50"]:-moz-autofill {
     background-color: transparent;
 }
 
+.terminal-component .terminal-inline-cursor {
+    display: inline-block;
+    margin-left: 2px;
+    color: #60a5fa;
+    animation: terminal-cursor-blink 1s steps(2, start) infinite;
+}
+
+@keyframes terminal-cursor-blink {
+    0%, 50% {
+        opacity: 1;
+    }
+    50.01%, 100% {
+        opacity: 0;
+    }
+}
+
 /* metrics component */
 .metrics-component .chart-wrapper {
 	overflow: hidden;
