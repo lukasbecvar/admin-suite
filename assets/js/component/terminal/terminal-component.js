@@ -41,6 +41,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let pollTimer = null
     const POLL_INTERVAL = 1200
 
+    // streamed output state
+    let partialOutputBuffer = ''
+    let partialOutputElement = null
+    let lastOutputEndedWithNewline = true
+
     // focus command input
     commandInput.focus()
 
@@ -234,6 +239,69 @@ document.addEventListener('DOMContentLoaded', function() {
             .replace(/'/g, '&#39;')
     }
 
+    // sanitize chunk for terminal output
+    function sanitizeTerminalContent(input) {
+        return convertBashColors(escapeHtml(input))
+    }
+
+    // ensure partial output element exists
+    function ensurePartialOutputElement() {
+        if (!partialOutputElement) {
+            partialOutputElement = document.createElement('div')
+            partialOutputElement.className = 'terminal-output-line terminal-output-partial'
+            terminal.appendChild(partialOutputElement)
+        }
+
+        return partialOutputElement
+    }
+
+    // update the rendered partial output
+    function updatePartialOutputElement() {
+        const element = ensurePartialOutputElement()
+        element.innerHTML = sanitizeTerminalContent(partialOutputBuffer)
+    }
+
+    // append an empty visual line
+    function appendEmptyLine() {
+        const element = document.createElement('div')
+        element.className = 'terminal-output-line'
+        element.innerHTML = '&nbsp;'
+        terminal.appendChild(element)
+    }
+
+    // finalize the current partial output
+    function finalizePartialOutput() {
+        if (partialOutputElement) {
+            if (!partialOutputBuffer) {
+                terminal.removeChild(partialOutputElement)
+            } else {
+                partialOutputElement.classList.remove('terminal-output-partial')
+                partialOutputElement.innerHTML = partialOutputBuffer
+                    ? sanitizeTerminalContent(partialOutputBuffer)
+                    : ''
+            }
+            partialOutputElement = null
+            partialOutputBuffer = ''
+            return
+        }
+
+        if (partialOutputBuffer) {
+            const element = document.createElement('div')
+            element.className = 'terminal-output-line'
+            element.innerHTML = partialOutputBuffer
+                ? sanitizeTerminalContent(partialOutputBuffer)
+                : ''
+            terminal.appendChild(element)
+            partialOutputBuffer = ''
+        }
+    }
+
+    // flush the partial output if present
+    function flushPartialOutput() {
+        finalizePartialOutput()
+        lastOutputEndedWithNewline = true
+    }
+
     // append output chunk to terminal
     function appendOutputChunk(chunk) {
         if (!chunk) {
@@ -277,8 +345,35 @@ document.addEventListener('DOMContentLoaded', function() {
             return
         }
 
-        const sanitized = escapeHtml(processedChunk)
-        terminal.innerHTML += convertBashColors('<div class="terminal-output-line">' + sanitized + '</div>')
+        const normalized = processedChunk.replace(/\r\n/g, '\n').replace(/\x1b\[[0-9;?]*K/g, '')
+
+        for (let i = 0; i < normalized.length; i++) {
+            const char = normalized[i]
+
+            if (char === '\r') {
+                partialOutputBuffer = ''
+                if (partialOutputElement) {
+                    partialOutputElement.innerHTML = ''
+                }
+                lastOutputEndedWithNewline = false
+                continue
+            }
+
+            if (char === '\n') {
+                const hadPendingNewline = lastOutputEndedWithNewline
+                finalizePartialOutput()
+                if (hadPendingNewline) {
+                    appendEmptyLine()
+                }
+                lastOutputEndedWithNewline = true
+                continue
+            }
+
+            partialOutputBuffer += char
+            updatePartialOutputElement()
+            lastOutputEndedWithNewline = false
+        }
+
         if (activeJob) {
             handlePotentialPrompt(processedChunk)
         }
@@ -288,8 +383,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // append message to terminal
     function appendMessage(message, style = 'text-yellow-400') {
         const stickToBottom = shouldStickToBottom()
-        const safeMessage = escapeHtml(message)
-        terminal.innerHTML += `<div class="${style}">${safeMessage}</div>`
+        flushPartialOutput()
+        const wrapper = document.createElement('div')
+        wrapper.className = style
+        wrapper.innerHTML = escapeHtml(message)
+        terminal.appendChild(wrapper)
+        lastOutputEndedWithNewline = true
         scrollToBottom(stickToBottom)
     }
 
@@ -600,6 +699,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (command === 'clear' || command === 'cls') {
             terminal.innerHTML = ''
+            partialOutputBuffer = ''
+            partialOutputElement = null
+            lastOutputEndedWithNewline = true
             return
         }
 
@@ -793,6 +895,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 host.appendChild(document.createTextNode(displayValue))
             }
             inlineInputPreview = null
+            lastOutputEndedWithNewline = false
             scrollToBottom(stickToBottom)
             return
         }
@@ -834,6 +937,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         scrollToBottom(stickToBottom)
+        lastOutputEndedWithNewline = false
     }
 
     // send input to active job
@@ -888,7 +992,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const command = this.value.trim()
             if (command.length > 0) {
                 const stickToBottom = shouldStickToBottom()
-                terminal.innerHTML += '<div class="command-history-prompt"><span class="text-green-500">' + currentUser + '</span><span class="text-white">:</span><span class="text-blue-600">' + pathElement.textContent + '</span><span class="text-white">$<span class="last-command">' + escapeHtml(command) + '</span></span><span class="command-inline-input text-gray-300"></span></div>'
+                flushPartialOutput()
+                terminal.insertAdjacentHTML(
+                    'beforeend',
+                    '<div class="command-history-prompt"><span class="text-green-500">' + currentUser + '</span><span class="text-white">:</span><span class="text-blue-600">' + pathElement.textContent + '</span><span class="text-white">$<span class="last-command">' + escapeHtml(command) + '</span></span><span class="command-inline-input text-gray-300"></span></div>'
+                )
+                lastOutputEndedWithNewline = true
 
                 commandHistory.push(command)
                 localStorage.setItem('commandHistory', JSON.stringify(commandHistory))
