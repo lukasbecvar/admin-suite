@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cursorElement = document.createElement('span')
     const commandInput = document.getElementById('command')
     const terminalWrapper = document.getElementById('terminal')
-    const usernameElement = document.getElementById('username')
+    const usernameElement = document.getElementById('terminal-username')
     const terminal = document.getElementById('output-container')
     const commandContainer = document.getElementById('command-container')
     const promptSeparatorElement = usernameElement ? usernameElement.nextElementSibling : null
