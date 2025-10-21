@@ -1,5 +1,6 @@
 /** file-system create directory functionality */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()
+{
     const form = document.querySelector('form')
     const errorContainer = document.createElement('div')
     const directoryNameInput = document.getElementById('directoryname')

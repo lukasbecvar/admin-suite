@@ -1,5 +1,6 @@
 /* suite config manager component (handle reset to default popup) */
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function()
+{
     var resetButtons = document.querySelectorAll('.reset-button')
     var popupOverlay = document.getElementById('reset-popup-overlay')
     var cancelButton = document.getElementById('reset-cancel-button')

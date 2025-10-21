@@ -1,5 +1,6 @@
 /* sidebar element functionality */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()
+{
     // get elements
     const sidebar = document.getElementById('sidebar')
     const mainContent = document.getElementById('main-content')

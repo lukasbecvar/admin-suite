@@ -1,5 +1,6 @@
 /* database table reader component functionality */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()
+{
     let deleteUrl
 
     // select popup elements

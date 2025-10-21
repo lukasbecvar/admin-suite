@@ -27,7 +27,7 @@ fi
 # fix storage permissions
 echo "${YELLOW}Setting permissions for var/ ...${RESET}"
 if sudo chmod -R 777 var/ && sudo chown -R www-data:www-data var/; then
-    echo "${GREEN}✔ Permissions successfully updated for var/${RESET}"
+    echo "${GREEN}Permissions successfully updated for var/${RESET}"
 else
-    echo "${RED}✘ Failed to update permissions for var/${RESET}"
+    echo "${RED}Failed to update permissions for var/${RESET}"
 fi

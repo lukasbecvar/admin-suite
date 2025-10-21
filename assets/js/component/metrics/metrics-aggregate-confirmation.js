@@ -1,5 +1,6 @@
 /** aggregate confirmation popup for metrics component */
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function()
+{
     // get elements related to aggregate functionality
     const aggregatePopup = document.getElementById('aggregatePopup')
     const aggregateButton = document.getElementById('aggregateButton')

@@ -16,20 +16,20 @@ remove_item() {
         sudo rm -rf "$target"
         # check if target removed
         if [ ! -e "$target" ]; then
-            echo "${GREEN}✔ Successfully removed $target${RESET}"
+            echo "${GREEN}Successfully removed $target${RESET}"
         else
-            echo "${RED}✘ Failed to remove $target${RESET}"
+            echo "${RED}Failed to remove $target${RESET}"
         fi
     else
-        echo "${GREEN}✔ $target not found, nothing to remove${RESET}"
+        echo "${GREEN}$target not found, nothing to remove${RESET}"
     fi
 }
 
-remove_item "composer.lock"
-remove_item "vendor/"
-remove_item "package-lock.json"
-remove_item "node_modules/"
-remove_item "public/bundles/"
-remove_item "public/assets/"
 remove_item "var/"
+remove_item "vendor/"
+remove_item "composer.lock"
+remove_item "node_modules/"
+remove_item "public/assets/"
+remove_item "public/bundles/"
+remove_item "package-lock.json"
 remove_item ".docker/services/"

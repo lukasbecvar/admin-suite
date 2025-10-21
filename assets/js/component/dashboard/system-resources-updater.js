@@ -1,5 +1,6 @@
 /** system resources dashboard refresher functionality */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()
+{
     let firstRequest = true
 
     // get progress bars

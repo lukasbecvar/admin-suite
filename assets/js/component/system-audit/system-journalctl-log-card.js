@@ -1,5 +1,6 @@
 /* system journalctl log card functionality */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function()
+{	
 	// get dom elements
 	const ul = document.getElementById('journalctl-logs')
 	const scrollBox = document.getElementById('journalctl-scrollbox')

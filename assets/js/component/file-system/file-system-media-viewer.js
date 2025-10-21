@@ -1,5 +1,6 @@
 /** file-system media viewer functionality */
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function()
+{
     // set up container height immediately
     fitImageToContainer()
 

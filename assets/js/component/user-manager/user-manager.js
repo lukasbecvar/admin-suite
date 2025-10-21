@@ -1,5 +1,6 @@
 /* users manager component (handle delete, role update, ban, unban popup) */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()
+{
     // elements related to delete functionality
     var popupOverlay = document.getElementById('popup-overlay')
     var cancelButton = document.getElementById('cancel-button')

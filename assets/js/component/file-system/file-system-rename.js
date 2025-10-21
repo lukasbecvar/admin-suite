@@ -1,5 +1,7 @@
 /** file-system rename functionality */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()
+{
+    // new name input field
     const newNameInput = document.getElementById('newName')
     const form = document.querySelector('form')
     const originalName = newNameInput.value

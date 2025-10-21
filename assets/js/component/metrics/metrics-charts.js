@@ -1,7 +1,8 @@
 /** metrics component graph functionality */
 const ApexCharts = require('apexcharts')
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function()
+{
     // function for dynamic color based on value
     function getColor(value, metricData) {
         const maxMetricValue = Math.max(...metricData.map(m => m.value))

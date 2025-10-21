@@ -1,5 +1,6 @@
 /** file-system view component functionality */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()
+{
     const cancelButton = document.getElementById('cancel-delete')
     const deleteModal = document.getElementById('delete-file-modal')
     const deletePathInput = document.getElementById('delete-file-path')

@@ -1,5 +1,6 @@
 /** delete confirmation popup for metrics component */
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function()
+{
     // get elements related to delete functionality
     const deletePopup = document.getElementById('deletePopup')
     const deleteButtons = document.querySelectorAll('.deleteButton')

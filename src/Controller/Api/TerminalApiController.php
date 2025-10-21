@@ -318,7 +318,7 @@ class TerminalApiController extends AbstractController
                 ) {
                     return new JsonResponse([
                         'status' => 'blocked',
-                        'message' => 'Command: ' . $rawCommand . ' is not allowed',
+                        'message' => 'Command: ' . $rawCommand . ' is not allowed'
                     ], Response::HTTP_OK);
                 }
             }
@@ -369,7 +369,7 @@ class TerminalApiController extends AbstractController
             // return error response
             return new JsonResponse([
                 'status' => 'error',
-                'message' => 'Error to start command: ' . $rawCommand,
+                'message' => 'Error to start command: ' . $rawCommand
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

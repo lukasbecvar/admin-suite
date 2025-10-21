@@ -1,6 +1,6 @@
 /** file-system upload component functionality */
-document.addEventListener('DOMContentLoaded', function() {
-
+document.addEventListener('DOMContentLoaded', function()
+{
     // global variables
     let selectedFiles = []
     let isUploading = false

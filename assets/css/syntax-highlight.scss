@@ -3,12 +3,12 @@
 
 /* custom overrides for syntax highlighting */
 .hljs {
-    background: transparent;
     padding: 0.5rem;
-    border-radius: 0.25rem;
-    font-family: monospace;
     white-space: pre;
     word-break: normal;
+    font-family: monospace;
+    background: transparent;
+    border-radius: 0.25rem;
 }
 
 /* ensure code blocks have proper spacing */

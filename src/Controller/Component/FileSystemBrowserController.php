@@ -1001,8 +1001,8 @@ class FileSystemBrowserController extends AbstractController
         return $this->render('component/file-system/file-system-move.twig', [
             'currentPath' => $path,
             'currentName' => $currentName,
-            'directoryPath' => $directoryPath,
             'isDirectory' => $isDirectory,
+            'directoryPath' => $directoryPath,
             'availableFolders' => $availableFolders
         ]);
     }

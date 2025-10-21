@@ -1,5 +1,6 @@
 /** file-system move functionality */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()
+{
     // get form elements
     const form = document.querySelector('form')
     const customPathError = document.getElementById('customPathError')

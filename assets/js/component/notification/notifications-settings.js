@@ -1,5 +1,6 @@
 /** push notifications settings component */
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async function()
+{
     let publicKey = null
     
     // get site elements

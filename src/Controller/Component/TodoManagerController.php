@@ -73,9 +73,9 @@ class TodoManagerController extends AbstractController
 
         // return todo table page view
         return $this->render('component/todo-manager/todo-table.twig', [
+            'createTodoForm' => $form->createView(),
             'filter' => $filter,
-            'todos' => $todos,
-            'createTodoForm' => $form->createView()
+            'todos' => $todos
         ]);
     }
 
@@ -278,7 +278,10 @@ class TodoManagerController extends AbstractController
                     message: 'invalid positions data',
                     code: Response::HTTP_BAD_REQUEST
                 );
-                return $this->json(['success' => false, 'message' => 'Invalid positions data'], Response::HTTP_BAD_REQUEST);
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Invalid positions data'
+                ], Response::HTTP_BAD_REQUEST);
             }
 
             // update positions
@@ -291,10 +294,10 @@ class TodoManagerController extends AbstractController
                 message: 'error updating positions: ' . $e->getMessage(),
                 code: $e->getCode()
             );
-            return $this->json(
-                ['success' => false, 'message' => 'Error updating positions: ' . $e->getMessage()],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            return $this->json([
+                'success' => false,
+                'message' => 'Error updating positions: ' . $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

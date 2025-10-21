@@ -1,5 +1,6 @@
 /** file-system syntax highlighting functionality */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()
+{
     // import highlight.js core
     const hljs = require('highlight.js/lib/core')
 

@@ -1,7 +1,8 @@
 /** todo manager component functionality */
 import Sortable from 'sortablejs'
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function()
+{
     let currentTodoId = null
 
     // get edit elements

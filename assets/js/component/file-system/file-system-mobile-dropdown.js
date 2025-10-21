@@ -1,6 +1,6 @@
 /** file-system item mobile dropdown functionality */
-document.addEventListener('DOMContentLoaded', function() {
-
+document.addEventListener('DOMContentLoaded', function()
+{
     // toggle dropdown menu
     function toggleDropdown(button) {
         const dropdown = button.closest('[data-dropdown]')
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function positionDropdown(button, menu) {
         const buttonRect = button.getBoundingClientRect()
         const menuWidth = 192 // w-48 = 12rem = 192px
-        const menuHeight = 200 // approximate menu height
+        const menuHeight = 200
         const viewportHeight = window.innerHeight
         const viewportWidth = window.innerWidth
         const spaceBelow = viewportHeight - buttonRect.bottom

@@ -1,5 +1,6 @@
 /** file-system create component functionality */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()
+{
     const form = document.querySelector('form')
     const editor = document.getElementById('editor')
     const errorContainer = document.createElement('div')

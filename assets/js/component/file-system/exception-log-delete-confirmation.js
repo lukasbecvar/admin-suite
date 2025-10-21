@@ -1,5 +1,6 @@
 /** service exception file delete confirmation popup functionality */
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function()
+{
     let fileToDelete
     
     // get view elements

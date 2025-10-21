@@ -1,5 +1,6 @@
 /** terminal component functionality */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()
+{
     // get html elements
     const pathElement = document.getElementById('path')
     const cursorElement = document.createElement('span')
@@ -276,9 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 terminal.removeChild(partialOutputElement)
             } else {
                 partialOutputElement.classList.remove('terminal-output-partial')
-                partialOutputElement.innerHTML = partialOutputBuffer
-                    ? sanitizeTerminalContent(partialOutputBuffer)
-                    : ''
+                partialOutputElement.innerHTML = partialOutputBuffer ? sanitizeTerminalContent(partialOutputBuffer) : ''
             }
             partialOutputElement = null
             partialOutputBuffer = ''
@@ -288,9 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (partialOutputBuffer) {
             const element = document.createElement('div')
             element.className = 'terminal-output-line'
-            element.innerHTML = partialOutputBuffer
-                ? sanitizeTerminalContent(partialOutputBuffer)
-                : ''
+            element.innerHTML = partialOutputBuffer ? sanitizeTerminalContent(partialOutputBuffer) : ''
             terminal.appendChild(element)
             partialOutputBuffer = ''
         }

@@ -1,5 +1,6 @@
 /** file-system edit component functionality */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()
+{
     const editor = document.getElementById('editor')
 
     // enable tab key in textarea

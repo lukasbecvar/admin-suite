@@ -1,5 +1,6 @@
 /** profile photo view component */
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function()
+{
     // get dom elements
     const sidebarModal = document.getElementById('profile-modal')
     const sidebarOpenBtn = document.getElementById('open-profile-modal')
