@@ -60,6 +60,7 @@ The environment variables are loaded from .env file. You can create .env file in
 | RATE_LIMIT_ENABLED | Enable rate limit | false |
 | RATE_LIMIT_INTERVAL | Rate limit interval | 60 |
 | RATE_LIMIT_LIMIT | Rate limit limit | 100 |
+| TERMINAL_JOB_MAX_RUNTIME | Maximum runtime for terminal job | 7200 |
 | EXTERNAL_API_LOG_TOKEN | Token for external api logging | 1234567890 |
 | ANTI_LOG_TOKEN | Token for disable logging | 1234567890 |
 | SYSTEM_LOGS_DIR | System logs directory | /var/log |
