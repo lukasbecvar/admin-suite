@@ -21,6 +21,7 @@ use App\Manager\NotificationsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SLAHistoryRepository;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use App\Repository\MonitoringStatusRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -32,6 +33,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(MonitoringManager::class)]
 class MonitoringManagerTest extends TestCase
 {
     private AppUtil & MockObject $appUtilMock;

@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class UserManagerTest
@@ -20,6 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(UserManager::class)]
 class UserManagerTest extends TestCase
 {
     private UserManager $userManager;

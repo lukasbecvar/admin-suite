@@ -2,6 +2,8 @@
 
 namespace App\Tests\Controller\Auth;
 
+use App\Controller\Auth\LogoutController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -12,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  *
  * @package App\Tests\Controller\Auth
  */
+#[CoversClass(LogoutController::class)]
 class LogoutControllerTest extends WebTestCase
 {
     /**

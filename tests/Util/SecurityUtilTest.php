@@ -7,6 +7,7 @@ use App\Util\JsonUtil;
 use App\Util\SecurityUtil;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -16,6 +17,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *
  * @package App\Tests\Util
  */
+#[CoversClass(SecurityUtil::class)]
 class SecurityUtilTest extends TestCase
 {
     private SecurityUtil $securityUtil;

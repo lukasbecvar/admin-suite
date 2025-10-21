@@ -7,6 +7,7 @@ use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class FileUploadUtilTest
@@ -15,6 +16,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @package App\Tests\Util
  */
+#[CoversClass(FileUploadUtil::class)]
 class FileUploadUtilTest extends TestCase
 {
     private string $tempDir;

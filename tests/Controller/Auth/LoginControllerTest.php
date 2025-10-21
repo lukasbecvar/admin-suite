@@ -2,6 +2,8 @@
 
 namespace App\Tests\Controller\Auth;
 
+use App\Controller\Auth\LoginController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -13,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  *
  * @package App\Tests\Controller\Auth
 */
+#[CoversClass(LoginController::class)]
 class LoginControllerTest extends WebTestCase
 {
     private KernelBrowser $client;

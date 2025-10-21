@@ -3,8 +3,10 @@
 namespace App\Tests\Controller\Api;
 
 use App\Tests\CustomTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use App\Controller\Api\PushNotificationsApiController;
 
 /**
  * Class PushNotificationsApiControllerTest
@@ -13,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
  *
  * @package App\Tests\Controller\Api
  */
+#[CoversClass(PushNotificationsApiController::class)]
 class PushNotificationsApiControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;

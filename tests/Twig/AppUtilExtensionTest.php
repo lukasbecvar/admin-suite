@@ -6,6 +6,7 @@ use App\Util\AppUtil;
 use App\Twig\AppUtilExtension;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class AppUtilExtensionTest
@@ -14,6 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @package App\Tests\Twig
  */
+#[CoversClass(AppUtilExtension::class)]
 class AppUtilExtensionTest extends TestCase
 {
     private AppUtil & MockObject $appUtil;

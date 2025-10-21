@@ -4,8 +4,10 @@ namespace App\Tests\Controller\Component;
 
 use App\Tests\CustomTestCase;
 use Symfony\Component\String\ByteString;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use App\Controller\Component\DatabaseBrowserController;
 
 /**
  * Class DatabaseBrowserControllerTest
@@ -14,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
  *
  * @package App\Tests\Controller\Component
  */
+#[CoversClass(DatabaseBrowserController::class)]
 class DatabaseBrowserControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;

@@ -4,6 +4,7 @@ namespace Tests\Unit\Util;
 
 use App\Util\JsonUtil;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class JsonUtilTest
@@ -12,6 +13,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Tests\Unit\Util
  */
+#[CoversClass(JsonUtil::class)]
 class JsonUtilTest extends TestCase
 {
     private JsonUtil $jsonUtil;

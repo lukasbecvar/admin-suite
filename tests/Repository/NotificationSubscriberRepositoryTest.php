@@ -5,6 +5,7 @@ namespace App\Tests\Repository;
 use DateTime;
 use App\Entity\NotificationSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use App\Repository\NotificationSubscriberRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -15,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  *
  * @package App\Tests\Repository
  */
+#[CoversClass(NotificationSubscriberRepository::class)]
 class NotificationSubscriberRepositoryTest extends KernelTestCase
 {
     private NotificationSubscriberRepository $notificationSubscriberRepository;

@@ -4,6 +4,8 @@ namespace App\Tests\Controller\Auth;
 
 use App\Manager\UserManager;
 use Symfony\Component\String\ByteString;
+use App\Controller\Auth\RegisterController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -15,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  *
  * @package App\Tests\Controller\Auth
  */
+#[CoversClass(RegisterController::class)]
 class RegisterControllerTest extends WebTestCase
 {
     private KernelBrowser $client;

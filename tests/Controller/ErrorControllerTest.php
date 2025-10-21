@@ -2,6 +2,8 @@
 
 namespace App\Tests\Controller;
 
+use App\Controller\ErrorController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -13,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  *
  * @package App\Tests\Controller
  */
+#[CoversClass(ErrorController::class)]
 class ErrorControllerTest extends WebTestCase
 {
     private KernelBrowser $client;

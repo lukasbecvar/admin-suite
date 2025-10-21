@@ -8,6 +8,7 @@ use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Manager\DatabaseManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
 
@@ -18,6 +19,7 @@ use Symfony\Component\Mailer\Exception\TransportException;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(EmailManager::class)]
 class EmailManagerTest extends TestCase
 {
     private EmailManager $emailManager;

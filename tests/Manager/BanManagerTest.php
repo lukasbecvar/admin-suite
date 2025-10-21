@@ -14,6 +14,7 @@ use App\Repository\BannedRepository;
 use App\Manager\NotificationsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class BanManagerTest
@@ -22,6 +23,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(BanManager::class)]
 class BanManagerTest extends TestCase
 {
     private BanManager $banManager;

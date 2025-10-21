@@ -5,6 +5,7 @@ namespace App\Tests\Repository;
 use App\Entity\SLAHistory;
 use App\Repository\SLAHistoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -14,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  *
  * @package App\Tests\Repository
  */
+#[CoversClass(SLAHistoryRepository::class)]
 class SLAHistoryRepositoryTest extends KernelTestCase
 {
     private SLAHistoryRepository $slaHistoryRepository;

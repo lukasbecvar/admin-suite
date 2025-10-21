@@ -3,8 +3,10 @@
 namespace App\Tests\Controller\Component;
 
 use App\Tests\CustomTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use App\Controller\Component\DiagnosticController;
 
 /**
  * Class DiagnosticControllerTest
@@ -13,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
  *
  * @package App\Tests\Controller\Component
  */
+#[CoversClass(DiagnosticController::class)]
 class DiagnosticControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;

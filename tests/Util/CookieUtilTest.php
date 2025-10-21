@@ -6,6 +6,7 @@ use App\Util\CookieUtil;
 use App\Util\SecurityUtil;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class CookieUtilTest
@@ -14,6 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @package App\Tests\Util
  */
+#[CoversClass(CookieUtil::class)]
 class CookieUtilTest extends TestCase
 {
     private CookieUtil $cookieUtil;

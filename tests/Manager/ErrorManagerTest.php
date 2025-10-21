@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -17,6 +18,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(ErrorManager::class)]
 class ErrorManagerTest extends TestCase
 {
     private ErrorManager $errorManager;

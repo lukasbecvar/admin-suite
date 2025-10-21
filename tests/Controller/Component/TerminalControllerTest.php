@@ -3,7 +3,9 @@
 namespace App\Tests\Controller\Component;
 
 use App\Tests\CustomTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
+use App\Controller\Component\TerminalController;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 /**
@@ -13,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
  *
  * @package App\Tests\Controller\Component
  */
+#[CoversClass(TerminalController::class)]
 class TerminalControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;

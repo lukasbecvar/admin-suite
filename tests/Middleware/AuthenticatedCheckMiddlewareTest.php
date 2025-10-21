@@ -6,6 +6,7 @@ use App\Manager\AuthManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
+use PHPUnit\Framework\Attributes\CoversClass;
 use App\Middleware\AuthenticatedCheckMiddleware;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -19,6 +20,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @package App\Tests\Middleware
  */
+#[CoversClass(AuthenticatedCheckMiddleware::class)]
 class AuthenticatedCheckMiddlewareTest extends TestCase
 {
     private AuthManager & MockObject $authManagerMock;

@@ -10,6 +10,7 @@ use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Manager\ServiceManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class ServiceManagerTest
@@ -18,6 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(ServiceManager::class)]
 class ServiceManagerTest extends TestCase
 {
     private ServiceManager $serviceManager;

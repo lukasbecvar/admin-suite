@@ -7,6 +7,7 @@ use App\Util\AppUtil;
 use PHPUnit\Framework\TestCase;
 use App\Manager\NotificationsManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use App\Command\Notifications\GenerateVapidKeysCommand;
@@ -18,6 +19,7 @@ use App\Command\Notifications\GenerateVapidKeysCommand;
  *
  * @package App\Tests\Command\Notifications
  */
+#[CoversClass(GenerateVapidKeysCommand::class)]
 class GenerateVapidKeysCommandTest extends TestCase
 {
     private CommandTester $commandTester;

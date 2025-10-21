@@ -24,6 +24,7 @@ use App\Repository\MetricRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ServiceVisitorRepository;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -34,6 +35,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(MetricsManager::class)]
 class MetricsManagerTest extends TestCase
 {
     private MetricsManager $metricsManager;

@@ -9,6 +9,7 @@ use App\Manager\ErrorManager;
 use App\Manager\ConfigManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -18,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(ConfigManager::class)]
 class ConfigManagerTest extends TestCase
 {
     private ConfigManager $configManager;

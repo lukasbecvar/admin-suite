@@ -8,6 +8,7 @@ use App\Manager\UserManager;
 use PHPUnit\Framework\TestCase;
 use App\Command\User\UserUpdateRoleCommand;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @package App\Tests\Command
  */
+#[CoversClass(UserUpdateRoleCommand::class)]
 class UserUpdateRoleCommandTest extends TestCase
 {
     private CommandTester $commandTester;

@@ -3,6 +3,8 @@
 namespace App\Tests\Controller;
 
 use App\Tests\CustomTestCase;
+use App\Controller\AntiLogController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
@@ -13,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
  *
  * @package App\Tests\Controller
  */
+#[CoversClass(AntiLogController::class)]
 class AntiLogControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;

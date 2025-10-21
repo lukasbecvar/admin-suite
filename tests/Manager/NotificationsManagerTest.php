@@ -13,6 +13,7 @@ use App\Manager\NotificationsManager;
 use App\Entity\NotificationSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\NotificationSubscriberRepository;
 
@@ -23,6 +24,7 @@ use App\Repository\NotificationSubscriberRepository;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(NotificationsManager::class)]
 class NotificationsManagerTest extends TestCase
 {
     private AppUtil & MockObject $appUtilMock;

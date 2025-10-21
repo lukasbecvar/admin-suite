@@ -9,6 +9,7 @@ use App\Manager\LogManager;
 use App\Manager\MetricsManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use App\Command\Metrics\AggregateOldMetricsCommand;
@@ -20,6 +21,7 @@ use App\Command\Metrics\AggregateOldMetricsCommand;
  *
  * @package App\Tests\Command\Metrics
  */
+#[CoversClass(AggregateOldMetricsCommand::class)]
 class AggregateOldMetricsCommandTest extends TestCase
 {
     private CommandTester $commandTester;

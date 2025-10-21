@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use App\Middleware\FeatureFlagsMiddleware;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use App\Controller\Component\DashboardController;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -21,6 +22,7 @@ use App\Controller\Component\MonitoringManagerController;
  *
  * @package App\Tests\Middleware
  */
+#[CoversClass(FeatureFlagsMiddleware::class)]
 class FeatureFlagsMiddlewareTest extends TestCase
 {
     private AppUtil & MockObject $appUtilMock;

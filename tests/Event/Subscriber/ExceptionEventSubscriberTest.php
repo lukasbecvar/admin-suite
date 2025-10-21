@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use App\Controller\ErrorController;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use App\Event\Subscriber\ExceptionEventSubscriber;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -23,6 +24,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @package App\Tests\Event\Subscriber
  */
+#[CoversClass(ExceptionEventSubscriber::class)]
 class ExceptionEventSubscriberTest extends TestCase
 {
     private AppUtil & MockObject $appUtilMock;

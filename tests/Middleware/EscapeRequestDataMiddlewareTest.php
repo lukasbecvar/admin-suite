@@ -6,6 +6,7 @@ use App\Util\SecurityUtil;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
+use PHPUnit\Framework\Attributes\CoversClass;
 use App\Middleware\EscapeRequestDataMiddleware;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -19,6 +20,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @package App\Tests\Middleware
  */
+#[CoversClass(EscapeRequestDataMiddleware::class)]
 class EscapeRequestDataMiddlewareTest extends TestCase
 {
     private RequestStack $requestStack;

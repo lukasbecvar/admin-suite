@@ -6,6 +6,7 @@ use App\Util\AppUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Middleware\SecurityCheckMiddleware;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  *
  * @package App\Tests\Middleware
  */
+#[CoversClass(SecurityCheckMiddleware::class)]
 class SecurityCheckMiddlewareTest extends TestCase
 {
     private AppUtil & MockObject $appUtilMock;

@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use App\Middleware\RateLimitMiddleware;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -21,6 +22,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @package App\Tests\Middleware
  */
+#[CoversClass(RateLimitMiddleware::class)]
 class RateLimitMiddlewareTest extends TestCase
 {
     private RateLimitMiddleware $middleware;

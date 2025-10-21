@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use App\Manager\DatabaseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -22,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(DatabaseManager::class)]
 class DatabaseManagerTest extends TestCase
 {
     private DatabaseManager $databaseManager;

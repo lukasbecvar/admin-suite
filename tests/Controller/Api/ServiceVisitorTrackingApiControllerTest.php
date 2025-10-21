@@ -7,8 +7,10 @@ use App\Util\VisitorInfoUtil;
 use App\Manager\MetricsManager;
 use App\Manager\ServiceManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use App\Controller\Api\ServiceVisitorTrackingApiController;
 
 /**
  * Class ServiceVisitorTrackingApiControllerTest
@@ -17,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
  *
  * @package App\Tests\Controller\Api
  */
+#[CoversClass(ServiceVisitorTrackingApiController::class)]
 class ServiceVisitorTrackingApiControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;

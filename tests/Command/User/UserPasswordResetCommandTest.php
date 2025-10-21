@@ -7,6 +7,7 @@ use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use App\Command\User\UserPasswordResetCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @package App\Tests\Command\User
  */
+#[CoversClass(UserPasswordResetCommand::class)]
 class UserPasswordResetCommandTest extends TestCase
 {
     private CommandTester $commandTester;

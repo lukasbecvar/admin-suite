@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use App\Util\VisitorInfoUtil;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class VisitorInfoUtilTest
@@ -16,6 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @package App\Tests\Util
  */
+#[CoversClass(VisitorInfoUtil::class)]
 class VisitorInfoUtilTest extends TestCase
 {
     private LoggerInterface $loggerMock;

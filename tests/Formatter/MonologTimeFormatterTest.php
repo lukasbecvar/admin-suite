@@ -8,6 +8,7 @@ use Monolog\LogRecord;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use App\Formatter\MonologTimeFormatter;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class MonologTimeFormatterTest
@@ -16,6 +17,7 @@ use App\Formatter\MonologTimeFormatter;
  *
  * @package App\Tests\Formatter
  */
+#[CoversClass(MonologTimeFormatter::class)]
 class MonologTimeFormatterTest extends TestCase
 {
     private MonologTimeFormatter $formatter;

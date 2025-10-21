@@ -6,6 +6,7 @@ use App\Manager\AuthManager;
 use PHPUnit\Framework\TestCase;
 use App\Command\RegenerateAuthTokensCommand;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -16,6 +17,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @package App\Tests\Command
  */
+#[CoversClass(RegenerateAuthTokensCommand::class)]
 class RegenerateAuthTokensCommandTest extends TestCase
 {
     private CommandTester $commandTester;

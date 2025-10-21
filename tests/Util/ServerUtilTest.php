@@ -10,6 +10,7 @@ use App\Manager\ErrorManager;
 use App\Manager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class ServerUtilTest
@@ -18,6 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @package Tests\Unit\Util
  */
+#[CoversClass(ServerUtil::class)]
 class ServerUtilTest extends TestCase
 {
     private ServerUtil $serverUtil;

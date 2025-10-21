@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -29,6 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(AuthManager::class)]
 class AuthManagerTest extends TestCase
 {
     private AuthManager $authManager;

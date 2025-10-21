@@ -7,6 +7,7 @@ use App\Util\AppUtil;
 use PHPUnit\Framework\TestCase;
 use App\Command\ToggleMaintenanceCommand;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -17,6 +18,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @package App\Tests\Command
  */
+#[CoversClass(ToggleMaintenanceCommand::class)]
 class ToggleMaintenanceCommandTest extends TestCase
 {
     private CommandTester $commandTester;

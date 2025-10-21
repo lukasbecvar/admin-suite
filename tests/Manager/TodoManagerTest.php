@@ -15,6 +15,7 @@ use App\Manager\DatabaseManager;
 use App\Repository\TodoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class TodoManagerTest
@@ -23,6 +24,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(TodoManager::class)]
 class TodoManagerTest extends TestCase
 {
     private TodoManager $todoManager;

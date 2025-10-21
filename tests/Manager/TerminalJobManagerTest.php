@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use App\Manager\TerminalJobManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Filesystem\Filesystem;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class TerminalJobManagerTest
@@ -18,6 +19,7 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(TerminalJobManager::class)]
 class TerminalJobManagerTest extends TestCase
 {
     private Filesystem $filesystem;

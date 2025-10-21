@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use App\Manager\DatabaseManager;
 use App\Command\RequirementsCheckCommand;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -17,6 +18,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @package App\Tests\Command
  */
+#[CoversClass(RequirementsCheckCommand::class)]
 class RequirementsCheckCommandTest extends TestCase
 {
     private CommandTester $commandTester;

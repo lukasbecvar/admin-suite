@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use App\Repository\LogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -24,6 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @package App\Tests\Manager
  */
+#[CoversClass(LogManager::class)]
 class LogManagerTest extends TestCase
 {
     private LogManager $logManager;

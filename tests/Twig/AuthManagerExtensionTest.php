@@ -7,6 +7,7 @@ use App\Manager\AuthManager;
 use PHPUnit\Framework\TestCase;
 use App\Twig\AuthManagerExtension;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class AuthManagerExtensionTest
@@ -15,6 +16,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @package App\Tests\Twig
  */
+#[CoversClass(AuthManagerExtension::class)]
 class AuthManagerExtensionTest extends TestCase
 {
     private AuthManager & MockObject $authManager;

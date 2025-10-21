@@ -10,6 +10,7 @@ use App\Util\VisitorInfoUtil;
 use PHPUnit\Framework\TestCase;
 use App\Command\Log\LogReaderCommand;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -20,6 +21,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @package App\Tests\Command\Log
  */
+#[CoversClass(LogReaderCommand::class)]
 class LogReaderCommandTest extends TestCase
 {
     private LogReaderCommand $command;

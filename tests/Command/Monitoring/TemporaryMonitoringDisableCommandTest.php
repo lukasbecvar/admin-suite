@@ -7,6 +7,7 @@ use App\Util\AppUtil;
 use PHPUnit\Framework\TestCase;
 use App\Manager\MonitoringManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use App\Command\Monitoring\TemporaryMonitoringDisableCommand;
@@ -18,6 +19,7 @@ use App\Command\Monitoring\TemporaryMonitoringDisableCommand;
  *
  * @package App\Tests\Command\Monitoring
  */
+#[CoversClass(TemporaryMonitoringDisableCommand::class)]
 class TemporaryMonitoringDisableCommandTest extends TestCase
 {
     private CommandTester $commandTester;

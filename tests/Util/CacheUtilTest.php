@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -19,6 +20,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @package App\Tests\Util
  */
+#[CoversClass(CacheUtil::class)]
 class CacheUtilTest extends TestCase
 {
     private CacheUtil $cacheUtil;

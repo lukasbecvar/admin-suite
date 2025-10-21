@@ -10,6 +10,7 @@ use App\Manager\UserManager;
 use PHPUnit\Framework\TestCase;
 use App\Middleware\AutoLoginMiddleware;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class AutoLoginMiddlewareTest
@@ -18,6 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @package App\Tests\Middleware
  */
+#[CoversClass(AutoLoginMiddleware::class)]
 class AutoLoginMiddlewareTest extends TestCase
 {
     private AutoLoginMiddleware $middleware;

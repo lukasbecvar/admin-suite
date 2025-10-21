@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\TestCase;
 use App\Middleware\AssetsCheckMiddleware;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -17,6 +18,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  *
  * @package App\Tests\Middleware
  */
+#[CoversClass(AssetsCheckMiddleware::class)]
 class AssetsCheckMiddlewareTest extends TestCase
 {
     private AssetsCheckMiddleware $middleware;

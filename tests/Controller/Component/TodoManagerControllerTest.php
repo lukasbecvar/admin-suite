@@ -3,9 +3,11 @@
 namespace App\Tests\Controller\Component;
 
 use App\Tests\CustomTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Controller\Component\TodoManagerController;
 
 /**
  * Class TodoManagerControllerTest
@@ -14,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @package App\Tests\Controller\Component
  */
+#[CoversClass(TodoManagerController::class)]
 class TodoManagerControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;

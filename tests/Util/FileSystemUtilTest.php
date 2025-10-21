@@ -6,6 +6,7 @@ use App\Util\FileSystemUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class FileSystemUtilTest
@@ -13,6 +14,7 @@ use PHPUnit\Framework\Attributes\Group;
  * @package App\Tests\Util
  */
 #[Group('file-system')]
+#[CoversClass(FileSystemUtil::class)]
 class FileSystemUtilTest extends TestCase
 {
     private FileSystemUtil $fileSystemUtil;

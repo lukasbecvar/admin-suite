@@ -6,6 +6,7 @@ use DateTime;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -15,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  *
  * @package App\Tests\Repository
  */
+#[CoversClass(UserRepository::class)]
 class UserRepositoryTest extends KernelTestCase
 {
     private UserRepository $userRepository;

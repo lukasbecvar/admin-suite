@@ -4,6 +4,7 @@ namespace App\Tests\Twig;
 
 use App\Twig\LinkifyExtension;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -13,6 +14,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  *
  * @package App\Tests\Twig
  */
+#[CoversClass(LinkifyExtension::class)]
 class LinkifyExtensionTest extends TestCase
 {
     private LinkifyExtension $linkifyExtension;

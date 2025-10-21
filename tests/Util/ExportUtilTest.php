@@ -4,6 +4,7 @@ namespace App\Tests\Util;
 
 use App\Util\ExportUtil;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class ExportUtilTest
@@ -12,6 +13,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @package App\Tests\Util
  */
+#[CoversClass(ExportUtil::class)]
 class ExportUtilTest extends TestCase
 {
     private ExportUtil $exportUtil;

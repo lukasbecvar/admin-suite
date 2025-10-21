@@ -6,6 +6,7 @@ use App\Manager\TodoManager;
 use PHPUnit\Framework\TestCase;
 use App\Twig\TodoManagerExtension;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class TodoManagerExtensionTest
@@ -14,6 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @package App\Tests\Twig
  */
+#[CoversClass(TodoManagerExtension::class)]
 class TodoManagerExtensionTest extends TestCase
 {
     private TodoManager & MockObject $todoManager;

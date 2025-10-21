@@ -4,9 +4,11 @@ namespace App\Tests\Controller\Component;
 
 use App\Tests\CustomTestCase;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Controller\Component\FileSystemBrowserController;
 
 /**
  * Class FileSystemBrowserControllerTest
@@ -15,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @package App\Tests\Controller\Component
  */
+#[CoversClass(FileSystemBrowserController::class)]
 class FileSystemBrowserControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;

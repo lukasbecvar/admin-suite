@@ -4,6 +4,7 @@ namespace App\Tests\Annotation;
 
 use PHPUnit\Framework\TestCase;
 use App\Annotation\Authorization;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class AuthorizationTest
@@ -12,6 +13,7 @@ use App\Annotation\Authorization;
  *
  * @package App\Tests\Annotation
  */
+#[CoversClass(Authorization::class)]
 class AuthorizationTest extends TestCase
 {
     /**

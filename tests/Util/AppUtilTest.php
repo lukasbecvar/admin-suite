@@ -7,6 +7,7 @@ use App\Util\JsonUtil;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -16,6 +17,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *
  * @package App\Tests\Util
  */
+#[CoversClass(AppUtil::class)]
 class AppUtilTest extends TestCase
 {
     private AppUtil $appUtil;

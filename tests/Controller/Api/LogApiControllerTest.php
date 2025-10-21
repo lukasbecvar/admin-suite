@@ -3,6 +3,8 @@
 namespace App\Tests\Controller\Api;
 
 use App\Tests\CustomTestCase;
+use App\Controller\Api\LogApiController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
@@ -13,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
  *
  * @package App\Tests\Controller
  */
+#[CoversClass(LogApiController::class)]
 class LogApiControllerTest extends CustomTestCase
 {
     private KernelBrowser $client;

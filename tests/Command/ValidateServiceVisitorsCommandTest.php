@@ -6,6 +6,7 @@ use Exception;
 use App\Manager\MetricsManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Command\Command;
 use App\Command\ValidateServiceVisitorsCommand;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -17,6 +18,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @package App\Tests\Command
  */
+#[CoversClass(ValidateServiceVisitorsCommand::class)]
 class ValidateServiceVisitorsCommandTest extends TestCase
 {
     private CommandTester $commandTester;
