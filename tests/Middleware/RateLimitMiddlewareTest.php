@@ -10,6 +10,7 @@ use Psr\Cache\CacheItemInterface;
 use App\Middleware\RateLimitMiddleware;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -138,8 +139,11 @@ class RateLimitMiddlewareTest extends TestCase
         $cacheItemMock->method('get')->willReturn('100');
         $this->cacheUtilMock->method('getValue')->willReturn($cacheItemMock);
 
-        // expect error manager to be called
-        $this->errorManagerMock->expects($this->once())->method('handleError');
+        // expect error manager to be called with correct payload
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'To many requests!',
+            Response::HTTP_TOO_MANY_REQUESTS
+        );
 
         // call tested middleware
         $this->middleware->onKernelRequest($this->requestEventMock);

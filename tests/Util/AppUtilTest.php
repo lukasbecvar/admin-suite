@@ -72,13 +72,14 @@ class AppUtilTest extends TestCase
     public function testGetAppRootDir(): void
     {
         // expect call get project dir
-        $this->kernelInterface->expects($this->once())->method('getProjectDir');
+        $this->kernelInterface->expects($this->once())->method('getProjectDir')->willReturn('/tmp/project-dir');
 
         // call tested method
         $result = $this->appUtil->getAppRootDir();
 
         // assert result
         $this->assertIsString($result);
+        $this->assertSame('/tmp/project-dir', $result);
     }
 
     /**
@@ -249,6 +250,7 @@ class AppUtilTest extends TestCase
 
         // assert result
         $this->assertIsBool($result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -284,6 +286,7 @@ class AppUtilTest extends TestCase
 
         // assert result
         $this->assertIsString($result);
+        $this->assertSame('test-value', $result);
     }
 
     /**
@@ -321,10 +324,17 @@ class AppUtilTest extends TestCase
     public function testLoadConfig(): void
     {
         // expect getJson method call
-        $this->jsonUtilMock->expects($this->once())->method('getJson');
+        $this->kernelInterface->method('getProjectDir')->willReturn('/app/project');
+        $expectedConfig = ['service' => 'monitoring'];
+        $this->jsonUtilMock->expects($this->once())->method('getJson')->with(
+            $this->stringEndsWith('/config/suite/services-monitoring.json')
+        )->willReturn($expectedConfig);
 
         // call tested method
-        $this->appUtil->loadConfig('services-monitoring.json');
+        $result = $this->appUtil->loadConfig('services-monitoring.json');
+
+        // assert result
+        $this->assertSame($expectedConfig, $result);
     }
 
     /**
@@ -349,11 +359,15 @@ class AppUtilTest extends TestCase
      */
     public function testCheckIfFutureIsDisabled(): void
     {
+        $this->kernelInterface->method('getProjectDir')->willReturn('/suite');
+        $this->jsonUtilMock->method('getJson')->willReturn(['monitoring' => false]);
+
         // call tested method
         $result = $this->appUtil->isFeatureFlagDisabled('monitoring');
 
         // assert result
         $this->assertIsBool($result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -413,5 +427,49 @@ class AppUtilTest extends TestCase
         // test gigabytes
         $this->assertEquals('1 GB', $this->appUtil->formatBytes(1073741824));
         $this->assertEquals('1.5 GB', $this->appUtil->formatBytes(1610612736));
+    }
+
+    /**
+     * Test check if feature flag is disabled when flag is not configured
+     *
+     * @return void
+     */
+    public function testCheckIfFeatureFlagDisabledWhenFlagIsNotConfigured(): void
+    {
+        $this->kernelInterface->method('getProjectDir')->willReturn('/suite');
+        $this->jsonUtilMock->method('getJson')->willReturn(['other-flag' => true]);
+
+        // call tested method
+        $result = $this->appUtil->isFeatureFlagDisabled('monitoring');
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test update environment value updates target env file
+     *
+     * @return void
+     */
+    public function testUpdateEnvValueUpdatesTargetFile(): void
+    {
+        // mock testing .env
+        $tempDir = sys_get_temp_dir() . '/app_util_' . uniqid();
+        mkdir($tempDir);
+        file_put_contents($tempDir . '/.env', "APP_ENV=test\nAPP_SECRET=old-secret\n");
+        file_put_contents($tempDir . '/.env.test', "APP_SECRET=old-secret\n");
+        $this->kernelInterface->method('getProjectDir')->willReturn($tempDir);
+
+        // call tested method
+        $this->appUtil->updateEnvValue('APP_SECRET', 'new-secret');
+
+        // assert result
+        $updatedContent = file_get_contents($tempDir . '/.env.test') ?: '';
+        $this->assertStringContainsString('APP_SECRET=new-secret', $updatedContent);
+
+        // clean up
+        unlink($tempDir . '/.env');
+        unlink($tempDir . '/.env.test');
+        rmdir($tempDir);
     }
 }

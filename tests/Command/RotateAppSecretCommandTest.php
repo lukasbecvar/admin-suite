@@ -43,11 +43,17 @@ class RotateAppSecretCommandTest extends TestCase
      */
     public function testExecuteSuccess(): void
     {
+        // mock old secret value
+        $this->appUtil->expects($this->once())->method('getEnvValue')->with('APP_SECRET')->willReturn('old-secret-value');
+
         // mock generateKey
         $this->appUtil->expects($this->once())->method('generateKey')->with(16)->willReturn('new-secret-value');
 
         // mock updateEnvValue
         $this->appUtil->expects($this->once())->method('updateEnvValue')->with('APP_SECRET', 'new-secret-value');
+
+        // expect reEncryptTodos to be called
+        $this->todoManager->expects($this->once())->method('reEncryptTodos')->with('old-secret-value', 'new-secret-value');
 
         // execute command
         $exitCode = $this->commandTester->execute([]);
@@ -57,6 +63,8 @@ class RotateAppSecretCommandTest extends TestCase
 
         // assert output
         $this->assertStringContainsString('APP_SECRET has been rotated successfully', $output);
+        $this->assertStringContainsString('Remember: Sessions, remember-me tokens, and encrypted data may become', $output);
+        $this->assertStringContainsString('invalid.', $output);
         $this->assertEquals(Command::SUCCESS, $exitCode);
     }
 
@@ -67,8 +75,15 @@ class RotateAppSecretCommandTest extends TestCase
      */
     public function testExecuteThrowsException(): void
     {
+        // mock old secret value
+        $this->appUtil->expects($this->once())->method('getEnvValue')->with('APP_SECRET')->willReturn('old-secret');
+
         // mock generateKey to throw exception
         $this->appUtil->method('generateKey')->willThrowException(new Exception('Something went wrong'));
+
+        // expect rotate not to be called
+        $this->appUtil->expects($this->never())->method('updateEnvValue');
+        $this->todoManager->expects($this->never())->method('reEncryptTodos');
 
         // execute command
         $exitCode = $this->commandTester->execute([]);

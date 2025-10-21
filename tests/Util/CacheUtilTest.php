@@ -10,6 +10,7 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class CacheUtilTest
@@ -190,5 +191,55 @@ class CacheUtilTest extends TestCase
 
         // call tested method
         $this->cacheUtil->deleteValue($key);
+    }
+
+    /**
+     * Test check cache existence when cache pool throws exception
+     *
+     * @return void
+     */
+    public function testIsCatchedWhenCachePoolThrowsException(): void
+    {
+        // mock exception
+        $this->cacheItemPoolMock->expects($this->once())->method('getItem')->willThrowException(
+            new Exception('Cache failure')
+        );
+
+        // expect exception handler
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'error to get cache value: Cache failure',
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        )->willThrowException(new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'cache failure'));
+
+        // expect exception
+        $this->expectException(HttpException::class);
+
+        // call tested method
+        $this->cacheUtil->isCatched('key');
+    }
+
+    /**
+     * Test get cache value when cache pool throws exception
+     *
+     * @return void
+     */
+    public function testGetValueWhenCachePoolThrowsException(): void
+    {
+        // mock exception
+        $this->cacheItemPoolMock->expects($this->once())->method('getItem')->willThrowException(
+            new Exception('Cache failure')
+        );
+
+        // expect exception handler
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'error to get cache value: Cache failure',
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        )->willThrowException(new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'cache failure'));
+
+        // expect exception
+        $this->expectException(HttpException::class);
+
+        // call tested method
+        $this->cacheUtil->getValue('key');
     }
 }
