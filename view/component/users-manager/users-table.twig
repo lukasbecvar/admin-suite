@@ -155,7 +155,7 @@
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-600/20 text-red-400">Yes</span>
                                     </td>
                                     <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap">
-                                        <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'inactive', 'page': currentPage}) }} id="loading-blocker" class="unban-button w-7 h-7 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-colors duration-200">
+                                        <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'inactive', 'page': currentPage}) }} id="loading-blocker" class="unban-button w-7 h-7 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-colors duration-200" title="Unban user">
                                             <i class="fas fa-check text-xs text-gray-300 hover:text-white"></i>
                                         </a>
                                     </td>
@@ -164,7 +164,7 @@
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-600/20 text-green-400">No</span>
                                     </td>
                                     <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap">
-                                        <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'active', 'page': currentPage}) }} id="loading-blocker" class="ban-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-colors duration-200">
+                                        <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'active', 'page': currentPage}) }} id="loading-blocker" class="ban-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-colors duration-200" title="Ban user">
                                             <i class="fas fa-ban text-xs text-gray-300 hover:text-white"></i>
                                         </a>
                                     </td>
@@ -179,7 +179,7 @@
 
                                 {# USER DELETE LINK #}
                                 <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap">
-                                    <a href={{ path('app_manager_users_delete', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="delete-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-colors duration-200">
+                                    <a href={{ path('app_manager_users_delete', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="delete-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-colors duration-200" title="Delete user">
                                         <i class="fas fa-trash text-xs text-gray-300 hover:text-white"></i>
                                     </a>
                                 </td>

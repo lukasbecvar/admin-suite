@@ -54,20 +54,20 @@
                         <div class="flex space-x-2 ml-1">
                             {% if filter == 'open' %}
                                 {# EDIT BUTTON #}
-                                <button data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} class="edit-button text-blue-400 text-xl hover:text-blue-300 focus:outline-none">
+                                <button data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} title="Open todo edit" class="edit-button text-blue-400 text-xl hover:text-blue-300 focus:outline-none">
                                     <i class="fa fa-edit" aria-hidden="true"></i>
                                 </button>
                                 {# COMPLETE BUTTON #}
-                                <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} class="delete-link text-green-400 text-xl hover:text-green-300 focus:outline-none mr-0.5">
+                                <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} title="Close todo" class="delete-link text-green-400 text-xl hover:text-green-300 focus:outline-none mr-0.5">
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 </a>
                             {% else %}
                                 {# REOPEN BUTTON #}
-                                <a href={{ path('app_todo_manager_reopen', {'id': todo.id}) }} class="delete-link text-green-400 text-xl hover:text-green-300 focus:outline-none mr-0.5">
+                                <a href={{ path('app_todo_manager_reopen', {'id': todo.id}) }} title="Reopen todo" class="delete-link text-green-400 text-xl hover:text-green-300 focus:outline-none mr-0.5">
                                     <i class="fa fa-undo" aria-hidden="true"></i>
                                 </a>
                                 {# DELETE BUTTON #}
-                                <button data-delete-url={{ path('app_todo_manager_delete', {'id': todo.id}) }} class="delete-button delete-link text-red-400 text-xl hover:text-red-300 focus:outline-none mr-0.5">
+                                <button data-delete-url={{ path('app_todo_manager_delete', {'id': todo.id}) }} title="Delete todo" class="delete-button delete-link text-red-400 text-xl hover:text-red-300 focus:outline-none mr-0.5">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                 </button>
                             {% endif %}

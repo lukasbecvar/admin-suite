@@ -10,12 +10,18 @@ body {
     background-color: #111827;
 }
 
-#main-content {
-    background-color: #111827;
+/* fix datetime-local input calendar icon */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
 }
 
 main {
 	margin-top: 38px;
+}
+
+#main-content {
+    background-color: #111827;
 }
 
 #main-content {
