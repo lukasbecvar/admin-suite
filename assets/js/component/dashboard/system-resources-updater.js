@@ -34,6 +34,17 @@ document.addEventListener('DOMContentLoaded', function()
     const loadingNetworkStats = document.getElementById('loading-network-stats')
     const networkStats = document.getElementById('network-stats')
 
+    // format bytes to human readable format
+    function formatBytes(mbps, decimals = 2) {
+        if (mbps === 0) return '0 B/s'
+        const bytesPerSecond = mbps * 125000
+        const k = 1024
+        const dm = decimals < 0 ? 0 : decimals
+        const sizes = ['B/s', 'KB/s', 'MB/s', 'GB/s', 'TB/s', 'PB/s', 'EB/s', 'ZB/s', 'YB/s']
+        const i = Math.floor(Math.log(bytesPerSecond) / Math.log(k))
+        return parseFloat((bytesPerSecond / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+    }
+
     function updateResourcesUsage() {
         // show loading only on first request
         if (firstRequest) {
@@ -51,8 +62,8 @@ document.addEventListener('DOMContentLoaded', function()
 
             // update network usage
             networkUsageElement.innerHTML = data.networkStats.networkUsagePercent + '%'
-            networkUsageDownloadElement.innerHTML = data.networkStats.downloadMbps + 'M/s'
-            networkUsageUploadElement.innerHTML = data.networkStats.uploadMbps + 'M/s'
+            networkUsageDownloadElement.innerHTML = formatBytes(data.networkStats.downloadMbps)
+            networkUsageUploadElement.innerHTML = formatBytes(data.networkStats.uploadMbps)
             networkUsagePingElement.innerHTML = data.networkStats.pingMs + 'ms'
             networkUsageInterfaceElement.innerHTML = data.networkStats.interface
             networkUsagePingServerElement.innerHTML = data.networkStats.pingToIp
@@ -109,6 +120,6 @@ document.addEventListener('DOMContentLoaded', function()
         })
     }
 
-    setInterval(updateResourcesUsage, 10000)
+    setInterval(updateResourcesUsage, 5000)
     updateResourcesUsage()
 })
