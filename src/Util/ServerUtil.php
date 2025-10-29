@@ -360,24 +360,14 @@ class ServerUtil
     /**
      * Get network statistics
      *
+     * @param string $interface The network interface
      * @param string $pingToIp The IP address to ping (default: 8.8.8.8)
      *
      * @return array<string,float|string> The network statistics
      */
-    public function getNetworkStats(string $pingToIp = '8.8.8.8'): array
+    public function getNetworkStats(string $interface = 'enp0s6', string $pingToIp = '8.8.8.8'): array
     {
         $maxSpeedMbps = (int) $this->appUtil->getEnvValue('NETWORK_SPEED_MAX');
-
-        // get default network interface
-        $interface = shell_exec("ip route | grep default | awk '{print $5}'");
-        if ($interface != null) {
-            $interface = trim($interface);
-        }
-
-        // fallback to eth0 if interface is not found
-        if (empty($interface)) {
-            $interface = 'eth0';
-        }
 
         // first measurement
         $rx1 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $2}'");
