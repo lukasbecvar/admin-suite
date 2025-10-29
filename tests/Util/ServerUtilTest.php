@@ -264,9 +264,11 @@ class ServerUtilTest extends TestCase
      */
     public function testGetNetworkStats(): void
     {
-        // mock env value
-        $this->appUtilMock->expects($this->once())->method('getEnvValue')
-            ->with('NETWORK_SPEED_MAX')->willReturn('1000');
+        // mock env config
+        $this->appUtilMock->expects($this->exactly(2))->method('getEnvValue')->willReturnMap([
+            ['NETWORK_INTERFACE', 'eth0'],
+            ['NETWORK_SPEED_MAX', '1000']
+        ]);
 
         // call tested method
         $result = $this->serverUtil->getNetworkStats();
