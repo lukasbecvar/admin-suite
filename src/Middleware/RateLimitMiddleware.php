@@ -2,9 +2,9 @@
 
 namespace App\Middleware;
 
-use App\Manager\AuthManager;
 use App\Util\AppUtil;
 use App\Util\CacheUtil;
+use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;

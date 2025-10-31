@@ -4,6 +4,7 @@ namespace App\Tests\Middleware;
 
 use App\Util\AppUtil;
 use App\Util\CacheUtil;
+use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
@@ -28,6 +29,7 @@ class RateLimitMiddlewareTest extends TestCase
     private RateLimitMiddleware $middleware;
     private AppUtil & MockObject $appUtilMock;
     private CacheUtil & MockObject $cacheUtilMock;
+    private AuthManager & MockObject $authManagerMock;
     private ErrorManager & MockObject $errorManagerMock;
     private RequestEvent & MockObject $requestEventMock;
     private UrlGeneratorInterface & MockObject $urlGeneratorMock;
@@ -37,6 +39,7 @@ class RateLimitMiddlewareTest extends TestCase
         // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->cacheUtilMock = $this->createMock(CacheUtil::class);
+        $this->authManagerMock = $this->createMock(AuthManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->requestEventMock = $this->createMock(RequestEvent::class);
         $this->urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
@@ -45,6 +48,7 @@ class RateLimitMiddlewareTest extends TestCase
         $this->middleware = new RateLimitMiddleware(
             $this->appUtilMock,
             $this->cacheUtilMock,
+            $this->authManagerMock,
             $this->errorManagerMock,
             $this->urlGeneratorMock
         );
