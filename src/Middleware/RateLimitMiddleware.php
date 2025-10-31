@@ -2,6 +2,7 @@
 
 namespace App\Middleware;
 
+use App\Manager\AuthManager;
 use App\Util\AppUtil;
 use App\Util\CacheUtil;
 use App\Manager\ErrorManager;
@@ -20,13 +21,20 @@ class RateLimitMiddleware
 {
     private AppUtil $appUtil;
     private CacheUtil $cacheUtil;
+    private AuthManager $authManager;
     private ErrorManager $errorManager;
     private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(AppUtil $appUtil, CacheUtil $cacheUtil, ErrorManager $errorManager, UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        CacheUtil $cacheUtil,
+        AuthManager $authManager,
+        ErrorManager $errorManager,
+        UrlGeneratorInterface $urlGenerator
+    ) {
         $this->appUtil = $appUtil;
         $this->cacheUtil = $cacheUtil;
+        $this->authManager = $authManager;
         $this->errorManager = $errorManager;
         $this->urlGenerator = $urlGenerator;
     }
@@ -43,6 +51,11 @@ class RateLimitMiddleware
             return;
         }
 
+        // check if user is logged in
+        if ($this->authManager->isUserLogedin()) {
+            return;
+        }
+
         // get request object
         $request = $event->getRequest();
 
@@ -56,6 +69,10 @@ class RateLimitMiddleware
             $request->getPathInfo() == $this->urlGenerator->generate('api_notifications_check_push_subscription') ||
             $request->getPathInfo() == $this->urlGenerator->generate('api_system_resources') ||
             $request->getPathInfo() == $this->urlGenerator->generate('api_terminal') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('api_terminal_job_start') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('api_terminal_job_status') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('api_terminal_job_stop') ||
+            $request->getPathInfo() == $this->urlGenerator->generate('api_terminal_job_input') ||
             $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_create_save') ||
             $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_create_directory_save') ||
             $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_save') ||
