@@ -19,7 +19,7 @@
                     <i class="fas fa-microchip text-blue-400 text-sm"></i>
                     <span class="text-white font-medium text-sm">CPU Usage</span>
                 </div>
-                <span class="text-white font-semibold text-sm" id="cpu-usage">{{ diagnosticData.cpuUsage|e }}%</span>
+                <span class="text-white font-semibold text-sm" id="cpu-usage">CPU: {{ diagnosticData.cpuUsage|e }}%</span>
             </div>
             <div class="w-full h-3 bg-gray-600/50 rounded-full overflow-hidden">
                 <div class="h-full transition-all duration-500 ease-in-out rounded-full" id="cpu-progress" style="min-width: 0.2%; width: {{ diagnosticData.cpuUsage|e }}%; background: {{ diagnosticData.cpuUsage > 80 ? 'linear-gradient(90deg, #ef4444, #f87171)' : 'linear-gradient(90deg, #3b82f6, #60a5fa)' }};"></div>
@@ -33,7 +33,7 @@
                     <i class="fas fa-memory text-green-400 text-sm"></i>
                     <span class="text-white font-medium text-sm">RAM Usage</span>
                 </div>
-                <span class="text-white font-semibold text-sm" id="ram-usage">{{ ramUsage.used|e }}G / {{ diagnosticData.ramUsage|e }}%</span>
+                <span class="text-white font-semibold text-sm" id="ram-usage">RAM: ({{ ramUsage.used|e }}G / {{ diagnosticData.ramUsage|e }}%)</span>
             </div>
             <div class="w-full h-3 bg-gray-600/50 rounded-full overflow-hidden">
                 <div class="h-full transition-all duration-500 ease-in-out rounded-full" id="ram-progress" style="min-width: 0.2%; width: {{ diagnosticData.ramUsage|e }}%; background: {{ diagnosticData.ramUsage > 80 ? 'linear-gradient(90deg, #ef4444, #f87171)' : 'linear-gradient(90deg, #10b981, #34d399)' }};"></div>
@@ -47,7 +47,7 @@
                     <i class="fas fa-hdd text-purple-400 text-sm"></i>
                     <span class="text-white font-medium text-sm">Storage Usage</span>
                 </div>
-                <span class="text-white font-semibold text-sm" id="drive-space">{{ storageUsage|e }}G / {{ diagnosticData.driveSpace|e }}%</span>
+                <span class="text-white font-semibold text-sm" id="drive-space">STORAGE: ({{ storageUsage|e }}G / {{ diagnosticData.driveSpace|e }}%)</span>
             </div>
             <div class="w-full h-3 bg-gray-600/50 rounded-full overflow-hidden">
                 <div class="h-full transition-all duration-500 ease-in-out rounded-full" id="drive-space-progress" style="min-width: 0.2%; width: {{ diagnosticData.driveSpace|e }}%; background: {{ diagnosticData.driveSpace > 80 ? 'linear-gradient(90deg, #ef4444, #f87171)' : 'linear-gradient(90deg, #8b5cf6, #a78bfa)' }};"></div>

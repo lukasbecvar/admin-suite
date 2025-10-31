@@ -34,7 +34,7 @@
                                 <span>Service Information</span>
                             </div>
                         </div>
-                        <div class="p-2 overflow-y-auto max-h-[400px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+                        <div class="p-2 overflow-y-auto max-h-[340px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
                             <div class="space-y-2">
                                 {# SERVICE NAME #}
                                 <div class="flex items-center justify-between py-2.5 px-3 bg-gray-700/20 rounded-lg border border-gray-600/30 transition-all duration-200 hover:bg-gray-700/50">
@@ -129,10 +129,10 @@
                             </div>
                             <span>Configuration (Raw)</span>
                         </div>
-                        <div class="bg-gray-700/10 overflow-y-auto max-h-[375px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+                        <div class="bg-gray-700/10 overflow-y-auto max-h-[340px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
                             <div class="bg-gray-700/10 text-sm transition">
                                 <div class="bg-gray-900/50 overflow-hidden">
-                                    <pre class="p-2 text-green-400 overflow-auto text-xs font-mono">{{ serviceConfig|json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_SLASHES'))|e }}</pre>
+                                    <pre class="p-2 text-green-400 overflow-auto text-xs font-mono max-h-[340px]">{{ serviceConfig|json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_SLASHES'))|e }}</pre>
                                 </div>
                             </div>
                         </div>
