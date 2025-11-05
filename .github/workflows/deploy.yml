@@ -1,9 +1,9 @@
 # deploy app to production server
 name: Deploy
 
-on:
-  release:
-    types: [created]
+# on:
+#   release:
+#     types: [created]
 
 jobs:
   deploy:
