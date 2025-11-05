@@ -1,0 +1,60 @@
+name: Build & Attach Release Artifact
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build & Attach Release Artifact
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # setup php interpreter
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: intl, pdo_mysql, pdo
+
+      # install backend dependencies
+      - name: Install backend dependencies
+        run: composer install --no-interaction --no-progress
+      
+      # install frontend dependencies
+      - name: Install frontend dependencies
+        run: npm install --loglevel=error
+
+      # build frontend assets
+      - name: Build assets
+        run: npm run build
+
+      - name: Create release archive
+        run: |
+          tar -czf app.tar.gz \
+            --exclude="docker-compose.yml" \
+            --exclude="package-lock.json" \
+            --exclude="webpack.config.js" \
+            --exclude="webpack.config.js" \
+            --exclude="composer.json" \
+            --exclude="composer.lock" \
+            --exclude="node_modules" \
+            --exclude="package.json" \
+            --exclude=".github" \
+            --exclude="assets" \
+            --exclude=".git" \
+            --exclude=".env" \
+            --exclude="docs" \
+            --exclude="var"
+            .
+
+      # upload release asset archive
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ github.event.repository.name }}-${{ github.ref_name }}.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
