@@ -1,12 +1,9 @@
 # deploy app to production server
 name: Deploy
 
-# on:
-#   release:
-#     types: [created]
-
 on:
-  workflow_dispatch:
+  release:
+    types: [created]
 
 jobs:
   deploy:

@@ -1,15 +1,16 @@
-name: Build & Attach Release Artifact
+name: Build & Attach release archive
 
 on:
   release:
     types: [published]
 
+# enable github actions token write permissions
 permissions:
   contents: write
 
 jobs:
   build:
-    name: Build & Attach Release Artifact
+    name: Build & Attach release archive
     runs-on: ubuntu-latest
 
     steps:
@@ -35,7 +36,7 @@ jobs:
       - name: Build assets
         run: npm run build
 
-      # create release asset archive
+      # create release asset archive without unnecessary files
       - name: Create release archive
         run: |
           tar --warning=no-file-changed -czf ${{ github.event.repository.name }}-${{ github.ref_name }}.tar.gz \
