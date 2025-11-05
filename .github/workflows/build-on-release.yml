@@ -32,9 +32,10 @@ jobs:
       - name: Build assets
         run: npm run build
 
+      # create release asset archive
       - name: Create release archive
         run: |
-          tar -czf ${{ github.event.repository.name }}-${{ github.ref_name }}.tar.gz \
+          tar --warning=no-file-changed -czf ${{ github.event.repository.name }}-${{ github.ref_name }}.tar.gz \
             --exclude="docker-compose.yml" \
             --exclude="package-lock.json" \
             --exclude="webpack.config.js" \
@@ -48,7 +49,7 @@ jobs:
             --exclude=".env" \
             --exclude="docs" \
             --exclude="var" \
-            .
+            . || true
 
       # upload release asset archive
       - name: Upload release asset
