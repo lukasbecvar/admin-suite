@@ -30,7 +30,7 @@ The application is designed to run on bare-metal rather than as a containerized 
 
 ## Installation
 Installation is very simple like any other PHP project.
-* Download the current app version from [releases](/releases)
+* Download the current app version from [GitHub Releases](releases)
 * Create apache virtual host or nginx configuration like ([apache-config](.docker/configs/apache-site.conf))
 * Create .env file with your configuration (.env.prod)
 * Install dependencies ``npm install && composer install``
