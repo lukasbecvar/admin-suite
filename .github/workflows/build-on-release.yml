@@ -34,10 +34,9 @@ jobs:
 
       - name: Create release archive
         run: |
-          tar -czf app.tar.gz \
+          tar -czf ${{ github.event.repository.name }}-${{ github.ref_name }}.tar.gz \
             --exclude="docker-compose.yml" \
             --exclude="package-lock.json" \
-            --exclude="webpack.config.js" \
             --exclude="webpack.config.js" \
             --exclude="composer.json" \
             --exclude="composer.lock" \
@@ -48,7 +47,7 @@ jobs:
             --exclude=".git" \
             --exclude=".env" \
             --exclude="docs" \
-            --exclude="var"
+            --exclude="var" \
             .
 
       # upload release asset archive
