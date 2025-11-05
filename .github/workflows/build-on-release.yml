@@ -48,7 +48,6 @@ jobs:
             --exclude="node_modules" \
             --exclude="package.json" \
             --exclude=".github" \
-            --exclude="assets" \
             --exclude=".git" \
             --exclude=".env" \
             --exclude="docs" \
