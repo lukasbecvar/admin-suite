@@ -1,4 +1,4 @@
-name: Build & Attach release archive
+name: Build & Attach archive on release
 
 on:
   release:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: Build & Attach release archive
+    name: Build & Attach
     runs-on: ubuntu-latest
 
     steps:
