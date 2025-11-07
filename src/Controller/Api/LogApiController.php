@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use DateTime;
 use Exception;
+use App\Util\XmlUtil;
 use App\Util\AppUtil;
 use App\Util\CacheUtil;
 use App\Util\SessionUtil;
@@ -24,6 +25,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class LogApiController extends AbstractController
 {
+    private XmlUtil $xmlUtil;
     private AppUtil $appUtil;
     private CacheUtil $cacheUtil;
     private LogManager $logManager;
@@ -31,12 +33,14 @@ class LogApiController extends AbstractController
     private ErrorManager $errorManager;
 
     public function __construct(
+        XmlUtil $xmlUtil,
         AppUtil $appUtil,
         CacheUtil $cacheUtil,
         LogManager $logManager,
         SessionUtil $sessionUtil,
         ErrorManager $errorManager
     ) {
+        $this->xmlUtil = $xmlUtil;
         $this->appUtil = $appUtil;
         $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
@@ -47,7 +51,17 @@ class LogApiController extends AbstractController
     /**
      * Handle log from external service
      *
-     * This endpoint is used in external services
+     * This endpoint is used in external services.
+     * Supports traditional query parameters or XML payloads
+     * with the following structure:
+     *
+     * XML payload:
+     *  <log>
+     *    <token>string</token>
+     *    <name>string</name>
+     *    <message>string</message>
+     *    <level>int</level>
+     *  </log>
      *
      * Request query parameters:
      *  - token: api access token (string)
@@ -64,6 +78,34 @@ class LogApiController extends AbstractController
     {
         // get access token from request parameter
         $accessToken = (string) $request->query->get('token');
+        $message = (string) $request->query->get('message');
+        $name = (string) $request->query->get('name');
+        $level = (int) $request->query->get('level');
+
+        // parse XML payload if provided
+        if ($this->xmlUtil->isXmlRequest($request)) {
+            try {
+                $xmlPayload = $this->xmlUtil->parseXmlPayload($request->getContent());
+            } catch (Exception $e) {
+                return $this->json([
+                    'status' => 'error',
+                    'message' => 'Invalid XML payload: ' . $e->getMessage()
+                ], JsonResponse::HTTP_BAD_REQUEST);
+            }
+
+            if (isset($xmlPayload->token) && (string) $xmlPayload->token !== '') {
+                $accessToken = (string) $xmlPayload->token;
+            }
+            if (isset($xmlPayload->name) && (string) $xmlPayload->name !== '') {
+                $name = (string) $xmlPayload->name;
+            }
+            if (isset($xmlPayload->message) && (string) $xmlPayload->message !== '') {
+                $message = (string) $xmlPayload->message;
+            }
+            if (isset($xmlPayload->level) && (string) $xmlPayload->level !== '') {
+                $level = (int) $xmlPayload->level;
+            }
+        }
 
         // check if token is set
         if (empty($accessToken)) {
@@ -83,11 +125,6 @@ class LogApiController extends AbstractController
                 'message' => 'Access token is invalid'
             ], JsonResponse::HTTP_UNAUTHORIZED);
         }
-
-        // get log data from request parameters
-        $name = (string) $request->query->get('name');
-        $message = (string) $request->query->get('message');
-        $level = (int) $request->query->get('level');
 
         // check parameters are set
         if (empty($name) || empty($message) || empty($level)) {
@@ -126,10 +163,10 @@ class LogApiController extends AbstractController
      *
      * This endpoint is used in system audit component
      *
-     * @return JsonResponse The JSON response with system logs
+     * @return JsonResponse|Response The JSON response with system logs
      */
     #[Route('/api/system/logs', methods:['GET'], name: 'app_api_system_logs')]
-    public function getSystemLogs(): JsonResponse
+    public function getSystemLogs(Request $request): JsonResponse|Response
     {
         // get session id (to store last get time separately for each session)
         $sessionId = $this->sessionUtil->getSessionId();
@@ -165,11 +202,20 @@ class LogApiController extends AbstractController
         $this->cacheUtil->deleteValue($cacheKey);
         $this->cacheUtil->setValue($cacheKey, $now, 30);
 
-        // return response with logs
-        return $this->json([
+        // build response payload
+        $payload = [
             'from' => $lastTimestamp,
             'to' => $now,
             'logs' => explode("\n", trim($output))
-        ], Response::HTTP_OK);
+        ];
+
+        // return XML response if requested
+        if (strtolower((string) $request->query->get('format')) === 'xml') {
+            $xmlContent = $this->xmlUtil->formatToXml($payload, 'systemLogs');
+            return new Response($xmlContent, Response::HTTP_OK, ['Content-Type' => 'application/xml']);
+        }
+
+        // return response with logs
+        return $this->json($payload, JsonResponse::HTTP_OK);
     }
 }

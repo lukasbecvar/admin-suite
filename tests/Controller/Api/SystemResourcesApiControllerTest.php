@@ -75,4 +75,32 @@ class SystemResourcesApiControllerTest extends CustomTestCase
         $this->assertArrayHasKey('diagnosticData', $responseData);
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
+
+    /**
+     * Test XML response when format query parameter is set
+     *
+     * @return void
+     */
+    public function testGetSystemResourcesDataAsXml(): void
+    {
+        $this->simulateLogin($this->client);
+        $this->client->request('GET', '/api/system/resources?format=xml');
+
+        // get response
+        $response = $this->client->getResponse();
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertTrue(
+            $response->headers->contains('Content-Type', 'application/xml'),
+            'Response should be delivered as XML'
+        );
+
+        // assert XML structure
+        $xml = simplexml_load_string((string) $response->getContent());
+        $this->assertNotFalse($xml);
+        $this->assertEquals('resources', $xml->getName());
+        $this->assertNotEmpty($xml->ramUsage);
+        $this->assertNotEmpty($xml->networkStats);
+    }
 }

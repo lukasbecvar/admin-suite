@@ -116,6 +116,34 @@ class LogApiControllerTest extends CustomTestCase
     }
 
     /**
+     * Test external log request with XML payload
+     *
+     * @return void
+     */
+    public function testExternalLogRequestWithXmlPayload(): void
+    {
+        // xml payload
+        $xmlPayload = sprintf(
+            '<log><token>%s</token><name>xml-log</name><message>xml message</message><level>2</level></log>',
+            $_ENV['EXTERNAL_API_LOG_TOKEN']
+        );
+
+        $this->client->request(
+            'POST',
+            '/api/external/log',
+            server: ['CONTENT_TYPE' => 'application/xml'],
+            content: $xmlPayload
+        );
+
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
+
+        // assert response
+        $this->assertEquals('Log message has been logged', $responseData['message']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
      * Test get system logs request with invalid method
      *
      * @return void
@@ -161,5 +189,33 @@ class LogApiControllerTest extends CustomTestCase
         $this->assertArrayHasKey('to', $responseData);
         $this->assertArrayHasKey('logs', $responseData);
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test get system logs request with XML format
+     *
+     * @return void
+     */
+    public function testGetSystemLogsRequestWithXmlFormat(): void
+    {
+        $this->simulateLogin($this->client);
+        $this->client->request('GET', '/api/system/logs?format=xml');
+
+        // get response
+        $response = $this->client->getResponse();
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertTrue(
+            $response->headers->contains('Content-Type', 'application/xml'),
+            'Response should be delivered as XML'
+        );
+
+        // assert XML structure
+        $xml = simplexml_load_string((string) $response->getContent());
+        $this->assertNotFalse($xml);
+        $this->assertEquals('systemLogs', $xml->getName());
+        $this->assertNotEmpty($xml->from);
+        $this->assertNotEmpty($xml->logs);
     }
 }
