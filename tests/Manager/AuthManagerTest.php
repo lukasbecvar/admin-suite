@@ -1041,6 +1041,76 @@ class AuthManagerTest extends TestCase
     }
 
     /**
+     * Test authenticate with api key returns false and logs when token invalid
+     *
+     * @return void
+     */
+    public function testAuthenticateWithApiKeyReturnsFalseWhenTokenInvalid(): void
+    {
+        // mock invalid token
+        $token = 'invalid-token';
+        $this->userManagerMock->expects($this->once())->method('getUserByToken')->with($token)->willReturn(null);
+
+        // expect log manager call
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            'api-authentication',
+            'invalid api key authentication with token: ' . $token,
+            LogManager::LEVEL_CRITICAL
+        );
+
+        // expect set session call (never)
+        $this->sessionUtilMock->expects($this->never())->method('setSession');
+
+        // call tested method
+        $result = $this->authManager->authenticateWithApiKey($token);
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test authenticate with api key hydrates session when token valid
+     *
+     * @return void
+     */
+    public function testAuthenticateWithApiKeyHydratesSessionWhenTokenValid(): void
+    {
+        // mock valid token
+        $token = 'valid-token';
+        $user = new User();
+        $reflection = new ReflectionClass($user);
+        $idProperty = $reflection->getProperty('id');
+        $idProperty->setAccessible(true);
+        $idProperty->setValue($user, 42);
+        $this->userManagerMock->expects($this->once())->method('getUserByToken')->with($token)->willReturn($user);
+
+        // expect set session calls
+        $expectedCalls = [
+            ['user-token', $token],
+            ['user-identifier', '42']
+        ];
+        $this->sessionUtilMock->expects($this->exactly(2))->method('setSession')
+            ->willReturnCallback(function (string $name, string $value) use (&$expectedCalls): void {
+                $expected = array_shift($expectedCalls);
+                if ($expected === null) {
+                    $this->fail('Unexpected setSession call');
+                }
+                [$expectedName, $expectedValue] = $expected;
+                $this->assertEquals($expectedName, $name);
+                $this->assertEquals($expectedValue, $value);
+            });
+
+        // expect log manager call (never)
+        $this->logManagerMock->expects($this->never())->method('log');
+
+        // call tested method
+        $result = $this->authManager->authenticateWithApiKey($token);
+
+        // assert result
+        $this->assertTrue($result);
+    }
+
+    /**
      * Test regenerate user token when user does not exist
      *
      * @return void

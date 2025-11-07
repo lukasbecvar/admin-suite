@@ -654,6 +654,11 @@ class AuthManager
         // check if token is valid
         $user = $this->userManager->getUserByToken($token);
         if ($user === null) {
+            $this->logManager->log(
+                name: 'api-authentication',
+                message: 'invalid api key authentication with token: ' . $token,
+                level: LogManager::LEVEL_CRITICAL
+            );
             return false;
         }
 
