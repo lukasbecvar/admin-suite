@@ -57,7 +57,7 @@ class AuthenticatedCheckMiddleware
     }
 
     /**
-     * Determine whether the given path bypasses authentication
+     * Check if path is excluded from authentication check
      *
      * @param string $pathInfo
      *
@@ -66,7 +66,6 @@ class AuthenticatedCheckMiddleware
     private function isExcludedPath(string $pathInfo): bool
     {
         return $pathInfo === '/api/monitoring/visitor/tracking'
-            || $pathInfo === '/api/external/log'
             || $pathInfo === '/register'
             || $pathInfo === '/login'
             || $pathInfo === '/'

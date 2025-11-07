@@ -5,7 +5,6 @@ namespace App\Controller\Api;
 use DateTime;
 use Exception;
 use App\Util\XmlUtil;
-use App\Util\AppUtil;
 use App\Util\CacheUtil;
 use App\Util\SessionUtil;
 use App\Manager\LogManager;
@@ -26,7 +25,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class LogApiController extends AbstractController
 {
     private XmlUtil $xmlUtil;
-    private AppUtil $appUtil;
     private CacheUtil $cacheUtil;
     private LogManager $logManager;
     private SessionUtil $sessionUtil;
@@ -34,14 +32,12 @@ class LogApiController extends AbstractController
 
     public function __construct(
         XmlUtil $xmlUtil,
-        AppUtil $appUtil,
         CacheUtil $cacheUtil,
         LogManager $logManager,
         SessionUtil $sessionUtil,
         ErrorManager $errorManager
     ) {
         $this->xmlUtil = $xmlUtil;
-        $this->appUtil = $appUtil;
         $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
         $this->sessionUtil = $sessionUtil;
@@ -57,14 +53,12 @@ class LogApiController extends AbstractController
      *
      * XML payload:
      *  <log>
-     *    <token>string</token>
      *    <name>string</name>
      *    <message>string</message>
      *    <level>int</level>
      *  </log>
      *
      * Request query parameters:
-     *  - token: api access token (string)
      *  - name: log name (string)
      *  - message: log message (string)
      *  - level: log level (int)
@@ -76,8 +70,7 @@ class LogApiController extends AbstractController
     #[Route('/api/external/log', methods:['POST'], name: 'app_api_external_log')]
     public function externalLog(Request $request): JsonResponse
     {
-        // get access token from request parameter
-        $accessToken = (string) $request->query->get('token');
+        // get log data from request
         $message = (string) $request->query->get('message');
         $name = (string) $request->query->get('name');
         $level = (int) $request->query->get('level');
@@ -93,9 +86,6 @@ class LogApiController extends AbstractController
                 ], JsonResponse::HTTP_BAD_REQUEST);
             }
 
-            if (isset($xmlPayload->token) && (string) $xmlPayload->token !== '') {
-                $accessToken = (string) $xmlPayload->token;
-            }
             if (isset($xmlPayload->name) && (string) $xmlPayload->name !== '') {
                 $name = (string) $xmlPayload->name;
             }
@@ -105,25 +95,6 @@ class LogApiController extends AbstractController
             if (isset($xmlPayload->level) && (string) $xmlPayload->level !== '') {
                 $level = (int) $xmlPayload->level;
             }
-        }
-
-        // check if token is set
-        if (empty($accessToken)) {
-            return $this->json([
-                'status' => 'error',
-                'message' => 'Parameter "token" is required'
-            ], JsonResponse::HTTP_BAD_REQUEST);
-        }
-
-        // get api token for authentication
-        $apiToken = $this->appUtil->getEnvValue('EXTERNAL_API_LOG_TOKEN');
-
-        // check is token matches with auth token
-        if ($accessToken != $apiToken) {
-            return $this->json([
-                'status' => 'error',
-                'message' => 'Access token is invalid'
-            ], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
         // check parameters are set
