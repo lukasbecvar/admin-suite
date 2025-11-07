@@ -51,6 +51,9 @@ class User
     #[ORM\Column(length: 255, unique: true)]
     private ?string $token = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $allow_api_access = false;
+
     #[ORM\Column(type: Types::TEXT)]
     private ?string $profile_pic = null;
 
@@ -257,6 +260,30 @@ class User
     public function setToken(string $token): static
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Get api access status
+     *
+     * @return bool The api access status
+     */
+    public function getAllowApiAccess(): bool
+    {
+        return $this->allow_api_access;
+    }
+
+    /**
+     * Set api access status
+     *
+     * @param bool $allow_api_access The api access status
+     *
+     * @return static The user object
+     */
+    public function setAllowApiAccess(bool $allow_api_access): self
+    {
+        $this->allow_api_access = $allow_api_access;
 
         return $this;
     }

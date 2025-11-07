@@ -143,6 +143,7 @@ class AuthManager
             ->setIpAddress($ip_address)
             ->setUserAgent($user_agent)
             ->setToken($token)
+            ->setAllowApiAccess(false)
             ->setProfilePic('default_pic')
             ->setRegisterTime($time)
             ->setLastLoginTime($time);
@@ -657,6 +658,16 @@ class AuthManager
             $this->logManager->log(
                 name: 'api-authentication',
                 message: 'invalid api key authentication with token: ' . $token,
+                level: LogManager::LEVEL_CRITICAL
+            );
+            return false;
+        }
+
+        // check if user is allowed to use api
+        if (!$user->getAllowApiAccess()) {
+            $this->logManager->log(
+                name: 'api-authentication',
+                message: 'api key authentication: ' . $user->getUsername() . ' is not allowed to use api',
                 level: LogManager::LEVEL_CRITICAL
             );
             return false;

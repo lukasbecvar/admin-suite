@@ -38,6 +38,7 @@ class CustomTestCase extends WebTestCase
         $mockUser->setRegisterTime(new DateTime());
         $mockUser->setLastLoginTime(new DateTime());
         $mockUser->setToken('fba6eb31278954ce68feb303cbd34bfe');
+        $mockUser->setAllowApiAccess(true);
         $mockUser->setProfilePic('default_pic');
 
         // create mock AuthManager mock instance

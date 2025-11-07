@@ -49,6 +49,7 @@ class UserFixtures extends Fixture
             ->setRegisterTime(new DateTime())
             ->setLastLoginTime(new DateTime())
             ->setToken(md5(random_bytes(32)))
+            ->setAllowApiAccess(true)
             ->setProfilePic('default_pic');
 
         // persist owner user
@@ -69,6 +70,7 @@ class UserFixtures extends Fixture
                 ->setRegisterTime($time)
                 ->setLastLoginTime($time)
                 ->setToken(md5(random_bytes(32)))
+                ->setAllowApiAccess(false)
                 ->setProfilePic('default_pic');
 
             // persist user

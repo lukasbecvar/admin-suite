@@ -1069,11 +1069,11 @@ class AuthManagerTest extends TestCase
     }
 
     /**
-     * Test authenticate with api key hydrates session when token valid
+     * Test authenticate with api key hydrates session when token valid and API access enabled
      *
      * @return void
      */
-    public function testAuthenticateWithApiKeyHydratesSessionWhenTokenValid(): void
+    public function testAuthenticateWithApiKeyHydratesSessionWhenApiAccessAllowed(): void
     {
         // mock valid token
         $token = 'valid-token';
@@ -1082,6 +1082,7 @@ class AuthManagerTest extends TestCase
         $idProperty = $reflection->getProperty('id');
         $idProperty->setAccessible(true);
         $idProperty->setValue($user, 42);
+        $user->setAllowApiAccess(true);
         $this->userManagerMock->expects($this->once())->method('getUserByToken')->with($token)->willReturn($user);
 
         // expect set session calls
@@ -1108,6 +1109,37 @@ class AuthManagerTest extends TestCase
 
         // assert result
         $this->assertTrue($result);
+    }
+
+    /**
+     * Test authenticate with api key denied when API access disabled
+     *
+     * @return void
+     */
+    public function testAuthenticateWithApiKeyDeniedWhenApiAccessDisabled(): void
+    {
+        // mock user
+        $token = 'valid-token';
+        $user = new User();
+        $user->setUsername('api-user');
+        $user->setAllowApiAccess(false);
+        $this->userManagerMock->expects($this->once())->method('getUserByToken')->with($token)->willReturn($user);
+
+        // expect log manager call
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            'api-authentication',
+            'api key authentication: api-user is not allowed to use api',
+            LogManager::LEVEL_CRITICAL
+        );
+
+        // expect session not set
+        $this->sessionUtilMock->expects($this->never())->method('setSession');
+
+        // call tested method
+        $result = $this->authManager->authenticateWithApiKey($token);
+
+        // assert result
+        $this->assertFalse($result);
     }
 
     /**
