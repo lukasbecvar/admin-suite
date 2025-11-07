@@ -637,6 +637,34 @@ class AuthManager
     }
 
     /**
+     * Authenticate request via API key header
+     *
+     * @param string $token The plain user token passed via API-KEY header
+     *
+     * @return bool True if token is valid and session was hydrated
+     */
+    public function authenticateWithApiKey(string $token): bool
+    {
+        // check if token is empty
+        $token = trim($token);
+        if ($token === '') {
+            return false;
+        }
+
+        // check if token is valid
+        $user = $this->userManager->getUserByToken($token);
+        if ($user === null) {
+            return false;
+        }
+
+        // set session
+        $this->sessionUtil->setSession('user-token', $token);
+        $this->sessionUtil->setSession('user-identifier', (string) $user->getId());
+
+        return true;
+    }
+
+    /**
      * Regenerate authentication token for a specific user
      *
      * @param int $userId The ID of the user

@@ -114,6 +114,8 @@ The default admin suite configuration is stored in json files in config/suite di
 
 ## Authentication
 Authentication uses a completely custom user system with a username and password, managed by the application user manager. Only the first user can use the registration form to create admin user. Login uses standard PHP session and cookie for the 'remember me' feature.
+#### API key authentication
+For machine-to-machine calls against `/api/**` routes you can reuse any user token as an API key by sending it in the `API-KEY` HTTP header (e.g. `curl -H "API-KEY: <user-token>" https://admin-suite/api/system/resources`). The middleware hydrates the session automatically, so all protected API endpoints behave as if the user was logged in.
 
 ## Monitoring
 #### Services monitoring

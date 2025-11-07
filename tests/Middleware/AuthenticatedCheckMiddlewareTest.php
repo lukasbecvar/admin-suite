@@ -51,7 +51,7 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
     {
         /** @var HttpKernelInterface&MockObject $kernel */
         $kernel = $this->createMock(HttpKernelInterface::class);
-        $request = new Request([], [], [], [], [], ['REQUEST_URI' => $pathInfo]);
+        $request = Request::create($pathInfo, 'GET');
         return new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
     }
 
@@ -63,7 +63,7 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
     public function testRequestWhenUserIsLoggedIn(): void
     {
         // create testing request event
-        $event = $this->createRequestEvent('/admin');
+        $event = $this->createRequestEvent('/api/system/resources');
 
         // simulate user is logged in
         $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(true);
@@ -100,6 +100,32 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
     }
 
     /**
+     * Test request when API-KEY header is provided with valid token
+     *
+     * @return void
+     */
+    public function testRequestWithApiKeyHeader(): void
+    {
+        // simulate user is logged in
+        $event = $this->createRequestEvent('/api/system/resources');
+        $event->getRequest()->headers->set('API-KEY', 'valid-token');
+        $this->assertTrue($event->getRequest()->headers->has('API-KEY'));
+
+        // mock auth manager
+        $this->authManagerMock->expects($this->once())
+            ->method('authenticateWithApiKey')->with('valid-token')->willReturn(true);
+
+        // expect login check to be skipped (user for regular route request)
+        $this->authManagerMock->expects($this->never())->method('isUserLogedin');
+
+        // call tested middleware
+        $this->middleware->onKernelRequest($event);
+
+        // assert response (null = no redirect to login page)
+        $this->assertNull($event->getResponse());
+    }
+
+    /**
      * Test request when pages are excluded from authentication check
      *
      * @return void
@@ -108,11 +134,11 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
     {
         // list of excluded paths
         $excludedPaths = [
-            '/login',
+            '/_profiler',
             '/register',
-            '/',
+            '/login',
             '/error',
-            '/_profiler'
+            '/'
         ];
 
         // expect auth manager not called
@@ -126,8 +152,8 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
             // call tested middleware
             $this->middleware->onKernelRequest($event);
 
-            // assert response
-            $this->assertNull($event->getResponse(), "Failed asserting for excluded path: $path");
+            // assert response (null = no redirect to login page)
+            $this->assertNull($event->getResponse(), 'Failed asserting for excluded path: ' . $path);
         }
     }
 }
