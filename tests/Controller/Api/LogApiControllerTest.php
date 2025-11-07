@@ -58,7 +58,7 @@ class LogApiControllerTest extends CustomTestCase
      */
     public function testExternalLogRequestWithInvalidToken(): void
     {
-        $this->client->request('POST', '/api/external/log', server: ['HTTP_API_KEY' => 'invalid']);
+        $this->client->request('POST', '/api/external/log', server: ['API-KEY' => 'invalid']);
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
@@ -71,7 +71,7 @@ class LogApiControllerTest extends CustomTestCase
     public function testExternalLogRequestWithoutParameters(): void
     {
         $this->simulateLogin($this->client);
-        $this->client->request('POST', '/api/external/log', server: ['HTTP_API_KEY' => 'fba6eb31278954ce68feb303cbd34bfe']);
+        $this->client->request('POST', '/api/external/log', server: ['API-KEY' => 'fba6eb31278954ce68feb303cbd34bfe']);
 
         /** @var array<mixed> $responseData */
         $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
@@ -93,7 +93,7 @@ class LogApiControllerTest extends CustomTestCase
             'name' => 'external-log',
             'message' => 'test message',
             'level' => 1
-        ], server: ['HTTP_API_KEY' => 'fba6eb31278954ce68feb303cbd34bfe']);
+        ], server: ['API-KEY' => 'fba6eb31278954ce68feb303cbd34bfe']);
 
         /** @var array<mixed> $responseData */
         $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
@@ -114,7 +114,7 @@ class LogApiControllerTest extends CustomTestCase
         $this->client->request(
             'POST',
             '/api/external/log',
-            server: ['HTTP_API_KEY' => 'fba6eb31278954ce68feb303cbd34bfe', 'CONTENT_TYPE' => 'application/xml'],
+            server: ['API-KEY' => 'fba6eb31278954ce68feb303cbd34bfe', 'CONTENT_TYPE' => 'application/xml'],
             content: '<log><name>xml-log</name><message>xml message</message><level>2</level></log>'
         );
 
