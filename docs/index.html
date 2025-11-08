@@ -135,9 +135,11 @@
                     deploying any standard PHP project. Follow these detailed steps to get your Admin Suite up and
                     running:</p>
                 <ol>
-                    <li><b>Clone the Repository:</b> Begin by cloning the Admin Suite source code from its GitHub
-                        repository to your server. This command will fetch all necessary files:
-                        <pre><code>git clone git@github.com:lukasbecvar/admin-suite.git</code></pre>
+                    <li><b>Download the Release archive:</b> Fetch the latest <code>admin-suite-&lt;tag&gt;.tar.gz</code>
+                        release assets on the <a href="https://github.com/lukasbecvar/admin-suite/releases" target="_blank">GitHub Releases</a>
+                        page, upload it to your server, and extract it to the directory. If you prefer working
+                        directly with the source, you can clone it via HTTPS instead:
+                        <pre><code>git clone https://github.com/lukasbecvar/admin-suite.git</code></pre>
                     </li>
                     <li><b>Configure Web Server:</b> Set up an Apache Virtual Host or Nginx server block to point to the
                         application's <code>public/</code> directory. This configures your web server to serve the Admin
@@ -460,6 +462,12 @@
                     interactions. Additionally, a 'remember me' feature is implemented using secure cookies, allowing
                     users to maintain their login status across browser sessions for enhanced convenience, while
                     adhering to best practices for secure cookie handling.</p>
+                <p>Machine-to-machine integrations can reuse any user’s authentication token as an API key. Sending the
+                    token in the <code>API-KEY</code> HTTP header automatically hydrates the session, so the request
+                    inherits the same permissions as if the user had logged in via the UI. API access must be explicitly
+                    allowed per user (the <code>allow_api_access</code> flag), and tokens can be rotated from the Users Manager
+                    module. Every API-key authentication attempt is logged under the
+                    <code>api-authentication</code> channel for auditing.</p>
             </section>
 
             <!-- security -->
@@ -590,6 +598,18 @@ fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
                         view of their entire ecosystem, simplifying troubleshooting, performance analysis, and security
                         incident response across their infrastructure.</li>
                 </ul>
+                <h4>External Log API</h4>
+                <p>External services can push events to <code>POST /api/external/log</code>. The endpoint
+                    accepts simple query parameters (<code>name</code>, <code>message</code>, <code>level</code>)
+                    or an <code>application/xml</code> payload with the same fields. Each call must include a valid <code>API-KEY</code> header that belongs
+                    to a user with API access enabled.</p>
+                <pre><code>curl -X POST https://admin-suite/api/external/log \
+  -H "API-KEY: &lt;user-token&gt;" \
+  --data-urlencode "name=backup-service" \
+  --data-urlencode "message=Backup finished in 142s" \
+  --data-urlencode "level=4"</code></pre>
+                <p>Successful return a JSON confirmation, while missing fields, malformed XML, or invalid
+                    credentials generate descriptive error responses so callers can react immediately.</p>
                 <p>By storing logs directly in the database, the Admin Suite ensures data integrity, facilitates complex
                     querying, and provides a persistent record of all events, making it an indispensable tool for system
                     administrators.</p>
