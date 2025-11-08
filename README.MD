@@ -112,9 +112,18 @@ The default admin suite configuration is stored in json files in config/suite di
 * PHP-GD extension
 
 ## Authentication
-Authentication uses a completely custom user system with a username and password, managed by the application user manager. Only the first user can use the registration form to create admin user. Login uses standard PHP session and cookie for the 'remember me' feature.
+Authentication uses a completely custom user system with a username and password, managed by the application user manager. Only the first user can use the registration form to create an admin user. Login uses standard PHP session and cookie for the 'remember me' feature.
 #### API key authentication
-For machine-to-machine calls against `/api/**` routes you can reuse any user token as an API key by sending it in the `API-KEY` HTTP header (e.g. `curl -H "API-KEY: <user-token>" https://admin-suite/api/system/resources`). The middleware hydrates the session automatically, so all protected API endpoints behave as if the user was logged in.
+Backend-to-backend consumers can call any `/api/**` route by reusing an existing user token as an API key and sending it via the `API-KEY` HTTP header. After the middleware validates the token, it hydrates the Symfony session, so the request runs with the same authorizations as if the user had passed through the HTML login form.
+
+**Issuing and rotating tokens**
+- Every user record has a randomly generated value in the `token` column. You can rotate it from *Users Manager → Regenerate authentication token* (route `/manager/users/token/regenerate`) or through your own automation by calling `AuthManager::regenerateSpecificUserToken`.
+- API access is additionally guarded by the `allow_api_access` flag that you must enable to use the user-token as an API key.
+
+**Using the header**
+- Attach the header to any API call: `curl -H "API-KEY: <user-token>" https://admin-suite/api/system/resources`.
+- Only `/api/**` paths accept header-based login. Browser sessions still rely on the standard cookie-based flow.
+- Each API request is fully audited. Invalid or disabled tokens are logged under the `api-authentication` channel so you can track brute-force attempts.
 
 ## Monitoring
 #### Services monitoring
@@ -123,7 +132,7 @@ HTTP and systemd services monitoring is ensured by a console command (infinite l
 The metrics component stores data during the monitoring process, so its function requires the monitoring process to be running. The metrics store average usage values for CPU, RAM, and storage during the interval set in ``.env`` as ``METRICS_SAVE_INTERVAL``.
 #### Metrics Collector for HTTP services
 The Metric Collector allows you to collect metrics from monitored HTTP web applications. You can enable the metric collector in the `services-monitoring.json` file ([services-monitoring.json](config/suite/services-monitoring.json)) by setting `collect_metrics` to true and specifying the `metrics_collector_url`. The Metric Collector accepts `key` (string) and `value` (int|float).
-#### Example response from the Metric Collector URL:
+#### Example response from the metric collector:
 ```json
 {
   "cpu_usage": 64,
@@ -152,7 +161,32 @@ fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
 Notifications from application are sent to admin users via web push notifications if the admin enables them. It also allows sending alerts directly to the admin's email.
 
 ## Logging
-The system allows storing actions in the database to track the actions of admin suite users and also receive logs from external applications via an API.
+The system stores user actions in the database (respecting `LOG_LEVEL`, anti-log cookies, and `DATABASE_LOGGING`). You can also push structured events from other services through a dedicated API.
+
+#### External log ingestion API
+- **Endpoint**: `POST /api/external/log`
+- **Authentication**: `API-KEY` header with a token that belongs to a user allowed to call the API
+- **Payloads**: either query parameters (`name`, `message`, `level`) or an `application/xml` body with the same fields
+- **Levels**: use the numeric constants from `LogManager` (`1=CRITICAL`, `2=WARNING`, `3=NOTICE`, `4=INFO`). Only levels lower than or equal to the configured `LOG_LEVEL` are saved.
+
+Example with query parameters:
+```bash
+curl -X POST https://admin-suite/api/external/log \
+  -H "API-KEY: <user-token>" \
+  --data-urlencode "name=backup-service" \
+  --data-urlencode "message=Backup finished in 142s" \
+  --data-urlencode "level=4"
+```
+
+Example with XML payload:
+```bash
+curl -X POST https://admin-suite/api/external/log \
+  -H "API-KEY: <user-token>" \
+  -H "Content-Type: application/xml" \
+  -d '<log><name>payment-worker</name><message>Bank API timeout</message><level>2</level></log>'
+```
+
+Successful requests return `{"status":"success"}`; missing fields, invalid XML, or bad credentials respond with `{"status":"error","message":"..."}` and the relevant HTTP code so you can react from the caller.
 
 ## Contributing
 Contributions are welcome! Please fork this repository and submit pull requests for any features, bug fixes, or enhancements. If you have any questions or need help, feel free to open an issue or contact me directly.
