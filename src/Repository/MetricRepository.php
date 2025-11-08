@@ -218,17 +218,30 @@ class MetricRepository extends ServiceEntityRepository
             $name = $metric->getName();
             $time = $metric->getTime();
 
-            // get date key based on time period
-            if ($timePeriod === 'last_24_hours') {
-                $dateKey = $time->format('H:i');
-            } elseif ($timePeriod === 'last_7_days' || $timePeriod === 'last_week') {
-                $dateKey = $time->format('m/d');
-            } elseif ($timePeriod === 'last_30_days' || $timePeriod === 'last_month') {
-                $dateKey = $time->format('m/d');
-            } elseif ($timePeriod === 'all_time') {
-                $dateKey = $time->format('Y/m');
-            } else {
-                $dateKey = $time->format('Y/m/d H:i');
+            // determine grouping key and display label based on time period
+            $groupKey = '';
+            $displayLabel = '';
+
+            switch ($timePeriod) {
+                case 'last_24_hours':
+                    $groupKey = $time->format('Y-m-d H');
+                    $displayLabel = $time->format('H:00');
+                    break;
+                case 'last_7_days':
+                case 'last_week':
+                case 'last_30_days':
+                case 'last_month':
+                    $groupKey = $time->format('Y-m-d');
+                    $displayLabel = $time->format('m/d');
+                    break;
+                case 'all_time':
+                    $groupKey = $time->format('Y-m');
+                    $displayLabel = $time->format('Y/m');
+                    break;
+                default:
+                    $groupKey = $time->format('Y-m-d H:i');
+                    $displayLabel = $time->format('Y/m/d H:i');
+                    break;
             }
 
             // initialize metric data if not already set
@@ -237,22 +250,28 @@ class MetricRepository extends ServiceEntityRepository
             }
 
             // initialize date group if not already set
-            if (!isset($groupedMetrics[$name][$dateKey])) {
-                $groupedMetrics[$name][$dateKey] = ['total' => 0, 'count' => 0];
+            if (!isset($groupedMetrics[$name][$groupKey])) {
+                $groupedMetrics[$name][$groupKey] = [
+                    'total' => 0,
+                    'count' => 0,
+                    'label' => $displayLabel
+                ];
             }
 
             // aggregate metric value
-            $groupedMetrics[$name][$dateKey]['total'] += (float) $metric->getValue();
-            $groupedMetrics[$name][$dateKey]['count']++;
+            $groupedMetrics[$name][$groupKey]['total'] += (float) $metric->getValue();
+            $groupedMetrics[$name][$groupKey]['count']++;
         }
 
         // prepare final results with average values
         $result = [];
         foreach ($groupedMetrics as $metricName => $metricData) {
+            ksort($metricData);
             foreach ($metricData as $dateKey => $data) {
+                $count = max(1, $data['count']);
                 $result[$metricName][] = [
-                    'value' => round($data['total'] / $data['count'], 1),
-                    'time' => $dateKey
+                    'value' => round($data['total'] / $count, 1),
+                    'time' => $data['label'] ?? $dateKey
                 ];
             }
         }
