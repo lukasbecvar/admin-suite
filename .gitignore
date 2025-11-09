@@ -23,12 +23,13 @@
 /package-lock.json
 
 # custom suite configs
-feature-flags.json
-terminal-aliases.json
-blocked-usernames.json
-services-monitoring.json
-package-requirements.json
-terminal-blocked-commands.json
+/feature-flags.json
+/terminal-aliases.json
+/blocked-usernames.json
+/protected-columns.json
+/services-monitoring.json
+/package-requirements.json
+/terminal-blocked-commands.json
 
 # docker services files
 .docker/services

@@ -76,17 +76,20 @@
                             {# TABLE ROW #}
                             {% for row in tableData %}
                                 <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300">
-                                    {% for column in row %}
+                                    {% for columnName, columnValue in row %}
                                         <td class="px-4 py-2 border-b border-gray-600/60 text-left relative">
                                             <div class="flex items-center">
-                                                <span class="truncate max-w-xl text-sm">{{ column|slice(0, 50) ~ (column|length > 50 ? '' : '') }}</span>
-                                                {% if column|length > 50 %}
-                                                    <button class="text-blue-400 hover:text-blue-300 text-xs font-bold view-raw-button ml-2" data-fulltext={{ column|e('html_attr') }}>...</button>
+                                                {% if columnName in protectedColumns %}
+                                                    <span class="truncate max-w-xl text-sm text-red-400/80 italic">[protected]</span>
+                                                {% else %}
+                                                    <span class="truncate max-w-xl text-sm">{{ columnValue|slice(0, 50) }}</span>
+                                                    {% if columnValue|length > 50 %}
+                                                        <button class="text-blue-400 hover:text-blue-300 text-xs font-bold view-raw-button ml-2" data-fulltext={{ columnValue|e('html_attr') }}>...</button>
+                                                    {% endif %}
                                                 {% endif %}
                                             </div>
                                         </td>
                                     {% endfor %}
-
                                     {# EDIT AND DELETE BUTTONS #}
                                     {% if row.id|default(null) is not null %}
                                         <td class="px-4 py-2 border-b border-gray-600/60 text-center">

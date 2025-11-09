@@ -90,6 +90,7 @@ The environment variables are loaded from .env file. You can create .env file in
 | PUSH_NOTIFICATIONS_VAPID_PRIVATE_KEY | Private key for push notifications | 12938747T6T6R236 |
 #### Suite configuration
 The default admin suite configuration is stored in json files in config/suite directory. You can create your own configuration files in app root and override default configuration.
+* ``config/suite/protected-columns.json`` - list of protected columns (hidden in table browser)
 * ``config/suite/blocked-usernames.json`` - list of blocked usernames
 * ``config/suite/package-requirements.json`` - list of packages and php extensions to be installed
 * ``config/suite/services-monitoring.json`` - list of services to be monitored

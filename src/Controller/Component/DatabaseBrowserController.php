@@ -110,6 +110,9 @@ class DatabaseBrowserController extends AbstractController
         // get last page number
         $lastPageNumber = $this->databaseManager->getLastTablePage($databaseName, $tableName);
 
+        // get protected columns list
+        $protectedColumns = $this->appUtil->loadConfig('protected-columns.json');
+
         // render table browser page view
         return $this->render('component/database-browser/table-browser.twig', [
             // filter & pagination data
@@ -118,6 +121,7 @@ class DatabaseBrowserController extends AbstractController
             'databaseName' => $databaseName,
             'limitPerPage' => $limitPerPage,
             'lastPageNumber' => $lastPageNumber,
+            'protectedColumns' => $protectedColumns,
 
             // table data
             'tableData' => $tableData,
