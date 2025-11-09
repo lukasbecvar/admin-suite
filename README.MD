@@ -30,7 +30,7 @@ The application is designed to run on bare-metal rather than as a containerized 
 
 ## Installation
 Installation is very simple like any other PHP project.
-* Download the latest prebuilt archive (`admin-suite-<tag>.tar.gz`) from the release assets: [GitHub Releases](https://github.com/lukasbecvar/admin-suite/releases) page and extract it on your server
+* Download the latest prebuilt archive (`admin-suite-<tag>.tar.gz`) from the release assets: [GitHub Releases](https://github.com/lukasbecvar/admin-suite/releases) page and extract it on your server or clone this repository
 * Create apache virtual host or nginx configuration like ([apache-config](.docker/configs/apache-site.conf))
 * Create .env file with your configuration (.env.prod)
 * Install dependencies ``npm install && composer install``
