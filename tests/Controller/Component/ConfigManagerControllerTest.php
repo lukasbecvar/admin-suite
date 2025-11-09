@@ -27,6 +27,11 @@ class ConfigManagerControllerTest extends CustomTestCase
         // simulate user authentication
         $this->simulateLogin($this->client);
 
+        // unlink protected columns config file before test
+        if (file_exists('protected-columns.json')) {
+            unlink('protected-columns.json');
+        }
+
         // unlink config file before test (prevent overwriting)
         if (file_exists('blocked-usernames.json')) {
             unlink('blocked-usernames.json');
@@ -122,14 +127,14 @@ class ConfigManagerControllerTest extends CustomTestCase
      */
     public function testLoadSuiteConfigShowPage(): void
     {
-        $this->client->request('GET', '/settings/suite/show?filename=terminal-aliases.json');
+        $this->client->request('GET', '/settings/suite/show?filename=protected-columns.json');
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('button[id="menu-toggle"]');
         $this->assertSelectorTextContains('body', 'View Configuration');
-        $this->assertSelectorTextContains('body', 'Config: terminal-aliases.json');
-        $this->assertSelectorExists('a[href="/settings/suite/create?filename=terminal-aliases.json"]');
+        $this->assertSelectorTextContains('body', 'Config: protected-columns.json');
+        $this->assertSelectorExists('a[href="/settings/suite/create?filename=protected-columns.json"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 

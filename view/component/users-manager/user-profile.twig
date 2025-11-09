@@ -206,18 +206,20 @@
                                 </thead>
                                 <tbody>
                                     {% for key, value in userIpInfo %}
-                                        <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300">
-                                            <td class="px-4 py-3 border-b border-gray-600/50 text-white whitespace-nowrap font-medium">
-                                                {{ key|title|replace({'_': ' '}) }}
-                                            </td>
-                                            <td class="px-4 py-3 border-b border-gray-600/50 text-white whitespace-nowrap">
-                                                {% if value is iterable %}
-                                                    <span class="text-gray-400 italic">[array]</span>
-                                                {% else %}
-                                                    {{ value }}
-                                                {% endif %}
-                                            </td>
-                                        </tr>
+                                        {% if value|length > 1 %}
+                                            <tr class="hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20 transition-all duration-300">
+                                                <td class="px-4 py-3 border-b border-gray-600/50 text-white whitespace-nowrap font-medium">
+                                                    {{ key|title|replace({'_': ' '}) }}
+                                                </td>
+                                                <td class="px-4 py-3 border-b border-gray-600/50 text-white whitespace-nowrap">
+                                                    {% if value is iterable %}
+                                                        <span class="text-gray-400 italic">[array]</span>
+                                                    {% else %}
+                                                        {{ value }}
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
                                     {% endfor %}
                                 </tbody>
                             </table>
