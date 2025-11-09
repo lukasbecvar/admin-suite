@@ -426,4 +426,47 @@ class UserManager
             );
         }
     }
+
+    /**
+     * Update API access status for a user
+     *
+     * @param int $userId The user ID
+     * @param bool $allowApiAccess The new API access status
+     * @param string $source The action origin (account-settings or user-manager)
+     *
+     * @return void
+     */
+    public function updateApiAccessStatus(int $userId, bool $allowApiAccess, string $source = 'account-settings'): void
+    {
+        // get user repo
+        $repo = $this->getUserRepository(['id' => $userId]);
+
+        // check if user exist
+        if ($repo != null) {
+            try {
+                // update api access status
+                $repo->setAllowApiAccess($allowApiAccess);
+
+                // flush updated user data
+                $this->entityManager->flush();
+            } catch (Exception $e) {
+                $this->errorManager->handleError(
+                    message: 'error to update api access status: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+
+            // log api access update event
+            $statusLabel = $allowApiAccess ? 'enabled' : 'disabled';
+            $logChannel = $source === 'user-manager' ? 'user-manager' : 'account-settings';
+            $logLevel = $source === 'user-manager' ? LogManager::LEVEL_WARNING : LogManager::LEVEL_INFO;
+
+            // log action event
+            $this->logManager->log(
+                name: $logChannel,
+                message: 'api access ' . $statusLabel . ' for user: ' . $repo->getUsername(),
+                level: $logLevel
+            );
+        }
+    }
 }

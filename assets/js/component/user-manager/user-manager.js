@@ -36,6 +36,17 @@ document.addEventListener('DOMContentLoaded', function()
     var tokenRegenerateCancelButton = document.getElementById('token-regenerate-cancel-button')
     var tokenRegenerateConfirmButton = document.getElementById('token-regenerate-confirm-button')
     var tokenRegenerateUrl = ''
+    
+    // elements related to api access functionality
+    var apiAccessButtons = document.querySelectorAll('.api-access-button')
+    var apiAccessPopupOverlay = document.getElementById('api-access-popup-overlay')
+    var apiAccessCancelButton = document.getElementById('api-access-cancel-button')
+    var apiAccessConfirmButton = document.getElementById('api-access-confirm-button')
+    var apiAccessActionLabel = document.getElementById('api-access-action-label')
+    var apiAccessUsernameLabel = document.getElementById('api-access-username')
+    var apiAccessConfirmText = apiAccessConfirmButton ? apiAccessConfirmButton.querySelector('span') : null
+    var apiAccessConfirmIcon = apiAccessConfirmButton ? apiAccessConfirmButton.querySelector('i') : null
+    var apiAccessUrl = ''
 
     // show the ban confirmation popup
     function showBanPopup(url) {
@@ -88,6 +99,41 @@ document.addEventListener('DOMContentLoaded', function()
     // event listener for cancelling unban action
     unbanCancelButton.addEventListener('click', function() {
         unbanPopupOverlay.classList.add('hidden')
+    })
+
+    // show api access confirmation popup
+    function showApiAccessPopup(url, username, action) {
+        apiAccessUrl = url
+        apiAccessActionLabel.textContent = action === 'enable' ? 'enable' : 'disable'
+        apiAccessUsernameLabel.textContent = username
+        if (apiAccessConfirmText) {
+            apiAccessConfirmText.textContent = action === 'enable' ? 'Enable API Access' : 'Disable API Access'
+        }
+        if (apiAccessConfirmIcon) {
+            apiAccessConfirmIcon.classList.remove('fa-toggle-on', 'fa-toggle-off')
+            apiAccessConfirmIcon.classList.add(action === 'enable' ? 'fa-toggle-on' : 'fa-toggle-off')
+        }
+        apiAccessPopupOverlay.classList.remove('hidden')
+    }
+
+    // event listeners for api access buttons
+    apiAccessButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault()
+            var username = button.getAttribute('data-username')
+            var action = button.getAttribute('data-action')
+            showApiAccessPopup(button.href, username, action)
+        })
+    })
+
+    // event listener for confirming api access action
+    apiAccessConfirmButton.addEventListener('click', function() {
+        window.location.href = apiAccessUrl
+    })
+
+    // event listener for cancelling api access action
+    apiAccessCancelButton.addEventListener('click', function() {
+        apiAccessPopupOverlay.classList.add('hidden')
     })
 
     // show the token regeneration confirmation popup
@@ -195,6 +241,9 @@ document.addEventListener('DOMContentLoaded', function()
             }
             if (!unbanPopupOverlay.classList.contains('hidden')) {
                 unbanPopupOverlay.classList.add('hidden')
+            }
+            if (!apiAccessPopupOverlay.classList.contains('hidden')) {
+                apiAccessPopupOverlay.classList.add('hidden')
             }
             if (!tokenRegeneratePopupOverlay.classList.contains('hidden')) {
                 tokenRegeneratePopupOverlay.classList.add('hidden')

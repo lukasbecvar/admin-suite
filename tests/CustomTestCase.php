@@ -3,10 +3,8 @@
 namespace App\Tests;
 
 use DateTime;
-use Exception;
 use App\Entity\User;
 use App\Manager\AuthManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -49,6 +47,12 @@ class CustomTestCase extends WebTestCase
 
         // mock isLoggedInUserAdmin to return true
         $authManager->method('isLoggedInUserAdmin')->willReturn(true);
+
+        // mock logged user id getter
+        $authManager->method('getLoggedUserId')->willReturn(1);
+
+        // mock token regeneration to succeed by default
+        $authManager->method('regenerateSpecificUserToken')->willReturn(true);
 
         // mock getLoggedUserRepository to return test mock user
         $authManager->method('getLoggedUserRepository')->willReturn($mockUser);

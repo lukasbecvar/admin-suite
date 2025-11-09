@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller\Component;
 
+use App\Manager\UserManager;
 use App\Tests\CustomTestCase;
 use Symfony\Component\String\ByteString;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -356,5 +357,81 @@ class UsersManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test API access update with missing user id
+     *
+     * @return void
+     */
+    public function testUpdateUserApiAccessWithEmptyId(): void
+    {
+        $this->client->request('GET', '/manager/users/api-access', [
+            'id' => '',
+            'status' => 'enable'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test API access update with invalid status value
+     *
+     * @return void
+     */
+    public function testUpdateUserApiAccessWithInvalidStatus(): void
+    {
+        $this->client->request('GET', '/manager/users/api-access', [
+            'id' => 2,
+            'status' => 'paused'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test API access update for non existing user id
+     *
+     * @return void
+     */
+    public function testUpdateUserApiAccessWithUnknownUser(): void
+    {
+        // mock user manager
+        $userManagerMock = $this->createMock(UserManager::class);
+        $userManagerMock->expects($this->once())->method('checkIfUserExistById')->with(99999)->willReturn(false);
+        static::getContainer()->set(UserManager::class, $userManagerMock);
+
+        $this->client->request('GET', '/manager/users/api-access', [
+            'id' => 99999,
+            'status' => 'enable'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test API access update success flow
+     *
+     * @return void
+     */
+    public function testUpdateUserApiAccessSuccess(): void
+    {
+        // mock user manager
+        $userManagerMock = $this->createMock(UserManager::class);
+        $userManagerMock->expects($this->once())->method('checkIfUserExistById')->with(5)->willReturn(true);
+        $userManagerMock->expects($this->once())->method('updateApiAccessStatus')->with(5, false, 'user-manager');
+        static::getContainer()->set(UserManager::class, $userManagerMock);
+
+        $this->client->request('GET', '/manager/users/api-access', [
+            'id' => 5,
+            'status' => 'disable',
+            'page' => 3
+        ]);
+
+        // assert response
+        $this->assertResponseRedirects('/manager/users?page=3');
     }
 }

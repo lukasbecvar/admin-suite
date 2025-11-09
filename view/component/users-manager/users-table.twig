@@ -69,9 +69,11 @@
                             <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Last Login</th>
                             <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">IP Address</th>
                             <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Status</th>
+                            <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">API Access</th>
                             <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Banned</th>
                             <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap align-middle"><i class="fas fa-ban"></i></th>
                             <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap align-middle"><i class="fas fa-key"></i></th>
+                            <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap align-middle"><i class="fas fa-toggle-on"></i></th>
                             <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap align-middle"><i class="fas fa-trash"></i></th>
                         </tr>
                     </thead>
@@ -149,6 +151,21 @@
                                     </td>
                                 {% endif %}
 
+                                {# API ACCESS STATUS #}
+                                <td class="px-4 py-3 border-b border-gray-600/50 whitespace-nowrap">
+                                    {% if row.allowApiAccess %}
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-600/20 text-green-400">
+                                            <span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-1"></span>
+                                            enabled
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-600/20 text-red-400">
+                                            <span class="w-1.5 h-1.5 bg-red-400 rounded-full mr-1"></span>
+                                            disabled
+                                        </span>
+                                    {% endif %}
+                                </td>
+
                                 {# BANNED STATUS #}
                                 {% if banManager.isUserBanned(row.id) %}
                                     <td class="px-4 py-3 border-b border-gray-600/50 whitespace-nowrap">
@@ -174,6 +191,18 @@
                                 <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap align-middle">
                                     <a href={{ path('app_manager_users_token_regenerate', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="token-regenerate-button w-7 h-7 bg-gray-700/50 hover:bg-blue-600/50 rounded inline-flex items-center justify-center transition-colors duration-200" title="Regenerate authentication token">
                                         <i class="fas fa-key text-xs text-gray-300 hover:text-white"></i>
+                                    </a>
+                                </td>
+
+                                {# API ACCESS ACTION LINK #}
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap align-middle">
+                                    <a href={{ path('app_manager_users_api_access', {'id': row.id, 'status': row.allowApiAccess ? 'disable' : 'enable', 'page': currentPage}) }}
+                                       id="loading-blocker"
+                                       class="api-access-button w-7 h-7 bg-gray-700/50 hover:bg-purple-600/50 rounded inline-flex items-center justify-center transition-colors duration-200"
+                                       data-username={{ row.username|e }}
+                                       data-action={{ row.allowApiAccess ? 'disable' : 'enable' }}
+                                       title={{ row.allowApiAccess ? 'Disable API access' : 'Enable API access' }}>
+                                        <i class="fas fa-toggle-{{ row.allowApiAccess ? 'on' : 'off' }} text-xs {{ row.allowApiAccess ? 'text-green-300' : 'text-gray-300' }} hover:text-white"></i>
                                     </a>
                                 </td>
 
@@ -284,6 +313,9 @@
 
         {# UNBAN CONFIRMATION OVERLAY #}
         {% include "component/users-manager/popup/user-unban-confirmation-popup.twig" %}
+
+        {# API ACCESS UPDATE OVERLAY #}
+        {% include "component/users-manager/popup/user-api-access-popup.twig" %}
 
         {# TOKEN REGENERATION CONFIRMATION OVERLAY #}
         {% include "component/users-manager/popup/user-token-regenerate-popup.twig" %}

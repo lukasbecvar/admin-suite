@@ -180,11 +180,7 @@ class TodoManagerControllerTest extends CustomTestCase
             method: 'POST',
             uri: '/manager/todo/update-positions',
             server: ['CONTENT_TYPE' => 'application/json'],
-            content: json_encode([
-                ['id' => 1, 'position' => 1],
-                ['id' => 2, 'position' => 2],
-                ['id' => 3, 'position' => 3]
-            ]) ?: '{}'
+            content: json_encode([1 => 1, 2 => 2, 3 => 4, 4 => 3]) ?: '{}'
         );
 
         /** @var array<mixed> $responseData */

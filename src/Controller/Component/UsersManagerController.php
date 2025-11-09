@@ -502,4 +502,58 @@ class UsersManagerController extends AbstractController
             'page' => $page
         ]);
     }
+
+    /**
+     * Handle updating API access status for a user
+     *
+     * @param Request $request The request object
+     *
+     * @return Response Redirect back to the users table page
+     */
+    #[Authorization(authorization: 'ADMIN')]
+    #[Route('/manager/users/api-access', methods:['GET'], name: 'app_manager_users_api_access')]
+    public function updateUserApiAccess(Request $request): Response
+    {
+        // get request data
+        $userId = (int) $request->query->get('id');
+        $status = (string) $request->query->get('status');
+        $page = (int) $request->query->get('page', '1');
+
+        // validate parameters
+        if ($userId == 0 || $status == null) {
+            $this->errorManager->handleError(
+                message: 'invalid request user "id" or "status" parameter not found in query',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+        if ($status !== 'enable' && $status !== 'disable') {
+            $this->errorManager->handleError(
+                message: 'invalid request user "status" parameter accept only enable or disable',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check if user id is valid
+        if (!$this->userManager->checkIfUserExistById($userId)) {
+            $this->errorManager->handleError(
+                message: 'invalid request user "id" parameter not found in database',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // update api access status
+        $this->userManager->updateApiAccessStatus(
+            userId: $userId,
+            allowApiAccess: $status === 'enable',
+            source: 'user-manager'
+        );
+
+        // add success message
+        $this->addFlash('success', $status === 'enable' ? 'API access has been enabled for the user.' : 'API access has been disabled for the user.');
+
+        // redirect back to users table page
+        return $this->redirectToRoute('app_manager_users', [
+            'page' => $page
+        ]);
+    }
 }

@@ -1,0 +1,42 @@
+<div id="api-access-popup-overlay" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+    <div class="backdrop-blur-lg bg-gray-800/90 rounded-xl p-8 border border-gray-600/50 animate-popin shadow-2xl max-w-md w-full mx-4">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 bg-purple-500/20 rounded flex items-center justify-center">
+                <i class="fas fa-toggle-on text-purple-400 text-lg"></i>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold text-white">Update API Access</h3>
+                <p class="text-gray-400 text-sm">Control a user's API-key availability</p>
+            </div>
+        </div>
+
+        {# WARNING SECTION #}
+        <div class="mb-5">
+            <p class="text-sm text-gray-300 leading-relaxed">
+                You are about to <span id="api-access-action-label" class="font-semibold text-purple-300">enable</span>
+                API access for <span id="api-access-username" class="font-semibold text-white"></span>. This toggles their ability
+                to authenticate API requests with their personal token.
+            </p>
+        </div>
+        <div class="p-4 bg-purple-500/10 border border-purple-500/30 rounded mb-6">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-info-circle text-purple-300 text-sm"></i>
+                <div class="text-sm text-gray-300">
+                    Disabling API access immediately blocks header-based authentication for this user.
+                </div>
+            </div>
+        </div>
+
+        {# CONFIRM BUTTONS #}
+        <div class="flex justify-end gap-3">
+            <button id="api-access-confirm-button" class="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 rounded border border-purple-500/30 transition-all duration-200 text-sm font-medium">
+                <i class="fas fa-toggle-on text-xs"></i>
+                <span>Confirm</span>
+            </button>
+            <button id="api-access-cancel-button" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded border border-gray-600/30 transition-all duration-200 text-sm font-medium">
+                <i class="fas fa-times text-xs"></i>
+                <span>Cancel</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -30,6 +30,7 @@ Encore
     .addEntry('file-system-media-viewer-js', './assets/js/component/file-system/file-system-media-viewer.js')
     .addEntry('notification-subscriberr-js', './assets/js/component/notification/notification-subscriber.js')
     .addEntry('metrics-delete-confirmaton-js', './assets/js/component/metrics/metrics-delete-confirmaton.js')
+    .addEntry('account-settings-table-js', './assets/js/component/account-settings/account-settings-table.js')
     .addEntry('database-table-browser-js', './assets/js/component/database-browser/database-table-browser.js')
     .addEntry('system-journalctl-log-card-js', './assets/js/component/system-audit/system-journalctl-log-card.js')
     .addEntry('file-system-mobile-dropdown-js', './assets/js/component/file-system/file-system-mobile-dropdown.js')

@@ -260,4 +260,84 @@ class AccountSettingsController extends AbstractController
             'passwordChangeForm' => $form->createView()
         ]);
     }
+
+    /**
+     * Handle API access toggle for current user
+     *
+     * @param Request $request The request object
+     *
+     * @return Response Redirect back to account settings page
+     */
+    #[Route('/account/settings/api/access', methods:['POST'], name: 'app_account_settings_api_access')]
+    public function accountSettingsApiAccess(Request $request): Response
+    {
+        // get requested status
+        $status = (string) $request->request->get('status');
+
+        // validate status
+        if ($status !== 'enable' && $status !== 'disable') {
+            $this->errorManager->handleError(
+                message: 'invalid api access status parameter',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // get logged user id
+        $userId = $this->authManager->getLoggedUserId();
+        if ($userId == 0) {
+            $this->errorManager->handleError(
+                message: 'user must be logged in to change api access',
+                code: Response::HTTP_UNAUTHORIZED
+            );
+        }
+
+        // update api access status
+        $allowApiAccess = $status === 'enable';
+        $this->userManager->updateApiAccessStatus(
+            userId: $userId,
+            allowApiAccess: $allowApiAccess,
+            source: 'account-settings'
+        );
+
+        // add flash message
+        $this->addFlash('success', $allowApiAccess ? 'API access has been enabled.' : 'API access has been disabled.');
+
+        // redirect back to account settings page
+        return $this->redirectToRoute('app_account_settings_table');
+    }
+
+    /**
+     * Handle API token regeneration for current user
+     *
+     * @return Response Redirect back to account settings page
+     */
+    #[Route('/account/settings/api/token/regenerate', methods:['POST'], name: 'app_account_settings_token_regenerate')]
+    public function accountSettingsRegenerateToken(): Response
+    {
+        // get logged user id
+        $userId = $this->authManager->getLoggedUserId();
+        if ($userId == 0) {
+            $this->errorManager->handleError(
+                message: 'user must be logged in to regenerate api token',
+                code: Response::HTTP_UNAUTHORIZED
+            );
+        }
+
+        // regenerate user token
+        $result = $this->authManager->regenerateSpecificUserToken($userId);
+
+        // check if token regeneration is successful
+        if (!$result) {
+            $this->errorManager->handleError(
+                message: 'failed to regenerate api token',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // add success flash message
+        $this->addFlash('success', 'API key has been regenerated successfully.');
+
+        // redirect back to account settings page
+        return $this->redirectToRoute('app_account_settings_table');
+    }
 }

@@ -15,6 +15,17 @@
     </div>
 </div>
 
+{# FLASH MESSAGES BOX #}
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="px-3 sm:px-3 py-3">
+            <div class="px-4 py-3 rounded border text-sm font-medium {% if label == 'success' %}bg-green-600/20 text-green-300 border-green-500/30{% else %}bg-red-600/20 text-red-300 border-red-500/30{% endif %}">
+                <i class="fas fa-{% if label == 'success' %}check-circle{% else %}exclamation-triangle{% endif %} mr-2"></i>{{ message|e }}
+            </div>
+        </div>
+    {% endfor %}
+{% endfor %}
+
 {# ACCOUNT SETTINGS TABLE #}
 <div class="sm:p-6">
     <div class="w-full max-w-4xl mx-auto">
@@ -95,6 +106,61 @@
                             </div>
                         </div>
                     </div>
+
+                    {# API ACCESS SETTINGS COMPONENT #}
+                    {% set apiAccessEnabled = getUserData().getAllowApiAccess %}
+                    <div class="bg-gray-700/30 rounded p-4 border border-gray-600/30 hover:bg-gray-700/40 transition-all duration-200 space-y-4">
+                        <div class="flex items-center justify-between gap-3 flex-wrap">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-purple-500/20 rounded flex items-center justify-center">
+                                    <i class="fas fa-key text-purple-400 text-sm"></i>
+                                </div>
+                                <div>
+                                    <div class="text-white font-medium text-sm">API Access</div>
+                                    <div class="text-gray-400 text-xs">Manage your API key usage and visibility</div>
+                                </div>
+                            </div>
+                            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border {{ apiAccessEnabled ? 'bg-green-600/20 border-green-500/30 text-green-300' : 'bg-red-600/20 border-red-500/30 text-red-300' }}">
+                                <span class="w-1.5 h-1.5 rounded-full {{ apiAccessEnabled ? 'bg-green-300' : 'bg-red-300' }}"></span>
+                                {{ apiAccessEnabled ? 'API access enabled' : 'API access disabled' }}
+                            </span>
+                        </div>
+
+                        {# CURRENT API TOKEN #}
+                        <div>
+                            <div class="text-gray-400 text-xs mb-1.5">Your current API token</div>
+                            <div class="bg-gray-900/50 border border-gray-700/70 rounded px-3 py-2 flex items-center gap-3">
+                                <span
+                                    id="api-token-value"
+                                    class="text-sm font-mono text-gray-200 flex-1 cursor-pointer select-text whitespace-nowrap overflow-hidden"
+                                    data-token={{ getUserData().token|e }}
+                                    title="Tap to copy token"
+                                >************</span>
+                                <button type="button" id="api-token-toggle" class="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-purple-500/40 bg-gray-800/60 hover:bg-gray-800 text-purple-200 text-[11px] font-semibold uppercase tracking-wide transition-all duration-200">
+                                    <i class="fas fa-eye text-[10px]"></i>
+                                    <span class="hidden sm:inline">View token</span>
+                                </button>
+                            </div>
+                            <p class="text-gray-500 text-xs mt-2">Use this token as the <code class="text-gray-300 bg-gray-800/50 px-1 py-0.5 rounded text-[10px]">API-KEY</code> header for any <code class="text-gray-300 bg-gray-800/50 px-1 py-0.5 rounded text-[10px]">/api/**</code> request when access is enabled.</p>
+                        </div>
+
+                        {# API ACCESS ACTION BUTTONS #}
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <form method="post" action={{ path('app_account_settings_api_access') }} class="flex-1">
+                                <input type="hidden" name="status" value={{ apiAccessEnabled ? 'disable' : 'enable' }}>
+                                <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded border transition-all duration-200 {{ apiAccessEnabled ? 'bg-red-600/20 hover:bg-red-600/30 border-red-500/40 text-red-200' : 'bg-green-600/20 hover:bg-green-600/30 border-green-500/40 text-green-200' }}">
+                                    <i class="fas fa-toggle-{{ apiAccessEnabled ? 'off' : 'on' }} text-xs"></i>
+                                    <span>{{ apiAccessEnabled ? 'Disable API Access' : 'Enable API Access' }}</span>
+                                </button>
+                            </form>
+                            <form method="post" action={{ path('app_account_settings_token_regenerate') }} class="flex-1">
+                                <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded border border-purple-500/40 bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 transition-all duration-200">
+                                    <i class="fas fa-sync-alt text-xs"></i>
+                                    <span>Regenerate API Key</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -144,5 +210,8 @@
         {# REGISTER NOTIFICATIONS SETTINGS JAVASCRIPT #}
         {{ encore_entry_script_tags('notifications-settings-js') }}
     {% endif %}
+
+    {# REGISTER ACCOUNT SETTINGS TABLE JAVASCRIPT #}
+    {{ encore_entry_script_tags('account-settings-table-js') }}
 </div>
 {% endblock %}

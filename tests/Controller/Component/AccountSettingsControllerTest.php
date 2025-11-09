@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller\Component;
 
+use App\Manager\UserManager;
 use App\Tests\CustomTestCase;
 use Symfony\Component\String\ByteString;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -332,6 +333,56 @@ class AccountSettingsControllerTest extends CustomTestCase
         ]);
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    /**
+     * Test toggle API access with invalid status input
+     *
+     * @return void
+     */
+    public function testToggleApiAccessWithInvalidStatus(): void
+    {
+        $this->client->request('POST', '/account/settings/api/access', [
+            'status' => 'invalid-status'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test toggle API access endpoint with valid payload
+     *
+     * @return void
+     */
+    public function testToggleApiAccessWithValidStatus(): void
+    {
+        // mock user manager
+        $userManagerMock = $this->createMock(UserManager::class);
+        $userManagerMock->expects($this->once())->method('updateApiAccessStatus')->with(1, true, 'account-settings');
+        static::getContainer()->set(UserManager::class, $userManagerMock);
+
+        $this->client->request('POST', '/account/settings/api/access', [
+            'status' => 'enable'
+        ]);
+
+        // assert response
+        $this->assertResponseRedirects('/account/settings');
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    /**
+     * Test API token regeneration endpoint success path
+     *
+     * @return void
+     */
+    public function testAccountSettingsTokenRegenerateSuccess(): void
+    {
+        $this->client->request('POST', '/account/settings/api/token/regenerate');
+
+        // assert response
+        $this->assertResponseRedirects('/account/settings');
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 }
