@@ -70,9 +70,9 @@
                             <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">IP Address</th>
                             <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Status</th>
                             <th class="px-4 py-3 border-b border-gray-600/50 text-left font-semibold text-gray-200 whitespace-nowrap">Banned</th>
-                            <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap"><i class="fas fa-ban"></i></th>
-                            <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap"><i class="fas fa-key"></i></th>
-                            <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap"><i class="fas fa-trash"></i></th>
+                            <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap align-middle"><i class="fas fa-ban"></i></th>
+                            <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap align-middle"><i class="fas fa-key"></i></th>
+                            <th class="px-4 py-3 border-b border-gray-600/50 text-center font-semibold text-gray-200 whitespace-nowrap align-middle"><i class="fas fa-trash"></i></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -154,8 +154,8 @@
                                     <td class="px-4 py-3 border-b border-gray-600/50 whitespace-nowrap">
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-600/20 text-red-400">Yes</span>
                                     </td>
-                                    <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap">
-                                        <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'inactive', 'page': currentPage}) }} id="loading-blocker" class="unban-button w-7 h-7 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-colors duration-200" title="Unban user">
+                                    <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap align-middle">
+                                        <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'inactive', 'page': currentPage}) }} id="loading-blocker" class="unban-button w-7 h-7 bg-gray-700/50 hover:bg-green-600/50 rounded inline-flex items-center justify-center transition-colors duration-200" title="Unban user">
                                             <i class="fas fa-check text-xs text-gray-300 hover:text-white"></i>
                                         </a>
                                     </td>
@@ -163,23 +163,23 @@
                                     <td class="px-4 py-3 border-b border-gray-600/50 whitespace-nowrap">
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-600/20 text-green-400">No</span>
                                     </td>
-                                    <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap">
-                                        <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'active', 'page': currentPage}) }} id="loading-blocker" class="ban-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-colors duration-200" title="Ban user">
+                                    <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap align-middle">
+                                        <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'active', 'page': currentPage}) }} id="loading-blocker" class="ban-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded inline-flex items-center justify-center transition-colors duration-200" title="Ban user">
                                             <i class="fas fa-ban text-xs text-gray-300 hover:text-white"></i>
                                         </a>
                                     </td>
                                 {% endif %}
 
                                 {# TOKEN REGENERATION LINK #}
-                                <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap">
-                                    <a href={{ path('app_manager_users_token_regenerate', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="token-regenerate-button w-7 h-7 bg-gray-700/50 hover:bg-blue-600/50 rounded flex items-center justify-center transition-colors duration-200" title="Regenerate authentication token">
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap align-middle">
+                                    <a href={{ path('app_manager_users_token_regenerate', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="token-regenerate-button w-7 h-7 bg-gray-700/50 hover:bg-blue-600/50 rounded inline-flex items-center justify-center transition-colors duration-200" title="Regenerate authentication token">
                                         <i class="fas fa-key text-xs text-gray-300 hover:text-white"></i>
                                     </a>
                                 </td>
 
                                 {# USER DELETE LINK #}
-                                <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap">
-                                    <a href={{ path('app_manager_users_delete', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="delete-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-colors duration-200" title="Delete user">
+                                <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap align-middle">
+                                    <a href={{ path('app_manager_users_delete', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="delete-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded inline-flex items-center justify-center transition-colors duration-200" title="Delete user">
                                         <i class="fas fa-trash text-xs text-gray-300 hover:text-white"></i>
                                     </a>
                                 </td>
