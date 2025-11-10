@@ -367,46 +367,54 @@ class ServerUtil
      */
     public function getNetworkStats(?string $interface = null, string $pingToIp = '8.8.8.8'): array
     {
-        // get interface from env
-        if ($interface == null) {
-            $interface = $this->appUtil->getEnvValue('NETWORK_INTERFACE');
+        $interface = $interface ?: $this->appUtil->getEnvValue('NETWORK_INTERFACE') ?: 'eth0';
+
+        // get network speed max from env (in Mbps) or try to auto-detect
+        $maxSpeedMbps = (int) $this->appUtil->getEnvValue('NETWORK_SPEED_MAX');
+        if ($maxSpeedMbps <= 0) {
+            $detectedSpeed = $this->detectInterfaceSpeed($interface);
+            if ($detectedSpeed !== null) {
+                $maxSpeedMbps = $detectedSpeed;
+            }
+        }
+        if ($maxSpeedMbps <= 0) {
+            $maxSpeedMbps = 100; // sensible default when detection fails
         }
 
-        // get network speed max from env (in Mbps)
-        $maxSpeedMbps = (int) $this->appUtil->getEnvValue('NETWORK_SPEED_MAX');
-
-        // first measurement
-        $rx1 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $2}'");
-        $tx1 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $10}'");
-        $rx1 = intval($rx1);
-        $tx1 = intval($tx1);
+        $firstSample = $this->readInterfaceCounters($interface);
+        if ($firstSample === null) {
+            return $this->buildEmptyNetworkStats($interface, $pingToIp);
+        }
 
         // wait 1 second before second measurement
-        usleep(1000000);
+        usleep(1_000_000);
 
-        // second measurement
-        $rx2 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $2}'");
-        $tx2 = shell_exec("cat /proc/net/dev | awk '/$interface/ {print $10}'");
-        $rx2 = intval($rx2);
-        $tx2 = intval($tx2);
+        $secondSample = $this->readInterfaceCounters($interface);
+        if ($secondSample === null) {
+            return $this->buildEmptyNetworkStats($interface, $pingToIp);
+        }
+
+        $rxDelta = max(0, $secondSample['rx'] - $firstSample['rx']);
+        $txDelta = max(0, $secondSample['tx'] - $firstSample['tx']);
 
         // calculate speed in Mbps
-        $rxMbps = (($rx2 - $rx1) * 8) / 1_000_000;
-        $txMbps = (($tx2 - $tx1) * 8) / 1_000_000;
+        $rxMbps = ($rxDelta * 8) / 1_000_000;
+        $txMbps = ($txDelta * 8) / 1_000_000;
 
-        // ping google dns
-        $pingOutput = shell_exec("ping -c 1 $pingToIp | grep 'time=' | awk -F'time=' '{print $2}' | awk '{print $1}'");
-        if ($pingOutput != false) {
+        $downloadUsagePercent = $this->calculateUsagePercent($rxMbps, $maxSpeedMbps);
+        $uploadUsagePercent = $this->calculateUsagePercent($txMbps, $maxSpeedMbps);
+        $networkUsagePercent = $this->calculateBidirectionalUsagePercent($rxMbps, $txMbps, $maxSpeedMbps);
+
+        // ping destination (default Google DNS)
+        $pingCommand = sprintf(
+            "ping -c 1 %s 2>/dev/null | grep 'time=' | awk -F'time=' '{print $2}' | awk '{print $1}'",
+            escapeshellarg($pingToIp)
+        );
+        $pingOutput = shell_exec($pingCommand);
+        if (is_string($pingOutput)) {
             $ping = trim($pingOutput) ?: "N/A";
         } else {
             $ping = "N/A";
-        }
-
-        // calculate usage in %
-        $usagePercent = (($rxMbps + $txMbps) / ($maxSpeedMbps * 2)) * 100;
-        $networkUsagePercent = round($usagePercent, 2);
-        if ($networkUsagePercent == 0.0) {
-            $networkUsagePercent = 0.1;
         }
 
         return [
@@ -415,9 +423,147 @@ class ServerUtil
             'lastCheckTime' => date('H:i:s'),
             'uploadMbps' => round($txMbps, 2),
             'downloadMbps' => round($rxMbps, 2),
+            'uploadUsagePercent' => $uploadUsagePercent,
             'networkUsagePercent' => $networkUsagePercent,
-            'pingMs' => is_numeric($ping) ? round(floatval($ping), 2) : "N/A"
+            'downloadUsagePercent' => $downloadUsagePercent,
+            'linkSpeedMbps' => (float) $maxSpeedMbps,
+            'pingMs' => is_numeric($ping) ? round((float) $ping, 2) : "N/A"
         ];
+    }
+
+    /**
+     * Build a default network stats payload when counters are unavailable
+     *
+     * @param string $interface The network interface
+     * @param string $pingToIp The IP address to ping
+     *
+     * @return array<string,float|string> The default network stats payload
+     */
+    public function buildEmptyNetworkStats(string $interface, string $pingToIp): array
+    {
+        return [
+            'pingToIp' => $pingToIp,
+            'interface' => $interface,
+            'lastCheckTime' => date('H:i:s'),
+            'uploadMbps' => 0.0,
+            'downloadMbps' => 0.0,
+            'uploadUsagePercent' => 0.0,
+            'downloadUsagePercent' => 0.0,
+            'networkUsagePercent' => 0.0,
+            'linkSpeedMbps' => 'N/A',
+            'pingMs' => "N/A"
+        ];
+    }
+
+    /**
+     * Read RX/TX counters from /proc/net/dev for a given interface
+     *
+     * @param string $interface The network interface
+     *
+     * @return array{rx:int,tx:int}|null The RX/TX counters or null on error
+     */
+    public function readInterfaceCounters(string $interface): ?array
+    {
+        $interface = trim($interface);
+        if ($interface === '') {
+            return null;
+        }
+
+        $lines = @file('/proc/net/dev', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if ($lines === false) {
+            return null;
+        }
+
+        foreach ($lines as $line) {
+            if (!str_contains($line, ':')) {
+                continue;
+            }
+
+            [$name, $stats] = array_map('trim', explode(':', $line, 2));
+            if ($name !== $interface) {
+                continue;
+            }
+
+            $columns = preg_split('/\s+/', trim($stats));
+            if (!is_array($columns) || count($columns) < 10) {
+                return null;
+            }
+
+            return [
+                'rx' => (int) $columns[0],
+                'tx' => (int) $columns[8],
+            ];
+        }
+
+        return null;
+    }
+
+    /**
+     * Attempt to detect the link speed for a network interface
+     *
+     * @param string $interface The network interface
+     *
+     * @return int|null The link speed in Mbps or null on error
+     */
+    public function detectInterfaceSpeed(string $interface): ?int
+    {
+        $interface = trim($interface);
+        if ($interface === '') {
+            return null;
+        }
+
+        $speedPath = '/sys/class/net/' . basename($interface) . '/speed';
+        if (is_readable($speedPath)) {
+            $speedRaw = trim((string) file_get_contents($speedPath));
+            if (is_numeric($speedRaw)) {
+                $speedValue = (int) $speedRaw;
+                if ($speedValue > 0) {
+                    return $speedValue;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Calculate usage percent for a given Mbps value and link speed
+     *
+     * @param float $mbps The Mbps value
+     * @param int $linkSpeed The link speed in Mbps
+     *
+     * @return float The usage percent
+     */
+    public function calculateUsagePercent(float $mbps, int $linkSpeed): float
+    {
+        if ($linkSpeed <= 0) {
+            return 0.0;
+        }
+
+        $usage = ($mbps / $linkSpeed) * 100;
+
+        return round(min(max($usage, 0.0), 100.0), 2);
+    }
+
+    /**
+     * Calculate combined upload+download utilization assuming full-duplex link
+     *
+     * @param float $downloadMbps The download Mbps
+     * @param float $uploadMbps The upload Mbps
+     * @param int $linkSpeed The link speed in Mbps
+     *
+     * @return float The combined utilization percent
+     */
+    public function calculateBidirectionalUsagePercent(float $downloadMbps, float $uploadMbps, int $linkSpeed): float
+    {
+        if ($linkSpeed <= 0) {
+            return 0.0;
+        }
+
+        $combinedCapacity = $linkSpeed * 2;
+        $combinedUsage = (($downloadMbps + $uploadMbps) / $combinedCapacity) * 100;
+
+        return round(min(max($combinedUsage, 0.0), 100.0), 2);
     }
 
     /**

@@ -36,8 +36,11 @@ document.addEventListener('DOMContentLoaded', function()
 
     // format bytes to human readable format
     function formatBytes(mbps, decimals = 2) {
-        if (mbps === 0) return '0 B/s'
-        const bytesPerSecond = mbps * 125000
+        const numericMbps = Number(mbps)
+        if (!Number.isFinite(numericMbps) || numericMbps <= 0) {
+            return '0 B/s'
+        }
+        const bytesPerSecond = numericMbps * 125000
         const k = 1024
         const dm = decimals < 0 ? 0 : decimals
         const sizes = ['B/s', 'KB/s', 'MB/s', 'GB/s', 'TB/s', 'PB/s', 'EB/s', 'ZB/s', 'YB/s']
@@ -61,11 +64,15 @@ document.addEventListener('DOMContentLoaded', function()
             systemStorageElement.innerHTML = 'STORAGE: (' + data.storageUsage + 'G / ' + data.diagnosticData.driveSpace + '%)'
 
             // update network usage
-            networkUsageElement.innerHTML = data.networkStats.networkUsagePercent + '%'
+            const usagePercent = Math.min(
+                100,
+                Math.max(0, Number(data.networkStats.networkUsagePercent) || 0)
+            )
+            networkUsageElement.innerHTML = usagePercent.toFixed(2) + '%'
             networkUsageDownloadElement.innerHTML = formatBytes(data.networkStats.downloadMbps)
             networkUsageUploadElement.innerHTML = formatBytes(data.networkStats.uploadMbps)
             networkUsagePingElement.innerHTML = data.networkStats.pingMs + 'ms'
-            networkUsageInterfaceElement.innerHTML = data.networkStats.interface
+            networkUsageInterfaceElement.innerHTML = data.networkStats.interface || 'N/A'
             networkUsagePingServerElement.innerHTML = data.networkStats.pingToIp
             networkLastCheckTimeElement.innerHTML = data.networkStats.lastCheckTime
 
@@ -73,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function()
             cpuProgress.style.width = data.diagnosticData.cpuUsage + '%'
             ramProgress.style.width = data.diagnosticData.ramUsage + '%'
             driveProgress.style.width = data.diagnosticData.driveSpace + '%'
-            networkProgress.style.width = data.networkStats.networkUsagePercent + '%'
+            networkProgress.style.width = usagePercent + '%'
 
             // update progress bars background color
             cpuProgress.style.background = data.diagnosticData.cpuUsage > 80
@@ -85,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function()
             driveProgress.style.background = data.diagnosticData.driveSpace > 80
                 ? 'linear-gradient(45deg, #ef4444, #f87171)'
                 : 'linear-gradient(45deg, #8b5cf6, #a78bfa)'
-            networkProgress.style.background = data.networkStats.networkUsagePercent > 80
+            networkProgress.style.background = usagePercent > 80
                 ? 'linear-gradient(45deg, #ef4444, #f87171)'
                 : 'linear-gradient(45deg, #06b6d4, #3b82f6)'
 

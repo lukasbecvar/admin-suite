@@ -439,4 +439,59 @@ class ServerUtilTest extends TestCase
         $this->assertArrayHasKey('isLastMonitoringTimeCached', $diagnosticData);
         $this->assertArrayHasKey('websiteDirectoryPermissions', $diagnosticData);
     }
+
+    /**
+     * Test build empty network stats returns zeroed payload
+     *
+     * @return void
+     */
+    public function testBuildEmptyNetworkStatsReturnsZeroedPayload(): void
+    {
+        // call tested method
+        $result = $this->serverUtil->buildEmptyNetworkStats('eth0', '1.1.1.1');
+
+        // assert result
+        $this->assertSame('1.1.1.1', $result['pingToIp']);
+        $this->assertSame('eth0', $result['interface']);
+        $this->assertSame(0.0, $result['uploadMbps']);
+        $this->assertSame(0.0, $result['downloadMbps']);
+        $this->assertSame('N/A', $result['linkSpeedMbps']);
+        $this->assertSame('N/A', $result['pingMs']);
+    }
+
+    /**
+     * Test calculate usage percent clamps values
+     *
+     * @return void
+     */
+    public function testCalculateUsagePercentClampsValues(): void
+    {
+        // call tested method
+        $overutilized = $this->serverUtil->calculateUsagePercent(150.0, 100);
+        $underutilized = $this->serverUtil->calculateUsagePercent(-10.0, 100);
+        $noLink = $this->serverUtil->calculateUsagePercent(50.0, 0);
+
+        // assert result
+        $this->assertSame(100.0, $overutilized);
+        $this->assertSame(0.0, $underutilized);
+        $this->assertSame(0.0, $noLink);
+    }
+
+    /**
+     * Test calculate bidirectional usage percent aggregates both directions
+     *
+     * @return void
+     */
+    public function testCalculateBidirectionalUsagePercentAggregatesBothDirections(): void
+    {
+        // call tested method
+        $balancedLoad = $this->serverUtil->calculateBidirectionalUsagePercent(50.0, 50.0, 100);
+        $overloaded = $this->serverUtil->calculateBidirectionalUsagePercent(400.0, 400.0, 100);
+        $noLink = $this->serverUtil->calculateBidirectionalUsagePercent(10.0, 10.0, 0);
+
+        // assert result
+        $this->assertSame(50.0, $balancedLoad);
+        $this->assertSame(100.0, $overloaded);
+        $this->assertSame(0.0, $noLink);
+    }
 }
