@@ -7,6 +7,7 @@ use App\Util\AppUtil;
 use App\Util\JsonUtil;
 use App\Manager\ErrorManager;
 use App\Manager\ConfigManager;
+use App\Annotation\Authorization;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -121,6 +122,7 @@ class ConfigManagerController extends AbstractController
      *
      * @return Response Redirect to config show page
      */
+    #[Authorization(authorization: 'ADMIN')]
     #[Route('/settings/suite/create', methods: ['GET'], name: 'app_suite_config_create')]
     public function suiteConfigCreate(Request $request): Response
     {
@@ -165,6 +167,7 @@ class ConfigManagerController extends AbstractController
      *
      * @return Response Redirect to config index page
      */
+    #[Authorization(authorization: 'ADMIN')]
     #[Route('/settings/suite/delete', name: 'app_suite_config_delete', methods: ['GET'])]
     public function suiteConfigDelete(Request $request): Response
     {
@@ -201,6 +204,7 @@ class ConfigManagerController extends AbstractController
      *
      * @return Response Redirect to config index page
      */
+    #[Authorization(authorization: 'ADMIN')]
     #[Route('/settings/suite/update', methods: ['POST'], name: 'app_suite_config_update')]
     public function suiteConfigUpdate(Request $request): Response
     {
@@ -267,6 +271,7 @@ class ConfigManagerController extends AbstractController
      *
      * @return Response Redirect to feature flags list page
      */
+    #[Authorization(authorization: 'ADMIN')]
     #[Route('/settings/feature-flags/update', methods: ['GET'], name: 'app_feature_flags_update')]
     public function featureFlagsUpdate(Request $request): Response
     {
