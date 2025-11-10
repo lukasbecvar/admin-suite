@@ -6,12 +6,14 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Sequentially;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Class RegistrationFormType
@@ -61,7 +63,18 @@ class RegistrationFormType extends AbstractType
                         )
                     ])
                 ],
-                'second_options' => ['label' => false]
+                'second_options' => ['label' => false],
+                'constraints' => new Callback(
+                    function (?string $password, ExecutionContextInterface $context): void {
+                        $form = $context->getRoot();
+                        $username = $form->has('username') ? $form->get('username')->getData() : null;
+
+                        // check if password is the same as username
+                        if ($password !== null && $username !== null && $password === $username) {
+                            $context->buildViolation('Your password cannot be the same as your username')->addViolation();
+                        }
+                    }
+                )
             ])
         ;
     }

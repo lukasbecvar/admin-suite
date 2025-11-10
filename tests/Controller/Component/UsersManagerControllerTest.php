@@ -168,6 +168,34 @@ class UsersManagerControllerTest extends CustomTestCase
     }
 
     /**
+     * Test submit user register form when password is the same as username
+     *
+     * @return void
+     */
+    public function testSubmitUserRegisterWithPasswordIsTheSameAsUsername(): void
+    {
+        $this->client->request('POST', '/manager/users/register', [
+            'registration_form' => [
+                'username' => 'valid-testing-username',
+                'password' => [
+                    'first' => 'valid-testing-username',
+                    'second' => 'valid-testing-username'
+                ]
+            ]
+        ]);
+
+        // assert response
+        $this->assertSelectorTextContains('title', 'Admin suite');
+        $this->assertSelectorExists('form[name="registration_form"]');
+        $this->assertSelectorExists('input[name="registration_form[username]"]');
+        $this->assertSelectorExists('input[name="registration_form[password][first]"]');
+        $this->assertSelectorExists('input[name="registration_form[password][second]"]');
+        $this->assertSelectorExists('button[type="submit"]');
+        $this->assertSelectorTextContains('li:contains("Your password cannot be the same as your username")', 'Your password cannot be the same as your username');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
      * Test submit user register form with success response
      *
      * @return void
