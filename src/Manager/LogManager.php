@@ -2,13 +2,13 @@
 
 namespace App\Manager;
 
-use App\Entity\ApiAccessLog;
 use DateTime;
 use Exception;
 use App\Entity\Log;
 use App\Util\AppUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
+use App\Entity\ApiAccessLog;
 use App\Util\FileSystemUtil;
 use App\Util\VisitorInfoUtil;
 use App\Repository\LogRepository;
@@ -528,7 +528,7 @@ class LogManager
             $this->entityManager->persist($log);
             $this->entityManager->flush();
         } catch (Exception $e) {
-            $this->errorManager->handleError(
+            $this->errorManager->logError(
                 message: 'log api access error: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
