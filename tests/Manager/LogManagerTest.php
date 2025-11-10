@@ -448,4 +448,30 @@ class LogManagerTest extends TestCase
         // assert result
         $this->assertIsArray($result);
     }
+
+    /**
+     * Test log api access
+     *
+     * @return void
+     */
+    public function testLogApiAccess(): void
+    {
+        // mock get log config
+        $this->appUtilMock->method('isDatabaseLoggingEnabled')->willReturn(true);
+        $this->appUtilMock->method('getEnvValue')->with('LOG_LEVEL')->willReturn('4');
+
+        // mock get visitor info
+        $this->visitorInfoUtilMock->method('getIP')->willReturn('127.0.0.1');
+        $this->visitorInfoUtilMock->method('getUserAgent')->willReturn('UnitTestAgent');
+
+        // mock user identifier getter
+        $this->sessionUtilMock->method('getSessionValue')->with('user-identifier', 0)->willReturn(1);
+
+        // expect process method to be called
+        $this->entityManagerMock->expects($this->once())->method('persist');
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->logManager->logApiAccess('test-url', 'test-method', 1);
+    }
 }

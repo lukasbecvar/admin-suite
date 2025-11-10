@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use App\Entity\ApiAccessLog;
 use DateTime;
 use Exception;
 use App\Entity\Log;
@@ -499,6 +500,36 @@ class LogManager
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to delete exception file: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Log api access
+     *
+     * @param string $url The url of the api access
+     * @param string $method The method of the api access
+     * @param int $userId The id of the user who made the api access
+     *
+     * @return void
+     */
+    public function logApiAccess(string $url, string $method, int $userId): void
+    {
+        // create log entity
+        $log = new ApiAccessLog();
+        $log->setUrl($url)
+            ->setMethod($method)
+            ->setTime(new DateTime())
+            ->setUserId($userId);
+
+        try {
+            // persist and flush log to database
+            $this->entityManager->persist($log);
+            $this->entityManager->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'log api access error: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

@@ -307,7 +307,8 @@ class DatabaseBrowserControllerTest extends CustomTestCase
             'last_login_time' => '2022-01-01 00:00:00',
             'role' => 'admin',
             'token' => 'testtoken',
-            'profile_pic' => 'testprofilepic'
+            'profile_pic' => 'testprofilepic',
+            'allow_api_access' => true
         ]);
 
         // assert response

@@ -1085,6 +1085,10 @@ class AuthManagerTest extends TestCase
         $user->setAllowApiAccess(true);
         $this->userManagerMock->expects($this->once())->method('getUserByToken')->with($token)->willReturn($user);
 
+        // mock request uri & method
+        $this->visitorInfoUtilMock->method('getRequestUri')->willReturn('/test-url');
+        $this->visitorInfoUtilMock->method('getRequestMethod')->willReturn('test-method');
+
         // expect set session calls
         $expectedCalls = [
             ['user-token', $token],
@@ -1103,6 +1107,13 @@ class AuthManagerTest extends TestCase
 
         // expect log manager call (never)
         $this->logManagerMock->expects($this->never())->method('log');
+
+        // expect log api access call
+        $this->logManagerMock->expects($this->once())->method('logApiAccess')->with(
+            $this->equalTo('/test-url'),
+            $this->equalTo('test-method'),
+            $this->equalTo(42)
+        );
 
         // call tested method
         $result = $this->authManager->authenticateWithApiKey($token);

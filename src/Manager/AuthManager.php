@@ -663,6 +663,15 @@ class AuthManager
             return false;
         }
 
+        // get and validate user id
+        $userId = $user->getId();
+        if ($userId == null) {
+            $this->errorManager->handleError(
+                message: 'error to authenticate with api key: user id is null',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
         // check if user is allowed to use api
         if (!$user->getAllowApiAccess()) {
             $this->logManager->log(
@@ -673,9 +682,14 @@ class AuthManager
             return false;
         }
 
+        // log api access
+        $requestUri = $this->visitorInfoUtil->getRequestUri();
+        $requestMethod = $this->visitorInfoUtil->getRequestMethod();
+        $this->logManager->logApiAccess($requestUri, $requestMethod, $userId);
+
         // set session
         $this->sessionUtil->setSession('user-token', $token);
-        $this->sessionUtil->setSession('user-identifier', (string) $user->getId());
+        $this->sessionUtil->setSession('user-identifier', (string) $userId);
 
         return true;
     }

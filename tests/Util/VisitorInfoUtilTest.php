@@ -42,6 +42,40 @@ class VisitorInfoUtilTest extends TestCase
     }
 
     /**
+     * Test get request uri
+     *
+     * @return void
+     */
+    public function testGetRequestUri(): void
+    {
+        // set server variables
+        $_SERVER['REQUEST_URI'] = '/test/uri';
+
+        // call tested method
+        $result = $this->visitorInfoUtil->getRequestUri();
+
+        // assert result
+        $this->assertEquals('/test/uri', $result);
+    }
+
+    /**
+     * Test get request method
+     *
+     * @return void
+     */
+    public function testGetRequestMethod(): void
+    {
+        // set server variables
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        // call tested method
+        $result = $this->visitorInfoUtil->getRequestMethod();
+
+        // assert result
+        $this->assertEquals('GET', $result);
+    }
+
+    /**
      * Test get visitor ip when HTTP_CLIENT_IP header is set
      *
      * @return void
