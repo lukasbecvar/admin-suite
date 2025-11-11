@@ -279,6 +279,7 @@ class NotificationsManager
 
         // check if recivers are set
         if (is_iterable($recivers)) {
+            $receiverMap = [];
             foreach ($recivers as $reciver) {
                 // create subscription object
                 $subscription = Subscription::create([
@@ -300,14 +301,25 @@ class NotificationsManager
                         'TTL' => intval($this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_MAX_TTL'))
                     ]);
                 }
+
+                // remember receiver id by endpoint to match flush reports
+                $receiverMap[$reciver->getEndpoint()] = (int) ($reciver->getUserId() ?? 0);
             }
 
             // send notifications
             foreach ($webPush->flush() as $report) {
                 /** @var \Minishlink\WebPush\MessageSentReport $report */
                 $endpoint = $report->getRequest()->getUri()->__toString();
-                if (!$report->isSuccess()) {
-                    // check response code status
+
+                // check if notification sent successfully
+                if ($report->isSuccess()) {
+                    // log sent notification
+                    $this->logManager->logSentNotification(
+                        title: $title,
+                        message: $message,
+                        receiverId: $receiverMap[$endpoint] ?? 0
+                    );
+                } else {
                     $response = $report->getResponse();
                     if ($response !== null && $response->getStatusCode() === 410) {
                         $subscriberId = $this->getSubscriberIdByEndpoint($endpoint);

@@ -13,6 +13,7 @@ use App\Util\VisitorInfoUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
 use App\Repository\LogRepository;
+use App\Entity\SentNotificationLog;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -473,5 +474,20 @@ class LogManagerTest extends TestCase
 
         // call tested method
         $this->logManager->logApiAccess('test-url', 'test-method', 1);
+    }
+
+    /**
+     * Test log sent notification
+     *
+     * @return void
+     */
+    public function testLogSentNotification(): void
+    {
+        // mock entity manager
+        $this->entityManagerMock->expects($this->once())->method('persist')->with($this->isInstanceOf(SentNotificationLog::class));
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->logManager->logSentNotification('test-title', 'test-message', 1);
     }
 }

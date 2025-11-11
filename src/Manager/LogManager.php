@@ -12,6 +12,7 @@ use App\Entity\ApiAccessLog;
 use App\Util\FileSystemUtil;
 use App\Util\VisitorInfoUtil;
 use App\Repository\LogRepository;
+use App\Entity\SentNotificationLog;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -530,6 +531,36 @@ class LogManager
         } catch (Exception $e) {
             $this->errorManager->logError(
                 message: 'log api access error: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Log sent notification
+     *
+     * @param string $title The title of the notification
+     * @param string $message The body of the notification
+     * @param int $receiverId The receiver id of the notification
+     *
+     * @return void
+     */
+    public function logSentNotification(string $title, string $message, int $receiverId): void
+    {
+        // create sent notification log entity
+        $log = new SentNotificationLog();
+        $log->setTitle($title)
+            ->setMessage($message)
+            ->setSentTime(new DateTime())
+            ->setReceiverId($receiverId);
+
+        try {
+            // persist and flush log to database
+            $this->entityManager->persist($log);
+            $this->entityManager->flush();
+        } catch (Exception $e) {
+            $this->errorManager->logError(
+                message: 'log sent notification error: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
