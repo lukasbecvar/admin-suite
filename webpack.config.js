@@ -23,6 +23,7 @@ Encore
     .addEntry('file-system-rename-js', './assets/js/component/file-system/file-system-rename.js')
     .addEntry('file-system-upload-js', './assets/js/component/file-system/file-system-upload.js')
     .addEntry('suite-config-manager-js', './assets/js/component/config-manager/suite-config-manager.js')
+    .addEntry('log-manager-raw-viewer-js', './assets/js/component/log-manager/log-manager-raw-viewer.js')
     .addEntry('notifications-settings-js', './assets/js/component/notification/notifications-settings.js')
     .addEntry('system-resources-updater-js', './assets/js/component/dashboard/system-resources-updater.js')
     .addEntry('file-system-file-delete-js', './assets/js/component/file-system/file-system-file-delete.js')
