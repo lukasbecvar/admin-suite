@@ -102,6 +102,22 @@ class UserManager
     }
 
     /**
+     * Get user reference
+     *
+     * @param int $userId The id of user
+     *
+     * @return User|null The user reference or null if not found
+     */
+    public function getUserReference(int $userId): ?User
+    {
+        if ($userId <= 0) {
+            return null;
+        }
+
+        return $this->entityManager->getReference(User::class, $userId);
+    }
+
+    /**
      * Get all users count from repository
      *
      * @return int|null The user object if found, null otherwise

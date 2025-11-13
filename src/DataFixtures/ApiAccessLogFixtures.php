@@ -50,7 +50,7 @@ class ApiAccessLogFixtures extends Fixture implements DependentFixtureInterface
             $log->setUrl(str_replace('{id}', (string) $faker->numberBetween(1, 100), $faker->randomElement($endpoints)))
                 ->setMethod($faker->randomElement($methods))
                 ->setTime($faker->dateTimeBetween('-30 days', 'now'))
-                ->setUserId($users[$i % count($users)]->getId() ?? 1);
+                ->setUser($users[$i % count($users)]);
 
             // persist log
             $manager->persist($log);
@@ -63,7 +63,7 @@ class ApiAccessLogFixtures extends Fixture implements DependentFixtureInterface
     /**
      * Declare fixture dependencies (ensure that the fixture is loaded after user fixtures)
      *
-     * @return array<Class-string>
+     * @return array<Class-string> The array of dependencies
      */
     public function getDependencies(): array
     {

@@ -4,9 +4,11 @@ namespace App\DataFixtures;
 
 use DateTime;
 use App\Entity\Todo;
+use App\Entity\User;
 use App\Util\SecurityUtil;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 /**
  * Class TodoFixtures
@@ -15,7 +17,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
  *
  * @package App\DataFixtures
  */
-class TodoFixtures extends Fixture
+class TodoFixtures extends Fixture implements DependentFixtureInterface
 {
     private SecurityUtil $securityUtil;
 
@@ -33,12 +35,18 @@ class TodoFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
+        // get user
+        $user = $manager->getRepository(User::class)->findOneBy([]);
+        if ($user === null) {
+            return;
+        }
+
         for ($i = 1; $i <= 20; $i++) {
             $todo = new Todo();
             $todo->setTodoText($this->securityUtil->encryptAes("Todo item for user 1 - Todo $i"))
                 ->setAddedTime(new DateTime())
                 ->setStatus('open')
-                ->setUserId(1);
+                ->setUser($user);
 
             // set completed_time for some todos
             if ($i % 3 == 0) {
@@ -51,5 +59,17 @@ class TodoFixtures extends Fixture
 
         // flush data to database
         $manager->flush();
+    }
+
+    /**
+     * Declare fixture dependencies (ensure that the fixture is loaded after user fixtures)
+     *
+     * @return array<Class-string> The array of dependencies
+     */
+    public function getDependencies(): array
+    {
+        return [
+            UserFixtures::class
+        ];
     }
 }

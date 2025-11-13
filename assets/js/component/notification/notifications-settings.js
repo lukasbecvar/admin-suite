@@ -9,19 +9,42 @@ document.addEventListener('DOMContentLoaded', async function()
 
     // convert Base64 URL to Uint8Array
     function urlBase64ToUint8Array(base64String) {
+        if (typeof base64String !== 'string' || base64String.length === 0) {
+            throw new Error('Missing VAPID public key')
+        }
         const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
         const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/')
         const rawData = window.atob(base64)
         return new Uint8Array([...rawData].map(char => char.charCodeAt(0)))
     }
+    
+    // check if VAPID key is valid
+    function isValidVapidKey(key) {
+        return typeof key === 'string' && key.length > 0 && /^[A-Za-z0-9_\-=]+$/.test(key)
+    }
 
     // resubscribe to push notifications
     subscribeButton.addEventListener('click', async () => {
+        let applicationServerKey
         console.log('Subscription button clicked.')
         if (Notification.permission === 'denied') {
             alert('Push notifications are disabled in your browser settings. Please enable them manually.')
             return
         }
+        if (!isValidVapidKey(publicKey)) {
+            statusElement.textContent = 'Push notifications are misconfigured. Please contact the administrator.'
+            console.error('Invalid VAPID key configured.')
+            return
+        }
+
+        try {
+            applicationServerKey = urlBase64ToUint8Array(publicKey)
+        } catch (error) {
+            console.error('Invalid VAPID key: ', error)
+            statusElement.textContent = 'Push notifications are misconfigured. Please contact the administrator.'
+            return
+        }
+
         try {
             const permission = await Notification.requestPermission()
     
@@ -35,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async function()
             const registration = await navigator.serviceWorker.ready
             const subscription = await registration.pushManager.subscribe({
                 userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(publicKey),
+                applicationServerKey: applicationServerKey
             })
 
             // send subscription to server
@@ -71,6 +94,12 @@ document.addEventListener('DOMContentLoaded', async function()
         // check if VAPID public key is loaded
         if (keyData.status === 'success') {
             publicKey = keyData.vapid_public_key
+            if (!isValidVapidKey(publicKey)) {
+                statusElement.textContent = 'Push notifications are misconfigured. Please contact the administrator.'
+                console.error('Invalid VAPID key format detected.')
+                subscribeButton.classList.add('hidden')
+                return
+            }
         } else {
             console.error('Failed to load VAPID public key: ', keyData.message)
             return

@@ -35,29 +35,20 @@ class SentNotificationLogFixtures extends Fixture implements DependentFixtureInt
         if (count($users) === 0) {
             return;
         }
-
-        // build receivers list
-        $receiverIds = [];
-        foreach ($users as $user) {
-            if ($user->getId() !== null) {
-                $receiverIds[] = $user->getId();
-            }
-        }
+        $availableReceivers = array_values(array_filter($users, static function (User $user) {
+            return $user->getId() !== null;
+        }));
 
         // create 100 sent notification logs
         for ($i = 0; $i < 100; $i++) {
-            $receiverId = count($receiverIds) > 0 ? $receiverIds[$i % count($receiverIds)] : null;
-            if ($receiverId === null) {
-                $fallbackUser = $users[$i % count($users)];
-                $receiverId = $fallbackUser->getId();
-            }
+            $receiver = $availableReceivers[$i % count($availableReceivers)] ?? $users[$i % count($users)];
 
             // create sent notification log
             $log = new SentNotificationLog();
             $log->setTitle($faker->sentence(4))
                 ->setMessage($faker->sentence(12))
                 ->setSentTime($faker->dateTimeBetween('-30 days', 'now'))
-                ->setReceiverId($receiverId ?? 1);
+                ->setReceiver($receiver);
 
             // persist sent notification log
             $manager->persist($log);
@@ -70,7 +61,7 @@ class SentNotificationLogFixtures extends Fixture implements DependentFixtureInt
     /**
      * Declare fixture dependencies (ensure that the fixture is loaded after user fixtures)
      *
-     * @return array<Class-string>
+     * @return array<Class-string> The array of dependencies
      */
     public function getDependencies(): array
     {

@@ -4,14 +4,15 @@ namespace App\Tests\Manager;
 
 use Exception;
 use App\Entity\Log;
+use App\Entity\User;
 use App\Util\AppUtil;
 use App\Util\CookieUtil;
 use App\Util\SessionUtil;
 use App\Manager\LogManager;
 use App\Util\FileSystemUtil;
+use App\Tests\CustomTestCase;
 use App\Util\VisitorInfoUtil;
 use App\Manager\ErrorManager;
-use PHPUnit\Framework\TestCase;
 use App\Repository\LogRepository;
 use App\Entity\SentNotificationLog;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,7 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @package App\Tests\Manager
  */
 #[CoversClass(LogManager::class)]
-class LogManagerTest extends TestCase
+class LogManagerTest extends CustomTestCase
 {
     private LogManager $logManager;
     private AppUtil & MockObject $appUtilMock;
@@ -50,6 +51,17 @@ class LogManagerTest extends TestCase
         $this->fileSystemUtilMock = $this->createMock(FileSystemUtil::class);
         $this->visitorInfoUtilMock = $this->createMock(VisitorInfoUtil::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
+
+        // mock get reference
+        $this->entityManagerMock->method('getReference')->willReturnCallback(
+            function (string $className, int|string $id) {
+                if ($className === User::class && is_numeric($id)) {
+                    return $this->createUserEntity((int) $id);
+                }
+
+                return null;
+            }
+        );
 
         // create the log manager instance
         $this->logManager = new LogManager(

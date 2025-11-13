@@ -222,8 +222,24 @@ class DatabaseManagerTest extends TestCase
      */
     public function testGetTableData(): void
     {
+        // mock limit content per page
+        $this->appUtilMock->method('getEnvValue')->with('LIMIT_CONTENT_PER_PAGE')->willReturn('10');
+
+        // mock table exists result
+        $tableExistsResult = $this->createMock(Result::class);
+        $tableExistsResult->method('fetchOne')->willReturn(1);
+        $dataResult = $this->createMock(Result::class);
+        $dataResult->method('fetchAllAssociative')->willReturn([['id' => 1]]);
+
+        // expect executeQuery calls
+        $this->connectionMock->expects($this->exactly(2))->method('executeQuery')
+            ->willReturnOnConsecutiveCalls($tableExistsResult, $dataResult);
+
+        // expect log manager call
+        $this->logManagerMock->expects($this->once())->method('log');
+
         // call tested method
-        $result = $this->databaseManager->getTableData($_ENV['DATABASE_NAME'], 'users', 1);
+        $result = $this->databaseManager->getTableData('test_db', 'users', 1);
 
         // assert result
         $this->assertIsArray($result);
@@ -587,5 +603,98 @@ class DatabaseManagerTest extends TestCase
 
         // assert result
         $this->assertCount(0, $queries);
+    }
+
+    /**
+     * Test get table foreign keys
+     *
+     * @return void
+     */
+    public function testGetTableForeignKeys(): void
+    {
+        $resultMock = $this->createMock(Result::class);
+        $resultMock->method('fetchAllAssociative')->willReturn([[
+            'COLUMN_NAME' => 'user_id',
+            'REFERENCED_TABLE_NAME' => 'users',
+            'REFERENCED_COLUMN_NAME' => 'id'
+        ]]);
+
+        // expect query call
+        $this->connectionMock->expects($this->once())->method('executeQuery')->willReturn($resultMock);
+
+        // call tested method
+        $foreignKeys = $this->databaseManager->getTableForeignKeys('test_db', 'logs');
+
+        // assert result
+        $this->assertArrayHasKey('user_id', $foreignKeys);
+        $this->assertSame('users', $foreignKeys['user_id']['referencedTable']);
+        $this->assertSame('id', $foreignKeys['user_id']['referencedColumn']);
+    }
+
+    /**
+     * Test get primary key column
+     *
+     * @return void
+     */
+    public function testGetPrimaryKeyColumn(): void
+    {
+        // mock primary key result
+        $resultMock = $this->createMock(Result::class);
+        $resultMock->method('fetchOne')->willReturn('id');
+
+        // expect query call
+        $this->connectionMock->expects($this->once())->method('executeQuery')->willReturn($resultMock);
+
+        // call tested method
+        $primaryKey = $this->databaseManager->getPrimaryKeyColumn('test_db', 'users');
+
+        // assert result
+        $this->assertSame('id', $primaryKey);
+    }
+
+    /**
+     * Test get page for column value
+     *
+     * @return void
+     */
+    public function testGetPageForColumnValue(): void
+    {
+        // mock fetch results
+        $primaryResult = $this->createMock(Result::class);
+        $primaryResult->method('fetchOne')->willReturn('id');
+        $existsResult = $this->createMock(Result::class);
+        $existsResult->method('fetchOne')->willReturn(1);
+        $countResult = $this->createMock(Result::class);
+        $countResult->method('fetchOne')->willReturn(14);
+
+        // expect query calls
+        $this->connectionMock->expects($this->exactly(3))->method('executeQuery')
+            ->willReturnOnConsecutiveCalls($primaryResult, $existsResult, $countResult);
+
+        // call tested method
+        $page = $this->databaseManager->getPageForColumnValue('test_db', 'users', 'id', '15', 10);
+
+        // assert result
+        $this->assertSame(2, $page);
+    }
+
+    /**
+     * Test get page for column value when primary key missing
+     *
+     * @return void
+     */
+    public function testGetPageForColumnValueReturnsNullWhenPrimaryKeyMissing(): void
+    {
+        $primaryResult = $this->createMock(Result::class);
+        $primaryResult->method('fetchOne')->willReturn(null);
+
+        // expect query call
+        $this->connectionMock->expects($this->once())->method('executeQuery')->willReturn($primaryResult);
+
+        // call tested method
+        $page = $this->databaseManager->getPageForColumnValue('test_db', 'users', 'id', '1', 10);
+
+        // assert result
+        $this->assertNull($page);
     }
 }

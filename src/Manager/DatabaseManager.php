@@ -490,6 +490,38 @@ class DatabaseManager
     }
 
     /**
+     * Check if a specific column value exists in the given table
+     *
+     * @param string $databaseName The database name
+     * @param string $tableName The table name
+     * @param string $columnName The column name
+     * @param int|string $value The value to look for
+     *
+     * @return bool True when the value exists
+     */
+    public function doesColumnValueExist(string $databaseName, string $tableName, string $columnName, int|string $value): bool
+    {
+        $sql = sprintf(
+            'SELECT COUNT(*) AS count FROM %s.%s WHERE %s = :value',
+            $this->connection->quoteSingleIdentifier($databaseName),
+            $this->connection->quoteSingleIdentifier($tableName),
+            $this->connection->quoteSingleIdentifier($columnName)
+        );
+
+        try {
+            $parameterType = $this->getParameterType((string) $value);
+            $count = $this->connection->fetchOne($sql, ['value' => $value], ['value' => $parameterType]);
+
+            return (int) $count > 0;
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error checking if column value exists: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
      * Add row to table
      *
      * @param array<mixed> $formData The submitted form data
@@ -900,5 +932,189 @@ class DatabaseManager
         }
 
         return $queries;
+    }
+
+    /**
+     * Get foreign key metadata for table
+     *
+     * @param string $dbName The name of the database
+     * @param string $tableName The name of the table
+     *
+     * @return array<string, array<string, string>> The foreign key metadata
+     */
+    public function getTableForeignKeys(string $dbName, string $tableName): array
+    {
+        // sql query
+        $sql = 'SELECT COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+                FROM information_schema.KEY_COLUMN_USAGE
+                WHERE TABLE_SCHEMA = :dbName
+                  AND TABLE_NAME = :tableName
+                  AND REFERENCED_TABLE_NAME IS NOT NULL';
+
+        try {
+            $stmt = $this->connection->executeQuery($sql, [
+                'dbName' => $dbName,
+                'tableName' => $tableName,
+            ]);
+
+            $foreignKeys = [];
+            foreach ($stmt->fetchAllAssociative() as $row) {
+                $columnName = $row['COLUMN_NAME'] ?? null;
+                $referencedTable = $row['REFERENCED_TABLE_NAME'] ?? null;
+                $referencedColumn = $row['REFERENCED_COLUMN_NAME'] ?? null;
+
+                if (is_string($columnName) && is_string($referencedTable) && is_string($referencedColumn)) {
+                    $foreignKeys[$columnName] = [
+                        'referencedTable' => $referencedTable,
+                        'referencedColumn' => $referencedColumn
+                    ];
+                }
+            }
+
+            return $foreignKeys;
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error retrieving foreign keys from table: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Get primary key column name for table
+     *
+     * @param string $dbName The name of the database
+     * @param string $tableName The name of the table
+     *
+     * @return string|null The primary key column name or null if not found
+     */
+    public function getPrimaryKeyColumn(string $dbName, string $tableName): ?string
+    {
+        $sql = 'SELECT COLUMN_NAME
+                FROM information_schema.KEY_COLUMN_USAGE
+                WHERE TABLE_SCHEMA = :dbName
+                  AND TABLE_NAME = :tableName
+                  AND CONSTRAINT_NAME = \'PRIMARY\'
+                LIMIT 1';
+
+        try {
+            $stmt = $this->connection->executeQuery($sql, [
+                'dbName' => $dbName,
+                'tableName' => $tableName,
+            ]);
+
+            /** @var string|null $columnName */
+            $columnName = $stmt->fetchOne();
+
+            return is_string($columnName) ? $columnName : null;
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error retrieving primary key column: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Resolve page number for a given primary key value
+     *
+     * @param string $dbName The name of the database
+     * @param string $tableName The name of the table
+     * @param string $columnName The name of the column
+     * @param string $value The value of the column
+     * @param int $pageLimit The page limit
+     *
+     * @return int|null The page number or null if not found
+     */
+    public function getPageForColumnValue(string $dbName, string $tableName, string $columnName, string $value, int $pageLimit): ?int
+    {
+        if ($pageLimit <= 0) {
+            return null;
+        }
+
+        // check if identifiers are valid
+        if (!$this->isValidIdentifier($dbName) || !$this->isValidIdentifier($tableName) || !$this->isValidIdentifier($columnName)) {
+            $this->errorManager->handleError('Invalid identifier provided', Response::HTTP_BAD_REQUEST);
+        }
+
+        $primaryKey = $this->getPrimaryKeyColumn($dbName, $tableName);
+        if ($primaryKey === null || $primaryKey !== $columnName) {
+            return null;
+        }
+
+        $paramType = $this->getParameterType($value);
+
+        try {
+            $existsStmt = $this->connection->executeQuery(
+                "SELECT COUNT(*) FROM {$dbName}.{$tableName} WHERE {$columnName} = :value",
+                ['value' => $value],
+                ['value' => $paramType]
+            );
+            $exists = (int) $existsStmt->fetchOne();
+            if ($exists === 0) {
+                return null;
+            }
+
+            $countStmt = $this->connection->executeQuery(
+                "SELECT COUNT(*) FROM {$dbName}.{$tableName} WHERE {$columnName} < :value",
+                ['value' => $value],
+                ['value' => $paramType]
+            );
+
+            $itemsBefore = (int) $countStmt->fetchOne();
+            $position = $itemsBefore + 1;
+
+            return (int) ceil($position / $pageLimit);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error resolving table page for column value: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Check if a column type represents a numeric value
+     *
+     * @param string $columnType The database column type
+     *
+     * @return bool True when the column expects numbers
+     */
+    public function isNumericColumnType(string $columnType): bool
+    {
+        $normalizedType = strtolower($columnType);
+        $numericHints = ['int', 'decimal', 'numeric', 'double', 'float', 'real'];
+
+        foreach ($numericHints as $hint) {
+            if (str_contains($normalizedType, $hint)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if identifier is valid
+     *
+     * @param string $identifier The identifier to check
+     *
+     * @return bool True if identifier is valid, false otherwise
+     */
+    private function isValidIdentifier(string $identifier): bool
+    {
+        return preg_match('/^[A-Za-z0-9_]+$/', $identifier) === 1;
+    }
+
+    /**
+     * Get the parameter type for a given value
+     *
+     * @param string $value The value to check
+     *
+     * @return ParameterType The parameter type
+     */
+    private function getParameterType(string $value): ParameterType
+    {
+        return ctype_digit($value) ? ParameterType::INTEGER : ParameterType::STRING;
     }
 }

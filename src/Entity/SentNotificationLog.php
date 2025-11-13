@@ -34,8 +34,9 @@ class SentNotificationLog
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $sent_time = null;
 
-    #[ORM\Column]
-    private ?int $receiver_id = null;
+    #[ORM\ManyToOne(inversedBy: 'receivedNotifications')]
+    #[ORM\JoinColumn(name: 'receiver_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private ?User $receiver = null;
 
     /**
      * Get database ID of the sent notification log
@@ -130,25 +131,25 @@ class SentNotificationLog
     }
 
     /**
-     * Get receiver id associated with the notification
+     * Get receiver associated with the notification
      *
-     * @return int|null The receiver id associated with the notification or null if not found
+     * @return User|null The receiver associated with the notification or null if not found
      */
-    public function getReceiverId(): ?int
+    public function getReceiver(): ?User
     {
-        return $this->receiver_id;
+        return $this->receiver;
     }
 
     /**
-     * Set receiver id associated with the notification
+     * Set receiver associated with the notification
      *
-     * @param int $receiver_id The receiver id associated with the notification
+     * @param User $receiver The receiver associated with the notification
      *
      * @return static The sent notification log object
      */
-    public function setReceiverId(int $receiver_id): static
+    public function setReceiver(?User $receiver): static
     {
-        $this->receiver_id = $receiver_id;
+        $this->receiver = $receiver;
 
         return $this;
     }

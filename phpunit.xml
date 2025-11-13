@@ -18,6 +18,7 @@
             <directory suffix=".php">./tests</directory>
             <exclude>./tests/bootstrap.php</exclude>
             <exclude>./tests/CustomTestCase.php</exclude>
+            <exclude>./tests/TestEntityFactory.php</exclude>
         </testsuite>
     </testsuites>    
     

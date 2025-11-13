@@ -3,7 +3,6 @@
 namespace App\Command\Log;
 
 use App\Manager\LogManager;
-use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -23,13 +22,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class LogReaderCommand extends Command
 {
     private LogManager $logManager;
-    private UserManager $userManager;
     private VisitorInfoUtil $visitorInfoUtil;
 
-    public function __construct(LogManager $logManager, UserManager $userManager, VisitorInfoUtil $visitorInfoUtil)
+    public function __construct(LogManager $logManager, VisitorInfoUtil $visitorInfoUtil)
     {
         $this->logManager = $logManager;
-        $this->userManager = $userManager;
         $this->visitorInfoUtil = $visitorInfoUtil;
         parent::__construct();
     }
@@ -91,7 +88,7 @@ class LogReaderCommand extends Command
         $data = [];
         foreach ($logs as $log) {
             // get user name of log
-            $user = $this->userManager->getUsernameById($log->getUserId() ?? 0) ?? 'Unknown user';
+            $user = $log->getUser()?->getUsername() ?? 'Unknown user';
 
             // get log time and format to string
             $time = $log->getTime();

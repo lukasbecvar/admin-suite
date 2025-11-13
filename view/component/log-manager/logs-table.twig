@@ -125,12 +125,14 @@
                                 <td class="px-4 py-3 border-b border-gray-600/60 text-gray-300 text-sm whitespace-nowrap">{{ visitorInfoUtil.getOs(row.userAgent)|e }}</td>
                                 <td class="px-4 py-3 border-b border-gray-600/60 text-gray-400 font-mono text-sm whitespace-nowrap">{{ row.ipAddress|e }}</td>
                                 <td class="px-4 py-3 border-b border-gray-600/60 whitespace-nowrap">
-                                    {% if userManager.getUsernameById(row.userId) != null or authManager.isUsernameBlocked(row.name) %}
-                                        <a href={{ path('app_manager_users_profile', {'id': row.userId}) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200 text-sm font-medium">
-                                            {{ userManager.getUsernameById(row.userId) ?? 'system' }}
+                                    {% set logUser = row.user %}
+                                    {% set logUserName = logUser ? logUser.username : 'system' %}
+                                    {% if logUser %}
+                                        <a href={{ path('app_manager_users_profile', {'id': logUser.id}) }} class="text-blue-400 hover:text-blue-300 transition-colors duration-200 text-sm font-medium">
+                                            {{ logUserName }}
                                         </a>
                                     {% else %}
-                                        <span class="text-gray-400 text-sm">{{ userManager.getUsernameById(row.userId) ?? 'system' }}</span>
+                                        <span class="text-gray-400 text-sm">{{ logUserName }}</span>
                                     {% endif %}
                                 </td>
 

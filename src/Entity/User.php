@@ -6,6 +6,8 @@ use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class User
@@ -56,6 +58,59 @@ class User
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $profile_pic = null;
+
+    /**
+     * @var Collection<int, Todo>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Todo::class)]
+    private Collection $todos;
+
+    /**
+     * @var Collection<int, Log>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Log::class)]
+    private Collection $logs;
+
+    /**
+     * @var Collection<int, ApiAccessLog>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ApiAccessLog::class)]
+    private Collection $apiAccessLogs;
+
+    /**
+     * @var Collection<int, NotificationSubscriber>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: NotificationSubscriber::class)]
+    private Collection $notificationSubscribers;
+
+    /**
+     * @var Collection<int, SentNotificationLog>
+     */
+    #[ORM\OneToMany(mappedBy: 'receiver', targetEntity: SentNotificationLog::class)]
+    private Collection $receivedNotifications;
+
+    /**
+     * @var Collection<int, Banned>
+     */
+    #[ORM\OneToMany(mappedBy: 'bannedUser', targetEntity: Banned::class)]
+    private Collection $bans;
+
+    /**
+     * @var Collection<int, Banned>
+     */
+    #[ORM\OneToMany(mappedBy: 'bannedBy', targetEntity: Banned::class)]
+    private Collection $issuedBans;
+
+    public function __construct()
+    {
+        $this->bans = new ArrayCollection();
+        $this->logs = new ArrayCollection();
+        $this->todos = new ArrayCollection();
+        $this->issuedBans = new ArrayCollection();
+        $this->apiAccessLogs = new ArrayCollection();
+        $this->receivedNotifications = new ArrayCollection();
+        $this->notificationSubscribers = new ArrayCollection();
+    }
 
     /**
      * Get database ID of the user
@@ -310,5 +365,75 @@ class User
         $this->profile_pic = $profile_pic;
 
         return $this;
+    }
+
+    /**
+     * Get todos owned by the user
+     *
+     * @return Collection<int, Todo> The todos owned by the user
+     */
+    public function getTodos(): Collection
+    {
+        return $this->todos;
+    }
+
+    /**
+     * Get logs owned by the user
+     *
+     * @return Collection<int, Log> The logs owned by the user
+     */
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    /**
+     * Get api access logs associated with the user
+     *
+     * @return Collection<int, ApiAccessLog> The api access logs associated with the user
+     */
+    public function getApiAccessLogs(): Collection
+    {
+        return $this->apiAccessLogs;
+    }
+
+    /**
+     * Get notification subscribers associated with the user
+     *
+     * @return Collection<int, NotificationSubscriber> The notification subscribers associated with the user
+     */
+    public function getNotificationSubscribers(): Collection
+    {
+        return $this->notificationSubscribers;
+    }
+
+    /**
+     * Get sent notification logs associated with the user
+     *
+     * @return Collection<int, SentNotificationLog> The sent notification logs associated with the user
+     */
+    public function getReceivedNotifications(): Collection
+    {
+        return $this->receivedNotifications;
+    }
+
+    /**
+     * Get bans associated with the user (this user banned status)
+     *
+     * @return Collection<int, Banned> The bans associated with the user
+     */
+    public function getBans(): Collection
+    {
+        return $this->bans;
+    }
+
+    /**
+     * Get bans issued by the user
+     *
+     * @return Collection<int, Banned> The bans issued by the user
+     */
+    public function getIssuedBans(): Collection
+    {
+        return $this->issuedBans;
     }
 }

@@ -4,8 +4,8 @@ namespace App\Tests\Command\Log;
 
 use DateTime;
 use App\Entity\Log;
+use App\Entity\User;
 use App\Manager\LogManager;
-use App\Manager\UserManager;
 use App\Util\VisitorInfoUtil;
 use PHPUnit\Framework\TestCase;
 use App\Command\Log\LogReaderCommand;
@@ -27,20 +27,17 @@ class LogReaderCommandTest extends TestCase
     private LogReaderCommand $command;
     private CommandTester $commandTester;
     private LogManager & MockObject $logManager;
-    private UserManager & MockObject $userManager;
     private VisitorInfoUtil & MockObject $visitorInfoUtil;
 
     protected function setUp(): void
     {
         // mock dependencies
         $this->logManager = $this->createMock(LogManager::class);
-        $this->userManager = $this->createMock(UserManager::class);
         $this->visitorInfoUtil = $this->createMock(VisitorInfoUtil::class);
 
         // create command instance
         $this->command = new LogReaderCommand(
             $this->logManager,
-            $this->userManager,
             $this->visitorInfoUtil
         );
 
@@ -99,14 +96,15 @@ class LogReaderCommandTest extends TestCase
         $log->method('getTime')->willReturn(new DateTime());
         $log->method('getUserAgent')->willReturn('User agent string');
         $log->method('getIpAddress')->willReturn('127.0.0.1');
-        $log->method('getUserId')->willReturn(1);
+
+        // mock test user object
+        $user = new User();
+        $user->setUsername('Test User');
+        $log->method('getUser')->willReturn($user);
 
         // mock log manager
         $this->logManager->method('getLogsWhereStatus')->willReturn([$log]);
         $this->logManager->method('getLogsCountWhereStatus')->willReturn(1);
-
-        // mock user manager
-        $this->userManager->method('getUsernameById')->willReturn('Test User');
 
         // mock visitor info util
         $this->visitorInfoUtil->method('getBrowserShortify')->willReturn('Browser');

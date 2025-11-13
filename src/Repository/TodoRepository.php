@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Todo;
+use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -32,12 +33,17 @@ class TodoRepository extends ServiceEntityRepository
      */
     public function findByUserIdAndStatus(int $userId, string $status): array
     {
-        return $this->findBy(
-            [
-                'user_id' => $userId,
-                'status' => $status
-            ],
-            ['position' => 'ASC']
-        );
+        if ($userId <= 0) {
+            return [];
+        }
+
+        // get user reference
+        $userReference = $this->getEntityManager()->getReference(User::class, $userId);
+
+        // find todos by user reference and status
+        return $this->findBy([
+            'user' => $userReference,
+            'status' => $status
+            ], ['position' => 'ASC']);
     }
 }

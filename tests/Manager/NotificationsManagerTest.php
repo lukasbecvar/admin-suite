@@ -3,11 +3,13 @@
 namespace App\Tests\Manager;
 
 use Exception;
+use App\Entity\User;
 use App\Util\AppUtil;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
+use App\Manager\UserManager;
 use App\Manager\ErrorManager;
-use PHPUnit\Framework\TestCase;
+use App\Tests\CustomTestCase;
 use App\Manager\DatabaseManager;
 use App\Manager\NotificationsManager;
 use App\Entity\NotificationSubscriber;
@@ -25,11 +27,12 @@ use App\Repository\NotificationSubscriberRepository;
  * @package App\Tests\Manager
  */
 #[CoversClass(NotificationsManager::class)]
-class NotificationsManagerTest extends TestCase
+class NotificationsManagerTest extends CustomTestCase
 {
     private AppUtil & MockObject $appUtilMock;
     private LogManager & MockObject $logManagerMock;
     private AuthManager & MockObject $authManagerMock;
+    private UserManager & MockObject $userManagerMock;
     private NotificationsManager $notificationsManager;
     private ErrorManager & MockObject $errorManagerMock;
     private DatabaseManager & MockObject $databaseManagerMock;
@@ -42,16 +45,23 @@ class NotificationsManagerTest extends TestCase
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->authManagerMock = $this->createMock(AuthManager::class);
+        $this->userManagerMock = $this->createMock(UserManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->databaseManagerMock = $this->createMock(DatabaseManager::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $this->repositoryMock = $this->createMock(NotificationSubscriberRepository::class);
+
+        // mock get user reference
+        $this->userManagerMock->method('getUserReference')->willReturnCallback(function (int $userId) {
+            return $this->createUserEntity($userId);
+        });
 
         // create notifications manager instance
         $this->notificationsManager = new NotificationsManager(
             $this->appUtilMock,
             $this->logManagerMock,
             $this->authManagerMock,
+            $this->userManagerMock,
             $this->errorManagerMock,
             $this->databaseManagerMock,
             $this->entityManagerMock,
@@ -146,9 +156,12 @@ class NotificationsManagerTest extends TestCase
         // mock notifications subscriber
         $notificationsSubscriber = new NotificationSubscriber();
 
-        // expect findOneBy method call
-        $this->repositoryMock->expects($this->once())->method('findOneBy')->with(['user_id' => 1, 'status' => 'open'])
-            ->willReturn($notificationsSubscriber);
+        // mock find notifications subscriber
+        $this->repositoryMock->expects($this->once())->method('findOneBy')->with($this->callback(function (array $criteria) {
+            $this->assertSame('open', $criteria['status']);
+            $this->assertInstanceOf(User::class, $criteria['user']);
+            return true;
+        }))->willReturn($notificationsSubscriber);
 
         // call tested method
         $result = $this->notificationsManager->getNotificationsSubscriberByUserId(1);
@@ -280,15 +293,15 @@ class NotificationsManagerTest extends TestCase
     {
         // mock current logged user ID
         $userId = 123;
-        $this->authManagerMock->expects($this->once())
-            ->method('getLoggedUserId')
-            ->willReturn($userId);
+        $this->authManagerMock->expects($this->once())->method('getLoggedUserId')->willReturn($userId);
 
         // mock notification subscriber
         $subscriber = new NotificationSubscriber();
-        $this->repositoryMock->expects($this->once())->method('findOneBy')
-            ->with(['user_id' => $userId, 'status' => 'open'])
-            ->willReturn($subscriber);
+        $this->repositoryMock->expects($this->once())->method('findOneBy')->with($this->callback(function (array $criteria) {
+            $this->assertSame('open', $criteria['status']);
+            $this->assertInstanceOf(User::class, $criteria['user']);
+            return true;
+        }))->willReturn($subscriber);
 
         // call tested method
         $result = $this->notificationsManager->getNotificationsSubscriberByUserId();
@@ -305,10 +318,9 @@ class NotificationsManagerTest extends TestCase
     public function testGetSubscriberIdByEndpointWhenSubscriberNotFound(): void
     {
         // mock repository to return null
-        $this->repositoryMock->expects($this->once())
-            ->method('findOneBy')
-            ->with(['endpoint' => 'non-existent-endpoint'])
-            ->willReturn(null);
+        $this->repositoryMock->expects($this->once())->method('findOneBy')->with([
+            'endpoint' => 'non-existent-endpoint'
+        ])->willReturn(null);
 
         // call tested method
         $result = $this->notificationsManager->getSubscriberIdByEndpoint('non-existent-endpoint');
@@ -325,8 +337,10 @@ class NotificationsManagerTest extends TestCase
     public function testUpdateNotificationsSubscriberStatusWhenNoSubscribersFound(): void
     {
         // mock repository to return empty array
-        $this->repositoryMock->expects($this->once())->method('findBy')
-            ->with(['user_id' => 999])->willReturn([]);
+        $this->repositoryMock->expects($this->once())->method('findBy')->with($this->callback(function (array $criteria) {
+            $this->assertInstanceOf(User::class, $criteria['user']);
+            return true;
+        }))->willReturn([]);
 
         // expect flush method not to be called
         $this->entityManagerMock->expects($this->never())->method('flush');
@@ -360,5 +374,70 @@ class NotificationsManagerTest extends TestCase
 
         // call tested method
         $this->notificationsManager->updateNotificationsSubscriberStatus(1, 'closed');
+    }
+
+    /**
+     * Test update notification subscriber status by ID
+     *
+     * @return void
+     */
+    public function testUpdateNotificationSubscriberStatusById(): void
+    {
+        // mock notification subscriber
+        $subscriber = $this->createMock(NotificationSubscriber::class);
+        $subscriber->expects($this->once())->method('setStatus')->with('closed');
+
+        // mock find notification subscriber
+        $this->repositoryMock->expects($this->once())->method('find')->with(123)->willReturn($subscriber);
+
+        // expect flush call
+        $this->entityManagerMock->expects($this->once())->method('flush');
+
+        // call tested method
+        $this->notificationsManager->updateNotificationSubscriberStatusById(123, 'closed');
+    }
+
+    /**
+     * Test update notification subscriber status by ID when subscriber not found
+     *
+     * @return void
+     */
+    public function testUpdateNotificationSubscriberStatusByIdWithMissingSubscriber(): void
+    {
+        // mock find notification subscriber
+        $this->repositoryMock->expects($this->once())->method('find')->with(123)->willReturn(null);
+
+        // expect flush not to be called
+        $this->entityManagerMock->expects($this->never())->method('flush');
+
+        // call tested method
+        $this->notificationsManager->updateNotificationSubscriberStatusById(123, 'closed');
+    }
+
+    /**
+     * Test update notification subscriber status by ID with exception
+     *
+     * @return void
+     */
+    public function testUpdateNotificationSubscriberStatusByIdWithException(): void
+    {
+        // mock notification subscriber
+        $subscriber = $this->createMock(NotificationSubscriber::class);
+        $subscriber->expects($this->once())->method('setStatus')->with('closed');
+
+        // mock find notification subscriber
+        $this->repositoryMock->expects($this->once())->method('find')->with(123)->willReturn($subscriber);
+
+        // mock flush throws exception
+        $this->entityManagerMock->expects($this->once())->method('flush')->willThrowException(new Exception('Database error'));
+
+        // expect error handling
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'error to update notification subscriber status: Database error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->notificationsManager->updateNotificationSubscriberStatusById(123, 'closed');
     }
 }

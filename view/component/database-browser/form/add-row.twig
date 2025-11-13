@@ -1,6 +1,8 @@
 {% extends 'common/layout.twig' %}
 
 {# DATABASE BROWSER COMPONENT - ADD ROW TO TABLE #}
+{% set foreignKeys = foreignKeys|default([]) %}
+
 {% block component %}
 <div class="flex flex-col h-full">
     {# SUB-NAVIGATION #}
@@ -58,23 +60,44 @@
                         <form method="post" action={{ path('app_manager_database_add', {'database': databaseName, 'table': tableName}) }}>
                             <div class="space-y-4">
                                 {% for column in columns %}
+                                    {% set columnName = column.COLUMN_NAME %}
+                                    {% set foreignKeyMeta = foreignKeys[columnName]|default(null) %}
+                                    {% set baseInputClass = 'w-full px-4 py-3 rounded bg-gray-700/50 text-white focus:ring-2 outline-none transition-all duration-200' %}
+                                    {% set colorInputClass = foreignKeyMeta
+                                        ? 'border border-sky-500/60 focus:border-sky-300 focus:ring-sky-400/30'
+                                        : 'border border-gray-600/50 focus:border-blue-500/50 focus:ring-blue-500/20' %}
+                                    {% set inputClass = baseInputClass ~ ' ' ~ colorInputClass %}
+
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-200 mb-2" for={{ column.COLUMN_NAME|e }}>{{ column.COLUMN_NAME|capitalize|e }}</label>
+                                        <label class="block text-sm font-medium text-gray-200 mb-1 flex items-center gap-2" for={{ columnName|e }}>
+                                            {{ columnName|capitalize|e }}
+                                            {% if foreignKeyMeta %}
+                                                <span class="text-[10px] uppercase tracking-wide bg-sky-500/20 border border-sky-400/40 text-sky-100 px-2 py-0.5 rounded">Foreign key</span>
+                                            {% endif %}
+                                        </label>
+                                        {% if foreignKeyMeta %}
+                                            <p class="text-xs text-sky-200/80 mb-2">
+                                                References {{ foreignKeyMeta.referencedTable|e }}.{{ foreignKeyMeta.referencedColumn|e }}
+                                            </p>
+                                        {% endif %}
+
                                         {% if column.COLUMN_TYPE == 'datetime' %}
                                             <input
-                                                class="w-full px-4 py-3 rounded bg-gray-700/50 border border-gray-600/50 text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200"
                                                 type="datetime-local"
-                                                name={{ column.COLUMN_NAME|e }}
-                                                id={{ column.COLUMN_NAME|e }}
-                                                value={{ formData[column.COLUMN_NAME]|default('')|e }}
+                                                id="{{ columnName|e }}"
+                                                class="{{ inputClass }}"
+                                                name="{{ columnName|e }}"
+                                                value="{{ formData[columnName]|default('')|e }}"
+                                                {% if foreignKeyMeta %}data-foreign-key="true"{% endif %}
                                             >
                                         {% else %}
                                             <input
-                                                class="w-full px-4 py-3 rounded bg-gray-700/50 border border-gray-600/50 text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200"
                                                 type="text"
-                                                name={{ column.COLUMN_NAME|e }}
-                                                id={{ column.COLUMN_NAME|e }}
-                                                value={{ formData[column.COLUMN_NAME]|default('')|e }}
+                                                id="{{ columnName|e }}"
+                                                class="{{ inputClass }}"
+                                                name="{{ columnName|e }}"
+                                                value="{{ formData[columnName]|default('')|e }}"
+                                                {% if foreignKeyMeta %}data-foreign-key="true"{% endif %}
                                             >
                                         {% endif %}
                                     </div>

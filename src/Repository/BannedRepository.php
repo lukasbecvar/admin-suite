@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Banned;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -32,7 +33,7 @@ class BannedRepository extends ServiceEntityRepository
     public function isBanned(int $bannedUserId): bool
     {
         $ban = $this->findOneBy([
-            'banned_user_id' => $bannedUserId,
+            'bannedUser' =>  $this->getEntityManager()->getReference(User::class, $bannedUserId),
             'status' => 'active'
         ]);
 
@@ -40,16 +41,16 @@ class BannedRepository extends ServiceEntityRepository
     }
 
     /**
-     * Get ban reason
+     * Get ban reason for given user
      *
-     * @param int $bannedUserId The ID of banned user
+     * @param int $bannedUserId The ID of the banned user
      *
-     * @return string|null The reason of banned user
+     * @return string|null The ban reason or null if not found
      */
     public function getBanReason(int $bannedUserId): ?string
     {
         $ban = $this->findOneBy([
-            'banned_user_id' => $bannedUserId,
+            'bannedUser' => $this->getEntityManager()->getReference(User::class, $bannedUserId),
             'status' => 'active'
         ]);
 
@@ -67,7 +68,7 @@ class BannedRepository extends ServiceEntityRepository
     public function updateBanStatus(int $bannedUserId, string $newStatus): void
     {
         $ban = $this->findOneBy([
-            'banned_user_id' => $bannedUserId,
+            'bannedUser' =>  $this->getEntityManager()->getReference(User::class, $bannedUserId),
             'status' => 'active'
         ]);
 

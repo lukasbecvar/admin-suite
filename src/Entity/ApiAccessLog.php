@@ -34,8 +34,9 @@ class ApiAccessLog
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $time = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
+    #[ORM\ManyToOne(inversedBy: 'apiAccessLogs')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private ?User $user = null;
 
     /**
      * Get id of the api access log (database ID)
@@ -130,25 +131,25 @@ class ApiAccessLog
     }
 
     /**
-     * Get id of the user who made the request
+     * Get user who made the request
      *
-     * @return int|null The id of the user who made the request or null if not found
+     * @return User|null The user who made the request or null if not found
      */
-    public function getUserId(): ?int
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
     /**
-     * Set id of the user who made the request
+     * Set user who made the request
      *
-     * @param int $user_id The id of the user who made the request
+     * @param User $user The user who made the request
      *
      * @return static The api access log object
      */
-    public function setUserId(int $user_id): static
+    public function setUser(?User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }

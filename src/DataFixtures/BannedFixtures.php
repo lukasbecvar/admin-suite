@@ -3,9 +3,11 @@
 namespace App\DataFixtures;
 
 use DateTime;
+use App\Entity\User;
 use App\Entity\Banned;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 /**
  * Class BannedFixtures
@@ -14,7 +16,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
  *
  * @package App\DataFixtures
  */
-class BannedFixtures extends Fixture
+class BannedFixtures extends Fixture implements DependentFixtureInterface
 {
     /**
      * Load banned fixtures
@@ -37,14 +39,25 @@ class BannedFixtures extends Fixture
             'Terms of service violation'
         ];
 
+        // get issuer
+        $issuer = $manager->getRepository(User::class)->find(1);
+        if ($issuer === null) {
+            return;
+        }
+
         // create banned users
         foreach ($bannedUserIds as $userId) {
+            $bannedUser = $manager->getRepository(User::class)->find($userId);
+            if ($bannedUser === null) {
+                continue;
+            }
+
             $banned = new Banned();
-            $banned->setBannedUserId($userId)
+            $banned->setBannedUser($bannedUser)
                 ->setReason($reasons[array_rand($reasons)])
                 ->setStatus('active')
                 ->setTime(new DateTime())
-                ->setBannedById(1);
+                ->setBannedBy($issuer);
 
             // persist banned user
             $manager->persist($banned);
@@ -52,5 +65,17 @@ class BannedFixtures extends Fixture
 
         // flush data to database
         $manager->flush();
+    }
+
+    /**
+     * Declare fixture dependencies (ensure that the fixture is loaded after user fixtures)
+     *
+     * @return array<Class-string> The array of dependencies
+     */
+    public function getDependencies(): array
+    {
+        return [
+            UserFixtures::class
+        ];
     }
 }

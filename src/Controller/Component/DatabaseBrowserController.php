@@ -89,6 +89,8 @@ class DatabaseBrowserController extends AbstractController
         $page = (int) $request->query->get('page', '1');
         $tableName = (string) $request->query->get('table');
         $databaseName = (string) $request->query->get('database');
+        $highlightColumn = (string) $request->query->get('highlightColumn', 'id');
+        $highlightValue = $request->query->get('highlightId');
 
         // check if table name and database name set
         if (empty($tableName) || empty($databaseName)) {
@@ -101,6 +103,27 @@ class DatabaseBrowserController extends AbstractController
         // get item pagination limit
         $limitPerPage = $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
 
+        // normalize highlight parameters
+        if ($highlightValue === null || $highlightValue === '') {
+            $highlightValue = null;
+            $highlightColumn = null;
+        }
+
+        // resolve highlight page when requested
+        if ($highlightValue !== null && $highlightColumn !== null) {
+            $resolvedPage = $this->databaseManager->getPageForColumnValue(
+                $databaseName,
+                $tableName,
+                $highlightColumn,
+                (string) $highlightValue,
+                (int) $limitPerPage
+            );
+
+            if ($resolvedPage !== null) {
+                $page = $resolvedPage;
+            }
+        }
+
         // get data from the table
         $tableData = $this->databaseManager->getTableData($databaseName, $tableName, $page);
 
@@ -112,12 +135,14 @@ class DatabaseBrowserController extends AbstractController
 
         // get protected columns list
         $protectedColumns = $this->appUtil->loadConfig('protected-columns.json');
+        $foreignKeys = $this->databaseManager->getTableForeignKeys($databaseName, $tableName);
 
         // render table browser page view
         return $this->render('component/database-browser/table-browser.twig', [
             // filter & pagination data
             'currentPage' => $page,
             'tableName' => $tableName,
+            'foreignKeys' => $foreignKeys,
             'databaseName' => $databaseName,
             'limitPerPage' => $limitPerPage,
             'lastPageNumber' => $lastPageNumber,
@@ -125,7 +150,9 @@ class DatabaseBrowserController extends AbstractController
 
             // table data
             'tableData' => $tableData,
-            'tableDataCount' => $tableDataCount
+            'tableDataCount' => $tableDataCount,
+            'highlightValue' => $highlightValue,
+            'highlightColumn' => $highlightColumn
         ]);
     }
 
@@ -162,6 +189,7 @@ class DatabaseBrowserController extends AbstractController
 
         // get columns to generate form
         $columns = $this->databaseManager->getColumnsList($databaseName, $tableName);
+        $foreignKeys = $this->databaseManager->getTableForeignKeys($databaseName, $tableName);
 
         // prepare form data variables
         $errors = [];
@@ -183,12 +211,14 @@ class DatabaseBrowserController extends AbstractController
             foreach ($columns as $column) {
                 /** @var string $columnName */
                 $columnName = $column['COLUMN_NAME'];
+                $value = $formData[$columnName] ?? null;
 
                 /** @var bool $isNullable */
                 $isNullable = $column['IS_NULLABLE'] === 'YES';
 
                 /** @var string $columnType */
                 $columnType = $column['COLUMN_TYPE'];
+                $normalizedColumnType = strtolower($columnType);
 
                 // check if value is present for non-nullable fields
                 if (!$isNullable && empty($formData[$columnName]) && $column['COLUMN_TYPE'] !== 'tinyint(1)') {
@@ -197,16 +227,36 @@ class DatabaseBrowserController extends AbstractController
 
                 // check if value is valid for specific column types
                 if (!empty($formData[$columnName])) {
-                    /** @var non-falsy-string $value */
-                    $value = $formData[$columnName];
-                    if (strpos($columnType, 'int') !== false && !is_numeric($value)) {
+                    $valueString = (string) $formData[$columnName];
+                    if ($this->databaseManager->isNumericColumnType($columnType) && !is_numeric($valueString)) {
                         $errors[] = 'The field ' . $columnName . ' must be a number.';
                     }
-                    if (strpos($columnType, 'varchar') !== false) {
+                    if (str_contains($normalizedColumnType, 'varchar')) {
                         $maxLength = (int) filter_var($columnType, FILTER_SANITIZE_NUMBER_INT);
-                        if (strlen($value) > $maxLength) {
-                            $errors[] = 'The field ' . $columnName . ' must not exceed {$maxLength} characters.';
+                        if (strlen($valueString) > $maxLength) {
+                            $errors[] = 'The field ' . $columnName . ' must not exceed ' . $maxLength . ' characters.';
                         }
+                    }
+                }
+
+                // check if foreign key exists and value is not empty
+                if (isset($foreignKeys[$columnName]) && $value !== null && $value !== '') {
+                    $foreignKeyMeta = $foreignKeys[$columnName];
+                    if (
+                        !$this->databaseManager->doesColumnValueExist(
+                            $databaseName,
+                            $foreignKeyMeta['referencedTable'],
+                            $foreignKeyMeta['referencedColumn'],
+                            $value
+                        )
+                    ) {
+                        $errors[] = sprintf(
+                            'Foreign key %s references value "%s" that does not exist in %s.%s.',
+                            $columnName,
+                            $value,
+                            $foreignKeyMeta['referencedTable'],
+                            $foreignKeyMeta['referencedColumn']
+                        );
                     }
                 }
             }
@@ -250,7 +300,8 @@ class DatabaseBrowserController extends AbstractController
             // form data
             'errors' => $errors,
             'columns' => $columns,
-            'formData' => $formData
+            'formData' => $formData,
+            'foreignKeys' => $foreignKeys
         ]);
     }
 
@@ -297,6 +348,7 @@ class DatabaseBrowserController extends AbstractController
 
         // get table columns to generate form
         $columns = $this->databaseManager->getColumnsList($databaseName, $tableName);
+        $foreignKeys = $this->databaseManager->getTableForeignKeys($databaseName, $tableName);
 
         // fetch existing row data for pre-filling the form
         $existingData = $this->databaseManager->getRowById($databaseName, $tableName, $id);
@@ -328,12 +380,14 @@ class DatabaseBrowserController extends AbstractController
             foreach ($columns as $column) {
                 /** @var string $columnName */
                 $columnName = $column['COLUMN_NAME'];
+                $value = $formData[$columnName] ?? null;
 
                 /** @var bool $isNullable */
                 $isNullable = $column['IS_NULLABLE'] === 'YES';
 
                 /** @var string $columnType */
                 $columnType = $column['COLUMN_TYPE'];
+                $normalizedColumnType = strtolower($columnType);
 
                 // check if value is present for non-nullable fields
                 if (!$isNullable && empty($formData[$columnName]) && $column['COLUMN_TYPE'] !== 'tinyint(1)') {
@@ -342,16 +396,36 @@ class DatabaseBrowserController extends AbstractController
 
                 // check if value is valid for specific column types
                 if (!empty($formData[$columnName])) {
-                    /** @var non-falsy-string $value */
-                    $value = $formData[$columnName];
-                    if (strpos($columnType, 'int') !== false && !is_numeric($value)) {
+                    $valueString = (string) $formData[$columnName];
+                    if ($this->databaseManager->isNumericColumnType($columnType) && !is_numeric($valueString)) {
                         $errors[] = 'The field ' . $columnName . ' must be a number.';
                     }
-                    if (strpos($columnType, 'varchar') !== false) {
+                    if (str_contains($normalizedColumnType, 'varchar')) {
                         $maxLength = (int) filter_var($columnType, FILTER_SANITIZE_NUMBER_INT);
-                        if (strlen($value) > $maxLength) {
-                            $errors[] = 'The field ' . $columnName . ' must not exceed {$maxLength} characters.';
+                        if (strlen($valueString) > $maxLength) {
+                            $errors[] = 'The field ' . $columnName . ' must not exceed ' . $maxLength . ' characters.';
                         }
+                    }
+                }
+
+                // check if foreign key exists and value is not empty
+                if (isset($foreignKeys[$columnName]) && $value !== null && $value !== '') {
+                    $foreignKeyMeta = $foreignKeys[$columnName];
+                    if (
+                        !$this->databaseManager->doesColumnValueExist(
+                            $databaseName,
+                            $foreignKeyMeta['referencedTable'],
+                            $foreignKeyMeta['referencedColumn'],
+                            $value
+                        )
+                    ) {
+                        $errors[] = sprintf(
+                            'Foreign key %s references value "%s" that does not exist in %s.%s.',
+                            $columnName,
+                            $value,
+                            $foreignKeyMeta['referencedTable'],
+                            $foreignKeyMeta['referencedColumn']
+                        );
                     }
                 }
             }
@@ -384,7 +458,8 @@ class DatabaseBrowserController extends AbstractController
             // form data
             'errors' => $errors,
             'columns' => $columns,
-            'formData' => $formData
+            'formData' => $formData,
+            'foreignKeys' => $foreignKeys
         ]);
     }
 

@@ -6,11 +6,11 @@ use DateTime;
 use App\Entity\Todo;
 use App\Util\SecurityUtil;
 use App\Manager\LogManager;
-use App\Manager\UserManager;
 use App\Manager\AuthManager;
 use App\Manager\TodoManager;
+use App\Manager\UserManager;
 use App\Manager\ErrorManager;
-use PHPUnit\Framework\TestCase;
+use App\Tests\CustomTestCase;
 use App\Manager\DatabaseManager;
 use App\Repository\TodoRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,12 +25,12 @@ use PHPUnit\Framework\Attributes\CoversClass;
  * @package App\Tests\Manager
  */
 #[CoversClass(TodoManager::class)]
-class TodoManagerTest extends TestCase
+class TodoManagerTest extends CustomTestCase
 {
     private TodoManager $todoManager;
     private LogManager & MockObject $logManagerMock;
-    private AuthManager & MockObject $authManagerMock;
     private UserManager & MockObject $userManagerMock;
+    private AuthManager & MockObject $authManagerMock;
     private SecurityUtil & MockObject $securityUtilMock;
     private ErrorManager & MockObject $errorManagerMock;
     private TodoRepository & MockObject $todoRepositoryMock;
@@ -41,19 +41,24 @@ class TodoManagerTest extends TestCase
     {
         // mock dependencies
         $this->logManagerMock = $this->createMock(LogManager::class);
-        $this->authManagerMock = $this->createMock(AuthManager::class);
         $this->userManagerMock = $this->createMock(UserManager::class);
+        $this->authManagerMock = $this->createMock(AuthManager::class);
         $this->securityUtilMock = $this->createMock(SecurityUtil::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->todoRepositoryMock = $this->createMock(TodoRepository::class);
         $this->databaseManagerMock = $this->createMock(DatabaseManager::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
+        // mock get reference
+        $this->entityManagerMock->method('getReference')->willReturnCallback(function (int $id) {
+            return $this->createUserEntity($id);
+        });
+
         // create todo manager instance
         $this->todoManager = new TodoManager(
             $this->logManagerMock,
-            $this->authManagerMock,
             $this->userManagerMock,
+            $this->authManagerMock,
             $this->securityUtilMock,
             $this->errorManagerMock,
             $this->todoRepositoryMock,
@@ -81,7 +86,7 @@ class TodoManagerTest extends TestCase
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
-            ->setUserId($userId);
+            ->setUser($this->createUserEntity($userId));
         $this->todoRepositoryMock->method('findByUserIdAndStatus')->willReturn([$todo]);
 
         // mock decrypt todo text
@@ -123,6 +128,8 @@ class TodoManagerTest extends TestCase
      */
     public function testGetTodosCount(): void
     {
+        $this->userManagerMock->method('getUserReference')->willReturn($this->createUserEntity(1));
+
         // expect count method call
         $this->todoRepositoryMock->expects($this->once())->method('count');
 
@@ -152,7 +159,7 @@ class TodoManagerTest extends TestCase
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
-            ->setUserId($userId);
+            ->setUser($this->createUserEntity($userId));
         $this->todoRepositoryMock->method('find')->willReturn($todo);
 
         // mock security util
@@ -218,7 +225,7 @@ class TodoManagerTest extends TestCase
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
-            ->setUserId($userId);
+            ->setUser($this->createUserEntity($userId));
         $this->todoRepositoryMock->method('find')->willReturn($todo);
 
         // mock security util
@@ -256,7 +263,7 @@ class TodoManagerTest extends TestCase
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
-            ->setUserId($userId);
+            ->setUser($this->createUserEntity($userId));
         $this->todoRepositoryMock->method('find')->willReturn($todo);
 
         // expect log manager call
@@ -289,7 +296,7 @@ class TodoManagerTest extends TestCase
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
-            ->setUserId($userId);
+            ->setUser($this->createUserEntity($userId));
         $this->todoRepositoryMock->method('find')->willReturn($todo);
 
         // expect log manager call
@@ -322,7 +329,7 @@ class TodoManagerTest extends TestCase
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
-            ->setUserId($userId);
+            ->setUser($this->createUserEntity($userId));
         $this->todoRepositoryMock->method('find')->willReturn($todo);
 
         // expect log manager call
@@ -357,7 +364,7 @@ class TodoManagerTest extends TestCase
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
-            ->setUserId(1);
+            ->setUser($this->createUserEntity(1));
         $this->todoRepositoryMock->method('find')->willReturn($todo);
 
         // expect persist and flush methods to be called
@@ -388,19 +395,19 @@ class TodoManagerTest extends TestCase
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
-            ->setUserId(1);
+            ->setUser($this->createUserEntity(1));
         $todo2 = new Todo();
         $todo2->setTodoText('encrypted text')
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
-            ->setUserId(1);
+            ->setUser($this->createUserEntity(1));
         $todo3 = new Todo();
         $todo3->setTodoText('encrypted text')
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
             ->setStatus('open')
-            ->setUserId(1);
+            ->setUser($this->createUserEntity(1));
         $this->todoRepositoryMock->method('find')->willReturnMap([
             [1, $todo1],
             [2, $todo2],

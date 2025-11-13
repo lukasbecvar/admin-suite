@@ -4,9 +4,11 @@ namespace App\DataFixtures;
 
 use Faker\Factory;
 use App\Entity\Log;
+use App\Entity\User;
 use App\Manager\LogManager;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 /**
  * Class LogFixtures
@@ -15,7 +17,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
  *
  * @package App\DataFixtures
  */
-class LogFixtures extends Fixture
+class LogFixtures extends Fixture implements DependentFixtureInterface
 {
     /**
      * Load log fixtures
@@ -27,6 +29,12 @@ class LogFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
+
+        // get user
+        $user = $manager->getRepository(User::class)->findOneBy([]);
+        if ($user === null) {
+            return;
+        }
 
         // create 100 logs
         for ($i = 0; $i < 100; $i++) {
@@ -40,7 +48,7 @@ class LogFixtures extends Fixture
                 ->setIpAddress($faker->ipv4)
                 ->setStatus('UNREADED')
                 ->setLevel(LogManager::LEVEL_CRITICAL)
-                ->setUserId(1);
+                ->setUser($user);
 
             // persist log
             $manager->persist($log);
@@ -48,5 +56,17 @@ class LogFixtures extends Fixture
 
         // flush data to database
         $manager->flush();
+    }
+
+    /**
+     * Declare fixture dependencies (ensure that the fixture is loaded after user fixtures)
+     *
+     * @return array<Class-string> The array of dependencies
+     */
+    public function getDependencies(): array
+    {
+        return [
+            UserFixtures::class
+        ];
     }
 }

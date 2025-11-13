@@ -3,6 +3,8 @@
 namespace App\Tests\Repository;
 
 use DateTime;
+use App\Entity\User;
+use App\Tests\TestEntityFactory;
 use App\Entity\NotificationSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -19,8 +21,10 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 #[CoversClass(NotificationSubscriberRepository::class)]
 class NotificationSubscriberRepositoryTest extends KernelTestCase
 {
-    private NotificationSubscriberRepository $notificationSubscriberRepository;
+    private User $userOne;
+    private User $userTwo;
     private EntityManagerInterface $entityManager;
+    private NotificationSubscriberRepository $notificationSubscriberRepository;
 
     protected function setUp(): void
     {
@@ -29,6 +33,10 @@ class NotificationSubscriberRepositoryTest extends KernelTestCase
         $this->entityManager = self::getContainer()->get('doctrine')->getManager();
         $this->notificationSubscriberRepository = $this->entityManager->getRepository(NotificationSubscriber::class);
 
+        // mock test users
+        $this->userOne = TestEntityFactory::createUser($this->entityManager, ['username' => 'subscriber-user-1']);
+        $this->userTwo = TestEntityFactory::createUser($this->entityManager, ['username' => 'subscriber-user-2']);
+
         // create testing data
         $subscriber = new NotificationSubscriber();
         $subscriber->setEndpoint('https://fcm.googleapis.com/fcm/send/test-endpoint');
@@ -36,14 +44,14 @@ class NotificationSubscriberRepositoryTest extends KernelTestCase
         $subscriber->setAuthToken('test-auth-token');
         $subscriber->setSubscribedTime(new DateTime());
         $subscriber->setStatus('active');
-        $subscriber->setUserId(1);
+        $subscriber->setUser($this->userOne);
         $inactiveSubscriber = new NotificationSubscriber();
         $inactiveSubscriber->setEndpoint('https://fcm.googleapis.com/fcm/send/inactive-endpoint');
         $inactiveSubscriber->setPublicKey('inactive-public-key');
         $inactiveSubscriber->setAuthToken('inactive-auth-token');
         $inactiveSubscriber->setSubscribedTime(new DateTime());
         $inactiveSubscriber->setStatus('inactive');
-        $inactiveSubscriber->setUserId(2);
+        $inactiveSubscriber->setUser($this->userTwo);
 
         // save subscriber to database
         $this->entityManager->persist($subscriber);
@@ -54,6 +62,7 @@ class NotificationSubscriberRepositoryTest extends KernelTestCase
     protected function tearDown(): void
     {
         $this->entityManager->createQuery('DELETE FROM App\\Entity\\NotificationSubscriber')->execute();
+        $this->entityManager->createQuery('DELETE FROM App\\Entity\\User')->execute();
         parent::tearDown();
     }
 
@@ -83,14 +92,14 @@ class NotificationSubscriberRepositoryTest extends KernelTestCase
     public function testFindByUserId(): void
     {
         // call tested method
-        $user1Subscribers = $this->notificationSubscriberRepository->findBy(['user_id' => 1]);
-        $user2Subscribers = $this->notificationSubscriberRepository->findBy(['user_id' => 2]);
+        $user1Subscribers = $this->notificationSubscriberRepository->findBy(['user' => $this->userOne]);
+        $user2Subscribers = $this->notificationSubscriberRepository->findBy(['user' => $this->userTwo]);
 
         // assert results
         $this->assertNotEmpty($user1Subscribers);
         $this->assertNotEmpty($user2Subscribers);
-        $this->assertSame(1, $user1Subscribers[0]->getUserId());
-        $this->assertSame(2, $user2Subscribers[0]->getUserId());
+        $this->assertSame($this->userOne->getId(), $user1Subscribers[0]->getUser()?->getId());
+        $this->assertSame($this->userTwo->getId(), $user2Subscribers[0]->getUser()?->getId());
     }
 
     /**

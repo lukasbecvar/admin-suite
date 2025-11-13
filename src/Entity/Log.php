@@ -47,8 +47,9 @@ class Log
     #[ORM\Column]
     private ?int $level = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
+    #[ORM\ManyToOne(inversedBy: 'logs')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?User $user = null;
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
@@ -213,25 +214,25 @@ class Log
     }
 
     /**
-     * Get id of the user who created the log
+     * Get user who created the log
      *
-     * @return int|null The id of the user who created the log or null if not found
+     * @return User|null The user who created the log or null if not found
      */
-    public function getUserId(): ?int
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
     /**
-     * Set id of the user who created the log
+     * Set user who created the log
      *
-     * @param int $user_id The id of the user who created the log
+     * @param User $user The user who created the log
      *
      * @return static The log object
      */
-    public function setUserId(int $user_id): static
+    public function setUser(?User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }

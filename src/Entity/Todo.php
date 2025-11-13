@@ -37,8 +37,9 @@ class Todo
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
+    #[ORM\ManyToOne(inversedBy: 'todos')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private ?User $user = null;
 
     #[ORM\Column(options: ["default" => 0])]
     private ?int $position = 0;
@@ -150,25 +151,25 @@ class Todo
     }
 
     /**
-     * Get id of the user who created the todo
+     * Get owner of the todo
      *
-     * @return int|null The id of the user who created the todo or null if not found
+     * @return User|null The owner of the todo or null if not found
      */
-    public function getUserId(): ?int
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
     /**
-     * Set id of the user who created the todo
+     * Set owner of the todo
      *
-     * @param int $user_id The id of the user who created the todo
+     * @param User $user The owner of the todo
      *
-     * @return static The log object
+     * @return static The todo object
      */
-    public function setUserId(int $user_id): static
+    public function setUser(?User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }

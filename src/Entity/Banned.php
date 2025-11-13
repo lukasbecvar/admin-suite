@@ -35,11 +35,13 @@ class Banned
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $time = null;
 
-    #[ORM\Column]
-    private ?int $banned_by_id = null;
+    #[ORM\ManyToOne(inversedBy: 'issuedBans')]
+    #[ORM\JoinColumn(name: 'banned_by_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?User $bannedBy = null;
 
-    #[ORM\Column]
-    private ?int $banned_user_id = null;
+    #[ORM\ManyToOne(inversedBy: 'bans')]
+    #[ORM\JoinColumn(name: 'banned_user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private ?User $bannedUser = null;
 
     /**
      * Get id of the banned status (database ID)
@@ -122,49 +124,49 @@ class Banned
     }
 
     /**
-     * Get id of the admin who banned the user
+     * Get admin who issued ban
      *
-     * @return int|null The id of the admin who banned the user or null if not found
+     * @return User|null The admin who issued ban or null if not found
      */
-    public function getBannedById(): ?int
+    public function getBannedBy(): ?User
     {
-        return $this->banned_by_id;
+        return $this->bannedBy;
     }
 
     /**
-     * Set id of the admin who banned the user
+     * Set admin who issued ban
      *
-     * @param int $banned_by_id The id of the admin who banned the user
+     * @param User $bannedBy The admin who issued ban
      *
      * @return static The banned status object
      */
-    public function setBannedById(int $banned_by_id): static
+    public function setBannedBy(?User $bannedBy): static
     {
-        $this->banned_by_id = $banned_by_id;
+        $this->bannedBy = $bannedBy;
 
         return $this;
     }
 
     /**
-     * Get id of the banned user
+     * Get banned user
      *
-     * @return int|null The id of the banned user or null if not found
+     * @return User|null The banned user or null if not found
      */
-    public function getBannedUserId(): ?int
+    public function getBannedUser(): ?User
     {
-        return $this->banned_user_id;
+        return $this->bannedUser;
     }
 
     /**
-     * Set id of the banned user
+     * Set banned user
      *
-     * @param int $banned_user_id The id of the banned user
+     * @param User $bannedUser The banned user
      *
      * @return static The banned status object
      */
-    public function setBannedUserId(int $banned_user_id): static
+    public function setBannedUser(?User $bannedUser): static
     {
-        $this->banned_user_id = $banned_user_id;
+        $this->bannedUser = $bannedUser;
 
         return $this;
     }

@@ -40,8 +40,9 @@ class NotificationSubscriber
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
+    #[ORM\ManyToOne(inversedBy: 'notificationSubscribers')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private ?User $user = null;
 
     /**
      * Get database ID of the notification subscriber
@@ -174,25 +175,25 @@ class NotificationSubscriber
     }
 
     /**
-     * Get user id of the notification subscriber
+     * Get user associated with the subscriber
      *
-     * @return int|null The user id of the notification subscriber or null if not found
+     * @return User|null The user associated with the subscriber or null if not found
      */
-    public function getUserId(): ?int
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
     /**
-     * Set user id of the notification subscriber
+     * Set user associated with the subscriber
      *
-     * @param int $user_id The user id of the notification subscriber
+     * @param User $user The user associated with the subscriber
      *
-     * @return static The notification subscriber object
+     * @return static The subscriber object
      */
-    public function setUserId(int $user_id): static
+    public function setUser(?User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }

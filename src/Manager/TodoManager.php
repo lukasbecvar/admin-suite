@@ -20,6 +20,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class TodoManager
 {
+    private const STATUS_OPEN = 'open';
+    private const STATUS_CLOSED = 'closed';
+
     private LogManager $logManager;
     private UserManager $userManager;
     private AuthManager $authManager;
@@ -31,8 +34,8 @@ class TodoManager
 
     public function __construct(
         LogManager $logManager,
-        AuthManager $authManager,
         UserManager $userManager,
+        AuthManager $authManager,
         SecurityUtil $securityUtil,
         ErrorManager $errorManager,
         TodoRepository $todoRepository,
@@ -40,8 +43,8 @@ class TodoManager
         EntityManagerInterface $entityManagerInterface
     ) {
         $this->logManager = $logManager;
-        $this->authManager = $authManager;
         $this->userManager = $userManager;
+        $this->authManager = $authManager;
         $this->securityUtil = $securityUtil;
         $this->errorManager = $errorManager;
         $this->todoRepository = $todoRepository;
@@ -70,13 +73,13 @@ class TodoManager
                 'addedTime' => $todo->getAddedTime(),
                 'completedTime' => $todo->getCompletedTime(),
                 'status' => $todo->getStatus(),
-                'userId' => $todo->getUserId(),
+                'userId' => $todo->getUser()?->getId(),
                 'position' => $todo->getPosition()
             ];
         }
 
         // sort completed todos by completed time
-        if ($filter == 'closed') {
+        if ($filter == self::STATUS_CLOSED) {
             usort($todoList, function ($a, $b) {
                 return $a['completedTime'] <=> $b['completedTime'];
             });
@@ -117,12 +120,15 @@ class TodoManager
      */
     public function getTodosCount(string $status = 'open'): int
     {
-        $count = $this->todoRepository->count([
-            'user_id' => $this->authManager->getLoggedUserId(),
+        $user = $this->userManager->getUserReference($this->authManager->getLoggedUserId());
+        if ($user === null) {
+            return 0;
+        }
+
+        return $this->todoRepository->count([
+            'user' => $user,
             'status' => $status
         ]);
-
-        return $count;
     }
 
     /**
@@ -147,15 +153,13 @@ class TodoManager
 
         // get todo data
         $id = $todo->getId();
-        $owner = $todo->getUserId();
+        $owner = $todo->getUser();
         $status = $todo->getStatus();
         $createdAt = $todo->getAddedTime();
         $closedAt = $todo->getCompletedTime();
 
         // check if owner id is set
-        if ($owner != null) {
-            $owner = $this->userManager->getUsernameById($owner);
-        }
+        $ownerName = $owner?->getUsername();
 
         // format datetimes
         if ($createdAt instanceof DateTimeInterface) {
@@ -168,7 +172,7 @@ class TodoManager
         // return todo info
         return [
             'id' => $id,
-            'owner' => $owner ?? 'Unknown',
+            'owner' => $ownerName ?? 'Unknown',
             'status' => $status,
             'created_at' => $createdAt ?? null,
             'closed_at' => $closedAt ?? 'non-closed'
@@ -189,7 +193,7 @@ class TodoManager
 
         // get the highest position
         $highestPosition = 0;
-        $userTodos = $this->todoRepository->findByUserIdAndStatus($this->authManager->getLoggedUserId(), 'open');
+        $userTodos = $this->todoRepository->findByUserIdAndStatus($this->authManager->getLoggedUserId(), self::STATUS_OPEN);
         foreach ($userTodos as $userTodo) {
             $position = $userTodo->getPosition();
             if ($position > $highestPosition) {
@@ -197,13 +201,22 @@ class TodoManager
             }
         }
 
+        // get logged user reference
+        $user = $this->userManager->getUserReference($this->authManager->getLoggedUserId());
+        if ($user === null) {
+            $this->errorManager->handleError(
+                message: 'unable to resolve logged user for todo creation',
+                code: Response::HTTP_UNAUTHORIZED
+            );
+        }
+
         // create new todo entity
         $todo = new Todo();
         $todo->setTodoText($todoText)
             ->setAddedTime(new DateTime())
             ->setCompletedTime(null)
-            ->setStatus('open')
-            ->setUserId($this->authManager->getLoggedUserId())
+            ->setStatus(self::STATUS_OPEN)
+            ->setUser($user)
             ->setPosition($highestPosition + 1);
 
         try {
@@ -247,7 +260,7 @@ class TodoManager
         }
 
         // check if user is owner of todo
-        if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
+        if (!$this->isTodoOwnedByLoggedUser($todo)) {
             $this->errorManager->handleError(
                 message: 'you are not the owner of the todo: ' . $todoId,
                 code: Response::HTTP_FORBIDDEN
@@ -255,7 +268,7 @@ class TodoManager
         }
 
         // check if todo is closed
-        if ($todo->getStatus() !== 'open') {
+        if ($todo->getStatus() !== self::STATUS_OPEN) {
             $this->errorManager->handleError(
                 message: 'todo: ' . $todoId . ' is closed',
                 code: Response::HTTP_FORBIDDEN
@@ -317,7 +330,7 @@ class TodoManager
         }
 
         // check if user is owner of todo
-        if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
+        if (!$this->isTodoOwnedByLoggedUser($todo)) {
             $this->errorManager->handleError(
                 message: 'you are not the owner of the todo: ' . $todoId,
                 code: Response::HTTP_FORBIDDEN
@@ -326,7 +339,7 @@ class TodoManager
 
         try {
             // set todo status to closed
-            $todo->setStatus('closed');
+            $todo->setStatus(self::STATUS_CLOSED);
             $todo->setCompletedTime(new DateTime());
 
             // flush todo entity
@@ -367,7 +380,7 @@ class TodoManager
         }
 
         // check if user is owner of todo
-        if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
+        if (!$this->isTodoOwnedByLoggedUser($todo)) {
             $this->errorManager->handleError(
                 message: 'you are not the owner of the todo: ' . $todoId,
                 code: Response::HTTP_FORBIDDEN
@@ -375,7 +388,7 @@ class TodoManager
         }
 
         // check if todo is closed
-        if ($todo->getStatus() != 'closed') {
+        if ($todo->getStatus() != self::STATUS_CLOSED) {
             $this->errorManager->handleError(
                 message: 'todo: ' . $todoId . ' is not closed',
                 code: Response::HTTP_FORBIDDEN
@@ -384,7 +397,7 @@ class TodoManager
 
         try {
             // set todo status to open
-            $todo->setStatus('open');
+            $todo->setStatus(self::STATUS_OPEN);
             $todo->setCompletedTime(null);
 
             // flush todo entity
@@ -425,7 +438,7 @@ class TodoManager
                 );
             } else {
                 // check if user is owner of todo
-                if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
+                if (!$this->isTodoOwnedByLoggedUser($todo)) {
                     $this->errorManager->handleError(
                         message: 'you are not the owner of the todo: ' . $todoId,
                         code: Response::HTTP_FORBIDDEN
@@ -433,7 +446,7 @@ class TodoManager
                 }
 
                 // check if todo is closed
-                if ($todo->getStatus() != 'closed') {
+                if ($todo->getStatus() != self::STATUS_CLOSED) {
                     $this->errorManager->handleError(
                         message: 'todo: ' . $todoId . ' is not closed',
                         code: Response::HTTP_FORBIDDEN
@@ -484,7 +497,7 @@ class TodoManager
         }
 
         // check if user is owner of todo
-        if ($todo->getUserId() !== $this->authManager->getLoggedUserId()) {
+        if (!$this->isTodoOwnedByLoggedUser($todo)) {
             $this->errorManager->handleError(
                 message: 'you are not the owner of the todo: ' . $todoId,
                 code: Response::HTTP_FORBIDDEN
@@ -492,7 +505,7 @@ class TodoManager
         }
 
         // check if todo is open
-        if ($todo->getStatus() !== 'open') {
+        if ($todo->getStatus() !== self::STATUS_OPEN) {
             $this->errorManager->handleError(
                 message: 'todo: ' . $todoId . ' is not open',
                 code: Response::HTTP_FORBIDDEN
@@ -529,7 +542,7 @@ class TodoManager
                 $todo = $this->todoRepository->find($todoId);
 
                 // skip if todo not found or user is not the owner
-                if ($todo === null || $todo->getUserId() !== $this->authManager->getLoggedUserId() || $todo->getStatus() !== 'open') {
+                if ($todo === null || !$this->isTodoOwnedByLoggedUser($todo) || $todo->getStatus() !== self::STATUS_OPEN) {
                     continue;
                 }
 
@@ -587,5 +600,21 @@ class TodoManager
 
         // save all changes to database
         $this->entityManagerInterface->flush();
+    }
+
+    /**
+     * Check if todo is owned by logged user
+     *
+     * @param Todo|null $todo The todo to check
+     *
+     * @return bool True if todo is owned by logged user, false otherwise
+     */
+    public function isTodoOwnedByLoggedUser(?Todo $todo): bool
+    {
+        if ($todo === null) {
+            return false;
+        }
+
+        return ($todo->getUser()?->getId() ?? 0) === $this->authManager->getLoggedUserId();
     }
 }

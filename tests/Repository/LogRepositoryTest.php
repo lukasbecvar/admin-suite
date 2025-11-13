@@ -4,6 +4,8 @@ namespace App\Tests\Repository;
 
 use DateTime;
 use App\Entity\Log;
+use App\Entity\User;
+use App\Tests\TestEntityFactory;
 use App\Repository\LogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -21,6 +23,7 @@ class LogRepositoryTest extends KernelTestCase
 {
     private LogRepository $logRepository;
     private EntityManagerInterface $entityManager;
+    private User $user;
 
     protected function setUp(): void
     {
@@ -29,6 +32,8 @@ class LogRepositoryTest extends KernelTestCase
         $this->entityManager = self::getContainer()->get('doctrine')->getManager();
         $this->logRepository = $this->entityManager->getRepository(Log::class);
 
+        $this->user = TestEntityFactory::createUser($this->entityManager, ['username' => 'repository-user']);
+
         // create testing data
         $log = new Log();
         $log->setName('error');
@@ -36,7 +41,7 @@ class LogRepositoryTest extends KernelTestCase
         $log->setTime(new DateTime());
         $log->setIpAddress('127.0.0.1');
         $log->setUserAgent('PHPUnit Test');
-        $log->setUserId(1);
+        $log->setUser($this->user);
         $log->setLevel(400);
         $log->setStatus('new');
 
@@ -48,6 +53,7 @@ class LogRepositoryTest extends KernelTestCase
     protected function tearDown(): void
     {
         $this->entityManager->createQuery('DELETE FROM App\\Entity\\Log')->execute();
+        $this->entityManager->createQuery('DELETE FROM App\\Entity\\User')->execute();
         parent::tearDown();
     }
 
@@ -74,11 +80,11 @@ class LogRepositoryTest extends KernelTestCase
     public function testFindByUserId(): void
     {
         // call tested method
-        $logs = $this->logRepository->findBy(['user_id' => 1]);
+        $logs = $this->logRepository->findBy(['user' => $this->user]);
 
         // assert result
         $this->assertNotEmpty($logs);
-        $this->assertSame(1, $logs[0]->getUserId());
+        $this->assertSame($this->user->getId(), $logs[0]->getUser()?->getId());
     }
 
     /**

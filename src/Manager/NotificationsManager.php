@@ -25,6 +25,7 @@ class NotificationsManager
     private AppUtil $appUtil;
     private LogManager $logManager;
     private AuthManager $authManager;
+    private UserManager $userManager;
     private ErrorManager $errorManager;
     private DatabaseManager $databaseManager;
     private EntityManagerInterface $entityManager;
@@ -34,6 +35,7 @@ class NotificationsManager
         AppUtil $appUtil,
         LogManager $logManager,
         AuthManager $authManager,
+        UserManager $userManager,
         ErrorManager $errorManager,
         DatabaseManager $databaseManager,
         EntityManagerInterface $entityManager,
@@ -42,6 +44,7 @@ class NotificationsManager
         $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->authManager = $authManager;
+        $this->userManager = $userManager;
         $this->errorManager = $errorManager;
         $this->entityManager = $entityManager;
         $this->databaseManager = $databaseManager;
@@ -110,8 +113,14 @@ class NotificationsManager
             $userId = $this->authManager->getLoggedUserId();
         }
 
+        // get user reference
+        $user = $this->userManager->getUserReference($userId);
+        if ($user === null) {
+            return null;
+        }
+
         return $this->notificationSubscriberRepository->findOneBy([
-            'user_id' => $userId,
+            'user' => $user,
             'status' => 'open'
         ]);
     }
@@ -188,6 +197,15 @@ class NotificationsManager
         // get subscriber user id
         $userId = $this->authManager->getLoggedUserId();
 
+        // get user reference
+        $user = $this->userManager->getUserReference($userId);
+        if ($user === null) {
+            $this->errorManager->handleError(
+                message: 'unable to resolve authenticated user for push subscription',
+                code: Response::HTTP_UNAUTHORIZED
+            );
+        }
+
         // create subscriber entity
         $notoficationSubscriber = new NotificationSubscriber();
         $notoficationSubscriber->setEndpoint($endpoint)
@@ -195,7 +213,7 @@ class NotificationsManager
             ->setAuthToken($authToken)
             ->setSubscribedTime(new DateTime())
             ->setStatus('open')
-            ->setUserId($userId);
+            ->setUser($user);
 
         try {
             // save subscriber to database
@@ -219,16 +237,22 @@ class NotificationsManager
     /**
      * Update notifications subscriber status
      *
-     * @param int $id The id of the notifications subscriber
+     * @param int $userId The id of the user whose subscriptions should be updated
      * @param string $status The status of the notifications subscriber
      *
      * @return void
      */
-    public function updateNotificationsSubscriberStatus(int $id, string $status): void
+    public function updateNotificationsSubscriberStatus(int $userId, string $status): void
     {
         try {
+            // get user reference
+            $user = $this->userManager->getUserReference($userId);
+            if ($user === null) {
+                return;
+            }
+
             // get notification subscriber
-            $notificationSubscriber = $this->notificationSubscriberRepository->findBy(['user_id' => $id]);
+            $notificationSubscriber = $this->notificationSubscriberRepository->findBy(['user' => $user]);
 
             // check if subscriber found
             if ($notificationSubscriber != null) {
@@ -302,8 +326,11 @@ class NotificationsManager
                     ]);
                 }
 
-                // remember receiver id by endpoint to match flush reports
-                $receiverMap[$reciver->getEndpoint()] = (int) ($reciver->getUserId() ?? 0);
+                // build receivers map
+                $receiverId = $reciver->getUser()?->getId();
+                if ($receiverId !== null) {
+                    $receiverMap[$reciver->getEndpoint()] = (int) $receiverId;
+                }
             }
 
             // send notifications
@@ -313,22 +340,53 @@ class NotificationsManager
 
                 // check if notification sent successfully
                 if ($report->isSuccess()) {
-                    // log sent notification
+                    if (!isset($receiverMap[$endpoint])) {
+                        continue;
+                    }
+
+                    // log sent event
                     $this->logManager->logSentNotification(
                         title: $title,
                         message: $message,
-                        receiverId: $receiverMap[$endpoint] ?? 0
+                        receiverId: $receiverMap[$endpoint]
                     );
-                } else {
-                    $response = $report->getResponse();
-                    if ($response !== null && $response->getStatusCode() === 410) {
-                        $subscriberId = $this->getSubscriberIdByEndpoint($endpoint);
-                        if ($subscriberId !== null) {
-                            $this->updateNotificationsSubscriberStatus($subscriberId, 'closed');
-                        }
+                    continue;
+                }
+
+                $response = $report->getResponse();
+                if ($response !== null && $response->getStatusCode() === 410) {
+                    $subscriberId = $this->getSubscriberIdByEndpoint($endpoint);
+                    if ($subscriberId !== null) {
+                        $this->updateNotificationSubscriberStatusById($subscriberId, 'closed');
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Update a single notifications subscriber status by subscriber id
+     *
+     * @param int $subscriberId The subscriber ID
+     * @param string $status The status of the subscriber
+     *
+     * @return void
+     */
+    public function updateNotificationSubscriberStatusById(int $subscriberId, string $status): void
+    {
+        try {
+            $subscriber = $this->notificationSubscriberRepository->find($subscriberId);
+            if ($subscriber === null) {
+                return;
+            }
+
+            $subscriber->setStatus($status);
+            $this->entityManager->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to update notification subscriber status: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

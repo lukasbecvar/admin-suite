@@ -4,6 +4,7 @@ namespace App\Tests;
 
 use DateTime;
 use App\Entity\User;
+use ReflectionProperty;
 use App\Manager\AuthManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -59,5 +60,33 @@ class CustomTestCase extends WebTestCase
 
         // set mock AuthManager instance to the container
         $client->getContainer()->set(AuthManager::class, $authManager);
+    }
+
+    /**
+     * Create a test user entity
+     *
+     * @param int $id The user ID
+     *
+     * @return User The test user entity
+     */
+    public function createUserEntity(int $id): User
+    {
+        $user = new User();
+        $user->setUsername('test-user-' . $id);
+        $user->setPassword('password');
+        $user->setRole('ADMIN');
+        $user->setIpAddress('127.0.0.1');
+        $user->setUserAgent('PHPUnit');
+        $user->setRegisterTime(new DateTime());
+        $user->setLastLoginTime(new DateTime());
+        $user->setToken('token-' . $id . uniqid());
+        $user->setAllowApiAccess(true);
+        $user->setProfilePic('pic');
+
+        $reflection = new ReflectionProperty(User::class, 'id');
+        $reflection->setAccessible(true);
+        $reflection->setValue($user, $id);
+
+        return $user;
     }
 }
