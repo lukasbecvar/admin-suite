@@ -64,10 +64,19 @@ class BanManager
 
         // get banned user and issuer
         $bannedUser = $this->userManager->getUserReference($userId);
-        $issuer = $this->userManager->getUserReference($this->authManager->getLoggedUserId());
-        if ($bannedUser === null || $issuer === null) {
+        $issuerId = $this->authManager->getLoggedUserId();
+        $issuer = $issuerId > 0 ? $this->userManager->getUserReference($issuerId) : null;
+
+        if ($bannedUser === null) {
             $this->errorManager->handleError(
                 message: 'invalid user context for ban operation',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($issuerId > 0 && $issuer === null) {
+            $this->errorManager->handleError(
+                message: 'invalid issuer context for ban operation',
                 code: Response::HTTP_BAD_REQUEST
             );
         }

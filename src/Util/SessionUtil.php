@@ -6,6 +6,8 @@ use Exception;
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 
 /**
  * Class SessionUtil
@@ -28,14 +30,29 @@ class SessionUtil
     }
 
     /**
+     * Get the current session or null when no HTTP context is present
+     *
+     * @return SessionInterface|null
+     */
+    private function getSession(): ?SessionInterface
+    {
+        try {
+            return $this->requestStack->getSession();
+        } catch (SessionNotFoundException) {
+            return null;
+        }
+    }
+
+    /**
      * Start new session if not already started
      *
      * @return void
      */
     public function startSession(): void
     {
-        if (!$this->requestStack->getSession()->isStarted()) {
-            $this->requestStack->getSession()->start();
+        $session = $this->getSession();
+        if ($session !== null && !$session->isStarted()) {
+            $session->start();
         }
     }
 
@@ -46,8 +63,9 @@ class SessionUtil
      */
     public function destroySession(): void
     {
-        if ($this->requestStack->getSession()->isStarted()) {
-            $this->requestStack->getSession()->invalidate();
+        $session = $this->getSession();
+        if ($session !== null && $session->isStarted()) {
+            $session->invalidate();
         }
     }
 
@@ -60,7 +78,12 @@ class SessionUtil
      */
     public function checkSession(string $sessionName): bool
     {
-        return $this->requestStack->getSession()->has($sessionName);
+        $session = $this->getSession();
+        if ($session === null) {
+            return false;
+        }
+
+        return $session->has($sessionName);
     }
 
     /**
@@ -73,8 +96,16 @@ class SessionUtil
      */
     public function setSession(string $sessionName, string $sessionValue): void
     {
-        $this->startSession();
-        $this->requestStack->getSession()->set($sessionName, $this->securityUtil->encryptAes($sessionValue));
+        $session = $this->getSession();
+        if ($session === null) {
+            return;
+        }
+
+        if (!$session->isStarted()) {
+            $session->start();
+        }
+
+        $session->set($sessionName, $this->securityUtil->encryptAes($sessionValue));
     }
 
     /**
@@ -86,16 +117,23 @@ class SessionUtil
      */
     public function getSessionValue(string $sessionName, mixed $default = null): mixed
     {
+        $session = $this->getSession();
+
+        if ($session === null) {
+            return $default;
+        }
+
         $value = null;
 
         try {
-            // start session
-            $this->startSession();
+            if (!$session->isStarted()) {
+                $session->start();
+            }
 
             /** @var string $value */
-            $value = $this->requestStack->getSession()->get($sessionName);
+            $value = $session->get($sessionName);
         } catch (Exception) {
-            return null;
+            return $default;
         }
 
         // check if session value get
@@ -126,6 +164,6 @@ class SessionUtil
      */
     public function getSessionId(): string
     {
-        return $this->requestStack->getSession()->getId();
+        return $this->getSession()?->getId() ?? '';
     }
 }
