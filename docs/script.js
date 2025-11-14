@@ -110,12 +110,17 @@ document.addEventListener('DOMContentLoaded', () => {
             description: 'The settings page allows you to manage account settings, suite configuration, and feature flags.'
         },
         {
-            image: 'assets/admin-suite-preview/14-suite-configuration.png',
+            image: 'assets/admin-suite-preview/14-account-settings.png',
+            title: 'Account Settings',
+            description: 'Account settings allow you to manage your account, including password changes, notification settings, and api access keys.'
+        },
+        {
+            image: 'assets/admin-suite-preview/15-suite-configuration.png',
             title: 'Suite Configuration',
             description: 'This page allows you to manage suite-wide configuration files. You can view the status of each configuration file.'
         },
         {
-            image: 'assets/admin-suite-preview/15-feature-flags-config.png',
+            image: 'assets/admin-suite-preview/16-feature-flags-config.png',
             title: 'Feature Flags',
             description: 'The feature flags page allows you to enable or disable features of the application in real-time.'
         }
