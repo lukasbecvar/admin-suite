@@ -31,6 +31,7 @@ class NonAuthRedirectTest extends WebTestCase
     private const ROUTES = [
         'api' => [
             ['method' => 'GET', 'url' => '/api/metrics/export'],
+            ['method' => 'GET', 'url' => '/api/monitoring/export'],
             ['method' => 'GET', 'url' => '/api/system/resources'],
             ['method' => 'POST', 'url' => '/api/system/terminal'],
             ['method' => 'GET', 'url' => '/api/system/terminal/job'],

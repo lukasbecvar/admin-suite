@@ -5,6 +5,7 @@ namespace App\Tests\Manager;
 use Exception;
 use App\Util\AppUtil;
 use App\Util\JsonUtil;
+use DateTimeImmutable;
 use App\Util\CacheUtil;
 use App\Util\ServerUtil;
 use App\Entity\SLAHistory;
@@ -210,6 +211,58 @@ class MonitoringManagerTest extends TestCase
 
         // assert result
         $this->assertNull($result);
+    }
+
+    /**
+     * Test get monitoring status snapshot
+     *
+     * @return void
+     */
+    public function testGetMonitoringStatusSnapshot(): void
+    {
+        // mock testing entity
+        $lastUpdate = new DateTimeImmutable('2025-01-01 10:00:00');
+        $statusMock = $this->createMock(MonitoringStatus::class);
+        $statusMock->method('getServiceName')->willReturn('test-service');
+        $statusMock->method('getStatus')->willReturn('running');
+        $statusMock->method('getMessage')->willReturn('All good');
+        $statusMock->method('getDownTime')->willReturn(10);
+        $statusMock->method('getSlaTimeframe')->willReturn('2025-01');
+        $statusMock->method('getLastUpdateTime')->willReturn($lastUpdate);
+        $this->repositoryMock->expects($this->once())->method('findAll')->willReturn([$statusMock]);
+
+        // call tested method
+        $snapshot = $this->monitoringManager->getMonitoringStatusSnapshot();
+
+        // assert result
+        $this->assertCount(1, $snapshot);
+        $this->assertSame('test-service', $snapshot[0]['service_name']);
+        $this->assertSame('running', $snapshot[0]['status']);
+        $this->assertSame('All good', $snapshot[0]['message']);
+        $this->assertSame(10, $snapshot[0]['down_time_minutes']);
+        $this->assertSame('2025-01', $snapshot[0]['sla_timeframe']);
+        $this->assertSame($lastUpdate->format(DATE_ATOM), $snapshot[0]['last_update_time']);
+        $this->assertIsFloat($snapshot[0]['current_sla']);
+    }
+
+    /**
+     * Test get monitoring status snapshot when repository fails
+     *
+     * @return void
+     */
+    public function testGetMonitoringStatusSnapshotWhenExceptionThrown(): void
+    {
+        // mock exception thrown
+        $this->repositoryMock->expects($this->once())->method('findAll')->willThrowException(new Exception('Repository error'));
+
+        // expect handleError call
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'error to get monitoring statuses: Repository error',
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->monitoringManager->getMonitoringStatusSnapshot();
     }
 
     /**

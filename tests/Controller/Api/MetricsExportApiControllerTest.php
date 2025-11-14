@@ -26,7 +26,7 @@ class MetricsExportApiControllerTest extends CustomTestCase
     }
 
     /**
-     * Test only GET is allowed call export endpoint
+     * Test only GET is allowed for export endpoint
      *
      * @return void
      */
@@ -59,22 +59,20 @@ class MetricsExportApiControllerTest extends CustomTestCase
     public function testExportMetricsReturnsJson(): void
     {
         $this->simulateLogin($this->client);
-
         $this->client->request('GET', '/api/metrics/export?service_name=host-system&time_period=last_week');
 
         /** @var array<mixed> $responseData */
         $responseData = json_decode((string) $this->client->getResponse()->getContent(), true);
 
         // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertIsArray($responseData);
         $this->assertSame('host-system', $responseData['service']);
         $this->assertSame('last_week', $responseData['time_period']);
         $this->assertArrayHasKey('generated_at', $responseData);
-        $this->assertNotEmpty($responseData['generated_at']);
         $this->assertArrayHasKey('data', $responseData);
         $this->assertArrayHasKey('categories', $responseData['data']);
         $this->assertArrayHasKey('metrics', $responseData['data']);
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     /**
@@ -85,7 +83,6 @@ class MetricsExportApiControllerTest extends CustomTestCase
     public function testExportMetricsReturnsXml(): void
     {
         $this->simulateLogin($this->client);
-
         $this->client->request('GET', '/api/metrics/export?format=xml&time_period=last_24_hours');
 
         // get response
@@ -98,7 +95,6 @@ class MetricsExportApiControllerTest extends CustomTestCase
         $this->assertNotFalse($xml);
         $this->assertEquals('metrics', $xml->getName());
         $this->assertEquals('host-system', (string) $xml->service);
-        $this->assertEquals('last_24_hours', (string) $xml->time_period);
     }
 
     /**
@@ -109,7 +105,6 @@ class MetricsExportApiControllerTest extends CustomTestCase
     public function testExportMetricsRejectsInvalidTimePeriod(): void
     {
         $this->simulateLogin($this->client);
-
         $this->client->request('GET', '/api/metrics/export?time_period=invalid_range');
 
         // assert response

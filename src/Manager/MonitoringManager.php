@@ -162,6 +162,48 @@ class MonitoringManager
     }
 
     /**
+     * Get latest monitoring status snapshot for all services
+     *
+     * @return array<int, array<string, mixed>> The monitoring status snapshot
+     */
+    public function getMonitoringStatusSnapshot(): array
+    {
+        try {
+            /** @var array<MonitoringStatus> $statuses */
+            $statuses = $this->monitoringStatusRepository->findAll();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error to get monitoring statuses: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        $snapshot = [];
+        $totalMinutesInMonth = 30.44 * 24 * 60;
+
+        foreach ($statuses ?? [] as $status) {
+            $downTime = $status->getDownTime() ?? 0;
+            $slaValue = null;
+
+            if ($downTime != null) {
+                $slaValue = round((1 - ($downTime / $totalMinutesInMonth)) * 100, 2);
+            }
+
+            $snapshot[] = [
+                'service_name' => (string) $status->getServiceName(),
+                'status' => (string) $status->getStatus(),
+                'message' => (string) $status->getMessage(),
+                'down_time_minutes' => $downTime,
+                'sla_timeframe' => (string) $status->getSlaTimeframe(),
+                'last_update_time' => $status->getLastUpdateTime() ? $status->getLastUpdateTime()->format(DATE_ATOM) : null,
+                'current_sla' => $slaValue
+            ];
+        }
+
+        return $snapshot;
+    }
+
+    /**
      * Handle monitoring status for a service
      *
      * @param string $serviceName The name of the service
