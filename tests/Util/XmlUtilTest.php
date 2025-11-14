@@ -113,6 +113,28 @@ class XmlUtilTest extends TestCase
     }
 
     /**
+     * Test payloads with dangerous declarations are rejected
+     *
+     * @return void
+     */
+    public function testParseXmlPayloadRejectsDoctype(): void
+    {
+        // mock exception
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('XML payload contains prohibited declarations');
+
+        $payload = <<<XML
+<!DOCTYPE foo [
+  <!ELEMENT foo ANY >
+  <!ENTITY xxe SYSTEM "file:///etc/passwd" >]>
+<foo>&xxe;</foo>
+XML;
+
+        // call tested method
+        $this->xmlUtil->parseXmlPayload($payload);
+    }
+
+    /**
      * Test formatting produces expected nodes and root name
      *
      * @return void

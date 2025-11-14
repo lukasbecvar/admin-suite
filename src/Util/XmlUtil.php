@@ -58,8 +58,17 @@ class XmlUtil
             );
         }
 
+        // check for prohibited declarations
+        if (preg_match('/<!DOCTYPE|<!ENTITY/i', $payload) === 1) {
+            $this->errorManager->handleError(
+                message: 'XML payload contains prohibited declarations',
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
         $previous = libxml_use_internal_errors(true);
-        $xml = simplexml_load_string($payload, SimpleXMLElement::class);
+        $options = LIBXML_NONET | LIBXML_NOERROR | LIBXML_NOWARNING;
+        $xml = simplexml_load_string($payload, SimpleXMLElement::class, $options);
         libxml_use_internal_errors($previous);
 
         if ($xml === false) {
