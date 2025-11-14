@@ -30,15 +30,16 @@ class NonAuthRedirectTest extends WebTestCase
      */
     private const ROUTES = [
         'api' => [
+            ['method' => 'GET', 'url' => '/api/metrics/export'],
+            ['method' => 'GET', 'url' => '/api/system/resources'],
             ['method' => 'POST', 'url' => '/api/system/terminal'],
             ['method' => 'GET', 'url' => '/api/system/terminal/job'],
             ['method' => 'POST', 'url' => '/api/system/terminal/job'],
             ['method' => 'POST', 'url' => '/api/system/terminal/job/stop'],
             ['method' => 'POST', 'url' => '/api/system/terminal/job/input'],
-            ['method' => 'GET', 'url' => '/api/system/resources'],
-            ['method' => 'GET', 'url' => '/api/notifications/enabled'],
+            ['method' => 'GET', 'url' => '/api/notifications/public-key'],
             ['method' => 'POST', 'url' => '/api/notifications/subscribe'],
-            ['method' => 'GET', 'url' => '/api/notifications/public-key']
+            ['method' => 'GET', 'url' => '/api/notifications/enabled']
         ],
         'anti_log' => [
             ['method' => 'GET', 'url' => '/13378/antilog']
