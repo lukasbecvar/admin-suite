@@ -698,6 +698,7 @@ class MonitoringManager
             if ($service['type'] == 'http') {
                 // get service status
                 $serviceStatus = $this->serviceManager->checkWebsiteStatus($service['url']);
+                $canCollectMetrics = $service['metrics_monitoring']['collect_metrics'] == 'true' && $serviceStatus['isOnline'];
 
                 // check if service is online
                 if ($serviceStatus['isOnline']) {
@@ -741,7 +742,7 @@ class MonitoringManager
                         );
 
                         // check if metrics can be collected
-                        if ($service['metrics_monitoring']['collect_metrics'] == 'true') {
+                        if ($canCollectMetrics) {
                             // get metrics from metrics collector
                             $metrics = $this->jsonUtil->getJson($service['metrics_monitoring']['metrics_collector_url'], 30);
 
