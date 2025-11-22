@@ -199,34 +199,8 @@
                     settings. This approach ensures that sensitive information is kept separate from the codebase and
                     can be easily managed across different deployment environments (e.g., development, staging,
                     production).</p>
-                <h4>Suite Configuration</h4>
-                <p>Beyond environment variables, the Admin Suite utilizes a system of JSON-based suite configuration
-                    files to manage various application-specific settings. The default configurations are stored in the
-                    <code>config/suite</code> directory. A powerful feature of the Admin Suite is its ability to allow
-                    you to override these default configurations by creating your own custom configuration files
-                    directly in the application's root directory. This provides immense flexibility, enabling you to
-                    customize behaviors without modifying the core application files.</p>
-                <p>Key suite configuration files include:</p>
-                <ul>
-                    <li><code>config/suite/protected-columns.json</code>: A list of protected columns (hidden in table browser)</li>
-                    <li><code>config/suite/blocked-usernames.json</code>: A comprehensive list of usernames that are
-                        reserved or blocked from being registered within the Admin Suite, enhancing security and
-                        preventing conflicts.</li>
-                    <li><code>config/suite/package-requirements.json</code>: Defines a list of required system packages
-                        and PHP extensions that the Admin Suite depends on for full functionality. This file is crucial
-                        for diagnostic checks and ensuring all prerequisites are met.</li>
-                    <li><code>config/suite/services-monitoring.json</code>: This file is central to the monitoring
-                        capabilities, specifying the services (HTTP, systemd) that the Admin Suite should actively
-                        monitor, along with their respective health check parameters and alert thresholds.</li>
-                    <li><code>config/suite/terminal-aliases.json</code>: Allows you to define custom command aliases for
-                        the integrated terminal component, streamlining frequently used commands and improving
-                        efficiency for administrators.</li>
-                    <li><code>config/suite/terminal-blocked-commands.json</code>: A critical security feature that lists
-                        commands that are explicitly blocked from execution within the integrated terminal, preventing
-                        potentially dangerous operations.</li>
-                </ul>
                 <div class="phone-none">
-                    <h4>Environment variables</h4>
+                    <h4>Environment variables table</h4>
                     <p>The environment variables are loaded from .env file. You can create .env file in root directory with your configuration.</p>
                     <table>
                         <thead>
@@ -444,6 +418,63 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="suite-configuration">
+                    <h4>Suite Configuration Files</h4>
+                    <p>In addition to the environment variables, Admin Suite relies on JSON configuration files that
+                        live in the <code>config/suite</code> directory. Each file governs a focused portion of the
+                        system and can be overridden by copying it into the project root (for example
+                        <code>protected-columns.json</code>) and editing the copy there. The application automatically
+                        prefers the custom file while leaving the default variant untouched, which makes upgrades safe
+                        and keeps your changes easily trackable.</p>
+                    <p>Available suite configuration files:</p>
+                    <p><b>protected-columns.json</b> — Array of database column names that the Table Browser must hide
+                        completely. Add fields that carry credentials (e.g., <code>authentication_string</code>,
+                        <code>auth_token</code>) to keep them obscured from exports and screenshots.</p>
+                    <p><b>blocked-usernames.json</b> — Array of reserved usernames. During registration the backend
+                        matches the chosen username against this list to prevent creation of accounts such as
+                        <code>root</code>, <code>administrator</code>, etc. Extend it with any internal-only aliases.</p>
+                    <p><b>feature-flags.json</b> — Key/value map of booleans that toggle whole components. Each property
+                        name matches a module (e.g., <code>monitoring</code>, <code>terminal</code>, <code>database-manager</code>);
+                        set it to <code>true</code> to expose the component in the UI or <code>false</code> to hide it.</p>
+                    <p><b>package-requirements.json</b> — Defines what the diagnostic command checks for. It contains two
+                        arrays:</p>
+                    <ul>
+                        <li><code>php-extensions</code>: Extension names such as <code>pdo_mysql</code>, <code>gd</code>
+                            or <code>intl</code>.</li>
+                        <li><code>system-packages</code>: Binaries that should be present on the host (e.g.,
+                            <code>composer</code>, <code>ufw</code>, <code>git</code>, <code>zip</code>). The Requirements
+                            check command iterates over both arrays and reports missing dependencies.</li>
+                    </ul>
+                    <p><b>services-monitoring.json</b> — Master definition of every monitored service. It is a map where
+                        each key is an internal identifier and the value describes the service:</p>
+                    <ul>
+                        <li><code>service_name</code>: Unique slug used in logs and API calls.</li>
+                        <li><code>display_name</code>: Human friendly label rendered on the dashboard.</li>
+                        <li><code>type</code>: Either <code>systemd</code> (checked via <code>systemctl</code>) or
+                            <code>http</code> (polled via HTTP requests).</li>
+                        <li><code>monitoring</code>/<code>display</code>: Toggle whether the service is actively checked
+                            and/or shown in the UI without deleting the definition.</li>
+                        <li><code>config_files</code>: List of files to expose in the detail drawer so operators can open
+                            related configuration from the UI.</li>
+                        <li><code>url</code> (HTTP only): Endpoint to call; <code>accept_codes</code> holds the HTTP
+                            status codes that count as healthy; <code>max_response_time</code> expresses the SLA in
+                            milliseconds.</li>
+                        <li><code>metrics_monitoring</code>: Nested object with <code>collect_metrics</code> boolean and
+                            <code>metrics_collector_url</code> string. When enabled, Admin Suite fetches custom metrics
+                            from the provided URL.</li>
+                        <li><code>exception_file</code>: Absolute path to the log file that should be tailed inside the
+                            monitoring UI (optional for purely systemd services).</li>
+                    </ul>
+                    <p><b>terminal-aliases.json</b> — Object where each key is the alias exposed in the in-browser
+                        terminal and the value is the exact command executed (e.g., <code>ll</code> →
+                        <code>ls -alF -v</code>). Updating this file lets you roll out helper shortcuts to all operators.
+                    </p>
+                    <p><b>terminal-blocked-commands.json</b> — Array of commands that the terminal will refuse to run.
+                        Add resource-heavy or destructive binaries (<code>bpytop</code>, <code>vim</code>, etc.) to keep
+                        the shared environment safe.</p>
+                    <p>Any change to these files is picked up immediately; you only need to clear cache if you modify
+                        them while running in production with long-lived opcache.</p>
                 </div>
             </section>
 
