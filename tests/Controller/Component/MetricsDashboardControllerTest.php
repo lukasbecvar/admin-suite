@@ -91,7 +91,7 @@ class MetricsDashboardControllerTest extends CustomTestCase
      */
     public function testAggregateMetrics(): void
     {
-        $this->client->request('GET', '/metrics/aggregate');
+        $this->client->request('POST', '/metrics/aggregate');
 
         // assert response is redirect back to dashboard
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
