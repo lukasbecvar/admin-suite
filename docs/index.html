@@ -662,26 +662,241 @@ fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
                     environment.
                 </p>
                 <div class="preview-grid">
-
-                    <!-- TESTING ARTICLE -->
+                    <!-- DASHBOARD -->
                     <article class="preview-card">
-                        <h3>aaaaa</h3>
+                        <h3>Dashboard component</h3>
                         <figure class="preview-media" tabindex="0">
                             <div class="preview-slider" data-active-slide="0">
                                 <img src="assets/admin-suite-preview/1-dashboard.png" alt="Dashboard showing monitoring cards, process list, and usage widgets" class="preview-slide" data-label="Full view">
-                                <img src="assets/admin-suite-preview/1-dashboard-detail.png" alt="Dashboard showing monitoring cards, process list, and usage widgets (detail view)" class="preview-slide" data-label="Detail view">
                             </div>
                         </figure>
                         <div class="preview-body">
-                            <p>The landing page concentrates key health indicators so operators can triage issues the second they log in.</p>
+                            <p>The dashboard page concentrates key health indicators.</p>
                             <ul>
-                                <li>Service tiles with inline controls reveal whether firewall, SSH, VPN, and other daemons are online.</li>
-                                <li>Process list exposes active PIDs, owning users, and commands for rapid kill/inspect actions.</li>
-                                <li>Widgets summarize network traffic, resource utilization, uptime, installation date, and database log statistics.</li>
+                                <li>Diagnostics alerts and notifications.</li>
+                                <li>Service status and controls.</li>
+                                <li>List with running processes information.</li>
+                                <li>Widgets summarize network traffic, resource utilization, uptime, installation date, and database statistics.</li>
                             </ul>
                         </div>
                     </article>
 
+                    <!-- MONITORING -->
+                    <article class="preview-card">
+                        <h3>Monitoring component</h3>
+                        <figure class="preview-media" tabindex="0">
+                            <div class="preview-slider" data-active-slide="0">
+                                <img src="assets/admin-suite-preview/2-monitoring.png" alt="Monitoring component" class="preview-slide" data-label="Full view">
+                                <img src="assets/admin-suite-preview/2-monitoring-service-metrics.png" alt="Service metrics detail" class="preview-slide" data-label="Detail view">
+                                <img src="assets/admin-suite-preview/2-monitoring-service-visitors-tracking.png" alt="Service visitor tracking" class="preview-slide" data-label="Detail view">
+                            </div>
+                        </figure>
+                        <div class="preview-body">
+                            <p>The Monitoring hub shows internal daemon list, HTTP checks, and drill-downs for each service.</p>
+                            <ul>
+                                <li>Status Log keeps a timestamped list of recent incidents with quick links into the global Log Manager.</li>
+                                <li>Internal and HTTP cards display heartbeat LEDs, SLA badges, response codes, and one-click start/stop or “Metrics” actions for every monitored target.</li>
+                                <li>The toolbar exposes shortcuts to the metrics dashboard, the configuration file, and the backing database table to streamline investigations.</li>
+                                <li>Service detail slides surface visitor charts, response-time graphs, JSON configuration, SLA tables, and even exception/config file shortcuts.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- METRICS DASHBOARD -->
+                    <article class="preview-card">
+                        <h3>Metrics Dashboard</h3>
+                        <figure class="preview-media" tabindex="0">
+                            <div class="preview-slider" data-active-slide="0">
+                                <img src="assets/admin-suite-preview/3-metrics-dashboard.png" alt="Metrics dashboard" class="preview-slide" data-label="Full view">
+                            </div>
+                        </figure>
+                        <div class="preview-body">
+                            <p>The Metrics Dashboard page provides a raw and historical data.</p>
+                            <ul>
+                                <li>The period dropdown flips between raw cache, 24h, week, month, or all-time views, while an “aggregate” button condenses old samples.</li>
+                                <li>Hero cards for CPU, RAM, and Disk show current percentages, gradient progress bars, and the instant trend.</li>
+                                <li>Each metric renders its own chart container with delete buttons for archived data, so stale series can be purged without leaving the UI.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- DATABASE MANAGER -->
+                    <article class="preview-card">
+                        <h3>Database Manager</h3>
+                        <figure class="preview-media" tabindex="0">
+                            <div class="preview-slider" data-active-slide="0">
+                                <img src="assets/admin-suite-preview/4-database-manager.png" alt="Database manager" class="preview-slide" data-label="Full view">
+                                <img src="assets/admin-suite-preview/4-database-manager-table-view.png" alt="Database tables viewer" class="preview-slide" data-label="Detail view">
+                                <img src="assets/admin-suite-preview/4-database-manager-data-view.png" alt="Database data viewer" class="preview-slide" data-label="Detail view">
+                            </div>
+                        </figure>
+                        <div class="preview-body">
+                            <p>The Database Manager bundles multi-level lists, quick actions, and server statistics without opening a separate client.</p>
+                            <ul>
+                                <li>Top-level tables show every schema with table counts and size plus shortcuts to the dump wizard and SQL console.</li>
+                                <li>Table browsers list row counts, storage usage, and expose pagination, per-row edit/delete buttons, truncate/add record controls, and automatic foreign-key linking.</li>
+                                <li>A statistics sheet on the same page reports MySQL version, uptime, threads, max connections, query counters, slow queries, and InnoDB buffer size.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- LOGS MANAGER -->
+                    <article class="preview-card">
+                        <h3>Logs Manager</h3>
+                        <figure class="preview-media" tabindex="0">
+                            <div class="preview-slider" data-active-slide="0">
+                                <img src="assets/admin-suite-preview/5-logs-manager.png" alt="Logs table" class="preview-slide" data-label="Full view">
+                                <img src="assets/admin-suite-preview/5-logs-manager-system-logs.png" alt="System logs viewer" class="preview-slide" data-label="Detail view">
+                            </div>
+                        </figure>
+                        <div class="preview-body">
+                            <p>Log Manager exposes a severity-colored table for app/API events plus dedicated system-log and exception-file explorers.</p>
+                            <ul>
+                                <li>The toolbar toggles anti-log mode, filters between Unread/Read/All, marks every row read, links to the raw database table, and opens the system log or exception file pickers.</li>
+                                <li>Each row exposes ID, name, truncated message with “raw” expansion, timestamp, browser/OS fingerprint, IP address, and user links—plus a one-click “Read” button when filtering unread items.</li>
+                                <li>The system log slide shows server log files as cards that deep-link directly into the filesystem viewer for tailing or download.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- Filesystem Manager -->
+                    <article class="preview-card">
+                        <h3>Filesystem Manager</h3>
+                        <figure class="preview-media" tabindex="0">
+                            <div class="preview-slider" data-active-slide="0">
+                                <img src="assets/admin-suite-preview/6-filesystem-manager.png" alt="Filesystem manager" class="preview-slide" data-label="Full view">
+                                <img src="assets/admin-suite-preview/6-filesystem-manager-file-view.png" alt="File viewer" class="preview-slide" data-label="Detail view">
+                                <img src="assets/admin-suite-preview/6-filesystem-manager-dir-create.png" alt="Directory creation" class="preview-slide" data-label="Detail view">
+                                <img src="assets/admin-suite-preview/6-filesystem-manager-upload.png" alt="Files upload" class="preview-slide" data-label="Detail view">
+                            </div>
+                        </figure>
+                        <div class="preview-body">
+                            <p>The Filesystem Browser mixes breadcrumb navigation, creation menus, and inline action bars for managing files remotely.</p>
+                            <ul>
+                                <li>Breadcrumb chips and the “+” dropdown let you jump to any directory, spawn files/folders, upload archives, or drop into the Terminal without typing a path.</li>
+                                <li>Listings surface name, size, permissions, and modified time with desktop action icons (download, edit, rename, move, delete) and a mobile-friendly overflow menu.</li>
+                                <li>Additional slides show the built-in viewer/editor, directory creation form, and multi-file upload dialog used when applying patches or shipping logs.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- Terminal -->
+                    <article class="preview-card">
+                        <h3>Terminal</h3>
+                        <figure class="preview-media" tabindex="0">
+                            <div class="preview-slider" data-active-slide="0">
+                                <img src="assets/admin-suite-preview/7-terminal-component.png" alt="Terminal component" class="preview-slide" data-label="Full view">
+                            </div>
+                        </figure>
+                        <div class="preview-body">
+                            <p>The embedded terminal is a browser-to-server shell wired into the <code>/api/system/terminal</code> endpoints.</p>
+                            <ul>
+                                <li>The prompt line mirrors <code>user@host:cwd$</code> and updates as you move around, so you always know where commands will execute.</li>
+                                <li>The output pane streams characters line-by-line, handling partial chunks and long-running jobs through the terminal-component script.</li>
+                                <li>The input field disables autocorrect/capitalization and feeds directly into the API, providing a native-SSH feel without leaving the suite.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- Diagnostics -->
+                    <article class="preview-card">
+                        <h3>Diagnostics</h3>
+                        <figure class="preview-media" tabindex="0">
+                            <div class="preview-slider" data-active-slide="0">
+                                <img src="assets/admin-suite-preview/8-diagnostics-page.png" alt="Diagnostics component" class="preview-slide" data-label="Full view">
+                            </div>
+                        </figure>
+                        <div class="preview-body">
+                            <p>The Diagnostics page runs both host and suite checks and summarizes them in color-coded cards.</p>
+                            <ul>
+                                <li>System diagnostics verify package requirements, log sizes, disk usage, CPU/RAM pressure, reboot requirements, and pending updates.</li>
+                                <li>Suite diagnostics confirm the monitoring process heartbeat, SSL status, environment mode, sudo permissions for the web user, and cache directory access.</li>
+                                <li>Services diagnostics call out collected exception files so you know exactly which service generated errors.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- System audit -->
+                    <article class="preview-card">
+                        <h3>System Audit</h3>
+                        <figure class="preview-media" tabindex="0">
+                            <div class="preview-slider" data-active-slide="0">
+                                <img src="assets/admin-suite-preview/9-system-audit.png" alt="System audit component" class="preview-slide" data-label="Full view">
+                            </div>
+                        </figure>
+                        <div class="preview-body">
+                            <p>The System Audit dashboard aggregates server info, security lists, and audit trails.</p>
+                            <ul>
+                                <li>The grid combines the standard system-info cards with UFW open ports, Linux service accounts, and the live process list.</li>
+                                <li>SSH access history and geolocation data document every login with timestamps, hostnames, and originating addresses.</li>
+                                <li>Journalctl and system log tails are embedded directly in the page alongside a diagnostics summary so you never leave the suite during audits.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- Todo manager -->
+                    <article class="preview-card">
+                        <h3>Todo Manager</h3>
+                        <figure class="preview-media" tabindex="0">
+                            <div class="preview-slider" data-active-slide="0">
+                                <img src="assets/admin-suite-preview/10-todo-manager.png" alt="Todo list" class="preview-slide" data-label="Full view">
+                                <img src="assets/admin-suite-preview/10-todo-manager-editor.png" alt="Todo editor" class="preview-slide" data-label="Detail view">
+                                <img src="assets/admin-suite-preview/10-todo-manager-info.png" alt="Todo info detail" class="preview-slide" data-label="Detail view">
+                            </div>
+                        </figure>
+                        <div class="preview-body">
+                            <p>Todo Manager is the operational runbook for open and closed tasks.</p>
+                            <ul>
+                                <li>Filters switch between open and closed tasks; drag handles (on desktop) let you reorder open items by priority.</li>
+                                <li>Inline icons allow editing, closing, reopening, and deleting without leaving the list, while the bottom form creates new tasks.</li>
+                                <li>The info modal (see the detail slides) shows owner, status, created/closed timestamps, so every change remains auditable.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- User Manager -->
+                    <article class="preview-card">
+                        <h3>User Manager</h3>
+                        <figure class="preview-media" tabindex="0">
+                            <div class="preview-slider" data-active-slide="0">
+                                <img src="assets/admin-suite-preview/11-users-manager.png" alt="User manager" class="preview-slide" data-label="Full view">
+                                <img src="assets/admin-suite-preview/11-users-manager-role-update.png" alt="User role update" class="preview-slide" data-label="Detail view">
+                                <img src="assets/admin-suite-preview/11-users-manager-ban-form.png" alt="User ban form" class="preview-slide" data-label="Detail view">
+                                <img src="assets/admin-suite-preview/11-users-manager-user-delete.png" alt="User delete" class="preview-slide" data-label="Detail view">
+                                <img src="assets/admin-suite-preview/11-users-manager-user-details-view.png" alt="User info detail" class="preview-slide" data-label="Detail view">
+                            </div>
+                        </figure>
+                        <div class="preview-body">
+                            <p>User Manager keeps every operator and their actions auditable.</p>
+                            <ul>
+                                <li>The list exposes ID, username, role, browser, OS, last login, IP, online state, API access, and ban status with filters for online or banned accounts.</li>
+                                <li>Inline icons launch modals for role changes, ban/unban, API toggles, token regeneration, and delete confirmations—mirroring the extra screenshots.</li>
+                                <li>The profile slide shows the dedicated user profile page with avatar zoom, logs shortcut, geolocation/IP data, registration timestamps, and ban details.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- Settings Manager -->
+                    <article class="preview-card">
+                        <h3>Settings Manager</h3>
+                        <figure class="preview-media" tabindex="0">
+                            <div class="preview-slider" data-active-slide="0">
+                                <img src="assets/admin-suite-preview/12-settings-manager.png" alt="Settings manager" class="preview-slide" data-label="Full view">
+                                <img src="assets/admin-suite-preview/12-settings-manager-user-settings.png" alt="User settings" class="preview-slide" data-label="Detail view">
+                                <img src="assets/admin-suite-preview/12-settings-manager-suite-config-table.png" alt="Suite config table" class="preview-slide" data-label="Detail view">
+                                <img src="assets/admin-suite-preview/12-settings-manager-suite-config-edit.png" alt="Suite config edit" class="preview-slide" data-label="Detail view">
+                                <img src="assets/admin-suite-preview/12-settings-manager-feature-flags-manager.png" alt="Feature flags manager" class="preview-slide" data-label="Detail view">
+                            </div>
+                        </figure>
+                        <div class="preview-body">
+                            <p>The Settings hub groups account preferences, suite JSON files, and feature flags inside one landing page.</p>
+                            <ul>
+                                <li>The selector groups Account Settings, Suite Configuration, and Feature Flags so admins know where to start.</li>
+                                <li>Account Settings presents cards for profile photo, username, password, API token visibility/toggles, and push-notification subscription controls.</li>
+                                <li>Suite Configuration lists every JSON file with default/custom badges, opens an editor that can reset to defaults, and the Feature Flags table provides enable/disable buttons per module.</li>
+                            </ul>
+                        </div>
+                    </article>
                 </div>
             </section>
         </main>
