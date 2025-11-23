@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="assets/images/favicon.png">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/images/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Suite Documentation</title>
 </head>
 <body>
@@ -39,7 +39,7 @@
     
     <!-- hero section -->
     <section id="hero-section" class="fade-in no-border">
-        <h3 align="center">Solution for administration and monitoring linux servers</h3>
+        <h3 align="center">Solution for administering and monitoring Linux servers</h3>
         <div class="hero-buttons">
             <a href="#description" class="button">More Information</a>
         </div>
@@ -53,7 +53,7 @@
                 <h2>Description</h2>
                 <p>The Admin Suite is a comprehensive, yet remarkably simple and user-friendly solution meticulously
                     crafted for the efficient monitoring and management of Linux servers. It is primarily designed to
-                    cater to the needs of single server instances, making it an ideal choice for small to medium-sized
+                    cater to the needs of single-server instances, making it an ideal choice for small to medium-sized
                     deployments or dedicated server environments. While optimized for Debian-based systems, its core
                     functionalities are broadly applicable across various Linux distributions.</p>
                 <p>This suite empowers administrators with a centralized dashboard to oversee critical server
@@ -84,8 +84,7 @@
                     provides direct access to server resources, and simplifies the operational footprint, making it
                     exceptionally straightforward to install and manage without the complexities often associated with
                     container orchestration.</p>
-                <p>At its core, the application leverages PHP 8+ (specifically Symfony, as identified from the GitHub
-                    repository analysis) for its powerful backend logic and API functionalities. For data persistence,
+                <p>At its core, the application leverages PHP 8+ for its powerful backend logic and API functionalities. For data persistence,
                     the metrics component and other critical data are stored in a MySQL database, chosen for its
                     reliability, widespread adoption, and robust feature set. Furthermore, the application utilizes the
                     filesystem for caching mechanisms instead of external solutions like Redis, further reducing
@@ -141,7 +140,7 @@
                     running:</p>
                 <ol>
                     <li><b>Download the Release archive:</b> Fetch the latest <code>admin-suite-&lt;tag&gt;.tar.gz</code>
-                        release assets on the <a href="https://github.com/lukasbecvar/admin-suite/releases" target="_blank">GitHub Releases</a>
+                        release archive from the <a href="https://github.com/lukasbecvar/admin-suite/releases" target="_blank">GitHub Releases</a>
                         page, upload it to your server, and extract it to the directory. If you prefer working
                         directly with the source, you can clone it via HTTPS instead:
                         <pre><code>git clone https://github.com/lukasbecvar/admin-suite.git</code></pre>
@@ -206,7 +205,7 @@
                     production).</p>
                 <div class="phone-none">
                     <h4>Environment variables table</h4>
-                    <p>The environment variables are loaded from .env file. You can create .env file in root directory with your configuration.</p>
+                    <p>The environment variables are loaded from the <code>.env</code> file. Create this file in the project root and populate it with your configuration.</p>
                     <table>
                         <thead>
                             <tr>
@@ -228,12 +227,12 @@
                             </tr>
                             <tr>
                                 <td>TRUSTED_HOSTS</td>
-                                <td>Trusted url hosts</td>
+                                <td>Trusted URL hosts</td>
                                 <td>becvar.xyz,becvar.test</td>
                             </tr>
                             <tr>
                                 <td>SSL_ONLY</td>
-                                <td>Enable only ssl traffic</td>
+                                <td>Allow only SSL traffic</td>
                                 <td>true</td>
                             </tr>
                             <tr>
@@ -243,32 +242,32 @@
                             </tr>
                             <tr>
                                 <td>PWA_APP_SUPPORT</td>
-                                <td>Enable pwa app support</td>
+                                <td>Enable PWA app support</td>
                                 <td>true</td>
                             </tr>
                             <tr>
                                 <td>ADMIN_CONTACT</td>
-                                <td>The system maintener contact email</td>
+                                <td>System maintainer contact email</td>
                                 <td>admin@becvar.xyz</td>
                             </tr>
                             <tr>
                                 <td>IP_APIS</td>
-                                <td>The list of APIs to get host server pulic ip</td>
-                                <td>IP_APIS=IP_APIS=https://ifconfig.me,url2,url2</td>
+                                <td>List of APIs used to obtain the host server's public IP</td>
+                                <td>https://ifconfig.me,https://example.tld</td>
                             </tr>
                             <tr>
                                 <td>IP_INFO_API</td>
-                                <td>API for get information about visitor ip</td>
+                                <td>API for getting information about visitor IP addresses</td>
                                 <td>http://ip-api.com</td>
                             </tr>
                             <tr>
                                 <td>AUTHOR_WEBSITE_URL</td>
-                                <td>The system maintener contact email</td>
+                                <td>Author's website URL</td>
                                 <td>https://becvar.xyz</td>
                             </tr>
                             <tr>
                                 <td>PROJECT_GITHUB_URL</td>
-                                <td>The system maintener contact email</td>
+                                <td>Project GitHub URL</td>
                                 <td>https://github.com/lukasbecvar/admin-suite</td>
                             </tr>
                             <tr>
@@ -288,7 +287,7 @@
                             </tr>
                             <tr>
                                 <td>ANTI_LOG_TOKEN</td>
-                                <td>Token for disable logging</td>
+                                <td>Token to disable logging</td>
                                 <td>1234567890</td>
                             </tr>
                             <tr>
@@ -403,7 +402,7 @@
                             </tr>
                             <tr>
                                 <td>PUSH_NOTIFICATIONS_MAX_TTL</td>
-                                <td>Push notifications max ttl</td>
+                                <td>Maximum TTL for push notifications</td>
                                 <td>86400</td>
                             </tr>
                             <tr>
@@ -437,7 +436,7 @@
                         completely. Add fields that carry credentials (e.g., <code>authentication_string</code>,
                         <code>auth_token</code>) to keep them obscured from exports and screenshots.</p>
                     <p><b>blocked-usernames.json</b> — Array of reserved usernames. During registration the backend
-                        matches the chosen username against this list to prevent creation of accounts such as
+                        matches the chosen username against this list to prevent the creation of accounts such as
                         <code>root</code>, <code>administrator</code>, etc. Extend it with any internal-only aliases.</p>
                     <p><b>feature-flags.json</b> — Key/value map of booleans that toggle whole components. Each property
                         name matches a module (e.g., <code>monitoring</code>, <code>terminal</code>, <code>database-manager</code>);
@@ -478,8 +477,8 @@
                     <p><b>terminal-blocked-commands.json</b> — Array of commands that the terminal will refuse to run.
                         Add resource-heavy or destructive binaries (<code>bpytop</code>, <code>vim</code>, etc.) to keep
                         the shared environment safe.</p>
-                    <p>Any change to these files is picked up immediately; you only need to clear cache if you modify
-                        them while running in production with long-lived opcache.</p>
+                    <p>Any change to these files is picked up immediately; you only need to clear the cache if you modify
+                        them while running in production with long-lived OPcache.</p>
                 </div>
             </section>
 
@@ -518,8 +517,8 @@
                     <li><b>XSS Protection:</b> The application incorporates various protections against Cross-Site
                         Scripting (XSS) attacks, sanitizing user inputs and outputs to mitigate common web
                         vulnerabilities.</li>
-                    <li><b>Production Environment Checks:</b> Includes checks to prevent running in production
-                        environments without SSL (Secure Sockets Layer) enabled, ensuring encrypted communication.</li>
+                    <li><b>Production Environment Checks:</b> This feature includes safeguards to prevent running in
+                        production environments without SSL (Secure Sockets Layer) enabled, ensuring encrypted communication.</li>
                     <li><b>Robust Authentication:</b> Utilizes a custom, secure user management system with strong
                         password handling and session management.</li>
                 </ul>
@@ -552,18 +551,18 @@
                     file (<code>METRICS_SAVE_INTERVAL</code>). This historical data is invaluable for analyzing
                     long-term performance trends, identifying bottlenecks, and planning resource allocation.</p>
                 <h4>Metrics Collector for HTTP Services</h4>
-                <p>For web applications, the Admin Suite offers a specialized Metric Collector, enabling you to gather
+                <p>For web applications, the Admin Suite offers a specialized Metrics Collector, enabling you to gather
                     custom metrics directly from your monitored HTTP services. This feature allows for a deeper insight
-                    into application-specific performance indicators. You can easily enable the metric collector within
+                    into application-specific performance indicators. You can easily enable the Metrics Collector within
                     the <code>services-monitoring.json</code> file by setting <code>collect_metrics</code> to
-                    <code>true</code> and specifying the <code>metrics_collector_url</code>. The Metric Collector is
+                    <code>true</code> and specifying the <code>metrics_collector_url</code>. The Metrics Collector is
                     designed to accept simple key-value pairs (<code>key</code> as a string, <code>value</code> as an
                     integer or float), making it highly adaptable for various custom metrics.</p>
                 <h4>Example Response from the Metric Collector URL:</h4>
                 <pre><code>{
   "cpu_usage": 64,
   "ram_usage": 77,
-  "storage_usage": 10,
+  "storage_usage": 10
 }</code></pre>
                 <p>This example demonstrates how your application can expose its internal metrics for collection by the
                     Admin Suite.</p>
@@ -645,7 +644,7 @@ fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
   --data-urlencode "name=backup-service" \
   --data-urlencode "message=Backup finished in 142s" \
   --data-urlencode "level=4"</code></pre>
-                <p>Successful return a JSON confirmation, while missing fields, malformed XML, or invalid
+                <p>Successful requests return a JSON confirmation, while missing fields, malformed XML, or invalid
                     credentials generate descriptive error responses so callers can react immediately.</p>
                 <p>By storing logs directly in the database, the Admin Suite ensures data integrity, facilitates complex
                     querying, and provides a persistent record of all events, making it an indispensable tool for system
@@ -658,7 +657,7 @@ fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
                 <p class="preview-description">
                     These frames are captured directly from a live Admin Suite environment, so every widget, badge, and
                     chart shown below reflects the production-ready state of the platform rather than mockups or drafts.
-                    Treat this section as a quick visual audit of how the tooling behaves once it is deployed on real
+                    Treat this section as a quick visual audit of how the tooling behaves once it is deployed in a real
                     environment.
                 </p>
                 <div class="preview-grid">
@@ -675,7 +674,7 @@ fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
                             <ul>
                                 <li>Diagnostics alerts and notifications.</li>
                                 <li>Service status and controls.</li>
-                                <li>List with running processes information.</li>
+                                <li>List of running processes with detailed information.</li>
                                 <li>Widgets summarize network traffic, resource utilization, uptime, installation date, and database statistics.</li>
                             </ul>
                         </div>
@@ -692,7 +691,7 @@ fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
                             </div>
                         </figure>
                         <div class="preview-body">
-                            <p>The Monitoring hub shows internal daemon list, HTTP checks, and drill-downs for each service.</p>
+                            <p>The Monitoring hub shows an internal daemon list, HTTP checks, and drill-downs for each service.</p>
                             <ul>
                                 <li>Status Log keeps a timestamped list of recent incidents with quick links into the global Log Manager.</li>
                                 <li>Internal and HTTP cards display heartbeat LEDs, SLA badges, response codes, and one-click start/stop or “Metrics” actions for every monitored target.</li>
@@ -711,7 +710,7 @@ fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
                             </div>
                         </figure>
                         <div class="preview-body">
-                            <p>The Metrics Dashboard page provides a raw and historical data.</p>
+                            <p>The Metrics Dashboard page provides raw and historical data.</p>
                             <ul>
                                 <li>The period dropdown flips between raw cache, 24h, week, month, or all-time views, while an “aggregate” button condenses old samples.</li>
                                 <li>Hero cards for CPU, RAM, and Disk show current percentages, gradient progress bars, and the instant trend.</li>

@@ -550,6 +550,7 @@ body.lightbox-open {
     justify-content: center;
     padding: 0;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    z-index: 1000;  
 }
 
 .lightbox-close {
