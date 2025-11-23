@@ -42,91 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
         appearOnScroll.observe(fader)
     })
 
-    // --- gallery lightbox --- //
-    const documentationData = [
-        {
-            image: 'assets/admin-suite-preview/1-dashboard.png',
-            title: 'Dashboard',
-            description: 'The main dashboard provides a comprehensive overview of the system. It displays real-time information about running processes, network usage, system resources, and database statistics.'
-        },
-        {
-            image: 'assets/admin-suite-preview/2-monitoring.png',
-            title: 'Monitoring',
-            description: 'The monitoring section allows you to track the status of internal and external services. It provides a log of recent events and shows the SLA history for each service.'
-        },
-        {
-            image: 'assets/admin-suite-preview/3-monitoring-service-details.png',
-            title: 'Service Details',
-            description: 'This view provides detailed metrics for a specific service, including visitor counts and total visitors over time. It also shows the HTTP service details like URL, max response time, and accepted codes.'
-        },
-        {
-            image: 'assets/admin-suite-preview/4-metrics-dashboard.png',
-            title: 'Metrics Dashboard',
-            description: 'The metrics dashboard displays historical data for CPU, RAM, and disk usage. This helps in analyzing the system\'s performance over a period of time.'
-        },
-        {
-            image: 'assets/admin-suite-preview/5-database-manager.png',
-            title: 'Database Manager',
-            description: 'The database manager provides an overview of all databases, including their size and the number of tables. It. also shows important database statistics like uptime, connected threads, and queries.'
-        },
-        {
-            image: 'assets/admin-suite-preview/6-logs-manager.png',
-            title: 'Logs Manager',
-            description: 'The logs manager displays a list of system logs. You can see details like the message, time, browser, OS, IP address, and the user associated with each log entry.'
-        },
-        {
-            image: 'assets/admin-suite-preview/7-file-system-manager.png',
-            title: 'File System Browser',
-            description: 'The file system browser allows you to navigate the server\'s file system. It shows file and folder names, sizes, permissions, and modification dates.'
-        },
-        {
-            image: 'assets/admin-suite-preview/8-terminal-component.png',
-            title: 'Terminal',
-            description: 'An interactive terminal to execute commands directly on the server. It also includes a server panel for quick actions like starting or stopping services.'
-        },
-        {
-            image: 'assets/admin-suite-preview/9-system-auditor.png',
-            title: 'System Auditor',
-            description: 'The system auditor displays security and audit information, including system security rules, SSH access history, and journal live logs.'
-        },
-        {
-            image: 'assets/admin-suite-preview/10-diagnostics.png',
-            title: 'System Diagnostics',
-            description: 'The diagnostics page runs a series of checks to ensure the system and the suite are running correctly. It checks for things like required packages, log file sizes, and storage usage.'
-        },
-        {
-            image: 'assets/admin-suite-preview/11-users-manager.png',
-            title: 'Users Manager',
-            description: 'The users manager lists all users with their roles, browser, OS, last login, and IP address. You can manage users and their permissions from this page.'
-        },
-        {
-            image: 'assets/admin-suite-preview/12-user-details-view.png',
-            title: 'User Profile',
-            description: 'The user profile page shows detailed information about a specific user, including their logs, IP geolocation information, and ban status.'
-        },
-        {
-            image: 'assets/admin-suite-preview/13-config-manager.png',
-            title: 'Settings',
-            description: 'The settings page allows you to manage account settings, suite configuration, and feature flags.'
-        },
-        {
-            image: 'assets/admin-suite-preview/14-account-settings.png',
-            title: 'Account Settings',
-            description: 'Account settings allow you to manage your account, including password changes, notification settings, and api access keys.'
-        },
-        {
-            image: 'assets/admin-suite-preview/15-suite-configuration.png',
-            title: 'Suite Configuration',
-            description: 'This page allows you to manage suite-wide configuration files. You can view the status of each configuration file.'
-        },
-        {
-            image: 'assets/admin-suite-preview/16-feature-flags-config.png',
-            title: 'Feature Flags',
-            description: 'The feature flags page allows you to enable or disable features of the application in real-time.'
-        }
-    ]
-
-    const galleryContainer = document.getElementById('preview-container')
+    // --- preview fullscreen viewer --- //
+    const previewCards = document.querySelectorAll('.preview-card')
+    const sliderState = new Map()
     const lightbox = document.getElementById('lightbox')
     const lightboxImg = document.getElementById('lightbox-img')
     const lightboxCaption = document.getElementById('lightbox-caption')
@@ -134,75 +52,210 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevBtn = document.querySelector('.lightbox-prev')
     const nextBtn = document.querySelector('.lightbox-next')
 
-    let currentIndex = 0
+    setupPreviewSliders()
+    const previewData = collectPreviewData()
 
-    documentationData.forEach((item, index) => {
-        const galleryItem = document.createElement('div')
-        galleryItem.classList.add('preview-item')
-        galleryItem.dataset.index = index
+    let currentCardIndex = 0
+    let currentSlideIndex = 0
 
-        const image = document.createElement('img')
-        image.src = item.image
-        image.alt = item.title
-
-        const caption = document.createElement('div')
-        caption.classList.add('caption')
-
-        const title = document.createElement('h3')
-        title.textContent = item.title
-
-        const description = document.createElement('p')
-        description.textContent = item.description
-
-        caption.appendChild(title)
-        caption.appendChild(description)
-
-        galleryItem.appendChild(image)
-        galleryItem.appendChild(caption)
-
-        galleryItem.addEventListener('click', () => {
-            openLightbox(index)
-        })
-
-        galleryContainer.appendChild(galleryItem)
-    })
-
-    function openLightbox(index) {
-        currentIndex = index
-        updateLightboxContent()
-        lightbox.style.display = 'block'
+    function openLightbox(cardIndex, slideIndex = 0) {
+        if (!lightbox) return
+        currentCardIndex = cardIndex
+        currentSlideIndex = slideIndex
+        updateLightbox()
+        lightbox.classList.add('visible')
         document.body.classList.add('lightbox-open')
+        lightbox.setAttribute('aria-hidden', 'false')
     }
 
     function closeLightbox() {
-        lightbox.style.display = 'none'
+        if (!lightbox) return
+        lightbox.classList.remove('visible')
         document.body.classList.remove('lightbox-open')
+        lightbox.setAttribute('aria-hidden', 'true')
     }
 
-    function showNext() {
-        currentIndex = (currentIndex + 1) % documentationData.length
-        updateLightboxContent()
+    function showNextPreview() {
+        if (!previewData.length) return
+        const slides = previewData[currentCardIndex]?.slides || []
+        if (slides.length && currentSlideIndex < slides.length - 1) {
+            currentSlideIndex += 1
+        } else {
+            currentCardIndex = (currentCardIndex + 1) % previewData.length
+            currentSlideIndex = 0
+        }
+        updateLightbox()
     }
 
-    function showPrev() {
-        currentIndex = (currentIndex - 1 + documentationData.length) % documentationData.length
-        updateLightboxContent()
+    function showPrevPreview() {
+        if (!previewData.length) return
+        const slides = previewData[currentCardIndex]?.slides || []
+        if (currentSlideIndex > 0) {
+            currentSlideIndex -= 1
+        } else {
+            currentCardIndex = (currentCardIndex - 1 + previewData.length) % previewData.length
+            const previousSlides = previewData[currentCardIndex]?.slides || []
+            currentSlideIndex = Math.max(previousSlides.length - 1, 0)
+        }
+        updateLightbox()
     }
 
-    function updateLightboxContent() {
-        const item = documentationData[currentIndex]
-        lightboxImg.src = item.image
-        lightboxCaption.innerHTML = `<h3>${item.title}</h3><p>${item.description}</p>`
+    function updateLightbox() {
+        const data = previewData[currentCardIndex]
+        if (!data || !lightboxImg || !lightboxCaption) return
+        const slide = data.slides[currentSlideIndex] || data.slides[0] || {}
+        lightboxImg.src = slide.src || ''
+        lightboxImg.alt = slide.alt || data.title
+        const slideLabel = slide.label ? `<p class=\"lightbox-slide-label\">${slide.label}</p>` : ''
+        lightboxCaption.innerHTML = `<h3>${data.title}</h3>${slideLabel}${data.description}`
     }
 
-    closeBtn.addEventListener('click', closeLightbox)
-    prevBtn.addEventListener('click', showPrev)
-    nextBtn.addEventListener('click', showNext)
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
+    previewCards.forEach((card, index) => {
+        const trigger = card.querySelector('.preview-media')
+        if (trigger) {
+            trigger.addEventListener('click', () => openLightbox(index, getActiveSlideIndex(index)))
+            trigger.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault()
+                    openLightbox(index, getActiveSlideIndex(index))
+                }
+            })
+        }
+    })
+
+    closeBtn?.addEventListener('click', closeLightbox)
+    prevBtn?.addEventListener('click', showPrevPreview)
+    nextBtn?.addEventListener('click', showNextPreview)
+
+    lightbox?.addEventListener('click', (event) => {
+        if (event.target === lightbox) {
             closeLightbox()
         }
     })
+
+    document.addEventListener('keydown', (event) => {
+        if (!lightbox?.classList.contains('visible')) {
+            return
+        }
+        if (event.key === 'Escape') {
+            closeLightbox()
+        } else if (event.key === 'ArrowRight') {
+            showNextPreview()
+        } else if (event.key === 'ArrowLeft') {
+            showPrevPreview()
+        }
+    })
+
+    function setupPreviewSliders() {
+        previewCards.forEach((card, cardIndex) => {
+            const media = card.querySelector('.preview-media')
+            const slider = media?.querySelector('.preview-slider')
+            const slides = slider ? Array.from(slider.querySelectorAll('.preview-slide')) : []
+            if (!slider || !slides.length) {
+                return
+            }
+
+            sliderState.set(cardIndex, 0)
+            slider.dataset.activeSlide = '0'
+            slides.forEach((slide, index) => {
+                const isActive = index === 0
+                slide.classList.toggle('active', isActive)
+                slide.setAttribute('aria-hidden', isActive ? 'false' : 'true')
+            })
+
+            if (slides.length <= 1) {
+                return
+            }
+
+            const prevBtn = document.createElement('button')
+            prevBtn.type = 'button'
+            prevBtn.className = 'preview-control preview-control-prev'
+            prevBtn.setAttribute('aria-label', 'Show previous screenshot')
+            prevBtn.innerHTML = '&#10094;'
+
+            const nextBtn = document.createElement('button')
+            nextBtn.type = 'button'
+            nextBtn.className = 'preview-control preview-control-next'
+            nextBtn.setAttribute('aria-label', 'Show next screenshot')
+            nextBtn.innerHTML = '&#10095;'
+
+            const dots = document.createElement('div')
+            dots.className = 'preview-dots'
+
+            const goToSlide = (targetIndex) => {
+                const total = slides.length
+                const normalized = (targetIndex + total) % total
+                slides.forEach((slide, slideIndex) => {
+                    const isActive = slideIndex === normalized
+                    slide.classList.toggle('active', isActive)
+                    slide.setAttribute('aria-hidden', isActive ? 'false' : 'true')
+                })
+                slider.dataset.activeSlide = String(normalized)
+                sliderState.set(cardIndex, normalized)
+                dots.querySelectorAll('.preview-dot').forEach((dot, dotIndex) => {
+                    dot.classList.toggle('active', dotIndex === normalized)
+                })
+            }
+
+            slides.forEach((slide, slideIndex) => {
+                const dot = document.createElement('button')
+                dot.type = 'button'
+                dot.className = 'preview-dot'
+                const label = slide.dataset.label || `Screenshot ${slideIndex + 1}`
+                dot.setAttribute('aria-label', `Show ${label}`)
+                dot.addEventListener('click', (event) => {
+                    event.stopPropagation()
+                    event.preventDefault()
+                    goToSlide(slideIndex)
+                })
+                dots.appendChild(dot)
+            })
+
+            prevBtn.addEventListener('click', (event) => {
+                event.stopPropagation()
+                event.preventDefault()
+                const current = Number(slider.dataset.activeSlide) || 0
+                goToSlide(current - 1)
+            })
+
+            nextBtn.addEventListener('click', (event) => {
+                event.stopPropagation()
+                event.preventDefault()
+                const current = Number(slider.dataset.activeSlide) || 0
+                goToSlide(current + 1)
+            })
+
+            media?.appendChild(prevBtn)
+            media?.appendChild(nextBtn)
+            media?.appendChild(dots)
+            goToSlide(0)
+        })
+    }
+
+    function collectPreviewData() {
+        return Array.from(previewCards).map(card => {
+            const title = card.querySelector('h3')?.textContent?.trim() || ''
+            const body = card.querySelector('.preview-body')
+            const slides = Array.from(card.querySelectorAll('.preview-slide')).map(slide => ({
+                src: slide.getAttribute('src') || '',
+                alt: slide.getAttribute('alt') || title,
+                label: slide.dataset.label || ''
+            }))
+            return {
+                title,
+                description: body ? body.innerHTML : '',
+                slides: slides.length ? slides : [{
+                    src: '',
+                    alt: title,
+                    label: ''
+                }]
+            }
+        })
+    }
+
+    function getActiveSlideIndex(cardIndex) {
+        return sliderState.get(cardIndex) ?? 0
+    }
 
     // get scroll to top button
     let mybutton = document.getElementById("scrollToTopBtn")

@@ -8,9 +8,11 @@
     <title>Admin Suite Documentation</title>
 </head>
 <body>
+    <!-- loading component -->
     <div id="preloader">
         <div class="spinner"></div>
     </div>
+    
     <!-- navbar -->
     <nav id="navbar">
         <div class="mobile-nav-header">
@@ -34,13 +36,16 @@
             <li><a href="#preview">System Preview</a></li>
         </ul>
     </nav>
-    <!-- landing page -->
+    
+    <!-- hero section -->
     <section id="hero-section" class="fade-in no-border">
         <h3 align="center">Solution for administration and monitoring linux servers</h3>
         <div class="hero-buttons">
             <a href="#description" class="button">More Information</a>
         </div>
     </section>
+
+    <!-- main content -->
     <div class="container">
         <main id="main-content">
             <!-- description -->
@@ -57,7 +62,7 @@
                     server management accessible even to those with limited command-line experience, while still
                     providing powerful tools for seasoned professionals.</p>
             </section>
-
+            
             <!-- open source -->
             <section id="open-source" class="fade-in">
                 <h2>Open Source</h2>
@@ -252,6 +257,11 @@
                                 <td>IP_APIS=IP_APIS=https://ifconfig.me,url2,url2</td>
                             </tr>
                             <tr>
+                                <td>IP_INFO_API</td>
+                                <td>API for get information about visitor ip</td>
+                                <td>http://ip-api.com</td>
+                            </tr>
+                            <tr>
                                 <td>AUTHOR_WEBSITE_URL</td>
                                 <td>The system maintener contact email</td>
                                 <td>https://becvar.xyz</td>
@@ -260,11 +270,6 @@
                                 <td>PROJECT_GITHUB_URL</td>
                                 <td>The system maintener contact email</td>
                                 <td>https://github.com/lukasbecvar/admin-suite</td>
-                            </tr>
-                            <tr>
-                                <td>IP_INFO_API</td>
-                                <td>API for get information about visitor ip</td>
-                                <td>http://ip-api.com</td>
                             </tr>
                             <tr>
                                 <td>RATE_LIMIT_ENABLED</td>
@@ -647,14 +652,37 @@ fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
                     administrators.</p>
             </section>
 
-            <!-- preview -->
-            <section id="preview" class="fade-in">
+            <!-- system preview -->
+            <section id="preview" class="preview-section">
                 <h2>System Preview</h2>
-                <p>Explore a visual preview of the Admin Suite in action. This gallery showcases various modules and
-                    functionalities as they appear in a production environment, offering a glimpse into the intuitive
-                    user interface and comprehensive features designed for efficient server administration and
-                    monitoring.</p>
-                <div id="preview-container"></div>
+                <p class="preview-description">
+                    These frames are captured directly from a live Admin Suite environment, so every widget, badge, and
+                    chart shown below reflects the production-ready state of the platform rather than mockups or drafts.
+                    Treat this section as a quick visual audit of how the tooling behaves once it is deployed on real
+                    environment.
+                </p>
+                <div class="preview-grid">
+
+                    <!-- TESTING ARTICLE -->
+                    <article class="preview-card">
+                        <h3>aaaaa</h3>
+                        <figure class="preview-media" tabindex="0">
+                            <div class="preview-slider" data-active-slide="0">
+                                <img src="assets/admin-suite-preview/1-dashboard.png" alt="Dashboard showing monitoring cards, process list, and usage widgets" class="preview-slide" data-label="Full view">
+                                <img src="assets/admin-suite-preview/1-dashboard-detail.png" alt="Dashboard showing monitoring cards, process list, and usage widgets (detail view)" class="preview-slide" data-label="Detail view">
+                            </div>
+                        </figure>
+                        <div class="preview-body">
+                            <p>The landing page concentrates key health indicators so operators can triage issues the second they log in.</p>
+                            <ul>
+                                <li>Service tiles with inline controls reveal whether firewall, SSH, VPN, and other daemons are online.</li>
+                                <li>Process list exposes active PIDs, owning users, and commands for rapid kill/inspect actions.</li>
+                                <li>Widgets summarize network traffic, resource utilization, uptime, installation date, and database log statistics.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                </div>
             </section>
         </main>
     </div>
@@ -665,15 +693,18 @@ fetch('https://admin-suite.url/api/monitoring/visitor/tracking', {
     </footer>
 
     <!-- lightbox -->
-    <div id="lightbox" class="lightbox">
-        <span class="lightbox-close">&times;</span>
-        <a class="lightbox-prev">&#10094;</a>
-        <a class="lightbox-next">&#10095;</a>
+    <div id="lightbox" class="lightbox" aria-hidden="true">
+        <span class="lightbox-close" aria-label="Close preview">&times;</span>
         <div class="lightbox-content">
-            <img id="lightbox-img" class="lightbox-img">
+            <div class="lightbox-media">
+                <button class="lightbox-prev" aria-label="Previous preview">&#10094;</button>
+                <img id="lightbox-img" class="lightbox-img" alt="System preview image">
+                <button class="lightbox-next" aria-label="Next preview">&#10095;</button>
+            </div>
             <div id="lightbox-caption" class="lightbox-caption"></div>
         </div>
     </div>
+
     <script src="script.js"></script>
     <button id="scrollToTopBtn" title="Go to top">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
