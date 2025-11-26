@@ -373,6 +373,23 @@ class AppUtilTest extends TestCase
     }
 
     /**
+     * Test check if feature flag is disabled when flag is not configured
+     *
+     * @return void
+     */
+    public function testCheckIfFeatureFlagDisabledWhenFlagIsNotConfigured(): void
+    {
+        $this->kernelInterface->method('getProjectDir')->willReturn('/suite');
+        $this->jsonUtilMock->method('getJson')->willReturn(['other-flag' => true]);
+
+        // call tested method
+        $result = $this->appUtil->isFeatureFlagDisabled('monitoring');
+
+        // assert result
+        $this->assertFalse($result);
+    }
+
+    /**
      * Test round times in array
      *
      * @return void
@@ -429,23 +446,6 @@ class AppUtilTest extends TestCase
         // test gigabytes
         $this->assertEquals('1 GB', $this->appUtil->formatBytes(1073741824));
         $this->assertEquals('1.5 GB', $this->appUtil->formatBytes(1610612736));
-    }
-
-    /**
-     * Test check if feature flag is disabled when flag is not configured
-     *
-     * @return void
-     */
-    public function testCheckIfFeatureFlagDisabledWhenFlagIsNotConfigured(): void
-    {
-        $this->kernelInterface->method('getProjectDir')->willReturn('/suite');
-        $this->jsonUtilMock->method('getJson')->willReturn(['other-flag' => true]);
-
-        // call tested method
-        $result = $this->appUtil->isFeatureFlagDisabled('monitoring');
-
-        // assert result
-        $this->assertFalse($result);
     }
 
     /**
