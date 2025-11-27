@@ -78,4 +78,42 @@ class BannedRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    /**
+     * Get active bans with related users using pagination
+     *
+     * @param int $limit Maximum number of rows to return
+     * @param int $offset Offset for pagination
+     *
+     * @return array<User> The list of banned users
+     */
+    public function findActiveBans(int $limit, int $offset = 0): array
+    {
+        if ($limit <= 0) {
+            return [];
+        }
+
+        $qb = $this->createQueryBuilder('b')
+            ->innerJoin('b.bannedUser', 'u')
+            ->addSelect('u')
+            ->where('b.status = :status')
+            ->setParameter('status', 'active')
+            ->orderBy('b.time', 'DESC')
+            ->setFirstResult(max($offset, 0))
+            ->setMaxResults($limit)
+            ->distinct();
+
+        /** @var array<Banned> $result */
+        $result = $qb->getQuery()->getResult();
+
+        $users = [];
+        foreach ($result as $ban) {
+            $user = $ban->getBannedUser();
+            if ($user !== null) {
+                $users[] = $user;
+            }
+        }
+
+        return $users;
+    }
 }

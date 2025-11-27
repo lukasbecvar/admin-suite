@@ -69,8 +69,8 @@ class UsersManagerController extends AbstractController
             $page = 1;
         }
 
-        // get page limit from config
-        $pageLimit = $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
+        // get page limiter
+        $pageLimit = (int) $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
 
         // get filter from request query params
         $filter = $request->query->get('filter', '');
@@ -98,7 +98,8 @@ class UsersManagerController extends AbstractController
                     $usersData = $this->authManager->getOnlineUsersList();
                     break;
                 case 'banned':
-                    $usersData = $this->banManager->getBannedUsers();
+                    $usersData = $this->banManager->getBannedUsers($page, $pageLimit);
+                    $usersCount = $this->banManager->getBannedCount();
                     break;
                 default:
                     $usersData = $this->userManager->getUsersByPage($page);

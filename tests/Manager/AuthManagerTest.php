@@ -1177,12 +1177,25 @@ class AuthManagerTest extends TestCase
      */
     public function testCacheOnlineUser(): void
     {
-        // expect cache set
-        $this->cacheUtilMock->expects($this->once())->method('setValue')->with(
-            $this->equalTo('online_user_123'),
-            $this->equalTo('online'),
-            $this->equalTo(300)
-        );
+        $onlineListCacheItem = $this->createMock(CacheItemInterface::class);
+        $onlineListCacheItem->method('get')->willReturn([]);
+
+        // mock cache
+        $this->cacheUtilMock->expects($this->once())->method('getValue')->with($this->equalTo('online_users_list'))->willReturn($onlineListCacheItem);
+
+        $setInvocation = 0;
+        $this->cacheUtilMock->expects($this->exactly(2))->method('setValue')->willReturnCallback(function (string $key, mixed $value, int $ttl) use (&$setInvocation) {
+            if ($setInvocation === 0) {
+                $this->assertSame('online_user_123', $key);
+                $this->assertSame('online', $value);
+                $this->assertSame(300, $ttl);
+            } else {
+                $this->assertSame('online_users_list', $key);
+                $this->assertEquals([123], $value);
+                $this->assertSame(300, $ttl);
+            }
+            $setInvocation++;
+        });
 
         // call test method
         $this->authManager->cacheOnlineUser(123);
@@ -1195,11 +1208,32 @@ class AuthManagerTest extends TestCase
      */
     public function testGetOnlineUsersList(): void
     {
+        $onlineListCacheItem = $this->createMock(CacheItemInterface::class);
+        $onlineListCacheItem->method('get')->willReturn([1]);
+        $onlineStatusCacheItem = $this->createMock(CacheItemInterface::class);
+        $onlineStatusCacheItem->method('get')->willReturn('online');
+
+        $getInvocation = 0;
+        $this->cacheUtilMock->expects($this->exactly(2))->method('getValue')->willReturnCallback(function (string $key) use (&$getInvocation, $onlineListCacheItem, $onlineStatusCacheItem) {
+            if ($getInvocation === 0) {
+                $this->assertSame('online_users_list', $key);
+                $getInvocation++;
+                return $onlineListCacheItem;
+            }
+            $this->assertSame('online_user_1', $key);
+            $getInvocation++;
+
+            return $onlineStatusCacheItem;
+        });
+
+        $user = $this->createMock(User::class);
+        $this->userManagerMock->expects($this->once())->method('getUsersByIds')->with([1])->willReturn([$user]);
+
         // call tested method
         $result = $this->authManager->getOnlineUsersList();
 
         // assert result
-        $this->assertIsArray($result);
+        $this->assertSame([$user], $result);
     }
 
     /**

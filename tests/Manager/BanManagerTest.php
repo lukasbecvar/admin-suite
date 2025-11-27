@@ -3,6 +3,7 @@
 namespace App\Tests\Manager;
 
 use App\Entity\User;
+use App\Util\AppUtil;
 use App\Entity\Banned;
 use App\Manager\BanManager;
 use App\Manager\LogManager;
@@ -27,6 +28,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class BanManagerTest extends CustomTestCase
 {
     private BanManager $banManager;
+    private AppUtil & MockObject $appUtilMock;
     private LogManager & MockObject $logManagerMock;
     private UserManager & MockObject $userManagerMock;
     private AuthManager & MockObject $authManagerMock;
@@ -38,6 +40,7 @@ class BanManagerTest extends CustomTestCase
     protected function setUp(): void
     {
         // mock dependencies
+        $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->userManagerMock = $this->createMock(UserManager::class);
         $this->authManagerMock = $this->createMock(AuthManager::class);
@@ -56,6 +59,7 @@ class BanManagerTest extends CustomTestCase
 
         // create ban manager instance
         $this->banManager = new BanManager(
+            $this->appUtilMock,
             $this->logManagerMock,
             $this->userManagerMock,
             $this->authManagerMock,
@@ -187,11 +191,18 @@ class BanManagerTest extends CustomTestCase
      */
     public function testGetBannedUsers(): void
     {
+        $limit = 10;
+        $users = [$this->createUserEntity(1)];
+
+        $this->appUtilMock->method('getEnvValue')->with('LIMIT_CONTENT_PER_PAGE')->willReturn((string) $limit);
+        $this->banRepositoryMock->expects($this->once())->method('findActiveBans')->with($limit, 0)->willReturn($users);
+
         // call the method
         $banList = $this->banManager->getBannedUsers();
 
         // assert result
         $this->assertIsArray($banList);
+        $this->assertSame($users, $banList);
     }
 
     /**

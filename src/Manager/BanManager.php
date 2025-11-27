@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use DateTime;
 use Exception;
+use App\Util\AppUtil;
 use App\Entity\Banned;
 use App\Repository\BannedRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,8 +26,10 @@ class BanManager
     private BannedRepository $bannedRepository;
     private EntityManagerInterface $entityManager;
     private NotificationsManager $notificationsManager;
+    private AppUtil $appUtil;
 
     public function __construct(
+        AppUtil $appUtil,
         LogManager $logManager,
         UserManager $userManager,
         AuthManager $authManager,
@@ -35,6 +38,7 @@ class BanManager
         EntityManagerInterface $entityManager,
         NotificationsManager $notificationsManager
     ) {
+        $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->userManager = $userManager;
         $this->authManager = $authManager;
@@ -189,34 +193,32 @@ class BanManager
     /**
      * Get banned users list
      *
+     * @param int $page Page number to fetch
+     * @param int|null $limit Optional page size override
+     *
      * @return array<\App\Entity\User> The list of banned users
      */
-    public function getBannedUsers(): array
+    public function getBannedUsers(int $page = 1, ?int $limit = null): array
     {
-        $banned = [];
-
-        /** @var array<\App\Entity\User> $users all users list */
-        $users = $this->userManager->getAllUsersRepositories();
-
-        // check if $users is iterable
-        if (is_iterable($users)) {
-            foreach ($users as $user) {
-                // get user id
-                $userId = $user->getId();
-
-                // check if user id is integer
-                if (!is_integer($userId)) {
-                    continue;
-                }
-
-                // check if user is banned
-                if ($this->isUserBanned($userId)) {
-                    $banned[] = $user;
-                }
-            }
+        if ($page < 1) {
+            $page = 1;
         }
 
-        return $banned;
+        $perPage = $limit ?? (int) $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
+        if ($perPage <= 0) {
+            $perPage = 25;
+        }
+
+        $offset = ($page - 1) * $perPage;
+
+        try {
+            return $this->bannedRepository->findActiveBans($perPage, $offset);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error getting banned users: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     /**

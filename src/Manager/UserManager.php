@@ -66,6 +66,22 @@ class UserManager
     }
 
     /**
+     * Get users by identifiers.
+     *
+     * @param array<int> $userIds List of user IDs
+     *
+     * @return array<User> The user objects matching the identifiers
+     */
+    public function getUsersByIds(array $userIds): array
+    {
+        if ($userIds === []) {
+            return [];
+        }
+
+        return $this->userRepository->findBy(['id' => $userIds]);
+    }
+
+    /**
      * Get user from repository by username
      *
      * @param string $username The username of user to retrieve

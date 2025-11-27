@@ -24,6 +24,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AuthManager
 {
+    private const ONLINE_STATUS_TTL = 300;
+    private const ONLINE_USERS_CACHE_KEY = 'online_users_list';
+
     private AppUtil $appUtil;
     private CacheUtil $cacheUtil;
     private LogManager $logManager;
@@ -744,34 +747,15 @@ class AuthManager
      */
     public function getOnlineUsersList(): array
     {
-        $onlineVisitors = [];
-
         try {
-            /** @var \App\Entity\User[] $users */
-            $users = $this->userManager->getAllUsersRepositories();
+            $onlineUserIds = $this->getCachedOnlineUserIds();
 
-            // check if $users is iterable
-            if (!is_iterable($users)) {
-                return $onlineVisitors;
+            // check if online user ids are empty
+            if ($onlineUserIds === []) {
+                return [];
             }
 
-            // check users status
-            foreach ($users as $user) {
-                $userId = $user->getId();
-
-                // check if id is not null
-                if ($userId != null) {
-                    // get visitor status
-                    $status = $this->getUserStatus($userId);
-
-                    // check visitor status
-                    if ($status == 'online') {
-                        array_push($onlineVisitors, $user);
-                    }
-                }
-            }
-
-            return $onlineVisitors;
+            return $this->userManager->getUsersByIds($onlineUserIds);
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to get online users list: ' . $e->getMessage(),
@@ -815,6 +799,64 @@ class AuthManager
     public function cacheOnlineUser(int $userId): void
     {
         // cache online visitor
-        $this->cacheUtil->setValue('online_user_' . $userId, 'online', 300);
+        $this->cacheUtil->setValue('online_user_' . $userId, 'online', self::ONLINE_STATUS_TTL);
+        $this->addOnlineUserToCacheList($userId);
+    }
+
+    /**
+     * Get list of currently cached online user IDs
+     *
+     * @return array<int>
+     */
+    public function getCachedOnlineUserIds(): array
+    {
+        $cacheItem = $this->cacheUtil->getValue(self::ONLINE_USERS_CACHE_KEY);
+        $stored = $cacheItem->get();
+
+        if (!is_array($stored)) {
+            return [];
+        }
+
+        $validIds = [];
+        foreach ($stored as $userId) {
+            if (!is_int($userId) || $userId <= 0) {
+                continue;
+            }
+
+            if ($this->getUserStatus($userId) === 'online') {
+                $validIds[] = $userId;
+            }
+        }
+
+        if ($validIds !== $stored) {
+            $this->cacheUtil->setValue(self::ONLINE_USERS_CACHE_KEY, $validIds, self::ONLINE_STATUS_TTL);
+        }
+
+        return $validIds;
+    }
+
+    /**
+     * Persist online user list with the provided identifier
+     *
+     * @param int $userId Online user identifier
+     *
+     * @return void
+     */
+    public function addOnlineUserToCacheList(int $userId): void
+    {
+        $cacheItem = $this->cacheUtil->getValue(self::ONLINE_USERS_CACHE_KEY);
+        $stored = $cacheItem->get();
+
+        // check if stored value is not an array
+        if (!is_array($stored)) {
+            $stored = [];
+        }
+
+        // check if user id is not already in the list
+        if (!in_array($userId, $stored, true)) {
+            $stored[] = $userId;
+        }
+
+        $this->cacheUtil->setValue(self::ONLINE_USERS_CACHE_KEY, array_values($stored), self::ONLINE_STATUS_TTL);
     }
 }
