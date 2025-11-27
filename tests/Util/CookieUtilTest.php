@@ -2,6 +2,7 @@
 
 namespace App\Tests\Util;
 
+use App\Util\AppUtil;
 use App\Util\CookieUtil;
 use App\Util\SecurityUtil;
 use PHPUnit\Framework\TestCase;
@@ -19,15 +20,17 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class CookieUtilTest extends TestCase
 {
     private CookieUtil $cookieUtil;
+    private AppUtil & MockObject $appUtilMock;
     private SecurityUtil & MockObject $securityUtilMock;
 
     protected function setUp(): void
     {
         // mock dependencies
+        $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->securityUtilMock = $this->createMock(SecurityUtil::class);
 
         // create the cookie util instance
-        $this->cookieUtil = new CookieUtil($this->securityUtilMock);
+        $this->cookieUtil = new CookieUtil($this->appUtilMock, $this->securityUtilMock);
     }
 
     /**

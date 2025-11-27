@@ -14,10 +14,12 @@ use App\Util\SecurityUtil;
  */
 class CookieUtil
 {
+    private AppUtil $appUtil;
     private SecurityUtil $securityUtil;
 
-    public function __construct(SecurityUtil $securityUtil)
+    public function __construct(AppUtil $appUtil, SecurityUtil $securityUtil)
     {
+        $this->appUtil = $appUtil;
         $this->securityUtil = $securityUtil;
     }
 
@@ -38,7 +40,13 @@ class CookieUtil
             $value = base64_encode($value);
 
             // set cookie
-            setcookie($name, $value, $expiration, '/', httponly: true);
+            setcookie($name, $value, [
+                'path'     => '/',
+                'httponly' => true,
+                'samesite' => 'Strict',
+                'expires'  => $expiration,
+                'secure'   => $this->appUtil->isSSLOnly()
+            ]);
         }
     }
 
