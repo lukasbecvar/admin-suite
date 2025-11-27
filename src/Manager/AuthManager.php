@@ -592,19 +592,27 @@ class AuthManager
             'message' => null
         ];
 
-        /** @var \App\Entity\User[] $userRepositories */
-        $userRepositories = $this->userManager->getAllUsersRepositories();
-
-        // regenerate all users tokens
-        foreach ($userRepositories as $user) {
-            // generate new auth token
-            $newToken = $this->generateUserToken();
-
-            // set new user token
-            $user->setToken($newToken);
-        }
-
         try {
+            /** @var \App\Entity\User[] $userRepositories */
+            $userRepositories = $this->userManager->getAllUsersRepositories();
+
+            // Fetch all existing tokens once and put them into a hash map for efficient lookup
+            $existingTokens = array_flip($this->userManager->findAllUserTokens());
+
+            // Regenerate all users tokens
+            foreach ($userRepositories as $user) {
+                $newToken = '';
+                do {
+                    // generate new auth token (without DB uniqueness check)
+                    $newToken = ByteString::fromRandom(32)->toString();
+                } while (isset($existingTokens[$newToken])); // Check against in-memory hash map
+
+                $existingTokens[$newToken] = true; // Add new token to the hash map to prevent duplicates within this batch
+
+                // set new user token
+                $user->setToken($newToken);
+            }
+
             // flush changes to database
             $this->entityManager->flush();
         } catch (Exception $e) {

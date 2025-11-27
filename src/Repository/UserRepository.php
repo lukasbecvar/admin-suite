@@ -21,4 +21,17 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
+    /**
+     * Finds all tokens from the User entity.
+     *
+     * @return string[] Returns an array of token strings.
+     */
+    public function findAllTokens(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.token')
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
 }

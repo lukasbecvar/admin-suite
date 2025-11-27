@@ -82,6 +82,16 @@ class UserManager
     }
 
     /**
+     * Get all user tokens from repository
+     *
+     * @return string[] Returns an array of token strings.
+     */
+    public function findAllUserTokens(): array
+    {
+        return $this->userRepository->findAllTokens();
+    }
+
+    /**
      * Get user from repository by username
      *
      * @param string $username The username of user to retrieve
