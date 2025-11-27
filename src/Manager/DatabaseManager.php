@@ -654,6 +654,22 @@ class DatabaseManager
      */
     public function tableTruncate(string $dbName, string $tableName): void
     {
+        // validate database and table names
+        if (!$this->isValidIdentifier($dbName) || !$this->isValidIdentifier($tableName)) {
+            $this->errorManager->handleError(
+                message: 'invalid database or table name provided: ' . $dbName . '.' . $tableName,
+                code: Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // check if table exists
+        if (!$this->isTableExists($dbName, $tableName)) {
+            $this->errorManager->handleError(
+                message: 'table not found: ' . $dbName . '.' . $tableName,
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
         // truncate table query
         $sql = 'TRUNCATE TABLE ' . $dbName . '.' . $tableName;
 

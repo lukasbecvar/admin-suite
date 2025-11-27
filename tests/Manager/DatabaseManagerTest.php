@@ -500,7 +500,14 @@ class DatabaseManagerTest extends TestCase
      */
     public function testTableTruncateThrowsException(): void
     {
-        // expect executeStatement call
+        // mock isTableExists to return true (via executeQuery)
+        $isTableExistsResult = $this->createMock(Result::class);
+        $isTableExistsResult->method('fetchOne')->willReturn(1); // Table exists
+
+        // expect executeQuery for isTableExists
+        $this->connectionMock->expects($this->once())->method('executeQuery')->willReturn($isTableExistsResult);
+
+        // expect executeStatement to throw exception
         $this->connectionMock->expects($this->once())->method('executeStatement')->willThrowException(
             new Exception('Database error')
         );
@@ -509,6 +516,28 @@ class DatabaseManagerTest extends TestCase
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
             'error truncating table: Database error in database: test_db',
             Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+
+        // call tested method
+        $this->databaseManager->tableTruncate('test_db', 'test_table');
+    }
+
+    /**
+     * Test truncate table throws table not found exception
+     *
+     * @return void
+     */
+    public function testTableTruncateThrowsTableNotFoundException(): void
+    {
+        // mock isValidIdentifier and isTableExists to trigger the "table not found" error
+        $this->connectionMock->expects($this->once())->method('executeQuery')->willReturn(
+            $this->createConfiguredMock(Result::class, ['fetchOne' => 0]) // For isTableExists, table does NOT exist
+        );
+
+        // expect handleError call
+        $this->errorManagerMock->expects($this->once())->method('handleError')->with(
+            'table not found: test_db.test_table',
+            Response::HTTP_NOT_FOUND
         );
 
         // call tested method
