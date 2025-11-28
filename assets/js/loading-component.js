@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', function()
                 return
             }
 
+            // allow links that explicitly open in a new context
+            if (target.target && target.target !== '_self') {
+                return
+            }
+
             // exclude links to internal blobs and data views
             if (!target.href.includes('http') || target.href.includes('blob')) {
                 return
