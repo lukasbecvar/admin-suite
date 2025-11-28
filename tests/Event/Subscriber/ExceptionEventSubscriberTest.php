@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use App\Event\Subscriber\ExceptionEventSubscriber;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -69,6 +70,9 @@ class ExceptionEventSubscriberTest extends TestCase
      */
     public function testHandleHttpExceptionExcludedFromLogging(): void
     {
+        // mock environment
+        $this->appUtilMock->method('getEnvValue')->with('APP_ENV')->willReturn('prod');
+
         // mock excluded http codes
         $this->appUtilMock->method('getYamlConfig')->with('packages/monolog.yaml')->willReturn([
             'monolog' => [
@@ -97,6 +101,9 @@ class ExceptionEventSubscriberTest extends TestCase
      */
     public function testHandleHttpExceptionLoggedToExceptionLog(): void
     {
+        // mock environment
+        $this->appUtilMock->method('getEnvValue')->with('APP_ENV')->willReturn('prod');
+
         // mock excluded http codes
         $this->appUtilMock->method('getYamlConfig')->with('packages/monolog.yaml')->willReturn([
             'monolog' => [
@@ -121,12 +128,52 @@ class ExceptionEventSubscriberTest extends TestCase
     }
 
     /**
+     * Test handle http exception in test environment
+     *
+     * @return void
+     */
+    public function testHandleHttpExceptionInTestEnvironment(): void
+    {
+        // mock excluded http codes
+        $this->appUtilMock->method('getYamlConfig')->with('packages/monolog.yaml')->willReturn([
+            'monolog' => [
+                'handlers' => [
+                    'filtered' => [
+                        'excluded_http_codes' => [404]
+                    ]
+                ]
+            ]
+        ]);
+
+        // create exception event
+        $event = $this->createExceptionEvent(new HttpException(Response::HTTP_NOT_FOUND, 'Not Found'));
+
+        // expect logger not to be called
+        $this->loggerMock->expects($this->never())->method('error');
+
+        // expect response to be set to json
+        $this->errorController->expects($this->once())->method('showException')->with($event->getThrowable())->willReturn(
+            new JsonResponse([
+                'error' => 'Not Found',
+                'status' => Response::HTTP_NOT_FOUND,
+                'class' => HttpException::class
+            ], Response::HTTP_NOT_FOUND)
+        );
+
+        // call exception event subscriber
+        $this->subscriber->onKernelException($event);
+    }
+
+    /**
      * Test handle non http exception
      *
      * @return void
      */
     public function testHandleNonHttpException(): void
     {
+        // mock environment
+        $this->appUtilMock->method('getEnvValue')->with('APP_ENV')->willReturn('prod');
+
         // mock excluded http codes
         $this->appUtilMock->method('getYamlConfig')->with('packages/monolog.yaml')->willReturn([
             'monolog' => [

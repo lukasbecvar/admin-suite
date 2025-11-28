@@ -5,8 +5,10 @@ namespace App\Event\Subscriber;
 use App\Util\AppUtil;
 use Psr\Log\LoggerInterface;
 use App\Controller\ErrorController;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -65,6 +67,16 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
         if ($exception instanceof HttpException) {
             // get exception status code
             $statusCode = $exception->getStatusCode();
+        }
+
+        // return json error response in test environment
+        if (!($event->getRequest() instanceof MockObject) && $this->appUtil->getEnvValue('APP_ENV') === 'test') {
+            $event->setResponse(new JsonResponse([
+                'error' => $message,
+                'status' => $statusCode,
+                'class' => $exception::class
+            ], $statusCode));
+            return;
         }
 
         /** @var array<array<array<array<mixed>>>> $config monolog config */
