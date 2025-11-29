@@ -2,11 +2,12 @@
 document.addEventListener('DOMContentLoaded', function()
 {
     // elements related to delete functionality
+    var selectedForm = null
     var popupOverlay = document.getElementById('popup-overlay')
     var cancelButton = document.getElementById('cancel-button')
+    var deleteForms = document.querySelectorAll('.delete-form')
     var confirmButton = document.getElementById('confirm-button')
     var deleteButtons = document.querySelectorAll('.delete-button')
-    var deleteUrl = ''
 
     // elements related to role update functionality
     var roleUpdateForm = document.getElementById('role-update-form')
@@ -16,94 +17,109 @@ document.addEventListener('DOMContentLoaded', function()
     var roleUpdateSubmitButton = document.getElementById('role-update-submit-button')
 
     // elements related to ban functionality
+    var selectedBanForm = null
+    var banForms = document.querySelectorAll('.ban-form')
     var banButtons = document.querySelectorAll('.ban-button')
     var banReasonInput = document.getElementById('ban-reason')
     var banPopupOverlay = document.getElementById('ban-popup-overlay')
     var banCancelButton = document.getElementById('ban-cancel-button')
     var banConfirmButton = document.getElementById('ban-confirm-button')
-    var banUrl = ''
 
     // elements related to unban functionality
+    var selectedUnbanForm = null
+    var unbanForms = document.querySelectorAll('.unban-form')
     var unbanButtons = document.querySelectorAll('.unban-button')
     var unbanPopupOverlay = document.getElementById('unban-popup-overlay')
     var unbanCancelButton = document.getElementById('unban-cancel-button')
     var unbanConfirmButton = document.getElementById('unban-confirm-button')
-    var unbanUrl = ''
 
     // elements related to token regeneration functionality
+    var selectedTokenRegenerateForm = null
+    var tokenRegenerateForms = document.querySelectorAll('.token-regenerate-form')
     var tokenRegenerateButtons = document.querySelectorAll('.token-regenerate-button')
     var tokenRegeneratePopupOverlay = document.getElementById('token-regenerate-popup-overlay')
     var tokenRegenerateCancelButton = document.getElementById('token-regenerate-cancel-button')
     var tokenRegenerateConfirmButton = document.getElementById('token-regenerate-confirm-button')
-    var tokenRegenerateUrl = ''
     
     // elements related to api access functionality
+    var selectedApiAccessForm = null
+    var apiAccessForms = document.querySelectorAll('.api-access-form')
     var apiAccessButtons = document.querySelectorAll('.api-access-button')
+    var apiAccessUsernameLabel = document.getElementById('api-access-username')
+    var apiAccessActionLabel = document.getElementById('api-access-action-label')
     var apiAccessPopupOverlay = document.getElementById('api-access-popup-overlay')
     var apiAccessCancelButton = document.getElementById('api-access-cancel-button')
     var apiAccessConfirmButton = document.getElementById('api-access-confirm-button')
-    var apiAccessActionLabel = document.getElementById('api-access-action-label')
-    var apiAccessUsernameLabel = document.getElementById('api-access-username')
     var apiAccessConfirmText = apiAccessConfirmButton ? apiAccessConfirmButton.querySelector('span') : null
     var apiAccessConfirmIcon = apiAccessConfirmButton ? apiAccessConfirmButton.querySelector('i') : null
-    var apiAccessUrl = ''
 
     // show the ban confirmation popup
-    function showBanPopup(url) {
-        banUrl = url
+    function showBanPopup() {
         banPopupOverlay.classList.remove('hidden')
     }
 
     // event listeners to each ban button
-    banButtons.forEach(function(button) {
+    banButtons.forEach(function(button, index) {
         button.addEventListener('click', function(event) {
             event.preventDefault()
-            var banUrl = this.href
-            showBanPopup(banUrl)
+            var form = banForms[index]
+            if (form) {
+                selectedBanForm = form
+                showBanPopup()
+            }
         })
     })
 
     // event listener for confirming ban action
     banConfirmButton.addEventListener('click', function() {
         var reason = banReasonInput.value.trim()
-        if (reason.length > 0) {
-            window.location.href = banUrl + '&reason=' + encodeURIComponent(reason)
+        if (selectedBanForm && reason.length > 0) {
+            var banReasonField = selectedBanForm.querySelector('input[name="reason"]')
+            if (banReasonField) {
+                banReasonField.value = reason
+            }
+            selectedBanForm.submit()
         }
     })
 
     // event listener for cancelling ban action
     banCancelButton.addEventListener('click', function() {
         banPopupOverlay.classList.add('hidden')
+        selectedBanForm = null
     })
 
     // show the unban confirmation popup
-    function showUnbanPopup(url) {
-        unbanUrl = url
+    function showUnbanPopup() {
         unbanPopupOverlay.classList.remove('hidden')
     }
 
     // event listeners to each unban button
-    unbanButtons.forEach(function(button) {
+    unbanButtons.forEach(function(button, index) {
         button.addEventListener('click', function(event) {
             event.preventDefault()
-            var unbanUrl = this.href
-            showUnbanPopup(unbanUrl)
+            var form = unbanForms[index]
+            if (form) {
+                selectedUnbanForm = form
+                showUnbanPopup()
+            }
         })
     })
 
     // event listener for confirming unban action
     unbanConfirmButton.addEventListener('click', function() {
-        window.location.href = unbanUrl
+        if (selectedUnbanForm) {
+            selectedUnbanForm.submit()
+        }
     })
 
     // event listener for cancelling unban action
     unbanCancelButton.addEventListener('click', function() {
         unbanPopupOverlay.classList.add('hidden')
+        selectedUnbanForm = null
     })
 
     // show api access confirmation popup
-    function showApiAccessPopup(url, username, action) {
-        apiAccessUrl = url
+    function showApiAccessPopup(username, action) {
         apiAccessActionLabel.textContent = action === 'enable' ? 'enable' : 'disable'
         apiAccessUsernameLabel.textContent = username
         if (apiAccessConfirmText) {
@@ -117,48 +133,60 @@ document.addEventListener('DOMContentLoaded', function()
     }
 
     // event listeners for api access buttons
-    apiAccessButtons.forEach(function(button) {
+    apiAccessButtons.forEach(function(button, index) {
         button.addEventListener('click', function(event) {
             event.preventDefault()
             var username = button.getAttribute('data-username')
             var action = button.getAttribute('data-action')
-            showApiAccessPopup(button.href, username, action)
+            var form = apiAccessForms[index]
+            if (form) {
+                selectedApiAccessForm = form
+                showApiAccessPopup(username, action)
+            }
         })
     })
 
     // event listener for confirming api access action
     apiAccessConfirmButton.addEventListener('click', function() {
-        window.location.href = apiAccessUrl
+        if (selectedApiAccessForm) {
+            selectedApiAccessForm.submit()
+        }
     })
 
     // event listener for cancelling api access action
     apiAccessCancelButton.addEventListener('click', function() {
         apiAccessPopupOverlay.classList.add('hidden')
+        selectedApiAccessForm = null
     })
 
     // show the token regeneration confirmation popup
-    function showTokenRegeneratePopup(url) {
-        tokenRegenerateUrl = url
+    function showTokenRegeneratePopup() {
         tokenRegeneratePopupOverlay.classList.remove('hidden')
     }
 
     // event listeners to each token regenerate button
-    tokenRegenerateButtons.forEach(function(button) {
+    tokenRegenerateButtons.forEach(function(button, index) {
         button.addEventListener('click', function(event) {
             event.preventDefault()
-            var url = this.href
-            showTokenRegeneratePopup(url)
+            var form = tokenRegenerateForms[index]
+            if (form) {
+                selectedTokenRegenerateForm = form
+                showTokenRegeneratePopup()
+            }
         })
     })
 
     // event listener for confirming token regeneration action
     tokenRegenerateConfirmButton.addEventListener('click', function() {
-        window.location.href = tokenRegenerateUrl
+        if (selectedTokenRegenerateForm) {
+            selectedTokenRegenerateForm.submit()
+        }
     })
 
     // event listener for cancelling token regeneration action
     tokenRegenerateCancelButton.addEventListener('click', function() {
         tokenRegeneratePopupOverlay.classList.add('hidden')
+        selectedTokenRegenerateForm = null
     })
 
     // show the role update popup with user data
@@ -209,17 +237,19 @@ document.addEventListener('DOMContentLoaded', function()
     })
 
     // event listeners to each delete button
-    deleteButtons.forEach(function(button) {
+    deleteButtons.forEach(function(button, index) {
         button.addEventListener('click', function(event) {
             event.preventDefault()
-            deleteUrl = this.href
+            selectedForm = deleteForms[index]
             popupOverlay.classList.remove('hidden')
         })
     })
 
     // event listener for confirming delete action
     confirmButton.addEventListener('click', function() {
-        window.location.href = deleteUrl
+        if (selectedForm) {
+            selectedForm.submit()
+        }
     })
 
     // event listener for cancelling delete action

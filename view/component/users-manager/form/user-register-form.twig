@@ -7,7 +7,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_manager_users') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to users manager">
+                <a href={{ path('app_manager_users') }} title="Back to users manager" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -52,20 +52,37 @@
 
                         {# REGISTER FORM #}
                         {{ form_start(registrationForm) }}
-
                             {# FORM FIELDS #}
                             <div class="space-y-4 mb-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-300 mb-2">Username</label>
-                                    {{ form_row(registrationForm.username, {'attr': {'class': 'w-full text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200 user-manager-input', 'placeholder': 'Enter username'}}) }}
+                                    {{ form_row(registrationForm.username, {
+                                        'attr': {
+                                            'placeholder': 'Enter username',
+                                            'class': 'w-full text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none 
+                                                transition-all duration-200 user-manager-input'
+                                        }})
+                                    }}
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
-                                    {{ form_row(registrationForm.password.first, {'attr': {'class': 'w-full text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200 user-manager-input', 'placeholder': 'Enter password'}}) }}
+                                    {{ form_row(registrationForm.password.first, {
+                                        'attr': {
+                                            'placeholder': 'Enter password',
+                                            'class': 'w-full text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none
+                                            transition-all duration-200 user-manager-input'
+                                        }})
+                                    }}
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-300 mb-2">Confirm Password</label>
-                                    {{ form_row(registrationForm.password.second, {'attr': {'class': 'w-full text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200 user-manager-input', 'placeholder': 'Confirm password'}}) }}
+                                    {{ form_row(registrationForm.password.second, {
+                                        'attr': {
+                                            'placeholder': 'Confirm password',
+                                            'class': 'w-full text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none
+                                            transition-all duration-200 user-manager-input'
+                                        }})
+                                    }}
                                 </div>
                             </div>
 

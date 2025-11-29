@@ -161,6 +161,7 @@ class TodoManagerControllerTest extends CustomTestCase
     {
         $this->client->request('POST', '/manager/todo', [
             'create_todo_form' => [
+                'csrf_token' => $this->getCsrfToken($this->client, 'create_todo_form'),
                 'todo_text' => 'todo text'
             ]
         ]);
@@ -179,8 +180,15 @@ class TodoManagerControllerTest extends CustomTestCase
         $this->client->request(
             method: 'POST',
             uri: '/manager/todo/update-positions',
-            server: ['CONTENT_TYPE' => 'application/json'],
-            content: json_encode([1 => 1, 2 => 2, 3 => 4, 4 => 3]) ?: '{}'
+            parameters: [
+                'csrf_token' => $this->getCsrfToken($this->client),
+                'positions' => [
+                    1 => 1,
+                    2 => 2,
+                    3 => 4,
+                    4 => 3
+                ]
+            ]
         );
 
         /** @var array<mixed> $responseData */
@@ -202,8 +210,9 @@ class TodoManagerControllerTest extends CustomTestCase
         $this->client->request(
             method: 'POST',
             uri: '/manager/todo/update-positions',
-            server: ['CONTENT_TYPE' => 'application/json'],
-            content: json_encode([]) ?: '{}'
+            parameters: [
+                'csrf_token' => $this->getCsrfToken($this->client)
+            ]
         );
 
         /** @var array<mixed> $responseData */

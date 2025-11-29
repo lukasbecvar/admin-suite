@@ -134,7 +134,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'token');
         $this->assertSelectorTextContains('body', 'profile_pic');
         $this->assertSelectorExists('a[href="/manager/database/edit?database=' . $_ENV['DATABASE_NAME'] . '&table=users&page=1&id=1"]');
-        $this->assertSelectorExists('button[data-url="/manager/database/delete?database=' . $_ENV['DATABASE_NAME'] . '&table=users&page=1&id=1"]');
+        $this->assertSelectorExists('form[action="/manager/database/delete?database=' . $_ENV['DATABASE_NAME'] . '&table=users&page=1&id=1"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -145,7 +145,8 @@ class DatabaseBrowserControllerTest extends CustomTestCase
      */
     public function testLoadTableTruncateConfirmationPage(): void
     {
-        $this->client->request('GET', '/manager/database/truncate', [
+        $this->client->request('POST', '/manager/database/truncate', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'database' => $_ENV['DATABASE_NAME'],
             'table' => 'logs'
         ]);
@@ -165,7 +166,8 @@ class DatabaseBrowserControllerTest extends CustomTestCase
      */
     public function testSubmitTableTruncateConfirmation(): void
     {
-        $this->client->request('GET', '/manager/database/truncate', [
+        $this->client->request('POST', '/manager/database/truncate', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'database' => $_ENV['DATABASE_NAME'],
             'table' => 'logs',
             'confirm' => 'yes'
@@ -322,7 +324,8 @@ class DatabaseBrowserControllerTest extends CustomTestCase
      */
     public function testDeleteRowRequestWithSuccessResponse(): void
     {
-        $this->client->request('GET', '/manager/database/delete', [
+        $this->client->request('POST', '/manager/database/delete', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'database' => $_ENV['DATABASE_NAME'],
             'table' => 'users',
             'id' => 5
@@ -339,7 +342,8 @@ class DatabaseBrowserControllerTest extends CustomTestCase
      */
     public function testDeleteRowRequestWhenDatabaseNotFound(): void
     {
-        $this->client->request('GET', '/manager/database/delete', [
+        $this->client->request('POST', '/manager/database/delete', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'database' => 'blblablanonexistdatabaseokokcsmuckmuckxoxo',
             'table' => 'users',
             'id' => 5
@@ -356,7 +360,8 @@ class DatabaseBrowserControllerTest extends CustomTestCase
      */
     public function testDeleteRowRequestWhenTableNotFound(): void
     {
-        $this->client->request('GET', '/manager/database/delete', [
+        $this->client->request('POST', '/manager/database/delete', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'database' => $_ENV['DATABASE_NAME'],
             'table' => 'blblablanonexistdatabaseokokcsmuckmuckxoxo',
             'id' => 5
@@ -373,7 +378,8 @@ class DatabaseBrowserControllerTest extends CustomTestCase
      */
     public function testDeleteRowRequestWhenIdIsNotFound(): void
     {
-        $this->client->request('GET', '/manager/database/delete', [
+        $this->client->request('POST', '/manager/database/delete', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'database' => $_ENV['DATABASE_NAME'],
             'table' => 'users',
             'id' => 53243324

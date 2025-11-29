@@ -33,17 +33,34 @@
 
         {# ANGLOG STATUS ALERT #}
         {% if antiLogStatus == false %}
-            <div class="bg-yellow-500/10 border border-yellow-500/25 rounded p-2 flex items-start gap-3 hover:bg-yellow-500/15 transition-colors duration-200">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-eye text-yellow-400 text-lg"></i>
+            <div class="bg-yellow-500/10 border border-yellow-500/30 rounded p-3 flex items-start gap-3 hover:bg-yellow-500/15 transition-all duration-300 shadow-lg">
+                <div class="flex-shrink-0 mt-0.5">
+                    <div class="w-8 h-8 bg-yellow-500/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-eye text-yellow-400 text-sm"></i>
+                    </div>
                 </div>
-                <div class="flex-1">
+                <div class="flex-1 min-w-0">
                     <h4 class="text-yellow-300 font-semibold text-sm mb-1">Browser Logging Enabled</h4>
-                    <p class="text-gray-300 text-sm">Logging for your browser is currently enabled</p>
-                    <a href={{ path('app_anti_log_enable', {'state': 'enable'}) }} class="inline-flex items-center gap-1 mt-2 text-yellow-400 hover:text-yellow-300 text-sm font-medium transition-colors duration-200">
-                        <span>Disable Logging</span>
-                        <i class="fas fa-arrow-right text-xs"></i>
-                    </a>
+                    <p class="text-gray-300 text-sm mb-2">Logging for your browser is currently enabled</p>
+                    {# ENABLE ANTI-LOG BUTTON #}
+                    <form method="POST" action={{ path('app_anti_log_enable') }} style="display:inline">
+
+                        {# ANTI LOG STATE #}
+                        <input type="hidden" name="state" value="enable">
+
+                        {# INCLUDE REQUEST PARAMETERS #}
+                        <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+
+                        {# SUBMIT BUTTON #}
+                        <button
+                            type="submit"
+                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-yellow-500/20 hover:bg-yellow-500/30 transition-all duration-200 shadow-sm
+                                border border-yellow-500/40 rounded-md text-yellow-300 hover:text-yellow-200 text-sm font-medium"
+                            >
+                            <span>Disable Logging</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         {% endif %}

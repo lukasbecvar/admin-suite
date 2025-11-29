@@ -57,12 +57,21 @@
                             </p>
                         </div>
                         <div class="flex justify-center gap-4">
+                            {# CANCEL BUTTON (go back to table browser) #}
                             <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName}) }} class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded font-semibold transition-colors duration-200">
                                 Cancel
                             </a>
-                            <a href={{ path('app_manager_database_truncate', {'database': databaseName, 'table': tableName, 'confirm': 'yes'}) }} class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded font-semibold transition-colors duration-200">
-                                Truncate Table
-                            </a>
+
+                            {# SUBMIT TRUNCATE TABLE BUTTON #}
+                            <form method="POST" action={{ path('app_manager_database_truncate', { 'database': databaseName, 'table': tableName, 'confirm': 'yes' }) }} class="inline">
+                                {# CSRF SECURITY TOKEN #}
+                                <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+
+                                {# SUBMIT BUTTON #}
+                                <button type="submit" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded font-semibold transition-colors duration-200 inline-block">
+                                    Truncate Table
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

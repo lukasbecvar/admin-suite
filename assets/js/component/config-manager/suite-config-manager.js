@@ -5,7 +5,11 @@ document.addEventListener('DOMContentLoaded', function()
     var popupOverlay = document.getElementById('reset-popup-overlay')
     var cancelButton = document.getElementById('reset-cancel-button')
     var confirmButton = document.getElementById('reset-confirm-button')
-    var resetUrl = ''
+
+    // external reset form
+    var selectedFilename = ''
+    var resetForm = document.getElementById('reset-form')
+    var filenameInput = document.getElementById('reset-filename')
 
     if (popupOverlay) {
         // handle reset buttons
@@ -13,16 +17,24 @@ document.addEventListener('DOMContentLoaded', function()
             resetButtons.forEach(function(button) {
                 button.addEventListener('click', function(event) {
                     event.preventDefault()
-                    resetUrl = this.getAttribute('data-url')
+                    
+                    // get filename from attribute
+                    selectedFilename = this.getAttribute('data-filename')
+
+                    // show popup
                     popupOverlay.classList.remove('hidden')
                 })
             })
         }
 
-        // handle confirm button
+        // handle confirm button (submit POST)
         if (confirmButton) {
             confirmButton.addEventListener('click', function() {
-                window.location.href = resetUrl
+                // set filename for reset
+                filenameInput.value = selectedFilename
+
+                // submit reset POST form
+                resetForm.submit()
             })
         }
 
@@ -33,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function()
             })
         }
 
-        // handle escape key
+        // escape closes popup
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 if (!popupOverlay.classList.contains('hidden')) {
@@ -42,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function()
             }
         })
 
-        // handle click outside popup
+        // click outside closes popup
         popupOverlay.addEventListener('click', function (event) {
             if (event.target === this) {
                 this.classList.add('hidden')

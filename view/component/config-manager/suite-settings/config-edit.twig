@@ -21,6 +21,13 @@
 <div class="h-full">
     <div class="backdrop-blur-md bg-gray-800/50 p-4 h-full flex flex-col">
         <form action={{ path('app_suite_config_update', {'filename': filename}) }} method="POST" class="h-full flex flex-col">
+
+            {# INCLUDE CSRF SECURITY TOKEN #}
+            <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+
+            {# FILENAME REQUIRED FOR CONTROLLER #}
+            <input type="hidden" name="filename" value={{ filename }}>
+
             <div class="mb-2 flex-1 flex flex-col">
                 <label for="content" class="block text-sm font-medium text-gray-300">{{ filename }} configuration</label>
                 {# FLASH ERROR MESSAGES #}
@@ -34,13 +41,20 @@
 						</div>
 					</div>
                 {% endfor %}
+
                 {# CONTENT EDITOR #}
-                <textarea name="content" id="content" class="focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 mt-1 p-1 block w-full h-full rounded bg-gray-900/100 border-gray-700 text-white shadow-sm sm:text-sm resize-none">{{ content }}</textarea>
+                <textarea name="content" id="content" class="focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 mt-1 p-1 block w-full h-full rounded bg-gray-900/100 border-gray-700 text-white shadow-sm sm:text-sm resize-none">
+                    {{ content }}
+                </textarea>
             </div>
+
             <div class="mt-2 text-right">
-                <button type="button" class="reset-button bg-yellow-600 hover:bg-yellow-500 text-white font-bold rounded text-sm px-2 py-2 sm:text-md sm:py-2 sm:px-4" data-url={{ path('app_suite_config_delete', {'filename': filename}) }}>
+                {# RESET BUTTON (opens popup, NOT submit) #}
+                <button type="button" class="reset-button bg-yellow-600 hover:bg-yellow-500 text-white font-bold rounded text-sm px-2 py-2 sm:text-md sm:py-2 sm:px-4" data-filename={{ filename }}>
                     <i class="fas fa-undo"></i> Reset to Default
                 </button>
+
+                {# SAVE CHANGES BUTTON #}
                 <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold rounded text-sm px-2 py-2 sm:text-md sm:py-2 sm:px-4">
                     Save Changes
                 </button>
@@ -48,6 +62,12 @@
         </form>
     </div>
 </div>
+
+{# HIDDEN RESET FORM (handeled with button inside popup) #}
+<form id="reset-form" method="POST" action={{ path('app_suite_config_delete') }} class="hidden">
+    <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+    <input type="hidden" name="filename" id="reset-filename">
+</form>
 
 {# INCLUDE POPUP FOR RESETTING CONFIG TO DEFAULT #}
 {% include "component/config-manager/suite-settings/popup/reset-confirmation-popup.twig" %}

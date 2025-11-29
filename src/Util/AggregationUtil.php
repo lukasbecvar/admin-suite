@@ -37,7 +37,7 @@ class AggregationUtil
 
         $readableMonths = [];
         foreach ($months as $monthKey) {
-            $monthDate = DateTime::createFromFormat('Y-m', $monthKey);
+            $monthDate = DateTime::createFromFormat('!Y-m', $monthKey);
             if ($monthDate instanceof DateTime) {
                 $readableMonths[] = $monthDate->format('F Y');
                 continue;
@@ -94,11 +94,7 @@ class AggregationUtil
         $monthSummary = '';
 
         if ($monthCount > 0) {
-            $monthSummary = sprintf(
-                ' covering %d month%s',
-                $monthCount,
-                $monthCount === 1 ? '' : 's'
-            );
+            $monthSummary = sprintf(' covering %d month%s', $monthCount, $monthCount === 1 ? '' : 's');
         }
 
         return sprintf(

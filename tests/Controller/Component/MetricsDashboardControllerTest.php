@@ -78,7 +78,9 @@ class MetricsDashboardControllerTest extends CustomTestCase
      */
     public function testDeleteMetricsRequest(): void
     {
-        $this->client->request('GET', '/metrics/delete?service_name=becvar.xyz&metric_name=cpu_usage');
+        $this->client->request('POST', '/metrics/delete?service_name=becvar.xyz&metric_name=cpu_usage', [
+            'csrf_token' => $this->getCsrfToken($this->client)
+        ]);
 
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
@@ -91,7 +93,9 @@ class MetricsDashboardControllerTest extends CustomTestCase
      */
     public function testAggregateMetrics(): void
     {
-        $this->client->request('POST', '/metrics/aggregate');
+        $this->client->request('POST', '/metrics/aggregate', [
+            'csrf_token' => $this->getCsrfToken($this->client)
+        ]);
 
         // assert response is redirect back to dashboard
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);

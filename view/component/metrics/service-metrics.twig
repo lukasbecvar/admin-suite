@@ -50,11 +50,21 @@
                             <div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden hover:bg-gray-800/60 transition-all duration-300">
                                 <div class="px-2 py-2 border-b border-gray-700/50 text-gray-200 font-semibold tracking-wide text-sm uppercase flex items-center justify-between">
                                     <span>{{ serviceName|e }} - {{ metricName | replace({'_': ' '}) | capitalize }}</span>
-                                    <button class="deleteButton inline-flex items-center gap-1 px-2 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 text-xs font-semibold rounded transition-all duration-200 border border-red-500/30" data-metric-name={{ metricName|e }} data-service-name={{ serviceName|e }} data-referer="app_metrics_service">
-                                        <span>Delete</span>
-                                        <i class="fas fa-trash text-xs"></i>
-                                    </button>
-                                </div>
+                                    {# DELETE METRIC BUTTON #}
+                                    <div>
+                                        <button data-metric-name={{ metricName|e }} data-service-name={{ serviceName|e }} data-referer="app_metrics_service" data-form-id="delete-metric-form-{{ metricName|e }}" class="deleteButton inline-flex items-center gap-1 px-2 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 text-xs font-semibold rounded transition-all duration-200 border border-red-500/30">
+                                            <span>Delete</span>
+                                            <i class="fas fa-trash text-xs"></i>
+                                        </button>
+                                        <form method="POST" action={{ path('app_metrics_delete') }} id="delete-metric-form-{{ metricName|e }}" class="hidden">
+                                            {# INCLUDE CSRF SECURITY TOKEN AND METRIC DATA #}
+                                            <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                            <input type="hidden" name="metric_name" value={{ metricName|e }}>
+                                            <input type="hidden" name="service_name" value={{ serviceName|e }}>
+                                            <input type="hidden" name="referer" value="app_metrics_service">
+                                        </form>
+                                    </div>
+                                </div>  
                                 <div class="chart-wrapper">
                                     <div id="{{ (metricName ~ '-' ~ 'default')|replace({'.': '_', ' ': '_'}) }}-line" class="chart-container"></div>
                                 </div>

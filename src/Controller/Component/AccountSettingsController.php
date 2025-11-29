@@ -7,6 +7,7 @@ use App\Util\AppUtil;
 use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use App\Manager\ErrorManager;
+use App\Annotation\CsrfProtection;
 use App\Manager\NotificationsManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -75,6 +76,7 @@ class AccountSettingsController extends AbstractController
      *
      * @return Response The response profile picture change form
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/account/settings/change/picture', methods:['GET', 'POST'], name: 'app_account_settings_change_picture')]
     public function accountSettingsChangePicture(Request $request): Response
     {
@@ -147,6 +149,7 @@ class AccountSettingsController extends AbstractController
      *
      * @return Response The response with username change form
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/account/settings/change/username', methods:['GET', 'POST'], name: 'app_account_settings_change_username')]
     public function accountSettingsChangeUsername(Request $request): Response
     {
@@ -210,6 +213,7 @@ class AccountSettingsController extends AbstractController
      *
      * @return Response The response with password change form view
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/account/settings/change/password', methods:['GET', 'POST'], name: 'app_account_settings_change_password')]
     public function accountSettingsChangePassword(Request $request): Response
     {

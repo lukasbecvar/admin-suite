@@ -1,13 +1,13 @@
-<aside id="sidebar" class="text-white border-r border-gray-700/50 bg-gradient-to-b from-gray-900 via-gray-900/80 to-gray-900 backdrop-blur-sm flex flex-col h-full w-64 shadow-xl">
-    <div class="px-6 py-[7px]">
+<aside id="sidebar" class="text-white border-r border-gray-700/50 bg-gray-900 backdrop-blur-sm flex flex-col h-full w-64 shadow-xl">
+    <div class="px-6 py-2">
         {# USER INFO #}
         <div class="flex flex-col items-center space-y-0">
             {# PROFILE IMAGE #}
-            <div class="group h-20 w-20 rounded-full overflow-hidden border-2 border-gray-600/50 cursor-pointer hover:ring-2 hover:ring-emerald-600 transition-all duration-300" id="open-profile-modal">
+            <div id="open-profile-modal" class="group h-20 w-20 rounded-full overflow-hidden border-2 border-gray-600/50 cursor-pointer hover:ring-2 hover:ring-emerald-600 transition-all duration-300">
                 {% if getUserData().getProfilePic == 'default_pic' %}
-                    <img class="h-full w-full object-cover" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture">
+                    <img src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture" class="h-full w-full object-cover">
                 {% else %}
-                    <img class="h-full w-full object-cover" src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture">
+                    <img src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture" class="h-full w-full object-cover">
                 {% endif %}
             </div>
 

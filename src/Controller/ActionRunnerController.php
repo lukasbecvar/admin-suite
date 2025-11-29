@@ -7,6 +7,7 @@ use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
 use App\Manager\ServiceManager;
 use App\Annotation\Authorization;
+use App\Annotation\CsrfProtection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -39,8 +40,9 @@ class ActionRunnerController extends AbstractController
      *
      * @return Response The redirect response
      */
+    #[CsrfProtection(enabled: false)]
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/service/action/runner', methods:['GET'], name: 'app_action_runner')]
+    #[Route('/service/action/runner', methods:['POST'], name: 'app_action_runner')]
     public function runServiceAction(Request $request): Response
     {
         // check if user is logged in
@@ -49,9 +51,9 @@ class ActionRunnerController extends AbstractController
         }
 
         // get request parameters
-        $action = (string) $request->query->get('action', null);
-        $referer = (string) $request->query->get('referer', null);
-        $service = (string) $request->query->get('service', null);
+        $action = (string) $request->request->get('action', null);
+        $referer = (string) $request->request->get('referer', null);
+        $service = (string) $request->request->get('service', null);
 
         // check if request parameters are null
         if ($referer == null || $service == null || $action == null) {

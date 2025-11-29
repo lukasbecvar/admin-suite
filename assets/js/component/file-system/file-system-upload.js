@@ -256,6 +256,7 @@ document.addEventListener('DOMContentLoaded', function()
             formData.append('chunkIndex', chunkIndex)
             formData.append('totalChunks', totalChunks)
             formData.append('fileId', fileId)
+            formData.append('csrf_token', window.uploadConfig.csrfToken)
 
             try {
                 // send chunked upload request
@@ -296,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function()
         formData.append('chunkIndex', 0)
         formData.append('totalChunks', 1)
         formData.append('fileId', generateFileId())
+        formData.append('csrf_token', window.uploadConfig.csrfToken)
 
         try {
             // send single upload request

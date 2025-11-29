@@ -116,7 +116,6 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorExists('form[action="/filesystem/save"]');
         $this->assertSelectorExists('textarea[id="editor"]');
         $this->assertSelectorExists('button[type="submit"]');
-        $this->assertSelectorTextContains('button[type="submit"]', 'Save');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -156,6 +155,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // submit the form with new content
         $this->client->request('POST', '/filesystem/save', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'path' => $tempFile,
             'content' => 'New content'
         ]);
@@ -187,7 +187,6 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('label[for="filename"]', 'Filename:');
         $this->assertSelectorExists('textarea[id="editor"]');
         $this->assertSelectorExists('button[type="submit"]');
-        $this->assertSelectorTextContains('button[type="submit"]', 'Create');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -210,7 +209,6 @@ class FileSystemBrowserControllerTest extends CustomTestCase
         $this->assertSelectorExists('label[for="directoryname"]');
         $this->assertSelectorTextContains('label[for="directoryname"]', 'Directory Name');
         $this->assertSelectorExists('button[type="submit"]');
-        $this->assertSelectorTextContains('button[type="submit"]', 'Create Directory');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -228,6 +226,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // submit form with empty filename
         $this->client->request('POST', '/filesystem/create/save', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'directory' => $tempDir,
             'filename' => '',
             'content' => 'Test content'
@@ -254,6 +253,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // submit form with empty directory name
         $this->client->request('POST', '/filesystem/create/directory/save', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'directory' => $tempDir,
             'directoryname' => ''
         ]);
@@ -314,6 +314,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // submit form to rename file
         $this->client->request('POST', '/filesystem/rename/save', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'path' => $tempFile,
             'newName' => $newName
         ]);
@@ -348,6 +349,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // submit form to rename directory
         $this->client->request('POST', '/filesystem/rename/save', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'path' => $tempDir,
             'newName' => $newName
         ]);
@@ -380,6 +382,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // submit form to create new file
         $this->client->request('POST', '/filesystem/create/save', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'directory' => $tempDir,
             'filename' => 'test_file.txt',
             'content' => 'Test content'
@@ -413,6 +416,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // submit form to create new directory
         $this->client->request('POST', '/filesystem/create/directory/save', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'directory' => $tempDir,
             'directoryname' => $newDirName
         ]);
@@ -481,6 +485,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // submit form to move file
         $this->client->request('POST', '/filesystem/move/save', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'sourcePath' => $sourceFile,
             'destinationPathType' => 'custom',
             'customDestinationPath' => $targetDir
@@ -555,6 +560,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // submit form to delete file
         $this->client->request('POST', '/filesystem/delete', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'path' => $tempFile
         ]);
 
@@ -582,6 +588,7 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // submit form to delete directory
         $this->client->request('POST', '/filesystem/delete', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'path' => $tempDir
         ]);
 

@@ -148,12 +148,14 @@
                         <div class="flex flex-col sm:flex-row gap-3">
                             <form method="post" action={{ path('app_account_settings_api_access') }} class="flex-1">
                                 <input type="hidden" name="status" value={{ apiAccessEnabled ? 'disable' : 'enable' }}>
+                                <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
                                 <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded border transition-all duration-200 {{ apiAccessEnabled ? 'bg-red-600/20 hover:bg-red-600/30 border-red-500/40 text-red-200' : 'bg-green-600/20 hover:bg-green-600/30 border-green-500/40 text-green-200' }}">
                                     <i class="fas fa-toggle-{{ apiAccessEnabled ? 'off' : 'on' }} text-xs"></i>
                                     <span>{{ apiAccessEnabled ? 'Disable API Access' : 'Enable API Access' }}</span>
                                 </button>
                             </form>
                             <form method="post" action={{ path('app_account_settings_token_regenerate') }} class="flex-1">
+                                <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
                                 <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded border border-purple-500/40 bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 transition-all duration-200">
                                     <i class="fas fa-sync-alt text-xs"></i>
                                     <span>Regenerate API Key</span>

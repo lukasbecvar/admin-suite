@@ -6,8 +6,13 @@ use DateTime;
 use App\Entity\User;
 use ReflectionProperty;
 use App\Manager\AuthManager;
+use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionFactoryInterface;
 
 /**
  * Class CustomTestCase
@@ -88,5 +93,39 @@ class CustomTestCase extends WebTestCase
         $reflection->setValue($user, $id);
 
         return $user;
+    }
+
+    /**
+     * Generate CSRF token identical to the one rendered in views
+     *
+     * @param string $tokenId The token identifier
+     *
+     * @return string The token value
+     */
+    protected function getCsrfToken(KernelBrowser $client, string $tokenId = 'internal-csrf-token'): string
+    {
+        /** @var SessionFactoryInterface $sessionFactory */
+        $sessionFactory = $client->getContainer()->get('session.factory');
+        $session = $sessionFactory->createSession();
+        $session->start();
+
+        // share session with BrowserKit client
+        $client->getCookieJar()->set(new Cookie($session->getName(), $session->getId()));
+
+        /** @var RequestStack $requestStack */
+        $requestStack = $client->getContainer()->get(RequestStack::class);
+        $request = Request::create('/');
+        $request->setSession($session);
+        $requestStack->push($request);
+
+        /** @var CsrfTokenManagerInterface $tokenManager */
+        $tokenManager = $client->getContainer()->get(CsrfTokenManagerInterface::class);
+        $token = $tokenManager->getToken($tokenId)->getValue();
+
+        $session->save();
+        $requestStack->pop();
+
+        // return token string
+        return $token;
     }
 }

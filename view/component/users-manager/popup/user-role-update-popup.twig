@@ -10,19 +10,24 @@
 			</div>
 		</div>
 
+		{# ROLE UPDATE FORM #}
 		<form id="role-update-form" method="POST" action={{ path('app_manager_users_role_update', {'page': currentPage} ) }}>
 			<input type="hidden" name="id" id="role-update-user-id">
 			<input type="hidden" name="current-role" id="current-role">
+			<input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
 
+			{# ROLE FIELD #}
 			<div class="mb-6">
 				<label for="new-role" class="block text-sm font-medium text-gray-300 mb-3">New Role</label>
-				<input type="text" name="role" id="new-role" class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all duration-200" placeholder="Enter new role (e.g., ADMIN, USER)">
+				<input type="text" name="role" id="new-role" placeholder="Enter new role (e.g., ADMIN, USER)" class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all duration-200">
 			</div>
 
+			{# ERROR MESSAGE #}
 			<div id="role-error-message" class="mb-4 p-3 rounded bg-red-500/20 text-red-300 border border-red-500/30 hidden">
 				<i class="fas fa-exclamation-circle mr-2"></i>The new role must be different from the current role.
 			</div>
 
+			{# SUBMIT BUTTONS #}
 			<div class="flex justify-end gap-3">
 				<button type="button" id="role-update-cancel-button" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded border border-gray-600/30 transition-all duration-200 text-sm font-medium">
 					<i class="fas fa-times text-xs"></i>

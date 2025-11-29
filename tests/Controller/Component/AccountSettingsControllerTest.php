@@ -184,6 +184,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     {
         $this->client->request('POST', '/account/settings/change/username', [
             'username_change_form' => [
+                'csrf_token' => $this->getCsrfToken($this->client, 'username_change_form'),
                 'username' => ByteString::fromRandom(10)->toByteString()
             ]
         ]);
@@ -325,6 +326,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     {
         $this->client->request('POST', '/account/settings/change/password', [
             'password_change_form' => [
+                'csrf_token' => $this->getCsrfToken($this->client, 'password_change_form'),
                 'password' => [
                     'first' => 'testtesttest',
                     'second' => 'testtesttest'
@@ -344,6 +346,7 @@ class AccountSettingsControllerTest extends CustomTestCase
     public function testToggleApiAccessWithInvalidStatus(): void
     {
         $this->client->request('POST', '/account/settings/api/access', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'status' => 'invalid-status'
         ]);
 
@@ -364,6 +367,7 @@ class AccountSettingsControllerTest extends CustomTestCase
         static::getContainer()->set(UserManager::class, $userManagerMock);
 
         $this->client->request('POST', '/account/settings/api/access', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'status' => 'enable'
         ]);
 
@@ -379,7 +383,9 @@ class AccountSettingsControllerTest extends CustomTestCase
      */
     public function testAccountSettingsTokenRegenerateSuccess(): void
     {
-        $this->client->request('POST', '/account/settings/api/token/regenerate');
+        $this->client->request('POST', '/account/settings/api/token/regenerate', [
+            'csrf_token' => $this->getCsrfToken($this->client)
+        ]);
 
         // assert response
         $this->assertResponseRedirects('/account/settings');

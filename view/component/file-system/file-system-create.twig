@@ -51,6 +51,7 @@
 
             {# FILE CREATE FORM #}
             <form action={{ path('app_file_system_create_save') }} method="post" class="flex flex-col flex-1">
+                <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
                 <input type="hidden" name="directory" value="{{ currentPath }}">
 
                 {# FILENAME INPUT BAR #}

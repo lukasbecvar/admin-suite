@@ -8,6 +8,7 @@ use App\Manager\AuthManager;
 use App\Manager\UserManager;
 use App\Manager\ErrorManager;
 use App\Form\Auth\LoginFormType;
+use App\Annotation\CsrfProtection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -46,6 +47,7 @@ class LoginController extends AbstractController
      *
      * @return Response The login view or redirect
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/login', methods:['GET', 'POST'], name: 'app_auth_login')]
     public function login(Request $request): Response
     {

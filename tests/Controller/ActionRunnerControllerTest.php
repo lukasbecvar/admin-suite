@@ -26,20 +26,6 @@ class ActionRunnerControllerTest extends CustomTestCase
     }
 
     /**
-     * Test request to service action runner when not logged in
-     *
-     * @return void
-     */
-    public function testRequestToServiceActionRunnerWhenNotLoggedIn(): void
-    {
-        $this->client->request('GET', '/service/action/runner');
-
-        // assert response
-        $this->assertResponseRedirects('/login');
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
-    }
-
-    /**
      * Test submit service action runner with invalid method
      *
      * @return void
@@ -50,7 +36,7 @@ class ActionRunnerControllerTest extends CustomTestCase
         $this->simulateLogin($this->client);
 
         // create request
-        $this->client->request('POST', '/service/action/runner', [
+        $this->client->request('GET', '/service/action/runner', [
             'service' => 'ufw',
             'action' => 'enable',
             'referer' => 'app_dashboard'
@@ -58,6 +44,20 @@ class ActionRunnerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_METHOD_NOT_ALLOWED);
+    }
+
+    /**
+     * Test request to service action runner when not logged in
+     *
+     * @return void
+     */
+    public function testRequestToServiceActionRunnerWhenNotLoggedIn(): void
+    {
+        $this->client->request('POST', '/service/action/runner');
+
+        // assert response
+        $this->assertResponseRedirects('/login');
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 
     /**
@@ -71,7 +71,7 @@ class ActionRunnerControllerTest extends CustomTestCase
         $this->simulateLogin($this->client);
 
         // create request
-        $this->client->request('GET', '/service/action/runner', [
+        $this->client->request('POST', '/service/action/runner', [
             'service' => 'ufw',
             'action' => 'enable',
             'referer' => 'app_dashboard'

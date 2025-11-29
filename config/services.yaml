@@ -48,59 +48,64 @@ services:
     # escape request data (for security)
     App\Middleware\EscapeRequestDataMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 12 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 13 }
     
     # check security rules
     App\Middleware\SecurityCheckMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 11 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 12 }
 
     # check if assets is builded
     App\Middleware\AssetsCheckMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 10 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 11 }
 
     # check if database is online
     App\Middleware\DatabaseOnlineMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 9 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 10 }
 
     # rate limiter middleware
     App\Middleware\RateLimitMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 8 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 9 }
 
     # check if app is running on linux
     App\Middleware\LinuxCheckMiddleware:
         tags:
-            - { name: kernel.event_listener, event: kernel.request, priority: 7 }
+            - { name: kernel.event_listener, event: kernel.request, priority: 8 }
 
     # handle maintenance mode
     App\Middleware\MaintenanceMiddleware:
         tags:
-            - { name: kernel.event_listener, event: kernel.request, priority: 6 }
+            - { name: kernel.event_listener, event: kernel.request, priority: 7 }
 
     # disable controller if feature flag is disabled
     App\Middleware\FeatureFlagsMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.controller', priority: 5 }
+            - { name: 'kernel.event_listener', event: 'kernel.controller', priority: 6 }
 
     # auto-login middleware for remember me feature
     App\Middleware\AutoLoginMiddleware:
         tags:
-            - { name: kernel.event_listener, event: kernel.request, priority: 4 }
+            - { name: kernel.event_listener, event: kernel.request, priority: 5 }
 
     # check if user is authenticated
     App\Middleware\AuthenticatedCheckMiddleware:
         tags:
-            - { name: kernel.event_listener, event: kernel.request, priority: 3 }
+            - { name: kernel.event_listener, event: kernel.request, priority: 4 }
 
     # check if user has permission to access component
     App\Middleware\AuthorizationMiddleware:
         tags:
-            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 2 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 3 }
 
     # check if user is banned
     App\Middleware\BannedCheckMiddleware:
         tags:
-            - { name: kernel.event_listener, event: kernel.request, priority: 1 }
+            - { name: kernel.event_listener, event: kernel.request, priority: 2 }
+
+    # validate CSRF token
+    App\Middleware\CsrfProtectionMiddleware:
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.request', priority: 1 }

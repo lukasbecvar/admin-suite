@@ -40,7 +40,7 @@ class AntiLogController extends AbstractController
      * @return Response The redirect response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/13378/antilog', methods:['GET'], name: 'app_anti_log_enable')]
+    #[Route('/13378/antilog', methods:['POST'], name: 'app_anti_log_enable')]
     public function enableAntiLog(Request $request): Response
     {
         // check if user is logged in
@@ -50,7 +50,7 @@ class AntiLogController extends AbstractController
 
         try {
             // get anti log state parameter
-            $state = $request->query->get('state', 'enable');
+            $state = $request->request->get('state', 'enable');
 
             // check if anti log is enabled
             if ($state == 'disable') {

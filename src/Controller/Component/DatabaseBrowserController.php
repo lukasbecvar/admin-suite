@@ -7,6 +7,7 @@ use App\Util\AppUtil;
 use App\Manager\ErrorManager;
 use App\Manager\DatabaseManager;
 use App\Annotation\Authorization;
+use App\Annotation\CsrfProtection;
 use App\Form\Database\QueryConsoleFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -163,6 +164,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @return Response The add row form view
      */
+    #[CsrfProtection(enabled: false)]
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/database/add', methods: ['GET', 'POST'], name: 'app_manager_database_add')]
     public function databaseAddRow(Request $request): Response
@@ -312,6 +314,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @return Response The edit row form view
      */
+    #[CsrfProtection(enabled: false)]
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/database/edit', methods: ['GET', 'POST'], name: 'app_manager_database_edit')]
     public function databaseEditRow(Request $request): Response
@@ -471,14 +474,14 @@ class DatabaseBrowserController extends AbstractController
      * @return Response The rendered delete row form
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/database/delete', methods: ['GET'], name: 'app_manager_database_delete')]
+    #[Route('/manager/database/delete', methods: ['POST'], name: 'app_manager_database_delete')]
     public function databaseDeleteRow(Request $request): Response
     {
         // get request parameters
-        $id = (int) $request->query->get('id');
-        $page = (int) $request->query->get('page', '1');
-        $tableName = (string) $request->query->get('table');
-        $databaseName = (string) $request->query->get('database');
+        $id = (int) $request->request->get('id');
+        $page = (int) $request->request->get('page', '1');
+        $tableName = (string) $request->request->get('table');
+        $databaseName = (string) $request->request->get('database');
 
         // check if request parameters are set
         if (empty($tableName) || empty($databaseName) || empty($id)) {
@@ -523,13 +526,13 @@ class DatabaseBrowserController extends AbstractController
      * @return Response The truncate table form page view
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/database/truncate', methods: ['GET'], name: 'app_manager_database_truncate')]
+    #[Route('/manager/database/truncate', methods: ['GET', 'POST'], name: 'app_manager_database_truncate')]
     public function databaseTruncateTable(Request $request): Response
     {
         // get request parameters
-        $confirm = (string) $request->query->get('confirm', 'no');
-        $tableName = (string) $request->query->get('table');
-        $databaseName = (string) $request->query->get('database');
+        $confirm = (string) $request->request->get('confirm', 'no');
+        $tableName = (string) $request->request->get('table');
+        $databaseName = (string) $request->request->get('database');
 
         // check confirmation
         if ($confirm !== 'yes') {
@@ -537,6 +540,14 @@ class DatabaseBrowserController extends AbstractController
                 'databaseName' => $databaseName,
                 'tableName' => $tableName
             ]);
+        }
+
+        // block truncate when request method is GET
+        if ($request->isMethod('GET')) {
+            $this->errorManager->handleError(
+                message: 'invalid request method',
+                code: Response::HTTP_BAD_REQUEST
+            );
         }
 
         // check if request parameters are set
@@ -641,6 +652,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @return Response The database console page view
      */
+    #[CsrfProtection(enabled: false)]
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/manager/database/console', methods: ['GET', 'POST'], name: 'app_manager_database_console')]
     public function databaseConsole(Request $request): Response

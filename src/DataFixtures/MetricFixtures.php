@@ -29,7 +29,7 @@ class MetricFixtures extends Fixture
         $metrics = ['cpu_usage', 'ram_usage', 'storage_usage'];
         $serviceNames = ['host-system', 'becvar.xyz', 'paste.becvar.xyz'];
         $interval = new DateInterval('PT1H'); // metrics interval
-        $startDate = new DateTime('-2 month'); // history limit
+        $startDate = new DateTime('-3 months'); // history limit
         $endDate = new DateTime();
         $currentDate = clone $startDate;
 

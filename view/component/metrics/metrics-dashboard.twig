@@ -135,10 +135,20 @@
                                     {% endif %}
                                 </span>
                                 {% if not showRawMetrics %}
-                                    <button class="deleteButton inline-flex items-center gap-1 px-2 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 text-xs font-semibold rounded transition-all duration-200 border border-red-500/30" data-metric-name={{ metricName|e }} data-service-name="host-system" data-referer="app_metrics_dashboard">
-                                        <span>Delete</span>
-                                        <i class="fas fa-trash text-xs"></i>
-                                    </button>
+                                    {# DELETE METRIC BUTTON #}
+                                    <div>
+                                        <button data-metric-name={{ metricName|e }} data-service-name="host-system" data-referer="app_metrics_dashboard" data-form-id="delete-metric-form-{{ metricName|e }}" class="deleteButton inline-flex items-center gap-1 px-2 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 text-xs font-semibold rounded transition-all duration-200 border border-red-500/30">
+                                            <span>Delete</span>
+                                            <i class="fas fa-trash text-xs"></i>
+                                        </button>
+                                        <form method="POST" action={{ path('app_metrics_delete') }} id="delete-metric-form-{{ metricName|e }}" class="hidden">
+                                            {# INCLUDE CSRF SECURITY TOKEN AND METRIC DATA #}
+                                            <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                            <input type="hidden" name="metric_name" value={{ metricName|e }}>
+                                            <input type="hidden" name="service_name" value="host-system">
+                                            <input type="hidden" name="referer" value="app_metrics_dashboard">
+                                        </form>
+                                    </div>
                                 {% endif %}
                             </div>
                             <div class="chart-wrapper">

@@ -281,7 +281,7 @@ class MetricsDashboardController extends AbstractController
      *
      * @return Response The service metrics view
      */
-    #[Route('/metrics/delete', methods:['GET'], name: 'app_metrics_delete')]
+    #[Route('/metrics/delete', methods:['POST'], name: 'app_metrics_delete')]
     public function deleteMetrics(Request $request): Response
     {
         // get request parameters

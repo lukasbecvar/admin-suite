@@ -31,19 +31,19 @@ class NonAuthRedirectTest extends WebTestCase
     private const ROUTES = [
         'api' => [
             ['method' => 'GET', 'url' => '/api/metrics/export'],
-            ['method' => 'GET', 'url' => '/api/monitoring/export'],
             ['method' => 'GET', 'url' => '/api/system/resources'],
             ['method' => 'POST', 'url' => '/api/system/terminal'],
+            ['method' => 'GET', 'url' => '/api/monitoring/export'],
             ['method' => 'GET', 'url' => '/api/system/terminal/job'],
             ['method' => 'POST', 'url' => '/api/system/terminal/job'],
-            ['method' => 'POST', 'url' => '/api/system/terminal/job/stop'],
-            ['method' => 'POST', 'url' => '/api/system/terminal/job/input'],
-            ['method' => 'GET', 'url' => '/api/notifications/public-key'],
+            ['method' => 'GET', 'url' => '/api/notifications/enabled'],
             ['method' => 'POST', 'url' => '/api/notifications/subscribe'],
-            ['method' => 'GET', 'url' => '/api/notifications/enabled']
+            ['method' => 'GET', 'url' => '/api/notifications/public-key'],
+            ['method' => 'POST', 'url' => '/api/system/terminal/job/stop'],
+            ['method' => 'POST', 'url' => '/api/system/terminal/job/input']
         ],
         'anti_log' => [
-            ['method' => 'GET', 'url' => '/13378/antilog']
+            ['method' => 'POST', 'url' => '/13378/antilog']
         ],
         'app_about' => [
             ['method' => 'GET', 'url' => '/about']
@@ -53,22 +53,22 @@ class NonAuthRedirectTest extends WebTestCase
         ],
         'user_manager' => [
             ['method' => 'GET', 'url' => '/manager/users'],
-            ['method' => 'GET', 'url' => '/manager/users/ban'],
-            ['method' => 'GET', 'url' => '/manager/users/delete'],
+            ['method' => 'POST', 'url' => '/manager/users/ban'],
+            ['method' => 'POST', 'url' => '/manager/users/delete'],
             ['method' => 'GET', 'url' => '/manager/users/register'],
-            ['method' => 'GET', 'url' => '/manager/users/api-access'],
+            ['method' => 'POST', 'url' => '/manager/users/api-access'],
             ['method' => 'POST', 'url' => '/manager/users/role/update'],
-            ['method' => 'GET', 'url' => '/manager/users/token/regenerate']
+            ['method' => 'POST', 'url' => '/manager/users/token/regenerate']
         ],
         'config_manager' => [
             ['method' => 'GET', 'url' => '/settings'],
             ['method' => 'GET', 'url' => '/settings/suite'],
             ['method' => 'GET', 'url' => '/settings/suite/show'],
-            ['method' => 'GET', 'url' => '/settings/suite/create'],
-            ['method' => 'GET', 'url' => '/settings/suite/delete'],
+            ['method' => 'POST', 'url' => '/settings/suite/create'],
+            ['method' => 'POST', 'url' => '/settings/suite/delete'],
             ['method' => 'POST', 'url' => '/settings/suite/update'],
             ['method' => 'GET', 'url' => '/settings/feature-flags'],
-            ['method' => 'GET', 'url' => '/settings/feature-flags/update']
+            ['method' => 'POST', 'url' => '/settings/feature-flags/update']
         ],
         'account_settings' => [
             ['method' => 'GET', 'url' => '/account/settings'],
@@ -82,14 +82,15 @@ class NonAuthRedirectTest extends WebTestCase
         'logs_manager' => [
             ['method' => 'GET', 'url' => '/manager/logs'],
             ['method' => 'GET', 'url' => '/manager/logs/system'],
-            ['method' => 'GET', 'url' => '/manager/logs/set/readed'],
-            ['method' => 'GET', 'url' => '/manager/logs/exception/files']
+            ['method' => 'POST', 'url' => '/manager/logs/set/readed'],
+            ['method' => 'GET', 'url' => '/manager/logs/exception/files'],
+            ['method' => 'POST', 'url' => '/manager/logs/exception/delete']
         ],
         'diagnostic' => [
             ['method' => 'GET', 'url' => '/diagnostic']
         ],
         'action_runner' => [
-            ['method' => 'GET', 'url' => '/service/action/runner']
+            ['method' => 'POST', 'url' => '/service/action/runner']
         ],
         'monitoring_manager' => [
             ['method' => 'GET', 'url' => '/manager/monitoring'],
@@ -98,11 +99,11 @@ class NonAuthRedirectTest extends WebTestCase
         ],
         'todo_manager' => [
             ['method' => 'GET', 'url' => '/manager/todo'],
-            ['method' => 'GET', 'url' => '/manager/todo/edit'],
             ['method' => 'GET', 'url' => '/manager/todo/info'],
-            ['method' => 'GET', 'url' => '/manager/todo/close'],
-            ['method' => 'GET', 'url' => '/manager/todo/reopen'],
-            ['method' => 'GET', 'url' => '/manager/todo/delete'],
+            ['method' => 'POST', 'url' => '/manager/todo/edit'],
+            ['method' => 'POST', 'url' => '/manager/todo/close'],
+            ['method' => 'POST', 'url' => '/manager/todo/reopen'],
+            ['method' => 'POST', 'url' => '/manager/todo/delete'],
             ['method' => 'POST', 'url' => '/manager/todo/update-positions']
         ],
         'database_manager' => [
@@ -111,9 +112,9 @@ class NonAuthRedirectTest extends WebTestCase
             ['method' => 'GET', 'url' => '/manager/database/edit'],
             ['method' => 'GET', 'url' => '/manager/database/dump'],
             ['method' => 'GET', 'url' => '/manager/database/table'],
-            ['method' => 'GET', 'url' => '/manager/database/delete'],
+            ['method' => 'POST', 'url' => '/manager/database/delete'],
             ['method' => 'GET', 'url' => '/manager/database/console'],
-            ['method' => 'GET', 'url' => '/manager/database/truncate']
+            ['method' => 'POST', 'url' => '/manager/database/truncate']
         ],
         'file_browser' => [
             ['method' => 'GET', 'url' => '/filesystem'],
@@ -137,7 +138,7 @@ class NonAuthRedirectTest extends WebTestCase
             ['method' => 'GET', 'url' => '/terminal']
         ],
         'metrics' => [
-            ['method' => 'GET', 'url' => '/metrics/delete'],
+            ['method' => 'POST', 'url' => '/metrics/delete'],
             ['method' => 'GET', 'url' => '/metrics/service'],
             ['method' => 'GET', 'url' => '/metrics/dashboard'],
             ['method' => 'POST', 'url' => '/metrics/aggregate'],

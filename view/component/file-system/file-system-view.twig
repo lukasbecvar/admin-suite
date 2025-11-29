@@ -58,7 +58,17 @@
                 {# DELETE FILE #}
                 {% if referer == 'log_manager_exception_files' %}
                     {% set service = app.request.get('service') %}
-                    <button class="delete-button w-8 h-8 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" data-file={{ service }} title="Delete this exception file">
+                    {# DELETE EXCEPTION FILE FORM (hidden triggered from javascript) #}
+                    <form method="POST" action={{ path('app_manager_logs_exception_delete') }} id="delete-exception-form-{{ service }}" class="hidden">
+                        {# INCLUDE CSRF SECURITY TOKEN #}
+                        <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+
+                        {# SERVICE NAME ASSOCIATED WITH EXCEPTION FILE #}
+                        <input type="hidden" name="file" value={{ service }}>
+                    </form>
+
+                    {# DELETE EXCEPTION FILE BUTTON #}
+                    <button data-form-id="delete-exception-form-{{ service }}" title="Delete this exception file" class="delete-button w-8 h-8 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                         <i class="fas fa-trash text-gray-300 text-xs"></i>
                     </button>
                 {% else %}

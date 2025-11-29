@@ -164,6 +164,13 @@ document.addEventListener('DOMContentLoaded', function()
 
     // event listener for confirming aggregate action
     confirmAggregateButton.addEventListener('click', function () {
+        const csrfToken = this.dataset.csrf
+
+        // prepare form-data payload
+        const formData = new URLSearchParams()
+        formData.append('csrf_token', csrfToken)
+        formData.append('source', 'metrics-dashboard')
+
         setButtonLoadingState(true)
         showStatusMessage('info', 'Aggregating old metrics...')
 
@@ -171,12 +178,12 @@ document.addEventListener('DOMContentLoaded', function()
             method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({ source: 'metrics-dashboard' }),
+            body: formData,
             credentials: 'same-origin'
-        }).then(response => response.json().then(data => {
+        })
+        .then(response => response.json().then(data => {
             if (!response.ok) {
                 const errorMessage = data && data.message ? data.message : 'Failed to aggregate metrics. Please try again.'
                 const error = new Error(errorMessage)
@@ -184,22 +191,27 @@ document.addEventListener('DOMContentLoaded', function()
                 throw error
             }
             return data
-        })).then(data => {
+        }))
+        .then(data => {
             const status = data && data.status ? data.status : 'success'
             const message = data && data.message ? data.message : 'Aggregation completed successfully.'
             const details = data && data.details ? data.details : null
             showStatusMessage(status, message, details)
-        }).catch(error => {
+        })
+        .catch(error => {
             let fallbackMessage = 'Failed to aggregate metrics. Please try again.'
 
-            if (error && typeof error.message === 'string' && error.message.indexOf('Unexpected token') === -1 && error.message.trim() !== '') {
+            if (error && typeof error.message === 'string' &&
+                error.message.indexOf('Unexpected token') === -1 &&
+                error.message.trim() !== '') {
                 fallbackMessage = error.message
             }
 
             const status = error && error.status ? error.status : 'error'
             const details = error && error.details ? error.details : null
             showStatusMessage(status, fallbackMessage, details)
-        }).finally(() => {
+        })
+        .finally(() => {
             setButtonLoadingState(false)
         })
     })

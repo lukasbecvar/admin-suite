@@ -120,14 +120,14 @@ class LogsManagerController extends AbstractController
      * @return Response Redirects to dashboard page after update logs status to 'READED'
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/logs/set/readed', methods:['GET'], name: 'app_manager_logs_set_readed')]
+    #[Route('/manager/logs/set/readed', methods:['POST'], name: 'app_manager_logs_set_readed')]
     public function setAllLogsToReaded(Request $request): Response
     {
         // get query parameters from request
         $id = (int) $request->get('id', '0');
-        $page = (int) $request->query->get('page', '1');
-        $userId = $request->query->get('user_id', '0');
-        $filter = $request->query->get('filter', 'UNREADED');
+        $page = (int) $request->request->get('page', '1');
+        $userId = $request->request->get('user_id', '0');
+        $filter = $request->request->get('filter', 'UNREADED');
 
         // action for all logs
         if ($id == 0) {
@@ -214,11 +214,11 @@ class LogsManagerController extends AbstractController
      * @return Response The redirect response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/logs/exception/delete', methods:['GET'], name: 'app_manager_logs_exception_delete')]
+    #[Route('/manager/logs/exception/delete', methods:['POST'], name: 'app_manager_logs_exception_delete')]
     public function deleteExceptionFile(Request $request): Response
     {
         // get exception file name from query parameter
-        $exceptionFile = (string) $request->query->get('file', 'none');
+        $exceptionFile = (string) $request->request->get('file', 'none');
 
         try {
             // delete exception file

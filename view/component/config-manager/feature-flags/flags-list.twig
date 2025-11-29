@@ -24,8 +24,18 @@
         <div class="bg-gray-800/50 sm:border border-gray-700/50 sm:rounded sm:m-4 shadow-xl text-white text-center">
             <div class="p-4">
                 <div class="text-gray-400 text-sm sm:text-xl">
-                    <p>You can edit feature flags only if you have a custom suite configuration file.</p>
-                    <p>To make custom configuration file click here: <a href={{ path('app_suite_config_create', {'referer': 'app_feature_flags', 'filename': 'feature-flags.json'}) }} class="text-blue-400 hover:underline">Create custom config file</a></p>
+                    <p>You can edit feature flags only if you have a custom internal configuration file.</p>
+                    <p>
+                        To make custom configuration file click here:
+                        <form method="POST" action={{ path('app_suite_config_create') }} style="display:inline">
+                            <input type="hidden" name="referer" value="app_feature_flags">
+                            <input type="hidden" name="filename" value="feature-flags.json">
+                            <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                            <button type="submit" class="text-blue-400 hover:underline bg-transparent border-0 p-0 cursor-pointer">
+                                Create custom config file
+                            </button>
+                        </form>
+                    </p>
                 </div>
             </div>
         </div>
@@ -42,12 +52,22 @@
                     {% for key, flag in featureFlagsConfig %}
                         <tr class="hover:bg-gray-700/20 transition-all duration-200">
                             <td class="px-4 py-4 font-medium text-white text-base">{{ key|replace({'-': ' '}) }}</td>
+                            {# FLAG ENABLE/DISABLE BUTTONS #}
                             <td class="px-4 py-4 text-right">
-                                {% if flag %}
-                                    <a href={{ path('app_feature_flags_update', {'feature': key, 'value': 'disable'}) }} class="px-4 py-2 text-xs font-medium rounded bg-red-600/80 hover:bg-red-500/90 text-white transition-all duration-200 shadow-sm border border-red-500/50 mr-[-5px]">Disable</a>
-                                {% else %}
-                                    <a href={{ path('app_feature_flags_update', {'feature': key, 'value': 'enable'}) }} class="px-4 py-2 text-xs font-medium rounded bg-green-600/80 hover:bg-green-500/90 text-white transition-all duration-200 shadow-sm border border-green-500/50 mr-[-5px]">Enable</a>
-                                {% endif %}
+                                <form method="POST" action={{ path('app_feature_flags_update') }} style="display:inline">
+
+                                    {# REQUEST PARAMETERS #}
+                                    <input type="hidden" name="feature" value={{ key }}>
+                                    <input type="hidden" name="value" value={{ flag ? 'disable' : 'enable' }}>
+
+                                    {# CSRF SECURITY TOKEN #}
+                                    <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+
+                                    {# SUBMIT BUTTON #}
+                                    <button type="submit" class="px-4 py-2 text-xs font-medium rounded {{ flag ? 'bg-red-600/80 hover:bg-red-500/90 border border-red-500/50' : 'bg-green-600/80 hover:bg-green-500/90 border border-green-500/50' }} text-white transition-all duration-200 shadow-sm mr-[-5px]">
+                                        {{ flag ? 'Disable' : 'Enable' }}
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     {% else %}

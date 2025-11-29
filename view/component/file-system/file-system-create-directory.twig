@@ -51,6 +51,7 @@
 
             {# CREATE DIRECTORY FORM #}
             <form action={{ path('app_file_system_create_directory_save') }} method="post" class="max-w-2xl mx-auto sm:mt-10">
+                <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
                 <input type="hidden" name="directory" value="{{ currentPath|e }}">
 
                 <div class="bg-gray-800/50 border border-gray-700/50 sm:rounded overflow-hidden">

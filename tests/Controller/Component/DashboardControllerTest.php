@@ -40,10 +40,10 @@ class DashboardControllerTest extends CustomTestCase
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorExists('button[id="menu-toggle"]');
-        $this->assertSelectorExists('a[title="Logout user"]');
+        $this->assertSelectorExists('button[title="Logout user"]');
         $this->assertSelectorExists('a[href="/settings"]');
         $this->assertSelectorExists('a[href="/about"]');
-        $this->assertSelectorExists('a[href="/logout"]');
+        $this->assertSelectorExists('form[action="/logout"]');
         $this->assertSelectorExists('aside[id="sidebar"]');
         $this->assertSelectorExists('img[alt="profile picture"]');
         $this->assertSelectorExists('h3[id="username"]');

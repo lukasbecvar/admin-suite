@@ -10,6 +10,7 @@ use App\Manager\LogManager;
 use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
 use App\Annotation\Authorization;
+use App\Annotation\CsrfProtection;
 use App\Manager\TerminalJobManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,6 +65,7 @@ class TerminalApiController extends AbstractController
      *
      * @return Response The command output
      */
+    #[CsrfProtection(enabled: false)]
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/api/system/terminal', methods: ['POST'], name: 'api_terminal')]
     public function terminalAction(Request $request): Response
@@ -259,6 +261,7 @@ class TerminalApiController extends AbstractController
      *
      * @return JsonResponse The JSON response
      */
+    #[CsrfProtection(enabled: false)]
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/api/system/terminal/job', methods: ['POST'], name: 'api_terminal_job_start')]
     public function startTerminalJob(Request $request): JsonResponse
@@ -440,6 +443,7 @@ class TerminalApiController extends AbstractController
      *
      * @return JsonResponse The JSON response
      */
+    #[CsrfProtection(enabled: false)]
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/api/system/terminal/job/stop', methods: ['POST'], name: 'api_terminal_job_stop')]
     public function stopTerminalJob(Request $request): JsonResponse
@@ -479,6 +483,7 @@ class TerminalApiController extends AbstractController
      *
      * @return JsonResponse The JSON response
      */
+    #[CsrfProtection(enabled: false)]
     #[Authorization(authorization: 'ADMIN')]
     #[Route('/api/system/terminal/job/input', methods: ['POST'], name: 'api_terminal_job_input')]
     public function sendTerminalJobInput(Request $request): JsonResponse

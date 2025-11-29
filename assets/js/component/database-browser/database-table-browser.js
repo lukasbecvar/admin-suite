@@ -1,7 +1,7 @@
 /* database table reader component functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
-    let deleteUrl
+    let deleteId = null
 
     // select popup elements
     const popup = document.getElementById('textPopup')
@@ -66,7 +66,9 @@ document.addEventListener('DOMContentLoaded', function()
 
     // confirm delete action
     confirmDeleteButton.addEventListener('click', function() {
-        window.location.href = deleteUrl
+        if (deleteId) {
+            document.getElementById('delete-form-' + deleteId).submit()
+        }
     })
 
     // cancel delete action
@@ -76,7 +78,8 @@ document.addEventListener('DOMContentLoaded', function()
     deleteButton.forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.preventDefault()
-            openDeletePopup(button.getAttribute('data-url'))
+            deleteId = button.getAttribute('data-id')
+            openDeletePopup()
         })
     })
 

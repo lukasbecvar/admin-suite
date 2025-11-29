@@ -39,10 +39,10 @@ class LogsManagerControllerTest extends CustomTestCase
 
         // assert response
         $this->assertSelectorTextContains('title', 'Admin suite');
-        $this->assertSelectorExists('a[href="/manager/logs/set/readed"]');
+        $this->assertSelectorExists('form[action="/manager/logs/set/readed"]');
         $this->assertSelectorExists('a[href="/manager/logs/system"]');
         $this->assertSelectorExists('a[href="/manager/logs/exception/files"]');
-        $this->assertSelectorExists('a[href="/13378/antilog?state=enable"]');
+        $this->assertSelectorExists('form[action="/13378/antilog"]');
         $this->assertSelectorExists('select[name="filter"]');
         $this->assertSelectorExists('th:contains("#")');
         $this->assertSelectorExists('th:contains("Name")');
@@ -52,7 +52,7 @@ class LogsManagerControllerTest extends CustomTestCase
         $this->assertSelectorExists('th:contains("OS")');
         $this->assertSelectorExists('th:contains("IP Address")');
         $this->assertSelectorExists('th:contains("User")');
-        $this->assertSelectorExists('a[title="Mark as readed"]');
+        $this->assertSelectorExists('button[title="Mark all as read"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -95,7 +95,9 @@ class LogsManagerControllerTest extends CustomTestCase
      */
     public function testRequestLogsSetReaded(): void
     {
-        $this->client->request('GET', '/manager/logs/set/readed');
+        $this->client->request('POST', '/manager/logs/set/readed', [
+            'csrf_token' => $this->getCsrfToken($this->client)
+        ]);
 
         // assert response
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);

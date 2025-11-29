@@ -19,10 +19,13 @@
                 <span class="phone-none sm:inline text-sm font-medium ml-1 mb-[1.2px] sm:mt-[1.9px]">About</span>
             </a>
             {# LOGOUT BUTTON #}
-            <a href={{ path('app_auth_logout') }} class="ml-2 inline-flex items-center justify-center rounded px-1.5 mx-1 py-[3px] my-0.7 text-gray-300 hover:text-blue-400 hover:bg-blue-500/10 active:bg-blue-500/20 transition-all duration-200 hover:border-blue-500/30" title="Logout user">
-                <i class="fas fa-sign-out-alt text-base logout-icon mr-1 mt-[1.5px]"></i>
-                <span class="phone-none sm:inline logout-text text-sm font-medium mb-[1px] sm:mt-[2px]">Logout</span>
-            </a>
+            <form method="POST" action={{ path('app_auth_logout') }} class="inline">
+                <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                <button type="submit" title="Logout user" class="ml-2 inline-flex items-center justify-center rounded px-1.5 mx-1 py-[3px] my-0.7 text-gray-300 hover:text-blue-400 hover:bg-blue-500/10 active:bg-blue-500/20 transition-all duration-200 hover:border-blue-500/30">
+                    <i class="fas fa-sign-out-alt text-base logout-icon mr-1 mt-[1.5px]"></i>
+                    <span class="phone-none sm:inline logout-text text-sm font-medium mb-[1px] sm:mt-[2px]">Logout</span>
+                </button>
+            </form>
         </div>
     </div>
 </nav>

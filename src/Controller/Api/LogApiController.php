@@ -9,6 +9,7 @@ use App\Util\CacheUtil;
 use App\Util\SessionUtil;
 use App\Manager\LogManager;
 use App\Manager\ErrorManager;
+use App\Annotation\CsrfProtection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,6 +68,7 @@ class LogApiController extends AbstractController
      *
      * @return JsonResponse The JSON response with status
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/api/external/log', methods:['POST'], name: 'app_api_external_log')]
     public function externalLog(Request $request): JsonResponse
     {

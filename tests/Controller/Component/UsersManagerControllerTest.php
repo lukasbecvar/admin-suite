@@ -204,6 +204,7 @@ class UsersManagerControllerTest extends CustomTestCase
     {
         $this->client->request('POST', '/manager/users/register', [
             'registration_form' => [
+                'csrf_token' => $this->getCsrfToken($this->client, 'registration_form'),
                 'username' => ByteString::fromRandom(10)->toByteString(),
                 'password' => [
                     'first' => 'testtest',
@@ -224,8 +225,9 @@ class UsersManagerControllerTest extends CustomTestCase
     public function testUpdateUserRoleWithEmptyId(): void
     {
         $this->client->request('POST', '/manager/users/role/update', [
-            'id' => '',
-            'role' => ''
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'role' => '',
+            'id' => ''
         ]);
 
         // assert response
@@ -240,8 +242,9 @@ class UsersManagerControllerTest extends CustomTestCase
     public function testUpdateUserRoleWithEmptyRole(): void
     {
         $this->client->request('POST', '/manager/users/role/update', [
-            'id' => 1,
-            'role' => ''
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'role' => '',
+            'id' => 1
         ]);
 
         // assert response
@@ -256,6 +259,7 @@ class UsersManagerControllerTest extends CustomTestCase
     public function testUpdateUserRoleWithInvalidId(): void
     {
         $this->client->request('POST', '/manager/users/role/update', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'id' => 13383838383,
             'role' => 'admin'
         ]);
@@ -271,7 +275,8 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testBanUserWithEmptyId(): void
     {
-        $this->client->request('GET', '/manager/users/ban', [
+        $this->client->request('POST', '/manager/users/ban', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'id' => ''
         ]);
 
@@ -286,9 +291,10 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testBanUserWithEmpty(): void
     {
-        $this->client->request('GET', '/manager/users/ban', [
-            'id' => 1,
-            'status' => ''
+        $this->client->request('POST', '/manager/users/ban', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'status' => '',
+            'id' => 1
         ]);
 
         // assert response
@@ -302,9 +308,10 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testBanUserWithInvalidStatus(): void
     {
-        $this->client->request('GET', '/manager/users/ban', [
-            'id' => 1,
-            'status' => 'invalid'
+        $this->client->request('POST', '/manager/users/ban', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'status' => 'invalid',
+            'id' => 1
         ]);
 
         // assert response
@@ -318,7 +325,8 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testBanUserWithUserNotExist(): void
     {
-        $this->client->request('GET', '/manager/users/ban', [
+        $this->client->request('POST', '/manager/users/ban', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'id' => 13383838383,
             'status' => 'active'
         ]);
@@ -334,7 +342,8 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testUserDeleteWithEmptyId(): void
     {
-        $this->client->request('GET', '/manager/users/delete', [
+        $this->client->request('POST', '/manager/users/delete', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'id' => ''
         ]);
 
@@ -349,7 +358,8 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testUserDeleteWithInvalidId(): void
     {
-        $this->client->request('GET', '/manager/users/delete', [
+        $this->client->request('POST', '/manager/users/delete', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'id' => 1323232323232
         ]);
 
@@ -364,7 +374,8 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testRegenerateUserTokenWithEmptyId(): void
     {
-        $this->client->request('GET', '/manager/users/token/regenerate', [
+        $this->client->request('POST', '/manager/users/token/regenerate', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'id' => ''
         ]);
 
@@ -379,7 +390,8 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testRegenerateUserTokenWithInvalidId(): void
     {
-        $this->client->request('GET', '/manager/users/token/regenerate', [
+        $this->client->request('POST', '/manager/users/token/regenerate', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'id' => 1323232323232
         ]);
 
@@ -394,9 +406,10 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testUpdateUserApiAccessWithEmptyId(): void
     {
-        $this->client->request('GET', '/manager/users/api-access', [
-            'id' => '',
-            'status' => 'enable'
+        $this->client->request('POST', '/manager/users/api-access', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'status' => 'enable',
+            'id' => ''
         ]);
 
         // assert response
@@ -410,9 +423,10 @@ class UsersManagerControllerTest extends CustomTestCase
      */
     public function testUpdateUserApiAccessWithInvalidStatus(): void
     {
-        $this->client->request('GET', '/manager/users/api-access', [
-            'id' => 2,
-            'status' => 'paused'
+        $this->client->request('POST', '/manager/users/api-access', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'status' => 'paused',
+            'id' => 2
         ]);
 
         // assert response
@@ -431,9 +445,10 @@ class UsersManagerControllerTest extends CustomTestCase
         $userManagerMock->expects($this->once())->method('checkIfUserExistById')->with(99999)->willReturn(false);
         static::getContainer()->set(UserManager::class, $userManagerMock);
 
-        $this->client->request('GET', '/manager/users/api-access', [
-            'id' => 99999,
-            'status' => 'enable'
+        $this->client->request('POST', '/manager/users/api-access', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'status' => 'enable',
+            'id' => 99999
         ]);
 
         // assert response
@@ -453,10 +468,11 @@ class UsersManagerControllerTest extends CustomTestCase
         $userManagerMock->expects($this->once())->method('updateApiAccessStatus')->with(5, false, 'user-manager');
         static::getContainer()->set(UserManager::class, $userManagerMock);
 
-        $this->client->request('GET', '/manager/users/api-access', [
-            'id' => 5,
+        $this->client->request('POST', '/manager/users/api-access', [
+            'csrf_token' => $this->getCsrfToken($this->client),
             'status' => 'disable',
-            'page' => 3
+            'page' => 3,
+            'id' => 5
         ]);
 
         // assert response

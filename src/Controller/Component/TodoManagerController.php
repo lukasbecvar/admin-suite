@@ -5,6 +5,7 @@ namespace App\Controller\Component;
 use Exception;
 use App\Manager\TodoManager;
 use App\Manager\ErrorManager;
+use App\Annotation\CsrfProtection;
 use App\Form\Todo\CreateTodoFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -37,6 +38,7 @@ class TodoManagerController extends AbstractController
      *
      * @return Response The todo manager component view
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/manager/todo', methods:['GET', 'POST'], name: 'app_todo_manager')]
     public function todoTable(Request $request): Response
     {
@@ -86,12 +88,12 @@ class TodoManagerController extends AbstractController
      *
      * @return Response The redirect back to todo manager
      */
-    #[Route('/manager/todo/edit', methods:['GET'], name: 'app_todo_manager_edit')]
+    #[Route('/manager/todo/edit', methods:['POST'], name: 'app_todo_manager_edit')]
     public function editTodo(Request $request): Response
     {
         // get request parameters
-        $todoId = (int) $request->query->get('id');
-        $newTodoText = (string) $request->query->get('todo');
+        $todoId = (int) $request->request->get('id');
+        $newTodoText = (string) $request->request->get('todo');
 
         // check if todo id is valid or not set
         if ($todoId == 0) {
@@ -130,11 +132,11 @@ class TodoManagerController extends AbstractController
      *
      * @return Response The redirect back to todo manager
      */
-    #[Route('/manager/todo/close', methods:['GET'], name: 'app_todo_manager_close')]
+    #[Route('/manager/todo/close', methods:['POST'], name: 'app_todo_manager_close')]
     public function closeTodo(Request $request): Response
     {
         // get todo id from request parameter
-        $todoId = (int) $request->query->get('id');
+        $todoId = (int) $request->request->get('id');
 
         // check if todo id is valid or not set
         if ($todoId == 0) {
@@ -165,11 +167,11 @@ class TodoManagerController extends AbstractController
      *
      * @return Response The redirect back to todo manager
      */
-    #[Route('/manager/todo/reopen', methods:['GET'], name: 'app_todo_manager_reopen')]
+    #[Route('/manager/todo/reopen', methods:['POST'], name: 'app_todo_manager_reopen')]
     public function reopenTodo(Request $request): Response
     {
         // get todo id from request parameter
-        $todoId = (int) $request->query->get('id', '0');
+        $todoId = (int) $request->request->get('id', '0');
 
         // check if todo id is valid or not set
         if ($todoId == 0) {
@@ -200,11 +202,11 @@ class TodoManagerController extends AbstractController
      *
      * @return Response The response todo manager redirect
      */
-    #[Route('/manager/todo/delete', methods:['GET'], name: 'app_todo_manager_delete')]
+    #[Route('/manager/todo/delete', methods:['POST'], name: 'app_todo_manager_delete')]
     public function deleteTodo(Request $request): Response
     {
         // get todo id from request parameter
-        $todoId = (int) $request->query->get('id', '0');
+        $todoId = (int) $request->request->get('id', '0');
 
         // check if todo id is valid or not set
         if ($todoId == 0) {
@@ -265,19 +267,20 @@ class TodoManagerController extends AbstractController
      *
      * @return JsonResponse The response with success status
      */
-    #[Route('/manager/todo/update-positions', methods:['POST'], name: 'app_todo_manager_update_positions')]
+    #[Route('/manager/todo/update-positions', methods: ['POST'], name: 'app_todo_manager_update_positions')]
     public function updateTodoPositions(Request $request): JsonResponse
     {
         try {
-            // get positions data from request
-            $positions = json_decode($request->getContent(), true);
+            // read positions form form-data
+            $positions = $request->request->all('positions');
 
             // validate positions data
-            if (!is_array($positions) || empty($positions)) {
+            if (empty($positions)) {
                 $this->errorManager->logError(
                     message: 'invalid positions data',
                     code: Response::HTTP_BAD_REQUEST
                 );
+
                 return $this->json([
                     'success' => false,
                     'message' => 'Invalid positions data'
@@ -294,9 +297,10 @@ class TodoManagerController extends AbstractController
                 message: 'error updating positions: ' . $e->getMessage(),
                 code: $e->getCode()
             );
+
             return $this->json([
-                'success' => false,
-                'message' => 'Error updating positions: ' . $e->getMessage()
+            'success' => false,
+            'message' => 'Error updating positions: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

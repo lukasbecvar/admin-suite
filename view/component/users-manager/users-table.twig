@@ -7,7 +7,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+                <a href={{ path('app_dashboard') }} title="Back to dashboard" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -16,12 +16,8 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                {# DATABASE LINK #}
-                <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': usersTableName}) }} class="w-8 h-8 bg-gray-700/50 hover:bg-blue-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="View database table">
-                    <i class="fas fa-database text-gray-300 text-xs"></i>
-                </a>
                 {# ADD USER LINK #}
-                <a href={{ path('app_manager_users_register') }} class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Add new user">
+                <a href={{ path('app_manager_users_register') }} title="Add new user" class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-plus text-gray-300 text-xs"></i>
                 </a>
                 {# FILTER FORM #}
@@ -172,45 +168,83 @@
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-600/20 text-red-400">Yes</span>
                                     </td>
                                     <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap align-middle">
-                                        <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'inactive', 'page': currentPage}) }} id="loading-blocker" class="unban-button w-7 h-7 bg-gray-700/50 hover:bg-green-600/50 rounded inline-flex items-center justify-center transition-colors duration-200" title="Unban user">
-                                            <i class="fas fa-check text-xs text-gray-300 hover:text-white"></i>
-                                        </a>
+                                        <form method="POST" action={{ path('app_manager_users_ban') }} style="display:inline" class="unban-form">
+                                            {# INCLUDE REQUEST PARAMETERS #}
+                                            <input type="hidden" name="id" value={{ row.id }}>
+                                            <input type="hidden" name="status" value="inactive">
+                                            <input type="hidden" name="page" value={{ currentPage }}>
+                                            <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+
+                                            {# SUBMIT BUTTON #}
+                                            <button type="submit" title="Unban user" class="unban-button w-7 h-7 bg-gray-700/50 hover:bg-green-600/50 rounded inline-flex items-center justify-center transition-colors duration-200">
+                                                <i class="fas fa-check text-xs text-gray-300 hover:text-white"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 {% else %}
                                     <td class="px-4 py-3 border-b border-gray-600/50 whitespace-nowrap">
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-600/20 text-green-400">No</span>
                                     </td>
                                     <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap align-middle">
-                                        <a href={{ path('app_manager_users_ban', {'id': row.id, 'status': 'active', 'page': currentPage}) }} id="loading-blocker" class="ban-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded inline-flex items-center justify-center transition-colors duration-200" title="Ban user">
-                                            <i class="fas fa-ban text-xs text-gray-300 hover:text-white"></i>
-                                        </a>
+                                        <form method="POST" action={{ path('app_manager_users_ban') }} class="ban-form" style="display:inline">
+                                            {# INCLUDE REQUEST PARAMETERS #}
+                                            <input type="hidden" name="id" value={{ row.id }}>
+                                            <input type="hidden" name="status" value="active">
+                                            <input type="hidden" name="page" value={{ currentPage }}>
+                                            <input type="hidden" name="reason" value="">
+                                            <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+
+                                            {# SUBMIT BUTTON #}
+                                            <button type="submit" title="Ban user" class="ban-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded inline-flex items-center justify-center transition-colors duration-200">
+                                                <i class="fas fa-ban text-xs text-gray-300 hover:text-white"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 {% endif %}
 
                                 {# TOKEN REGENERATION LINK #}
                                 <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap align-middle">
-                                    <a href={{ path('app_manager_users_token_regenerate', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="token-regenerate-button w-7 h-7 bg-gray-700/50 hover:bg-blue-600/50 rounded inline-flex items-center justify-center transition-colors duration-200" title="Regenerate authentication token">
-                                        <i class="fas fa-key text-xs text-gray-300 hover:text-white"></i>
-                                    </a>
+                                    <form method="POST" action={{ path('app_manager_users_token_regenerate') }} class="token-regenerate-form" style="display:inline">
+                                        {# INCLUDE REQUEST PARAMETERS #}
+                                        <input type="hidden" name="id" value={{ row.id }}>
+                                        <input type="hidden" name="page" value={{ currentPage }}>
+                                        <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+
+                                        {# SUBMIT BUTTON #}
+                                        <button type="submit" title="Regenerate authentication token" class="token-regenerate-button w-7 h-7 bg-gray-700/50 hover:bg-blue-600/50 rounded inline-flex items-center justify-center transition-colors duration-200">
+                                            <i class="fas fa-key text-xs text-gray-300 hover:text-white"></i>
+                                        </button>
+                                    </form>
                                 </td>
 
                                 {# API ACCESS ACTION LINK #}
                                 <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap align-middle">
-                                    <a href={{ path('app_manager_users_api_access', {'id': row.id, 'status': row.allowApiAccess ? 'disable' : 'enable', 'page': currentPage}) }}
-                                       id="loading-blocker"
-                                       class="api-access-button w-7 h-7 bg-gray-700/50 hover:bg-purple-600/50 rounded inline-flex items-center justify-center transition-colors duration-200"
-                                       data-username={{ row.username|e }}
-                                       data-action={{ row.allowApiAccess ? 'disable' : 'enable' }}
-                                       title={{ row.allowApiAccess ? 'Disable API access' : 'Enable API access' }}>
-                                        <i class="fas fa-toggle-{{ row.allowApiAccess ? 'on' : 'off' }} text-xs {{ row.allowApiAccess ? 'text-green-300' : 'text-gray-300' }} hover:text-white"></i>
-                                    </a>
+                                    <form method="POST" action={{ path('app_manager_users_api_access') }} class="api-access-form" style="display:inline">
+                                        {# INCLUDE REQUEST PARAMETERS #}
+                                        <input type="hidden" name="id" value={{ row.id }}>
+                                        <input type="hidden" name="status" value={{ row.allowApiAccess ? 'disable' : 'enable' }}>
+                                        <input type="hidden" name="page" value={{ currentPage }}>
+                                        <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+
+                                        <button type="submit" title={{ row.allowApiAccess ? 'Disable API access' : 'Enable API access' }} class="api-access-button w-7 h-7 bg-gray-700/50 hover:bg-purple-600/50 rounded inline-flex items-center justify-center transition-colors duration-200" data-username={{ row.username|e }} data-action={{ row.allowApiAccess ? 'disable' : 'enable' }}>
+                                            <i class="fas fa-toggle-{{ row.allowApiAccess ? 'on' : 'off' }} text-xs {{ row.allowApiAccess ? 'text-green-300' : 'text-gray-300' }} hover:text-white"></i>
+                                        </button>
+                                    </form>
                                 </td>
 
                                 {# USER DELETE LINK #}
                                 <td class="px-4 py-3 border-b border-gray-600/50 text-center whitespace-nowrap align-middle">
-                                    <a href={{ path('app_manager_users_delete', {'id': row.id, 'page': currentPage}) }} id="loading-blocker" class="delete-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded inline-flex items-center justify-center transition-colors duration-200" title="Delete user">
-                                        <i class="fas fa-trash text-xs text-gray-300 hover:text-white"></i>
-                                    </a>
+                                    <form method="POST" action={{ path('app_manager_users_delete') }} class="delete-form" style="display:inline">
+                                        {# INCLUDE REQUEST PARAMETERS #}
+                                        <input type="hidden" name="id" value={{ row.id }}>
+                                        <input type="hidden" name="page" value={{ currentPage }}>
+                                        <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+
+                                        {# SUBMIT BUTTON #}
+                                        <button type="submit" title="Delete user" class="delete-button w-7 h-7 bg-gray-700/50 hover:bg-red-600/50 rounded inline-flex items-center justify-center transition-colors duration-200">
+                                            <i class="fas fa-trash text-xs text-gray-300 hover:text-white"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -238,7 +272,7 @@
                                         <i class="fas fa-angle-double-left text-xs"></i>
                                     </span>
                                 {% else %}
-                                    <a href="{{ path('app_manager_users', {page: 1}) }}" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200" title="First page">
+                                    <a href={{ path('app_manager_users', {page: 1}) }} title="First page" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
                                         <i class="fas fa-angle-double-left text-xs"></i>
                                     </a>
                                 {% endif %}
@@ -250,7 +284,7 @@
                                     <i class="fas fa-chevron-left text-xs"></i>
                                 </span>
                             {% else %}
-                                <a href="{{ path('app_manager_users', {page: previousPage}) }}" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
+                                <a href={{ path('app_manager_users', {page: previousPage}) }} class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
                                     <i class="fas fa-chevron-left text-xs"></i>
                                 </a>
                             {% endif %}
@@ -258,7 +292,7 @@
                             {# PAGE NUMBERS - Mobile version (fewer pages) #}
                             <div class="flex items-center gap-2 sm:hidden">
                                 {% for page in startPage..endPage %}
-                                    <a href="{{ path('app_manager_users', {page: page}) }}" class="px-3 py-2 text-sm font-medium {{ page == currentPage ? 'text-white bg-blue-500/20 border-blue-500/50' : 'text-gray-300 bg-gray-700/50 border-gray-600/50 hover:bg-gray-600/50 hover:text-white' }} border rounded transition-all duration-200">
+                                    <a href={{ path('app_manager_users', {page: page}) }} class="px-3 py-2 text-sm font-medium {{ page == currentPage ? 'text-white bg-blue-500/20 border-blue-500/50' : 'text-gray-300 bg-gray-700/50 border-gray-600/50 hover:bg-gray-600/50 hover:text-white' }} border rounded transition-all duration-200">
                                         {{ page }}
                                     </a>
                                 {% endfor %}
@@ -267,7 +301,7 @@
                             {# PAGE NUMBERS - Desktop version (more pages) #}
                             <div class="hidden sm:flex items-center gap-2">
                                 {% for page in startPageDesktop..endPageDesktop %}
-                                    <a href="{{ path('app_manager_users', {page: page}) }}" class="px-3 py-2 text-sm font-medium {{ page == currentPage ? 'text-white bg-blue-500/20 border-blue-500/50' : 'text-gray-300 bg-gray-700/50 border-gray-600/50 hover:bg-gray-600/50 hover:text-white' }} border rounded transition-all duration-200">
+                                    <a href={{ path('app_manager_users', {page: page}) }} class="px-3 py-2 text-sm font-medium {{ page == currentPage ? 'text-white bg-blue-500/20 border-blue-500/50' : 'text-gray-300 bg-gray-700/50 border-gray-600/50 hover:bg-gray-600/50 hover:text-white' }} border rounded transition-all duration-200">
                                         {{ page }}
                                     </a>
                                 {% endfor %}
@@ -279,7 +313,7 @@
                                     <i class="fas fa-chevron-right text-xs"></i>
                                 </span>
                             {% else %}
-                                <a href="{{ path('app_manager_users', {page: nextPage}) }}" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
+                                <a href={{ path('app_manager_users', {page: nextPage}) }} class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
                                     <i class="fas fa-chevron-right text-xs"></i>
                                 </a>
                             {% endif %}
@@ -291,7 +325,7 @@
                                         <i class="fas fa-angle-double-right text-xs"></i>
                                     </span>
                                 {% else %}
-                                    <a href="{{ path('app_manager_users', {page: totalPages}) }}" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200" title="Last page">
+                                    <a href={{ path('app_manager_users', {page: totalPages}) }} title="Last page" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
                                         <i class="fas fa-angle-double-right text-xs"></i>
                                     </a>
                                 {% endif %}

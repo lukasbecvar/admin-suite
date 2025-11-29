@@ -120,6 +120,7 @@
                                     {% endfor %}
                                     {# EDIT AND DELETE BUTTONS #}
                                     {% if row.id|default(null) is not null %}
+                                        {# EDIT BUTTON #}
                                         <td class="px-4 py-2 border-b border-gray-600/60 text-center">
                                             <div class="flex justify-center">
                                                 <a href={{ path('app_manager_database_edit', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }} class="w-6 h-6 bg-yellow-500/20 hover:bg-yellow-500/30 rounded flex items-center justify-center transition-all duration-200 border border-yellow-500/30" title="Edit record">
@@ -127,9 +128,16 @@
                                                 </a>
                                             </div>
                                         </td>
+                                        {# DELETE BUTTON #}
                                         <td class="px-4 py-2 border-b border-gray-600/60 text-center">
                                             <div class="flex justify-center">
-                                                <button class="w-6 h-6 bg-red-500/20 hover:bg-red-500/30 rounded flex items-center justify-center transition-all duration-200 border border-red-500/30 delete-button" data-url={{ path('app_manager_database_delete', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }} title="Delete record">
+                                                {# HIDEN DELETE FORM #}
+                                                <form method="POST" action={{ path('app_manager_database_delete', { database: databaseName, table: tableName, page: currentPage, id: row.id }) }} id="delete-form-{{ row.id }}" class="hidden">
+                                                    {# INCLUDE CSRF SECURITY TOKEN #}
+                                                    <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                                </form>
+                                                {# DELETE BUTTON (trigger delete form) #}
+                                                <button data-id={{ row.id }} title="Delete record" class="w-6 h-6 bg-red-500/20 hover:bg-red-500/30 rounded flex items-center justify-center transition-all duration-200 border border-red-500/30 delete-button">
                                                     <i class="fas fa-trash text-red-400 text-xs"></i>
                                                 </button>
                                             </div>

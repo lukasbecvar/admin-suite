@@ -123,17 +123,17 @@ class ConfigManagerController extends AbstractController
      * @return Response Redirect to config show page
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/settings/suite/create', methods: ['GET'], name: 'app_suite_config_create')]
+    #[Route('/settings/suite/create', methods: ['POST'], name: 'app_suite_config_create')]
     public function suiteConfigCreate(Request $request): Response
     {
         // get referer parameter from query string
-        $referer = $request->query->get('referer');
+        $referer = $request->request->get('referer');
 
         // get config filename parameter from query string
-        $filename = $request->query->get('filename');
+        $filename = $request->request->get('filename');
 
-        // check if filename parameter is set
-        if ($filename === null) {
+        // validate filename
+        if (!is_string($filename) || $filename === '') {
             $this->errorManager->handleError(
                 message: 'filename cannot be empty',
                 code: Response::HTTP_BAD_REQUEST
@@ -152,7 +152,7 @@ class ConfigManagerController extends AbstractController
         }
 
         // redirect to referer page
-        if ($referer !== null) {
+        if ($referer !== null && is_string($referer)) {
             return $this->redirectToRoute($referer);
         }
 
@@ -168,14 +168,14 @@ class ConfigManagerController extends AbstractController
      * @return Response Redirect to config index page
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/settings/suite/delete', name: 'app_suite_config_delete', methods: ['GET'])]
+    #[Route('/settings/suite/delete', name: 'app_suite_config_delete', methods: ['POST'])]
     public function suiteConfigDelete(Request $request): Response
     {
         // get config filename from query string
-        $filename = $request->query->get('filename');
+        $filename = $request->request->get('filename');
 
-        // check if filename parameter is set
-        if ($filename === null) {
+        // validate filename parameter
+        if (!is_string($filename) || $filename === '') {
             $this->errorManager->handleError(
                 message: 'filename cannot be empty',
                 code: Response::HTTP_BAD_REQUEST
@@ -272,7 +272,7 @@ class ConfigManagerController extends AbstractController
      * @return Response Redirect to feature flags list page
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/settings/feature-flags/update', methods: ['GET'], name: 'app_feature_flags_update')]
+    #[Route('/settings/feature-flags/update', methods: ['POST'], name: 'app_feature_flags_update')]
     public function featureFlagsUpdate(Request $request): Response
     {
         // get feature flag name from query string

@@ -1,7 +1,7 @@
 /** service exception file delete confirmation popup functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
-    let fileToDelete
+    let formToSubmit = null
     
     // get view elements
     const deletePopup = document.getElementById('deletePopup')
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function()
     // handle delete confirmation popup show
     deleteButtons.forEach(button => {
         button.addEventListener('click', function () {
-            fileToDelete = this.dataset.file
+            formToSubmit = this.dataset.formId
             deletePopup.classList.remove('hidden')
         })
     })
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function()
     // handle cancel button click
     cancelDeleteButton.addEventListener('click', function () {
         deletePopup.classList.add('hidden')
-        fileToDelete = null
+        formToSubmit = null
     })
 
     // handle escape key press
@@ -28,21 +28,23 @@ document.addEventListener('DOMContentLoaded', function()
         if (event.key === 'Escape') {
             if (!deletePopup.classList.contains('hidden')) {
                 deletePopup.classList.add('hidden')
+                formToSubmit = null
             }
         }
     })
 
-    // handle click outside of popup
-    document.getElementById('deletePopup').addEventListener('click', function (event) {
+    // handle click outside popup
+    deletePopup.addEventListener('click', function (event) {
         if (event.target === this) {
             this.classList.add('hidden')
+            formToSubmit = null
         }
     })
 
-    // handle click on confirm button
+    // POST submit when confirmed
     confirmDeleteButton.addEventListener('click', function () {
-        if (fileToDelete) {
-            window.location.href = '/manager/logs/exception/delete?file=' + encodeURIComponent(fileToDelete)
+        if (formToSubmit) {
+            document.getElementById(formToSubmit).submit()
         }
     })
 })

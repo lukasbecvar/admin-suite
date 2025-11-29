@@ -32,7 +32,9 @@ class AntiLogControllerTest extends CustomTestCase
      */
     public function testSetAntiLogWithUserNotLoggedIn(): void
     {
-        $this->client->request('GET', '/13378/antilog');
+        $this->client->request('POST', '/13378/antilog', [
+            'csrf_token' => $this->getCsrfToken($this->client)
+        ]);
 
         // assert response
         $this->assertResponseRedirects('/login');
@@ -50,7 +52,9 @@ class AntiLogControllerTest extends CustomTestCase
         $this->simulateLogin($this->client);
 
         // create request
-        $this->client->request('GET', '/13378/antilog');
+        $this->client->request('POST', '/13378/antilog', [
+            'csrf_token' => $this->getCsrfToken($this->client)
+        ]);
 
         // assert response
         $this->assertResponseRedirects('/manager/logs');

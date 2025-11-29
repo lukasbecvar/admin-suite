@@ -51,6 +51,7 @@
 
             {# MOVE FORM #}
             <form action={{ path('app_file_system_move_save') }} method="post" class="max-w-3xl mx-auto sm:mt-10">
+                <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
                 <input type="hidden" name="sourcePath" value="{{ currentPath|e }}">
 
                 <div class="bg-gray-800/50 border border-gray-700/50 sm:rounded overflow-hidden">

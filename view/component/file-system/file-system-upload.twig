@@ -52,6 +52,7 @@
             {# FILE UPLOAD FORM #}
             <div class="p-6">
                 <form action={{ path('app_file_system_upload_save') }} method="post" enctype="multipart/form-data" class="space-y-2" id="upload-form">
+                    <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
                     <input type="hidden" name="directory" value="{{ currentPath }}" id="directory-input">
 
                     {# UPLOAD AREA #}
@@ -120,6 +121,7 @@
 <script>
 // send upload configuration to JavaScript
 window.uploadConfig = {
+    csrfToken: '{{ csrf_token('internal-csrf-token') }}',
     chunkUploadUrl: '{{ path('app_file_system_upload_chunk') }}',
     redirectUrl: '{{ path('app_file_system_browser', { 'path': currentPath }) }}'
 }

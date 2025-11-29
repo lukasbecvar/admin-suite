@@ -27,7 +27,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_manager_users') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to users manager">
+                <a href={{ path('app_manager_users') }} title="Back to users manager" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -45,15 +45,19 @@
                 {# PROFILE CARD #}
                 <div class="bg-gray-800/50 border border-gray-700/50 sm:rounded overflow-hidden sm:mb-6">
                     <div class="px-6 py-8 text-center border-b border-gray-700/50 bg-gray-800/30">
+                        {# PROFILE PICTURE #}
                         {% if userRepository.getProfilePic() == 'default_pic' %}
-                            <img id="user-profile-photo" class="w-24 h-24 rounded-full mx-auto cursor-pointer hover:ring-2 hover:ring-blue-500/50 transition-all duration-200" src={{ asset('/assets/images/default-profile.jpg') }} alt="User Profile Picture">
+                            <img id="user-profile-photo" src={{ asset('/assets/images/default-profile.jpg') }} alt="User Profile Picture" class="w-24 h-24 rounded-full mx-auto cursor-pointer hover:ring-2 hover:ring-blue-500/50 transition-all duration-200">
                         {% else %}
-                            <img id="user-profile-photo" class="w-24 h-24 rounded-full mx-auto cursor-pointer hover:ring-2 hover:ring-blue-500/50 transition-all duration-200" src="data:image/jpeg;base64,{{ userRepository.getProfilePic()|e }}" alt="User Profile Picture">
+                            <img id="user-profile-photo" src="data:image/jpeg;base64,{{ userRepository.getProfilePic()|e }}" alt="User Profile Picture" class="w-24 h-24 rounded-full mx-auto cursor-pointer hover:ring-2 hover:ring-blue-500/50 transition-all duration-200">
                         {% endif %}
+                        
+                        {# USERNAME #}
                         <h1 class="text-3xl font-bold mt-4 text-white">
                             {{ userRepository.getUsername()|e }}
                         </h1>
 
+                        {# USER ROLE #}
                         <div class="mt-3">
                             {% if isUserAdmin %}
                                 <span id="role" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-600/20 text-red-400">
@@ -110,10 +114,10 @@
                                         {% set ipAddress = userRepository.getIpAddress() %}
                                         {% if ipAddress|length > 20 %}
                                             <div class="relative">
-                                                <p id="ip-short" class="text-white font-medium cursor-pointer hover:text-blue-400 transition-colors duration-200" onclick="toggleIpDisplay()" title="Click to show full IP address">
+                                                <p id="ip-short" title="Click to show full IP address" class="text-white font-medium cursor-pointer hover:text-blue-400 transition-colors duration-200">
                                                     {{ ipAddress|slice(0, 17) }}...
                                                 </p>
-                                                <p id="ip-full" class="text-white font-medium cursor-pointer hover:text-blue-400 transition-colors duration-200 hidden break-all" onclick="toggleIpDisplay()" title="Click to shorten IP address">
+                                                <p id="ip-full" title="Click to shorten IP address" class="text-white font-medium cursor-pointer hover:text-blue-400 transition-colors duration-200 hidden break-all">
                                                     {{ ipAddress|e }}
                                                 </p>
                                             </div>
@@ -230,40 +234,4 @@
         </div>
     </div>
 </div>
-
-{# PROFILE PICTURE MODAL SCRIPT #}
-<script>
-    document.getElementById('user-profile-photo').addEventListener('click', function() {
-        document.getElementById('user-profile-modal').classList.remove('hidden')
-        document.getElementById('user-profile-modal').classList.add('flex')
-    });
-
-    document.getElementById('close-user-profile-modal').addEventListener('click', function() {
-        document.getElementById('user-profile-modal').classList.add('hidden')
-        document.getElementById('user-profile-modal').classList.remove('flex')
-    });
-
-    document.getElementById('user-profile-modal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            this.classList.add('hidden')
-            this.classList.remove('flex')
-        }
-    });
-
-    // IP address toggle function
-    function toggleIpDisplay() {
-        const ipShort = document.getElementById('ip-short')
-        const ipFull = document.getElementById('ip-full')
-
-        if (ipShort && ipFull) {
-            if (ipShort.classList.contains('hidden')) {
-                ipShort.classList.remove('hidden')
-                ipFull.classList.add('hidden')
-            } else {
-                ipShort.classList.add('hidden')
-                ipFull.classList.remove('hidden')
-            }
-        }
-    }
-</script>
 {% endblock %}

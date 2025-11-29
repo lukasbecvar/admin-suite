@@ -30,7 +30,8 @@
         </div>
     </div>
 
-    <div class="flex-grow overflow-y-auto">
+    {# TODO LIST #}
+    <div class="flex-grow overflow-y-auto" id="todo-csrf-token" data-csrf="{{ csrf_token('internal-csrf-token') }}">
         <div class="{{ filter == 'open' ? 'todo-list' : '' }} card-component p-0 px-2 pb-[2px] todo-manager overflow-hidden breadcrumb component">
             <div id="todo-items-container" class="divide-y divide-gray-700/50">
 
@@ -41,38 +42,61 @@
 
                 {# TODO ITEM #}
                 {% for todo in todos %}
-                    <div class="todo-item flex items-center justify-between p-3 my-2 rounded bg-gradient-to-r from-slate-800/60 to-slate-700/40 border border-slate-600/30 transition-all duration-200 hover:from-slate-700/70 hover:to-slate-600/50 hover:border-slate-500/40 hover:shadow-lg hover:shadow-slate-900/20 relative" data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} data-position={{ todo.position }}>
-                        {# ITEM MOVE DRAG HANDLE #}
+                    <div class="todo-item flex items-center justify-between p-3 my-2 rounded bg-gradient-to-r from-slate-800/60 to-slate-700/40 border border-slate-600/30 transition-all duration-200 hover:from-slate-700/70 hover:to-slate-600/50 hover:border-slate-500/40 hover:shadow-lg hover:shadow-slate-900/20 relative"
+                        data-todo-id="{{ todo.id }}"
+                        data-todo-text="{{ todo.todoText|e('html_attr') }}"
+                        data-position="{{ todo.position }}">
+
+                        {# TODO ITEM DRAG HANDLE #}
                         {% if filter == 'open' and todos|length > 1 %}
                             <div class="drag-handle mr-2 cursor-move text-gray-500 hover:text-white flex items-center justify-center">
                                 <i class="fas fa-grip-vertical text-lg"></i>
                             </div>
                         {% endif %}
+
+                        {# TODO ITEM TEXT #}
                         <div class="flex-grow">
                             <span class="text-white whitespace-pre-line disable-select-on-phone">{{ todo.todoText|linkify }}</span>
                         </div>
+
                         <div class="flex space-x-2 ml-1">
                             {% if filter == 'open' %}
                                 {# EDIT BUTTON #}
-                                <button data-todo-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} title="Open todo edit" class="edit-button text-blue-400 text-xl hover:text-blue-300 focus:outline-none">
-                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                <button data-edit-id={{ todo.id }} data-todo-text={{ todo.todoText|e('html_attr') }} title="Open todo edit" class="edit-button text-blue-400 text-xl hover:text-blue-300">
+                                    <i class="fa fa-edit"></i>
                                 </button>
-                                {# COMPLETE BUTTON #}
-                                <a href={{ path('app_todo_manager_close', {'id': todo.id}) }} title="Close todo" class="delete-link text-green-400 text-xl hover:text-green-300 focus:outline-none mr-0.5">
-                                    <i class="fa fa-check" aria-hidden="true"></i>
-                                </a>
+
+                                {# CLOSE FORM + BUTTON #}
+                                <form method="POST" id=todo-close-form-{{ todo.id }} action={{ path('app_todo_manager_close') }} class="hidden">
+                                    <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                    <input type="hidden" name="id" value={{ todo.id }}>
+                                </form>
+                                <button class="todo-close-button text-green-400 text-xl hover:text-green-300" data-form-id="todo-close-form-{{ todo.id }}" title="Close todo">
+                                    <i class="fa fa-check"></i>
+                                </button>
+
                             {% else %}
-                                {# REOPEN BUTTON #}
-                                <a href={{ path('app_todo_manager_reopen', {'id': todo.id}) }} title="Reopen todo" class="delete-link text-green-400 text-xl hover:text-green-300 focus:outline-none mr-0.5">
-                                    <i class="fa fa-undo" aria-hidden="true"></i>
-                                </a>
-                                {# DELETE BUTTON #}
-                                <button data-delete-url={{ path('app_todo_manager_delete', {'id': todo.id}) }} title="Delete todo" class="delete-button delete-link text-red-400 text-xl hover:text-red-300 focus:outline-none mr-0.5">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                {# REOPEN FORM + BUTTON #}
+                                <form method="POST" id="todo-reopen-form-{{ todo.id }}" action={{ path('app_todo_manager_reopen') }} class="hidden">
+                                    <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                    <input type="hidden" name="id" value={{ todo.id }}>
+                                </form>
+                                <button data-form-id="todo-reopen-form-{{ todo.id }}" title="Reopen todo" class="todo-reopen-button text-green-400 text-xl hover:text-green-300">
+                                    <i class="fa fa-undo"></i>
+                                </button>
+
+                                {# DELETE FORM + BUTTON #}
+                                <form method="POST" id="todo-delete-form-{{ todo.id }}" action={{ path('app_todo_manager_delete') }} class="hidden">
+                                    <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                    <input type="hidden" name="id" value={{ todo.id }}>
+                                </form>
+                                <button data-form-id="todo-delete-form-{{ todo.id }}" title="Delete todo" class="delete-button text-red-400 text-xl hover:text-red-300">
+                                    <i class="fa fa-trash"></i>
                                 </button>
                             {% endif %}
+
                             {# INFO BUTTON #}
-                            <button class="info-button phone-none" data-todo-id={{ todo.id }} title="View Info">
+                            <button data-todo-id={{ todo.id }} title="View Info" class="info-button">
                                 <i class="fas fa-info-circle text-gray-400"></i>
                             </button>
                         </div>

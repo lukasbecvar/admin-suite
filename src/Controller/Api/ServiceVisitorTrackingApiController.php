@@ -6,6 +6,7 @@ use Exception;
 use App\Util\VisitorInfoUtil;
 use App\Manager\MetricsManager;
 use App\Manager\ServiceManager;
+use App\Annotation\CsrfProtection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,6 +64,7 @@ class ServiceVisitorTrackingApiController extends AbstractController
      *
      * @return JsonResponse The JSON response with status
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/api/monitoring/visitor/tracking', methods:['POST'], name: 'app_api_monitoring_visitor_tracking')]
     public function visitorTracking(Request $request): JsonResponse
     {
