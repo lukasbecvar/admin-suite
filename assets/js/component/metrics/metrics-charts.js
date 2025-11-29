@@ -3,7 +3,10 @@ const ApexCharts = require('apexcharts')
 
 document.addEventListener('DOMContentLoaded', function()
 {
-    // function for dynamic color based on value
+    // -----------------------------
+    // UTILITY FUNCTIONS
+    // -----------------------------
+    // Function for dynamic color based on value
     function getColor(value, metricData) {
         const maxMetricValue = Math.max(...metricData.map(m => m.value))
         if (maxMetricValue > 100) {
@@ -12,13 +15,16 @@ document.addEventListener('DOMContentLoaded', function()
         return value > 50 ? '#cc3829' : '#1fa33d'
     }
 
+    // -----------------------------
+    // CHART INITIALIZATION AND RENDERING
+    // -----------------------------
     if (!window.metricsData) {
         console.error('Metrics data not found in window.metricsData')
         return
     }
     const services = typeof window.metricsData.categories === 'undefined' ? window.metricsData : { default: window.metricsData }
 
-    // iterate over each service in metrics data 
+    // iterate over each service in metrics data
     Object.keys(services).forEach(serviceName => {
         const { categories, metrics, percentage } = services[serviceName]
         Object.keys(metrics).forEach(metricName => {
@@ -193,7 +199,9 @@ document.addEventListener('DOMContentLoaded', function()
     })
 })
 
-// handle time-period change
+// -----------------------------
+// TIME PERIOD CHANGE HANDLER
+// -----------------------------
 document.addEventListener('DOMContentLoaded', function initTimePeriodSelector() {
     const select = document.getElementById('time-period');
     if (!select) return

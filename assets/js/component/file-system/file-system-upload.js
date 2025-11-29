@@ -1,7 +1,9 @@
 /** file-system upload component functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
-    // global variables
+    // -----------------------------
+    // GLOBAL VARIABLES AND CONFIGURATION
+    // -----------------------------
     let selectedFiles = []
     let isUploading = false
     let uploadStats = {
@@ -16,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function()
         redirectUrl: ''
     }
 
+    // -----------------------------
+    // FILE SELECTION AND LIST MANAGEMENT
+    // -----------------------------
     // handle file selection
     function handleFileSelection(input) {
         if (isUploading) return
@@ -113,6 +118,9 @@ document.addEventListener('DOMContentLoaded', function()
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
     }
 
+    // -----------------------------
+    // UPLOAD PROCESS MANAGEMENT
+    // -----------------------------
     // format upload speed to readable format
     function formatSpeed(bytesPerSecond) {
         if (bytesPerSecond === 0) return '0 B/s'
@@ -224,9 +232,6 @@ document.addEventListener('DOMContentLoaded', function()
         }, 3000)
     }
 
-    // expose functions globally for template access
-    window.startUpload = startUpload
-
     async function uploadFile(file, fileIndex) {
         const chunkSize = 1024 * 1024 // 1MB chunks
         const totalChunks = Math.ceil(file.size / chunkSize)
@@ -279,7 +284,6 @@ document.addEventListener('DOMContentLoaded', function()
 
                 // small delay to allow UI updates
                 await new Promise(resolve => setTimeout(resolve, 10))
-
             } catch (error) {
                 return { success: false, error: 'Network error during upload' }
             }
@@ -371,7 +375,9 @@ document.addEventListener('DOMContentLoaded', function()
         return Date.now().toString(36) + Math.random().toString(36).substr(2)
     }
 
-    // drag and drop functionality
+    // -----------------------------
+    // DRAG AND DROP FUNCTIONALITY
+    // -----------------------------
     function initializeDragAndDrop() {
         const uploadArea = document.getElementById('upload-area')
         const fileInput = document.getElementById('file-input')
@@ -441,9 +447,10 @@ document.addEventListener('DOMContentLoaded', function()
         e.preventDefault()
     })
 
-    // expose functions globally for template access
+    // -----------------------------
+    // GLOBAL EXPOSURE
+    // -----------------------------
+    window.startUpload = startUpload
     window.handleFileSelection = handleFileSelection
-
-    // expose functions globally for template access
     window.removeFile = removeFile
 })

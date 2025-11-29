@@ -1,6 +1,9 @@
 /** file-system media viewer functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // GLOBAL VARIABLES AND INITIAL SETUP
+    // -----------------------------
     // set up container height immediately
     fitImageToContainer()
 
@@ -50,6 +53,9 @@ let imageState = {
     zoomStep: 0.5
 }
 
+// -----------------------------
+// IMAGE VIEWER FUNCTIONALITY
+// -----------------------------
 // update image details
 function updateImageInfo(img) {
     const infoElement = document.getElementById('image-info')
@@ -342,6 +348,9 @@ function fitImageToContainer() {
     }
 }
 
+// -----------------------------
+// VIDEO PLAYER FUNCTIONALITY
+// -----------------------------
 // update video details
 function updateVideoInfo(video) {
     const infoElement = document.getElementById('video-info')
@@ -464,7 +473,10 @@ function initializeVideoPlayer() {
     })
 }
 
-// audio viewer functionality
+// -----------------------------
+// AUDIO PLAYER FUNCTIONALITY
+// -----------------------------
+// update audio details
 function updateAudioInfo(audio) {
     const durationElement = document.getElementById('audio-duration')
     if (audio.duration && !isNaN(audio.duration)) {
@@ -486,9 +498,11 @@ function formatDuration(seconds) {
     }
 }
 
-// keyboard shortcuts
+// -----------------------------
+// GLOBAL EVENT LISTENERS
+// -----------------------------
 document.addEventListener('keydown', function (e) {
-    // ESC key - exit fullscreen or reset zoom
+    // esc key - exit fullscreen or reset zoom
     if (e.key === 'Escape') {
         if (document.fullscreenElement) {
             document.exitFullscreen()
@@ -578,6 +592,9 @@ document.addEventListener('keydown', function (e) {
     }
 })
 
+// -----------------------------
+// GLOBAL EXPOSURE
+// -----------------------------
 // expose functions globally for access in template
 window.resetImageZoom = resetImageZoom
 window.updateImageInfo = updateImageInfo

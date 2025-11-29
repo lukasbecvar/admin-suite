@@ -1,9 +1,12 @@
 /** service exception file delete confirmation popup functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
-    let formToSubmit = null
+    // -----------------------------
+    // DELETE CONFIRMATION POPUP LOGIC
+    // -----------------------------
     
     // get view elements
+    let formToSubmit = null
     const deletePopup = document.getElementById('deletePopup')
     const deleteButtons = document.querySelectorAll('.delete-button')
     const cancelDeleteButton = document.getElementById('cancelDeleteButton')

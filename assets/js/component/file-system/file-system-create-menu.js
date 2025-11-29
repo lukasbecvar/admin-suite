@@ -1,6 +1,9 @@
 /** file-system create menu functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // MENU TOGGLE AND EVENT LISTENERS
+    // -----------------------------
     const createMenu = document.getElementById('create-menu')
     const createMenuButton = document.getElementById('create-menu-button')
 

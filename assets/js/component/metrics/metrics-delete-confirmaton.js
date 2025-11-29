@@ -1,6 +1,9 @@
 /** delete confirmation popup for metrics component */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // DELETE CONFIRMATION POPUP LOGIC
+    // -----------------------------
     let formToSubmit = null
     
     const deletePopup = document.getElementById('deletePopup')
@@ -16,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function()
         })
     })
 
-    // cancel
+    // cancel delete
     cancelDeleteButton.addEventListener('click', function () {
         deletePopup.classList.add('hidden')
         formToSubmit = null
@@ -29,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function()
         }
     })
 
-    // esc
+    // close on Escape key
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
             deletePopup.classList.add('hidden')
@@ -37,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function()
         }
     })
 
-    // click outside
+    // close on click outside
     deletePopup.addEventListener('click', function (event) {
         if (event.target === this) {
             deletePopup.classList.add('hidden')

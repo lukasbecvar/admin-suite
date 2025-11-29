@@ -1,6 +1,9 @@
 /** file-system create directory functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // ELEMENT DECLARATIONS
+    // -----------------------------
     const form = document.querySelector('form')
     const errorContainer = document.createElement('div')
     const directoryNameInput = document.getElementById('directoryname')
@@ -27,6 +30,9 @@ document.addEventListener('DOMContentLoaded', function()
     emptyErrorMessage.textContent = 'Directory name cannot be empty'
     errorContainer.appendChild(emptyErrorMessage)
 
+    // -----------------------------
+    // UTILITY FUNCTIONS
+    // -----------------------------
     // validate directory name
     function validateDirectoryName() {
         const directoryName = directoryNameInput.value.trim()
@@ -62,6 +68,9 @@ document.addEventListener('DOMContentLoaded', function()
         return isValid
     }
 
+    // -----------------------------
+    // EVENT LISTENERS
+    // -----------------------------
     // check for slashes on input
     directoryNameInput.addEventListener('input', validateDirectoryName)
 
@@ -72,10 +81,7 @@ document.addEventListener('DOMContentLoaded', function()
         }
     })
 
-    // focus on directory name input
-    directoryNameInput.focus()
-
-    // ctrl+s to save
+    // strl+s to save
     document.addEventListener('keydown', function(e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 's') {
             e.preventDefault()
@@ -94,4 +100,10 @@ document.addEventListener('DOMContentLoaded', function()
             }
         }
     })
+
+    // -----------------------------
+    // INITIALIZATION
+    // -----------------------------
+    // focus on directory name input
+    directoryNameInput.focus()
 })

@@ -1,4 +1,8 @@
+/** sidebar toggle functionality */
 document.addEventListener('DOMContentLoaded', function () {
+    // -----------------------------
+    // SIDEBAR INITIALIZATION ON DOMContentLoaded
+    // -----------------------------
     const sidebar = document.getElementById('sidebar')
     const mainContent = document.getElementById('main-content')
 

@@ -1,12 +1,18 @@
 /** file-system view component functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // ELEMENT DECLARATIONS
+    // -----------------------------
     const cancelButton = document.getElementById('cancel-delete')
     const deleteModal = document.getElementById('delete-file-modal')
     const deletePathInput = document.getElementById('delete-file-path')
     const deleteButtons = document.querySelectorAll('.delete-file-button')
     const deleteConfirmationText = document.getElementById('delete-confirmation-text')
 
+    // -----------------------------
+    // EVENT LISTENERS
+    // -----------------------------
     // show modal when delete button is clicked
     deleteButtons.forEach(button => {
         button.addEventListener('click', function() {

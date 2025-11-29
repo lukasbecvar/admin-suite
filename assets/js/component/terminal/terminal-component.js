@@ -1,7 +1,9 @@
 /** terminal component functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
-    // get html elements
+    // -----------------------------
+    // ELEMENT DECLARATIONS
+    // -----------------------------
     const pathElement = document.getElementById('path')
     const cursorElement = document.createElement('span')
     const commandInput = document.getElementById('command')
@@ -19,13 +21,16 @@ document.addEventListener('DOMContentLoaded', function()
         return
     }
 
+    // -----------------------------
+    // GLOBAL VARIABLES & CONFIGURATION
+    // -----------------------------
     // current working directory
     let currentPath = ''
 
     // current user
     let currentUser = ''
 
-    // api url links
+    // API URL links
     const apiUrl = '/api/system/terminal'
     const asyncApiUrl = '/api/system/terminal/job'
     const asyncStatusBaseUrl = '/api/system/terminal/job/'
@@ -47,15 +52,9 @@ document.addEventListener('DOMContentLoaded', function()
     let partialOutputElement = null
     let lastOutputEndedWithNewline = true
 
-    // focus command input
-    commandInput.focus()
-
-    // update cwd on page load
-    getCurrentPath()
-
-    // update user on page load
-    getCurrentUser()
-
+    // -----------------------------
+    // TERMINAL UI MANAGEMENT
+    // -----------------------------
     // update cwd
     function updatePath() {
         if (!pathElement) {
@@ -82,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function()
         }
     }
 
-    // scroll bottom
+    // resolve scroll host
     function resolveScrollHost() {
         if (scrollHost && scrollHost.isConnected) {
             const cachedStyle = window.getComputedStyle(scrollHost)
@@ -230,14 +229,17 @@ document.addEventListener('DOMContentLoaded', function()
         }, 50)
     }
 
-    // escape html
+    // -----------------------------
+    // OUTPUT HANDLING
+    // -----------------------------
+    // escape HTML
     function escapeHtml(input) {
         return input
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;')
+            .replace(/"/g, '&quot;')
     }
 
     // sanitize chunk for terminal output
@@ -389,6 +391,36 @@ document.addEventListener('DOMContentLoaded', function()
         scrollToBottom(stickToBottom)
     }
 
+    // colorize the output using bash color codes
+    function convertBashColors(input) {
+        // regex to match the bash color codes
+        const regex = /\x1b\[([0-9;]*)m/g
+        let output = input
+
+        // replace color codes with corresponding HTML styles
+        output = output.replace(regex, function(match, code) {
+            let color = ''
+            switch (code) {
+                case '31': color = 'color: red;'; break
+                case '32': color = 'color: green;'; break
+                case '33': color = 'color: yellow;'; break
+                case '34': color = 'color: blue;'; break
+                case '0': color = 'color: white;'; break
+                case '1': color = 'font-weight: bold;'; break
+                default: color = ''; break
+            }
+            return `<span style='${color}'>`
+        })
+
+        // reset code
+        output = output.replace(/\x1b\[0m/g, '</span>')
+
+        return output
+    }
+
+    // -----------------------------
+    // COMMAND INPUT & JOB MANAGEMENT
+    // -----------------------------
     // disable command input
     function setInputDisabled(disabled) {
         commandInput.disabled = disabled
@@ -460,19 +492,15 @@ document.addEventListener('DOMContentLoaded', function()
             return null
         }
 
-        inlineInputPreview = host.querySelector('.interactive-input-preview')
+        inlineInputPreview = document.createElement('span')
+        inlineInputPreview.className = 'interactive-input-preview text-gray-200'
 
-        if (!inlineInputPreview) {
-            inlineInputPreview = document.createElement('span')
-            inlineInputPreview.className = 'interactive-input-preview text-gray-200'
-
-            const hostText = host.textContent ?? ''
-            if (!hostText.endsWith(' ')) {
-                host.appendChild(document.createTextNode(' '))
-            }
-
-            host.appendChild(inlineInputPreview)
+        const hostText = host.textContent ?? ''
+        if (!hostText.endsWith(' ')) {
+            host.appendChild(document.createTextNode(' '))
         }
+
+        host.appendChild(inlineInputPreview)
 
         if (cursorElement.parentNode !== host) {
             if (inlineInputPreview.nextSibling) {
@@ -556,8 +584,8 @@ document.addEventListener('DOMContentLoaded', function()
     // check if chunk contains prompt
     function chunkContainsPrompt(chunk) {
         const promptPatterns = [
-            /\[y\/N]/,
-            /\[y\/n]/i,
+            /\x5By\/N\x5D/,
+            /\x5By\/n\x5D/i,
             /\(y\/n\)/i,
             /\(yes\/no\)/i,
             /confirm/i,
@@ -587,7 +615,7 @@ document.addEventListener('DOMContentLoaded', function()
                 return true
             }
 
-            if (/\[[^\]]*(?:y\/n|yes\/no)[^\]]*\]$/i.test(lastLine)) {
+            if (/\x5B[^\x5D]*(?:y\/n|yes\/no)[^\x5D]*\x5D$/i.test(lastLine)) {
                 return true
             }
         }
@@ -652,33 +680,6 @@ document.addEventListener('DOMContentLoaded', function()
             updateInlinePreviewValue(commandInput.value)
             commandInput.focus()
         }
-    }
-
-    // colorize the output using bash color codes
-    function convertBashColors(input) {
-        // regex to match the bash color codes
-        const regex = /\x1b\[([0-9;]*)m/g
-        let output = input
-
-        // replace color codes with corresponding HTML styles
-        output = output.replace(regex, function(match, code) {
-            let color = ''
-            switch (code) {
-                case '31': color = 'color: red;'; break
-                case '32': color = 'color: green;'; break
-                case '33': color = 'color: yellow;'; break
-                case '34': color = 'color: blue;'; break
-                case '0': color = 'color: white;'; break
-                case '1': color = 'font-weight: bold;'; break
-                default: color = ''; break
-            }
-            return `<span style='${color}'>`
-        })
-
-        // reset code
-        output = output.replace(/\x1b\[0m/g, '</span>')
-
-        return output
     }
 
     // complete command execution
@@ -752,7 +753,7 @@ document.addEventListener('DOMContentLoaded', function()
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'blocked' || data.status === 'error') {
-                    appendMessage(data.message ?? 'Unable to execute command.')
+                    appendMessage(data.message ?? 'Unable to execute command.', 'text-blue-300')
                     finishBackgroundCommand()
                     return
                 }
@@ -974,6 +975,9 @@ document.addEventListener('DOMContentLoaded', function()
             })
     }
 
+    // -----------------------------
+    // EVENT LISTENERS
+    // -----------------------------
     // event listener for keypress in the command input
     commandInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
@@ -1057,4 +1061,16 @@ document.addEventListener('DOMContentLoaded', function()
             this.value = this.value.toLowerCase()
         }
     })
+
+    // -----------------------------
+    // INITIALIZATION
+    // -----------------------------
+    // focus command input
+    commandInput.focus()
+
+    // update cwd on page load
+    getCurrentPath()
+
+    // update user on page load
+    getCurrentUser()
 })

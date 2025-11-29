@@ -1,5 +1,8 @@
 /** profile photo view component */
 document.addEventListener('DOMContentLoaded', () => {
+    // -----------------------------
+    // GLOBAL DOMContentLoaded EVENT LISTENER
+    // -----------------------------
     initProfilePhotoViewer()
     initIpToggle(
         document.getElementById('ip-short'),
@@ -7,15 +10,19 @@ document.addEventListener('DOMContentLoaded', () => {
     )
 })
 
+// -----------------------------
+// PROFILE PHOTO VIEWER INITIALIZATION
+// -----------------------------
 function initProfilePhotoViewer() {
     const modal = document.getElementById('profile-viewer-modal')
     if (!modal) {
         return
     }
 
-    const closeButton = document.getElementById('js-close-profile-viewer')
-    const modalImage = document.getElementById('js-profile-viewer-image')
     const triggers = document.querySelectorAll('.js-open-profile-viewer')
+    const modalImage = document.getElementById('js-profile-viewer-image')
+    const closeButton = document.getElementById('js-close-profile-viewer')
+    const downloadButton = document.getElementById('js-download-profile-image')
 
     const showModal = (src) => {
         if (modalImage && src) {
@@ -29,9 +36,8 @@ function initProfilePhotoViewer() {
         modal.classList.add('hidden')
         modal.classList.remove('flex')
     }
-
-    const downloadButton = document.getElementById('js-download-profile-image')
-
+    
+    // event listener for download button
     if (downloadButton) {
         downloadButton.addEventListener('click', () => {
             const imgSrc = modalImage.src
@@ -46,6 +52,7 @@ function initProfilePhotoViewer() {
         })
     }
 
+    // event listener for profile image trigger
     triggers.forEach(trigger => {
         trigger.addEventListener('click', () => {
             let imgSrc = null
@@ -64,16 +71,19 @@ function initProfilePhotoViewer() {
         })
     })
 
+    // event listener for close button
     if (closeButton) {
         closeButton.addEventListener('click', hideModal)
     }
 
+    // event listener for modal click
     modal.addEventListener('click', (event) => {
         if (event.target === modal) {
             hideModal()
         }
     })
 
+    // event listener for escape key
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
             hideModal()
@@ -81,6 +91,9 @@ function initProfilePhotoViewer() {
     })
 }
 
+// -----------------------------
+// IP ADDRESS VIEW TOGGLE INITIALIZATION
+// -----------------------------
 function initIpToggle(ipShort, ipFull) {
     if (!ipShort || !ipFull) {
         return
@@ -91,6 +104,7 @@ function initIpToggle(ipShort, ipFull) {
         ipFull.classList.toggle('hidden')
     }
 
+    // event listener for ip short toggle
     ipShort.addEventListener('click', toggle)
     ipFull.addEventListener('click', toggle)
 }

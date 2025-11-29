@@ -1,6 +1,9 @@
 /** file-system item mobile dropdown functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // DROPDOWN CONTROL FUNCTIONS
+    // -----------------------------
     // toggle dropdown menu
     function toggleDropdown(button) {
         const dropdown = button.closest('[data-dropdown]')
@@ -99,38 +102,41 @@ document.addEventListener('DOMContentLoaded', function()
 
     // close dropdown when clicking on menu item
     function handleMenuItemClick(event) {
-        // don't close immediately for delete button (needs confirmation)
+        // dont close immediately for delete button (needs confirmation)
         if (!event.target.closest('.delete-file-button')) {
             closeAllDropdowns()
         }
     }
 
-    // initialize dropdown functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        // add click handlers to menu items
-        const menuItems = document.querySelectorAll('[data-dropdown-menu] a, [data-dropdown-menu] button')
-        menuItems.forEach(item => {
-            item.addEventListener('click', handleMenuItemClick)
-        })
-        
-        // close dropdowns on escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeAllDropdowns()
-            }
-        })
-        
-        // close dropdowns on scroll (mobile UX)
-        window.addEventListener('scroll', function() {
+    // -----------------------------
+    // INITIALIZATION AND GLOBAL EVENT LISTENERS
+    // -----------------------------
+    // add click handlers to menu items
+    const menuItems = document.querySelectorAll('[data-dropdown-menu] a, [data-dropdown-menu] button')
+    menuItems.forEach(item => {
+        item.addEventListener('click', handleMenuItemClick)
+    })
+    
+    // close dropdowns on escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
             closeAllDropdowns()
-        })
-        
-        // handle orientation change on mobile
-        window.addEventListener('orientationchange', function() {
-            setTimeout(closeAllDropdowns, 100)
-        })
+        }
+    })
+    
+    // close dropdowns on scroll (mobile UX)
+    window.addEventListener('scroll', function() {
+        closeAllDropdowns()
+    })
+    
+    // handle orientation change on mobile
+    window.addEventListener('orientationchange', function() {
+        setTimeout(closeAllDropdowns, 100)
     })
 
+    // -----------------------------
+    // GLOBAL EXPOSURE
+    // -----------------------------
     // expose functions globally for template access
     window.toggleDropdown = toggleDropdown
     window.closeAllDropdowns = closeAllDropdowns

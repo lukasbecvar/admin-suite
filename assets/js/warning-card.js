@@ -1,6 +1,18 @@
+/** warning card functionality */
 document.addEventListener('DOMContentLoaded', () => {
+    // -----------------------------
+    // INITIALIZATION
+    // -----------------------------
     const warningBox = document.getElementById('warning-box')
+    const warningElements = document.getElementById('wraning-elements')
+
     if (!warningBox) {
+        return
+    }
+
+    // check if there are warning elements and if not -> hide the box
+    if (warningElements && warningElements.innerHTML.trim() === '') {
+        warningBox.style.display = 'none'
         return
     }
 
@@ -8,6 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     animateWarningBoxEntrance(warningBox)
 })
 
+// -----------------------------
+// CLOSE BUTTON HYDRATION
+// -----------------------------
 function hydrateCloseButton(warningBox) {
     const closeButton = document.getElementById('close-warning-box')
     if (!closeButton) {
@@ -17,6 +32,9 @@ function hydrateCloseButton(warningBox) {
     closeButton.addEventListener('click', () => closeWarningBox(warningBox))
 }
 
+// -----------------------------
+// WARNING BOX CLOSING LOGIC
+// -----------------------------
 function closeWarningBox(warningBox) {
     // add closing animation class
     warningBox.classList.add('warning-closing')
@@ -40,7 +58,9 @@ function closeWarningBox(warningBox) {
     }, 280)
 }
 
-// box animation
+// -----------------------------
+// WARNING BOX ENTRANCE ANIMATION
+// -----------------------------
 function animateWarningBoxEntrance(warningBox) {
     // start with hidden state
     warningBox.style.opacity = '0'
@@ -55,14 +75,3 @@ function animateWarningBoxEntrance(warningBox) {
         warningBox.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
     }, 100)
 }
-
-// hide warning box if no elements are found
-window.addEventListener('DOMContentLoaded', () => {
-    const warningBox = document.getElementById('warning-box')
-    const warningElements = document.getElementById('wraning-elements')
-    if (!warningBox || !warningElements) {
-        return
-    }
-
-    warningBox.style.display = warningElements.innerHTML.trim() === '' ? 'none' : 'block'
-})

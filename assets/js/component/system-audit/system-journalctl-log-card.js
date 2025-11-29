@@ -1,11 +1,16 @@
-/* system journalctl log card functionality */
+/** system journalctl log card functionality */
 document.addEventListener('DOMContentLoaded', function()
 {	
-	// get dom elements
+	// -----------------------------
+	// ELEMENT DECLARATIONS
+	// -----------------------------
 	const ul = document.getElementById('journalctl-logs')
 	const scrollBox = document.getElementById('journalctl-scrollbox')
 	const waitingForLogs = document.getElementById('waiting-for-logs')
 
+	// -----------------------------
+	// UTILITY FUNCTIONS
+	// -----------------------------
 	// format timestamp to human readable
 	function formatTimestamp(isoString) {
 		try {
@@ -23,6 +28,9 @@ document.addEventListener('DOMContentLoaded', function()
 		}
 	}
 
+	// -----------------------------
+	// LOG FETCHING AND DISPLAY LOGIC
+	// -----------------------------
 	// fetch logs from server
 	async function fetchLogs() {
 		// check if scroll is near bottom (tolerance 10px)
@@ -44,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function()
 				const li = document.createElement('li')
 				li.classList.add('whitespace-pre-wrap', 'font-mono', 'text-sm')
 
-				// ISO log format parsing
+				// iso log format parsing
 				const match = log.match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\+\d{4})?) (\S+) (\S+):\s?(.*)$/)
 				if (match) {
 					const [, timestamp, host, unit, message] = match
@@ -81,6 +89,9 @@ document.addEventListener('DOMContentLoaded', function()
 		}
 	}
 
+	// -----------------------------
+	// INITIALIZATION
+	// -----------------------------
 	// fetch initially and then every 10 seconds
 	fetchLogs()
 	setInterval(fetchLogs, 10000)

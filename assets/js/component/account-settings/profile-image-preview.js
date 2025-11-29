@@ -1,4 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+/** profile image preview */
+document.addEventListener('DOMContentLoaded', function()
+{
+    // -----------------------------
+    // IMAGE INPUT EVENT HANDLER
+    // -----------------------------
     const input = document.getElementById('profile-pic-input')
 
     // check if input exists
@@ -12,7 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 })
 
-// validate image format & size and show preview
+// -----------------------------
+// IMAGE VALIDATION AND PREVIEW FUNCTION
+// -----------------------------
 function validateAndPreviewImage(input) {
     if (input.files && input.files[0]) {
         const file = input.files[0]

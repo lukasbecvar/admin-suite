@@ -1,6 +1,9 @@
 /** file-system rename functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // ELEMENT DECLARATIONS
+    // -----------------------------
     // new name input field
     const newNameInput = document.getElementById('newName')
     const form = document.querySelector('form')
@@ -35,6 +38,9 @@ document.addEventListener('DOMContentLoaded', function()
     lengthErrorMessage.textContent = 'Name must be between 1 and 255 characters'
     errorContainer.appendChild(lengthErrorMessage)
 
+    // -----------------------------
+    // VALIDATION FUNCTIONS
+    // -----------------------------
     // validate name
     function validateNewName() {
         const newName = newNameInput.value.trim()
@@ -77,6 +83,9 @@ document.addEventListener('DOMContentLoaded', function()
         return true
     }
 
+    // -----------------------------
+    // EVENT LISTENERS
+    // -----------------------------
     // check validation on input
     newNameInput.addEventListener('input', validateNewName)
 
@@ -86,9 +95,6 @@ document.addEventListener('DOMContentLoaded', function()
             e.preventDefault()
         }
     })
-
-    // select text in input field
-    newNameInput.select()
 
     // ctrl+s to save
     document.addEventListener('keydown', function(e) {
@@ -109,4 +115,10 @@ document.addEventListener('DOMContentLoaded', function()
             }
         }
     })
+
+    // -----------------------------
+    // INITIALIZATION
+    // -----------------------------
+    // select text in input field
+    newNameInput.select()
 })

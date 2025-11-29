@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function()
     const cancelEditButton = document.getElementById('cancelEditButton')
     const confirmEditButton = document.getElementById('confirmEditButton')
 
+    // event listener for edit button
     document.querySelectorAll('.edit-button').forEach(button => {
         button.addEventListener('click', function () {
             currentEditId = this.dataset.editId
@@ -21,11 +22,13 @@ document.addEventListener('DOMContentLoaded', function()
         })
     })
 
+    // event listener for cancel button
     cancelEditButton.addEventListener('click', function () {
         editPopup.classList.add('hidden')
         editTodoInput.value = ''
     })
 
+    // event listener for confirmation submit
     confirmEditButton.addEventListener('click', function () {
         const csrfToken = document.getElementById('todo-csrf-token').dataset.csrf
 
@@ -53,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function()
     const deleteCancelButton = document.getElementById('delete-cancel-button')
     const deleteConfirmButton = document.getElementById('delete-confirm-button')
 
+    // event listener for delete button
     document.querySelectorAll('.delete-button').forEach(button => {
         button.addEventListener('click', function () {
             deleteFormId = this.dataset.formId
@@ -60,11 +64,13 @@ document.addEventListener('DOMContentLoaded', function()
         })
     })
 
+    // event listener for cancel button
     deleteCancelButton.addEventListener('click', function () {
         deletePopupOverlay.classList.add('hidden')
         deleteFormId = null
     })
 
+    // event listener for confirmation submit
     deleteConfirmButton.addEventListener('click', function () {
         if (deleteFormId) {
             document.getElementById(deleteFormId).submit()
@@ -90,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function()
     const todoCreatedAt = document.getElementById('todoCreatedAt')
     const closePopupButton = document.getElementById('closePopup')
 
+    // event listener for info button
     document.querySelectorAll('.info-button').forEach(button => {
         button.addEventListener('click', function () {
             const todoId = this.dataset.todoId
@@ -99,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function()
         })
     })
 
+    // show todo info popup
     function showTodoInfoPopup(todo) {
         todoOwner.textContent = `Owner: ${todo.owner}`
         todoStatus.textContent = `Status: ${todo.status}`
@@ -107,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function()
         infoPopup.classList.remove('hidden')
     }
 
+    // event listener for close button
     closePopupButton.addEventListener('click', function () {
         infoPopup.classList.add('hidden')
     })
@@ -115,10 +124,8 @@ document.addEventListener('DOMContentLoaded', function()
     // UPDATE POSITIONS (POST + CSRF)
     // -----------------------------
     const todoItemsContainer = document.getElementById('todo-items-container')
-
     if (todoItemsContainer) {
         const isMobile = window.innerWidth <= 768
-
         new Sortable(todoItemsContainer, {
             animation: 150,
             handle: isMobile ? null : '.drag-handle',
@@ -132,12 +139,12 @@ document.addEventListener('DOMContentLoaded', function()
                 items.forEach((item, index) => {
                     positions[item.dataset.todoId] = index + 1
                 })
-
                 updatePositions(positions)
             }
         })
     }
 
+    // update positions
     function updatePositions(positions) {
         const csrfToken = document.getElementById('todo-csrf-token').dataset.csrf
 

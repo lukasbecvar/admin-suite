@@ -1,10 +1,13 @@
 /** file-system syntax highlighting functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // HIGHLIGHT.JS LANGUAGE REGISTRATION
+    // -----------------------------
     // import highlight.js core
     const hljs = require('highlight.js/lib/core')
 
-    // import common languages
+    // Import common languages
     hljs.registerLanguage('xml', require('highlight.js/lib/languages/xml'))
     hljs.registerLanguage('css', require('highlight.js/lib/languages/css'))
     hljs.registerLanguage('php', require('highlight.js/lib/languages/php'))
@@ -55,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function()
                     className: 'keyword',
                     begin: /\b(ERROR|Error|error|WARN|Warn|warn|WARNING|Warning|warning|INFO|Info|info|DEBUG|Debug|debug|NOTICE|Notice|notice|CRITICAL|Critical|critical|ALERT|Alert|alert|EMERGENCY|Emergency|emergency)\b/
                 },
-                // http methods and status codes
+                // HTTP methods and status codes
                 {
                     className: 'keyword',
                     begin: /\b(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)\b|\b([1-5][0-9][0-9])\b/
@@ -70,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function()
                     className: 'number',
                     begin: /\b\d+\b/
                 },
-                // urls
+                // URLs
                 {
                     className: 'string',
                     begin: /(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/
@@ -79,6 +82,9 @@ document.addEventListener('DOMContentLoaded', function()
         }
     })
 
+    // -----------------------------
+    // SYNTAX HIGHLIGHTING LOGIC
+    // -----------------------------
     // get element containing file content
     const codeElement = document.querySelector('pre.file-content')
 
@@ -106,9 +112,12 @@ document.addEventListener('DOMContentLoaded', function()
         }
     }
 
+    // -----------------------------
+    // UTILITY FUNCTIONS
+    // -----------------------------
     // apply general highlighting to a code element
     function applyGeneralHighlighting(element) {
-        // add general-log class
+        // Add general-log class
         element.classList.add('language-general-log')
 
         // apply highlighting

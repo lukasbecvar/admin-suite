@@ -1,6 +1,9 @@
-/* suite config manager component (handle reset to default popup) */
+/** suite config manager component */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // RESET TO DEFAULT FUNCTIONALITY
+    // -----------------------------
     var resetButtons = document.querySelectorAll('.reset-button')
     var popupOverlay = document.getElementById('reset-popup-overlay')
     var cancelButton = document.getElementById('reset-cancel-button')
@@ -44,21 +47,24 @@ document.addEventListener('DOMContentLoaded', function()
                 popupOverlay.classList.add('hidden')
             })
         }
-
-        // escape closes popup
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                if (!popupOverlay.classList.contains('hidden')) {
-                    popupOverlay.classList.add('hidden')
-                }
-            }
-        })
-
-        // click outside closes popup
-        popupOverlay.addEventListener('click', function (event) {
-            if (event.target === this) {
-                this.classList.add('hidden')
-            }
-        })
     }
+
+    // -----------------------------
+    // GLOBAL EVENT LISTENERS
+    // -----------------------------
+    // escape closes popup
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            if (!popupOverlay.classList.contains('hidden')) {
+                popupOverlay.classList.add('hidden')
+            }
+        }
+    })
+
+    // click outside closes popup
+    popupOverlay.addEventListener('click', function (event) {
+        if (event.target === this) {
+            this.classList.add('hidden')
+        }
+    })
 })

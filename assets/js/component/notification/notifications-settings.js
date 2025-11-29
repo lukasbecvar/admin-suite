@@ -1,12 +1,25 @@
 /** push notifications settings component */
 document.addEventListener('DOMContentLoaded', async function()
 {
+    // -----------------------------
+    // GLOBAL VARIABLES
+    // -----------------------------
     let publicKey = null
     
-    // get site elements
+    // -----------------------------
+    // ELEMENT DECLARATIONS
+    // -----------------------------
     const statusElement = document.getElementById('push-status')
     const subscribeButton = document.getElementById('subscribe-btn')
 
+    // Check if elements exist
+    if (!statusElement || !subscribeButton) {
+        return
+    }
+
+    // -----------------------------
+    // UTILITY FUNCTIONS
+    // -----------------------------
     // convert Base64 URL to Uint8Array
     function urlBase64ToUint8Array(base64String) {
         if (typeof base64String !== 'string' || base64String.length === 0) {
@@ -23,9 +36,11 @@ document.addEventListener('DOMContentLoaded', async function()
         return typeof key === 'string' && key.length > 0 && /^[A-Za-z0-9_\-=]+$/.test(key)
     }
 
+    // -----------------------------
+    // SUBSCRIPTION MANAGEMENT
+    // -----------------------------
     // resubscribe to push notifications
-    subscribeButton.addEventListener('click', async () => {
-        let applicationServerKey
+    async function resubscribeUser() {
         console.log('Subscription button clicked.')
         if (Notification.permission === 'denied') {
             alert('Push notifications are disabled in your browser settings. Please enable them manually.')
@@ -37,6 +52,7 @@ document.addEventListener('DOMContentLoaded', async function()
             return
         }
 
+        let applicationServerKey
         try {
             applicationServerKey = urlBase64ToUint8Array(publicKey)
         } catch (error) {
@@ -83,9 +99,16 @@ document.addEventListener('DOMContentLoaded', async function()
             console.error('Subscription error: ', error)
             statusElement.textContent = 'Subscription failed'
         }
-    })
+    }
 
-    // check subscription status
+    // -----------------------------
+    // EVENT LISTENERS
+    // -----------------------------
+    subscribeButton.addEventListener('click', resubscribeUser)
+
+    // -----------------------------
+    // SUBSCRIPTION STATUS CHECK
+    // -----------------------------
     try {
         // get VAPID public key
         const keyResponse = await fetch('/api/notifications/public-key')

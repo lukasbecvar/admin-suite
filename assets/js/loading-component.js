@@ -1,13 +1,15 @@
-/* loading component functionality */
+/** Loading Component Functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // INITIAL PAGE LOAD HIDING
+    // -----------------------------
     // hide loading component after page load
     document.getElementById('loader-wrapper').style.display = 'none'
-})
 
-/* loading component for click on links */
-document.addEventListener('DOMContentLoaded', function()
-{
+    // -----------------------------
+    // LINK CLICK LOADING
+    // -----------------------------
     document.body.addEventListener('click', function (event) {
         const target = event.target.closest('a')
         const loader = document.getElementById('loader-wrapper')
@@ -34,11 +36,11 @@ document.addEventListener('DOMContentLoaded', function()
             }, 10)
         }
     })
-})
 
-// fix disable loading when user navigates step back in history
-document.addEventListener('DOMContentLoaded', function()
-{
+    // -----------------------------
+    // HISTORY NAVIGATION HIDING
+    // -----------------------------
+    // fix disable loading when user navigates step back in history
     window.addEventListener('pageshow', function (event) {
         if (event.persisted) {
             document.getElementById('loader-wrapper').style.display = 'none'

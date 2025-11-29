@@ -1,22 +1,28 @@
 /** push notifications subscriber functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // NOTIFICATION STATUS CHECKS
+    // -----------------------------
     // check if notifications are enabled on backend
     async function checkNotificationsEnabled() {
         const response = await fetch('/api/notifications/enabled')
         const data = await response.json()
 
-        // check if request was successful
+        // Check if request was successful
         if (data.status === 'success' && data.enabled == 'true') {
             return true
         }
         return false
     }
 
+    // -----------------------------
+    // SUBSCRIPTION MANAGEMENT
+    // -----------------------------
     // subscribe user to push notifications
     async function subscribeUser() {
         const notificationsEnabled = await checkNotificationsEnabled()
-        // check if notifications future enabled
+        // check if notifications feature enabled
         if (!notificationsEnabled) {
             return
         }
@@ -82,6 +88,9 @@ document.addEventListener('DOMContentLoaded', function()
         }
     }
 
+    // -----------------------------
+    // UTILITY FUNCTIONS
+    // -----------------------------
     // convert Base64 URL to Uint8Array
     function urlBase64ToUint8Array(base64String) {
         const padding = '='.repeat((4 - base64String.length % 4) % 4)
@@ -90,6 +99,9 @@ document.addEventListener('DOMContentLoaded', function()
         return new Uint8Array([...rawData].map(char => char.charCodeAt(0)))
     }
 
+    // -----------------------------
+    // SERVICE WORKER REGISTRATION
+    // -----------------------------
     // register service worker
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then(() => {

@@ -1,44 +1,25 @@
-/* database table reader component functionality */
+/** database table reader component functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
-    let deleteId = null
-
-    // select popup elements
+    // -----------------------------
+    // RAW DATA VIEWER (POPUP)
+    // -----------------------------
     const popup = document.getElementById('textPopup')
     const popupText = document.getElementById('popupText')
-    const deletePopup = document.getElementById('deletePopup')
-    const deleteButton = document.querySelectorAll('.delete-button')
     const viewRawButton = document.querySelectorAll('.view-raw-button')
     const closePopupButton = document.getElementById('closePopupButton')
-    const cancelDeleteButton = document.getElementById('cancelDeleteButton')
-    const confirmDeleteButton = document.getElementById('confirmDeleteButton')
-
-    // get raw string
-    function decodeInput(input) {
-        const e = document.createElement('div')
-        e.innerHTML = input
-        return e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue
-    }
 
     // handle popup open (raw data viewer)
     function openPopup(text) {
         popupText.textContent = text
         popup.classList.remove('hidden')
-        document.addEventListener('keydown', handleEscKey)
+        document.addEventListener('keydown', handleEscKey) // add handler for ESC key
     }
 
     // handle popup close (raw data viewer)
     function closePopup() {
         popup.classList.add('hidden')
-        document.removeEventListener('keydown', handleEscKey)
-    }
-
-    // handle close popup with esc key press (raw data viewer)
-    function handleEscKey(event) {
-        if (event.key === 'Escape') {
-            closePopup()
-            closeDeletePopup()
-        }
+        document.removeEventListener('keydown', handleEscKey) // remove handler for ESC key
     }
 
     // detect click on truncate button (raw data viewer)
@@ -51,17 +32,26 @@ document.addEventListener('DOMContentLoaded', function()
     // init close popup button event
     closePopupButton.addEventListener('click', closePopup)
 
+    // -----------------------------
+    // ROW DELETION (CONFIRMATION POPUP)
+    // -----------------------------
+    let deleteId = null
+    const deletePopup = document.getElementById('deletePopup')
+    const deleteButton = document.querySelectorAll('.delete-button')
+    const cancelDeleteButton = document.getElementById('cancelDeleteButton')
+    const confirmDeleteButton = document.getElementById('confirmDeleteButton')
+
     // handle row delete confirmation popup open
-    function openDeletePopup(url) {
-        deleteUrl = url
+    function openDeletePopup() {
         deletePopup.classList.remove('hidden')
-        document.addEventListener('keydown', handleEscKey)
+        document.addEventListener('keydown', handleEscKey) // add handler for ESC key
     }
 
     // handle row delete confirmation popup close
     function closeDeletePopup() {
         deletePopup.classList.add('hidden')
-        document.removeEventListener('keydown', handleEscKey)
+        deleteId = null // reset deleteId when closing
+        document.removeEventListener('keydown', handleEscKey) // remove handler for ESC key
     }
 
     // confirm delete action
@@ -89,12 +79,37 @@ document.addEventListener('DOMContentLoaded', function()
             this.classList.add('hidden')
         }
     })
+
+    // -----------------------------
+    // UTILITY FUNCTIONS
+    // -----------------------------
+    // get raw string
+    function decodeInput(input) {
+        const e = document.createElement('div')
+        e.innerHTML = input
+        return e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue
+    }
+
+    // handle close popup with esc key press (raw data viewer)
+    function handleEscKey(event) {
+        if (event.key === 'Escape') {
+            // check if raw data viewer popup is open
+            if (!popup.classList.contains('hidden')) {
+                closePopup()
+            }
+            // check if delete confirmation popup is open
+            if (!deletePopup.classList.contains('hidden')) {
+                closeDeletePopup()
+            }
+        }
+    }
 })
 
-// scroll to highlighted row
+// -----------------------------
+// SCROLL TO HIGHLIGHTED ROW
+// -----------------------------
 document.addEventListener('DOMContentLoaded', () => {
     const highlightedRow = document.querySelector('[data-highlighted-row="true"]')
-
     // check if highlight element exists
     if (highlightedRow) {
         highlightedRow.scrollIntoView({

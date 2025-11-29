@@ -1,6 +1,9 @@
 /** file-system create component functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // ELEMENT DECLARATIONS
+    // -----------------------------
     const form = document.querySelector('form')
     const editor = document.getElementById('editor')
     const errorContainer = document.createElement('div')
@@ -28,6 +31,9 @@ document.addEventListener('DOMContentLoaded', function()
     emptyErrorMessage.textContent = 'Filename cannot be empty'
     errorContainer.appendChild(emptyErrorMessage)
 
+    // -----------------------------
+    // UTILITY FUNCTIONS
+    // -----------------------------
     // validate filename
     function validateFilename() {
         const filename = filenameInput.value.trim()
@@ -63,6 +69,9 @@ document.addEventListener('DOMContentLoaded', function()
         return isValid
     }
 
+    // -----------------------------
+    // EVENT LISTENERS
+    // -----------------------------
     // check for slashes on input
     filenameInput.addEventListener('input', validateFilename)
 
@@ -100,6 +109,9 @@ document.addEventListener('DOMContentLoaded', function()
         }
     })
 
+    // -----------------------------
+    // INITIALIZATION
+    // -----------------------------
     // focus filename input
     filenameInput.focus()
 })

@@ -3,12 +3,15 @@ document.addEventListener('DOMContentLoaded', function()
 {
     const editor = document.getElementById('editor')
 
+    // -----------------------------
+    // EDITOR FUNCTIONALITY
+    // -----------------------------
     // enable tab key in textarea
     editor.addEventListener('keydown', function(e) {
         if (e.key === 'Tab') {
             e.preventDefault()
 
-            // het cursor position
+            // get cursor position
             const start = this.selectionStart
             const end = this.selectionEnd
 
@@ -20,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function()
         }
     })
 
+    // -----------------------------
+    // KEYBOARD SHORTCUTS
+    // -----------------------------
     // ctrl+s to save
     document.addEventListener('keydown', function(e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 's') {
@@ -28,6 +34,9 @@ document.addEventListener('DOMContentLoaded', function()
         }
     })
 
+    // -----------------------------
+    // INITIALIZATION
+    // -----------------------------
     // focus editor
     editor.focus()
 })

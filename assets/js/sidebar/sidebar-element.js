@@ -1,7 +1,9 @@
-/* sidebar element functionality */
+/** sidebar element functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
-    // get elements
+    // -----------------------------
+    // ELEMENT DECLARATIONS
+    // -----------------------------
     const sidebar = document.getElementById('sidebar')
     const mainContent = document.getElementById('main-content')
     
@@ -12,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function()
     let touchEndY = 0
     let isHorizontalSwipe = true
 
+    // -----------------------------
+    // UTILITY FUNCTIONS
+    // -----------------------------
     // check if any element on the page has horizontal overflow at the start
     function hasHorizontalOverflowAtStart() {
         const elements = document.querySelectorAll('*')
@@ -34,6 +39,9 @@ document.addEventListener('DOMContentLoaded', function()
         return false
     }
 
+    // -----------------------------
+    // SWIPE DETECTION LOGIC
+    // -----------------------------
     // setup swipe detection for an element
     function setupSwipeDetection(element) {
         let touchedElement = null
@@ -43,12 +51,11 @@ document.addEventListener('DOMContentLoaded', function()
             touchEndX = touchStartX
             touchEndY = touchStartY
             isHorizontalSwipe = true
-                touchedElement = document.elementFromPoint(
+            touchedElement = document.elementFromPoint(
                 e.changedTouches[0].clientX,
                 e.changedTouches[0].clientY
             )
         })
-    
         element.addEventListener('touchmove', function(e) {
             touchEndX = e.changedTouches[0].screenX
             touchEndY = e.changedTouches[0].screenY
@@ -58,11 +65,10 @@ document.addEventListener('DOMContentLoaded', function()
                 isHorizontalSwipe = false
             }
         })
-    
         element.addEventListener('touchend', function() {
             const swipeThreshold = 80
             const swipeDistance = touchEndX - touchStartX
-                if (isHorizontalSwipe && Math.abs(swipeDistance) > swipeThreshold) {
+            if (isHorizontalSwipe && Math.abs(swipeDistance) > swipeThreshold) {
                 let el = touchedElement
                 while (el) {
                     const canScroll = el.scrollWidth > el.clientWidth && ((swipeDistance > 0 && el.scrollLeft > 0) || (swipeDistance < 0 && el.scrollLeft < el.scrollWidth - el.clientWidth))
@@ -82,6 +88,9 @@ document.addEventListener('DOMContentLoaded', function()
         })
     }
 
+    // -----------------------------
+    // EVENT LISTENERS
+    // -----------------------------
     // setup swipe detection for main content
     setupSwipeDetection(mainContent)
 

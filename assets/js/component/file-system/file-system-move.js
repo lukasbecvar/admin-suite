@@ -1,6 +1,9 @@
 /** file-system move functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // ELEMENT DECLARATIONS
+    // -----------------------------
     // get form elements
     const form = document.querySelector('form')
     const customPathError = document.getElementById('customPathError')
@@ -14,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function()
     // get directory part of the source path
     const sourceDir = sourcePath.lastIndexOf('/') > 0 ? sourcePath.substring(0, sourcePath.lastIndexOf('/')) : '/'
 
+    // -----------------------------
+    // PATH TYPE TOGGLE
+    // -----------------------------
     // toggle between select and custom path inputs
     destinationTypeRadios.forEach(radio => {
         radio.addEventListener('change', function() {
@@ -27,6 +33,9 @@ document.addEventListener('DOMContentLoaded', function()
         })
     })
 
+    // -----------------------------
+    // VALIDATION FUNCTIONS
+    // -----------------------------
     // validate custom path
     function validateCustomPath() {
         const path = customDestinationPath.value.trim()
@@ -54,9 +63,6 @@ document.addEventListener('DOMContentLoaded', function()
         // check if path exists (this will be validated on the server side as well)
         return true
     }
-
-    // add validation for custom path input
-    customDestinationPath.addEventListener('input', validateCustomPath)
 
     // validate destination path
     function validateDestination() {
@@ -113,6 +119,12 @@ document.addEventListener('DOMContentLoaded', function()
 
         return true
     }
+
+    // -----------------------------
+    // EVENT LISTENERS
+    // -----------------------------
+    // add validation for custom path input
+    customDestinationPath.addEventListener('input', validateCustomPath)
 
     // prevent form submission if validation fails
     form.addEventListener('submit', function(e) {

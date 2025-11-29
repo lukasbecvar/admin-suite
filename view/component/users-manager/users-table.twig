@@ -16,6 +16,11 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
+                {# GO TO DATABASE BROWSER BUTTON #}
+                <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': usersTableName}) }} title="Go to database browser" class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
+                    <i class="fas fa-database text-gray-300 text-xs"></i>
+                </a>
+
                 {# ADD USER LINK #}
                 <a href={{ path('app_manager_users_register') }} title="Add new user" class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-plus text-gray-300 text-xs"></i>

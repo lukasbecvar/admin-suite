@@ -1,6 +1,9 @@
 /** aggregate confirmation popup for metrics component */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // CONSTANTS AND INITIAL SETUP
+    // -----------------------------
     // get elements related to aggregate functionality
     const aggregatePopup = document.getElementById('aggregatePopup')
     const aggregateButton = document.getElementById('aggregateButton')
@@ -25,6 +28,14 @@ document.addEventListener('DOMContentLoaded', function()
 
     const confirmButtonDefaultText = confirmAggregateButton ? confirmAggregateButton.textContent.trim() : 'Aggregate Now'
 
+    // check if elements exist (they might not exist on all pages)
+    if (!aggregatePopup || !aggregateButton || !cancelAggregateButton || !confirmAggregateButton || !aggregateStatusMessage) {
+        return
+    }
+
+    // -----------------------------
+    // UTILITY FUNCTIONS
+    // -----------------------------
     // helper to clear status box between actions
     const resetStatusMessage = () => {
         if (!aggregateStatusMessage) {
@@ -142,11 +153,9 @@ document.addEventListener('DOMContentLoaded', function()
         }
     }
 
-    // check if elements exist (they might not exist on all pages)
-    if (!aggregatePopup || !aggregateButton || !cancelAggregateButton || !confirmAggregateButton || !aggregateStatusMessage) {
-        return
-    }
-
+    // -----------------------------
+    // EVENT LISTENERS FOR AGGREGATE POPUP
+    // -----------------------------
     // event listener for aggregate button click
     aggregateButton.addEventListener('click', function (event) {
         event.preventDefault()
@@ -174,6 +183,9 @@ document.addEventListener('DOMContentLoaded', function()
         setButtonLoadingState(true)
         showStatusMessage('info', 'Aggregating old metrics...')
 
+        // -----------------------------
+        // AGGREGATION LOGIC
+        // -----------------------------
         fetch('/metrics/aggregate', {
             method: 'POST',
             headers: {

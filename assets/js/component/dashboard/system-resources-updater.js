@@ -1,6 +1,9 @@
 /** system resources dashboard refresher functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    // -----------------------------
+    // ELEMENT DECLARATIONS
+    // -----------------------------
     let firstRequest = true
 
     // get progress bars
@@ -34,20 +37,9 @@ document.addEventListener('DOMContentLoaded', function()
     const loadingNetworkStats = document.getElementById('loading-network-stats')
     const networkStats = document.getElementById('network-stats')
 
-    // format bytes to human readable format
-    function formatBytes(mbps, decimals = 2) {
-        const numericMbps = Number(mbps)
-        if (!Number.isFinite(numericMbps) || numericMbps <= 0) {
-            return '0 B/s'
-        }
-        const bytesPerSecond = numericMbps * 125000
-        const k = 1024
-        const dm = decimals < 0 ? 0 : decimals
-        const sizes = ['B/s', 'KB/s', 'MB/s', 'GB/s', 'TB/s', 'PB/s', 'EB/s', 'ZB/s', 'YB/s']
-        const i = Math.floor(Math.log(bytesPerSecond) / Math.log(k))
-        return parseFloat((bytesPerSecond / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
-    }
-
+    // -----------------------------
+    // UPDATE RESOURCES LOGIC
+    // -----------------------------
     function updateResourcesUsage() {
         // show loading only on first request
         if (firstRequest) {
@@ -64,10 +56,7 @@ document.addEventListener('DOMContentLoaded', function()
             systemStorageElement.innerHTML = 'STORAGE: (' + data.storageUsage + 'G / ' + data.diagnosticData.driveSpace + '%)'
 
             // update network usage
-            const usagePercent = Math.min(
-                100,
-                Math.max(0, Number(data.networkStats.networkUsagePercent) || 0)
-            )
+            const usagePercent = Math.min(100, Math.max(0, Number(data.networkStats.networkUsagePercent) || 0))
             networkUsageElement.innerHTML = usagePercent.toFixed(2) + '%'
             networkUsageDownloadElement.innerHTML = formatBytes(data.networkStats.downloadMbps)
             networkUsageUploadElement.innerHTML = formatBytes(data.networkStats.uploadMbps)
@@ -127,6 +116,26 @@ document.addEventListener('DOMContentLoaded', function()
         })
     }
 
+    // -----------------------------
+    // INITIALIZATION
+    // -----------------------------
     setInterval(updateResourcesUsage, 5000)
     updateResourcesUsage()
+
+    // -----------------------------
+    // UTILITY
+    // -----------------------------
+    // format bytes to human readable format
+    function formatBytes(mbps, decimals = 2) {
+        const numericMbps = Number(mbps)
+        if (!Number.isFinite(numericMbps) || numericMbps <= 0) {
+            return '0 B/s'
+        }
+        const bytesPerSecond = numericMbps * 125000
+        const k = 1024
+        const dm = decimals < 0 ? 0 : decimals
+        const sizes = ['B/s', 'KB/s', 'MB/s', 'GB/s', 'TB/s', 'PB/s', 'EB/s', 'ZB/s', 'YB/s']
+        const i = Math.floor(Math.log(bytesPerSecond) / Math.log(k))
+        return parseFloat((bytesPerSecond / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+    }
 })
