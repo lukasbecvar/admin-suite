@@ -191,3 +191,15 @@ document.addEventListener('DOMContentLoaded', function()
         return e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue
     }
 })
+
+// -----------------------------
+// PREVENT MULTIPLE SUBMISSIONS
+// -----------------------------
+document.addEventListener('submit', (event) =>
+{
+    const submitButton = event.target.querySelector('.add-todo-button')
+    if (submitButton) {
+        submitButton.disabled = true
+        submitButton.classList.add('opacity-50', 'cursor-not-allowed')
+    }
+})

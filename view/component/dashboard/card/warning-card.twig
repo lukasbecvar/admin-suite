@@ -1,14 +1,14 @@
-<div class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden w-full sm:col-span-2 transition-all duration-500 ease-in-out transform" id="warning-box">
+<div id="warning-box" class="backdrop-blur-md bg-gray-800/50 border border-gray-700/50 rounded shadow-xl text-white w-full overflow-hidden w-full sm:col-span-2 transition-all duration-500 ease-in-out transform">
     <div class="px-2 py-2 border-b border-gray-700/50 font-semibold tracking-wide text-sm uppercase text-gray-200 flex items-center justify-between">
         <div class="flex items-center gap-2">
             <div class="w-8 h-8 bg-amber-500/20 rounded flex items-center justify-center">
                 <i class="fas fa-exclamation-triangle text-amber-400 text-sm"></i>
             </div>
-            <a href={{ path('app_diagnostic') }} class="text-sm text-gray-200 hover:text-white transition-colors duration-200" title="Go to diagnostic">
+            <div class="text-sm text-gray-200 hover:text-white transition-colors duration-200">
                 Diagnostic Alerts
-            </a>
+            </div>
         </div>
-        <button onclick="closeWarningBox()" class="group relative w-7 h-7 rounded hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-all duration-200 cursor-pointer flex items-center justify-center shrink-0">
+        <button type="button" id="close-warning-box" class="group relative w-7 h-7 rounded hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-all duration-200 cursor-pointer flex items-center justify-center shrink-0">
             <i class="fas fa-times text-xl transition-transform duration-200 leading-none absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
             <div class="absolute inset-0 rounded border border-transparent group-hover:border-red-500/30 transition-colors duration-200"></div>
         </button>
@@ -188,49 +188,5 @@
     </div>
 </div>
 
-<script>
-function closeWarningBox() {
-    const warningBox = document.getElementById('warning-box');
-    if (warningBox) {
-        // add closing animation class
-        warningBox.classList.add('warning-closing')
-
-        // simple, elegant fade and slide animation
-        warningBox.style.transition = 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
-        warningBox.style.transformOrigin = 'center center'
-
-        // smooth fade out with gentle slide up
-        setTimeout(() => {
-            warningBox.style.transform = 'translateY(-20px) scale(0.95)'
-            warningBox.style.opacity = '0'
-            warningBox.style.filter = 'blur(1px)'
-        }, 30)
-
-        // remove element after animation completes
-        setTimeout(() => {
-            if (warningBox.parentNode) {
-                warningBox.parentNode.removeChild(warningBox)
-            }
-        }, 280)
-    }
-}
-
-// add smooth entrance animation on page load
-document.addEventListener('DOMContentLoaded', function() {
-    const warningBox = document.getElementById('warning-box')
-    if (warningBox) {
-        // start with hidden state
-        warningBox.style.opacity = '0'
-        warningBox.style.transform = 'translateY(-20px) scale(0.95)'
-        warningBox.style.filter = 'blur(2px)'
-
-        // animate to visible state
-        setTimeout(() => {
-            warningBox.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
-            warningBox.style.opacity = '1'
-            warningBox.style.transform = 'translateY(0) scale(1)'
-            warningBox.style.filter = 'blur(0px)'
-        }, 100)
-    }
-})
-</script>
+{# INCLUDE JS FOR WARNING CARD #}
+{{ encore_entry_script_tags('warning-card-js') }}

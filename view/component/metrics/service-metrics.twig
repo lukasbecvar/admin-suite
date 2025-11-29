@@ -19,7 +19,7 @@
                 {# TIME PERIOD SELECTOR #}
                 <div class="flex items-center gap-2">
                     <label for="time-period" class="text-xs text-gray-400 hidden sm:block">Period:</label>
-                    <select id="time-period" onchange="updateTimePeriod()" class="h-8 px-3 bg-gray-800/95 text-white border border-gray-600/80 rounded text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/90 focus:border-blue-500/90 hover:bg-gray-700/95 hover:border-gray-500/90 transition-all duration-200 cursor-pointer shadow-lg backdrop-blur-sm">
+                    <select id="time-period" class="h-8 px-3 bg-gray-800/95 text-white border border-gray-600/80 rounded text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/90 focus:border-blue-500/90 hover:bg-gray-700/95 hover:border-gray-500/90 transition-all duration-200 cursor-pointer shadow-lg backdrop-blur-sm">
                         <option value="last_24_hours" selected class="bg-gray-800 text-white">Last 24 hours</option>
                         <option value="last_week" class="bg-gray-800 text-white">Last week</option>
                         <option value="last_month" class="bg-gray-800 text-white">Last month</option>
@@ -102,30 +102,8 @@
     </div>
 </div>
 
+{# SEND METRICS DATA TO CHARTS JS #}
 <script>
-    // update time period in url
-    function updateTimePeriod() {
-        const select = document.getElementById('time-period')
-        const selectedValue = select.value
-        const serviceName = "{{ serviceName|e('js') }}"
-        window.location.search = `?service_name=${serviceName}&time_period=${selectedValue}`
-    }
-
-    // select selecton value from url
-    function setSelectedValue() {
-        const urlParams = new URLSearchParams(window.location.search)
-        const timePeriod = urlParams.get('time_period')
-        const select = document.getElementById('time-period')
-
-        // set selected value
-        if (timePeriod) {
-            select.value = timePeriod
-        }
-    }
-
-    // init select value
-    window.onload = setSelectedValue
-
     {% if serviceName != 'all-services' %}
         window.metricsData = {{ { categories: data.categories, metrics: data.metrics, serviceName: serviceName } | json_encode | raw }}
     {% else %}

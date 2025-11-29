@@ -1,5 +1,5 @@
 {# CREATE NEW TODO FORM #}
-{{ form_start(createTodoForm, {'attr': {'onsubmit': 'disableSubmitButton(this)'}}) }}
+{{ form_start(createTodoForm) }}
     <div class="bg-slate-800/80 flex-none backdrop-blur-sm">
 
         {# SUBMIT ERROR MESSAGE #}
@@ -25,14 +25,3 @@
         </div>
     </div>
 {{ form_end(createTodoForm) }}
-
-{# DISABLE SUBMIT BUTTON WHEN FORM IS SUBMITTED (prevents multiple submits) #}
-<script>
-    function disableSubmitButton(form) {
-        const submitButton = form.querySelector('.add-todo-button')
-        if (submitButton) {
-            submitButton.disabled = true
-            submitButton.classList.add('opacity-50', 'cursor-not-allowed')
-        }
-    }
-</script>

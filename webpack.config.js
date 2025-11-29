@@ -10,8 +10,10 @@ Encore
     .addEntry('index-css', './assets/css/index.scss')
 
     // register js
-    .addEntry('sidebar-element-js', './assets/js/sidebar-element.js')
+    .addEntry('warning-card-js', './assets/js/warning-card.js')
     .addEntry('loading-component-js', './assets/js/loading-component.js')
+    .addEntry('sidebar-toggle-js', './assets/js/sidebar/sidebar-toggle.js')
+    .addEntry('sidebar-element-js', './assets/js/sidebar/sidebar-element.js')
     .addEntry('profile-photo-view-toggle-js', './assets/js/profile-photo-viewer.js')
     .addEntry('metrics-charts-js', './assets/js/component/metrics/metrics-charts.js')
     .addEntry('user-manager-js', './assets/js/component/user-manager/user-manager.js')
@@ -28,6 +30,7 @@ Encore
     .addEntry('system-resources-updater-js', './assets/js/component/dashboard/system-resources-updater.js')
     .addEntry('file-system-file-delete-js', './assets/js/component/file-system/file-system-file-delete.js')
     .addEntry('file-system-create-menu-js', './assets/js/component/file-system/file-system-create-menu.js')
+    .addEntry('profile-image-preview-js', './assets/js/component/account-settings/profile-image-preview.js')
     .addEntry('notification-subscriber-js', './assets/js/component/notification/notification-subscriber.js')
     .addEntry('file-system-media-viewer-js', './assets/js/component/file-system/file-system-media-viewer.js')
     .addEntry('metrics-delete-confirmaton-js', './assets/js/component/metrics/metrics-delete-confirmaton.js')

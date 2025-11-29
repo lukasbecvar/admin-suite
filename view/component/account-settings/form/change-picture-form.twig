@@ -5,7 +5,7 @@
 {# SUB NAVIGATION #}
 <div class="px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
     <div class="flex items-center gap-4">
-        <a href={{ path('app_account_settings_table') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to account settings">
+        <a href={{ path('app_account_settings_table') }} title="Back to account settings" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
             <i class="fas fa-arrow-left text-gray-300 text-sm"></i>
         </a>
         <div>
@@ -47,7 +47,7 @@
 
                 {# IMAGE PREVIEW BOX #}
                 <div class="image-preview flex justify-center animate-popin">
-                    <div class="mb-6 relative rounded overflow-hidden border border-gray-600/50 shadow-lg bg-gray-700/30" style="display: none;" id="image-preview-container">
+                    <div class="mb-6 relative rounded overflow-hidden border border-gray-600/50 shadow-lg bg-gray-700/30" id="image-preview-container" style="display: none;">
                         <img id="preview-image" src="#" alt="Image preview" class="w-40 h-40 object-cover">
                     </div>
                 </div>
@@ -61,14 +61,17 @@
                                 <label class="cursor-pointer inline-flex items-center px-6 py-3 bg-gray-700/50 hover:bg-gray-600/50 text-white rounded transition-all duration-200 border border-gray-600/50 hover:border-gray-500/50">
                                     <i class="fas fa-upload mr-3 text-blue-400"></i>
                                     <span>Choose Image File</span>
-                                    {{ form_row(profilePicChangeForm['profile-pic'], {
+                                    {{ form_widget(profilePicChangeForm['profile-pic'], {
+                                        'id': 'profile-pic-input',
                                         'attr': {
                                             'class': 'hidden',
-                                            'accept': 'image/jpeg,image/jpg,image/png,image/gif,image/webp',
-                                            'onchange': 'validateAndPreviewImage(this)'
-                                        }
-                                    }) }}
+                                            'accept': 'image/jpeg,image/jpg,image/png,image/gif,image/webp'
+                                        }})
+                                    }}
                                 </label>
+                            </div>
+                            <div class="mt-2 text-sm text-red-300 text-center space-y-1">
+                                {{ form_errors(profilePicChangeForm['profile-pic']) }}
                             </div>
                             <p class="text-gray-400 text-xs mt-2 text-center">Supported formats: JPG, PNG, GIF, WebP (max 5MB)</p>
                         </div>
@@ -85,39 +88,5 @@
 </div>
 
 {# IMAGE VALIDATION AND PREVIEW FUNCTION #}
-<script>
-    function validateAndPreviewImage(input) {
-        if (input.files && input.files[0]) {
-            const file = input.files[0]
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
-            const maxSize = 5 * 1024 * 1024 // 5MB in bytes
-
-            // check file type
-            if (!allowedTypes.includes(file.type)) {
-                alert('Please select a valid image file (JPG, PNG, GIF, or WebP).')
-                input.value = ''
-                document.getElementById('image-preview-container').style.display = 'none'
-                return
-            }
-
-            // check file size
-            if (file.size > maxSize) {
-                alert('File size must be less than 5MB.')
-                input.value = ''
-                document.getElementById('image-preview-container').style.display = 'none'
-                return
-            }
-
-            // show preview if validation passes
-            var reader = new FileReader()
-            reader.onload = function(e) {
-                document.getElementById('preview-image').setAttribute('src', e.target.result)
-                document.getElementById('image-preview-container').style.display = 'block'
-            }
-            reader.readAsDataURL(file)
-        } else {
-            document.getElementById('image-preview-container').style.display = 'none'
-        }
-    }
-</script>
+{{ encore_entry_script_tags('profile-image-preview-js') }}
 {% endblock %}

@@ -192,3 +192,36 @@ document.addEventListener('DOMContentLoaded', function()
         })
     })
 })
+
+// handle time-period change
+document.addEventListener('DOMContentLoaded', function initTimePeriodSelector() {
+    const select = document.getElementById('time-period');
+    if (!select) return
+
+    // read URL parameters
+    const urlParams = new URLSearchParams(window.location.search)
+    const timePeriod = urlParams.get('time_period')
+    const serviceName = urlParams.get('service_name')
+
+    // set initial value from URL
+    if (timePeriod) {
+        select.value = timePeriod
+    }
+
+    // handle user change
+    select.addEventListener('change', () => {
+        const selectedValue = select.value
+
+        // build new query params
+        const params = new URLSearchParams()
+        params.set('time_period', selectedValue)
+
+        // preserve service_name only if it exists
+        if (serviceName) {
+            params.set('service_name', serviceName)
+        }
+
+        // redirect
+        window.location.search = params.toString()
+    })
+})

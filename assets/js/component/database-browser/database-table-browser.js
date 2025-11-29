@@ -90,3 +90,16 @@ document.addEventListener('DOMContentLoaded', function()
         }
     })
 })
+
+// scroll to highlighted row
+document.addEventListener('DOMContentLoaded', () => {
+    const highlightedRow = document.querySelector('[data-highlighted-row="true"]')
+
+    // check if highlight element exists
+    if (highlightedRow) {
+        highlightedRow.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        })
+    }
+})

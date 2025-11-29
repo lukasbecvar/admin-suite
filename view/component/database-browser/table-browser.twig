@@ -243,15 +243,4 @@
 
 {# POPUP FUNCTIONS #}
 {{ encore_entry_script_tags('database-table-browser-js') }}
-
-{% if highlightValue is not null %}
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const highlightedRow = document.querySelector('[data-highlighted-row="true"]')
-            if (highlightedRow) {
-                highlightedRow.scrollIntoView({ behavior: 'smooth', block: 'center' })
-            }
-        })
-    </script>
-{% endif %}
 {% endblock %}
