@@ -1,0 +1,21 @@
+{# components/profile_viewer_modal.twig #}
+<div id="profile-viewer-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+	<div class="relative bg-gray-800/95 rounded max-w-md w-full border border-gray-700/50 m-2 animate-popin backdrop-blur-md">
+		<div class="px-4 py-2 phn:py-1 border-b border-gray-700/50 bg-gray-800/30 flex items-center justify-between">
+			<div class="flex items-center">
+				<i class="fas fa-user-circle text-blue-400 mr-2"></i>
+				<span class="font-semibold text-white">Profile Picture</span>
+			</div>
+			<div
+				class="flex items-center">
+				<button id="js-download-profile-image" class="text-gray-400 hover:text-emerald-400 transition-colors duration-200 mr-2">
+					<i class="fas fa-download text-xl mt-[4px]"></i>
+				</button>
+				<button id="js-close-profile-viewer" class="text-gray-400 hover:text-red-400 transition-colors duration-200">
+					<i class="fas fa-times text-xl mt-[4px]"></i>
+				</button>
+			</div>
+		</div>
+		<img id="js-profile-viewer-image" class="w-full h-auto rounded-b-lg" src="" alt="profile picture">
+	</div>
+</div>

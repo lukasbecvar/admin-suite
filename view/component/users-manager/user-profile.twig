@@ -3,26 +3,6 @@
 {# USER PROFILE VIEWER COMPONENT #}
 {% block component %}
 <div class="flex flex-col h-full">
-    {# USER PROFILE IMAGE VIEW MODAL #}
-    <div id="user-profile-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
-        <div class="relative bg-gray-800/95 rounded max-w-md w-full border border-gray-700/50 m-2 animate-popin backdrop-blur-md">
-            <div class="px-4 py-2 phn:py-1 border-b border-gray-700/50 bg-gray-800/30 flex items-center justify-between">
-                <div class="flex items-center">
-                    <i class="fas fa-user-circle text-blue-400 mr-2"></i>
-                    <span class="font-semibold text-white">Profile Picture</span>
-                </div>
-                <button id="close-user-profile-modal" class="text-gray-400 hover:text-red-400 transition-colors duration-200">
-                    <i class="fas fa-times text-xl mt-[4px]"></i>
-                </button>
-            </div>
-            {% if userRepository.getProfilePic() == 'default_pic' %}
-                <img class="w-full h-auto rounded-b-lg" src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture">
-            {% else %}
-                <img class="w-full h-auto rounded-b-lg" src="data:image/jpeg;base64,{{ userRepository.getProfilePic()|e }}" alt="profile picture">
-            {% endif %}
-        </div>
-    </div>
-
     {# SUB-NAVIGATION #}
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
@@ -47,9 +27,9 @@
                     <div class="px-6 py-8 text-center border-b border-gray-700/50 bg-gray-800/30">
                         {# PROFILE PICTURE #}
                         {% if userRepository.getProfilePic() == 'default_pic' %}
-                            <img id="user-profile-photo" src={{ asset('/assets/images/default-profile.jpg') }} alt="User Profile Picture" class="w-24 h-24 rounded-full mx-auto cursor-pointer hover:ring-2 hover:ring-blue-500/50 transition-all duration-200">
+                            <img class="js-open-profile-viewer w-24 h-24 rounded-full mx-auto cursor-pointer hover:ring-2 hover:ring-blue-500/50 transition-all duration-200" src={{ asset('/assets/images/default-profile.jpg') }} alt="User Profile Picture">
                         {% else %}
-                            <img id="user-profile-photo" src="data:image/jpeg;base64,{{ userRepository.getProfilePic()|e }}" alt="User Profile Picture" class="w-24 h-24 rounded-full mx-auto cursor-pointer hover:ring-2 hover:ring-blue-500/50 transition-all duration-200">
+                            <img class="js-open-profile-viewer w-24 h-24 rounded-full mx-auto cursor-pointer hover:ring-2 hover:ring-blue-500/50 transition-all duration-200" src="data:image/jpeg;base64,{{ userRepository.getProfilePic()|e }}" alt="User Profile Picture">
                         {% endif %}
                         
                         {# USERNAME #}

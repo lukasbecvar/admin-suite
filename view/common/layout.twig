@@ -7,20 +7,8 @@
         <meta http-equiv="refresh" content="0; URL='{{ path('app_error_by_code', {code: '426'}) }}'" />
     </noscript>
 
-    {# PROFILE IMAGE VIEW #}
-    <div id="profile-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
-        <div class="relative bg-gray-800 rounded max-w-md w-full border border-gray-600 m-2 animate-popin shadow-2xl">
-            <div class="px-4 py-3 border-b border-gray-600 font-semibold tracking-wide text-sm uppercase text-gray-200 flex items-center gap-2">
-                <span>Profile picture</span>
-                <button id="close-profile-modal" class="absolute top-2 right-3 text-gray-300 text-2xl leading-none hover:text-red-400 transition-colors duration-200">&times;</button>
-            </div>
-            {% if getUserData().getProfilePic == 'default_pic' %}
-                <img src={{ asset('/assets/images/default-profile.jpg') }} alt="profile picture" class="w-full h-auto rounded-b-lg">
-            {% else %}
-                <img src="data:image/jpeg;base64,{{ getUserData().getProfilePic|e }}" alt="profile picture" class="w-full h-auto rounded-b-lg">
-            {% endif %}
-        </div>
-    </div>
+    {# PROFILE VIEWER MODAL #}
+    {% include "component/users-manager/popup/profile-viewer-popup.twig" %}
 
     {# LOADER COMPONENT #}
     <div id="loader-wrapper">
@@ -62,6 +50,6 @@
 
     {# REGISTER JAVASCRIPT ASSETS #}
     {{ encore_entry_script_tags('loading-component-js') }}
-    {{ encore_entry_script_tags('notification-subscriberr-js') }}
+    {{ encore_entry_script_tags('notification-subscriber-js') }}
     {{ encore_entry_script_tags('profile-photo-view-toggle-js') }}
 {% endblock %}
