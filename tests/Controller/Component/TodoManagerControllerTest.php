@@ -171,6 +171,160 @@ class TodoManagerControllerTest extends CustomTestCase
     }
 
     /**
+     * Test edit todo with success response
+     *
+     * @return void
+     */
+    public function testEditTodoWithSuccessResponse(): void
+    {
+        $this->client->request('POST', '/manager/todo/edit', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'todo' => 'new-todo-text',
+            'id' => 1
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    /**
+     * Test edit todo with empty todo text
+     *
+     * @return void
+     */
+    public function testEditTodoWithEmptyTodoText(): void
+    {
+        $this->client->request('POST', '/manager/todo/edit', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'todo' => '',
+            'id' => 1
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test edit todo with invalid id
+     *
+     * @return void
+     */
+    public function testEditTodoWithInvalidId(): void
+    {
+        $this->client->request('POST', '/manager/todo/edit', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'todo' => 'new-todo-text',
+            'id' => 'abc'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test close todo with success response
+     *
+     * @return void
+     */
+    public function testCloseTodoWithSuccessResponse(): void
+    {
+        $this->client->request('POST', '/manager/todo/close', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'id' => 1
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    /**
+     * Test close todo with invalid id
+     *
+     * @return void
+     */
+    public function testCloseTodoWithInvalidId(): void
+    {
+        $this->client->request('POST', '/manager/todo/close', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'id' => 'abc'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test reopen todo with success response
+     *
+     * @return void
+     */
+    public function testReopenTodoWithSuccessResponse(): void
+    {
+        $this->client->request('POST', '/manager/todo/reopen', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'id' => 1
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    /**
+     * Test reopen todo with invalid id
+     *
+     * @return void
+     */
+    public function testReopenTodoWithInvalidId(): void
+    {
+        $this->client->request('POST', '/manager/todo/reopen', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'id' => 'abc'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Test delete todo with success response
+     *
+     * @return void
+     */
+    public function testDeleteTodoWithSuccessResponse(): void
+    {
+        // First, close the todo
+        $this->client->request('POST', '/manager/todo/close', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'id' => 1
+        ]);
+
+        // Then, delete the todo
+        $this->client->request('POST', '/manager/todo/delete', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'id' => 1
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    /**
+     * Test delete todo with invalid id
+     *
+     * @return void
+     */
+    public function testDeleteTodoWithInvalidId(): void
+    {
+        $this->client->request('POST', '/manager/todo/delete', [
+            'csrf_token' => $this->getCsrfToken($this->client),
+            'id' => 'abc'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
      * Test update todo positions with valid data
      *
      * @return void
