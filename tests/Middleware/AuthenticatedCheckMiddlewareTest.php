@@ -2,7 +2,9 @@
 
 namespace App\Tests\Middleware;
 
+use App\Manager\LogManager;
 use App\Manager\AuthManager;
+use App\Manager\ConfigManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,19 +25,25 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[CoversClass(AuthenticatedCheckMiddleware::class)]
 class AuthenticatedCheckMiddlewareTest extends TestCase
 {
-    private AuthManager & MockObject $authManagerMock;
+    private LogManager & MockObject $logManagerMock;
     private AuthenticatedCheckMiddleware $middleware;
+    private AuthManager & MockObject $authManagerMock;
+    private ConfigManager & MockObject $configManagerMock;
     private UrlGeneratorInterface & MockObject $urlGeneratorMock;
 
     protected function setUp(): void
     {
         // mock dependencies
+        $this->logManagerMock = $this->createMock(LogManager::class);
         $this->authManagerMock = $this->createMock(AuthManager::class);
+        $this->configManagerMock = $this->createMock(ConfigManager::class);
         $this->urlGeneratorMock = $this->createMock(UrlGeneratorInterface::class);
 
         // create middleware instance
         $this->middleware = new AuthenticatedCheckMiddleware(
+            $this->logManagerMock,
             $this->authManagerMock,
+            $this->configManagerMock,
             $this->urlGeneratorMock
         );
     }
@@ -65,6 +73,9 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
         // create testing request event
         $event = $this->createRequestEvent('/api/system/resources');
 
+        // mock config manager to return no exclusions
+        $this->configManagerMock->method('readConfig')->willReturn('[]');
+
         // simulate user is logged in
         $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(true);
 
@@ -84,6 +95,9 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
     {
         // create testing request event
         $event = $this->createRequestEvent('/dashboard');
+
+        // mock config manager to return no exclusions
+        $this->configManagerMock->method('readConfig')->willReturn('[]');
 
         // simulate user is not logged in
         $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(false);
@@ -106,6 +120,9 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
      */
     public function testRequestWithApiKeyHeader(): void
     {
+        // mock config manager to return no exclusions
+        $this->configManagerMock->method('readConfig')->willReturn('[]');
+
         // simulate user is logged in
         $event = $this->createRequestEvent('/api/system/resources');
         $event->getRequest()->headers->set('API-KEY', 'valid-token');
@@ -132,28 +149,81 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
      */
     public function testRequestsForExcludedPages(): void
     {
-        // list of excluded paths
-        $excludedPaths = [
-            '/_profiler',
-            '/register',
-            '/login',
-            '/error',
-            '/'
+        // mock config manager to return exclusions
+        $exclusions = [
+            'exact_paths' => ['/login', '/'],
+            'path_prefixes' => ['/error', '/api/public'],
+            'path_patterns' => ['^/(_profiler|_wdt)']
+        ];
+        $this->configManagerMock->method('readConfig')->with('security-exclusions.json')->willReturn(json_encode($exclusions));
+
+        // test paths
+        $testPaths = [
+            'exact' => '/login',
+            'exact_root' => '/',
+            'prefix' => '/error/404',
+            'prefix_api' => '/api/public/data',
+            'pattern' => '/_profiler/12345'
         ];
 
-        // expect auth manager not called
+        // expect auth manager not called for any of these paths
         $this->authManagerMock->expects($this->never())->method('isUserLogedin');
 
-        // test each excluded path
-        foreach ($excludedPaths as $path) {
-            // create testing request event
+        foreach ($testPaths as $key => $path) {
             $event = $this->createRequestEvent($path);
-
-            // call tested middleware
             $this->middleware->onKernelRequest($event);
-
-            // assert response (null = no redirect to login page)
-            $this->assertNull($event->getResponse(), 'Failed asserting for excluded path: ' . $path);
+            $this->assertNull($event->getResponse(), "Failed asserting for excluded path type: $key, path: $path");
         }
+    }
+
+    /**
+     * Test request when exclusion config is missing
+     *
+     * @return void
+     */
+    public function testRequestWhenExclusionConfigIsMissing(): void
+    {
+        // mock config manager to return null
+        $this->configManagerMock->method('readConfig')->with('security-exclusions.json')->willReturn(null);
+
+        // expect log manager to log warning
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            'suite-config',
+            'security-exclusions.json not found, auth check running on all paths',
+            LogManager::LEVEL_WARNING
+        );
+
+        // expect auth check to run because config is missing
+        $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(true);
+
+        // call tested middleware
+        $event = $this->createRequestEvent('/some-path');
+        $this->middleware->onKernelRequest($event);
+    }
+
+    /**
+     * Test request when exclusion config is empty
+     *
+     * @return void
+     */
+    public function testRequestWhenExclusionConfigIsInvalid(): void
+    {
+        // mock config manager to return invalid config
+        $this->configManagerMock->method('readConfig')->with('security-exclusions.json')
+            ->willReturn('{ "invalid_json": ...');
+
+        // expect log manager to log error
+        $this->logManagerMock->expects($this->once())->method('log')->with(
+            'suite-config-error',
+            $this->stringContains('Error parsing security-exclusions.json'),
+            LogManager::LEVEL_CRITICAL
+        );
+
+        // expect auth check to run because config is invalid (fail-secure)
+        $this->authManagerMock->expects($this->once())->method('isUserLogedin')->willReturn(true);
+
+        // call tested middleware
+        $event = $this->createRequestEvent('/some-path');
+        $this->middleware->onKernelRequest($event);
     }
 }

@@ -24,6 +24,7 @@
 
 # custom suite configs
 /feature-flags.json
+/auth-exclusions.json
 /terminal-aliases.json
 /blocked-usernames.json
 /protected-columns.json

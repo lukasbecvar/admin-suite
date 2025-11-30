@@ -2,7 +2,10 @@
 
 namespace App\Middleware;
 
+use Exception;
+use App\Manager\LogManager;
 use App\Manager\AuthManager;
+use App\Manager\ConfigManager;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -16,12 +19,20 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class AuthenticatedCheckMiddleware
 {
+    private LogManager $logManager;
     private AuthManager $authManager;
+    private ConfigManager $configManager;
     private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(AuthManager $authManager, UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        LogManager $logManager,
+        AuthManager $authManager,
+        ConfigManager $configManager,
+        UrlGeneratorInterface $urlGenerator
+    ) {
+        $this->logManager = $logManager;
         $this->authManager = $authManager;
+        $this->configManager = $configManager;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -65,11 +76,43 @@ class AuthenticatedCheckMiddleware
      */
     private function isExcludedPath(string $pathInfo): bool
     {
-        return $pathInfo === '/api/monitoring/visitor/tracking'
-            || $pathInfo === '/register'
-            || $pathInfo === '/login'
-            || $pathInfo === '/'
-            || str_starts_with($pathInfo, '/error')
-            || preg_match('#^/(_profiler|_wdt)#', $pathInfo);
+        // get security exclusions from config
+        $securityExclusionsConfig = $this->configManager->readConfig('security-exclusions.json');
+        if ($securityExclusionsConfig === null) {
+            $this->logManager->log('suite-config', 'security-exclusions.json not found, auth check running on all paths', LogManager::LEVEL_WARNING);
+            return false;
+        }
+
+        try {
+            $exclusions = json_decode($securityExclusionsConfig, true, 512, JSON_THROW_ON_ERROR);
+        } catch (Exception $e) {
+            $this->logManager->log('suite-config-error', 'error parsing security-exclusions.json: ' . $e->getMessage(), LogManager::LEVEL_CRITICAL);
+            return false;
+        }
+
+        $exactPaths = $exclusions['exact_paths'] ?? [];
+        $pathPrefixes = $exclusions['path_prefixes'] ?? [];
+        $pathPatterns = $exclusions['path_patterns'] ?? [];
+
+        // check for exact path match
+        if (in_array($pathInfo, $exactPaths, true)) {
+            return true;
+        }
+
+        // check for path prefix
+        foreach ($pathPrefixes as $prefix) {
+            if (str_starts_with($pathInfo, $prefix)) {
+                return true;
+            }
+        }
+
+        // check for path pattern
+        foreach ($pathPatterns as $pattern) {
+            if (preg_match('#' . $pattern . '#', $pathInfo)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

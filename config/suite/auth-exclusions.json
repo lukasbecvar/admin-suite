@@ -1,0 +1,14 @@
+{
+    "exact_paths": [
+        "/",
+        "/login",
+        "/register",
+        "/api/monitoring/visitor/tracking"
+    ],
+    "path_prefixes": [
+        "/error"
+    ],
+    "path_patterns": [
+        "^/(_profiler|_wdt)"
+    ]
+}
