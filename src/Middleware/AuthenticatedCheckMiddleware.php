@@ -77,16 +77,16 @@ class AuthenticatedCheckMiddleware
     private function isExcludedPath(string $pathInfo): bool
     {
         // get security exclusions from config
-        $securityExclusionsConfig = $this->configManager->readConfig('security-exclusions.json');
+        $securityExclusionsConfig = $this->configManager->readConfig('auth-exclusions.json');
         if ($securityExclusionsConfig === null) {
-            $this->logManager->log('suite-config', 'security-exclusions.json not found, auth check running on all paths', LogManager::LEVEL_WARNING);
+            $this->logManager->log('suite-config', 'auth-exclusions.json not found, auth check running on all paths', LogManager::LEVEL_WARNING);
             return false;
         }
 
         try {
             $exclusions = json_decode($securityExclusionsConfig, true, 512, JSON_THROW_ON_ERROR);
         } catch (Exception $e) {
-            $this->logManager->log('suite-config-error', 'error parsing security-exclusions.json: ' . $e->getMessage(), LogManager::LEVEL_CRITICAL);
+            $this->logManager->log('suite-config-error', 'error parsing auth-exclusions.json: ' . $e->getMessage(), LogManager::LEVEL_CRITICAL);
             return false;
         }
 

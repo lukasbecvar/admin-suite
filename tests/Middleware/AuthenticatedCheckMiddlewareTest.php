@@ -155,7 +155,7 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
             'path_prefixes' => ['/error', '/api/public'],
             'path_patterns' => ['^/(_profiler|_wdt)']
         ];
-        $this->configManagerMock->method('readConfig')->with('security-exclusions.json')->willReturn(json_encode($exclusions));
+        $this->configManagerMock->method('readConfig')->with('auth-exclusions.json')->willReturn(json_encode($exclusions));
 
         // test paths
         $testPaths = [
@@ -184,12 +184,12 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
     public function testRequestWhenExclusionConfigIsMissing(): void
     {
         // mock config manager to return null
-        $this->configManagerMock->method('readConfig')->with('security-exclusions.json')->willReturn(null);
+        $this->configManagerMock->method('readConfig')->with('auth-exclusions.json')->willReturn(null);
 
         // expect log manager to log warning
         $this->logManagerMock->expects($this->once())->method('log')->with(
             'suite-config',
-            'security-exclusions.json not found, auth check running on all paths',
+            'auth-exclusions.json not found, auth check running on all paths',
             LogManager::LEVEL_WARNING
         );
 
@@ -209,13 +209,12 @@ class AuthenticatedCheckMiddlewareTest extends TestCase
     public function testRequestWhenExclusionConfigIsInvalid(): void
     {
         // mock config manager to return invalid config
-        $this->configManagerMock->method('readConfig')->with('security-exclusions.json')
-            ->willReturn('{ "invalid_json": ...');
+        $this->configManagerMock->method('readConfig')->with('auth-exclusions.json')->willReturn('{ "invalid_json": ...');
 
         // expect log manager to log error
         $this->logManagerMock->expects($this->once())->method('log')->with(
             'suite-config-error',
-            $this->stringContains('Error parsing security-exclusions.json'),
+            $this->stringContains('Error parsing auth-exclusions.json'),
             LogManager::LEVEL_CRITICAL
         );
 
