@@ -49,7 +49,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The filesystem browser view response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem', methods:['GET'], name: 'app_file_system_browser')]
+    #[Route('/filesystem', methods: ['GET'], name: 'app_file_system_browser')]
     public function filesystemList(Request $request): Response
     {
         // get filesystem path
@@ -95,7 +95,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The file browser view response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/view', methods:['GET'], name: 'app_file_system_view')]
+    #[Route('/filesystem/view', methods: ['GET'], name: 'app_file_system_view')]
     public function filesystemView(Request $request): Response
     {
         // get browsing file path
@@ -200,7 +200,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The file create view response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/create', methods:['GET'], name: 'app_file_system_create')]
+    #[Route('/filesystem/create', methods: ['GET'], name: 'app_file_system_create')]
     public function filesystemCreate(Request $request): Response
     {
         // get directory path
@@ -226,7 +226,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The directory create view response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/create/directory', methods:['GET'], name: 'app_file_system_create_directory')]
+    #[Route('/filesystem/create/directory', methods: ['GET'], name: 'app_file_system_create_directory')]
     public function filesystemCreateDirectory(Request $request): Response
     {
         // get directory path
@@ -252,7 +252,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The redirect response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/create/save', methods:['POST'], name: 'app_file_system_create_save')]
+    #[Route('/filesystem/create/save', methods: ['POST'], name: 'app_file_system_create_save')]
     public function filesystemCreateSave(Request $request): Response
     {
         // get directory path, filename and content
@@ -383,7 +383,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The redirect response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/create/directory/save', methods:['POST'], name: 'app_file_system_create_directory_save')]
+    #[Route('/filesystem/create/directory/save', methods: ['POST'], name: 'app_file_system_create_directory_save')]
     public function filesystemCreateDirectorySave(Request $request): Response
     {
         // get directory path and new directory name
@@ -479,7 +479,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The file rename view response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/rename', methods:['GET'], name: 'app_file_system_rename')]
+    #[Route('/filesystem/rename', methods: ['GET'], name: 'app_file_system_rename')]
     public function filesystemRename(Request $request): Response
     {
         // get file path
@@ -520,7 +520,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The redirect response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/rename/save', methods:['POST'], name: 'app_file_system_rename_save')]
+    #[Route('/filesystem/rename/save', methods: ['POST'], name: 'app_file_system_rename_save')]
     public function filesystemRenameSave(Request $request): Response
     {
         // get old path and new name
@@ -623,7 +623,7 @@ class FileSystemBrowserController extends AbstractController
      * @return StreamedResponse|JsonResponse The media file resource content or JSON response with error message
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/get/resource', methods:['GET'], name: 'app_file_system_get_resource')]
+    #[Route('/filesystem/get/resource', methods: ['GET'], name: 'app_file_system_get_resource')]
     public function filesystemGetResource(Request $request): StreamedResponse|JsonResponse
     {
         // get resource file path
@@ -743,7 +743,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The file editor view response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/edit', methods:['GET'], name: 'app_file_system_edit')]
+    #[Route('/filesystem/edit', methods: ['GET'], name: 'app_file_system_edit')]
     public function filesystemEdit(Request $request): Response
     {
         // get file path
@@ -809,7 +809,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The redirect response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/save', methods:['POST'], name: 'app_file_system_save')]
+    #[Route('/filesystem/save', methods: ['POST'], name: 'app_file_system_save')]
     public function filesystemSave(Request $request): Response
     {
         // get file path and content (raw, without escaping)
@@ -884,7 +884,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The redirect response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/delete', methods:['POST'], name: 'app_file_system_delete')]
+    #[Route('/filesystem/delete', methods: ['POST'], name: 'app_file_system_delete')]
     public function filesystemDelete(Request $request): Response
     {
         // get file path
@@ -944,7 +944,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The file move view response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/move', methods:['GET'], name: 'app_file_system_move')]
+    #[Route('/filesystem/move', methods: ['GET'], name: 'app_file_system_move')]
     public function filesystemMove(Request $request): Response
     {
         // get file path
@@ -1015,7 +1015,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The redirect response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/move/save', methods:['POST'], name: 'app_file_system_move_save')]
+    #[Route('/filesystem/move/save', methods: ['POST'], name: 'app_file_system_move_save')]
     public function filesystemMoveSave(Request $request): Response
     {
         // get source path
@@ -1145,7 +1145,7 @@ class FileSystemBrowserController extends AbstractController
      * @return StreamedResponse The file download response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/download', methods:['GET'], name: 'app_file_system_download')]
+    #[Route('/filesystem/download', methods: ['GET'], name: 'app_file_system_download')]
     public function filesystemDownload(Request $request): StreamedResponse
     {
         // get file path
@@ -1215,7 +1215,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The file upload view response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/upload', methods:['GET'], name: 'app_file_system_upload')]
+    #[Route('/filesystem/upload', methods: ['GET'], name: 'app_file_system_upload')]
     public function filesystemUpload(Request $request): Response
     {
         // get directory path
@@ -1254,7 +1254,7 @@ class FileSystemBrowserController extends AbstractController
      * @return JsonResponse The upload status response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/upload/chunk', methods:['POST'], name: 'app_file_system_upload_chunk')]
+    #[Route('/filesystem/upload/chunk', methods: ['POST'], name: 'app_file_system_upload_chunk')]
     public function filesystemUploadChunk(Request $request): JsonResponse
     {
         try {
@@ -1385,7 +1385,7 @@ class FileSystemBrowserController extends AbstractController
      * @return Response The redirect response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/filesystem/upload/save', methods:['POST'], name: 'app_file_system_upload_save')]
+    #[Route('/filesystem/upload/save', methods: ['POST'], name: 'app_file_system_upload_save')]
     public function filesystemUploadSave(Request $request): Response
     {
         // get directory path

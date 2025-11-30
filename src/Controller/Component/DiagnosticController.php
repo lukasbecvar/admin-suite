@@ -35,7 +35,7 @@ class DiagnosticController extends AbstractController
      *
      * @return Response The diagnostic page view
      */
-    #[Route('/diagnostic', methods:['GET'], name: 'app_diagnostic')]
+    #[Route('/diagnostic', methods: ['GET'], name: 'app_diagnostic')]
     public function diagnosticPage(): Response
     {
         // get diagnostic data

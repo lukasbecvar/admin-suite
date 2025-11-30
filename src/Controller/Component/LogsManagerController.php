@@ -59,7 +59,7 @@ class LogsManagerController extends AbstractController
      *
      * @return Response The logs table view
      */
-    #[Route('/manager/logs', methods:['GET'], name: 'app_manager_logs')]
+    #[Route('/manager/logs', methods: ['GET'], name: 'app_manager_logs')]
     public function logsTable(Request $request): Response
     {
         // get filter parameters from request query
@@ -120,7 +120,7 @@ class LogsManagerController extends AbstractController
      * @return Response Redirects to dashboard page after update logs status to 'READED'
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/logs/set/readed', methods:['POST'], name: 'app_manager_logs_set_readed')]
+    #[Route('/manager/logs/set/readed', methods: ['POST'], name: 'app_manager_logs_set_readed')]
     public function setAllLogsToReaded(Request $request): Response
     {
         // get query parameters from request
@@ -162,7 +162,7 @@ class LogsManagerController extends AbstractController
      * @return Response The system logs view
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/logs/system', methods:['GET'], name: 'app_manager_logs_system')]
+    #[Route('/manager/logs/system', methods: ['GET'], name: 'app_manager_logs_system')]
     public function systemLogsTable(): Response
     {
         // get log files from host system
@@ -187,7 +187,7 @@ class LogsManagerController extends AbstractController
      * @return Response The exception log view
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/logs/exception/files', methods:['GET'], name: 'app_manager_logs_exception_files')]
+    #[Route('/manager/logs/exception/files', methods: ['GET'], name: 'app_manager_logs_exception_files')]
     public function exceptionFiles(): Response
     {
         // get exception files
@@ -214,7 +214,7 @@ class LogsManagerController extends AbstractController
      * @return Response The redirect response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/logs/exception/delete', methods:['POST'], name: 'app_manager_logs_exception_delete')]
+    #[Route('/manager/logs/exception/delete', methods: ['POST'], name: 'app_manager_logs_exception_delete')]
     public function deleteExceptionFile(Request $request): Response
     {
         // get exception file name from query parameter

@@ -48,7 +48,7 @@ class RegisterController extends AbstractController
      * @return Response The registration view or redirect
      */
     #[CsrfProtection(enabled: false)]
-    #[Route('/register', methods:['GET', 'POST'], name: 'app_auth_register')]
+    #[Route('/register', methods: ['GET', 'POST'], name: 'app_auth_register')]
     public function register(Request $request): Response
     {
         // check if user is already logged in

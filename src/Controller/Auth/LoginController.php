@@ -48,7 +48,7 @@ class LoginController extends AbstractController
      * @return Response The login view or redirect
      */
     #[CsrfProtection(enabled: false)]
-    #[Route('/login', methods:['GET', 'POST'], name: 'app_auth_login')]
+    #[Route('/login', methods: ['GET', 'POST'], name: 'app_auth_login')]
     public function login(Request $request): Response
     {
         // check if user is already logged in

@@ -69,7 +69,7 @@ class MonitoringManagerController extends AbstractController
      *
      * @return Response The monitoring dashboard view
      */
-    #[Route('/manager/monitoring', methods:['GET'], name: 'app_manager_monitoring')]
+    #[Route('/manager/monitoring', methods: ['GET'], name: 'app_manager_monitoring')]
     public function monitoring(): Response
     {
         // get services list
@@ -121,7 +121,7 @@ class MonitoringManagerController extends AbstractController
      * @return Response The services config view
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/monitoring/config', methods:['GET'], name: 'app_manager_monitoring_config')]
+    #[Route('/manager/monitoring/config', methods: ['GET'], name: 'app_manager_monitoring_config')]
     public function monitoringConfig(): Response
     {
         // get services list
@@ -148,7 +148,7 @@ class MonitoringManagerController extends AbstractController
      * @return Response The service details view
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/monitoring/service', methods:['GET'], name: 'app_manager_monitoring_service_detail')]
+    #[Route('/manager/monitoring/service', methods: ['GET'], name: 'app_manager_monitoring_service_detail')]
     public function serviceDetail(Request $request): Response
     {
         // get service name from request parameter
@@ -253,7 +253,7 @@ class MonitoringManagerController extends AbstractController
      * @return Response The excel file download response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/monitoring/export/slahistory', methods:['GET'], name: 'app_manager_monitoring_export_slahistory')]
+    #[Route('/manager/monitoring/export/slahistory', methods: ['GET'], name: 'app_manager_monitoring_export_slahistory')]
     public function exportSLAHistory(): Response
     {
         try {

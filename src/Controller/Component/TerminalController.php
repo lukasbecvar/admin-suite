@@ -30,7 +30,7 @@ class TerminalController extends AbstractController
      * @return Response The terminal page view
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/terminal', methods:['GET'], name: 'app_terminal')]
+    #[Route('/terminal', methods: ['GET'], name: 'app_terminal')]
     public function terminalPage(): Response
     {
         // set default terminal user

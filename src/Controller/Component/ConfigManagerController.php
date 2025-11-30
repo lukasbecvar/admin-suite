@@ -44,7 +44,7 @@ class ConfigManagerController extends AbstractController
      *
      * @return Response The settings category selector page view
      */
-    #[Route('/settings', methods:['GET'], name: 'app_settings')]
+    #[Route('/settings', methods: ['GET'], name: 'app_settings')]
     public function settingsSelector(): Response
     {
         // render settings category selector page view
@@ -168,7 +168,7 @@ class ConfigManagerController extends AbstractController
      * @return Response Redirect to config index page
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/settings/suite/delete', name: 'app_suite_config_delete', methods: ['POST'])]
+    #[Route('/settings/suite/delete', methods: ['POST'], name: 'app_suite_config_delete')]
     public function suiteConfigDelete(Request $request): Response
     {
         // get config filename from query string

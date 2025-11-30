@@ -40,7 +40,7 @@ class AntiLogController extends AbstractController
      * @return Response The redirect response
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/13378/antilog', methods:['POST'], name: 'app_anti_log_enable')]
+    #[Route('/13378/antilog', methods: ['POST'], name: 'app_anti_log_enable')]
     public function enableAntiLog(Request $request): Response
     {
         // check if user is logged in

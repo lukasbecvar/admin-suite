@@ -65,7 +65,7 @@ class ServiceVisitorTrackingApiController extends AbstractController
      * @return JsonResponse The JSON response with status
      */
     #[CsrfProtection(enabled: false)]
-    #[Route('/api/monitoring/visitor/tracking', methods:['POST'], name: 'app_api_monitoring_visitor_tracking')]
+    #[Route('/api/monitoring/visitor/tracking', methods: ['POST'], name: 'app_api_monitoring_visitor_tracking')]
     public function visitorTracking(Request $request): JsonResponse
     {
         $response = new JsonResponse();

@@ -181,7 +181,7 @@ class PushNotificationsApiController extends AbstractController
      * @return JsonResponse The response with the status of the subscription
      */
     #[CsrfProtection(enabled: false)]
-    #[Route('/api/notifications/check-push-subscription', name: 'api_notifications_check_push_subscription', methods: ['POST'])]
+    #[Route('/api/notifications/check-push-subscription', methods: ['POST'], name: 'api_notifications_check_push_subscription')]
     public function checkPushSubscription(Request $request): JsonResponse
     {
         // check if push notifications is enabled

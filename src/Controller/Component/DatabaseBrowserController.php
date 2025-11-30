@@ -42,7 +42,7 @@ class DatabaseBrowserController extends AbstractController
      * @return Response The database select page view
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/database', methods:['GET'], name: 'app_manager_database')]
+    #[Route('/manager/database', methods: ['GET'], name: 'app_manager_database')]
     public function databaseBrowser(Request $request): Response
     {
         // get database name from query parameter
@@ -83,7 +83,7 @@ class DatabaseBrowserController extends AbstractController
      * @return Response The table data browser page view
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/database/table', methods:['GET'], name: 'app_manager_database_table_browser')]
+    #[Route('/manager/database/table', methods: ['GET'], name: 'app_manager_database_table_browser')]
     public function databaseTableBrowser(Request $request): Response
     {
         // get request parameters

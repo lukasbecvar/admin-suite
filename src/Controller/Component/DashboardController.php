@@ -54,7 +54,7 @@ class DashboardController extends AbstractController
      *
      * @return Response The dashboard page view
      */
-    #[Route('/dashboard', methods:['GET'], name: 'app_dashboard')]
+    #[Route('/dashboard', methods: ['GET'], name: 'app_dashboard')]
     public function dashboard(): Response
     {
         try {

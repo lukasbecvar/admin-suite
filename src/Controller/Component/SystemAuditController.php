@@ -44,7 +44,7 @@ class SystemAuditController extends AbstractController
      * @return Response The system audit page view
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/system/audit', methods:['GET'], name: 'app_system_audit')]
+    #[Route('/system/audit', methods: ['GET'], name: 'app_system_audit')]
     public function systemAuditDashboard(): Response
     {
         // get system info data

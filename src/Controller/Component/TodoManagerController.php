@@ -39,7 +39,7 @@ class TodoManagerController extends AbstractController
      * @return Response The todo manager component view
      */
     #[CsrfProtection(enabled: false)]
-    #[Route('/manager/todo', methods:['GET', 'POST'], name: 'app_todo_manager')]
+    #[Route('/manager/todo', methods: ['GET', 'POST'], name: 'app_todo_manager')]
     public function todoTable(Request $request): Response
     {
         // get query parameter filter
@@ -88,7 +88,7 @@ class TodoManagerController extends AbstractController
      *
      * @return Response The redirect back to todo manager
      */
-    #[Route('/manager/todo/edit', methods:['POST'], name: 'app_todo_manager_edit')]
+    #[Route('/manager/todo/edit', methods: ['POST'], name: 'app_todo_manager_edit')]
     public function editTodo(Request $request): Response
     {
         // get request parameters
@@ -132,7 +132,7 @@ class TodoManagerController extends AbstractController
      *
      * @return Response The redirect back to todo manager
      */
-    #[Route('/manager/todo/close', methods:['POST'], name: 'app_todo_manager_close')]
+    #[Route('/manager/todo/close', methods: ['POST'], name: 'app_todo_manager_close')]
     public function closeTodo(Request $request): Response
     {
         // get todo id from request parameter
@@ -167,7 +167,7 @@ class TodoManagerController extends AbstractController
      *
      * @return Response The redirect back to todo manager
      */
-    #[Route('/manager/todo/reopen', methods:['POST'], name: 'app_todo_manager_reopen')]
+    #[Route('/manager/todo/reopen', methods: ['POST'], name: 'app_todo_manager_reopen')]
     public function reopenTodo(Request $request): Response
     {
         // get todo id from request parameter
@@ -202,7 +202,7 @@ class TodoManagerController extends AbstractController
      *
      * @return Response The response todo manager redirect
      */
-    #[Route('/manager/todo/delete', methods:['POST'], name: 'app_todo_manager_delete')]
+    #[Route('/manager/todo/delete', methods: ['POST'], name: 'app_todo_manager_delete')]
     public function deleteTodo(Request $request): Response
     {
         // get todo id from request parameter
@@ -232,7 +232,7 @@ class TodoManagerController extends AbstractController
      *
      * @return JsonResponse The todo info in json format
      */
-    #[Route('/manager/todo/info', methods:['GET'], name: 'app_todo_manager_info')]
+    #[Route('/manager/todo/info', methods: ['GET'], name: 'app_todo_manager_info')]
     public function getTodoInfo(Request $request): JsonResponse
     {
         // get todo id

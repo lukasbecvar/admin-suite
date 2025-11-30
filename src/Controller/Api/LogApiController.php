@@ -69,7 +69,7 @@ class LogApiController extends AbstractController
      * @return JsonResponse The JSON response with status
      */
     #[CsrfProtection(enabled: false)]
-    #[Route('/api/external/log', methods:['POST'], name: 'app_api_external_log')]
+    #[Route('/api/external/log', methods: ['POST'], name: 'app_api_external_log')]
     public function externalLog(Request $request): JsonResponse
     {
         // get log data from request
@@ -138,7 +138,7 @@ class LogApiController extends AbstractController
      *
      * @return JsonResponse|Response The JSON response with system logs
      */
-    #[Route('/api/system/logs', methods:['GET'], name: 'app_api_system_logs')]
+    #[Route('/api/system/logs', methods: ['GET'], name: 'app_api_system_logs')]
     public function getSystemLogs(Request $request): JsonResponse|Response
     {
         // get session id (to store last get time separately for each session)

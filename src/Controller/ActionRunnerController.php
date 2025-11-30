@@ -42,7 +42,7 @@ class ActionRunnerController extends AbstractController
      */
     #[CsrfProtection(enabled: false)]
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/service/action/runner', methods:['POST'], name: 'app_action_runner')]
+    #[Route('/service/action/runner', methods: ['POST'], name: 'app_action_runner')]
     public function runServiceAction(Request $request): Response
     {
         // check if user is logged in

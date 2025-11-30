@@ -61,7 +61,7 @@ class UsersManagerController extends AbstractController
      *
      * @return Response The users manager table view
      */
-    #[Route('/manager/users', methods:['GET'], name: 'app_manager_users')]
+    #[Route('/manager/users', methods: ['GET'], name: 'app_manager_users')]
     public function usersTable(Request $request): Response
     {
         // get current page from request query params
@@ -146,7 +146,7 @@ class UsersManagerController extends AbstractController
      *
      * @return Response The user profile view
      */
-    #[Route('/manager/users/profile', methods:['GET'], name: 'app_manager_users_profile')]
+    #[Route('/manager/users/profile', methods: ['GET'], name: 'app_manager_users_profile')]
     public function userProfile(Request $request): Response
     {
         // get user id
@@ -209,7 +209,7 @@ class UsersManagerController extends AbstractController
      */
     #[CsrfProtection(enabled: false)]
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/users/register', methods:['GET', 'POST'], name: 'app_manager_users_register')]
+    #[Route('/manager/users/register', methods: ['GET', 'POST'], name: 'app_manager_users_register')]
     public function userRegister(Request $request): Response
     {
         // get page limit from config
@@ -270,7 +270,7 @@ class UsersManagerController extends AbstractController
      * @return Response Redirect to users table page
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/users/role/update', methods:['POST'], name: 'app_manager_users_role_update')]
+    #[Route('/manager/users/role/update', methods: ['POST'], name: 'app_manager_users_role_update')]
     public function userRoleUpdate(Request $request): Response
     {
         // get user id to delete
@@ -337,7 +337,7 @@ class UsersManagerController extends AbstractController
      * @return Response The redirect back to users table page
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/users/delete', methods:['POST'], name: 'app_manager_users_delete')]
+    #[Route('/manager/users/delete', methods: ['POST'], name: 'app_manager_users_delete')]
     public function userDelete(Request $request): Response
     {
         // get user id to delete
@@ -384,7 +384,7 @@ class UsersManagerController extends AbstractController
      * @return Response The redirect back to users table page
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/users/ban', methods:['POST'], name: 'app_manager_users_ban')]
+    #[Route('/manager/users/ban', methods: ['POST'], name: 'app_manager_users_ban')]
     public function banUser(Request $request): Response
     {
         // get request data
@@ -461,7 +461,7 @@ class UsersManagerController extends AbstractController
      * @return Response The redirect back to users table page
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/users/token/regenerate', methods:['POST'], name: 'app_manager_users_token_regenerate')]
+    #[Route('/manager/users/token/regenerate', methods: ['POST'], name: 'app_manager_users_token_regenerate')]
     public function regenerateUserToken(Request $request): Response
     {
         // get user id
@@ -514,7 +514,7 @@ class UsersManagerController extends AbstractController
      * @return Response Redirect back to the users table page
      */
     #[Authorization(authorization: 'ADMIN')]
-    #[Route('/manager/users/api-access', methods:['POST'], name: 'app_manager_users_api_access')]
+    #[Route('/manager/users/api-access', methods: ['POST'], name: 'app_manager_users_api_access')]
     public function updateUserApiAccess(Request $request): Response
     {
         // get request data

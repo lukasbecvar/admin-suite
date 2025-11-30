@@ -55,7 +55,7 @@ class MetricsDashboardController extends AbstractController
      *
      * @return Response The metrics dashboard view
      */
-    #[Route('/metrics/dashboard', methods:['GET'], name: 'app_metrics_dashboard')]
+    #[Route('/metrics/dashboard', methods: ['GET'], name: 'app_metrics_dashboard')]
     public function metricsDashboard(Request $request): Response
     {
         // get metrics time period from request parameter
@@ -106,7 +106,7 @@ class MetricsDashboardController extends AbstractController
      *
      * @return Response The service metrics view
      */
-    #[Route('/metrics/service', methods:['GET'], name: 'app_metrics_service')]
+    #[Route('/metrics/service', methods: ['GET'], name: 'app_metrics_service')]
     public function serviceMetrics(Request $request): Response
     {
         // get request parameters
@@ -142,7 +142,7 @@ class MetricsDashboardController extends AbstractController
      *
      * @return Response The services metrics view
      */
-    #[Route('/metrics/service/all', methods:['GET'], name: 'app_metrics_services_all')]
+    #[Route('/metrics/service/all', methods: ['GET'], name: 'app_metrics_services_all')]
     public function serviceMetricsAll(Request $request): Response
     {
         // get time period
@@ -175,7 +175,7 @@ class MetricsDashboardController extends AbstractController
      *
      * @return Response The redirect response
      */
-    #[Route('/metrics/aggregate', methods:['POST'], name: 'app_metrics_aggregate')]
+    #[Route('/metrics/aggregate', methods: ['POST'], name: 'app_metrics_aggregate')]
     public function aggregateMetrics(Request $request): Response
     {
         // default payload
@@ -281,7 +281,7 @@ class MetricsDashboardController extends AbstractController
      *
      * @return Response The service metrics view
      */
-    #[Route('/metrics/delete', methods:['POST'], name: 'app_metrics_delete')]
+    #[Route('/metrics/delete', methods: ['POST'], name: 'app_metrics_delete')]
     public function deleteMetrics(Request $request): Response
     {
         // get request parameters
