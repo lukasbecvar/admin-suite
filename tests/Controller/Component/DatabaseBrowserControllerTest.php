@@ -569,7 +569,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
     {
         $this->client->request('POST', '/manager/database/console', [
             'query_console_form' => [
-                'query' => ''
+                'query' => 'SELECT 1;'
             ]
         ]);
 
@@ -577,7 +577,47 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'Database Console');
         $this->assertSelectorTextContains('body', 'Execute Query');
-        $this->assertSelectorTextContains('body', 'Please enter a query');
+        $this->assertStringContainsString('1', (string) $this->client->getResponse()->getContent());
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * Test database dump download returns SQL file
+     *
+     * @return void
+     */
+    public function testDatabaseDumpDownloadReturnsSqlFile(): void
+    {
+        $databaseName = $_ENV['DATABASE_NAME'];
+        $this->client->request('GET', '/manager/database/dump', [
+            'database' => $databaseName,
+            'select' => 'no',
+            'include_data' => 'yes'
+        ]);
+
+        // get response
+        $response = $this->client->getResponse();
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertSame('application/sql', $response->headers->get('Content-Type'));
+        $this->assertStringContainsString($databaseName . '-structure-dump-', (string) $response->headers->get('Content-Disposition'));
+        $this->assertStringContainsString('-- Database: ' . $databaseName, (string) $response->getContent());
+    }
+
+    /**
+     * Test database dump without database parameter returns 400
+     *
+     * @return void
+     */
+    public function testDatabaseDumpWithoutDatabaseReturnsBadRequest(): void
+    {
+        $this->client->request('GET', '/manager/database/dump', [
+            'select' => 'no',
+            'include_data' => 'yes'
+        ]);
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 }
