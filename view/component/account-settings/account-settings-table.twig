@@ -5,7 +5,7 @@
 {# SUB NAVIGATION #}
 <div class="px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
     <div class="flex items-center gap-4">
-        <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+        <a href={{ path('app_dashboard') }} title="Back to dashboard" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
             <i class="fas fa-arrow-left text-gray-300 text-sm"></i>
         </a>
         <div>
@@ -32,7 +32,6 @@
         <div class="backdrop-blur-md bg-gray-800/50 sm:border-t sm:border-l sm:border-r border-b border-gray-700/50 sm:rounded shadow-xl text-white w-full overflow-hidden">
             <div class="p-2 sm:p-4">
                 <div class="space-y-2 sm:space-y-4">
-
                     {# PROFILE PICTURE SETTINGS COMPONENT #}
                     <div class="bg-gray-700/30 rounded p-4 border border-gray-600/30 hover:bg-gray-700/40 transition-all duration-200">
                         <div class="flex items-center justify-between">
@@ -132,9 +131,9 @@
                             <div class="bg-gray-900/50 border border-gray-700/70 rounded px-3 py-2 flex items-center gap-3">
                                 <span
                                     id="api-token-value"
+                                    title="Tap to copy token"
                                     class="text-sm font-mono text-gray-200 flex-1 cursor-pointer select-text whitespace-nowrap overflow-hidden"
                                     data-token={{ getUserData().token|e }}
-                                    title="Tap to copy token"
                                 >************</span>
                                 <button type="button" id="api-token-toggle" class="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-purple-500/40 bg-gray-800/60 hover:bg-gray-800 text-purple-200 text-[11px] font-semibold uppercase tracking-wide transition-all duration-200">
                                     <i class="fas fa-eye text-[10px]"></i>

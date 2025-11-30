@@ -7,7 +7,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_file_system_browser', { 'path': directoryPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to directory">
+                <a href={{ path('app_file_system_browser', { 'path': directoryPath }) }} title="Back to directory" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -75,16 +75,7 @@
                         {# NEW NAME INPUT #}
                         <div class="mb-6">
                             <label for="newName" class="block text-sm font-medium text-gray-300 mb-3">New Name</label>
-                            <input
-                                type="text"
-                                id="newName"
-                                name="newName"
-                                value="{{ currentName }}"
-                                class="w-full bg-gray-900/50 text-white font-mono px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200"
-                                placeholder="Enter new name"
-                                required
-                                autofocus
-                            >
+                            <input required autofocus type="text" id="newName" name="newName" value="{{ currentName }}" placeholder="Enter new name" class="w-full bg-gray-900/50 text-white font-mono px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200">
                             <div class="mt-3 space-y-1">
                                 <p class="text-gray-500 text-xs flex items-center">
                                     <i class="fas fa-info-circle mr-2 text-blue-400"></i>

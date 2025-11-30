@@ -7,7 +7,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+                <a href={{ path('app_dashboard') }} title="Back to dashboard" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -54,13 +54,13 @@
                 </form>
 
                 {# OTHERS QUICK ACTIONS #}
-                <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': logsTableName}) }} class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 rounded flex items-center justify-center transition-all duration-200 border border-blue-500/30" title="Database view">
+                <a href={{ path('app_manager_database_table_browser', {'database': mainDatabase, 'table': logsTableName}) }} title="Database view" class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 rounded flex items-center justify-center transition-all duration-200 border border-blue-500/30">
                     <i class="fas fa-database text-blue-400 text-xs"></i>
                 </a>
-                <a href={{ path('app_manager_logs_system') }} class="w-8 h-8 bg-purple-500/20 hover:bg-purple-500/30 rounded flex items-center justify-center transition-all duration-200 border border-purple-500/30" title="System logs">
+                <a href={{ path('app_manager_logs_system') }} title="System logs" class="w-8 h-8 bg-purple-500/20 hover:bg-purple-500/30 rounded flex items-center justify-center transition-all duration-200 border border-purple-500/30">
                     <i class="fas fa-server text-purple-400 text-xs"></i>
                 </a>
-                <a href={{ path('app_manager_logs_exception_files') }} class="w-8 h-8 bg-red-500/20 hover:bg-red-500/30 rounded flex items-center justify-center transition-all duration-200 border border-red-500/30" title="Exception files">
+                <a href={{ path('app_manager_logs_exception_files') }} title="Exception files" class="w-8 h-8 bg-red-500/20 hover:bg-red-500/30 rounded flex items-center justify-center transition-all duration-200 border border-red-500/30">
                     <i class="fas fa-bomb text-red-400 text-xs"></i>
                 </a>
 
@@ -147,7 +147,7 @@
                                     <div class="flex items-center gap-2 max-w-1xl">
                                         <span class="truncate block max-w-1xl">{{ displayMessage|e|linkify }}</span>
                                         {% if row.message|length > 60 %}
-                                            <button class="text-blue-400 hover:text-blue-300 text-xs font-semibold view-raw-button whitespace-nowrap" data-fulltext={{ row.message|e('html_attr') }} title="Expand full log message">
+                                            <button title="Expand full log message" class="text-blue-400 hover:text-blue-300 text-xs font-semibold view-raw-button whitespace-nowrap" data-fulltext={{ row.message|e('html_attr') }}>
                                                 raw
                                             </button>
                                         {% endif %}
@@ -214,7 +214,7 @@
                                     <i class="fas fa-angle-double-left text-xs"></i>
                                 </span>
                             {% else %}
-                                <a href={{ path('app_manager_logs', {page: 1, filter: filter, user_id: userId}) }} class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200" title="First page">
+                                <a href={{ path('app_manager_logs', {page: 1, filter: filter, user_id: userId}) }} title="First page" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
                                     <i class="fas fa-angle-double-left text-xs"></i>
                                 </a>
                             {% endif %}
@@ -267,7 +267,7 @@
                                     <i class="fas fa-angle-double-right text-xs"></i>
                                 </span>
                             {% else %}
-                                <a href={{ path('app_manager_logs', {page: totalPages, filter: filter, user_id: userId}) }} class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200" title="Last page">
+                                <a href={{ path('app_manager_logs', {page: totalPages, filter: filter, user_id: userId}) }} title="Last page" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
                                     <i class="fas fa-angle-double-right text-xs"></i>
                                 </a>
                             {% endif %}
@@ -278,7 +278,8 @@
         {% endif %}
     </div>
 </div>
-{% include "component/database-browser/popup/raw-data-view-popup.twig" %}
 
+{# INCLUDE RAW TEXT POPUP #}
+{% include "component/database-browser/popup/raw-data-view-popup.twig" %}
 {{ encore_entry_script_tags('log-manager-raw-viewer-js') }}
 {% endblock %}

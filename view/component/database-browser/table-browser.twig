@@ -7,7 +7,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_manager_database', {'database': databaseName}) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to database browser">
+                <a href={{ path('app_manager_database', {'database': databaseName}) }} title="Back to database browser" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -18,10 +18,10 @@
 
             <div class="flex items-center gap-2">
                 {# QUICK ACTIONS #}
-                <a href={{ path('app_manager_database_add', {'database': databaseName, 'table': tableName}) }} class="w-8 h-8 bg-green-500/20 hover:bg-green-500/30 rounded flex items-center justify-center transition-all duration-200 border border-green-500/30" title="Add new record to table">
+                <a href={{ path('app_manager_database_add', {'database': databaseName, 'table': tableName}) }} title="Add new record to table" class="w-8 h-8 bg-green-500/20 hover:bg-green-500/30 rounded flex items-center justify-center transition-all duration-200 border border-green-500/30">
                     <i class="fas fa-plus text-green-400 text-xs"></i>
                 </a>
-                <a href={{ path('app_manager_database_truncate', {'database': databaseName, 'table': tableName}) }} class="w-8 h-8 bg-red-500/20 hover:bg-red-500/30 rounded flex items-center justify-center transition-all duration-200 border border-red-500/30" title="Drop all records from table">
+                <a href={{ path('app_manager_database_truncate', {'database': databaseName, 'table': tableName}) }} title="Drop all records from table" class="w-8 h-8 bg-red-500/20 hover:bg-red-500/30 rounded flex items-center justify-center transition-all duration-200 border border-red-500/30">
                     <i class="fas fa-trash text-red-400 text-xs"></i>
                 </a>
             </div>
@@ -79,10 +79,12 @@
                         <tbody>
                             {# TABLE ROW #}
                             {% for row in tableData %}
-                                {% set isHighlightedRow = highlightValue is not null
+                                {% set
+                                    isHighlightedRow = highlightValue is not null
                                     and highlightColumn is not null
                                     and row[highlightColumn]|default(null) is not null
-                                    and (row[highlightColumn]|default('') == highlightValue) %}
+                                    and (row[highlightColumn]|default('') == highlightValue)
+                                %}
                                 <tr class="transition-all duration-300 {{ isHighlightedRow ? 'bg-sky-200/20 border border-sky-300/60 shadow-inner shadow-sky-900/20' : 'hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20' }}" {% if isHighlightedRow %}data-highlighted-row="true"{% endif %}>
                                     {% for columnName, columnValue in row %}
                                         <td class="px-4 py-2 border-b border-gray-600/60 text-left relative">
@@ -103,7 +105,7 @@
                                                                 'table': fkInfo.referencedTable,
                                                                 'highlightId': columnValue,
                                                                 'highlightColumn': fkInfo.referencedColumn
-                                                            }) }} class="truncate max-w-xl text-sm text-blue-400 hover:text-blue-300 transition-colors duration-200" title="Go to {{ fkInfo.referencedTable }}.{{ fkInfo.referencedColumn }}">
+                                                            }) }} title="Go to {{ fkInfo.referencedTable }}.{{ fkInfo.referencedColumn }}" class="truncate max-w-xl text-sm text-blue-400 hover:text-blue-300 transition-colors duration-200">
                                                                 {{ truncatedValue }}
                                                             </a>
                                                         {% else %}
@@ -123,7 +125,7 @@
                                         {# EDIT BUTTON #}
                                         <td class="px-4 py-2 border-b border-gray-600/60 text-center">
                                             <div class="flex justify-center">
-                                                <a href={{ path('app_manager_database_edit', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }} class="w-6 h-6 bg-yellow-500/20 hover:bg-yellow-500/30 rounded flex items-center justify-center transition-all duration-200 border border-yellow-500/30" title="Edit record">
+                                                <a href={{ path('app_manager_database_edit', {'database': databaseName, 'table': tableName, 'page': currentPage, 'id': row.id}) }} title="Edit record" class="w-6 h-6 bg-yellow-500/20 hover:bg-yellow-500/30 rounded flex items-center justify-center transition-all duration-200 border border-yellow-500/30">
                                                     <i class="fas fa-edit text-yellow-400 text-xs"></i>
                                                 </a>
                                             </div>
@@ -162,7 +164,6 @@
 
             <div class="flex flex-col sm:flex-row justify-center items-center py-4 border-t border-gray-700/50 bg-gray-900 gap-3">
                 <div class="flex items-center gap-2">
-
                     {# FIRST PAGE - Hidden on mobile #}
                     <div class="hidden sm:block">
                         {% if currentPage == 1 %}
@@ -170,7 +171,7 @@
                                 <i class="fas fa-angle-double-left text-xs"></i>
                             </span>
                         {% else %}
-                            <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName, 'page': 1}) }} class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200" title="First page">
+                            <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName, 'page': 1}) }} title="First page" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
                                 <i class="fas fa-angle-double-left text-xs"></i>
                             </a>
                         {% endif %}
@@ -223,7 +224,7 @@
                                 <i class="fas fa-angle-double-right text-xs"></i>
                             </span>
                         {% else %}
-                            <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName, 'page': totalPages}) }} class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200" title="Last page">
+                            <a href={{ path('app_manager_database_table_browser', {'database': databaseName, 'table': tableName, 'page': totalPages}) }} title="Last page" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
                                 <i class="fas fa-angle-double-right text-xs"></i>
                             </a>
                         {% endif %}

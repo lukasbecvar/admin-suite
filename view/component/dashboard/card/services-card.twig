@@ -6,7 +6,7 @@
             </div>
             <span>Monitoring</span>
         </div>
-        <a href={{ path('app_manager_monitoring') }} class="inline-flex items-center gap-1 px-2 py-1 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 hover:text-blue-300 text-xs font-semibold rounded transition-all duration-200 border border-blue-500/30" title="Go to metrics view">
+        <a href={{ path('app_manager_monitoring') }} title="Go to metrics view" class="inline-flex items-center gap-1 px-2 py-1 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 hover:text-blue-300 text-xs font-semibold rounded transition-all duration-200 border border-blue-500/30">
             <span>View All</span>
             <i class="fas fa-external-link-alt text-xs"></i>
         </a>
@@ -25,9 +25,9 @@
             </div>
             <div class="flex items-center">
                 {% if serviceManager.isUfwRunning() %}
-                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_dashboard'}) }} class="bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 hover:border-red-500/60 text-red-300 hover:text-red-200 px-2 py-1 rounded-md text-xs font-medium transition-all duration-200" title="Stop service">Stop</a>
+                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'disable', 'referer': 'app_dashboard'}) }} title="Stop service" class="bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 hover:border-red-500/60 text-red-300 hover:text-red-200 px-2 py-1 rounded-md text-xs font-medium transition-all duration-200">Stop</a>
                 {% else %}
-                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_dashboard'}) }} class="bg-green-500/20 hover:bg-green-500/30 border border-green-500/40 hover:border-green-500/60 text-green-300 hover:text-green-200 px-2 py-1 rounded-md text-xs font-medium transition-all duration-200" title="Start service">Start</a>
+                    <a href={{ path('app_action_runner', {'service': 'ufw', 'action': 'enable', 'referer': 'app_dashboard'}) }} title="Start service" class="bg-green-500/20 hover:bg-green-500/30 border border-green-500/40 hover:border-green-500/60 text-green-300 hover:text-green-200 px-2 py-1 rounded-md text-xs font-medium transition-all duration-200">Start</a>
                 {% endif %}
             </div>
         </div>
@@ -49,9 +49,9 @@
                         </div>
                         <div class="flex items-center">
                             {% if serviceStatus %}
-                                <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_dashboard'}) }} class="bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 hover:border-red-500/60 text-red-300 hover:text-red-200 px-2 py-1 rounded-md text-xs font-medium transition-all duration-200" title="Stop service">Stop</a>
+                                <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'stop', 'referer': 'app_dashboard'}) }} title="Stop service" class="bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 hover:border-red-500/60 text-red-300 hover:text-red-200 px-2 py-1 rounded-md text-xs font-medium transition-all duration-200">Stop</a>
                             {% else %}
-                                <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_dashboard'}) }} class="bg-green-500/20 hover:bg-green-500/30 border border-green-500/40 hover:border-green-500/60 text-green-300 hover:text-green-200 px-2 py-1 rounded-md text-xs font-medium transition-all duration-200" title="Start service">Start</a>
+                                <a href={{ path('app_action_runner', {'service': service.service_name, 'action': 'start', 'referer': 'app_dashboard'}) }} title="Start service" class="bg-green-500/20 hover:bg-green-500/30 border border-green-500/40 hover:border-green-500/60 text-green-300 hover:text-green-200 px-2 py-1 rounded-md text-xs font-medium transition-all duration-200">Start</a>
                             {% endif %}
                         </div>
                     </div>

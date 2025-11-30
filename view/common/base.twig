@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href={{ asset('assets/images/favicon.png') }} type="image/x-icon">
     <meta content="Admin suite linux servers and app managment dashboard" name="description">
-    <link rel="icon" href={{ asset('assets/images/favicon.png') }} type="image/x-icon"/>
     {# INCLUDE PWA CONFIG MANIFEST #}
     {% if pwa_app_support == 'true' %}
         <link rel="manifest" href={{ asset('pwa-config.json') }}>

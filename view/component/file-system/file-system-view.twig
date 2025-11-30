@@ -27,7 +27,7 @@
                 {% else %}
                     {% set backPath = path('app_file_system_browser', { 'path': directoryPath }) %}
                 {% endif %}
-                <a href={{ backPath }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to previous page">
+                <a href={{ backPath }} title="Back to previous page" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
 
@@ -39,19 +39,19 @@
 
             <div class="flex items-center gap-2">
                 {# DOWNLOAD BUTTON #}
-                <a href={{ path('app_file_system_download', { 'path': currentPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" id="loading-blocker" title="Download this file">
+                <a href={{ path('app_file_system_download', { 'path': currentPath }) }} id="loading-blocker" title="Download this file" class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-download text-gray-300 text-xs"></i>
                 </a>
 
                 {# EDIT BUTTON (only for non-media files) #}
                 {% if mediaType == 'non-mediafile' or mediaType == null %}
-                    <a href={{ path('app_file_system_edit', { 'path': currentPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-blue-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Edit this file">
+                    <a href={{ path('app_file_system_edit', { 'path': currentPath }) }} title="Edit this file" class="w-8 h-8 bg-gray-700/50 hover:bg-blue-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                         <i class="fas fa-pen text-gray-300 text-xs"></i>
                     </a>
                 {% endif %}
 
                 {# MOVE BUTTON #}
-                <a href={{ path('app_file_system_move', { 'path': currentPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-purple-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Move this file">
+                <a href={{ path('app_file_system_move', { 'path': currentPath }) }} title="Move this file" class="w-8 h-8 bg-gray-700/50 hover:bg-purple-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-arrows-alt text-gray-300 text-xs"></i>
                 </a>
 
@@ -72,7 +72,7 @@
                         <i class="fas fa-trash text-gray-300 text-xs"></i>
                     </button>
                 {% else %}
-                    <button class="delete-file-button w-8 h-8 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" data-path="{{ currentPath }}" data-is-dir="false" title="Delete this file">
+                    <button data-path="{{ currentPath }}" data-is-dir="false" title="Delete this file" class="delete-file-button w-8 h-8 bg-gray-700/50 hover:bg-red-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                         <i class="fas fa-trash text-gray-300 text-xs"></i>
                     </button>
                 {% endif %}
@@ -142,22 +142,22 @@
                         {% if fileMetadata.isTruncated %}
                             <div class="flex items-center gap-1 mt-2 sm:mt-0">
                                 {% if fileMetadata.startLine > 1 %}
-                                    <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': 1, 'max_lines': fileMetadata.maxLines}) }} class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded flex items-center justify-center transition-all duration-200" title="First page">
+                                    <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': 1, 'max_lines': fileMetadata.maxLines}) }} title="First page" class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded flex items-center justify-center transition-all duration-200">
                                         <i class="fas fa-angle-double-left text-blue-300 text-xs"></i>
                                     </a>
-                                    <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, fileMetadata.startLine - fileMetadata.maxLines), 'max_lines': fileMetadata.maxLines}) }} class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded flex items-center justify-center transition-all duration-200" title="Previous page">
+                                    <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, fileMetadata.startLine - fileMetadata.maxLines), 'max_lines': fileMetadata.maxLines}) }} title="Previous page" class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded flex items-center justify-center transition-all duration-200">
                                         <i class="fas fa-angle-left text-blue-300 text-xs"></i>
                                     </a>
                                 {% endif %}
                                 {% if fileMetadata.endLine < fileMetadata.totalLines %}
-                                    <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': fileMetadata.endLine + 1, 'max_lines': fileMetadata.maxLines}) }} class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded flex items-center justify-center transition-all duration-200" title="Next page">
+                                    <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': fileMetadata.endLine + 1, 'max_lines': fileMetadata.maxLines}) }} title="Next page" class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded flex items-center justify-center transition-all duration-200">
                                         <i class="fas fa-angle-right text-blue-300 text-xs"></i>
                                     </a>
                                     {% set lastPageStart = fileMetadata.totalLines - (fileMetadata.totalLines % fileMetadata.maxLines) %}
                                     {% if fileMetadata.totalLines % fileMetadata.maxLines == 0 %}
                                         {% set lastPageStart = fileMetadata.totalLines - fileMetadata.maxLines %}
                                     {% endif %}
-                                    <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, lastPageStart + 1), 'max_lines': fileMetadata.maxLines}) }} class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded flex items-center justify-center transition-all duration-200" title="Last page">
+                                    <a href={{ path('app_file_system_view', {'path': currentPath, 'start_line': max(1, lastPageStart + 1), 'max_lines': fileMetadata.maxLines}) }} title="Last page" class="w-8 h-8 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded flex items-center justify-center transition-all duration-200">
                                         <i class="fas fa-angle-double-right text-blue-300 text-xs"></i>
                                     </a>
                                 {% endif %}

@@ -7,7 +7,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+                <a href={{ path('app_dashboard') }} title="Back to dashboard" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -18,11 +18,11 @@
             <div class="flex items-center gap-2">
                 {# STATUS FILTER BUTTONS #}
                 {% if filter == 'closed' %}
-                    <a href={{ path('app_todo_manager', {'filter': 'open'}) }} class="w-8 h-8 bg-gray-700/50 hover:bg-blue-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="View open todos">
+                    <a href={{ path('app_todo_manager', {'filter': 'open'}) }} title="View open todos" class="w-8 h-8 bg-gray-700/50 hover:bg-blue-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                         <i class="fas fa-tasks text-gray-300 text-xs"></i>
                     </a>
                 {% else %}
-                    <a href={{ path('app_todo_manager', {'filter': 'closed'}) }} class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="View closed todos">
+                    <a href={{ path('app_todo_manager', {'filter': 'closed'}) }} title="View closed todos" class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                         <i class="fas fa-check text-gray-300 text-xs"></i>
                     </a>
                 {% endif %}
@@ -34,7 +34,6 @@
     <div class="flex-grow overflow-y-auto" id="todo-csrf-token" data-csrf="{{ csrf_token('internal-csrf-token') }}">
         <div class="{{ filter == 'open' ? 'todo-list' : '' }} card-component p-0 px-2 pb-[2px] todo-manager overflow-hidden breadcrumb component">
             <div id="todo-items-container" class="divide-y divide-gray-700/50">
-
                 {# TODO LIST IS EMPTY INFORMATION #}
                 {% if todos|length == 0 %}
                     <p class="flex items-center justify-center mt-10 mb-20 text-2xl text-white font-bold">This todo list is empty</p>

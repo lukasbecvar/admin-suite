@@ -23,11 +23,11 @@
             <div class="flex items-center gap-3">
                 {# BACK BUTTON #}
                 {% if backPath == '/' and currentPath == '/' %}
-                    <a href={{ path('app_dashboard') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to dashboard">
+                    <a href={{ path('app_dashboard') }} title="Back to dashboard" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                         <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                     </a>
                 {% else %}
-                    <a href={{ path('app_file_system_browser', { 'path': backPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to previous directory">
+                    <a href={{ path('app_file_system_browser', { 'path': backPath }) }} title="Back to previous directory" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                         <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                     </a>
                 {% endif %}
@@ -41,7 +41,7 @@
             <div class="flex items-center gap-2">
                 {# CREATE MENU BUTTON #}
                 <div class="relative inline-block">
-                    <button id="create-menu-button" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Create new item">
+                    <button id="create-menu-button" title="Create new item" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                         <i class="fas fa-plus text-gray-300 text-xs"></i>
                     </button>
                     <div id="create-menu" class="absolute right-0 mt-1 w-56 rounded shadow-lg bg-gray-800/95 backdrop-blur-sm border border-gray-700/50 z-10 hidden overflow-hidden">
@@ -59,12 +59,12 @@
                 </div>
 
                 {# UPLOAD BUTTON #}
-                <a href={{ path('app_file_system_upload', { 'path': currentPath == '' ? '/' : currentPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Upload files">
+                <a href={{ path('app_file_system_upload', { 'path': currentPath == '' ? '/' : currentPath }) }} title="Upload files" class="w-8 h-8 bg-gray-700/50 hover:bg-green-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-upload text-gray-300 text-xs"></i>
                 </a>
 
                 {# TERMINAL BUTTON #}
-                <a href={{ path('app_terminal') }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Open terminal">
+                <a href={{ path('app_terminal') }} title="Open terminal" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-terminal text-gray-300 text-xs"></i>
                 </a>
             </div>
@@ -168,29 +168,29 @@
                                             {# DESKTOP ACTIONS - Hidden on mobile #}
                                             <div class="hidden sm:flex items-center gap-1">
                                                 {% if not file.isDir %}
-                                                    <a href={{ path('app_file_system_download', { 'path': currentPath ~ '/' ~ file.name }) }} class="w-7 h-7 bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 rounded flex items-center justify-center transition-all duration-200" id="loading-blocker" title="Download file">
+                                                    <a href={{ path('app_file_system_download', { 'path': currentPath ~ '/' ~ file.name }) }} id="loading-blocker" title="Download file" class="w-7 h-7 bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 rounded flex items-center justify-center transition-all duration-200">
                                                         <i class="fas fa-download text-xs text-green-400"></i>
                                                     </a>
                                                 {% endif %}
                                                 {% if not file.isDir and file.isEditable %}
-                                                    <a href={{ path('app_file_system_edit', { 'path': currentPath ~ '/' ~ file.name }) }} class="w-7 h-7 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded flex items-center justify-center transition-all duration-200" title="Edit file">
+                                                    <a href={{ path('app_file_system_edit', { 'path': currentPath ~ '/' ~ file.name }) }} title="Edit file" class="w-7 h-7 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded flex items-center justify-center transition-all duration-200">
                                                         <i class="fas fa-edit text-xs text-blue-400"></i>
                                                     </a>
                                                 {% endif %}
-                                                <a href={{ path('app_file_system_rename', { 'path': currentPath ~ '/' ~ file.name }) }} class="w-7 h-7 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/30 rounded flex items-center justify-center transition-all duration-200" title="Rename {{ file.isDir ? 'directory' : 'file' }}">
+                                                <a href={{ path('app_file_system_rename', { 'path': currentPath ~ '/' ~ file.name }) }} title="Rename {{ file.isDir ? 'directory' : 'file' }}" class="w-7 h-7 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/30 rounded flex items-center justify-center transition-all duration-200">
                                                     <i class="fas fa-pen text-xs text-yellow-400"></i>
                                                 </a>
-                                                <a href={{ path('app_file_system_move', { 'path': currentPath ~ '/' ~ file.name }) }} class="w-7 h-7 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded flex items-center justify-center transition-all duration-200" title="Move {{ file.isDir ? 'directory' : 'file' }}">
+                                                <a href={{ path('app_file_system_move', { 'path': currentPath ~ '/' ~ file.name }) }} title="Move {{ file.isDir ? 'directory' : 'file' }}" class="w-7 h-7 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded flex items-center justify-center transition-all duration-200">
                                                     <i class="fas fa-arrows-alt text-xs text-purple-400"></i>
                                                 </a>
-                                                <button class="delete-file-button w-7 h-7 bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded flex items-center justify-center transition-all duration-200" data-path="{{ currentPath ~ '/' ~ file.name }}" data-is-dir="{{ file.isDir ? 'true' : 'false' }}" title="Delete {{ file.isDir ? 'directory' : 'file' }}">
+                                                <button title="Delete {{ file.isDir ? 'directory' : 'file' }}" class="delete-file-button w-7 h-7 bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded flex items-center justify-center transition-all duration-200" data-path="{{ currentPath ~ '/' ~ file.name }}" data-is-dir="{{ file.isDir ? 'true' : 'false' }}">
                                                     <i class="fas fa-trash text-xs text-red-400"></i>
                                                 </button>
                                             </div>
 
                                             {# MOBILE ACTIONS - Dropdown menu #}
                                             <div class="sm:hidden relative" data-dropdown>
-                                                <button class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/30 rounded flex items-center justify-center transition-all duration-200 z-1" onclick="toggleDropdown(this)" title="Actions">
+                                                <button onclick="toggleDropdown(this)" title="Actions" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/30 rounded flex items-center justify-center transition-all duration-200 z-1">
                                                     <i class="fas fa-ellipsis-v text-xs text-gray-300"></i>
                                                 </button>
 

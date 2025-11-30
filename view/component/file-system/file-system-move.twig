@@ -7,7 +7,7 @@
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
-                <a href={{ path('app_file_system_browser', { 'path': directoryPath }) }} class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30" title="Back to directory">
+                <a href={{ path('app_file_system_browser', { 'path': directoryPath }) }} title="Back to directory" class="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded flex items-center justify-center transition-all duration-200 border border-gray-600/30">
                     <i class="fas fa-arrow-left text-gray-300 text-xs"></i>
                 </a>
                 <div class="hidden sm:block">
@@ -106,11 +106,7 @@
 
                             <div id="selectPathContainer">
                                 <label for="destinationPath" class="block text-sm font-medium text-gray-300 mb-2">Destination Folder</label>
-                                <select
-                                    id="destinationPath"
-                                    name="destinationPath"
-                                    class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200"
-                                >
+                                <select id="destinationPath" name="destinationPath" class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200">
                                     {% for folder in availableFolders %}
                                         <option value="{{ folder.path }}" {% if folder.path == directoryPath %}selected{% endif %}>
                                             {{ folder.displayPath }}
@@ -121,13 +117,7 @@
 
                             <div id="customPathContainer" class="hidden">
                                 <label for="customDestinationPath" class="block text-sm font-medium text-gray-300 mb-2">Custom Destination Path</label>
-                                <input
-                                    type="text"
-                                    id="customDestinationPath"
-                                    name="customDestinationPath"
-                                    class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200 font-mono"
-                                    placeholder="e.g. /var/www/html"
-                                >
+                                <input type="text" id="customDestinationPath" name="customDestinationPath" placeholder="e.g. /var/www/html" class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200 font-mono">
                                 <div id="customPathError" class="text-red-400 text-xs mt-2 hidden flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     <span></span>
