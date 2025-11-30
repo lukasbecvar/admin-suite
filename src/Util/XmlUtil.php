@@ -107,7 +107,7 @@ class XmlUtil
      *
      * @return void
      */
-    private function arrayToXml(array $data, SimpleXMLElement $xml): void
+    public function arrayToXml(array $data, SimpleXMLElement $xml): void
     {
         foreach ($data as $key => $value) {
             $nodeName = is_numeric($key) ? 'item' : preg_replace('/[^a-z0-9_\-]/i', '_', (string) $key);

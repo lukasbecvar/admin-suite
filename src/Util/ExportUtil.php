@@ -116,4 +116,59 @@ class ExportUtil
         $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '.xlsx"');
         return $response;
     }
+
+    /**
+     * Merge monitoring statuses with service configuration
+     *
+     * @param array<int, array<string, mixed>> $snapshot Monitoring status snapshot
+     * @param array<string, array<string, mixed>> $servicesConfig Monitored services configuration
+     *
+     * @return array<int, array<string, mixed>> The merged array
+     */
+    public function mergeStatusWithServiceConfig(array $snapshot, array $servicesConfig): array
+    {
+        $indexedStatuses = [];
+        foreach ($snapshot as $entry) {
+            $indexedStatuses[$entry['service_name']] = $entry;
+        }
+
+        $services = [];
+
+        foreach ($servicesConfig as $serviceName => $config) {
+            $entry = $indexedStatuses[$serviceName] ?? null;
+            $services[] = $this->buildServiceEntry($serviceName, $config, $entry);
+            unset($indexedStatuses[$serviceName]);
+        }
+
+        foreach ($indexedStatuses as $serviceName => $entry) {
+            $services[] = $this->buildServiceEntry($serviceName, null, $entry);
+        }
+
+        return $services;
+    }
+
+    /**
+     * Build service entry using config and snapshot data
+     *
+     * @param string $serviceName Service identifier
+     * @param array<string, mixed>|null $config Service configuration
+     * @param array<string, mixed>|null $status Monitoring snapshot entry
+     *
+     * @return array<string, mixed> The service entry
+     */
+    public function buildServiceEntry(string $serviceName, ?array $config, ?array $status): array
+    {
+        return [
+            'service_name' => $serviceName,
+            'display_name' => $config['display_name'] ?? $serviceName,
+            'type' => $config['type'] ?? 'virtual',
+            'monitoring' => $config['monitoring'] ?? null,
+            'status' => $status['status'] ?? 'unknown',
+            'message' => $status['message'] ?? null,
+            'down_time_minutes' => $status['down_time_minutes'] ?? 0,
+            'sla_timeframe' => $status['sla_timeframe'] ?? null,
+            'current_sla' => $status['current_sla'] ?? null,
+            'last_update_time' => $status['last_update_time'] ?? null
+        ];
+    }
 }

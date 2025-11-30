@@ -1117,7 +1117,7 @@ class DatabaseManager
      *
      * @return bool True if identifier is valid, false otherwise
      */
-    private function isValidIdentifier(string $identifier): bool
+    public function isValidIdentifier(string $identifier): bool
     {
         return preg_match('/^[A-Za-z0-9_]+$/', $identifier) === 1;
     }
@@ -1129,7 +1129,7 @@ class DatabaseManager
      *
      * @return ParameterType The parameter type
      */
-    private function getParameterType(string $value): ParameterType
+    public function getParameterType(string $value): ParameterType
     {
         return ctype_digit($value) ? ParameterType::INTEGER : ParameterType::STRING;
     }

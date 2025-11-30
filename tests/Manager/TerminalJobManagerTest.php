@@ -2,10 +2,10 @@
 
 namespace App\Tests\Manager;
 
-use JsonException;
 use App\Util\AppUtil;
 use RuntimeException;
 use App\Util\SessionUtil;
+use App\Util\TerminalUtil;
 use PHPUnit\Framework\TestCase;
 use App\Manager\TerminalJobManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -22,19 +22,23 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(TerminalJobManager::class)]
 class TerminalJobManagerTest extends TestCase
 {
+    private string $rootDir;
+    private string $jobsBaseDir;
     private Filesystem $filesystem;
     private AppUtil & MockObject $appUtilMock;
     private TerminalJobManager $terminalJobManager;
     private SessionUtil & MockObject $sessionUtilMock;
-    private string $rootDir;
-    private string $jobsBaseDir;
+    private TerminalUtil & MockObject $terminalUtilMock;
 
     protected function setUp(): void
     {
+        // mock dependencies
         $this->filesystem = new Filesystem();
         $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->sessionUtilMock = $this->createMock(SessionUtil::class);
+        $this->terminalUtilMock = $this->createMock(TerminalUtil::class);
 
+        // create temporary directories for tests
         $this->rootDir = sys_get_temp_dir() . '/admin-suite-terminal-job-manager-' . uniqid('', true);
         $this->jobsBaseDir = $this->rootDir . '/var/terminal-jobs';
         $this->filesystem->mkdir($this->rootDir, 0700);
@@ -44,7 +48,8 @@ class TerminalJobManagerTest extends TestCase
         $this->terminalJobManager = new TerminalJobManager(
             $this->appUtilMock,
             $this->filesystem,
-            $this->sessionUtilMock
+            $this->sessionUtilMock,
+            $this->terminalUtilMock
         );
     }
 
@@ -80,10 +85,13 @@ class TerminalJobManagerTest extends TestCase
     {
         $sessionId = 'session123';
         $jobId = 'job123';
+        $jobDirectory = $this->createJobDirectory($sessionId, $jobId);
 
-        // mock session ID
+        // mock session ID and terminal util
         $this->sessionUtilMock->method('getSessionId')->willReturn($sessionId);
-        $this->createJobDirectory($sessionId, $jobId);
+        $this->terminalUtilMock->method('sanitizeIdentifier')->willReturn($sessionId);
+        $this->terminalUtilMock->method('getJobDirectory')->willReturn($jobDirectory);
+        $this->terminalUtilMock->method('getInputFilePath')->willReturn($jobDirectory . '/non-existent-file');
 
         // expect exception
         $this->expectException(RuntimeException::class);
@@ -102,10 +110,14 @@ class TerminalJobManagerTest extends TestCase
     {
         $sessionId = 'session456';
         $jobId = 'job456';
-
-        $this->sessionUtilMock->method('getSessionId')->willReturn($sessionId);
         $jobDirectory = $this->createJobDirectory($sessionId, $jobId);
         $inputFile = $jobDirectory . '/input.queue';
+
+        $this->sessionUtilMock->method('getSessionId')->willReturn($sessionId);
+        $this->terminalUtilMock->method('sanitizeIdentifier')->willReturn($sessionId);
+        $this->terminalUtilMock->method('getJobDirectory')->willReturn($jobDirectory);
+        $this->terminalUtilMock->method('getInputFilePath')->willReturn($inputFile);
+
         $this->filesystem->dumpFile($inputFile, '');
 
         // call tested method
@@ -125,10 +137,12 @@ class TerminalJobManagerTest extends TestCase
     {
         $sessionId = 'session789';
         $jobId = 'job789';
+        $jobDirectory = $this->createJobDirectory($sessionId, $jobId);
 
-        // mock session ID
+        // mock session ID and terminal util
         $this->sessionUtilMock->method('getSessionId')->willReturn($sessionId);
-        $this->createJobDirectory($sessionId, $jobId);
+        $this->terminalUtilMock->method('sanitizeIdentifier')->willReturn($sessionId);
+        $this->terminalUtilMock->method('getJobDirectory')->willReturn($jobDirectory);
 
         // expect exception
         $this->expectException(RuntimeException::class);
@@ -147,26 +161,23 @@ class TerminalJobManagerTest extends TestCase
     {
         $sessionId = 'session999';
         $jobId = 'job999';
-
-        $this->sessionUtilMock->method('getSessionId')->willReturn($sessionId);
         $jobDirectory = $this->createJobDirectory($sessionId, $jobId);
-
         $logFile = $jobDirectory . '/output.log';
         $exitCodeFile = $jobDirectory . '/exit-code';
-        $metaFile = $jobDirectory . '/meta.json';
+        $meta = [
+            'started_at' => 1700000000,
+            'execution_mode' => 'interactive-runner'
+        ];
+
+        $this->sessionUtilMock->method('getSessionId')->willReturn($sessionId);
+        $this->terminalUtilMock->method('sanitizeIdentifier')->willReturn($sessionId);
+        $this->terminalUtilMock->method('getJobDirectory')->willReturn($jobDirectory);
+        $this->terminalUtilMock->method('getPid')->willReturn(12345);
+        $this->terminalUtilMock->method('readMeta')->willReturn($meta);
+        $this->terminalUtilMock->method('isProcessRunning')->willReturn(false);
 
         $this->filesystem->dumpFile($logFile, 'FirstLineSecondLine');
         $this->filesystem->dumpFile($exitCodeFile, '0');
-        $metaJson = '';
-        try {
-            $metaJson = json_encode([
-                'started_at' => 1700000000,
-                'execution_mode' => 'interactive-runner'
-            ], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
-            $this->fail('Failed to encode metadata: ' . $exception->getMessage());
-        }
-        $this->filesystem->dumpFile($metaFile, $metaJson);
 
         // call tested method
         $result = $this->terminalJobManager->getOutput($jobId, 0, 5);
@@ -189,15 +200,14 @@ class TerminalJobManagerTest extends TestCase
     {
         $sessionId = 'sessionstop';
         $jobId = 'jobstop';
+        $jobDirectory = $this->createJobDirectory($sessionId, $jobId);
 
         $this->sessionUtilMock->method('getSessionId')->willReturn($sessionId);
-        $jobDirectory = $this->createJobDirectory($sessionId, $jobId);
+        $this->terminalUtilMock->method('sanitizeIdentifier')->willReturn($sessionId);
+        $this->terminalUtilMock->method('getJobDirectory')->willReturn($jobDirectory);
+        $this->terminalUtilMock->expects($this->once())->method('requestStop')->with($jobDirectory);
 
         // call tested method
         $this->terminalJobManager->stopJob($jobId);
-
-        // assert stop flag created
-        $this->assertFileExists($jobDirectory . '/stop.flag');
-        $this->assertNotEmpty(file_get_contents($jobDirectory . '/stop.flag'));
     }
 }
