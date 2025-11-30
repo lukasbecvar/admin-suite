@@ -1,6 +1,7 @@
 # <h1 align="center">Admin suite</h1>
 ### <p align="center">Solution for administration and monitoring linux servers</p>
 <p align="center">
+    <a href="https://lukasbecvar.github.io/admin-suite" target="_blank">Documentation</a> |
     <a href="LICENSE" target="_blank">License</a> |
     <a href="https://becvar.xyz" target="_blank">Author website</a>
 </p>
