@@ -2,6 +2,7 @@
 
 namespace App\Tests\Manager;
 
+use DateTime;
 use Exception;
 use App\Util\AppUtil;
 use DateTimeImmutable;
@@ -158,7 +159,7 @@ class MonitoringManagerTest extends TestCase
         $MonitoringStatus->expects($this->once())
             ->method('setStatus')->with($status)->willReturn($MonitoringStatus);
         $MonitoringStatus->expects($this->once())
-            ->method('setLastUpdateTime')->with($this->isInstanceOf(\DateTime::class));
+            ->method('setLastUpdateTime')->with($this->isInstanceOf(DateTime::class));
 
         // expect flush method to be called
         $this->entityManagerMock->expects($this->once())->method('flush');
@@ -780,5 +781,91 @@ class MonitoringManagerTest extends TestCase
 
         // call tested method
         $this->monitoringManager->temporaryDisableMonitoring('non-existent-service', 1);
+    }
+
+    /**
+     * Test monitor services delegates handling to monitoring util
+     *
+     * @return void
+     */
+    public function testMonitorServicesInvokesMonitoringUtilForSupportedTypes(): void
+    {
+        $services = [
+            [
+                'service_name' => 'nginx',
+                'display_name' => 'Nginx',
+                'monitoring' => true,
+                'type' => 'systemd'
+            ],
+            [
+                'service_name' => 'frontend',
+                'display_name' => 'Frontend',
+                'monitoring' => true,
+                'type' => 'http',
+                'metrics_monitoring' => [
+                    'collect_metrics' => 'false',
+                    'metrics_collector_url' => ''
+                ]
+            ]
+        ];
+
+        $this->cacheUtilMock->expects($this->exactly(2))->method('isCatched')->willReturn(false);
+        $this->monitoringUtilMock->expects($this->once())->method('monitorSystemdService')
+            ->with($this->symfonyStyleMock, $services[0], 5, $this->monitoringManager);
+        $this->monitoringUtilMock->expects($this->once())->method('monitorHttpService')
+            ->with($this->symfonyStyleMock, $services[1], 5, $this->monitoringManager);
+
+        // call tested method
+        $this->monitoringManager->monitorServices($this->symfonyStyleMock, $services, 5);
+    }
+
+    /**
+     * Test monitor services skips temporarily disabled service
+     *
+     * @return void
+     */
+    public function testMonitorServicesSkipsTemporarilyDisabledService(): void
+    {
+        $service = [
+            'service_name' => 'nginx',
+            'display_name' => 'Nginx',
+            'monitoring' => true,
+            'type' => 'systemd'
+        ];
+
+        $this->cacheUtilMock->expects($this->once())->method('isCatched')
+            ->with('monitoring-temporary-disabled-nginx')->willReturn(true);
+        $this->symfonyStyleMock->expects($this->once())->method('writeln')
+            ->with($this->stringContains('monitoring for service nginx skipped'));
+        $this->monitoringUtilMock->expects($this->never())->method('monitorSystemdService');
+
+        // call tested method
+        $this->monitoringManager->monitorServices($this->symfonyStyleMock, [$service], 10);
+    }
+
+    /**
+     * Test monitor services logs error when service type is unknown
+     *
+     * @return void
+     */
+    public function testMonitorServicesLogsErrorForUnknownType(): void
+    {
+        $service = [
+            'service_name' => 'custom',
+            'display_name' => 'Custom service',
+            'monitoring' => true,
+            'type' => 'queue'
+        ];
+
+        $this->cacheUtilMock->expects($this->once())->method('isCatched')->willReturn(false);
+        $this->errorManagerMock->expects($this->once())->method('logError')->with(
+            'service Custom service has unknown type: queue',
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+        $this->monitoringUtilMock->expects($this->never())->method('monitorSystemdService');
+        $this->monitoringUtilMock->expects($this->never())->method('monitorHttpService');
+
+        // call tested method
+        $this->monitoringManager->monitorServices($this->symfonyStyleMock, [$service], 15);
     }
 }
