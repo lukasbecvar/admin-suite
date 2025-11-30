@@ -5,10 +5,10 @@ namespace App\Manager;
 use DateTime;
 use Exception;
 use App\Util\AppUtil;
-use App\Util\JsonUtil;
 use App\Util\CacheUtil;
 use App\Util\ServerUtil;
 use App\Entity\SLAHistory;
+use App\Util\MonitoringUtil;
 use App\Entity\MonitoringStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SLAHistoryRepository;
@@ -26,7 +26,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class MonitoringManager
 {
     private AppUtil $appUtil;
-    private JsonUtil $jsonUtil;
     private CacheUtil $cacheUtil;
     private LogManager $logManager;
     private ServerUtil $serverUtil;
@@ -34,6 +33,7 @@ class MonitoringManager
     private ErrorManager $errorManager;
     private MetricsManager $metricsManager;
     private ServiceManager $serviceManager;
+    private MonitoringUtil $monitoringUtil;
     private SLAHistoryRepository $slaHistoryRepository;
     private NotificationsManager $notificationsManager;
     private EntityManagerInterface $entityManagerInterface;
@@ -41,7 +41,6 @@ class MonitoringManager
 
     public function __construct(
         AppUtil $appUtil,
-        JsonUtil $jsonUtil,
         CacheUtil $cacheUtil,
         LogManager $logManager,
         ServerUtil $serverUtil,
@@ -49,13 +48,13 @@ class MonitoringManager
         ErrorManager $errorManager,
         MetricsManager $metricsManager,
         ServiceManager $serviceManager,
+        MonitoringUtil $monitoringUtil,
         SLAHistoryRepository $slaHistoryRepository,
         NotificationsManager $notificationsManager,
         EntityManagerInterface $entityManagerInterface,
         MonitoringStatusRepository $monitoringStatusRepository
     ) {
         $this->appUtil = $appUtil;
-        $this->jsonUtil = $jsonUtil;
         $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
         $this->serverUtil = $serverUtil;
@@ -63,6 +62,7 @@ class MonitoringManager
         $this->errorManager = $errorManager;
         $this->metricsManager = $metricsManager;
         $this->serviceManager = $serviceManager;
+        $this->monitoringUtil = $monitoringUtil;
         $this->slaHistoryRepository = $slaHistoryRepository;
         $this->notificationsManager = $notificationsManager;
         $this->entityManagerInterface = $entityManagerInterface;
@@ -553,37 +553,17 @@ class MonitoringManager
     }
 
     /**
-     * Init monitoring process (called from monitoring process command)
+     * Monitor system resources (CPU, RAM, Storage)
      *
-     * @param SymfonyStyle $io The command output decorator
+     * @param SymfonyStyle $io The Symfony command output decorator
+     * @param float $cpuUsage The current CPU usage
+     * @param float $ramUsage The current RAM usage
+     * @param int $storageUsage The current storage usage
      *
      * @return void
      */
-    public function monitorInit(SymfonyStyle $io): void
+    public function monitorSystemResources(SymfonyStyle $io, float $cpuUsage, float $ramUsage, int $storageUsage): void
     {
-        // check if method is called from cli
-        if (php_sapi_name() != 'cli') {
-            $this->errorManager->handleError(
-                message: 'error to init monitoring process: this method can be called only from cli',
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
-
-        // reset down times for all services (reset data for SLA calculation)
-        $this->resetDownTimes($io);
-
-        // get monitoring interval
-        $monitoringInterval = (int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60;
-        $possibleDownTime = $monitoringInterval / 60;
-
-        // get current resource usages
-        $cpuUsage = $this->serverUtil->getCpuUsage();
-        $ramUsage = $this->serverUtil->getRamUsagePercentage();
-        $storageUsage = (int) $this->serverUtil->getDriveUsagePercentage();
-
-        // get network usage
-        $networkStats = $this->serverUtil->getNetworkStats();
-
         // monitor cpu usage
         if ($cpuUsage > 98) {
             $this->handleMonitoringStatus(
@@ -646,17 +626,19 @@ class MonitoringManager
                 '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>storage space is in normal range (current: ' . $storageUsage . '%)</fg=green>'
             );
         }
+    }
 
-        /** @var array<array<mixed>> $services */
-        $services = $this->serviceManager->getServicesList();
-
-        // check if services list is iterable
-        if (!is_iterable($services)) {
-            $io->error('Error to iterate services list');
-            return;
-        }
-
-        // handle configured services status
+    /**
+     * Monitor configured services
+     *
+     * @param SymfonyStyle $io The Symfony command output decorator
+     * @param array<array<mixed>> $services The list of services
+     * @param int $possibleDownTime The possible down time in minutes
+     *
+     * @return void
+     */
+    public function monitorServices(SymfonyStyle $io, array $services, int $possibleDownTime): void
+    {
         foreach ($services as $service) {
             // check if service is enabled
             if ($service['monitoring'] == false) {
@@ -669,132 +651,66 @@ class MonitoringManager
                 continue;
             }
 
-            // monitor systemd services
-            if ($service['type'] == 'systemd') {
-                // check if service is running
-                if ($this->serviceManager->isServiceRunning($service['service_name'])) {
-                    $this->handleMonitoringStatus(
-                        serviceName: $service['service_name'],
-                        currentStatus: 'running',
-                        message:$service['display_name'] . ' is running'
+            switch ($service['type']) {
+                case 'systemd':
+                    $this->monitoringUtil->monitorSystemdService($io, $service, $possibleDownTime, $this);
+                    break;
+                case 'http':
+                    $this->monitoringUtil->monitorHttpService($io, $service, $possibleDownTime, $this);
+                    break;
+                default:
+                    // log an error for unknown service types
+                    $serviceName = $service['display_name'] ?? ($service['service_name'] ?? 'unknown service');
+                    $this->errorManager->logError(
+                        message: 'service ' . $serviceName . ' has unknown type: ' . $service['type'],
+                        code: Response::HTTP_INTERNAL_SERVER_ERROR
                     );
-                    $io->writeln(
-                        '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>' . $service['display_name'] . ' is running without issues</fg=green>'
-                    );
-                } else {
-                    $this->handleMonitoringStatus(
-                        serviceName: $service['service_name'],
-                        currentStatus: 'not-running',
-                        message: $service['display_name'] . ' is not running'
-                    );
-                    $this->increaseDownTime($service['service_name'], $possibleDownTime);
-                    $io->writeln(
-                        '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not running</fg=red>'
-                    );
-                }
-            }
-
-            // monitor http services
-            if ($service['type'] == 'http') {
-                // get service status
-                $serviceStatus = $this->serviceManager->checkWebsiteStatus($service['url']);
-                $canCollectMetrics = $service['metrics_monitoring']['collect_metrics'] == 'true' && $serviceStatus['isOnline'];
-
-                // check if service is online
-                if ($serviceStatus['isOnline']) {
-                    // check service response code
-                    if (!in_array($serviceStatus['responseCode'], $service['accept_codes'])) {
-                        // split accept codes to string
-                        $acceptCodesStr = implode(', ', $service['accept_codes']);
-
-                        // handle http service status
-                        $this->handleMonitoringStatus(
-                            serviceName: $service['service_name'],
-                            currentStatus: 'not-accepting-code',
-                            message: $service['display_name'] . ' is not accepting any of the codes ' . $acceptCodesStr . ' (response code: ' . $serviceStatus['responseCode'] . ')'
-                        );
-                        $this->increaseDownTime($service['service_name'], $possibleDownTime);
-                        $io->writeln(
-                            '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not accepting any of the codes ' . $acceptCodesStr . ' (response code: ' . $serviceStatus['responseCode'] . ')</fg=red>'
-                        );
-                    // check service response time
-                    } elseif ($serviceStatus['responseTime'] > $service['max_response_time']) {
-                        // handle http service status
-                        $this->handleMonitoringStatus(
-                            serviceName: $service['service_name'],
-                            currentStatus: 'not-responding',
-                            message: $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . 'ms'
-                        );
-                        $this->increaseDownTime($service['service_name'], $possibleDownTime);
-                        $io->writeln(
-                            '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is not responding in ' . $service['max_response_time'] . ' ms</fg=red>'
-                        );
-
-                    // status ok
-                    } else {
-                        $this->handleMonitoringStatus(
-                            serviceName: $service['service_name'],
-                            currentStatus: 'online',
-                            message: $service['display_name'] . ' is online'
-                        );
-                        $io->writeln(
-                            '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>' . $service['display_name'] . ' is online (response code: ' . $serviceStatus['responseCode'] . ', response time: ' . $serviceStatus['responseTime'] . 'ms)</>'
-                        );
-
-                        // check if metrics can be collected
-                        if ($canCollectMetrics) {
-                            // get metrics from metrics collector
-                            $metrics = $this->jsonUtil->getJson($service['metrics_monitoring']['metrics_collector_url'], 30);
-
-                            // check if metrics get is successful
-                            if ($metrics == null) {
-                                // handle error
-                                $errorMessage = 'error to get metrics from ' . $service['metrics_monitoring']['metrics_collector_url'];
-                                $io->error($errorMessage);
-                                $this->logManager->log(
-                                    name: 'monitoring',
-                                    message: $errorMessage,
-                                    level: LogManager::LEVEL_WARNING
-                                );
-                            } else {
-                                // collect service metrics
-                                foreach ($metrics as $name => $value) {
-                                    try {
-                                        $metricSaveStatus = $this->metricsManager->saveServiceMetric(
-                                            metricName: $name,
-                                            value: $value,
-                                            serviceName: $service['service_name']
-                                        );
-                                        if ($metricSaveStatus) {
-                                            $io->writeln(
-                                                '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=green>metric ' . $name . ' from service ' . $service['display_name'] . ' saved</fg=green>'
-                                            );
-                                        }
-                                    } catch (Exception $e) {
-                                        $this->errorManager->logError(
-                                            message: 'Error to save metric: ' . $e->getMessage(),
-                                            code: Response::HTTP_INTERNAL_SERVER_ERROR
-                                        );
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                // handle service offline status
-                } else {
-                    $this->handleMonitoringStatus(
-                        serviceName: $service['service_name'],
-                        currentStatus: 'not-online',
-                        message: $service['display_name'] . ' is offline'
-                    );
-                    $this->increaseDownTime($service['service_name'], $possibleDownTime);
-                    $io->writeln(
-                        '[' . date('Y-m-d H:i:s') . '] monitoring: <fg=red>' . $service['display_name'] . ' is offline</fg=red>'
-                    );
-                }
             }
         }
+    }
+
+    /**
+     * Init monitoring process (called from monitoring process command)
+     *
+     * @param SymfonyStyle $io The command output decorator
+     *
+     * @return void
+     */
+    public function monitorInit(SymfonyStyle $io): void
+    {
+        // check if method is called from cli
+        if (php_sapi_name() != 'cli') {
+            $this->errorManager->handleError(
+                message: 'error to init monitoring process: this method can be called only from cli',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // reset down times for all services (reset data for SLA calculation)
+        $this->resetDownTimes($io);
+
+        // get monitoring interval
+        $monitoringInterval = (int) $this->appUtil->getEnvValue('MONITORING_INTERVAL') * 60;
+        $possibleDownTime = $monitoringInterval / 60;
+
+        /** @var array<array<mixed>> $services */
+        $services = $this->serviceManager->getServicesList();
+        if (!is_iterable($services)) {
+            $io->error('Error to iterate services list');
+            return;
+        }
+
+        // get current resource usages
+        $cpuUsage = $this->serverUtil->getCpuUsage();
+        $ramUsage = $this->serverUtil->getRamUsagePercentage();
+        $storageUsage = (int) $this->serverUtil->getDriveUsagePercentage();
+        $networkStats = $this->serverUtil->getNetworkStats();
+
+        // monitor system resources
+        $this->monitorSystemResources($io, $cpuUsage, $ramUsage, $storageUsage);
+
+        // handle configured services status
+        $this->monitorServices($io, $services, $possibleDownTime);
 
         // save host usages metrics to database
         try {

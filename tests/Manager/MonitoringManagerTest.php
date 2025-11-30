@@ -4,12 +4,12 @@ namespace App\Tests\Manager;
 
 use Exception;
 use App\Util\AppUtil;
-use App\Util\JsonUtil;
 use DateTimeImmutable;
 use App\Util\CacheUtil;
 use App\Util\ServerUtil;
 use App\Entity\SLAHistory;
 use App\Manager\LogManager;
+use App\Util\MonitoringUtil;
 use App\Manager\EmailManager;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +38,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class MonitoringManagerTest extends TestCase
 {
     private AppUtil & MockObject $appUtilMock;
-    private JsonUtil & MockObject $jsonUtilMock;
     private MonitoringManager $monitoringManager;
     private CacheUtil & MockObject $cacheUtilMock;
     private LogManager & MockObject $logManagerMock;
@@ -46,6 +45,7 @@ class MonitoringManagerTest extends TestCase
     private EmailManager & MockObject $emailManagerMock;
     private ErrorManager & MockObject $errorManagerMock;
     private SymfonyStyle & MockObject $symfonyStyleMock;
+    private MonitoringUtil & MockObject $monitoringUtilMock;
     private MetricsManager & MockObject $metricsManagerMock;
     private ServiceManager & MockObject $serviceManagerMock;
     private EntityManagerInterface & MockObject $entityManagerMock;
@@ -57,13 +57,13 @@ class MonitoringManagerTest extends TestCase
     {
         // mock dependencies
         $this->appUtilMock = $this->createMock(AppUtil::class);
-        $this->jsonUtilMock = $this->createMock(JsonUtil::class);
         $this->cacheUtilMock = $this->createMock(CacheUtil::class);
         $this->logManagerMock = $this->createMock(LogManager::class);
         $this->serverUtilMock = $this->createMock(ServerUtil::class);
         $this->emailManagerMock = $this->createMock(EmailManager::class);
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
         $this->symfonyStyleMock = $this->createMock(SymfonyStyle::class);
+        $this->monitoringUtilMock = $this->createMock(MonitoringUtil::class);
         $this->metricsManagerMock = $this->createMock(MetricsManager::class);
         $this->serviceManagerMock = $this->createMock(ServiceManager::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
@@ -74,7 +74,6 @@ class MonitoringManagerTest extends TestCase
         // create the monitoring manager instance
         $this->monitoringManager = new MonitoringManager(
             $this->appUtilMock,
-            $this->jsonUtilMock,
             $this->cacheUtilMock,
             $this->logManagerMock,
             $this->serverUtilMock,
@@ -82,6 +81,7 @@ class MonitoringManagerTest extends TestCase
             $this->errorManagerMock,
             $this->metricsManagerMock,
             $this->serviceManagerMock,
+            $this->monitoringUtilMock,
             $this->slaHistoryRepositoryMock,
             $this->notificationsManagerMock,
             $this->entityManagerMock,
