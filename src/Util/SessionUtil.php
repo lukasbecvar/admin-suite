@@ -166,4 +166,25 @@ class SessionUtil
     {
         return $this->getSession()?->getId() ?? '';
     }
+
+    /**
+     * Regenerate the current session id to prevent fixation
+     *
+     * @return void
+     */
+    public function regenerateSession(): void
+    {
+        $session = $this->getSession();
+
+        if ($session === null) {
+            return;
+        }
+
+        if (!$session->isStarted()) {
+            $session->start();
+        }
+
+        // migrate session to invalidate previously issued id
+        $session->migrate(true);
+    }
 }

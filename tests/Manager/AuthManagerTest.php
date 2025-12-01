@@ -452,6 +452,9 @@ class AuthManagerTest extends TestCase
         $this->userManagerMock->method('getUserByUsername')->willReturn($user);
         $this->userManagerMock->method('getUserByToken')->willReturn($user);
 
+        // expect session id regeneration
+        $this->sessionUtilMock->expects($this->once())->method('regenerateSession');
+
         // expect session set
         $this->sessionUtilMock->expects($this->exactly(2))->method('setSession');
 

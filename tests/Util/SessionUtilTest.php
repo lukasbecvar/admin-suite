@@ -236,4 +236,20 @@ class SessionUtilTest extends TestCase
         // assert result
         $this->assertIsString($result);
     }
+
+    /**
+     * Test regenerate session id
+     */
+    public function testRegenerateSession(): void
+    {
+        // ensure session is started before migration
+        $this->sessionInterfaceMock->method('isStarted')->willReturn(false);
+
+        // expect session to be started and migrated
+        $this->sessionInterfaceMock->expects($this->once())->method('start');
+        $this->sessionInterfaceMock->expects($this->once())->method('migrate')->with(true);
+
+        // call tested method
+        $this->sessionUtil->regenerateSession();
+    }
 }

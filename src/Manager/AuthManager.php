@@ -306,6 +306,9 @@ class AuthManager
             $token = (string) $user->getToken();
 
             try {
+                // regenerate session id before persisting login data
+                $this->sessionUtil->regenerateSession();
+
                 // save user auth token to session storage
                 $this->sessionUtil->setSession('user-token', $token);
 
