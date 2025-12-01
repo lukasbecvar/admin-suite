@@ -10,14 +10,24 @@ body {
     background-color: #111827;
 }
 
+main {
+	margin-top: 38px;
+}
+
 /* fix datetime-local input calendar icon */
 input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
     cursor: pointer;
 }
 
-main {
-	margin-top: 38px;
+/* disable textarea resizing */
+textarea {
+    resize: none;
+}
+
+/* fix profiler toolbar position */
+.sf-toolbar {
+	position: absolute !important;
 }
 
 #main-content {
@@ -49,16 +59,6 @@ main {
 .link:hover {
 	color: rgb(24, 132, 255);
 	text-decoration: underline;
-}
-
-/* disable textarea resizing */
-textarea {
-    resize: none;
-}
-
-/* fix profiler toolbar position */
-.sf-toolbar {
-	position: absolute !important;
 }
 
 /* auth component style */

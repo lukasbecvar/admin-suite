@@ -86,6 +86,7 @@ class UserApiAccessCommand extends Command
             return Command::FAILURE;
         }
 
+        // normalize status (enable|disable -> true|false)
         $allowAccess = $normalizedStatus === 'enable';
 
         // check if change is necessary
