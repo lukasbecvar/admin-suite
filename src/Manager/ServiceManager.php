@@ -239,9 +239,6 @@ class ServiceManager
         $end = microtime(true);
         $responseTime = round(($end - $start) * 1000);
 
-        // close cURL session
-        curl_close($ch);
-
         // determine if the site is online
         $isOnline = ($httpCode >= Response::HTTP_OK);
 

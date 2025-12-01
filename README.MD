@@ -100,7 +100,7 @@ The default admin suite configuration is stored in json files in config/suite di
 
 ## Requirements
 #### Software
-* PHP 8.4 and compatible web server
+* PHP 8.5 and compatible web server
 * MySQL 8 or higher
 * Composer
 * NPM

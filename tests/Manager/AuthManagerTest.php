@@ -807,7 +807,6 @@ class AuthManagerTest extends TestCase
         $user = new User();
         $reflection = new ReflectionClass($user);
         $idProperty = $reflection->getProperty('id');
-        $idProperty->setAccessible(true);
         $idProperty->setValue($user, 1);
 
         // mock session check
@@ -1083,7 +1082,6 @@ class AuthManagerTest extends TestCase
         $user = new User();
         $reflection = new ReflectionClass($user);
         $idProperty = $reflection->getProperty('id');
-        $idProperty->setAccessible(true);
         $idProperty->setValue($user, 42);
         $user->setAllowApiAccess(true);
         $this->userManagerMock->expects($this->once())->method('getUserByToken')->with($token)->willReturn($user);

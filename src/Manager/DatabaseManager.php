@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use PDO;
 use Exception;
+use Pdo\Mysql;
 use PDOException;
 use App\Util\AppUtil;
 use Doctrine\DBAL\Connection;
@@ -858,7 +859,7 @@ class DatabaseManager
                 'mysql:host=' . $_ENV['DATABASE_HOST'] . ';dbname=' . $_ENV['DATABASE_NAME'],
                 $_ENV['DATABASE_USERNAME'],
                 $_ENV['DATABASE_PASSWORD'],
-                [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']
+                [Mysql::ATTR_INIT_COMMAND => 'SET NAMES utf8']
             );
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

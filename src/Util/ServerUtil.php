@@ -592,7 +592,6 @@ class ServerUtil
 
             $ip = (string) curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
 
             if ($ip && $httpCode === Response::HTTP_OK && filter_var($ip, FILTER_VALIDATE_IP)) {
                 $hostIp = trim($ip);

@@ -39,7 +39,6 @@ class MonologTimeFormatterTest extends TestCase
         $parentClass = $reflection->getParentClass();
         $this->assertNotFalse($parentClass);
         $property = $parentClass->getProperty('dateFormat');
-        $property->setAccessible(true);
         $this->assertEquals('Y-m-d H:i:s', $property->getValue($this->formatter));
     }
 

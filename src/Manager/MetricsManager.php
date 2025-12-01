@@ -859,10 +859,12 @@ class MetricsManager
 
         // get referers with count for a given service name
         foreach ($serviceVisitors as $serviceVisitor) {
-            if (!isset($referers[$serviceVisitor->getReferer()])) {
-                $referers[$serviceVisitor->getReferer()] = 0;
+            $referer = $serviceVisitor->getReferer() ?? 'Unknown';
+
+            if (!isset($referers[$referer])) {
+                $referers[$referer] = 0;
             }
-            $referers[$serviceVisitor->getReferer()]++;
+            $referers[$referer]++;
         }
 
         // sort referers by count

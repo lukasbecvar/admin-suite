@@ -333,7 +333,7 @@ class MonitoringManager
 
             // convert data to array
             foreach ($slaHistoryData as $slaHistory) {
-                $serviceName = $slaHistory->getServiceName();
+                $serviceName = $slaHistory->getServiceName() ?? 'Unknown Service';
                 $timeframe = $slaHistory->getSlaTimeframe() ?? 'N/A';
                 $slaValue = $slaHistory->getSlaValue() ?? 0.0;
 

@@ -89,7 +89,6 @@ class CustomTestCase extends WebTestCase
         $user->setProfilePic('pic');
 
         $reflection = new ReflectionProperty(User::class, 'id');
-        $reflection->setAccessible(true);
         $reflection->setValue($user, $id);
 
         return $user;

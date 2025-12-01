@@ -305,9 +305,14 @@ class NotificationsManager
         if (is_iterable($recivers)) {
             $receiverMap = [];
             foreach ($recivers as $reciver) {
+                $endpoint = $reciver->getEndpoint();
+                if ($endpoint === null) {
+                    continue;
+                }
+
                 // create subscription object
                 $subscription = Subscription::create([
-                    'endpoint' => $reciver->getEndpoint(),
+                    'endpoint' => $endpoint,
                     'publicKey' => $reciver->getPublicKey(),
                     'authToken' => $reciver->getAuthToken(),
                     'contentEncoding' => $this->appUtil->getEnvValue('PUSH_NOTIFICATIONS_CONTENT_ENCODING')
@@ -329,7 +334,7 @@ class NotificationsManager
                 // build receivers map
                 $receiverId = $reciver->getUser()?->getId();
                 if ($receiverId !== null) {
-                    $receiverMap[$reciver->getEndpoint()] = (int) $receiverId;
+                    $receiverMap[$endpoint] = (int) $receiverId;
                 }
             }
 

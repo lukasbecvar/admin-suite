@@ -1,5 +1,5 @@
 # define base php-apache image (development environment)
-FROM php:8.4-apache
+FROM php:8.5-apache
 
 # set container working directory
 WORKDIR /var/www
@@ -28,9 +28,6 @@ RUN docker-php-ext-install \
 # install phpGD extension
 RUN docker-php-ext-configure gd \
     && docker-php-ext-install -j$(nproc) gd
-
-# install OPCache extension
-RUN docker-php-ext-install opcache
 
 # allow apache execute sudo commands without password
 RUN echo 'www-data ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
