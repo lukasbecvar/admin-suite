@@ -31,6 +31,7 @@
 /services-monitoring.json
 /package-requirements.json
 /terminal-blocked-commands.json
+/escape-request-exclusions.json
 
 # docker services files
 .docker/services

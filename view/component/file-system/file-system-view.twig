@@ -10,7 +10,7 @@
         {% set directoryPath = parts|slice(0, parts|length - 1)|join('/') %}
 
         {# BACK BUTTON #}
-        {% set referer = app.request.get('referer') %}
+        {% set referer = app.request.query.get('referer') %}
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-3">
                 {# BACK BUTTON #}
@@ -57,7 +57,7 @@
 
                 {# DELETE FILE #}
                 {% if referer == 'log_manager_exception_files' %}
-                    {% set service = app.request.get('service') %}
+                    {% set service = app.request.query.get('service') %}
                     {# DELETE EXCEPTION FILE FORM (hidden triggered from javascript) #}
                     <form method="POST" action={{ path('app_manager_logs_exception_delete') }} id="delete-exception-form-{{ service }}" class="hidden">
                         {# INCLUDE CSRF SECURITY TOKEN #}

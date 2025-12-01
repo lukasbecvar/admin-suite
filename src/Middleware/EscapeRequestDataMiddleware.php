@@ -2,9 +2,11 @@
 
 namespace App\Middleware;
 
+use JsonException;
 use App\Util\SecurityUtil;
+use App\Manager\LogManager;
+use App\Manager\ConfigManager;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Class EscapeRequestDataMiddleware
@@ -15,13 +17,21 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class EscapeRequestDataMiddleware
 {
+    private LogManager $logManager;
     private SecurityUtil $securityUtil;
-    private UrlGeneratorInterface $urlGenerator;
+    private ConfigManager $configManager;
 
-    public function __construct(SecurityUtil $securityUtil, UrlGeneratorInterface $urlGenerator)
+    /** @var list<string>|null */
+    private ?array $excludedRoutesCache = null;
+
+    // config filename
+    private const CONFIG_FILENAME = 'escape-request-exclusions.json';
+
+    public function __construct(LogManager $logManager, SecurityUtil $securityUtil, ConfigManager $configManager)
     {
+        $this->logManager = $logManager;
         $this->securityUtil = $securityUtil;
-        $this->urlGenerator = $urlGenerator;
+        $this->configManager = $configManager;
     }
 
     /**
@@ -34,45 +44,66 @@ class EscapeRequestDataMiddleware
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
+        $route = $request->attributes->get('_route');
 
-        // excluded controller paths from escaping
-        if (
-            // terminal controllers
-            $request->getPathInfo() == $this->urlGenerator->generate('api_terminal') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('api_terminal_job_start') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('api_terminal_job_input') ||
-
-            // suite config file update controller
-            $request->getPathInfo() == $this->urlGenerator->generate('app_suite_config_update') ||
-
-            // config manager controllers
-            $request->getPathInfo() == $this->urlGenerator->generate('app_suite_config_show') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('app_manager_database_console') ||
-
-            // file system controllers
-            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_create_save') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_upload_save') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_upload_chunk') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_get_resource') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_download') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_delete') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_save') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_edit') ||
-            $request->getPathInfo() == $this->urlGenerator->generate('app_file_system_view')
-        ) {
+        if (is_string($route) && in_array($route, $this->getExcludedRoutes(), true)) {
             return;
         }
 
-        // get form data
+        // merge GET + POST data
         $requestData = $request->query->all() + $request->request->all();
 
-        // escape all inputs
+        // escape data
         array_walk_recursive($requestData, function (&$value) {
             $value = $this->securityUtil->escapeString($value);
         });
 
-        // replace request data with escaped data
+        // replace original data
         $request->query->replace($requestData);
         $request->request->replace($requestData);
+    }
+
+    /**
+     * Get excluded routes that should skip escaping
+     *
+     * @return list<string>
+     */
+    private function getExcludedRoutes(): array
+    {
+        if ($this->excludedRoutesCache !== null) {
+            return $this->excludedRoutesCache;
+        }
+
+        $configContent = $this->configManager->readConfig(self::CONFIG_FILENAME);
+        if ($configContent === null) {
+            $this->logManager->log(
+                name: 'suite-config',
+                message: self::CONFIG_FILENAME . ' not found, escaping all routes by default',
+                level: LogManager::LEVEL_WARNING
+            );
+            return $this->excludedRoutesCache = [];
+        }
+
+        try {
+            $config = json_decode($configContent, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            $this->logManager->log(
+                name: 'suite-config-error',
+                message: 'error parsing ' . self::CONFIG_FILENAME . ': ' . $exception->getMessage(),
+                level: LogManager::LEVEL_CRITICAL
+            );
+            return $this->excludedRoutesCache = [];
+        }
+
+        $routes = [];
+        if (isset($config['routes']) && is_array($config['routes'])) {
+            foreach ($config['routes'] as $route) {
+                if (is_string($route) && $route !== '') {
+                    $routes[] = $route;
+                }
+            }
+        }
+
+        return $this->excludedRoutesCache = $routes;
     }
 }

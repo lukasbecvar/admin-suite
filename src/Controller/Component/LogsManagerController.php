@@ -124,7 +124,7 @@ class LogsManagerController extends AbstractController
     public function setAllLogsToReaded(Request $request): Response
     {
         // get query parameters from request
-        $id = (int) $request->get('id', '0');
+        $id = (int) $request->request->get('id', '0');
         $page = (int) $request->request->get('page', '1');
         $userId = $request->request->get('user_id', '0');
         $filter = $request->request->get('filter', 'UNREADED');

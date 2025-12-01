@@ -1,0 +1,19 @@
+{
+    "routes": [
+        "app_suite_config_update",
+        "api_terminal_job_start",
+        "api_terminal_job_input",
+        "app_suite_config_show",
+        "api_terminal",
+        "app_manager_database_console",
+        "app_file_system_create_save",
+        "app_file_system_upload_save",
+        "app_file_system_upload_chunk",
+        "app_file_system_get_resource",
+        "app_file_system_download",
+        "app_file_system_delete",
+        "app_file_system_save",
+        "app_file_system_edit",
+        "app_file_system_view"
+    ]
+}
