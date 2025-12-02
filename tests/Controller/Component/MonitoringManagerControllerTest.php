@@ -91,7 +91,7 @@ class MonitoringManagerControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'SLA History');
         $this->assertSelectorTextContains('body', 'Configuration Files');
         $this->assertSelectorTextContains('body', 'Service Actions');
-        $this->assertSelectorExists('a:contains("Restart Service")');
+        $this->assertSelectorExists('button:contains("Restart Service")');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 

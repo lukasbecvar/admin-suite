@@ -240,22 +240,33 @@
                         </div>
                         <div class="overflow-y-auto max-h-[400px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
                             <div class="p-2 text-sm transition">
+                                {# CONTROL BUTTON FORM #}
                                 <div class="flex flex-wrap gap-2">
-                                    <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'restart', 'referer': 'app_manager_monitoring'}) }} class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded transition-all duration-200">
-                                        <i class="fas fa-redo text-sm mr-2"></i>
-                                        Restart Service
-                                    </a>
-                                    {% if serviceStatus == 'running' %}
-                                        <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'stop', 'referer': 'app_manager_monitoring'}) }} class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-medium rounded transition-all duration-200">
-                                            <i class="fas fa-stop text-sm mr-2"></i>
-                                            Stop Service
-                                        </a>
-                                    {% else %}
-                                        <a href={{ path('app_action_runner', {'service': serviceName, 'action': 'start', 'referer': 'app_manager_monitoring'}) }} class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-medium rounded transition-all duration-200">
-                                            <i class="fas fa-play text-sm mr-2"></i>
-                                            Start Service
-                                        </a>
-                                    {% endif %}
+                                    <form action={{ path('app_action_runner') }} method="POST" class="inline">
+                                        <input type="hidden" name="service" value={{ serviceName }}>
+                                        <input type="hidden" name="action" value="restart">
+                                        <input type="hidden" name="referer" value="app_manager_monitoring">
+                                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded transition-all duration-200">
+                                            <i class="fas fa-redo text-sm mr-2"></i>
+                                            Restart Service
+                                        </button>
+                                    </form>
+
+                                    {# --- START / STOP BUTTON --- #}
+                                    {% set isRunning = (serviceStatus == 'running') %}
+                                    {% set action = isRunning ? 'stop' : 'start' %}
+                                    {% set label = isRunning ? 'Stop Service' : 'Start Service' %}
+                                    {% set icon = isRunning ? 'fas fa-stop' : 'fas fa-play' %}
+                                    {% set color = isRunning ? 'red' : 'green' %}
+                                    <form action={{ path('app_action_runner') }} method="POST" class="inline">
+                                        <input type="hidden" name="service" value={{ serviceName }}>
+                                        <input type="hidden" name="action" value={{ action }}>
+                                        <input type="hidden" name="referer" value="app_manager_monitoring">
+                                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-{{ color }}-600 hover:bg-{{ color }}-500 text-white font-medium rounded transition-all duration-200">
+                                            <i class="{{ icon }} text-sm mr-2"></i>
+                                            {{ label }}
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
