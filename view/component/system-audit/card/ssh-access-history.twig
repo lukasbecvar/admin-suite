@@ -9,7 +9,7 @@
 		{% if sshAccessHistory|length == 0 %}
 			<div class="text-center text-gray-400 text-sm p-4">No SSH access history found</div>
 		{% else %}
-			<div class="space-y-1 p-2">
+			<div class="space-y-1 p-1">
 				{% for login in sshAccessHistory %}
 					<div class="flex items-center justify-between p-3 bg-gray-700/30 hover:bg-gray-700/50 rounded transition-colors duration-200">
 						<div class="flex flex-col">
