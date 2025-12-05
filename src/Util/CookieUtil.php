@@ -43,7 +43,7 @@ class CookieUtil
             setcookie($name, $value, [
                 'path'     => '/',
                 'httponly' => true,
-                'samesite' => 'Strict',
+                'samesite' => 'Lax',
                 'expires'  => $expiration,
                 'secure'   => $this->appUtil->isSSLOnly()
             ]);
