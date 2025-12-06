@@ -142,15 +142,12 @@
                                     <span class="text-white font-medium text-sm">{{ row.name|e }}</span>
                                 </td>
                                 <td class="px-4 py-3 border-b border-gray-600/60 text-gray-300 text-sm whitespace-nowrap">
-                                    {% set truncatedMessage = row.message|slice(0, 60) %}
-                                    {% set displayMessage = row.message|length > 60 ? truncatedMessage ~ '…' : truncatedMessage %}
-                                    <div class="flex items-center gap-2 max-w-1xl">
-                                        <span class="truncate block max-w-1xl">{{ displayMessage|e|linkify }}</span>
-                                        {% if row.message|length > 60 %}
-                                            <button title="Expand full log message" class="text-blue-400 hover:text-blue-300 text-xs font-semibold view-raw-button whitespace-nowrap" data-fulltext={{ row.message|e('html_attr') }}>
-                                                raw
-                                            </button>
-                                        {% endif %}
+                                    <div class="log-message-container flex items-center gap-2 w-full min-w-0">
+                                        <span class="log-message-text truncate block w-full min-w-0 pr-3" title={{ row.message|e('html_attr') }}>{{ row.message|e|linkify }}</span>
+                                        <button title="Expand full log message" class="text-blue-400 hover:text-blue-300 text-lg leading-none view-raw-button hidden" data-fulltext={{ row.message|e('html_attr') }}>
+                                            <span aria-hidden="true">…</span>
+                                            <span class="sr-only">Show full log</span>
+                                        </button>
                                     </div>
                                 </td>
                                 <td class="px-4 py-3 border-b border-gray-600/60 text-gray-400 font-mono text-xs whitespace-nowrap">{{ row.time|date('Y-m-d H:i:s')|e }}</td>

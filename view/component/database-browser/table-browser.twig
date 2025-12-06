@@ -88,7 +88,7 @@
                                 <tr class="transition-all duration-300 {{ isHighlightedRow ? 'bg-sky-200/20 border border-sky-300/60 shadow-inner shadow-sky-900/20' : 'hover:bg-gray-600/40 hover:shadow-lg hover:shadow-gray-900/20' }}" {% if isHighlightedRow %}data-highlighted-row="true"{% endif %}>
                                     {% for columnName, columnValue in row %}
                                         <td class="px-4 py-2 border-b border-gray-600/60 text-left relative">
-                                            <div class="flex items-center">
+                                            <div class="database-cell-container flex items-center w-full min-w-0">
                                                 {% if columnName in protectedColumns %}
                                                     <span class="truncate max-w-xl text-sm text-red-400/80 italic">[protected]</span>
                                                 {% else %}
@@ -96,25 +96,26 @@
                                                     {% set isForeignKey = fkInfo is not null and columnValue is not null %}
 
                                                     {% if columnValue is null %}
-                                                        <span class="truncate max-w-xl text-sm text-gray-400 italic">(NULL)</span>
+                                                        <span class="database-cell-value truncate w-full min-w-0 text-sm text-gray-400 italic">(NULL)</span>
                                                     {% else %}
-                                                        {% set truncatedValue = columnValue|slice(0, 50) %}
-                                                        {% if isForeignKey %}
-                                                            <a href={{ path('app_manager_database_table_browser', {
-                                                                'database': databaseName,
-                                                                'table': fkInfo.referencedTable,
-                                                                'highlightId': columnValue,
-                                                                'highlightColumn': fkInfo.referencedColumn
-                                                            }) }} title="Go to {{ fkInfo.referencedTable }}.{{ fkInfo.referencedColumn }}" class="truncate max-w-xl text-sm text-blue-400 hover:text-blue-300 transition-colors duration-200">
-                                                                {{ truncatedValue }}
-                                                            </a>
-                                                        {% else %}
-                                                            <span class="truncate max-w-xl text-sm">{{ truncatedValue }}</span>
-                                                        {% endif %}
-
-                                                        {% if columnValue|length > 50 %}
-                                                            <button class="text-blue-400 hover:text-blue-300 text-xs font-bold view-raw-button ml-2" data-fulltext={{ columnValue|e('html_attr') }}>...</button>
-                                                        {% endif %}
+                                                        <div class="flex items-center gap-2 w-full min-w-0">
+                                                            {% if isForeignKey %}
+                                                                <a href={{ path('app_manager_database_table_browser', {
+                                                                    'database': databaseName,
+                                                                    'table': fkInfo.referencedTable,
+                                                                    'highlightId': columnValue,
+                                                                    'highlightColumn': fkInfo.referencedColumn
+                                                                }) }} title="Go to {{ fkInfo.referencedTable }}.{{ fkInfo.referencedColumn }} ({{ columnValue|e('html_attr') }})" class="database-cell-value truncate block w-full min-w-0 pr-3 text-sm text-blue-400 hover:text-blue-300 transition-colors duration-200">
+                                                                    {{ columnValue|e }}
+                                                                </a>
+                                                            {% else %}
+                                                                <span class="database-cell-value truncate block w-full min-w-0 pr-3 text-sm" title="{{ columnValue|e('html_attr') }}">{{ columnValue|e }}</span>
+                                                            {% endif %}
+                                                            <button class="text-blue-400 hover:text-blue-300 text-lg leading-none view-raw-button hidden" title="Show full value" data-fulltext="{{ columnValue|e('html_attr') }}">
+                                                                <span aria-hidden="true">…</span>
+                                                                <span class="sr-only">Show full value</span>
+                                                            </button>
+                                                        </div>
                                                     {% endif %}
                                                 {% endif %}
                                             </div>

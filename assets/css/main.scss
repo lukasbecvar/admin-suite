@@ -607,6 +607,18 @@ input[class*="bg-gray-900/50"]:-moz-autofill {
     box-shadow: 0 0 0 1000px rgba(55, 65, 81, 0.8) inset !important;
 }
 
+.log-message-container {
+	max-width: clamp(16rem, 45vw, 60rem);
+}
+
+.log-message-text, .database-cell-value {
+	text-overflow: clip;
+}
+
+.database-cell-container {
+	max-width: clamp(16rem, 40vw, 60rem);
+}
+
 /** terminal component */
 .terminal-component {
 	padding: 3px;

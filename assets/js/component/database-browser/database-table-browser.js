@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function()
 
     // handle popup open (raw data viewer)
     function openPopup(text) {
-        popupText.textContent = text
+        popupText.innerHTML = linkifyText(text)
         popup.classList.remove('hidden')
         document.addEventListener('keydown', handleEscKey) // add handler for ESC key
     }
@@ -22,11 +22,29 @@ document.addEventListener('DOMContentLoaded', function()
         document.removeEventListener('keydown', handleEscKey) // remove handler for ESC key
     }
 
+    const toggleRawButtonsVisibility = () => {
+        viewRawButton.forEach((button) => {
+            const valueElement = button.previousElementSibling
+            if (!valueElement) {
+                return
+            }
+
+            const isOverflowing = valueElement.scrollWidth - valueElement.clientWidth > 1
+            button.classList.toggle('hidden', !isOverflowing)
+        })
+    }
+
     // detect click on truncate button (raw data viewer)
     viewRawButton.forEach(function(button) {
         button.addEventListener('click', function() {
             openPopup(decodeInput(button.getAttribute('data-fulltext')))
         })
+    })
+
+    // initial visibility check + updates on resize
+    toggleRawButtonsVisibility()
+    window.addEventListener('resize', () => {
+        window.requestAnimationFrame(toggleRawButtonsVisibility)
     })
 
     // init close popup button event
@@ -83,6 +101,18 @@ document.addEventListener('DOMContentLoaded', function()
     // -----------------------------
     // UTILITY FUNCTIONS
     // -----------------------------
+    const escapeHtml = (input = '') => input
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+
+    const linkifyText = (text = '') => escapeHtml(text).replace(
+        /(https?:\/\/[^\s]+)/g,
+        '<a href="$1" class="link" target="_blank" rel="noopener noreferrer">$1</a>'
+    )
+
     // get raw string
     function decodeInput(input) {
         const e = document.createElement('div')
