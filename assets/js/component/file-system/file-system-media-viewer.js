@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function()
 
     // initialize video player if present
     initializeVideoPlayer()
+    initializeVideoControls()
+    initializeAudioControls()
 
     // auto-hide loading spinner for images
     const images = document.querySelectorAll('img[onload]')
@@ -448,13 +450,8 @@ function handleVideoError(video) {
 function handleVideoWaiting() {
     const statusElement = document.getElementById('video-status')
     if (statusElement) {
-        statusElement.innerHTML = `
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-800/50 rounded">
-                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-400"></div>
-                <span class="text-gray-300">Buffering...</span>
-            </div>
-        `
-        statusElement.classList.remove('hidden')
+        statusElement.textContent = 'Buffering...'
+        statusElement.style.opacity = '1'
     }
 }
 
@@ -462,7 +459,7 @@ function handleVideoWaiting() {
 function handleVideoCanPlay() {
     const statusElement = document.getElementById('video-status')
     if (statusElement) {
-        statusElement.classList.add('hidden')
+        statusElement.style.opacity = '0'
     }
 }
 
@@ -471,13 +468,8 @@ function handleVideoStalled(video) {
     console.warn('Video stalled, attempting to recover...')
     const statusElement = document.getElementById('video-status')
     if (statusElement) {
-        statusElement.innerHTML = `
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded">
-                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-400"></div>
-                <span class="text-yellow-300">Connection issues, retrying...</span>
-            </div>
-        `
-        statusElement.classList.remove('hidden')
+        statusElement.textContent = 'Connection issues, retrying...'
+        statusElement.style.opacity = '1'
     }
 
     // try to recover from stalled state
@@ -508,22 +500,107 @@ function initializeVideoPlayer() {
     video.addEventListener('seeking', function () {
         const statusElement = document.getElementById('video-status')
         if (statusElement) {
-            statusElement.innerHTML = `
-                <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded">
-                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400"></div>
-                    <span class="text-blue-300">Seeking...</span>
-                </div>
-            `
-            statusElement.classList.remove('hidden')
+            statusElement.textContent = 'Seeking...'
+            statusElement.style.opacity = '1'
         }
     })
 
     video.addEventListener('seeked', function () {
         const statusElement = document.getElementById('video-status')
         if (statusElement) {
-            statusElement.classList.add('hidden')
+            statusElement.style.opacity = '0'
         }
     })
+}
+
+function initializeVideoControls() {
+    const video = document.getElementById('main-video')
+    const controls = document.getElementById('custom-video-controls')
+    if (!video || !controls) {
+        return
+    }
+
+    const playButton = controls.querySelector('[data-action="toggle-play"]')
+    const fullscreenButton = controls.querySelector('[data-action="toggle-fullscreen"]')
+    const progress = document.getElementById('video-progress')
+    const currentTimeElement = document.getElementById('video-current-time')
+    const totalDurationElement = document.getElementById('video-total-duration')
+    const volumeSlider = document.getElementById('video-volume')
+
+    if (!playButton || !progress || !currentTimeElement || !totalDurationElement || !volumeSlider) {
+        return
+    }
+
+    const updatePlayButton = () => {
+        const icon = playButton.querySelector('i')
+        if (!icon) {
+            return
+        }
+        if (video.paused) {
+            icon.classList.remove('fa-pause')
+            icon.classList.add('fa-play')
+        } else {
+            icon.classList.remove('fa-play')
+            icon.classList.add('fa-pause')
+        }
+    }
+
+    const updateProgress = () => {
+        if (!video.duration || isNaN(video.duration)) {
+            return
+        }
+        const percentage = (video.currentTime / video.duration) * 100
+        progress.value = percentage
+        controls.style.setProperty('--video-progress', percentage)
+        currentTimeElement.textContent = formatDuration(video.currentTime)
+        totalDurationElement.textContent = formatDuration(video.duration)
+    }
+
+    const syncVolumeSlider = () => {
+        volumeSlider.value = video.muted ? 0 : video.volume
+    }
+
+    const togglePlayback = () => {
+        if (video.paused) {
+            video.play()
+        } else {
+            video.pause()
+        }
+    }
+
+    playButton.addEventListener('click', togglePlayback)
+    video.addEventListener('click', togglePlayback)
+
+    if (fullscreenButton) {
+        fullscreenButton.addEventListener('click', () => toggleVideoFullscreen())
+    }
+
+    progress.addEventListener('input', (event) => {
+        if (!video.duration || isNaN(video.duration)) {
+            return
+        }
+        const percentValue = parseFloat(event.target.value)
+        const percent = percentValue / 100
+        video.currentTime = percent * video.duration
+        controls.style.setProperty('--video-progress', percentValue)
+    })
+
+    volumeSlider.addEventListener('input', (event) => {
+        const value = parseFloat(event.target.value)
+        video.volume = value
+        video.muted = value === 0
+    })
+
+    video.addEventListener('timeupdate', updateProgress)
+    video.addEventListener('loadedmetadata', updateProgress)
+    video.addEventListener('play', updatePlayButton)
+    video.addEventListener('pause', updatePlayButton)
+    video.addEventListener('volumechange', syncVolumeSlider)
+
+    // initialize state
+    updatePlayButton()
+    updateProgress()
+    syncVolumeSlider()
 }
 
 // -----------------------------
@@ -532,9 +609,19 @@ function initializeVideoPlayer() {
 // update audio details
 function updateAudioInfo(audio) {
     const durationElement = document.getElementById('audio-duration')
+    const headerDurationElement = document.getElementById('audio-file-duration')
+    const controlsDurationElement = document.getElementById('audio-total-duration')
     if (audio.duration && !isNaN(audio.duration)) {
         const duration = formatDuration(audio.duration)
-        durationElement.textContent = `Duration: ${duration}`
+        if (durationElement) {
+            durationElement.textContent = `Duration: ${duration}`
+        }
+        if (headerDurationElement) {
+            headerDurationElement.textContent = duration
+        }
+        if (controlsDurationElement) {
+            controlsDurationElement.textContent = duration
+        }
     }
 }
 
@@ -549,6 +636,99 @@ function formatDuration(seconds) {
     } else {
         return `${minutes}:${secs.toString().padStart(2, '0')}`
     }
+}
+
+function initializeAudioControls() {
+    const audio = document.getElementById('main-audio')
+    const controls = document.getElementById('custom-audio-controls')
+
+    if (!audio || !controls) {
+        return
+    }
+
+    const playButton = controls.querySelector('[data-action="toggle-play"]')
+    const progress = document.getElementById('audio-progress')
+    const currentTimeElement = document.getElementById('audio-current-time')
+    const totalDurationElement = document.getElementById('audio-total-duration')
+    const volumeSlider = document.getElementById('audio-volume')
+
+    if (!playButton || !progress || !currentTimeElement || !totalDurationElement || !volumeSlider) {
+        return
+    }
+
+    const updatePlayButton = () => {
+        const icon = playButton.querySelector('i')
+        if (!icon) {
+            return
+        }
+        if (audio.paused) {
+            icon.classList.remove('fa-pause')
+            icon.classList.add('fa-play')
+        } else {
+            icon.classList.remove('fa-play')
+            icon.classList.add('fa-pause')
+        }
+    }
+
+    const updateProgress = () => {
+        if (!audio.duration || isNaN(audio.duration)) {
+            return
+        }
+        const percentage = (audio.currentTime / audio.duration) * 100
+        progress.value = percentage
+        controls.style.setProperty('--audio-progress', percentage)
+        currentTimeElement.textContent = formatDuration(audio.currentTime)
+        totalDurationElement.textContent = formatDuration(audio.duration)
+    }
+
+    const syncVolumeSlider = () => {
+        volumeSlider.value = audio.muted ? 0 : audio.volume
+    }
+
+    playButton.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play()
+        } else {
+            audio.pause()
+        }
+    })
+
+    progress.addEventListener('input', (event) => {
+        if (!audio.duration || isNaN(audio.duration)) {
+            return
+        }
+        const percentValue = parseFloat(event.target.value)
+        const percent = percentValue / 100
+        audio.currentTime = percent * audio.duration
+        controls.style.setProperty('--audio-progress', percentValue)
+    })
+
+    volumeSlider.addEventListener('input', (event) => {
+        const value = parseFloat(event.target.value)
+        audio.volume = value
+        audio.muted = value === 0
+    })
+
+    audio.addEventListener('timeupdate', updateProgress)
+    audio.addEventListener('loadedmetadata', updateProgress)
+    audio.addEventListener('play', updatePlayButton)
+    audio.addEventListener('pause', updatePlayButton)
+    audio.addEventListener('volumechange', syncVolumeSlider)
+
+    // initialize state
+    updatePlayButton()
+    updateProgress()
+    syncVolumeSlider()
+}
+
+function seekMedia(mediaElement, offsetSeconds) {
+    if (!mediaElement || !mediaElement.duration || isNaN(mediaElement.duration)) {
+        return false
+    }
+
+    const newTime = Math.max(0, Math.min(mediaElement.duration, mediaElement.currentTime + offsetSeconds))
+    mediaElement.currentTime = newTime
+    return true
 }
 
 // -----------------------------
@@ -582,6 +762,17 @@ document.addEventListener('keydown', function (e) {
     }
 
     // arrow keys for panning when zoomed
+    const activeElement = document.activeElement
+    const isFormFocus = activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA' || activeElement.tagName === 'SELECT' || activeElement.isContentEditable)
+    const isArrowKey = e.key === 'ArrowLeft' || e.key === 'ArrowRight'
+    if (isArrowKey && !isFormFocus) {
+        const mediaTarget = document.getElementById('main-video') || document.getElementById('main-audio')
+        if (mediaTarget && seekMedia(mediaTarget, e.key === 'ArrowLeft' ? -5 : 5)) {
+            e.preventDefault()
+            return
+        }
+    }
+
     if (imageState.scale > 1) {
         const panStep = 50
         let panX = 0, panY = 0

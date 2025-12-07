@@ -249,35 +249,23 @@
                                 </div>
                             </div>
 
-                        {# VIDEO VIEWER #}
+                        {# VIDEO PLAYER #}
                         {% elseif mediaType starts with 'video/' %}
-                            <div class="flex-1 flex flex-col bg-gray-900/20">
-                                {# VIDEO CONTROLS BAR #}
-                                <div class="px-2 py-1 border-b border-gray-700/30 bg-gray-800/30">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center gap-4">
-                                            <div class="flex items-center gap-2">
-                                                <i class="fas fa-video text-purple-400"></i>
-                                                <span class="text-sm font-medium text-gray-300">Video Player</span>
-                                            </div>
-                                            <div class="text-xs text-gray-400" id="video-info">
-                                                {{ mediaType }}
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center gap-2">
-                                            <button onclick="toggleVideoFullscreen()" class="px-3 py-1 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 hover:text-purple-200 rounded text-xs border border-purple-500/30 transition-all duration-200">
-                                                <i class="fas fa-expand mr-1"></i>
-                                                Fullscreen
-                                            </button>
-                                        </div>
+                            <div class="flex-1 flex justify-center p-0 md:p-4">
+                                <div class="w-full max-w-5xl flex flex-col bg-gray-900/20 border border-gray-800/50 rounded-none md:rounded-xl overflow-hidden">
+                                <div class="px-3 py-2 border-b border-gray-900/65 bg-gray-950/60 flex items-center justify-between">
+                                    <div class="flex items-center gap-2 text-gray-300 text-sm font-medium">
+                                        <i class="fas fa-video text-purple-400"></i>
+                                        <span>Video Player</span>
+                                        <span id="video-status" class="text-[11px] uppercase tracking-wide text-purple-200 opacity-0 transition-opacity duration-150">Loading...</span>
                                     </div>
+                                    <span class="text-xs text-gray-400" id="video-info">{{ mediaType }}</span>
                                 </div>
 
-                                {# VIDEO CONTAINER #}
-                                <div class="flex-1 flex items-center justify-center p-6">
-                                    <div class="w-full max-w-6xl">
-                                        <video id="main-video" controls preload="metadata"
-                                               class="w-full shadow-2xl rounded-lg border border-gray-600/30 bg-black"
+                                <div class="flex-1 flex flex-col p-4 gap-4 bg-gray-950/40">
+                                    <div class="flex-1">
+                                        <video id="main-video" preload="metadata"
+                                               class="w-full h-full rounded-lg border border-gray-700/40 bg-black shadow-lg"
                                                onloadedmetadata="updateVideoInfo(this)"
                                                onerror="handleVideoError(this)"
                                                onwaiting="handleVideoWaiting(this)"
@@ -289,65 +277,112 @@
                                                 <p>Your browser does not support the video tag.</p>
                                             </div>
                                         </video>
-
-                                        {# VIDEO STATUS INDICATOR #}
-                                        <div id="video-status" class="hidden mt-2 text-center text-sm">
-                                            <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-800/50 rounded">
-                                                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-400"></div>
-                                                <span class="text-gray-300">Loading...</span>
-                                            </div>
-                                        </div>
                                     </div>
-                                </div>
-                            </div>
 
-                        {# AUDIO VIEWER #}
-                        {% elseif mediaType starts with 'audio/' %}
-                            <div class="flex-1 flex flex-col bg-gray-900/20">
-                                {# AUDIO CONTROLS BAR #}
-                                <div class="px-2 py-1 border-b border-gray-700/30 bg-gray-800/30">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center gap-4">
-                                            <div class="flex items-center gap-2">
-                                                <i class="fas fa-music text-green-400"></i>
-                                                <span class="text-sm font-medium text-gray-300">Audio Player</span>
-                                            </div>
-                                            <div class="text-xs text-gray-400" id="audio-info">
-                                                {{ mediaType }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {# AUDIO CONTAINER #}
-                                <div class="flex-1 flex items-center justify-center p-6">
-                                    <div class="w-full max-w-2xl">
-                                        {# AUDIO VISUALIZER PLACEHOLDER #}
-                                        <div class="bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-lg p-8 mb-6 border border-gray-600/30">
-                                            <div class="flex items-center justify-center mb-4">
-                                                <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center">
-                                                    <i class="fas fa-music text-green-400 text-2xl"></i>
+                                    <div id="custom-video-controls" class="space-y-4">
+                                        <div class="flex items-center gap-3">
+                                            <button type="button" data-action="toggle-play" class="w-11 h-11 rounded-full bg-purple-500/25 border border-purple-400/40 text-purple-100 flex items-center justify-center hover:bg-purple-500/40 transition">
+                                                <i class="fas fa-play text-base"></i>
+                                            </button>
+                                            <div class="flex-1">
+                                                <div class="flex items-center justify-between text-[11px] text-gray-400 font-mono uppercase tracking-widest">
+                                                    <span>Timeline</span>
+                                                    <span>
+                                                        <span id="video-current-time">0:00</span>
+                                                        <span class="text-gray-500">/</span>
+                                                        <span id="video-total-duration">0:00</span>
+                                                    </span>
+                                                </div>
+                                                <div class="relative mt-1.5 h-2">
+                                                    <div class="h-2 w-full rounded-full bg-gray-800/70"></div>
+                                                    <input type="range" id="video-progress" min="0" max="100" value="0" class="absolute inset-0 w-full opacity-0 cursor-pointer">
+                                                    <div class="h-2 w-full rounded-full overflow-hidden absolute inset-0 pointer-events-none">
+                                                        <div class="h-full bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400 rounded-full" style="width: calc(var(--video-progress, 0) * 1%);"></div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="text-center">
-                                                <h3 class="text-lg font-medium text-white mb-2">{{ currentPath|split('/')|last }}</h3>
-                                                <p class="text-gray-400 text-sm" id="audio-duration">Loading...</p>
-                                            </div>
                                         </div>
-
-                                        {# AUDIO PLAYER #}
-                                        <audio id="main-audio" controls preload="metadata"
-                                               class="w-full shadow-lg rounded-lg border border-gray-600/30"
-                                               onloadedmetadata="updateAudioInfo(this)">
-                                            <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
-                                            <div class="p-4 text-center text-gray-400">
-                                                <i class="fas fa-exclamation-triangle mb-2"></i>
-                                                <p>Your browser does not support the audio tag.</p>
+                                        <div class="flex flex-wrap items-center gap-4 text-xs text-gray-300">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-volume-up text-[11px] text-gray-400"></i>
+                                                <input type="range" id="video-volume" min="0" max="1" step="0.01" value="1" class="w-32 accent-purple-400 cursor-pointer h-1 bg-gray-800/80 rounded-full">
                                             </div>
-                                        </audio>
+                                            <button type="button" data-action="toggle-fullscreen" class="ml-auto px-4 py-1.5 rounded-full border border-gray-600/60 text-gray-200 hover:bg-gray-700/60 transition flex items-center gap-2 text-xs">
+                                                <i class="fas fa-expand"></i>
+                                                Fullscreen
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            </div>
+                        {% elseif mediaType starts with 'audio/' %}
+                            <div class="flex-1 flex justify-center p-0 md:p-4">
+                                <div class="w-full max-w-3xl flex flex-col bg-gray-900/20 border border-gray-800/50 rounded-none md:rounded-xl overflow-hidden">
+                                <div class="px-3 py-2 border-b border-gray-900/65 bg-gray-950/60 flex items-center justify-between">
+                                    <div class="flex items-center gap-2 text-gray-300 text-sm font-medium">
+                                        <i class="fas fa-music text-green-400"></i>
+                                        <span>Audio Player</span>
+                                    </div>
+                                    <span class="text-xs text-gray-400" id="audio-info">{{ mediaType }}</span>
+                                </div>
+
+                                <div class="flex-1 flex flex-col p-4 gap-5 bg-gray-950/40">
+                                    <div class="bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-lg p-6 border border-gray-700/40 shadow-inner">
+                                        <div class="flex items-center justify-center mb-3">
+                                            <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center">
+                                                <i class="fas fa-wave-square text-green-300 text-xl"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text-center">
+                                            <h3 class="text-base font-medium text-white mb-1">{{ currentPath|split('/')|last }}</h3>
+                                        </div>
+                                    </div>
+
+                                    <audio id="main-audio" preload="metadata"
+                                           class="hidden"
+                                           onloadedmetadata="updateAudioInfo(this)">
+                                        <source src={{ path('app_file_system_get_resource', { 'path': currentPath }) }} type={{ mediaType }}>
+                                        <div class="p-4 text-center text-gray-400">
+                                            <i class="fas fa-exclamation-triangle mb-2"></i>
+                                            <p>Your browser does not support the audio tag.</p>
+                                        </div>
+                                    </audio>
+
+                                    <div id="custom-audio-controls" class="flex flex-col gap-4">
+                                        <div class="flex items-center gap-3">
+                                            <button type="button" data-action="toggle-play" class="w-11 h-11 rounded-full bg-emerald-500/25 border border-emerald-400/40 text-emerald-100 flex items-center justify-center hover:bg-emerald-500/40 transition">
+                                                <i class="fas fa-play text-base"></i>
+                                            </button>
+                                            <div class="flex-1">
+                                                <p class="text-sm font-semibold text-white truncate">{{ currentPath|split('/')|last }}</p>
+                                                <p class="text-[11px] text-gray-400 uppercase tracking-widest" id="audio-file-duration">0:00</p>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-volume-up text-[11px] text-gray-400"></i>
+                                                <input type="range" id="audio-volume" min="0" max="1" step="0.01" value="1" class="w-32 accent-green-400 cursor-pointer h-1 bg-gray-800/80 rounded-full">
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-between text-xs text-gray-400 font-mono">
+                                            <span>Timeline</span>
+                                            <span>
+                                                <span id="audio-current-time">0:00</span>
+                                                <span class="text-gray-500">/</span>
+                                                <span id="audio-total-duration">0:00</span>
+                                            </span>
+                                        </div>
+                                        <div class="relative h-2">
+                                            <div class="h-2 w-full rounded-full bg-gray-800/70"></div>
+                                            <input type="range" id="audio-progress" min="0" max="100" value="0" class="absolute inset-0 w-full opacity-0 cursor-pointer">
+                                            <div class="h-2 w-full rounded-full overflow-hidden absolute inset-0 pointer-events-none">
+                                                <div class="h-full bg-gradient-to-r from-emerald-400 via-green-400 to-cyan-400 rounded-full" style="width: calc(var(--audio-progress, 0) * 1%);"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+
                         {% endif %}
                     </div>
                 {% endif %}
