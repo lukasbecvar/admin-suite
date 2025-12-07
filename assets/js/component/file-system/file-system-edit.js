@@ -1,6 +1,7 @@
 /** file-system edit component functionality */
 document.addEventListener('DOMContentLoaded', function()
 {
+    const form = editor.closest('form')
     const editor = document.getElementById('editor')
 
     // -----------------------------
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function()
     document.addEventListener('keydown', function(e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 's') {
             e.preventDefault()
-            document.querySelector('form').submit()
+            form?.submit()
         }
     })
 

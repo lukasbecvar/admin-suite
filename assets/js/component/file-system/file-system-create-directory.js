@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', function()
     // -----------------------------
     // ELEMENT DECLARATIONS
     // -----------------------------
-    const form = document.querySelector('form')
-    const errorContainer = document.createElement('div')
     const directoryNameInput = document.getElementById('directoryname')
+    const errorContainer = document.createElement('div')
+    const form = directoryNameInput.closest('form')
 
     // create error container
     errorContainer.className = 'mt-2'

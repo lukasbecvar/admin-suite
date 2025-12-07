@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function()
     // -----------------------------
     // new name input field
     const newNameInput = document.getElementById('newName')
-    const form = document.querySelector('form')
+    const form = newNameInput.closest('form')
     const originalName = newNameInput.value
 
     // create error messages container

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function()
     // ELEMENT DECLARATIONS
     // -----------------------------
     // get form elements
-    const form = document.querySelector('form')
+    const form = destinationPathSelect.closest('form')
     const customPathError = document.getElementById('customPathError')
     const destinationPathSelect = document.getElementById('destinationPath')
     const selectPathContainer = document.getElementById('selectPathContainer')

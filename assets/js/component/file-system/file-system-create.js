@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function()
     // -----------------------------
     // ELEMENT DECLARATIONS
     // -----------------------------
-    const form = document.querySelector('form')
+    const form = filenameInput.closest('form')
     const editor = document.getElementById('editor')
     const errorContainer = document.createElement('div')
     const filenameInput = document.getElementById('filename')
