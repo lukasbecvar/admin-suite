@@ -19,10 +19,15 @@ document.addEventListener('DOMContentLoaded', function()
     })
 
     // add smooth transitions
-    const mediaElements = document.querySelectorAll('#main-image, #main-video, #main-audio')
+    const mediaElements = document.querySelectorAll('#main-video, #main-audio')
     mediaElements.forEach(element => {
         element.style.transition = 'transform 0.3s ease, opacity 0.3s ease'
     })
+
+    const imageElement = document.getElementById('main-image')
+    if (imageElement) {
+        setImageTransition(true)
+    }
 
     // handle window resize
     window.addEventListener('resize', function () {
@@ -34,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function()
     if (mainImage) {
         mainImage.addEventListener('load', function () {
             fitImageToContainer()
+            updateBaseImageDimensions()
         })
     }
 })
@@ -50,7 +56,9 @@ let imageState = {
     initialTranslateY: 0,
     minScale: 0.5,
     maxScale: 10,
-    zoomStep: 0.5
+    zoomStep: 0.3,
+    baseWidth: 0,
+    baseHeight: 0
 }
 
 // -----------------------------
@@ -76,6 +84,8 @@ function updateImageInfo(img) {
         if (loadingElement) {
             loadingElement.style.display = 'none'
         }
+
+        updateBaseImageDimensions()
     }
 }
 
@@ -83,7 +93,8 @@ function updateImageInfo(img) {
 function applyImageTransform() {
     const img = document.getElementById('main-image')
     if (img) {
-        img.style.transform = `scale(${imageState.scale}) translate(${imageState.translateX}px, ${imageState.translateY}px)`
+        img.style.transformOrigin = 'center center'
+        img.style.transform = `translate(${imageState.translateX}px, ${imageState.translateY}px) scale(${imageState.scale})`
         img.style.cursor = imageState.scale > 1 ? 'grab' : 'zoom-in'
 
         if (imageState.scale > 1) {
@@ -101,26 +112,21 @@ function zoomImage(delta, centerX = null, centerY = null) {
     if (!img || !container) return
 
     const oldScale = imageState.scale
+    const direction = delta > 0 ? 1 : -1
+    const nextScale = imageState.scale + direction * imageState.zoomStep
+    const newScale = clamp(nextScale, imageState.minScale, imageState.maxScale)
 
-    if (delta > 0) {
-        imageState.scale = Math.min(imageState.scale + imageState.zoomStep, imageState.maxScale)
-    } else {
-        imageState.scale = Math.max(imageState.scale - imageState.zoomStep, imageState.minScale)
+    if (newScale === oldScale) {
+        constrainImagePosition()
+        applyImageTransform()
+        return
     }
 
-    // if zoom point is specified, adjust translation to zoom towards that point
-    if (centerX !== null && centerY !== null && oldScale !== imageState.scale) {
-        const containerRect = container.getBoundingClientRect()
-        const scaleChange = imageState.scale / oldScale
+    imageState.scale = newScale
+    const scaleChange = newScale / oldScale
 
-        // calculate relative position within container
-        const relativeX = (centerX - containerRect.left) / containerRect.width - 0.5
-        const relativeY = (centerY - containerRect.top) / containerRect.height - 0.5
-
-        // adjust translation to zoom towards the point
-        imageState.translateX = imageState.translateX * scaleChange - relativeX * containerRect.width * (scaleChange - 1) / imageState.scale
-        imageState.translateY = imageState.translateY * scaleChange - relativeY * containerRect.height * (scaleChange - 1) / imageState.scale
-    }
+    imageState.translateX *= scaleChange
+    imageState.translateY *= scaleChange
 
     constrainImagePosition()
     applyImageTransform()
@@ -132,16 +138,19 @@ function constrainImagePosition() {
     const container = document.getElementById('image-container')
     if (!img || !container) return
 
-    const containerRect = container.getBoundingClientRect()
-    const imgRect = img.getBoundingClientRect()
+    const containerWidth = container.clientWidth
+    const containerHeight = container.clientHeight
+    const baseWidth = imageState.baseWidth || img.clientWidth
+    const baseHeight = imageState.baseHeight || img.clientHeight
+    const scaledWidth = baseWidth * imageState.scale
+    const scaledHeight = baseHeight * imageState.scale
 
-    // calculate maximum allowed translation
-    const maxTranslateX = Math.max(0, (imgRect.width * imageState.scale - containerRect.width) / 2 / imageState.scale)
-    const maxTranslateY = Math.max(0, (imgRect.height * imageState.scale - containerRect.height) / 2 / imageState.scale)
+    const maxTranslateX = Math.max(0, (scaledWidth - containerWidth) / 2)
+    const maxTranslateY = Math.max(0, (scaledHeight - containerHeight) / 2)
 
     // constrain translation
-    imageState.translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, imageState.translateX))
-    imageState.translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, imageState.translateY))
+    imageState.translateX = clamp(imageState.translateX, -maxTranslateX, maxTranslateX)
+    imageState.translateY = clamp(imageState.translateY, -maxTranslateY, maxTranslateY)
 }
 
 // legacy function for backward compatibility
@@ -230,18 +239,22 @@ function initializeImageDrag() {
 
 // drag/pan start
 function startDrag(e) {
+    if (!canPan()) return
+
     imageState.isDragging = false // start as false, will become true on first move
     imageState.dragStartX = e.clientX
     imageState.dragStartY = e.clientY
     imageState.initialTranslateX = imageState.translateX
     imageState.initialTranslateY = imageState.translateY
 
+    setImageTransition(false)
     e.preventDefault()
 }
 
 // touch drag/pan start
 function startDragTouch(e) {
     if (e.touches.length !== 1) return
+    if (!canPan()) return
 
     const touch = e.touches[0]
     imageState.isDragging = false
@@ -250,12 +263,13 @@ function startDragTouch(e) {
     imageState.initialTranslateX = imageState.translateX
     imageState.initialTranslateY = imageState.translateY
 
+    setImageTransition(false)
     e.preventDefault()
 }
 
 // drag/pan
 function drag(e) {
-    if (imageState.dragStartX === undefined) return
+    if (imageState.dragStartX === undefined || !canPan()) return
 
     const deltaX = e.clientX - imageState.dragStartX
     const deltaY = e.clientY - imageState.dragStartY
@@ -283,7 +297,7 @@ function drag(e) {
 
 // touch drag/pan
 function dragTouch(e) {
-    if (e.touches.length !== 1 || imageState.dragStartX === undefined) return
+    if (e.touches.length !== 1 || imageState.dragStartX === undefined || !canPan()) return
 
     const touch = e.touches[0]
     const deltaX = touch.clientX - imageState.dragStartX
@@ -318,6 +332,7 @@ function endDrag() {
     if (img) {
         img.style.cursor = imageState.scale > 1 ? 'grab' : 'zoom-in'
         img.classList.remove('dragging')
+        setImageTransition(true)
     }
 }
 
@@ -342,10 +357,48 @@ function fitImageToContainer() {
 
         // reset zoom state
         resetImageZoom()
+        updateBaseImageDimensions()
 
         // initialize drag functionality
         initializeImageDrag()
     }
+}
+
+function updateBaseImageDimensions() {
+    const img = document.getElementById('main-image')
+    if (!img) return
+
+    const width = img.clientWidth
+    const height = img.clientHeight
+
+    if (width > 0 && height > 0) {
+        imageState.baseWidth = width
+        imageState.baseHeight = height
+    }
+}
+
+function canPan() {
+    const img = document.getElementById('main-image')
+    const container = document.getElementById('image-container')
+    if (!img || !container) return false
+
+    const baseWidth = imageState.baseWidth || img.clientWidth
+    const baseHeight = imageState.baseHeight || img.clientHeight
+    const scaledWidth = baseWidth * imageState.scale
+    const scaledHeight = baseHeight * imageState.scale
+
+    return scaledWidth > container.clientWidth + 2 || scaledHeight > container.clientHeight + 2
+}
+
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max)
+}
+
+function setImageTransition(enabled) {
+    const img = document.getElementById('main-image')
+    if (!img) return
+
+    img.style.transition = enabled ? 'transform 0.12s ease-out, opacity 0.3s ease' : 'none'
 }
 
 // -----------------------------
