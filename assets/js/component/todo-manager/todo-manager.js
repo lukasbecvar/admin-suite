@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function()
     // -----------------------------
     // UPDATE POSITIONS (POST + CSRF)
     // -----------------------------
+    const todoScrollContainer = document.getElementById('todo-csrf-token')
     const todoItemsContainer = document.getElementById('todo-items-container')
     if (todoItemsContainer) {
         const isMobile = window.innerWidth <= 768
@@ -132,7 +133,12 @@ document.addEventListener('DOMContentLoaded', function()
             ghostClass: 'bg-neutral-600/80',
             delay: isMobile ? 300 : 0,
             delayOnTouchOnly: true,
+            onMove: function (evt) {
+                handleDragAutoScroll(evt.originalEvent, todoScrollContainer)
+            },
             onEnd: function () {
+                stopDragAutoScroll()
+
                 const items = Array.from(todoItemsContainer.querySelectorAll('.todo-item'))
                 const positions = {}
 
@@ -146,7 +152,10 @@ document.addEventListener('DOMContentLoaded', function()
 
     // update positions
     function updatePositions(positions) {
-        const csrfToken = document.getElementById('todo-csrf-token').dataset.csrf
+        if (!todoScrollContainer) {
+            return
+        }
+        const csrfToken = todoScrollContainer.dataset.csrf
 
         const form = new URLSearchParams()
         form.append('csrf_token', csrfToken)
@@ -192,6 +201,92 @@ document.addEventListener('DOMContentLoaded', function()
     // -----------------------------
     // UTILITIES
     // -----------------------------
+    let scrollAnimationFrame = null
+    let scrollDirection = null
+
+    function handleDragAutoScroll(originalEvent, scrollContainer) {
+        if (!scrollContainer) {
+            stopDragAutoScroll()
+            return
+        }
+
+        const clientY = getClientY(originalEvent)
+        if (clientY === null) {
+            return
+        }
+
+        const rect = scrollContainer.getBoundingClientRect()
+        const topThreshold = rect.top + 80
+        const bottomThreshold = rect.bottom - 80
+        const maxScrollTop = scrollContainer.scrollHeight - scrollContainer.clientHeight
+
+        if (clientY < topThreshold && scrollContainer.scrollTop > 0) {
+            startDragAutoScroll('up', scrollContainer)
+        } else if (clientY > bottomThreshold && scrollContainer.scrollTop < maxScrollTop) {
+            startDragAutoScroll('down', scrollContainer)
+        } else {
+            stopDragAutoScroll()
+        }
+    }
+
+    function getClientY(evt) {
+        if (!evt) {
+            return null
+        }
+
+        if (evt.touches && evt.touches.length > 0) {
+            return evt.touches[0].clientY
+        }
+
+        if (evt.clientY !== undefined) {
+            return evt.clientY
+        }
+
+        if (evt.pageY !== undefined) {
+            return evt.pageY
+        }
+
+        return null
+    }
+
+    function startDragAutoScroll(direction, scrollContainer) {
+        if (scrollDirection === direction) {
+            return
+        }
+
+        scrollDirection = direction
+
+        const step = () => {
+            if (scrollDirection === 'up') {
+                scrollContainer.scrollTop = Math.max(0, scrollContainer.scrollTop - 12)
+            } else if (scrollDirection === 'down') {
+                scrollContainer.scrollTop = Math.min(
+                    scrollContainer.scrollHeight - scrollContainer.clientHeight,
+                    scrollContainer.scrollTop + 12
+                )
+            } else {
+                return
+            }
+
+            scrollAnimationFrame = requestAnimationFrame(step)
+        }
+
+        if (scrollAnimationFrame) {
+            cancelAnimationFrame(scrollAnimationFrame)
+        }
+
+        scrollAnimationFrame = requestAnimationFrame(step)
+    }
+
+    function stopDragAutoScroll() {
+        scrollDirection = null
+
+        if (scrollAnimationFrame) {
+            cancelAnimationFrame(scrollAnimationFrame)
+            scrollAnimationFrame = null
+        }
+    }
+
     function decodeInput(input) {
         const e = document.createElement('div')
         e.innerHTML = input
