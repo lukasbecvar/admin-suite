@@ -3,6 +3,7 @@
 namespace App\Controller\Component;
 
 use Exception;
+use App\Util\AppUtil;
 use App\Manager\LogManager;
 use App\Util\FileSystemUtil;
 use App\Util\FileUploadUtil;
@@ -24,17 +25,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class FileSystemBrowserController extends AbstractController
 {
+    private AppUtil $appUtil;
     private LogManager $logManager;
     private ErrorManager $errorManager;
     private FileSystemUtil $fileSystemUtil;
     private FileUploadUtil $fileUploadUtil;
 
     public function __construct(
+        AppUtil $appUtil,
         LogManager $logManager,
         ErrorManager $errorManager,
         FileSystemUtil $fileSystemUtil,
         FileUploadUtil $fileUploadUtil
     ) {
+        $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->errorManager = $errorManager;
         $this->fileSystemUtil = $fileSystemUtil;
@@ -55,6 +59,9 @@ class FileSystemBrowserController extends AbstractController
         // get filesystem path
         $path = (string) $request->query->get('path', '/');
 
+        // get page
+        $page = (int) $request->query->get('page', '1');
+
         // check if path exists
         if (!$this->fileSystemUtil->checkIfFileExist($path)) {
             return $this->render('component/file-system/file-system-error.twig', [
@@ -68,8 +75,14 @@ class FileSystemBrowserController extends AbstractController
             ]);
         }
 
+        // get limit per page
+        $limitPerPage = (int) $this->appUtil->getEnvValue('LIMIT_CONTENT_PER_PAGE');
+
+        // get files count
+        $filesystemListCount = $this->fileSystemUtil->getFilesCount($path);
+
         // get list of file in current path
-        $filesystemList = $this->fileSystemUtil->getFilesList($path);
+        $filesystemList = $this->fileSystemUtil->getPaginatedFilesList($path, $page, $limitPerPage);
 
         // add information about editability for each file
         foreach ($filesystemList as &$file) {
@@ -80,10 +93,20 @@ class FileSystemBrowserController extends AbstractController
             }
         }
 
+        // set last page
+        $lastPage = 1;
+        if ($filesystemListCount > $limitPerPage) {
+            $lastPage = ceil($filesystemListCount / $limitPerPage);
+        }
+
         // render filesystem list view
         return $this->render('component/file-system/file-system-browser.twig', [
+            'filesystemList' => $filesystemList,
             'currentPath' => $path,
-            'filesystemList' => $filesystemList
+            'total' => $filesystemListCount,
+            'limit' => $limitPerPage,
+            'currentPage' => $page,
+            'lastPage' => $lastPage
         ]);
     }
 

@@ -232,6 +232,87 @@
                             {% endfor %}
                         </tbody>
                     </table>
+
+                    {# PAGINATION SYSTEM #}
+                    {% if total > limit %}
+                        {% set totalPages = lastPage %}
+                        {% set previousPage = currentPage > 1 ? currentPage - 1 : 1 %}
+                        {% set nextPage = currentPage < totalPages ? currentPage + 1 : totalPages %}
+                        {% set startPage = max(currentPage - 1, 1) %}
+                        {% set endPage = min(currentPage + 1, totalPages) %}
+                        {% set startPageDesktop = max(currentPage - 3, 1) %}
+                        {% set endPageDesktop = min(currentPage + 3, totalPages) %}
+
+                        <div class="flex flex-col sm:flex-row justify-center items-center py-4 border-t border-gray-700/50 bg-gray-900 gap-3">
+                            <div class="flex items-center gap-2">
+                                {# FIRST PAGE - Hidden on mobile #}
+                                <div class="hidden sm:block">
+                                    {% if currentPage == 1 %}
+                                        <span class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-700/30 border border-gray-600/30 rounded cursor-not-allowed opacity-50">
+                                            <i class="fas fa-angle-double-left text-xs"></i>
+                                        </span>
+                                    {% else %}
+                                        <a href={{ path('app_file_system_browser', {'path': currentPath, 'page': 1}) }} title="First page" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
+                                            <i class="fas fa-angle-double-left text-xs"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+
+                                {# PREVIOUS PAGE #}
+                                {% if currentPage == 1 %}
+                                    <span class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-700/30 border border-gray-600/30 rounded cursor-not-allowed opacity-50">
+                                        <i class="fas fa-chevron-left text-xs"></i>
+                                    </span>
+                                {% else %}
+                                    <a href={{ path('app_file_system_browser', {'path': currentPath, 'page': previousPage}) }} class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
+                                        <i class="fas fa-chevron-left text-xs"></i>
+                                    </a>
+                                {% endif %}
+
+                                {# PAGE NUMBERS - Mobile version (fewer pages) #}
+                                <div class="flex items-center gap-2 sm:hidden">
+                                    {% for page in startPage..endPage %}
+                                        <a href={{ path('app_file_system_browser', {'path': currentPath, 'page': page}) }} class="px-3 py-2 text-sm font-medium {{ page == currentPage ? 'text-white bg-blue-500/20 border-blue-500/50' : 'text-gray-300 bg-gray-700/50 border-gray-600/50 hover:bg-gray-600/50 hover:text-white' }} border rounded transition-all duration-200">
+                                            {{ page }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+
+                                {# PAGE NUMBERS - Desktop version (more pages) #}
+                                <div class="hidden sm:flex items-center gap-2">
+                                    {% for page in startPageDesktop..endPageDesktop %}
+                                        <a href={{ path('app_file_system_browser', {'path': currentPath, 'page': page}) }} class="px-3 py-2 text-sm font-medium {{ page == currentPage ? 'text-white bg-blue-500/20 border-blue-500/50' : 'text-gray-300 bg-gray-700/50 border-gray-600/50 hover:bg-gray-600/50 hover:text-white' }} border rounded transition-all duration-200">
+                                            {{ page }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+
+                                {# NEXT PAGE #}
+                                {% if currentPage == totalPages %}
+                                    <span class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-700/30 border border-gray-600/30 rounded cursor-not-allowed opacity-50">
+                                        <i class="fas fa-chevron-right text-xs"></i>
+                                    </span>
+                                {% else %}
+                                    <a href={{ path('app_file_system_browser', {'path': currentPath, 'page': nextPage}) }} class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
+                                        <i class="fas fa-chevron-right text-xs"></i>
+                                    </a>
+                                {% endif %}
+
+                                {# LAST PAGE - Hidden on mobile #}
+                                <div class="hidden sm:block">
+                                    {% if currentPage == totalPages %}
+                                        <span class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-700/30 border border-gray-600/30 rounded cursor-not-allowed opacity-50">
+                                            <i class="fas fa-angle-double-right text-xs"></i>
+                                        </span>
+                                    {% else %}
+                                        <a href={{ path('app_file_system_browser', {'path': currentPath, 'page': totalPages}) }} title="Last page" class="px-3 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600/50 rounded hover:bg-gray-600/50 hover:text-white transition-all duration-200">
+                                            <i class="fas fa-angle-double-right text-xs"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

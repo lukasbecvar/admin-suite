@@ -223,6 +223,165 @@ class FileSystemUtil
     }
 
     /**
+     * Get files count in path
+     *
+     * @param string $path
+     *
+     * @return int
+     */
+    public function getFilesCount(string $path): int
+    {
+        // set default path if is empty
+        if (empty($path)) {
+            $path = '/';
+        }
+
+        try {
+            // skip system directories that might cause permission issues
+            if (in_array($path, ['/proc', '/sys', '/dev', '/run'])) {
+                return 0;
+            }
+
+            // execute find command with exclusions for system directories and count lines
+            $depth = '-mindepth 1 -maxdepth 1';
+            $excludes = '-not -path "/proc/*" -not -path "/sys/*" -not -path "/dev/*" -not -path "/run/*"';
+            $command = "sudo find " . escapeshellarg($path) . " $depth $excludes 2>/dev/null | wc -l";
+            $output = shell_exec($command);
+
+            // check if output is empty or not set
+            if ($output === null || $output === false) {
+                return 0;
+            }
+
+            return (int) trim($output);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error counting files: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Get paginated list of files and directories in the specified path
+     *
+     * @param string $path The path to list files and directories
+     * @param int $page The current page number
+     * @param int $limit The number of items per page
+     *
+     * @return array<array<mixed>> The list of files and directories
+     */
+    public function getPaginatedFilesList(string $path, int $page, int $limit): array
+    {
+        // set default path if is empty
+        if (empty($path)) {
+            $path = '/';
+        }
+
+        $files = [];
+
+        try {
+            // skip system directories that might cause permission issues
+            if (in_array($path, ['/proc', '/sys', '/dev', '/run'])) {
+                return [];
+            }
+
+            // execute find command to get all file paths
+            $depth = '-mindepth 1 -maxdepth 1';
+            $excludes = '-not -path "/proc/*" -not -path "/sys/*" -not -path "/dev/*" -not -path "/run/*"';
+            $command = "sudo find " . escapeshellarg($path) . " $depth $excludes 2>/dev/null";
+            $output = shell_exec($command);
+
+            if ($output === null || $output === false || trim($output) === '') {
+                return [];
+            }
+
+            $allFiles = explode("\n", trim($output));
+
+            // sort the initial list of paths
+            sort($allFiles);
+
+            // slice the array for pagination
+            $offset = ($page - 1) * $limit;
+            $paginatedFiles = array_slice($allFiles, $offset, $limit);
+
+            foreach ($paginatedFiles as $filePath) {
+                if (empty(trim($filePath))) {
+                    continue;
+                }
+
+                $command = "sudo find " . escapeshellarg($filePath) . " -maxdepth 0 -printf '%f;%s;%m;%y;%p;%T@;%Y\n' 2>/dev/null";
+                $line = shell_exec($command);
+
+                // check if command returned null
+                if ($line === null || $line === false) {
+                    continue;
+                }
+
+                // check if line is empty
+                if (empty(trim($line))) {
+                    continue;
+                }
+
+                $parts = explode(';', trim($line));
+
+                if (count($parts) < 7) {
+                    if (str_contains($line, 'Permission denied') || str_contains($line, 'No such file or directory')) {
+                        continue;
+                    }
+
+                    // log invalid format error
+                    $this->errorManager->logError(
+                        message: 'Invalid format in find output: ' . $line,
+                        code: Response::HTTP_INTERNAL_SERVER_ERROR
+                    );
+                    continue;
+                }
+
+                [$name, $size, $permissions, $type, $realPath, $creationTime] = $parts;
+
+                // calculate total size
+                $isDir = $type === 'd';
+                $fileSize = (int)$size;
+
+                if ($isDir) {
+                    $fileSize = $this->calculateDirectorySize($realPath);
+                }
+
+                // format size
+                $formattedSize = $this->formatFileSize($fileSize);
+
+                $files[] = [
+                    'name' => $name,
+                    'size' => $formattedSize,
+                    'rawSize' => $fileSize,
+                    'permissions' => $permissions,
+                    'isDir' => $isDir,
+                    'path' => $realPath,
+                    'creationTime' => date('Y-m-d H:i:s', (int)$creationTime)
+                ];
+            }
+
+            // sort the final paginated list
+            usort($files, function ($a, $b) {
+                if ($a['isDir'] && !$b['isDir']) {
+                    return -1;
+                } elseif (!$a['isDir'] && $b['isDir']) {
+                    return 1;
+                }
+                return strcasecmp($a['name'], $b['name']);
+            });
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                message: 'error listing files: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return $files;
+    }
+
+    /**
      * Check if file is executable
      *
      * @param string $path The path to the file
@@ -244,6 +403,11 @@ class FileSystemUtil
         // check if file is a log file (by extension or name)
         $fileName = $this->getBasename($path);
         if (str_ends_with($fileName, '.log') || str_contains($fileName, 'log') || str_contains($fileName, 'exception') || str_contains($path, '/log/')) {
+            return false;
+        }
+
+        // check if file is media file
+        if ($this->detectMediaType($path) !== 'non-mediafile') {
             return false;
         }
 
