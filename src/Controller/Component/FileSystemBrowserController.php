@@ -82,7 +82,7 @@ class FileSystemBrowserController extends AbstractController
         $filesystemListCount = $this->fileSystemUtil->getFilesCount($path);
 
         // get list of file in current path
-        $filesystemList = $this->fileSystemUtil->getPaginatedFilesList($path, $page, $limitPerPage);
+        $filesystemList = $this->fileSystemUtil->getFilesList($path, false, $page, $limitPerPage);
 
         // add information about editability for each file
         foreach ($filesystemList as &$file) {
