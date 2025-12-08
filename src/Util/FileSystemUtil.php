@@ -257,26 +257,60 @@ class FileSystemUtil
             return 'non-mediafile';
         }
 
-        // get MIME type using the file command
-        $mimeType = shell_exec("sudo file --mime-type -b " . escapeshellarg($path));
+        // supported extensions mapping
+        $extensionMap = [
+            // images
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'webp' => 'image/webp',
+            'bmp' => 'image/bmp',
+            'tiff' => 'image/tiff',
+            'svg' => 'image/svg+xml',
 
-        // check if MIME type is detected
+            // videos
+            'mp4' => 'video/mp4',
+            'mkv' => 'video/x-matroska',
+            'mov' => 'video/quicktime',
+            'avi' => 'video/x-msvideo',
+            'webm' => 'video/webm',
+            'flv' => 'video/x-flv',
+
+            // audio
+            'mp3' => 'audio/mpeg',
+            'wav' => 'audio/wav',
+            'flac' => 'audio/flac',
+            'ogg' => 'audio/ogg',
+            'm4a' => 'audio/mp4',
+            'aac' => 'audio/aac'
+        ];
+
+        // get extension
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
+        // if extension exists and we know it
+        if ($ext !== '' && isset($extensionMap[$ext])) {
+            return $extensionMap[$ext];
+        }
+
+        // --- FALLBACK: file --mime-type ---
+        $cmd = "sudo file --mime-type -b " . escapeshellarg($path);
+        $mimeType = shell_exec($cmd);
         if (!$mimeType) {
             $this->errorManager->handleError(
                 message: 'Error: Unable to detect MIME type for ' . $path,
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        // trim output
         $mimeType = trim($mimeType);
 
-        // determine if file is an image, video, or audio
-        if (str_starts_with($mimeType, 'image/')) {
-            return $mimeType;
-        } elseif (str_starts_with($mimeType, 'video/')) {
-            return $mimeType;
-        } elseif (str_starts_with($mimeType, 'audio/')) {
+        // determine if file is an image, video, or audio based on MIME prefix
+        if (
+            str_starts_with($mimeType, 'image/') ||
+            str_starts_with($mimeType, 'video/') ||
+            str_starts_with($mimeType, 'audio/')
+        ) {
             return $mimeType;
         }
 
