@@ -5,33 +5,13 @@ document.addEventListener('DOMContentLoaded', function()
     // ELEMENT DECLARATIONS
     // -----------------------------
     // get form elements
-    const form = destinationPathSelect.closest('form')
     const customPathError = document.getElementById('customPathError')
-    const destinationPathSelect = document.getElementById('destinationPath')
-    const selectPathContainer = document.getElementById('selectPathContainer')
-    const customPathContainer = document.getElementById('customPathContainer')
+    const form = customPathError.closest('form')
     const sourcePath = document.querySelector('input[name="sourcePath"]').value
     const customDestinationPath = document.getElementById('customDestinationPath')
-    const destinationTypeRadios = document.querySelectorAll('input[name="destinationPathType"]')
 
     // get directory part of the source path
     const sourceDir = sourcePath.lastIndexOf('/') > 0 ? sourcePath.substring(0, sourcePath.lastIndexOf('/')) : '/'
-
-    // -----------------------------
-    // PATH TYPE TOGGLE
-    // -----------------------------
-    // toggle between select and custom path inputs
-    destinationTypeRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (this.value === 'select') {
-                selectPathContainer.classList.remove('hidden')
-                customPathContainer.classList.add('hidden')
-            } else {
-                selectPathContainer.classList.add('hidden')
-                customPathContainer.classList.remove('hidden')
-            }
-        })
-    })
 
     // -----------------------------
     // VALIDATION FUNCTIONS
@@ -66,55 +46,25 @@ document.addEventListener('DOMContentLoaded', function()
 
     // validate destination path
     function validateDestination() {
-        // check which type of destination is selected
-        const isCustomPath = document.querySelector('input[name="destinationPathType"]:checked').value === 'custom'
+        if (!validateCustomPath()) {
+            return false
+        }
 
-        if (isCustomPath) {
-            // validate custom path
-            if (!validateCustomPath()) {
-                return false
-            }
+        const destinationPath = customDestinationPath.value.trim()
 
-            const destinationPath = customDestinationPath.value.trim()
+        if (sourcePath !== '/' && destinationPath.startsWith(sourcePath + '/')) {
+            alert('Cannot move a directory into its own subdirectory')
+            return false
+        }
 
-            // check if destination is a subdirectory of the source (for directories)
-            if (sourcePath !== '/' && destinationPath.startsWith(sourcePath + '/')) {
-                alert('Cannot move a directory into its own subdirectory')
-                return false
-            }
+        if (destinationPath === sourceDir) {
+            alert('The destination folder is the same as the current location. Please select a different folder.')
+            return false
+        }
 
-            // check if destination is the same as the source directory
-            if (destinationPath === sourceDir) {
-                alert('The destination folder is the same as the current location. Please select a different folder.')
-                return false
-            }
-
-            // special case for root directory
-            if (sourcePath === '/' && destinationPath === '/') {
-                alert('Cannot move the root directory to itself')
-                return false
-            }
-        } else {
-            // validate selected path
-            const destinationPath = destinationPathSelect.value
-
-            // check if destination is a subdirectory of the source (for directories)
-            if (sourcePath !== '/' && destinationPath.startsWith(sourcePath + '/')) {
-                alert('Cannot move a directory into its own subdirectory')
-                return false
-            }
-
-            // check if destination is the same as the source directory
-            if (destinationPath === sourceDir) {
-                alert('The destination folder is the same as the current location. Please select a different folder.')
-                return false
-            }
-
-            // special case for root directory
-            if (sourcePath === '/' && destinationPath === '/') {
-                alert('Cannot move the root directory to itself')
-                return false
-            }
+        if (sourcePath === '/' && destinationPath === '/') {
+            alert('Cannot move the root directory to itself')
+            return false
         }
 
         return true

@@ -454,8 +454,8 @@ class FileSystemBrowserControllerTest extends CustomTestCase
 
         // assert form exists
         $this->assertSelectorExists('form[action="/filesystem/move/save"]');
+        $this->assertSelectorTextContains('label', 'Custom Destination Path');
         $this->assertSelectorExists('input[name="sourcePath"]');
-        $this->assertSelectorExists('select[name="destinationPath"]');
         $this->assertSelectorExists('button[type="submit"]');
 
         // clean up

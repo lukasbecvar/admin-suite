@@ -92,30 +92,7 @@
 
                         {# DESTINATION FOLDER SELECTION #}
                         <div>
-                            <label for="destinationPathType" class="block text-sm font-medium text-gray-300 mb-3">Destination Type</label>
-                            <div class="flex items-center space-x-6 mb-4">
-                                <label class="inline-flex items-center cursor-pointer">
-                                    <input type="radio" name="destinationPathType" value="select" class="w-4 h-4 text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500 focus:ring-2" checked>
-                                    <span class="ml-2 text-gray-300">Select from list</span>
-                                </label>
-                                <label class="inline-flex items-center cursor-pointer">
-                                    <input type="radio" name="destinationPathType" value="custom" class="w-4 h-4 text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500 focus:ring-2">
-                                    <span class="ml-2 text-gray-300">Custom path</span>
-                                </label>
-                            </div>
-
-                            <div id="selectPathContainer">
-                                <label for="destinationPath" class="block text-sm font-medium text-gray-300 mb-2">Destination Folder</label>
-                                <select id="destinationPath" name="destinationPath" class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200">
-                                    {% for folder in availableFolders %}
-                                        <option value="{{ folder.path }}" {% if folder.path == directoryPath %}selected{% endif %}>
-                                            {{ folder.displayPath }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-
-                            <div id="customPathContainer" class="hidden">
+                            <div id="customPathContainer">
                                 <label for="customDestinationPath" class="block text-sm font-medium text-gray-300 mb-2">Custom Destination Path</label>
                                 <input type="text" id="customDestinationPath" name="customDestinationPath" placeholder="e.g. /var/www/html" class="w-full bg-gray-900/50 text-white px-4 py-3 border border-gray-600/50 rounded focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all duration-200 font-mono">
                                 <div id="customPathError" class="text-red-400 text-xs mt-2 hidden flex items-center">
