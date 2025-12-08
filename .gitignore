@@ -3,6 +3,7 @@
 
 # bundles assets
 /public/bundles/
+config/reference.php
 
 # cache files
 /var
