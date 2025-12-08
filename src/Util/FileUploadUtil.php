@@ -5,6 +5,7 @@ namespace App\Util;
 use Exception;
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class FileUploadUtil
@@ -16,10 +17,12 @@ use Symfony\Component\HttpFoundation\Response;
 class FileUploadUtil
 {
     private ErrorManager $errorManager;
+    private FileSystemUtil $fileSystemUtil;
 
-    public function __construct(ErrorManager $errorManager)
+    public function __construct(ErrorManager $errorManager, FileSystemUtil $fileSystemUtil)
     {
         $this->errorManager = $errorManager;
+        $this->fileSystemUtil = $fileSystemUtil;
     }
 
     /**
@@ -50,7 +53,7 @@ class FileUploadUtil
             // combine chunks in order
             for ($i = 0; $i < $totalChunks; $i++) {
                 $chunkPath = $tempDir . '/chunk_' . $i;
-                if (!file_exists($chunkPath)) {
+                if (!$this->fileSystemUtil->checkIfFileExist($chunkPath)) {
                     fclose($outputHandle);
                     unlink($tempFile);
                     return false;
@@ -89,9 +92,121 @@ class FileUploadUtil
                 return false;
             }
 
-            return file_exists($targetPath);
+            return $this->fileSystemUtil->checkIfFileExist($targetPath);
         } catch (Exception) {
             return false;
+        }
+    }
+
+    /**
+     * Save uploaded file chunk
+     *
+     * @param UploadedFile $file The uploaded file
+     * @param string $targetDir The target directory
+     * @param string $targetFilename The target filename
+     * @param bool $useSudo Use sudo for file operations (default: false)
+     *
+     * @return bool True if the chunk was saved successfully, false otherwise
+     */
+    public function saveUploadedChunk(UploadedFile $file, string $targetDir, string $targetFilename, bool $useSudo = false): bool
+    {
+        try {
+            // ensure target dir exists
+            if (!is_dir($targetDir)) {
+                if ($useSudo) {
+                    shell_exec('sudo mkdir -p ' . escapeshellarg($targetDir));
+                    shell_exec('sudo chown www-data:www-data ' . escapeshellarg($targetDir));
+                } else {
+                    mkdir($targetDir, 0755, true);
+                }
+            }
+
+            // php tmp path
+            $tmpPath = $file->getPathname();
+
+            // final path
+            $finalPath = rtrim($targetDir, '/') . '/' . $targetFilename;
+
+            if ($useSudo) {
+                // sudo mv tmpfile finalfile
+                $cmd = 'sudo mv ' . escapeshellarg($tmpPath) . ' ' . escapeshellarg($finalPath) . ' 2>&1';
+                $out = (string) shell_exec($cmd);
+
+                if (trim($out) !== '') {
+                    throw new Exception("sudo mv error: " . $out);
+                }
+
+                // set readable perms
+                shell_exec('sudo chmod 0644 ' . escapeshellarg($finalPath));
+            } else {
+                if (!@rename($tmpPath, $finalPath)) {
+                    throw new Exception("rename() failed");
+                }
+            }
+
+            return true;
+        } catch (Exception $e) {
+            $this->errorManager->logError(
+                message: 'saveUploadedChunk error: ' . $e->getMessage(),
+                code: 500
+            );
+            return false;
+        }
+    }
+
+    /**
+     * List uploaded chunks
+     *
+     * @param string $tempDir The temporary directory containing chunks
+     * @param string $prefix The prefix for chunk filenames (default: 'chunk_')
+     * @param bool $useSudo Use sudo for file operations (default: false)
+     *
+     * @return array<string> The list of full paths to uploaded chunks
+     */
+    public function listChunks(string $tempDir, string $prefix = 'chunk_', bool $useSudo = false): array
+    {
+        try {
+            if (!$useSudo) {
+                if (!is_dir($tempDir)) {
+                    throw new Exception("Directory does not exist: $tempDir");
+                }
+
+                $files = scandir($tempDir);
+                if ($files === false) {
+                    throw new Exception("Failed to read directory: $tempDir");
+                }
+
+                // chunk filter
+                $chunks = array_values(
+                    array_filter($files, fn($f) => str_starts_with($f, $prefix))
+                );
+
+                // sort chunks by index
+                natsort($chunks);
+
+                // return full paths
+                return array_map(fn($f) => $tempDir . '/' . $f, $chunks);
+            }
+
+            // find chunks using sudo
+            $cmd = 'sudo find ' . escapeshellarg($tempDir) . ' -maxdepth 1 -type f -name ' . escapeshellarg($prefix . '*') . ' 2>&1';
+            $output = shell_exec($cmd);
+            if ($output === null || $output === false) {
+                throw new Exception("sudo find returned null");
+            }
+
+            // split output to lines
+            $lines = array_filter(explode("\n", trim($output)));
+            natsort($lines);
+
+            // return full paths
+            return array_values($lines);
+        } catch (Exception $e) {
+            $this->errorManager->logError(
+                message: 'listChunks error: ' . $e->getMessage(),
+                code: 500
+            );
+            return [];
         }
     }
 
@@ -105,22 +220,13 @@ class FileUploadUtil
     public function cleanupTempDirectory(string $tempDir): void
     {
         try {
-            if (is_dir($tempDir)) {
-                // remove all files in temp directory
-                $files = glob($tempDir . '/*');
+            // use sudo rm -rf to remove all files and the directory itself
+            $cmd = 'sudo rm -rf ' . escapeshellarg($tempDir) . ' 2>&1';
+            $output = (string) shell_exec($cmd);
 
-                // check if files are iterable
-                if (!is_iterable($files)) {
-                    return;
-                }
-
-                foreach ($files as $file) {
-                    if (is_file($file)) {
-                        unlink($file);
-                    }
-                }
-                // remove directory
-                rmdir($tempDir);
+            // if rm returned error output, log it
+            if (trim($output) !== '') {
+                throw new Exception('sudo rm -rf failed: ' . $output);
             }
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -131,7 +237,7 @@ class FileUploadUtil
     }
 
     /**
-     * Stream file range for media files with Range support
+     * Stream file range for media files with Range support (with dd command)
      *
      * @param string $path The file path
      * @param int $start Start byte position
@@ -142,48 +248,36 @@ class FileUploadUtil
     public function streamFileRange(string $path, int $start, int $length): void
     {
         try {
-            // use PHP file handling for better performance than dd command
-            $handle = fopen($path, 'rb');
-            if ($handle === false) {
-                return;
-            }
-
-            // seek to start position
-            if ($start > 0) {
-                fseek($handle, $start);
-            }
-
-            // disable output buffering for immediate streaming
+            // prevent any php output buffering
             if (ob_get_level()) {
                 ob_end_clean();
             }
 
-            // stream data in larger chunks for better performance
-            $chunkSize = 65536; // 64KB chunks - optimal for video streaming
-            $bytesStreamed = 0;
+            // build dd command
+            $cmd = sprintf('sudo dd if=%s bs=1 skip=%d count=%d 2>/dev/null', escapeshellarg($path), $start, $length);
 
-            while (!feof($handle) && $bytesStreamed < $length) {
-                $remainingBytes = $length - $bytesStreamed;
-                $currentChunkSize = max(1, min($chunkSize, $remainingBytes));
+            // open a process handle
+            $process = popen($cmd, 'rb');
+            if (!$process) {
+                return;
+            }
 
-                $chunk = fread($handle, $currentChunkSize);
+            // stream out in chunks (64KB default)
+            $buffer = 65536;
+
+            while (!feof($process)) {
+                $chunk = fread($process, $buffer);
                 if ($chunk === false || $chunk === '') {
                     break;
                 }
-
                 echo $chunk;
-                $bytesStreamed += strlen($chunk);
-
-                // flush output immediately for streaming
                 flush();
-
-                // prevent timeout for large files
                 if (connection_status() !== CONNECTION_NORMAL) {
                     break;
                 }
             }
 
-            fclose($handle);
+            pclose($process);
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 message: 'error to stream file range: ' . $e->getMessage(),

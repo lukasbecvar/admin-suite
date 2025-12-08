@@ -59,6 +59,50 @@ class FileSystemUtil
     }
 
     /**
+     * Check if file is a symlink
+     *
+     * @param string $path The path to the file
+     *
+     * @return bool True if the file is a symlink, false otherwise
+     */
+    public function checkIfFileIsSymlink(string $path): bool
+    {
+        // use shell to check if path is a symlink
+        $escapedPath = escapeshellarg($path);
+        $cmd = "sudo test -L $escapedPath";
+
+        // check exit status of the shell command
+        exec($cmd, $output, $exitCode);
+        return $exitCode === 0;
+    }
+
+    /**
+     * Get file permissions
+     *
+     * @param string $path The path to the file
+     *
+     * @return int|null The file permissions or null on error
+     */
+    public function getFilePermissions(string $path): ?int
+    {
+        $escapedPath = escapeshellarg($path);
+        $cmd = "sudo stat -c %a $escapedPath 2>&1";
+
+        $output = [];
+        $exitCode = 0;
+
+        exec($cmd, $output, $exitCode);
+
+        // stat failed? → return null
+        if ($exitCode !== 0 || empty($output[0]) || !ctype_digit($output[0])) {
+            return null;
+        }
+
+        // convert octal string → int (cast removes float possibility)
+        return (int) octdec($output[0]);
+    }
+
+    /**
      * Get list of files and directories in the specified path
      *
      * @param string $path The path to list files and directories
@@ -188,24 +232,24 @@ class FileSystemUtil
     public function isFileExecutable(string $path): bool
     {
         // check file exists
-        if (!file_exists($path)) {
+        if (!$this->checkIfFileExist($path)) {
             return false;
         }
 
         // check if path is directory
-        if ($this->isPathDirectory($path) || is_link($path)) {
+        if ($this->isPathDirectory($path) || $this->checkIfFileIsSymlink($path)) {
             return false;
         }
 
         // check if file is a log file (by extension or name)
-        $fileName = basename($path);
+        $fileName = $this->getBasename($path);
         if (str_ends_with($fileName, '.log') || str_contains($fileName, 'log') || str_contains($fileName, 'exception') || str_contains($path, '/log/')) {
             return false;
         }
 
         // check if file has executable permissions
-        $perms = fileperms($path);
-        if ($perms !== false && ($perms & 0111)) {
+        $perms = $this->getFilePermissions($path);
+        if ($perms !== null && ($perms & 0o111)) {
             return true;
         }
 
@@ -248,12 +292,12 @@ class FileSystemUtil
     public function detectMediaType(string $path): string
     {
         // check if file exists
-        if (!file_exists($path)) {
+        if (!$this->checkIfFileExist($path)) {
             return 'non-mediafile';
         }
 
         // check if path is a directory or symbolic link
-        if ($this->isPathDirectory($path) || is_link($path)) {
+        if ($this->isPathDirectory($path) || $this->checkIfFileIsSymlink($path)) {
             return 'non-mediafile';
         }
 
@@ -306,11 +350,7 @@ class FileSystemUtil
         $mimeType = trim($mimeType);
 
         // determine if file is an image, video, or audio based on MIME prefix
-        if (
-            str_starts_with($mimeType, 'image/') ||
-            str_starts_with($mimeType, 'video/') ||
-            str_starts_with($mimeType, 'audio/')
-        ) {
+        if (str_starts_with($mimeType, 'image/') || str_starts_with($mimeType, 'video/') || str_starts_with($mimeType, 'audio/')) {
             return $mimeType;
         }
 
@@ -330,7 +370,7 @@ class FileSystemUtil
     {
         try {
             // check if path is directory
-            if ($this->isPathDirectory($path) || is_link($path)) {
+            if ($this->isPathDirectory($path) || $this->checkIfFileIsSymlink($path)) {
                 $this->errorManager->handleError(
                     message: 'error opening file: ' . $path . ' is a directory or a link',
                     code: Response::HTTP_BAD_REQUEST
@@ -463,7 +503,7 @@ class FileSystemUtil
     {
         try {
             // check if path is directory
-            if ($this->isPathDirectory($path) || is_link($path)) {
+            if ($this->isPathDirectory($path) || $this->checkIfFileIsSymlink($path)) {
                 $this->errorManager->handleError(
                     message: 'error saving file: ' . $path . ' is a directory or a link',
                     code: Response::HTTP_BAD_REQUEST
@@ -582,7 +622,7 @@ class FileSystemUtil
         }
 
         // check if path is directory or link
-        if ($this->isPathDirectory($path) || is_link($path)) {
+        if ($this->isPathDirectory($path) || $this->checkIfFileIsSymlink($path)) {
             return false;
         }
 
@@ -644,7 +684,7 @@ class FileSystemUtil
     {
         try {
             // check if path exists
-            if (!file_exists($path)) {
+            if (!$this->checkIfFileExist($path)) {
                 $this->errorManager->handleError(
                     message: 'error deleting file: ' . $path . ' does not exist',
                     code: Response::HTTP_BAD_REQUEST
@@ -692,7 +732,7 @@ class FileSystemUtil
     {
         try {
             // check if old path exists
-            if (!file_exists($oldPath)) {
+            if (!$this->checkIfFileExist($oldPath)) {
                 $this->errorManager->handleError(
                     message: 'error renaming file: ' . $oldPath . ' does not exist',
                     code: Response::HTTP_BAD_REQUEST
@@ -700,7 +740,7 @@ class FileSystemUtil
             }
 
             // check if new path already exists
-            if (file_exists($newPath)) {
+            if ($this->checkIfFileExist($newPath)) {
                 throw new Exception('Destination already exists: ' . $newPath);
             }
 
@@ -711,11 +751,6 @@ class FileSystemUtil
             // check if command was successful
             if ($output !== null && !empty($output)) {
                 throw new Exception('Failed to rename file or directory: ' . $output);
-            }
-
-            // Verify the rename was successful
-            if (!file_exists($newPath)) {
-                throw new Exception('Rename operation completed but the new path does not exist: ' . $newPath);
             }
 
             return true;
@@ -734,10 +769,11 @@ class FileSystemUtil
      * Create directory
      *
      * @param string $path The path to the directory to create
+     * @param int|null $mode Optional chmod mode (e.g., 0755). If null, default system umask is used
      *
      * @return bool True if the directory was created successfully, false otherwise
      */
-    public function createDirectory(string $path): bool
+    public function createDirectory(string $path, ?int $mode = null): bool
     {
         try {
             // check if path already exists
@@ -748,26 +784,32 @@ class FileSystemUtil
                 );
             }
 
-            // create directory using sudo
-            $command = 'sudo mkdir -p ' . escapeshellarg($path);
-            $output = shell_exec($command);
+            // build sudo command (mkdir -p [-m <mode>] <path>)
+            $cmd = 'sudo mkdir -p ';
 
-            // check if command was successful
-            if ($output !== null && !empty($output)) {
+            if ($mode !== null) {
+                // ensure mode is e.g. 0755, 0770 … convert to octal string
+                $cmd .= '-m ' . sprintf('%04o', $mode) . ' ';
+            }
+
+            $cmd .= escapeshellarg($path);
+            $output = shell_exec($cmd . ' 2>&1');
+
+            // check if command wrote something = error
+            if (!empty($output)) {
                 throw new Exception('Failed to create directory: ' . $output);
             }
 
             return true;
         } catch (Exception $e) {
-            // log error to exception log
             $this->errorManager->logError(
                 message: 'error to create directory: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
-
             return false;
         }
     }
+
     /**
      * Get full content of file without pagination for editing
      *
@@ -818,7 +860,7 @@ class FileSystemUtil
     {
         try {
             // check if path exists and is a directory
-            if (!file_exists($path) || !$this->isPathDirectory($path)) {
+            if (!$this->checkIfFileExist($path) || !$this->isPathDirectory($path)) {
                 return 0;
             }
 
@@ -879,76 +921,185 @@ class FileSystemUtil
     public function moveFileOrDirectory(string $sourcePath, string $destinationPath): bool
     {
         try {
-            // check if source path exists
-            if (!file_exists($sourcePath)) {
+            // validate source path
+            if (!$this->checkIfFileExist($sourcePath)) {
                 $this->errorManager->handleError(
-                    message: 'Error moving file: ' . $sourcePath . ' does not exist',
+                    message: 'Source path does not exist: ' . $sourcePath,
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
 
-            // check if destination path exists and is a directory
-            if (!file_exists($destinationPath) || !$this->isPathDirectory($destinationPath)) {
+            // validate destination directory
+            if (
+                !$this->checkIfFileExist($destinationPath) ||
+                !$this->isPathDirectory($destinationPath)
+            ) {
                 $this->errorManager->handleError(
-                    message: 'Error moving file: Destination ' . $destinationPath . ' is not a valid directory',
+                    message: 'Destination path is not a valid directory: ' . $destinationPath,
                     code: Response::HTTP_BAD_REQUEST
                 );
             }
 
-            // get the basename of the source
-            $basename = basename($sourcePath);
+            // basename of the source
+            $basename = $this->getBasename($sourcePath);
 
-            // build the full destination path
-            if ($destinationPath === '/') {
-                $newPath = '/' . $basename;
-            } else {
-                $newPath = rtrim($destinationPath, '/') . '/' . $basename;
-            }
+            // compute final target path (dir + basename)
+            $newPath = rtrim($destinationPath, '/') . '/' . $basename;
 
-            // check if destination already exists
-            if (file_exists($newPath)) {
+            // prevent overwriting existing file/directory
+            if ($this->checkIfFileExist($newPath)) {
                 throw new Exception('Destination already exists: ' . $newPath);
             }
 
-            // check if source is a subdirectory of destination (for directories)
-            if ($this->isPathDirectory($sourcePath) && strpos($destinationPath, $sourcePath . '/') === 0) {
-                throw new Exception('Cannot move a directory into its own subdirectory');
+            // prevent moving a dir into its own subdirectory
+            if ($this->isPathDirectory($sourcePath)) {
+                $normalizedSource = rtrim($sourcePath, '/');
+                $normalizedDest   = rtrim($destinationPath, '/');
+
+                if (str_starts_with($normalizedDest . '/', $normalizedSource . '/')) {
+                    throw new Exception('Cannot move directory into its own subdirectory');
+                }
             }
 
-            // move file or directory using sudo
-            if ($destinationPath === '/') {
-                $command = 'sudo mv ' . escapeshellarg($sourcePath) . ' ' . escapeshellarg('/' . $basename);
-            } else {
-                $command = 'sudo mv ' . escapeshellarg($sourcePath) . ' ' . escapeshellarg($destinationPath);
-            }
-            $output = shell_exec($command);
+            // build sudo command
+            $cmd = sprintf(
+                'sudo mv %s %s 2>&1',
+                escapeshellarg($sourcePath),
+                escapeshellarg($newPath)
+            );
 
-            // check if command was successful
-            if ($output !== null && !empty($output)) {
-                throw new Exception('Failed to move file or directory: ' . $output);
-            }
+            $output = (string) shell_exec($cmd);
 
-            // build full destination path for verification
-            if ($destinationPath === '/') {
-                $newFullPath = '/' . $basename;
-            } else {
-                $newFullPath = rtrim($destinationPath, '/') . '/' . $basename;
-            }
-
-            // verify the move was successful
-            if (!file_exists($newFullPath)) {
-                throw new Exception('Move operation completed but the new path does not exist: ' . $newFullPath);
+            // any output from sudo mv means error
+            if (trim($output) !== '') {
+                throw new Exception('sudo mv error: ' . $output);
             }
 
             return true;
         } catch (Exception $e) {
-            // log error to exception log
             $this->errorManager->logError(
-                message: 'Error moving file or directory: ' . $e->getMessage(),
+                message: 'Error moving file/directory: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
 
             return false;
         }
+    }
+
+    /**
+     * Check if file is a shell script
+     *
+     * @param string $path The path to the file
+     *
+     * @return bool True if the file is a shell script, false otherwise
+     */
+    public function isShellScript(string $path): bool
+    {
+        // check if path is directory
+        if ($this->isPathDirectory($path) || $this->checkIfFileIsSymlink($path)) {
+            return false;
+        }
+
+        // get file info
+        $fileInfo = exec('sudo file ' . escapeshellarg($path));
+
+        // check if file info is set
+        if (!$fileInfo) {
+            $this->errorManager->handleError(
+                message: 'error get file info: ' . $path . ' file info detection failed',
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // check if file is a shell script
+        if (strpos($fileInfo, 'shell script') !== false || str_ends_with($path, '.sh') || str_ends_with($path, '.bash')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get directory name of a file
+     *
+     * @param string $path The path to the file
+     *
+     * @return string The directory name
+     */
+    public function getDirname(string $path): string
+    {
+        $out = shell_exec('sudo dirname ' . escapeshellarg($path));
+
+        // check if command returned null
+        if ($out === null || $out === false) {
+            return '';
+        }
+
+        return trim($out);
+    }
+
+    /**
+     * Make a shell script executable
+     *
+     * @param string $filePath The path to the file
+     *
+     * @return bool True if the file was made executable, false otherwise
+     */
+    public function makeScriptExecutable(string $filePath): bool
+    {
+        $chmodCommand = 'sudo chmod +x ' . escapeshellarg($filePath);
+        $out = shell_exec($chmodCommand);
+
+        // check if command returned null
+        if ($out === null || $out === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get file modification time
+     *
+     * @param string $path The path to the file
+     *
+     * @return int The file modification time
+     */
+    public function getMtime(string $path): int
+    {
+        $mtime = shell_exec('sudo stat -c %Y ' . escapeshellarg($path));
+        return (int) $mtime;
+    }
+
+    /**
+     * Get file name
+     *
+     * @param string $path The path to the file
+     *
+     * @return string The file name
+     */
+    public function getBasename(string $path): string
+    {
+        $out = shell_exec('sudo basename ' . escapeshellarg($path));
+
+        // check if command returned null
+        if ($out === null || $out === false) {
+            return '';
+        }
+
+        return trim($out);
+    }
+
+    /**
+     * Get file size
+     *
+     * @param string $path The path to the file
+     *
+     * @return int The file size
+     */
+    public function getFileSize(string $path): int
+    {
+        $fileSize = shell_exec('sudo stat -c %s ' . escapeshellarg($path));
+        return (int) $fileSize;
     }
 }

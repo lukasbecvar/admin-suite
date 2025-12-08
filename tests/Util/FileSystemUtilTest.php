@@ -32,27 +32,6 @@ class FileSystemUtilTest extends TestCase
     }
 
     /**
-     * Test check if file exists
-     *
-     * @return void
-     */
-    public function testCheckIfFileExist(): void
-    {
-        // create temporary text file
-        $textFile = tempnam(sys_get_temp_dir(), 'test_');
-        file_put_contents($textFile, 'Test content');
-
-        // test existing file
-        $this->assertTrue($this->fileSystemUtil->checkIfFileExist($textFile));
-
-        // test non-existent file
-        $this->assertFalse($this->fileSystemUtil->checkIfFileExist('/non/existent/file'));
-
-        // clean up
-        unlink($textFile);
-    }
-
-    /**
      * Test is path directory
      *
      * @return void
@@ -71,6 +50,43 @@ class FileSystemUtilTest extends TestCase
 
         // clean up
         rmdir($tempDir);
+    }
+
+    public function testCheckIfFileExist(): void
+    {
+        // create temporary text file
+        $textFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($textFile, 'Test content');
+
+        // test existing file
+        $this->assertTrue($this->fileSystemUtil->checkIfFileExist($textFile));
+
+        // test non-existent file
+        $this->assertFalse($this->fileSystemUtil->checkIfFileExist('/non/existent/file'));
+
+        // clean up
+        unlink($textFile);
+    }
+
+    /**
+     * Test get file permissions
+     *
+     * @return void
+     */
+    public function testGetFilePermissions(): void
+    {
+        // create temporary text file
+        $textFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($textFile, 'Test content');
+
+        // test existing file
+        $this->assertIsInt($this->fileSystemUtil->getFilePermissions($textFile));
+
+        // test non-existent file
+        $this->assertNull($this->fileSystemUtil->getFilePermissions('/non/existent/file'));
+
+        // clean up
+        unlink($textFile);
     }
 
     /**

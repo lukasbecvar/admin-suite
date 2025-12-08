@@ -104,7 +104,7 @@ class FileSystemBrowserController extends AbstractController
         // check if file exists
         if (!$this->fileSystemUtil->checkIfFileExist($path)) {
             // get directory path for return link
-            $directoryPath = dirname($path);
+            $directoryPath = $this->fileSystemUtil->getDirname($path);
             if ($directoryPath === '.') {
                 $directoryPath = '/';
             }
@@ -137,14 +137,8 @@ class FileSystemBrowserController extends AbstractController
         }
 
         try {
-            // check if file is executable but not a shell script
-            $fileInfo = exec('sudo file ' . escapeshellarg($path));
-            if ($fileInfo === false) {
-                $fileInfo = '';
-            }
-            $isShellScript = strpos($fileInfo, 'shell script') !== false || str_ends_with($path, '.sh') || str_ends_with($path, '.bash');
-
-            if ($this->fileSystemUtil->isFileExecutable($path) && !$isShellScript) {
+            // check if file is executable but not a shell script (or is a shell script)
+            if ($this->fileSystemUtil->isFileExecutable($path) && !$this->fileSystemUtil->isShellScript($path)) {
                 $fileContent = 'You cannot view the content of a binary executable file';
             } else {
                 // get media type of the file
@@ -208,8 +202,7 @@ class FileSystemBrowserController extends AbstractController
 
         // ensure path is a directory
         if ($this->fileSystemUtil->checkIfFileExist($path) && !$this->fileSystemUtil->isPathDirectory($path)) {
-            // if path is a file, use its directory
-            $path = dirname($path);
+            $path = $this->fileSystemUtil->getDirname($path);
         }
 
         // render file create view
@@ -234,8 +227,7 @@ class FileSystemBrowserController extends AbstractController
 
         // ensure path is a directory
         if ($this->fileSystemUtil->checkIfFileExist($path) && !$this->fileSystemUtil->isPathDirectory($path)) {
-            // if path is a file, use its directory
-            $path = dirname($path);
+            $path = $this->fileSystemUtil->getDirname($path);
         }
 
         // render directory create view
@@ -311,7 +303,7 @@ class FileSystemBrowserController extends AbstractController
             }
 
             // ensure parent directory exists
-            $parentDir = dirname($filePath);
+            $parentDir = $this->fileSystemUtil->getDirname($filePath);
             if (!$this->fileSystemUtil->checkIfFileExist($parentDir)) {
                 $this->errorManager->handleError(
                     message: 'parent directory does not exist: ' . $parentDir,
@@ -351,8 +343,13 @@ class FileSystemBrowserController extends AbstractController
 
             // make shell scripts executable
             if ($isShellScript) {
-                $chmodCommand = 'sudo chmod +x ' . escapeshellarg($filePath);
-                shell_exec($chmodCommand);
+                $makeScriptExecutable = $this->fileSystemUtil->makeScriptExecutable($filePath);
+                if (!$makeScriptExecutable) {
+                    $this->errorManager->handleError(
+                        message: 'failed to make script executable',
+                        code: Response::HTTP_INTERNAL_SERVER_ERROR
+                    );
+                }
             }
 
             // log file creation
@@ -501,7 +498,7 @@ class FileSystemBrowserController extends AbstractController
         }
 
         // always use basename for the display name
-        $currentName = basename($path);
+        $currentName = $this->fileSystemUtil->getBasename($path);
 
         // render file rename view
         return $this->render('component/file-system/file-system-rename.twig', [
@@ -642,13 +639,7 @@ class FileSystemBrowserController extends AbstractController
             }
 
             // get file size
-            $fileSize = filesize($path);
-            if ($fileSize === false) {
-                return $this->json([
-                    'status' => 'error',
-                    'message' => 'Cannot determine file size'
-                ], Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
+            $fileSize = $this->fileSystemUtil->getFileSize($path);
 
             // log file access
             $this->logManager->log(
@@ -709,23 +700,22 @@ class FileSystemBrowserController extends AbstractController
             $response->headers->set('Expires', gmdate('D, d M Y H:i:s', time() + 3600) . ' GMT');
 
             // add ETag for better caching
-            $etag = md5($path . filemtime($path) . $fileSize);
+            $etag = md5($path . $this->fileSystemUtil->getMtime($path) . $fileSize);
             $response->headers->set('ETag', '"' . $etag . '"');
 
             // add Last-Modified header
-            $lastModTime = filemtime($path);
-            if ($lastModTime !== false) {
-                $response->headers->set('Last-Modified', gmdate('D, d M Y H:i:s', $lastModTime) . ' GMT');
-            }
+            $lastModTime = $this->fileSystemUtil->getMtime($path);
+            $response->headers->set('Last-Modified', gmdate('D, d M Y H:i:s', $lastModTime) . ' GMT');
 
             if ($statusCode === Response::HTTP_PARTIAL_CONTENT) {
                 $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
             }
 
             // set filename for inline display
-            $filename = basename($path);
+            $filename = $this->fileSystemUtil->getBasename($path);
             $response->headers->set('Content-Disposition', 'inline; filename="' . $filename . '"');
 
+            // return reponse
             return $response;
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -753,14 +743,7 @@ class FileSystemBrowserController extends AbstractController
         $fileContent = null;
 
         try {
-            // check if file is executable but not a shell script
-            $fileInfo = exec('sudo file ' . escapeshellarg($path));
-            if ($fileInfo === false) {
-                $fileInfo = '';
-            }
-            $isShellScript = strpos($fileInfo, 'shell script') !== false || str_ends_with($path, '.sh') || str_ends_with($path, '.bash');
-
-            if ($this->fileSystemUtil->isFileExecutable($path) && !$isShellScript) {
+            if ($this->fileSystemUtil->isFileExecutable($path) && !$this->fileSystemUtil->isShellScript($path)) {
                 $this->errorManager->handleError(
                     message: 'you cannot edit an executable file (except shell scripts)',
                     code: Response::HTTP_BAD_REQUEST
@@ -817,14 +800,7 @@ class FileSystemBrowserController extends AbstractController
         $content = (string) $request->request->get('content', '');
 
         try {
-            // check if file is executable but not a shell script
-            $fileInfo = exec('sudo file ' . escapeshellarg($path));
-            if ($fileInfo === false) {
-                $fileInfo = '';
-            }
-            $isShellScript = strpos($fileInfo, 'shell script') !== false || str_ends_with($path, '.sh') || str_ends_with($path, '.bash');
-
-            if ($this->fileSystemUtil->isFileExecutable($path) && !$isShellScript) {
+            if ($this->fileSystemUtil->isFileExecutable($path) && !$this->fileSystemUtil->isShellScript($path)) {
                 $this->errorManager->handleError(
                     message: 'you cannot edit an executable file (except shell scripts)',
                     code: Response::HTTP_BAD_REQUEST
@@ -899,7 +875,7 @@ class FileSystemBrowserController extends AbstractController
         }
 
         // get return path (directory containing the file)
-        $directoryPath = dirname($path);
+        $directoryPath = $this->fileSystemUtil->getDirname($path);
         if ($directoryPath === '.') {
             $directoryPath = '/';
         }
@@ -960,13 +936,13 @@ class FileSystemBrowserController extends AbstractController
 
         // get current name and directory path
         $isDirectory = $this->fileSystemUtil->isPathDirectory($path);
-        $directoryPath = dirname($path);
+        $directoryPath = $this->fileSystemUtil->getDirname($path);
         if ($directoryPath === '.') {
             $directoryPath = '/';
         }
 
         // always use basename for the display name
-        $currentName = basename($path);
+        $currentName = $this->fileSystemUtil->getBasename($path);
 
         // get list of all directories for destination selection
         $availableFolders = [];
@@ -989,7 +965,7 @@ class FileSystemBrowserController extends AbstractController
         }
 
         // add parent directory of the current path
-        $parentDir = dirname($path);
+        $parentDir = $this->fileSystemUtil->getDirname($path);
         if ($parentDir !== '/' && $parentDir !== $path) {
             $availableFolders[] = [
                 'path' => $parentDir,
@@ -1022,12 +998,7 @@ class FileSystemBrowserController extends AbstractController
         $sourcePath = (string) $request->request->get('sourcePath', '/');
 
         // get destination path based on the selected type
-        $destinationPathType = (string) $request->request->get('destinationPathType', 'select');
-        if ($destinationPathType === 'custom') {
-            $destinationPath = (string) $request->request->get('customDestinationPath', '/');
-        } else {
-            $destinationPath = (string) $request->request->get('destinationPath', '/');
-        }
+        $destinationPath = (string) $request->request->get('customDestinationPath', '/');
 
         // additional validation for the source path
         if (!$this->fileSystemUtil->checkIfFileExist($sourcePath)) {
@@ -1037,41 +1008,8 @@ class FileSystemBrowserController extends AbstractController
             );
         }
 
-        // validate custom destination path
-        if ($destinationPathType === 'custom') {
-            // check if path is empty
-            if (empty($destinationPath)) {
-                $this->errorManager->handleError(
-                    message: 'destination path cannot be empty',
-                    code: Response::HTTP_BAD_REQUEST
-                );
-            }
-
-            // check if path starts with /
-            if (!str_starts_with($destinationPath, '/')) {
-                $this->errorManager->handleError(
-                    message: 'destination path must start with /',
-                    code: Response::HTTP_BAD_REQUEST
-                );
-            }
-
-            // check if destination path exists and is a directory
-            if (!$this->fileSystemUtil->checkIfFileExist($destinationPath) || !$this->fileSystemUtil->isPathDirectory($destinationPath)) {
-                // render error page instead of throwing an exception
-                return $this->render('component/file-system/file-system-error.twig', [
-                    'errorTitle' => 'Invalid Destination',
-                    'errorMessage' => 'The destination path does not exist or is not a directory.',
-                    'details' => 'Path: ' . $destinationPath,
-                    'returnPath' => dirname($sourcePath),
-                    'actionPath' => $this->generateUrl('app_file_system_move', ['path' => $sourcePath]),
-                    'actionText' => 'Try Different Path',
-                    'actionIcon' => 'exchange'
-                ]);
-            }
-        }
-
         // fet return path (directory containing the file)
-        $directoryPath = dirname($sourcePath);
+        $directoryPath = $this->fileSystemUtil->getDirname($sourcePath);
         if ($directoryPath === '.') {
             $directoryPath = '/';
         }
@@ -1089,7 +1027,7 @@ class FileSystemBrowserController extends AbstractController
             }
 
             // get the basename of the source
-            $basename = basename($sourcePath);
+            $basename = $this->fileSystemUtil->getBasename($sourcePath);
 
             // log file move
             $this->logManager->log(
@@ -1161,16 +1099,10 @@ class FileSystemBrowserController extends AbstractController
             }
 
             // get file size
-            $fileSize = filesize($path);
-            if ($fileSize === false) {
-                $this->errorManager->handleError(
-                    message: 'cannot determine file size: ' . $path,
-                    code: Response::HTTP_INTERNAL_SERVER_ERROR
-                );
-            }
+            $fileSize = $this->fileSystemUtil->getFileSize($path);
 
             // get filename for download
-            $filename = basename($path);
+            $filename = $this->fileSystemUtil->getBasename($path);
 
             // detect media type for proper content-type header
             $mediaType = $this->fileSystemUtil->detectMediaType($path);
@@ -1223,8 +1155,7 @@ class FileSystemBrowserController extends AbstractController
 
         // ensure path is a directory
         if ($this->fileSystemUtil->checkIfFileExist($path) && !$this->fileSystemUtil->isPathDirectory($path)) {
-            // if path is a file, use its directory
-            $path = dirname($path);
+            $path = $this->fileSystemUtil->getDirname($path);
         }
 
         // check if directory exists
@@ -1301,23 +1232,19 @@ class FileSystemBrowserController extends AbstractController
             // create temp directory for chunks
             $tempDir = sys_get_temp_dir() . '/admin_suite_upload_' . $fileId;
             if (!$this->fileSystemUtil->isPathDirectory($tempDir)) {
-                mkdir($tempDir, 0755, true);
+                $this->fileSystemUtil->createDirectory($tempDir, 0755);
             }
 
             // save chunk to temp file
-            $uploadedFile->move($tempDir, 'chunk_' . $chunkIndex);
+            $this->fileUploadUtil->saveUploadedChunk(
+                file: $uploadedFile,
+                targetDir: $tempDir,
+                targetFilename: 'chunk_' . $chunkIndex,
+                useSudo: true
+            );
 
             // check if all chunks are uploaded
-            $uploadedChunks = glob($tempDir . '/chunk_*');
-
-            // check if glob returned false
-            if ($uploadedChunks === false) {
-                return $this->json([
-                    'success' => false,
-                    'error' => 'Failed to check uploaded chunks'
-                ], Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
-
+            $uploadedChunks = $this->fileUploadUtil->listChunks($tempDir, 'chunk_', useSudo: true);
             if (count($uploadedChunks) === $totalChunks) {
                 // combine all chunks
                 $targetPath = rtrim($directoryPath, '/') . '/' . $filename;
@@ -1455,11 +1382,7 @@ class FileSystemBrowserController extends AbstractController
                 }
 
                 // get file content
-                $fileContent = file_get_contents($uploadedFile->getPathname());
-                if ($fileContent === false) {
-                    $errors[] = 'Failed to read content of file "' . $originalFilename . '"';
-                    continue;
-                }
+                $fileContent = $this->fileSystemUtil->getFullFileContent($uploadedFile->getPathname());
 
                 // save file
                 $result = $this->fileSystemUtil->saveFileContent($targetPath, $fileContent);
