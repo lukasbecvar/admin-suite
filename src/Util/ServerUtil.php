@@ -69,7 +69,7 @@ class ServerUtil
     public function getCpuUsage(): float
     {
         $start = $this->readPerCoreCpuStats();
-        
+
         // brief pause to capture delta without blocking too long
         usleep(100000);
         $end = $this->readPerCoreCpuStats();
