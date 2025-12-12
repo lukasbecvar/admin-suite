@@ -96,11 +96,18 @@ class ServerUtil
         }
 
         if (empty($usages)) {
-            return 0.0;
+            return 0.1;
         }
 
         $average = array_sum($usages) / count($usages);
-        return round($average, 2);
+        $usage = round($average, 2);
+
+        // prevent negative usage
+        if ($usage < 0.1) {
+            $usage = 0.1;
+        }
+
+        return $usage;
     }
 
     /**
