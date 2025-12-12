@@ -68,32 +68,82 @@ class ServerUtil
      */
     public function getCpuUsage(): float
     {
-        $load = 0;
-        $loads = sys_getloadavg();
+        $start = $this->readPerCoreCpuStats();
+        
+        // brief pause to capture delta without blocking too long
+        usleep(100000);
+        $end = $this->readPerCoreCpuStats();
 
-        // check if sys_getloadavg() returned an array and has at least one value
-        if (!is_array($loads) || count($loads) < 1) {
-            return $load;
+        if (empty($start) || empty($end)) {
+            return 0.0;
         }
 
-        // get number of CPU cores
-        $coreNums = shell_exec('nproc');
+        $usages = [];
+        foreach ($start as $core => $startStats) {
+            if (!isset($end[$core])) {
+                continue;
+            }
 
-        // check if nproc command returned a valid number of cores
-        if (!$coreNums) {
-            return 0;
+            $totalDiff = $end[$core]['total'] - $startStats['total'];
+            $idleDiff = $end[$core]['idle'] - $startStats['idle'];
+
+            if ($totalDiff <= 0) {
+                continue;
+            }
+
+            $usage = (1 - ($idleDiff / $totalDiff)) * 100;
+            $usages[] = max(0, min($usage, 100));
         }
 
-        // fetch number of CPU cores using nproc command
-        $coreNums = (int) trim($coreNums);
-
-        // validate number of cores obtained
-        if ($coreNums > 0) {
-            // calculate CPU usage in percentage
-            $load = round(min($loads[0] / $coreNums * 100, 100), 2);
+        if (empty($usages)) {
+            return 0.0;
         }
 
-        return max($load, 0.1);
+        $average = array_sum($usages) / count($usages);
+        return round($average, 2);
+    }
+
+    /**
+     * Read per-core CPU stats from /proc/stat
+     *
+     * @return array<string,array<string,int>> keyed by cpu index (e.g. cpu0)
+     */
+    private function readPerCoreCpuStats(): array
+    {
+        $stats = [];
+        $lines = @file('/proc/stat', FILE_IGNORE_NEW_LINES);
+
+        if ($lines === false) {
+            return $stats;
+        }
+
+        foreach ($lines as $line) {
+            if (!str_starts_with($line, 'cpu')) {
+                continue;
+            }
+
+            // skip the aggregated "cpu " line to keep per-core data only
+            if (preg_match('/^cpu\\s+/', $line)) {
+                continue;
+            }
+
+            $parts = preg_split('/\\s+/', trim($line));
+            if (!$parts || count($parts) < 5) {
+                continue;
+            }
+
+            $coreId = $parts[0];
+            $values = array_map('intval', array_slice($parts, 1));
+            $idle = $values[3] + ($values[4] ?? 0); // idle + iowait
+            $total = array_sum($values);
+
+            $stats[$coreId] = [
+                'idle' => $idle,
+                'total' => $total
+            ];
+        }
+
+        return $stats;
     }
 
     /**
