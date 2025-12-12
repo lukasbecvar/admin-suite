@@ -565,7 +565,7 @@ class MonitoringManager
     public function monitorSystemResources(SymfonyStyle $io, float $cpuUsage, float $ramUsage, int $storageUsage): void
     {
         // monitor cpu usage
-        if ($cpuUsage > 98) {
+        if ($cpuUsage > 99) {
             $this->handleMonitoringStatus(
                 serviceName: 'system-cpu-usage',
                 currentStatus: 'critical',
@@ -586,7 +586,7 @@ class MonitoringManager
         }
 
         // monitor ram usage
-        if ($ramUsage > 98) {
+        if ($ramUsage > 99) {
             $this->handleMonitoringStatus(
                 serviceName: 'system-ram-usage',
                 currentStatus: 'critical',
