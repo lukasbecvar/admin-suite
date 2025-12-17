@@ -122,7 +122,7 @@
         {% endif %}
 
         {# SSL ALERT #}
-        {% if diagnosticData.isSSL == false %}
+        {% if diagnosticData.isSSL == false and diagnosticData.isSSLOnly == true %}
             <div class="bg-red-500/10 border border-red-500/25 rounded p-3 flex items-start gap-3 hover:bg-red-500/15 transition-colors duration-200">
                 <div class="flex-shrink-0">
                     <i class="fas fa-shield-alt text-red-400 text-lg"></i>

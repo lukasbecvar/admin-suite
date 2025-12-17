@@ -1050,6 +1050,7 @@ class ServerUtil
         $webUsername = $this->getWebUsername();
         $isWebUserSudo = $this->isWebUserSudo();
         $isDevMode = $this->appUtil->isDevMode();
+        $isSSLOnly = $this->appUtil->isSslOnly();
         $ramUsage = $this->getRamUsagePercentage();
         $rebootRequired = $this->isRebootRequired();
         $updateAvailable = $this->isUpdateAvailable();
@@ -1071,6 +1072,7 @@ class ServerUtil
             'cpuUsage' => $cpuUsage,
             'ramUsage' => $ramUsage,
             'isDevMode' => $isDevMode,
+            'isSSLOnly' => $isSSLOnly,
             'driveSpace' => $driveSpace,
             'webUsername' => $webUsername,
             'isLogsTooBig' => $isLogsTooBig,
