@@ -2,7 +2,7 @@
 
 {# LOG MANAGER TABLE #}
 {% block component %}
-<div class="flex flex-col h-full">
+<div class="flex flex-col h-full component">
     {# SUB-NAVIGATION #}
     <div class="flex-shrink-0 px-2 py-1 border-b border-gray-700/50 bg-gray-800/30">
         <div class="flex items-center justify-between gap-2">
@@ -89,7 +89,7 @@
             </div>
         {% else %}
             {# LOG VIEW TABLE #}
-            <div class="overflow-x-auto border-b border-gray-600/60">
+            <div class="overflow-x-auto">
                 <table class="min-w-full text-white w-full bg-gray-800/50 border border-gray-700/50" style="min-width: 1200px;">
                     <thead>
                         <tr class="bg-gray-700/50">
@@ -142,9 +142,9 @@
                                     <span class="text-white font-medium text-sm">{{ row.name|e }}</span>
                                 </td>
                                 <td class="px-4 py-3 border-b border-gray-600/60 text-gray-300 text-sm whitespace-nowrap">
-                                    <div class="log-message-container flex items-center gap-2 w-full min-w-0">
-                                        <span class="log-message-text truncate block w-full min-w-0 pr-3" title={{ row.message|e('html_attr') }}>{{ row.message|e|linkify }}</span>
-                                        <button title="Expand full log message" class="text-blue-400 hover:text-blue-300 text-lg leading-none view-raw-button hidden" data-fulltext={{ row.message|e('html_attr') }}>
+                                    <div class="log-message-container flex items-center gap-2 w-full min-w-0 relative pr-3">
+                                        <span class="log-message-text truncate block w-full min-w-0 mr-2" title={{ row.message|e('html_attr') }}>{{ row.message|e|linkify }}</span>
+                                        <button title="Expand full log message" class="text-blue-400 hover:text-blue-300 text-lg leading-none view-raw-button hidden absolute right-0 top-1/2 -translate-y-1/2" data-fulltext="{{ row.message|e('html_attr') }}">
                                             <span aria-hidden="true">…</span>
                                             <span class="sr-only">Show full log</span>
                                         </button>
