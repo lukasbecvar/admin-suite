@@ -95,6 +95,23 @@
             "/etc/apache2/sites-available/admin-suite.conf"
         ]
     },
+    "admin-suite.site": {
+        "service_name": "admin-suite.site",
+        "display_name": "admin-suite.site",
+        "url": "https://admin-suite.site",
+        "accept_codes": [200],
+        "max_response_time": 3000,
+        "type": "http",
+        "monitoring": true,
+        "display": true,
+        "metrics_monitoring": {
+            "collect_metrics": false,
+            "metrics_collector_url": ""
+        },
+        "config_files": [
+            "/etc/apache2/sites-available/admin-suite-docs.conf"
+        ]
+    }
     "paste.becvar.xyz": {
         "service_name": "paste.becvar.xyz",
         "display_name": "code-paste",
