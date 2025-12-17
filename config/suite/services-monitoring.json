@@ -111,7 +111,7 @@
         "config_files": [
             "/etc/apache2/sites-available/admin-suite-docs.conf"
         ]
-    }
+    },
     "paste.becvar.xyz": {
         "service_name": "paste.becvar.xyz",
         "display_name": "code-paste",
