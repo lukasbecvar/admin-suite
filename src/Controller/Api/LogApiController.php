@@ -191,4 +191,32 @@ class LogApiController extends AbstractController
         // return response with logs
         return $this->json($payload, JsonResponse::HTTP_OK);
     }
+
+    /**
+     * Get SSH access history from journalctl
+     *
+     * This endpoint is used in system audit component
+     * for lazy loading SSH access history card
+     *
+     * @return JsonResponse The JSON response with ssh access history
+     */
+    #[Route('/api/system/ssh-access-history', methods: ['GET'], name: 'app_api_system_ssh_access_history')]
+    public function getSshAccessHistory(): JsonResponse
+    {
+        // get ssh logins from journalctl
+        $sshAccessHistory = $this->logManager->getSshLoginsFromJournalctl();
+
+        if ($sshAccessHistory === null) {
+            $sshAccessHistory = [];
+        }
+
+        // build response payload
+        $payload = [
+            'ssh_access_history' => $sshAccessHistory,
+            'count' => count($sshAccessHistory)
+        ];
+
+        // return response with ssh access history
+        return $this->json($payload, JsonResponse::HTTP_OK);
+    }
 }

@@ -30,6 +30,7 @@ Encore
     .addEntry('system-resources-updater-js', './assets/js/component/dashboard/system-resources-updater.js')
     .addEntry('file-system-file-delete-js', './assets/js/component/file-system/file-system-file-delete.js')
     .addEntry('file-system-create-menu-js', './assets/js/component/file-system/file-system-create-menu.js')
+    .addEntry('ssh-access-history-card-js', './assets/js/component/system-audit/ssh-access-history-card.js')
     .addEntry('profile-image-preview-js', './assets/js/component/account-settings/profile-image-preview.js')
     .addEntry('notification-subscriber-js', './assets/js/component/notification/notification-subscriber.js')
     .addEntry('file-system-media-viewer-js', './assets/js/component/file-system/file-system-media-viewer.js')

@@ -59,9 +59,6 @@ class SystemAuditController extends AbstractController
         // get diagnostic data
         $diagnosticData = $this->serverUtil->getDiagnosticData();
 
-        // get ssh logins from journalctl
-        $sshAccessHistory = $this->logManager->getSshLoginsFromJournalctl();
-
         // get linux system users
         $linuxUsers = $this->serverUtil->getLinuxUsers();
 
@@ -94,9 +91,6 @@ class SystemAuditController extends AbstractController
 
             // diagnostic data
             'diagnosticData' => $diagnosticData,
-
-            // ssh access history
-            'sshAccessHistory' => $sshAccessHistory,
 
             // linux system users
             'linuxUsers' => $linuxUsers

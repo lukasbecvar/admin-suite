@@ -199,4 +199,52 @@ class LogApiControllerTest extends CustomTestCase
         $this->assertNotEmpty($xml->from);
         $this->assertNotEmpty($xml->logs);
     }
+
+    /**
+     * Test get ssh access history request with invalid method
+     *
+     * @return void
+     */
+    public function testGetSshAccessHistoryRequestWithInvalidMethod(): void
+    {
+        $this->client->request('POST', '/api/system/ssh-access-history');
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_METHOD_NOT_ALLOWED);
+    }
+
+    /**
+     * Test get ssh access history request when user is not logged in
+     *
+     * @return void
+     */
+    public function testGetSshAccessHistoryRequestWhenUserIsNotLoggedIn(): void
+    {
+        $this->client->request('GET', '/api/system/ssh-access-history');
+
+        // assert response
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    /**
+     * Test get ssh access history request with success response
+     *
+     * @return void
+     */
+    public function testGetSshAccessHistoryRequestWithSuccessResponse(): void
+    {
+        $this->simulateLogin($this->client);
+        $this->client->request('GET', '/api/system/ssh-access-history');
+
+        /** @var array<mixed> $responseData */
+        $responseData = json_decode(($this->client->getResponse()->getContent() ?: '{}'), true);
+
+        // assert response payload structure
+        $this->assertArrayHasKey('ssh_access_history', $responseData);
+        $this->assertArrayHasKey('count', $responseData);
+        $this->assertIsArray($responseData['ssh_access_history']);
+        $this->assertIsInt($responseData['count']);
+        $this->assertSame($responseData['count'], count($responseData['ssh_access_history']));
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
 }
