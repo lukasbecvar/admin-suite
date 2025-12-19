@@ -55,7 +55,7 @@
 
                         {# TODO ITEM TEXT #}
                         <div class="flex-grow">
-                            <span class="text-white whitespace-pre-line disable-select-on-phone">{{ todo.todoText|linkify }}</span>
+                            <span class="text-white whitespace-pre-line disable-select-on-phone">{{ todo.todoText|format_todo_text|linkify }}</span>
                         </div>
 
                         <div class="flex space-x-2 ml-1">

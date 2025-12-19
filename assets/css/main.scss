@@ -558,6 +558,25 @@ input[class*="bg-gray-900/50"]:-moz-autofill {
     cursor: grabbing;
 }
 
+.todo-manager .highlighted-text {
+    color: #cc6666;
+    font-weight: bold;
+}
+
+.todo-manager .strikethrough-red {
+    color: #ff9999;
+    text-decoration: line-through;
+}
+
+.todo-manager ul {
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+.todo-manager ul li {
+    margin-bottom: 4px;
+}
+
 @media screen and (max-width: 768px) {
     .todo-manager .drag-handle {
         display: none;
