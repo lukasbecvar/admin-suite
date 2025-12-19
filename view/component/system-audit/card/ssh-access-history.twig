@@ -6,8 +6,10 @@
 		</h3>
 	</div>
 	<div id="ssh-access-history-container" class="overflow-auto max-h-[320px] custom-scrollbar">
-		<div id="ssh-access-history-loading" class="p-3 space-y-2">
-			<div class="text-center text-gray-400 text-sm pb-1">Loading SSH access history...</div>
+		{# LOADING SPINNER #}
+		<div id="ssh-access-history-loading" class="p-3 space-y-2 text-center text-gray-400">
+			<i class="fas fa-spinner fa-spin text-purple-400 text-3xl mb-2"></i>
+			<div class="text-sm">Loading SSH access history...</div>
 		</div>
 
 		{# EMPTY STATE #}
