@@ -10,6 +10,7 @@ use App\Manager\LogManager;
 use App\Util\AggregationUtil;
 use App\Manager\ErrorManager;
 use App\Manager\MetricsManager;
+use App\Annotation\Authorization;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -175,6 +176,7 @@ class MetricsDashboardController extends AbstractController
      *
      * @return Response The redirect response
      */
+    #[Authorization(authorization: 'ADMIN')]
     #[Route('/metrics/aggregate', methods: ['POST'], name: 'app_metrics_aggregate')]
     public function aggregateMetrics(Request $request): Response
     {
@@ -281,6 +283,7 @@ class MetricsDashboardController extends AbstractController
      *
      * @return Response The service metrics view
      */
+    #[Authorization(authorization: 'ADMIN')]
     #[Route('/metrics/delete', methods: ['POST'], name: 'app_metrics_delete')]
     public function deleteMetrics(Request $request): Response
     {

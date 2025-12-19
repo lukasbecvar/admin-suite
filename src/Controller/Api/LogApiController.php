@@ -10,6 +10,7 @@ use App\Util\CacheUtil;
 use App\Util\SessionUtil;
 use App\Manager\LogManager;
 use App\Manager\ErrorManager;
+use App\Annotation\Authorization;
 use App\Annotation\CsrfProtection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -142,6 +143,7 @@ class LogApiController extends AbstractController
      *
      * @return JsonResponse|Response The JSON response with system logs
      */
+    #[Authorization(authorization: 'ADMIN')]
     #[Route('/api/system/logs', methods: ['GET'], name: 'app_api_system_logs')]
     public function getSystemLogs(Request $request): JsonResponse|Response
     {
@@ -212,6 +214,7 @@ class LogApiController extends AbstractController
      *
      * @return JsonResponse The JSON response with ssh access history
      */
+    #[Authorization(authorization: 'ADMIN')]
     #[Route('/api/system/ssh-access-history', methods: ['GET'], name: 'app_api_system_ssh_access_history')]
     public function getSshAccessHistory(): JsonResponse
     {

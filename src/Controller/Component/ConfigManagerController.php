@@ -56,6 +56,7 @@ class ConfigManagerController extends AbstractController
      *
      * @return Response The suite configurations list view
      */
+    #[Authorization(authorization: 'ADMIN')]
     #[Route('/settings/suite', methods: ['GET'], name: 'app_suite_config_index')]
     public function suiteConfigsList(): Response
     {
@@ -75,6 +76,7 @@ class ConfigManagerController extends AbstractController
      *
      * @return Response The suite configuration file view
      */
+    #[Authorization(authorization: 'ADMIN')]
     #[Route('/settings/suite/show', methods: ['GET'], name: 'app_suite_config_show')]
     public function suiteConfigShow(Request $request): Response
     {
@@ -248,6 +250,7 @@ class ConfigManagerController extends AbstractController
      *
      * @return Response The feature flags list page view
      */
+    #[Authorization(authorization: 'ADMIN')]
     #[Route('/settings/feature-flags', methods: ['GET'], name: 'app_feature_flags')]
     public function featureFlagsList(): Response
     {

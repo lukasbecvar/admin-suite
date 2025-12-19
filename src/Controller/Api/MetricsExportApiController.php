@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use Throwable;
 use App\Util\XmlUtil;
 use DateTimeImmutable;
 use App\Manager\ErrorManager;
@@ -70,7 +71,7 @@ class MetricsExportApiController extends AbstractController
 
         try {
             $metrics = $this->metricsManager->getServiceMetrics($serviceName, $timePeriod);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $this->errorManager->handleError(
                 message: 'error to export metrics data: ' . $exception->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
