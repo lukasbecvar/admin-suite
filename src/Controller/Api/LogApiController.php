@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use DateTime;
 use Exception;
+use App\Util\AppUtil;
 use App\Util\XmlUtil;
 use App\Util\CacheUtil;
 use App\Util\SessionUtil;
@@ -25,6 +26,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class LogApiController extends AbstractController
 {
+    private AppUtil $appUtil;
     private XmlUtil $xmlUtil;
     private CacheUtil $cacheUtil;
     private LogManager $logManager;
@@ -32,12 +34,14 @@ class LogApiController extends AbstractController
     private ErrorManager $errorManager;
 
     public function __construct(
+        AppUtil $appUtil,
         XmlUtil $xmlUtil,
         CacheUtil $cacheUtil,
         LogManager $logManager,
         SessionUtil $sessionUtil,
-        ErrorManager $errorManager
+        ErrorManager $errorManager,
     ) {
+        $this->appUtil = $appUtil;
         $this->xmlUtil = $xmlUtil;
         $this->cacheUtil = $cacheUtil;
         $this->logManager = $logManager;
@@ -141,6 +145,14 @@ class LogApiController extends AbstractController
     #[Route('/api/system/logs', methods: ['GET'], name: 'app_api_system_logs')]
     public function getSystemLogs(Request $request): JsonResponse|Response
     {
+        // check if feature flag is disabled
+        if ($this->appUtil->isFeatureFlagDisabled('system-audit')) {
+            return $this->json([
+                'status' => 'error',
+                'message' => 'system audit is disabled'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        }
+
         // get session id (to store last get time separately for each session)
         $sessionId = $this->sessionUtil->getSessionId();
 
@@ -203,6 +215,14 @@ class LogApiController extends AbstractController
     #[Route('/api/system/ssh-access-history', methods: ['GET'], name: 'app_api_system_ssh_access_history')]
     public function getSshAccessHistory(): JsonResponse
     {
+        // check if feature flag is disabled
+        if ($this->appUtil->isFeatureFlagDisabled('system-audit')) {
+            return $this->json([
+                'status' => 'error',
+                'message' => 'system audit is disabled'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        }
+
         // get ssh logins from journalctl
         $sshAccessHistory = $this->logManager->getSshLoginsFromJournalctl();
 

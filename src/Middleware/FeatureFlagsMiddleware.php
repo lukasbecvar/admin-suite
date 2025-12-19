@@ -4,11 +4,14 @@ namespace App\Middleware;
 
 use App\Util\AppUtil;
 use App\Manager\ErrorManager;
+use App\Controller\Api\TerminalApiController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Controller\Component\TerminalController;
+use App\Controller\Api\MetricsExportApiController;
 use App\Controller\Component\DiagnosticController;
 use App\Controller\Component\SystemAuditController;
 use App\Controller\Component\TodoManagerController;
+use App\Controller\Api\MonitoringExportApiController;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use App\Controller\Component\DatabaseBrowserController;
 use App\Controller\Component\MetricsDashboardController;
@@ -50,7 +53,7 @@ class FeatureFlagsMiddleware
             $controllerObject = $controller[0];
 
             // disable monitoring if feature flag is disabled
-            if ($controllerObject instanceof MonitoringManagerController || $controllerObject instanceof ServiceVisitorTrackingApiController) {
+            if ($controllerObject instanceof MonitoringManagerController || $controllerObject instanceof ServiceVisitorTrackingApiController || $controllerObject instanceof MonitoringExportApiController) {
                 if ($this->appUtil->isFeatureFlagDisabled('monitoring')) {
                     $this->errorManager->handleError(
                         message: 'monitoring is disabled',
@@ -60,7 +63,7 @@ class FeatureFlagsMiddleware
             }
 
             // disable metrics if feature flag is disabled
-            if ($controllerObject instanceof MetricsDashboardController) {
+            if ($controllerObject instanceof MetricsDashboardController || $controllerObject instanceof MetricsExportApiController) {
                 if ($this->appUtil->isFeatureFlagDisabled('metrics')) {
                     $this->errorManager->handleError(
                         message: 'metrics is disabled',
@@ -90,7 +93,7 @@ class FeatureFlagsMiddleware
             }
 
             // disable terminal if feature flag is disabled
-            if ($controllerObject instanceof TerminalController) {
+            if ($controllerObject instanceof TerminalController || $controllerObject instanceof TerminalApiController) {
                 if ($this->appUtil->isFeatureFlagDisabled('terminal')) {
                     $this->errorManager->handleError(
                         message: 'terminal is disabled',
