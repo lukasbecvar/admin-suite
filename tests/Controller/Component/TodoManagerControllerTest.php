@@ -44,7 +44,7 @@ class TodoManagerControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'Todo Manager');
         $this->assertSelectorExists('a[title="Back to dashboard"]');
         $this->assertSelectorExists('a[title="View closed todos"]');
-        $this->assertSelectorExists('input[name="create_todo_form[todo_text]"]');
+        $this->assertSelectorExists('textarea[name="create_todo_form[todo_text]"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
@@ -107,7 +107,7 @@ class TodoManagerControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('title', 'Admin suite');
         $this->assertSelectorTextContains('body', 'Todo Manager');
         $this->assertSelectorTextContains('body', 'Please enter a todo text');
-        $this->assertSelectorExists('input[name="create_todo_form[todo_text]"]');
+        $this->assertSelectorExists('textarea[name="create_todo_form[todo_text]"]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 

@@ -8,8 +8,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Sequentially;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * Class CreateTodoFormType
@@ -32,11 +32,12 @@ class CreateTodoFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('todo_text', TextType::class, [
+        $builder->add('todo_text', TextareaType::class, [
             'label' => false,
             'attr' => [
                 'autocomplete' => 'off',
-                'maxlength' => 1024
+                'maxlength' => 1024,
+                'rows' => 1
             ],
             'constraints' => new Sequentially([
                 new NotBlank(message: 'Please enter a todo text'),

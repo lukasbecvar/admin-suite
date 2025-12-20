@@ -305,3 +305,26 @@ document.addEventListener('submit', (event) =>
         submitButton.classList.add('opacity-50', 'cursor-not-allowed')
     }
 })
+
+document.addEventListener('DOMContentLoaded', function() {
+    // -----------------------------
+    // NEW TODO TEXTAREA
+    // -----------------------------
+    const newTodoTextarea = document.getElementById('create_todo_form_todo_text')
+
+    if (newTodoTextarea) {
+        // auto-resize textarea
+        newTodoTextarea.addEventListener('input', function () {
+            this.style.height = 'auto'
+            this.style.height = (this.scrollHeight) + 'px'
+        })
+
+        // submit on enter, new line on shift+enter
+        newTodoTextarea.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault()
+                this.closest('form').submit()
+            }
+        })
+    }
+})
