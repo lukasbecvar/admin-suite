@@ -29,10 +29,21 @@ document.addEventListener('DOMContentLoaded', function()
     })
 
     // event listener for confirmation submit
+    let isEditSubmitting = false
     confirmEditButton.addEventListener('click', function () {
+        // prevent multiple submissions
+        if (isEditSubmitting) {
+            return
+        }
+
         const csrfToken = document.getElementById('todo-csrf-token').dataset.csrf
 
         if (editTodoInput.value.length >= 1 && editTodoInput.value.length <= 2048) {
+            isEditSubmitting = true
+            this.disabled = true
+            this.classList.add('opacity-50', 'cursor-not-allowed')
+            this.textContent = 'Saving...'
+
             const form = new URLSearchParams()
             form.append('csrf_token', csrfToken)
             form.append('id', currentEditId)
@@ -45,6 +56,74 @@ document.addEventListener('DOMContentLoaded', function()
             }).then(() => window.location.reload())
         } else {
             alert('Todo text must be between 1 and 2048 characters')
+        }
+    })
+
+    // alt + arrow keys for line reordering in edit textarea
+    editTodoInput.addEventListener('keydown', function (event) {
+        if (event.altKey && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
+            event.preventDefault()
+                
+            const lines = this.value.split('\n')
+            const cursorPos = this.selectionStart
+            const cursorEnd = this.selectionEnd
+                
+            // find current line index and cursor position within line
+            let currentLineIndex = 0
+            let charPosInLine = 0
+            let tempPos = 0
+                
+            for (let i = 0; i < lines.length; i++) {
+                if (tempPos + lines[i].length >= cursorPos) {
+                    currentLineIndex = i
+                    charPosInLine = cursorPos - tempPos
+                    break
+                }
+                tempPos += lines[i].length + 1 // +1 for \n
+            }
+                
+            let newCursorPos = cursorPos
+            let moved = false
+                
+            if (event.key === 'ArrowUp' && currentLineIndex > 0) {
+                // move line up
+                [lines[currentLineIndex - 1], lines[currentLineIndex]] = [lines[currentLineIndex], lines[currentLineIndex - 1]]
+                moved = true
+                    
+                // calculate new cursor position
+                if (currentLineIndex === 1) {
+                    newCursorPos = charPosInLine
+                } else {
+                    let newTempPos = 0
+                    for (let i = 0; i < currentLineIndex - 1; i++) {
+                        newTempPos += lines[i].length + 1
+                    }
+                    newCursorPos = newTempPos + charPosInLine
+                }
+            } else if (event.key === 'ArrowDown' && currentLineIndex < lines.length - 1) {
+                // move line down  
+                [lines[currentLineIndex], lines[currentLineIndex + 1]] = [lines[currentLineIndex + 1], lines[currentLineIndex]]
+                moved = true
+                    
+                // calculate new cursor position
+                let newTempPos = 0
+                for (let i = 0; i <= currentLineIndex; i++) {
+                    newTempPos += lines[i].length + 1
+                }
+                newCursorPos = newTempPos + charPosInLine
+            }
+                
+            if (moved) {
+                this.value = lines.join('\n')
+                    
+                // set cursor to the moved line, preserving position within line
+                const selectionLength = cursorEnd - cursorPos
+                this.setSelectionRange(newCursorPos, newCursorPos + selectionLength)
+                    
+                // auto-resize after content change
+                this.style.height = 'auto'
+                this.style.height = (this.scrollHeight) + 'px'
+            }
         }
     })
 
@@ -313,6 +392,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const newTodoTextarea = document.getElementById('create_todo_form_todo_text')
 
     if (newTodoTextarea) {
+        let isSubmitting = false
+
         // auto-resize textarea
         newTodoTextarea.addEventListener('input', function () {
             this.style.height = 'auto'
@@ -323,7 +404,95 @@ document.addEventListener('DOMContentLoaded', function() {
         newTodoTextarea.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault()
-                this.closest('form').submit()
+                
+                // prevent multiple submissions
+                if (isSubmitting) {
+                    return
+                }
+                
+                isSubmitting = true
+                const form = this.closest('form')
+                const submitButton = form.querySelector('.add-todo-button')
+                
+                if (submitButton) {
+                    submitButton.disabled = true
+                    submitButton.classList.add('opacity-50', 'cursor-not-allowed')
+                }
+                
+                form.submit()
+            }
+        })
+
+        // reset submitting flag on input change
+        newTodoTextarea.addEventListener('input', function () {
+            isSubmitting = false
+        })
+
+        // alt + arrow keys for line reordering
+        newTodoTextarea.addEventListener('keydown', function (event) {
+            if (event.altKey && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
+                event.preventDefault()
+                
+                const lines = this.value.split('\n')
+                const cursorPos = this.selectionStart
+                const cursorEnd = this.selectionEnd
+                
+                // find current line index and cursor position within line
+                let currentLineIndex = 0
+                let charPosInLine = 0
+                let tempPos = 0
+                
+                for (let i = 0; i < lines.length; i++) {
+                    if (tempPos + lines[i].length >= cursorPos) {
+                        currentLineIndex = i
+                        charPosInLine = cursorPos - tempPos
+                        break
+                    }
+                    tempPos += lines[i].length + 1 // +1 for \n
+                }
+                
+                let newCursorPos = cursorPos
+                let moved = false
+                
+                if (event.key === 'ArrowUp' && currentLineIndex > 0) {
+                    // move line up
+                    [lines[currentLineIndex - 1], lines[currentLineIndex]] = [lines[currentLineIndex], lines[currentLineIndex - 1]]
+                    moved = true
+                    
+                    // calculate new cursor position
+                    if (currentLineIndex === 1) {
+                        newCursorPos = charPosInLine
+                    } else {
+                        let newTempPos = 0
+                        for (let i = 0; i < currentLineIndex - 1; i++) {
+                            newTempPos += lines[i].length + 1
+                        }
+                        newCursorPos = newTempPos + charPosInLine
+                    }
+                } else if (event.key === 'ArrowDown' && currentLineIndex < lines.length - 1) {
+                    // move line down  
+                    [lines[currentLineIndex], lines[currentLineIndex + 1]] = [lines[currentLineIndex + 1], lines[currentLineIndex]]
+                    moved = true
+                    
+                    // calculate new cursor position
+                    let newTempPos = 0
+                    for (let i = 0; i <= currentLineIndex; i++) {
+                        newTempPos += lines[i].length + 1
+                    }
+                    newCursorPos = newTempPos + charPosInLine
+                }
+                
+                if (moved) {
+                    this.value = lines.join('\n')
+                    
+                    // set cursor to the moved line, preserving position within line
+                    const selectionLength = cursorEnd - cursorPos
+                    this.setSelectionRange(newCursorPos, newCursorPos + selectionLength)
+                    
+                    // auto-resize after content change
+                    this.style.height = 'auto'
+                    this.style.height = (this.scrollHeight) + 'px'
+                }
             }
         })
     }
