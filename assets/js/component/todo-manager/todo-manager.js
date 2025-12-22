@@ -28,9 +28,8 @@ document.addEventListener('DOMContentLoaded', function()
         editTodoInput.value = ''
     })
 
-    // event listener for confirmation submit
-    let isEditSubmitting = false
-    confirmEditButton.addEventListener('click', function () {
+    // submit function for edit todo
+    function submitEditTodo() {
         // prevent multiple submissions
         if (isEditSubmitting) {
             return
@@ -40,9 +39,9 @@ document.addEventListener('DOMContentLoaded', function()
 
         if (editTodoInput.value.length >= 1 && editTodoInput.value.length <= 2048) {
             isEditSubmitting = true
-            this.disabled = true
-            this.classList.add('opacity-50', 'cursor-not-allowed')
-            this.textContent = 'Saving...'
+            confirmEditButton.disabled = true
+            confirmEditButton.classList.add('opacity-50', 'cursor-not-allowed')
+            confirmEditButton.textContent = 'Saving...'
 
             const form = new URLSearchParams()
             form.append('csrf_token', csrfToken)
@@ -57,11 +56,18 @@ document.addEventListener('DOMContentLoaded', function()
         } else {
             alert('Todo text must be between 1 and 2048 characters')
         }
-    })
+    }
 
-    // alt + arrow keys for line reordering in edit textarea
+    // event listener for confirmation submit
+    let isEditSubmitting = false
+    confirmEditButton.addEventListener('click', submitEditTodo)
+
+    // ctrl + s to save and alt + arrow keys for line reordering in edit textarea
     editTodoInput.addEventListener('keydown', function (event) {
-        if (event.altKey && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
+        if (event.ctrlKey && event.key === 's') {
+            event.preventDefault()
+            submitEditTodo()
+        } else if (event.altKey && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
             event.preventDefault()
                 
             const lines = this.value.split('\n')
@@ -400,9 +406,27 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.height = (this.scrollHeight) + 'px'
         })
 
-        // submit on enter, new line on shift+enter
+        // submit on enter, new line on shift + enter, ctrl + s to save
         newTodoTextarea.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault()
+                
+                // prevent multiple submissions
+                if (isSubmitting) {
+                    return
+                }
+                
+                isSubmitting = true
+                const form = this.closest('form')
+                const submitButton = form.querySelector('.add-todo-button')
+                
+                if (submitButton) {
+                    submitButton.disabled = true
+                    submitButton.classList.add('opacity-50', 'cursor-not-allowed')
+                }
+                
+                form.submit()
+            } else if (event.ctrlKey && event.key === 's') {
                 event.preventDefault()
                 
                 // prevent multiple submissions
