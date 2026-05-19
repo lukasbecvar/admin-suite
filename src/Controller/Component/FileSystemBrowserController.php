@@ -693,7 +693,7 @@ class FileSystemBrowserController extends AbstractController
                         // bytes=start- (from start to end of file)
                         $start = (int) $rangeStart;
                         $end = $fileSize - 1;
-                    } elseif ($rangeStart === '' && $rangeEnd !== '') {
+                    } elseif ($rangeEnd !== '') {
                         // bytes=-end (last N bytes)
                         $start = $fileSize - (int) $rangeEnd;
                         $end = $fileSize - 1;

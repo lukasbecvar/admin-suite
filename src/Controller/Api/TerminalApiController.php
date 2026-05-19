@@ -70,6 +70,7 @@ class TerminalApiController extends AbstractController
     #[Route('/api/system/terminal', methods: ['POST'], name: 'api_terminal')]
     public function terminalAction(Request $request): Response
     {
+        $command = '';
         try {
             // get command executor username
             $username = $this->authManager->getLoggedUsername();
@@ -372,7 +373,7 @@ class TerminalApiController extends AbstractController
             // return error response
             return new JsonResponse([
                 'status' => 'error',
-                'message' => 'Error to start command: ' . $rawCommand
+                'message' => 'Error to start command: ' . $rawCommand . ' with error: ' . $exception->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
