@@ -15,10 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class FileSystemUtil
 {
+    private AppUtil $appUtil;
     private ErrorManager $errorManager;
 
-    public function __construct(ErrorManager $errorManager)
+    public function __construct(AppUtil $appUtil, ErrorManager $errorManager)
     {
+        $this->appUtil = $appUtil;
         $this->errorManager = $errorManager;
     }
 
@@ -31,9 +33,11 @@ class FileSystemUtil
      */
     public function checkIfFileExist(string $path): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         // use shell to check if file exists
         $escapedPath = escapeshellarg($path);
-        $cmd = "sudo test -e $escapedPath";
+        $cmd = "$sudoPath test -e $escapedPath";
 
         // check exit status of the shell command
         exec($cmd, $output, $exitCode);
@@ -49,9 +53,11 @@ class FileSystemUtil
      */
     public function isPathDirectory(string $path): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         // use shell to check if path is a directory
         $escapedPath = escapeshellarg($path);
-        $cmd = "sudo test -d $escapedPath";
+        $cmd = "$sudoPath test -d $escapedPath";
 
         // check exit status of the shell command
         exec($cmd, $output, $exitCode);
@@ -67,9 +73,11 @@ class FileSystemUtil
      */
     public function checkIfFileIsSymlink(string $path): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         // use shell to check if path is a symlink
         $escapedPath = escapeshellarg($path);
-        $cmd = "sudo test -L $escapedPath";
+        $cmd = "$sudoPath test -L $escapedPath";
 
         // check exit status of the shell command
         exec($cmd, $output, $exitCode);
@@ -85,9 +93,10 @@ class FileSystemUtil
      */
     public function getFilePermissions(string $path): ?int
     {
+        $sudoPath = $this->appUtil->getSudoPath();
         $escapedPath = escapeshellarg($path);
-        $cmd = "sudo stat -c %a $escapedPath 2>&1";
-
+        $statFormat = $this->appUtil->isHostRunningOnFreeBSD() ? '-f %Lp' : '-c %a';
+        $cmd = "$sudoPath stat $statFormat $escapedPath 2>&1";
         $output = [];
         $exitCode = 0;
 
@@ -105,8 +114,8 @@ class FileSystemUtil
     /**
      * Get list of files and directories in the specified path, with optional pagination
      *
-     * @param string   $path The path to list files and directories
-     * @param bool     $recursive Spec for log manager (return all files recursive without directories)
+     * @param string $path The path to list files and directories
+     * @param bool $recursive Spec for log manager (return all files recursive without directories)
      * @param int|null $page The current page number for pagination
      * @param int|null $limit The number of items per page for pagination
      *
@@ -114,6 +123,8 @@ class FileSystemUtil
      */
     public function getFilesList(string $path, bool $recursive = false, ?int $page = null, ?int $limit = null): array
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         // set default path if is empty
         if (empty($path)) {
             $path = '/';
@@ -131,7 +142,13 @@ class FileSystemUtil
             $type = $recursive ? '-type f' : '\\( -type f -o -type d \\)';
             $depth = $recursive ? '' : '-mindepth 1 -maxdepth 1';
             $excludes = '-not -path "/proc/*" -not -path "/sys/*" -not -path "/dev/*" -not -path "/run/*"';
-            $command = "sudo find " . escapeshellarg($path) . " $depth $type $excludes -printf '%f;%s;%m;%y;%p;%T@;%Y\n' 2>/dev/null";
+
+            // FreeBSD find does not support -printf, use -exec stat instead
+            if ($this->appUtil->isHostRunningOnFreeBSD()) {
+                $command = "$sudoPath find " . escapeshellarg($path) . " $depth $type $excludes -exec stat -f '%N|%z|%Lp|%HT|%m' {} + 2>/dev/null";
+            } else {
+                $command = "$sudoPath find " . escapeshellarg($path) . " $depth $type $excludes -printf '%f;%s;%m;%y;%p;%T@;%Y\n' 2>/dev/null";
+            }
             $output = shell_exec($command);
 
             // check if output is empty or not set
@@ -154,24 +171,49 @@ class FileSystemUtil
                 }
 
                 // split output to variables
-                $parts = explode(';', $line);
+                if ($this->appUtil->isHostRunningOnFreeBSD()) {
+                    // BSD stat format: %N|%z|%Lp|%HT|%m
+                    $parts = explode('|', $line);
 
-                // check if we have all the expected parts
-                if (count($parts) < 6) {
-                    // skip lines with permission denied or no such file errors
-                    if (str_contains($line, 'Permission denied') || str_contains($line, 'No such file or directory')) {
+                    // check if we have all the expected parts
+                    if (count($parts) < 5) {
+                        // skip lines with permission denied or no such file errors
+                        if (str_contains($line, 'Permission denied') || str_contains($line, 'No such file or directory')) {
+                            continue;
+                        }
+
+                        // lLog other problematic lines
+                        $this->errorManager->logError(
+                            message: 'Invalid format in find output: ' . $line,
+                            code: Response::HTTP_INTERNAL_SERVER_ERROR
+                        );
                         continue;
                     }
 
-                    // lLog other problematic lines
-                    $this->errorManager->logError(
-                        message: 'Invalid format in find output: ' . $line,
-                        code: Response::HTTP_INTERNAL_SERVER_ERROR
-                    );
-                    continue;
-                }
+                    [$filePath, $size, $permissions, $typeDescription, $creationTime] = $parts;
+                    $name = basename($filePath);
+                    $realPath = $filePath;
+                    $type = str_contains($typeDescription, 'Directory') ? 'd' : 'f';
+                } else {
+                    $parts = explode(';', $line);
 
-                [$name, $size, $permissions, $type, $realPath, $creationTime] = $parts;
+                    // check if we have all the expected parts
+                    if (count($parts) < 6) {
+                        // skip lines with permission denied or no such file errors
+                        if (str_contains($line, 'Permission denied') || str_contains($line, 'No such file or directory')) {
+                            continue;
+                        }
+
+                        // lLog other problematic lines
+                        $this->errorManager->logError(
+                            message: 'Invalid format in find output: ' . $line,
+                            code: Response::HTTP_INTERNAL_SERVER_ERROR
+                        );
+                        continue;
+                    }
+
+                    [$name, $size, $permissions, $type, $realPath, $creationTime] = $parts;
+                }
 
                 // exclude root and boot directories and original path
                 if ($realPath === '/' || $realPath === '/boot' || $realPath === realpath($path)) {
@@ -239,6 +281,8 @@ class FileSystemUtil
      */
     public function getFilesCount(string $path): int
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         // set default path if is empty
         if (empty($path)) {
             $path = '/';
@@ -253,7 +297,7 @@ class FileSystemUtil
             // execute find command with exclusions for system directories and count lines
             $depth = '-mindepth 1 -maxdepth 1';
             $excludes = '-not -path "/proc/*" -not -path "/sys/*" -not -path "/dev/*" -not -path "/run/*"';
-            $command = "sudo find " . escapeshellarg($path) . " $depth $excludes 2>/dev/null | wc -l";
+            $command = "$sudoPath find " . escapeshellarg($path) . " $depth $excludes 2>/dev/null | wc -l";
             $output = shell_exec($command);
 
             // check if output is empty or not set
@@ -279,6 +323,8 @@ class FileSystemUtil
      */
     public function isFileExecutable(string $path): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         // check file exists
         if (!$this->checkIfFileExist($path)) {
             return false;
@@ -307,7 +353,7 @@ class FileSystemUtil
         }
 
         // get file info
-        $fileInfo = exec('sudo file ' . escapeshellarg($path));
+        $fileInfo = exec($sudoPath . 'file ' . escapeshellarg($path));
 
         // check file info is set
         if (!$fileInfo) {
@@ -344,6 +390,8 @@ class FileSystemUtil
      */
     public function detectMediaType(string $path): string
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         // check if file exists
         if (!$this->checkIfFileExist($path)) {
             return 'non-mediafile';
@@ -392,7 +440,7 @@ class FileSystemUtil
         }
 
         // --- FALLBACK: file --mime-type ---
-        $cmd = "sudo file --mime-type -b " . escapeshellarg($path);
+        $cmd = "$sudoPath file --mime-type -b " . escapeshellarg($path);
         $mimeType = shell_exec($cmd);
         if (!$mimeType) {
             $this->errorManager->handleError(
@@ -421,6 +469,8 @@ class FileSystemUtil
      */
     public function getFileContent(string $path, ?int $maxLines = null, ?int $startLine = null): array
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             // check if path is directory
             if ($this->isPathDirectory($path) || $this->checkIfFileIsSymlink($path)) {
@@ -431,7 +481,8 @@ class FileSystemUtil
             }
 
             // get file size
-            $cmd = 'sudo /usr/bin/stat -c %s ' . escapeshellarg($path);
+            $statFormat = $this->appUtil->isHostRunningOnFreeBSD() ? '-f %z' : '-c %s';
+            $cmd = $sudoPath . '/usr/bin/stat ' . $statFormat . ' ' . escapeshellarg($path);
             $fileSize = (int) shell_exec($cmd);
 
             if ($fileSize == false) {
@@ -450,7 +501,7 @@ class FileSystemUtil
             }
 
             // get total line count without loading the entire file
-            $totalLinesOutput = shell_exec('sudo wc -l ' . escapeshellarg($path));
+            $totalLinesOutput = shell_exec($sudoPath . 'wc -l ' . escapeshellarg($path));
 
             // parse output to get just the number
             if ($totalLinesOutput !== null && $totalLinesOutput !== false && preg_match('/^\s*(\d+)/', $totalLinesOutput, $matches)) {
@@ -472,14 +523,14 @@ class FileSystemUtil
                 // use sed to extract the specified range of lines
                 if ($startLine <= 1) {
                     // if starting from the beginning, use head for better performance
-                    $command = 'sudo head -n ' . $maxLines . ' ' . escapeshellarg($path);
+                    $command = $sudoPath . 'head -n ' . $maxLines . ' ' . escapeshellarg($path);
                 } elseif ($startLine > $totalLines - $maxLines) {
                     // if near the end, use tail for better performance
                     $linesToTake = $totalLines - $startLine + 1;
-                    $command = 'sudo tail -n ' . $linesToTake . ' ' . escapeshellarg($path);
+                    $command = $sudoPath . 'tail -n ' . $linesToTake . ' ' . escapeshellarg($path);
                 } else {
                     // use sed to extract lines from the middle
-                    $command = 'sudo sed -n \'' . $startLine . ',' . $endLine . 'p\' ' . escapeshellarg($path);
+                    $command = $sudoPath . 'sed -n \'' . $startLine . ',' . $endLine . 'p\' ' . escapeshellarg($path);
                 }
 
                 $fileContent = shell_exec($command);
@@ -508,7 +559,7 @@ class FileSystemUtil
                 ];
             } else {
                 // for smaller files, read the entire content
-                $fileContent = shell_exec('sudo cat ' . escapeshellarg($path));
+                $fileContent = shell_exec($sudoPath . 'cat ' . escapeshellarg($path));
 
                 // check if content was retrieved
                 if ($fileContent === null || $fileContent === false) {
@@ -554,6 +605,8 @@ class FileSystemUtil
      */
     public function saveFileContent(string $path, string $content): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             // check if path is directory
             if ($this->isPathDirectory($path) || $this->checkIfFileIsSymlink($path)) {
@@ -571,7 +624,7 @@ class FileSystemUtil
 
             // check if file is a shell script
             $isShellScript = false;
-            $fileInfo = exec('sudo file ' . escapeshellarg($path));
+            $fileInfo = exec($sudoPath . 'file ' . escapeshellarg($path));
             if ($fileInfo === false) {
                 $fileInfo = '';
             }
@@ -618,9 +671,10 @@ class FileSystemUtil
                 throw new Exception('Failed to write to temporary file');
             }
 
-            // use cat to preserve line endings instead of tee
-            $command = 'sudo cat ' . escapeshellarg($tempFile) . ' > ' . escapeshellarg($path);
-            $output = shell_exec('sudo bash -c ' . escapeshellarg($command) . ' 2>&1');
+            // use cat to preserve line endings instead of tee FreeBSD uses sh instead of bash
+            $shell = $this->appUtil->isHostRunningOnFreeBSD() ? 'sh' : 'bash';
+            $command = $sudoPath . 'cat ' . escapeshellarg($tempFile) . ' > ' . escapeshellarg($path);
+            $output = shell_exec($sudoPath . $shell . ' -c ' . escapeshellarg($command) . ' 2>&1');
 
             // check if command was successful
             if ($output !== null && !empty($output)) {
@@ -629,17 +683,17 @@ class FileSystemUtil
 
             // restore original permissions if it was executable
             if ($originalPerms !== null && ($originalPerms & 0111)) {
-                $chmodCommand = 'sudo chmod ' . sprintf('%o', $originalPerms & 0777) . ' ' . escapeshellarg($path);
+                $chmodCommand = $sudoPath . 'chmod ' . sprintf('%o', $originalPerms & 0777) . ' ' . escapeshellarg($path);
                 shell_exec($chmodCommand);
             } elseif ($isShellScript) {
                 // make shell scripts executable
-                $chmodCommand = 'sudo chmod +x ' . escapeshellarg($path);
+                $chmodCommand = $sudoPath . 'chmod +x ' . escapeshellarg($path);
                 shell_exec($chmodCommand);
             }
 
             // restore original owner and group
             if ($fileOwner !== null && $fileGroup !== null) {
-                $chownCommand = 'sudo chown ' . $fileOwner . ':' . $fileGroup . ' ' . escapeshellarg($path);
+                $chownCommand = $sudoPath . 'chown ' . $fileOwner . ':' . $fileGroup . ' ' . escapeshellarg($path);
                 shell_exec($chownCommand);
             }
 
@@ -669,6 +723,8 @@ class FileSystemUtil
      */
     public function isFileEditable(string $path): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         // check if file exists
         if (!file_exists($path)) {
             return false;
@@ -680,7 +736,7 @@ class FileSystemUtil
         }
 
         // special case for shell scripts - allow editing
-        $fileInfo = exec('sudo file ' . escapeshellarg($path));
+        $fileInfo = exec($sudoPath . 'file ' . escapeshellarg($path));
         if ($fileInfo === false) {
             return false;
         }
@@ -694,7 +750,7 @@ class FileSystemUtil
         }
 
         // get MIME type using the file command
-        $mimeType = shell_exec("sudo file --mime-type -b " . escapeshellarg($path));
+        $mimeType = shell_exec("$sudoPath file --mime-type -b " . escapeshellarg($path));
 
         // check if MIME type is detected
         if (!$mimeType) {
@@ -705,21 +761,12 @@ class FileSystemUtil
         $mimeType = trim($mimeType);
 
         // check if file is a media file
-        if (
-            str_starts_with($mimeType, 'image/') ||
-            str_starts_with($mimeType, 'video/') ||
-            str_starts_with($mimeType, 'audio/')
-        ) {
+        if (str_starts_with($mimeType, 'image/') || str_starts_with($mimeType, 'video/') || str_starts_with($mimeType, 'audio/')) {
             return false;
         }
 
         // check if file is a binary file
-        if (
-            str_starts_with($mimeType, 'application/') &&
-            !str_contains($mimeType, 'text') &&
-            !str_contains($mimeType, 'json') &&
-            !str_contains($mimeType, 'xml')
-        ) {
+        if (str_starts_with($mimeType, 'application/') && !str_contains($mimeType, 'text') && !str_contains($mimeType, 'json') && !str_contains($mimeType, 'xml')) {
             return false;
         }
 
@@ -735,6 +782,8 @@ class FileSystemUtil
      */
     public function deleteFileOrDirectory(string $path): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             // check if path exists
             if (!$this->checkIfFileExist($path)) {
@@ -747,10 +796,10 @@ class FileSystemUtil
             // check if path is a directory
             if ($this->isPathDirectory($path)) {
                 // always use rm -rf for directories (empty or not)
-                $command = 'sudo rm -rf ' . escapeshellarg($path);
+                $command = $sudoPath . 'rm -rf ' . escapeshellarg($path);
             } else {
                 // delete file using sudo
-                $command = 'sudo rm ' . escapeshellarg($path);
+                $command = $sudoPath . 'rm ' . escapeshellarg($path);
             }
 
             // execute command
@@ -783,6 +832,8 @@ class FileSystemUtil
      */
     public function renameFileOrDirectory(string $oldPath, string $newPath): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             // check if old path exists
             if (!$this->checkIfFileExist($oldPath)) {
@@ -798,7 +849,7 @@ class FileSystemUtil
             }
 
             // rename file or directory using sudo
-            $command = 'sudo mv ' . escapeshellarg($oldPath) . ' ' . escapeshellarg($newPath);
+            $command = $sudoPath . 'mv ' . escapeshellarg($oldPath) . ' ' . escapeshellarg($newPath);
             $output = shell_exec($command);
 
             // check if command was successful
@@ -828,6 +879,8 @@ class FileSystemUtil
      */
     public function createDirectory(string $path, ?int $mode = null): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             // check if path already exists
             if (file_exists($path)) {
@@ -838,7 +891,7 @@ class FileSystemUtil
             }
 
             // build sudo command (mkdir -p [-m <mode>] <path>)
-            $cmd = 'sudo mkdir -p ';
+            $cmd = $sudoPath . 'mkdir -p ';
 
             if ($mode !== null) {
                 // ensure mode is e.g. 0755, 0770 … convert to octal string
@@ -872,6 +925,8 @@ class FileSystemUtil
      */
     public function getFullFileContent(string $path): string
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             // check if path is directory
             if ($this->isPathDirectory($path) || is_link($path)) {
@@ -882,7 +937,7 @@ class FileSystemUtil
             }
 
             // get file content using cat
-            $fileContent = shell_exec('sudo cat ' . escapeshellarg($path));
+            $fileContent = shell_exec($sudoPath . 'cat ' . escapeshellarg($path));
 
             // check if content was retrieved
             if ($fileContent === null || $fileContent === false) {
@@ -911,14 +966,20 @@ class FileSystemUtil
      */
     public function calculateDirectorySize(string $path): int
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             // check if path exists and is a directory
             if (!$this->checkIfFileExist($path) || !$this->isPathDirectory($path)) {
                 return 0;
             }
 
-            // use du command to get directory size
-            $command = 'sudo du -sb ' . escapeshellarg($path) . ' 2>&1';
+            // use du command to get directory size (BSD du has no -b flag, use -sk)
+            if ($this->appUtil->isHostRunningOnFreeBSD()) {
+                $command = $sudoPath . 'du -sk ' . escapeshellarg($path) . ' 2>&1';
+            } else {
+                $command = $sudoPath . 'du -sb ' . escapeshellarg($path) . ' 2>&1';
+            }
             $output = shell_exec($command);
 
             // check if output is empty or not set
@@ -928,7 +989,9 @@ class FileSystemUtil
 
             // parse output to get the size
             if (preg_match('/^(\d+)\s+/', $output, $matches)) {
-                return (int)$matches[1];
+                // BSD du reports size in 1024-byte blocks
+                $size = (int)$matches[1];
+                return $this->appUtil->isHostRunningOnFreeBSD() ? $size * 1024 : $size;
             }
 
             return 0;
@@ -973,6 +1036,8 @@ class FileSystemUtil
      */
     public function moveFileOrDirectory(string $sourcePath, string $destinationPath): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             // validate source path
             if (!$this->checkIfFileExist($sourcePath)) {
@@ -1015,17 +1080,12 @@ class FileSystemUtil
             }
 
             // build sudo command
-            $cmd = sprintf(
-                'sudo mv %s %s 2>&1',
-                escapeshellarg($sourcePath),
-                escapeshellarg($newPath)
-            );
-
+            $cmd = sprintf($sudoPath . 'mv %s %s 2>&1', escapeshellarg($sourcePath), escapeshellarg($newPath));
             $output = (string) shell_exec($cmd);
 
             // any output from sudo mv means error
             if (trim($output) !== '') {
-                throw new Exception('sudo mv error: ' . $output);
+                throw new Exception('mv error: ' . $output);
             }
 
             return true;
@@ -1048,13 +1108,15 @@ class FileSystemUtil
      */
     public function isShellScript(string $path): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         // check if path is directory
         if ($this->isPathDirectory($path) || $this->checkIfFileIsSymlink($path)) {
             return false;
         }
 
         // get file info
-        $fileInfo = exec('sudo file ' . escapeshellarg($path));
+        $fileInfo = exec($sudoPath . 'file ' . escapeshellarg($path));
 
         // check if file info is set
         if (!$fileInfo) {
@@ -1081,7 +1143,8 @@ class FileSystemUtil
      */
     public function getDirname(string $path): string
     {
-        $out = shell_exec('sudo dirname ' . escapeshellarg($path));
+        $sudoPath = $this->appUtil->getSudoPath();
+        $out = shell_exec($sudoPath . 'dirname ' . escapeshellarg($path));
 
         // check if command returned null
         if ($out === null || $out === false) {
@@ -1100,7 +1163,8 @@ class FileSystemUtil
      */
     public function makeScriptExecutable(string $filePath): bool
     {
-        $chmodCommand = 'sudo chmod +x ' . escapeshellarg($filePath);
+        $sudoPath = $this->appUtil->getSudoPath();
+        $chmodCommand = $sudoPath . 'chmod +x ' . escapeshellarg($filePath);
         $out = shell_exec($chmodCommand);
 
         // check if command returned null
@@ -1120,7 +1184,9 @@ class FileSystemUtil
      */
     public function getMtime(string $path): int
     {
-        $mtime = shell_exec('sudo stat -c %Y ' . escapeshellarg($path));
+        $sudoPath = $this->appUtil->getSudoPath();
+        $statFormat = $this->appUtil->isHostRunningOnFreeBSD() ? '-f %m' : '-c %Y';
+        $mtime = shell_exec($sudoPath . 'stat ' . $statFormat . ' ' . escapeshellarg($path));
         return (int) $mtime;
     }
 
@@ -1133,7 +1199,8 @@ class FileSystemUtil
      */
     public function getBasename(string $path): string
     {
-        $out = shell_exec('sudo basename ' . escapeshellarg($path));
+        $sudoPath = $this->appUtil->getSudoPath();
+        $out = shell_exec($sudoPath . 'basename ' . escapeshellarg($path));
 
         // check if command returned null
         if ($out === null || $out === false) {
@@ -1152,7 +1219,9 @@ class FileSystemUtil
      */
     public function getFileSize(string $path): int
     {
-        $fileSize = shell_exec('sudo stat -c %s ' . escapeshellarg($path));
+        $sudoPath = $this->appUtil->getSudoPath();
+        $statFormat = $this->appUtil->isHostRunningOnFreeBSD() ? '-f %z' : '-c %s';
+        $fileSize = shell_exec($sudoPath . 'stat ' . $statFormat . ' ' . escapeshellarg($path));
         return (int) $fileSize;
     }
 }

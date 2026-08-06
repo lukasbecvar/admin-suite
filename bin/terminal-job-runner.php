@@ -142,10 +142,34 @@ final class TerminalJobRunner
 
         // check if sudo user is empty
         if ($sudoUser === '') {
-            return sprintf('bash -lc %s', $escapedCommand);
+            return sprintf('%s -lc %s', $this->getLoginShell(), $escapedCommand);
         }
 
-        return sprintf('sudo -u %s bash -lc %s', escapeshellarg($sudoUser), $escapedCommand);
+        return sprintf('%s -u %s %s -lc %s', $this->getSudoPath(), escapeshellarg($sudoUser), $this->getLoginShell(), $escapedCommand);
+    }
+
+    /**
+     * Resolve login shell binary used to execute terminal commands
+     *
+     * FreeBSD does not ship bash by default, use the always available sh there
+     *
+     * @return string The login shell binary
+     */
+    private function getLoginShell(): string
+    {
+        return PHP_OS_FAMILY === 'BSD' ? 'sh' : 'bash';
+    }
+
+    /**
+     * Resolve sudo binary path
+     *
+     * /usr/local/bin is not in the web user PATH on FreeBSD, use absolute path there
+     *
+     * @return string The sudo binary path
+     */
+    private function getSudoPath(): string
+    {
+        return PHP_OS_FAMILY === 'BSD' ? '/usr/local/bin/sudo' : 'sudo';
     }
 
     /**

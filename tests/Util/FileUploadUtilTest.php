@@ -2,6 +2,7 @@
 
 namespace App\Tests\Util;
 
+use App\Util\AppUtil;
 use App\Util\FileUploadUtil;
 use App\Util\FileSystemUtil;
 use App\Manager\ErrorManager;
@@ -22,15 +23,17 @@ class FileUploadUtilTest extends TestCase
 {
     private string $tempDir;
     private string $secondTempDir;
+    private AppUtil|MockObject $appUtil;
     private FileUploadUtil $fileUploadUtil;
     private ErrorManager|MockObject $errorManager;
     private FileSystemUtil|MockObject $fileSystemUtil;
 
     protected function setUp(): void
     {
+        $this->appUtil = $this->createMock(AppUtil::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
         $this->fileSystemUtil = $this->createMock(FileSystemUtil::class);
-        $this->fileUploadUtil = new FileUploadUtil($this->errorManager, $this->fileSystemUtil);
+        $this->fileUploadUtil = new FileUploadUtil($this->appUtil, $this->errorManager, $this->fileSystemUtil);
 
         // create temporary directories for tests
         $this->tempDir = sys_get_temp_dir() . '/file_upload_test_' . uniqid();

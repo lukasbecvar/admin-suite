@@ -77,12 +77,18 @@ class ServiceManager
 
         $command = null;
 
-        // check if action is related to ufw
-        if ($serviceName == 'ufw') {
-            $command = 'sudo ufw ' . $action;
+        // check if system is running on FreeBSD
+        if ($this->appUtil->isHostRunningOnFreeBSD()) {
+            // build action command for FreeBSD service command /usr/sbin is not in the web user PATH, use absolute path
+            $command = $this->appUtil->getSudoPath() . '/usr/sbin/service ' . $serviceName . ' ' . $action;
         } else {
-            // build action command
-            $command = 'sudo systemctl ' . $action . ' ' . $serviceName;
+            // check if action is related to ufw
+            if ($serviceName == 'ufw') {
+                $command = 'sudo ufw ' . $action;
+            } else {
+                // build action command
+                $command = 'sudo systemctl ' . $action . ' ' . $serviceName;
+            }
         }
 
         /** @var \App\Entity\User $user logged user */
@@ -109,6 +115,17 @@ class ServiceManager
     public function isServiceRunning(string $service): bool
     {
         try {
+            // check if system is running on FreeBSD
+            if ($this->appUtil->isHostRunningOnFreeBSD()) {
+                // execute FreeBSD service status command (exit code indicates running state)
+                // /usr/sbin is not in the web user PATH, use absolute path
+                // sudo is required because rc.subr check_pidfile() uses kill -0,
+                // which fails with EPERM when the service runs under a different user
+                $command = $this->appUtil->getSudoPath() . '/usr/sbin/service ' . $service . ' status';
+                exec($command, $output, $resultCode);
+                return $resultCode === 0;
+            }
+
             $output = shell_exec('systemctl is-active ' . $service);
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -162,6 +179,11 @@ class ServiceManager
      */
     public function isUfwRunning(): bool
     {
+        // check if system is running on FreeBSD
+        if ($this->appUtil->isHostRunningOnFreeBSD()) {
+            return false;
+        }
+
         try {
             // execute cmd
             $output = shell_exec('sudo ufw status');

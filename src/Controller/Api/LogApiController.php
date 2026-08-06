@@ -172,10 +172,45 @@ class LogApiController extends AbstractController
 
         // journalctl command execute to get logs
         try {
-            $command = "sudo journalctl --since '$lastTimestamp' -o short-iso | grep -v 'COMMAND=/usr/bin/journalctl' | grep -v 'pam_unix(sudo:session)'";
-            $output = shell_exec($command);
-            if ($output == false) {
-                $output = '';
+            // FreeBSD does not ship journalctl, read /var/log/messages incrementally
+            if ($this->appUtil->isHostRunningOnFreeBSD()) {
+                $messagesLog = '/var/log/messages';
+                $sudoPath = $this->appUtil->getSudoPath();
+
+                // cache key for last read byte offset
+                $sizeCacheKey = 'last_log_size_' . substr(md5($sessionId), 0, 8);
+                $sizeCacheItem = $this->cacheUtil->getValue($sizeCacheKey);
+                $lastSize = (int) $sizeCacheItem->get();
+                $currentSize = (int) @filesize($messagesLog);
+
+                // read last lines on first poll or when the log was rotated
+                if ($lastSize <= 0 || $currentSize < $lastSize) {
+                    $command = $sudoPath . '/usr/bin/tail -n 50 ' . $messagesLog;
+                } else {
+                    $command = $sudoPath . '/usr/bin/tail -c +' . ($lastSize + 1) . ' ' . $messagesLog;
+                }
+
+                $rawOutput = shell_exec($command);
+                if ($rawOutput == false) {
+                    $rawOutput = '';
+                }
+
+                // convert syslog lines to short-iso format
+                $isoLines = [];
+                foreach (explode("\n", $rawOutput) as $line) {
+                    $isoLines[] = $this->appUtil->formatSyslogLineToIso($line);
+                }
+                $output = implode("\n", $isoLines);
+
+                // store current size for next poll
+                $this->cacheUtil->deleteValue($sizeCacheKey);
+                $this->cacheUtil->setValue($sizeCacheKey, (string) $currentSize, 30);
+            } else {
+                $command = "sudo journalctl --since '$lastTimestamp' -o short-iso | grep -v 'COMMAND=/usr/bin/journalctl' | grep -v 'pam_unix(sudo:session)'";
+                $output = shell_exec($command);
+                if ($output == false) {
+                    $output = '';
+                }
             }
         } catch (Exception $e) {
             $this->errorManager->handleError(

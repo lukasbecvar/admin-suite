@@ -10,13 +10,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
- * Class LinuxCheckMiddleware
+ * Class SystemCheckMiddleware
  *
- * Middleware for check if website is running on linux server
+ * Middleware for check if website is running on supported operating system
  *
  * @package App\Middleware
  */
-class LinuxCheckMiddleware
+class SystemCheckMiddleware
 {
     private AppUtil $appUtil;
     private ServerUtil $serverUtil;
@@ -36,7 +36,7 @@ class LinuxCheckMiddleware
     }
 
     /**
-     * Check if system is linux
+     * Check if system is supported
      *
      * @param RequestEvent $event The request event
      *
@@ -45,15 +45,15 @@ class LinuxCheckMiddleware
     public function onKernelRequest(RequestEvent $event): void
     {
         // check if system is linux
-        if (!$this->serverUtil->isSystemLinux()) {
+        if (!$this->serverUtil->isSystemSupported()) {
             // handle debug mode exception
             if ($this->appUtil->isDevMode()) {
                 $this->errorManager->handleError(
-                    message: 'this system is only for linux.',
+                    message: 'This system is not supported!',
                     code: Response::HTTP_NOT_IMPLEMENTED
                 );
             } else {
-                $this->logger->error('this system can only be used on linux');
+                $this->logger->error('This system is not supported!');
             }
 
             // return error response

@@ -2,6 +2,7 @@
 
 namespace App\Tests\Util;
 
+use App\Util\AppUtil;
 use App\Util\FileSystemUtil;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(FileSystemUtil::class)]
 class FileSystemUtilTest extends TestCase
 {
+    private AppUtil $appUtil;
     private FileSystemUtil $fileSystemUtil;
     private ErrorManager $errorManager;
 
@@ -27,8 +29,9 @@ class FileSystemUtilTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->appUtil = $this->createMock(AppUtil::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
-        $this->fileSystemUtil = new FileSystemUtil($this->errorManager);
+        $this->fileSystemUtil = new FileSystemUtil($this->appUtil, $this->errorManager);
     }
 
     /**

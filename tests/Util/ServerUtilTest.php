@@ -156,31 +156,17 @@ class ServerUtilTest extends TestCase
     }
 
     /**
-     * Test check is system linux
+     * Test check is system supported
      *
      * @return void
      */
-    public function testCheckIsSystemLinux(): void
+    public function testCheckIsSystemSupported(): void
     {
         // call tested method
-        $result = $this->serverUtil->isSystemLinux();
+        $result = $this->serverUtil->isSystemSupported();
 
         // assert result
         $this->assertIsBool($result);
-    }
-
-    /**
-     * Test check is system linux
-     *
-     * @return void
-     */
-    public function testIsSystemLinux(): void
-    {
-        // call tested method
-        $isLinux = $this->serverUtil->isSystemLinux();
-
-        // assert that the result is a boolean value
-        $this->assertIsBool($isLinux);
     }
 
     /**

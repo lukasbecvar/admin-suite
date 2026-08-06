@@ -32,7 +32,8 @@ class AppUtilExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('isFeatureFlagDisabled', [$this->appUtil, 'isFeatureFlagDisabled'])
+            new TwigFunction('isFeatureFlagDisabled', [$this->appUtil, 'isFeatureFlagDisabled']),
+            new TwigFunction('isHostRunningOnFreeBSD', [$this->appUtil, 'isHostRunningOnFreeBSD'])
         ];
     }
 }

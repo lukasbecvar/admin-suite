@@ -16,11 +16,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class FileUploadUtil
 {
+    private AppUtil $appUtil;
     private ErrorManager $errorManager;
     private FileSystemUtil $fileSystemUtil;
 
-    public function __construct(ErrorManager $errorManager, FileSystemUtil $fileSystemUtil)
+    public function __construct(AppUtil $appUtil, ErrorManager $errorManager, FileSystemUtil $fileSystemUtil)
     {
+        $this->appUtil = $appUtil;
         $this->errorManager = $errorManager;
         $this->fileSystemUtil = $fileSystemUtil;
     }
@@ -36,6 +38,8 @@ class FileUploadUtil
      */
     public function combineChunks(string $tempDir, string $targetPath, int $totalChunks): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             // create temporary file for combining chunks
             $tempFile = tempnam(sys_get_temp_dir(), 'admin_suite_combine_');
@@ -83,7 +87,7 @@ class FileUploadUtil
             fclose($outputHandle);
 
             // move combined file to target location using sudo
-            $command = 'sudo mv ' . escapeshellarg($tempFile) . ' ' . escapeshellarg($targetPath);
+            $command = $sudoPath . 'mv ' . escapeshellarg($tempFile) . ' ' . escapeshellarg($targetPath);
             $output = shell_exec($command);
 
             // check if move was successful
@@ -110,12 +114,14 @@ class FileUploadUtil
      */
     public function saveUploadedChunk(UploadedFile $file, string $targetDir, string $targetFilename, bool $useSudo = false): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             // ensure target dir exists
             if (!is_dir($targetDir)) {
                 if ($useSudo) {
-                    shell_exec('sudo mkdir -p ' . escapeshellarg($targetDir));
-                    shell_exec('sudo chown www-data:www-data ' . escapeshellarg($targetDir));
+                    shell_exec($sudoPath . 'mkdir -p ' . escapeshellarg($targetDir));
+                    shell_exec($sudoPath . 'chown www-data:www-data ' . escapeshellarg($targetDir));
                 } else {
                     mkdir($targetDir, 0755, true);
                 }
@@ -129,15 +135,15 @@ class FileUploadUtil
 
             if ($useSudo) {
                 // sudo mv tmpfile finalfile
-                $cmd = 'sudo mv ' . escapeshellarg($tmpPath) . ' ' . escapeshellarg($finalPath) . ' 2>&1';
+                $cmd = $sudoPath . 'mv ' . escapeshellarg($tmpPath) . ' ' . escapeshellarg($finalPath) . ' 2>&1';
                 $out = (string) shell_exec($cmd);
 
                 if (trim($out) !== '') {
-                    throw new Exception("sudo mv error: " . $out);
+                    throw new Exception("mv error: " . $out);
                 }
 
                 // set readable perms
-                shell_exec('sudo chmod 0644 ' . escapeshellarg($finalPath));
+                shell_exec($sudoPath . 'chmod 0644 ' . escapeshellarg($finalPath));
             } else {
                 if (!@rename($tmpPath, $finalPath)) {
                     throw new Exception("rename() failed");
@@ -165,6 +171,8 @@ class FileUploadUtil
      */
     public function listChunks(string $tempDir, string $prefix = 'chunk_', bool $useSudo = false): array
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             if (!$useSudo) {
                 if (!is_dir($tempDir)) {
@@ -189,10 +197,10 @@ class FileUploadUtil
             }
 
             // find chunks using sudo
-            $cmd = 'sudo find ' . escapeshellarg($tempDir) . ' -maxdepth 1 -type f -name ' . escapeshellarg($prefix . '*') . ' 2>&1';
+            $cmd = $sudoPath . 'find ' . escapeshellarg($tempDir) . ' -maxdepth 1 -type f -name ' . escapeshellarg($prefix . '*') . ' 2>&1';
             $output = shell_exec($cmd);
             if ($output === null || $output === false) {
-                throw new Exception("sudo find returned null");
+                throw new Exception("find returned null");
             }
 
             // split output to lines
@@ -219,14 +227,16 @@ class FileUploadUtil
      */
     public function cleanupTempDirectory(string $tempDir): void
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             // use sudo rm -rf to remove all files and the directory itself
-            $cmd = 'sudo rm -rf ' . escapeshellarg($tempDir) . ' 2>&1';
+            $cmd = $sudoPath . 'rm -rf ' . escapeshellarg($tempDir) . ' 2>&1';
             $output = (string) shell_exec($cmd);
 
             // if rm returned error output, log it
             if (trim($output) !== '') {
-                throw new Exception('sudo rm -rf failed: ' . $output);
+                throw new Exception('rm -rf failed: ' . $output);
             }
         } catch (Exception $e) {
             $this->errorManager->handleError(
@@ -247,6 +257,8 @@ class FileUploadUtil
      */
     public function streamFileRange(string $path, int $start, int $length): void
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         try {
             // prevent any php output buffering
             if (ob_get_level()) {
@@ -254,7 +266,7 @@ class FileUploadUtil
             }
 
             // build dd command
-            $cmd = sprintf('sudo dd if=%s bs=1 skip=%d count=%d 2>/dev/null', escapeshellarg($path), $start, $length);
+            $cmd = sprintf($sudoPath . 'dd if=%s bs=1 skip=%d count=%d 2>/dev/null', escapeshellarg($path), $start, $length);
 
             // open a process handle
             $process = popen($cmd, 'rb');

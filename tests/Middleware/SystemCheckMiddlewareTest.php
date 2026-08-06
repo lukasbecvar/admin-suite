@@ -7,23 +7,23 @@ use App\Util\ServerUtil;
 use Psr\Log\LoggerInterface;
 use App\Manager\ErrorManager;
 use PHPUnit\Framework\TestCase;
-use App\Middleware\LinuxCheckMiddleware;
+use App\Middleware\SystemCheckMiddleware;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
- * Class LinuxCheckMiddlewareTest
+ * Class SystemCheckMiddlewareTest
  *
- * Test cases for linux check middleware
+ * Test cases for system check middleware
  *
  * @package App\Tests\Middleware
  */
-#[CoversClass(LinuxCheckMiddleware::class)]
-class LinuxCheckMiddlewareTest extends TestCase
+#[CoversClass(SystemCheckMiddleware::class)]
+class SystemCheckMiddlewareTest extends TestCase
 {
-    private LinuxCheckMiddleware $middleware;
+    private SystemCheckMiddleware $middleware;
     private AppUtil & MockObject $appUtilMock;
     private ServerUtil & MockObject $serverUtilMock;
     private LoggerInterface & MockObject $loggerMock;
@@ -38,7 +38,7 @@ class LinuxCheckMiddlewareTest extends TestCase
         $this->errorManagerMock = $this->createMock(ErrorManager::class);
 
         // create middleware instance
-        $this->middleware = new LinuxCheckMiddleware(
+        $this->middleware = new SystemCheckMiddleware(
             $this->appUtilMock,
             $this->serverUtilMock,
             $this->loggerMock,
@@ -47,14 +47,14 @@ class LinuxCheckMiddlewareTest extends TestCase
     }
 
     /**
-     * Test request when host system is linux
+     * Test request when host system is supported
      *
      * @return void
      */
-    public function testRequestWhenHostSystemIsLinux(): void
+    public function testRequestWhenHostSystemIsSupported(): void
     {
-        // simulate system is linux
-        $this->serverUtilMock->expects($this->once())->method('isSystemLinux')->willReturn(true);
+        // simulate system is supported
+        $this->serverUtilMock->expects($this->once())->method('isSystemSupported')->willReturn(true);
 
         // mock request event
         /** @var RequestEvent & MockObject $eventMock */
@@ -66,25 +66,25 @@ class LinuxCheckMiddlewareTest extends TestCase
     }
 
     /**
-     * Test request when host system is not linux
+     * Test request when host system is not supported
      *
      * @return void
      */
-    public function testRequestWhenHostSystemIsNotLinux(): void
+    public function testRequestWhenHostSystemIsNotSupported(): void
     {
         // mock request event
         /** @var RequestEvent & MockObject $eventMock */
         $eventMock = $this->createMock(RequestEvent::class);
 
-        // simulate system is not linux
-        $this->serverUtilMock->expects($this->once())->method('isSystemLinux')->willReturn(false);
+        // simulate system is not supported
+        $this->serverUtilMock->expects($this->once())->method('isSystemSupported')->willReturn(false);
 
         // simulate dev mode
         $this->appUtilMock->expects($this->once())->method('isDevMode')->willReturn(true);
 
         // expect error handler called
         $this->errorManagerMock->expects($this->once())->method('handleError')->with(
-            'this system is only for linux.',
+            'This system is not supported!',
             Response::HTTP_NOT_IMPLEMENTED
         );
 

@@ -211,8 +211,9 @@ class TerminalApiController extends AbstractController
 
             // regular command execution
             } else {
-                // execute command
-                exec('sudo -u ' . $this->sessionUtil->getSessionValue('terminal-user') . ' ' . $command, $output, $returnCode);
+                // execute command (sudo path resolved per OS, /usr/local/bin/sudo is not in web user PATH on FreeBSD)
+                $terminalUser = (string) $this->sessionUtil->getSessionValue('terminal-user', 'root');
+                exec($this->appUtil->getSudoPath() . '-u ' . $terminalUser . ' ' . $command, $output, $returnCode);
 
                 // check if command run valid
                 if ($returnCode !== 0) {

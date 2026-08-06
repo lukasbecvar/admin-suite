@@ -3,6 +3,7 @@
 namespace App\Util;
 
 use RuntimeException;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -87,7 +88,21 @@ class TerminalUtil
             return false;
         }
 
-        return file_exists(sprintf('/proc/%d', $pid));
+        // use posix_kill with signal 0 to check process existence (works on FreeBSD and Linux)
+        if (function_exists('posix_kill')) {
+            return @posix_kill($pid, 0);
+        }
+
+        // fallback: check procfs (Linux)
+        if (is_dir('/proc')) {
+            return file_exists(sprintf('/proc/%d', $pid));
+        }
+
+        // fallback: kill -0 via shell (FreeBSD has /bin/kill, /proc is not mounted by default)
+        $killProcess = Process::fromShellCommandline(sprintf('/bin/kill -0 %d 2>/dev/null', $pid));
+        $killProcess->run();
+
+        return $killProcess->isSuccessful();
     }
 
     /**
@@ -162,8 +177,20 @@ class TerminalUtil
             escapeshellarg($jobDirectory)
         );
 
-        $wrapped = sprintf('bash -lc %s', escapeshellarg($baseCommand));
+        $wrapped = sprintf('%s -lc %s', $this->resolveLoginShell(), escapeshellarg($baseCommand));
         return sprintf('%s > /dev/null 2>&1 & echo $!', $wrapped);
+    }
+
+    /**
+     * Resolve login shell used to spawn terminal job processes
+     *
+     * FreeBSD does not ship bash by default, use the always available sh there
+     *
+     * @return string The login shell binary
+     */
+    private function resolveLoginShell(): string
+    {
+        return $this->appUtil->isHostRunningOnFreeBSD() ? 'sh' : 'bash';
     }
 
     /**

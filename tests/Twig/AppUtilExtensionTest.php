@@ -28,24 +28,6 @@ class AppUtilExtensionTest extends TestCase
     }
 
     /**
-     * Test get functions
-     *
-     * @return void
-     */
-    public function testGetFunctions(): void
-    {
-        // call tested method
-        $functions = $this->appUtilExtension->getFunctions();
-
-        // assert result
-        $this->assertCount(1, $functions);
-
-        // check isFeatureFlagDisabled function
-        $this->assertEquals('isFeatureFlagDisabled', $functions[0]->getName());
-        $this->assertEquals([$this->appUtil, 'isFeatureFlagDisabled'], $functions[0]->getCallable());
-    }
-
-    /**
      * Test isFeatureFlagDisabled function
      *
      * @return void

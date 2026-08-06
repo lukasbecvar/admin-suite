@@ -44,14 +44,54 @@ class ServerUtil
      */
     public function getHostUptime(): string
     {
+        // get host uptime (freebsd)
+        if ($this->appUtil->isHostRunningOnFreeBSD()) {
+            $bootTime = $this->getFreeBsdBootTime();
+            if ($bootTime !== null) {
+                return $this->formatUptime(time() - $bootTime);
+            }
+            return 'error: Unable to read uptime.';
+        }
+
         // get host uptime
-        $uptimeString = file_get_contents('/proc/uptime');
+        $uptimeString = @file_get_contents('/proc/uptime');
         if ($uptimeString === false) {
             return 'error: Unable to read uptime.';
         }
 
-        $uptime = (int) strtok($uptimeString, '.');
+        return $this->formatUptime((int) strtok($uptimeString, '.'));
+    }
 
+    /**
+     * Get FreeBSD boot time (unix timestamp)
+     *
+     * @return int|null The boot timestamp, null if it cannot be read
+     */
+    private function getFreeBsdBootTime(): ?int
+    {
+        $output = shell_exec('sysctl -n kern.boottime');
+        if ($output === null || $output === false) {
+            return null;
+        }
+
+        // parse boot timestamp (format: { sec = <timestamp>, usec = <microseconds> } ...)
+        $matches = [];
+        if (preg_match('/sec\s*=\s*(\d+)/', $output, $matches)) {
+            return (int) $matches[1];
+        }
+
+        return null;
+    }
+
+    /**
+     * Format uptime in seconds to human readable string
+     *
+     * @param int $uptime The uptime in seconds
+     *
+     * @return string The formatted uptime
+     */
+    private function formatUptime(int $uptime): string
+    {
         // get uptime values
         $days = floor($uptime / (3600 * 24));
         $hours = floor(($uptime % (3600 * 24)) / 3600);
@@ -83,14 +123,11 @@ class ServerUtil
             if (!isset($end[$core])) {
                 continue;
             }
-
             $totalDiff = $end[$core]['total'] - $startStats['total'];
             $idleDiff = $end[$core]['idle'] - $startStats['idle'];
-
             if ($totalDiff <= 0) {
                 continue;
             }
-
             $usage = (1 - ($idleDiff / $totalDiff)) * 100;
             $usages[] = max(0, min($usage, 100));
         }
@@ -118,8 +155,45 @@ class ServerUtil
     private function readPerCoreCpuStats(): array
     {
         $stats = [];
-        $lines = @file('/proc/stat', FILE_IGNORE_NEW_LINES);
+        if ($this->appUtil->isHostRunningOnFreeBSD()) {
+            $output = [];
+            $returnVar = 0;
 
+            exec('sysctl -n kern.cp_times', $output, $returnVar);
+
+            if ($returnVar !== 0 || !isset($output[0])) {
+                return $stats;
+            }
+
+            $parts = preg_split('/\s+/', trim($output[0]));
+            if ($parts === false) {
+                return $stats;
+            }
+
+            $values = array_map('intval', $parts);
+            $cpuCountOutput = shell_exec('sysctl -n hw.ncpu');
+            $cpuCount = is_string($cpuCountOutput) ? (int) trim($cpuCountOutput) : 0;
+            for ($cpu = 0; $cpu < $cpuCount; $cpu++) {
+                $offset = $cpu * 5;
+                if (!isset($values[$offset + 4])) {
+                    continue;
+                }
+                $idle = $values[$offset + 4];
+                $stats['cpu' . $cpu] = [
+                    'idle' => $idle,
+                    'total' => $values[$offset]
+                        + $values[$offset + 1]
+                        + $values[$offset + 2]
+                        + $values[$offset + 3]
+                        + $idle,
+                ];
+            }
+
+            return $stats;
+        }
+
+        // linux
+        $lines = @file('/proc/stat', FILE_IGNORE_NEW_LINES);
         if ($lines === false) {
             return $stats;
         }
@@ -129,24 +203,24 @@ class ServerUtil
                 continue;
             }
 
-            // skip the aggregated "cpu " line to keep per-core data only
-            if (preg_match('/^cpu\\s+/', $line)) {
+            // Skip aggregated CPU line
+            if (preg_match('/^cpu\s+/', $line)) {
                 continue;
             }
 
-            $parts = preg_split('/\\s+/', trim($line));
-            if (!$parts || count($parts) < 5) {
+            $parts = preg_split('/\s+/', trim($line));
+            if ($parts === false || count($parts) < 5) {
                 continue;
             }
 
             $coreId = $parts[0];
-            $values = array_map('intval', array_slice($parts, 1));
-            $idle = $values[3] + ($values[4] ?? 0); // idle + iowait
-            $total = array_sum($values);
+            $cpuValues = array_slice($parts, 1);
+            $values = array_map('intval', $cpuValues);
+            $idle = $values[3] + ($values[4] ?? 0);
 
             $stats[$coreId] = [
                 'idle' => $idle,
-                'total' => $total
+                'total' => array_sum($values),
             ];
         }
 
@@ -160,6 +234,23 @@ class ServerUtil
      */
     public function getRamUsage(): array
     {
+        if ($this->appUtil->isHostRunningOnFreeBSD()) {
+            $memoryTotal = (float) shell_exec('sysctl -n hw.physmem') / 1073741824;
+            $freePages = (int) shell_exec('sysctl -n vm.stats.vm.v_free_count');
+            $inactivePages = (int) shell_exec('sysctl -n vm.stats.vm.v_inactive_count');
+            $cachePages = (int) shell_exec('sysctl -n vm.stats.vm.v_cache_count');
+            $pageSize = (int) shell_exec('sysctl -n vm.stats.vm.v_page_size');
+            $memoryAvailable = (($freePages + $inactivePages + $cachePages) * $pageSize) / 1073741824;
+            $memoryUsed = $memoryTotal - $memoryAvailable;
+
+            return [
+                'used'  => number_format($memoryUsed, 2),
+                'free'  => number_format($memoryAvailable, 2),
+                'total' => number_format($memoryTotal, 2)
+            ];
+        }
+
+        // linux fallback
         $memoryRaw = file_get_contents('/proc/meminfo');
         $memoryTotal = 0;
         $memoryAvailable = 0;
@@ -175,12 +266,11 @@ class ServerUtil
             }
         }
 
-        // calculate memory usage
         $memoryUsed = $memoryTotal - $memoryAvailable;
 
         return [
-            'used'  => number_format($memoryUsed, 2),
-            'free'  => number_format($memoryAvailable, 2),
+            'used' => number_format($memoryUsed, 2),
+            'free' => number_format($memoryAvailable, 2),
             'total' => number_format($memoryTotal, 2)
         ];
     }
@@ -262,14 +352,19 @@ class ServerUtil
     }
 
     /**
-     * Check if host system is linux
+     * Check if host running on supported operating system
      *
-     * @return bool True if the system is running Linux, false otherwise
+     * @return bool True if the system is running on supported operating system, false otherwise
      */
-    public function isSystemLinux(): bool
+    public function isSystemSupported(): bool
     {
         // check if system is linux
         if (strtolower(substr(PHP_OS, 0, 3)) == 'lin') {
+            return true;
+        }
+
+        // check if system is freebsd
+        if ($this->appUtil->isHostRunningOnFreeBSD()) {
             return true;
         }
 
@@ -284,7 +379,7 @@ class ServerUtil
     public function isWebUserSudo(): bool
     {
         // testing sudo exec
-        $exec = (string) exec('sudo echo test');
+        $exec = (string) exec($this->appUtil->getSudoPath() . 'echo test');
 
         // count output length
         $len = strlen($exec);
@@ -306,28 +401,34 @@ class ServerUtil
     {
         $distro = [];
 
-        // get kernel version and architecture
-        $kernelInfo = php_uname('r') . ' ' . php_uname('m');
-        $distro['kernel_version'] = php_uname('s') . ' ' . $kernelInfo;
+        // Kernel information
+        $distro['kernel_version'] = php_uname('s') . ' ' . php_uname('r') . ' ' . php_uname('m');
         $distro['kernel_arch'] = php_uname('m');
 
-        // get distribution name
-        $releaseFiles = glob('/etc/*-release');
-        $distroName = '';
+        if ($this->appUtil->isHostRunningOnFreeBSD()) {
+            $version = trim((string)shell_exec('freebsd-version'));
+            if ($version === '') {
+                $version = php_uname('r');
+            }
 
-        // check if release files exist
-        if (!is_iterable($releaseFiles)) {
+            // match the os-release format expected by the frontend (NAME="...")
+            $distro['operating_system'] = 'NAME="FreeBSD ' . $version . '"';
             return $distro;
         }
 
-        foreach ($releaseFiles as $file) {
-            $content = file_get_contents($file);
-            if ($content !== false) {
-                $distroName .= $content;
+        // linux
+        $releaseFiles = glob('/etc/*-release');
+        $distroName = '';
+        if (is_array($releaseFiles)) {
+            foreach ($releaseFiles as $file) {
+                $content = file_get_contents($file);
+
+                if ($content !== false) {
+                    $distroName .= $content;
+                }
             }
         }
         $distro['operating_system'] = trim($distroName);
-
         return $distro;
     }
 
@@ -338,7 +439,8 @@ class ServerUtil
      */
     public function getSystemInstallInfo(): string
     {
-        $command = "sudo tune2fs -l $(df / | tail -1 | awk '{print $1}') | grep 'Filesystem created'";
+        $sudoPath = $this->appUtil->getSudoPath();
+        $command = "$sudoPath tune2fs -l $(df / | tail -1 | awk '{print $1}') | grep 'Filesystem created'";
         $output = shell_exec($command);
 
         // check if output is empty
@@ -384,16 +486,17 @@ class ServerUtil
             }
         }
 
-        // get list of installed dpkg packages
+        // get list of installed packages (dpkg on linux, pkg on freebsd)
         if ($installedPackages === null) {
-            $output = shell_exec('dpkg -l');
+            $command = $this->appUtil->isHostRunningOnFreeBSD() ? 'pkg info' : 'dpkg -l';
+            $output = shell_exec($command);
             if ($output != null) {
                 $installedPackages = explode("\n", $output);
             }
         }
 
-        // check dpkg package
-        foreach ($installedPackages as $package) {
+        // check installed packages
+        foreach ($installedPackages ?? [] as $package) {
             if (stripos($package, $serviceName) !== false) {
                 return true;
             }
@@ -462,11 +565,9 @@ class ServerUtil
         $uploadUsagePercent = $this->calculateUsagePercent($txMbps, $maxSpeedMbps);
         $networkUsagePercent = $this->calculateBidirectionalUsagePercent($rxMbps, $txMbps, $maxSpeedMbps);
 
-        // ping destination (default Google DNS)
-        $pingCommand = sprintf(
-            "ping -c 1 %s 2>/dev/null | grep 'time=' | awk -F'time=' '{print $2}' | awk '{print $1}'",
-            escapeshellarg($pingToIp)
-        );
+        // ping destination (default Google DNS) FreeBSD has ping in /sbin which is not in the web user PATH
+        $pingBinary = $this->appUtil->isHostRunningOnFreeBSD() ? '/sbin/ping' : 'ping';
+        $pingCommand = sprintf("%s -c 1 %s 2>/dev/null | grep 'time=' | awk -F'time=' '{print $2}' | awk '{print $1}'", $pingBinary, escapeshellarg($pingToIp));
         $pingOutput = shell_exec($pingCommand);
         if (is_string($pingOutput)) {
             $ping = trim($pingOutput) ?: "N/A";
@@ -526,6 +627,28 @@ class ServerUtil
             return null;
         }
 
+        if ($this->appUtil->isHostRunningOnFreeBSD()) {
+            exec('netstat -ibn', $output, $returnVar);
+            if ($returnVar !== 0) {
+                return null;
+            }
+            foreach ($output as $line) {
+                $columns = preg_split('/\s+/', trim($line));
+                if (!is_array($columns) || count($columns) < 10) {
+                    continue;
+                }
+                if ($columns[0] !== $interface) {
+                    continue;
+                }
+                return [
+                    'rx' => (int) $columns[6], // Ibytes
+                    'tx' => (int) $columns[9], // Obytes
+                ];
+            }
+            return null;
+        }
+
+        // linux
         $lines = @file('/proc/net/dev', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         if ($lines === false) {
             return null;
@@ -547,8 +670,8 @@ class ServerUtil
             }
 
             return [
-                'rx' => (int) $columns[0],
-                'tx' => (int) $columns[8],
+                'rx' => (int)$columns[0],
+                'tx' => (int)$columns[8],
             ];
         }
 
@@ -640,16 +763,9 @@ class ServerUtil
 
         foreach ($apis as $api) {
             $ch = curl_init($api);
-            curl_setopt_array($ch, [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT => 2,
-                CURLOPT_CONNECTTIMEOUT => 2,
-                CURLOPT_FAILONERROR => true
-            ]);
-
+            curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 2, CURLOPT_CONNECTTIMEOUT => 2, CURLOPT_FAILONERROR => true]);
             $ip = (string) curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
             if ($ip && $httpCode === Response::HTTP_OK && filter_var($ip, FILTER_VALIDATE_IP)) {
                 $hostIp = trim($ip);
                 $this->cacheUtil->setValue('host-ip', $hostIp, 86400);
@@ -729,44 +845,74 @@ class ServerUtil
         $processes = [];
 
         try {
+            if ($this->appUtil->isHostRunningOnFreeBSD()) {
+                $output = [];
+                $returnVar = 0;
+                exec('ps -axo pid,user,command', $output, $returnVar);
+                if ($returnVar !== 0) {
+                    return [];
+                }
+
+                // skip header
+                array_shift($output);
+                foreach ($output as $line) {
+                    $line = trim($line);
+                    if ($line === '') {
+                        continue;
+                    }
+
+                    // split into PID, USER and COMMAND
+                    $parts = preg_split('/\s+/', $line, 3);
+
+                    if ($parts === false || count($parts) !== 3) {
+                        continue;
+                    }
+
+                    /** @var array{string, string, string} $parts */
+                    $processes[] = [
+                        'pid' => $parts[0],
+                        'user' => $parts[1],
+                        'process' => $parts[2],
+                    ];
+                }
+
+                return $processes;
+            }
+
+            // linux implementation
             $procDir = '/proc';
             $pids = array_filter(scandir($procDir), fn($pid) => is_numeric($pid));
-
             foreach ($pids as $pid) {
                 $statusFile = "$procDir/$pid/status";
                 $cmdlineFile = "$procDir/$pid/cmdline";
-
                 if (!is_readable($statusFile) || !is_readable($cmdlineFile)) {
                     continue;
                 }
 
-                // read status file to get user info
                 $statusContent = file_get_contents($statusFile);
                 if (!$statusContent) {
                     continue;
                 }
+
                 preg_match('/Uid:\s+(\d+)/', $statusContent, $matches);
                 $uid = $matches[1] ?? 'unknown';
+                $user = posix_getpwuid((int)$uid)['name'] ?? 'unknown';
 
-                // resolve UID to username
-                $user = posix_getpwuid((int) $uid)['name'] ?? 'unknown';
-
-                // read command line file to get process name
                 $cmdline = file_get_contents($cmdlineFile);
                 if (!$cmdline) {
                     continue;
                 }
-                $processName = str_replace("\0", ' ', trim($cmdline)) ?: '[unknown]';
 
+                $processName = str_replace("\0", ' ', trim($cmdline)) ?: '[unknown]';
                 $processes[] = [
                     'pid' => $pid,
                     'user' => $user,
-                    'process' => $processName
+                    'process' => $processName,
                 ];
             }
         } catch (Exception $e) {
             $this->errorManager->handleError(
-                message: 'error getting process list: ' . $e->getMessage(),
+                message: 'Error getting process list: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
@@ -900,6 +1046,10 @@ class ServerUtil
      */
     public function getUfwOpenPorts(): array
     {
+        if ($this->appUtil->isHostRunningOnFreeBSD()) {
+            return [];
+        }
+
         try {
             $output = shell_exec('sudo ufw status');
         } catch (Exception $e) {
@@ -1013,10 +1163,12 @@ class ServerUtil
      */
     public function checkIfDirectoryIsTooBig(string $directoryPath, int $limitGB = 20): bool
     {
+        $sudoPath = $this->appUtil->getSudoPath();
+
         // run command to get size in kilobytes
         $output = [];
         $returnVar = 0;
-        exec("sudo du -sk {$directoryPath} 2>/dev/null", $output, $returnVar);
+        exec("$sudoPath du -sk {$directoryPath} 2>/dev/null", $output, $returnVar);
 
         // check if command was successful
         if ($returnVar !== 0 || empty($output)) {
@@ -1055,6 +1207,7 @@ class ServerUtil
         $rebootRequired = $this->isRebootRequired();
         $updateAvailable = $this->isUpdateAvailable();
         $driveSpace = $this->getDriveUsagePercentage();
+        $sudoersPath = $this->appUtil->getSudoersPath();
         $lastMonitoringTime = $this->getLastMonitoringTime();
         $exceptionFilesList = $this->logManager->getExceptionFiles();
         $isLogsTooBig = $this->checkIfDirectoryIsTooBig('/var/log', 20);
@@ -1074,6 +1227,7 @@ class ServerUtil
             'isDevMode' => $isDevMode,
             'isSSLOnly' => $isSSLOnly,
             'driveSpace' => $driveSpace,
+            'sudoersPath' => $sudoersPath,
             'webUsername' => $webUsername,
             'isLogsTooBig' => $isLogsTooBig,
             'isWebUserSudo' => $isWebUserSudo,

@@ -70,8 +70,8 @@ services:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 9 }
 
-    # check if app is running on linux
-    App\Middleware\LinuxCheckMiddleware:
+    # check if app is running on supported operating system
+    App\Middleware\SystemCheckMiddleware:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 8 }
 

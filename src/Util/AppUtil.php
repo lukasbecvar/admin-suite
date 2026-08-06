@@ -26,6 +26,74 @@ class AppUtil
     }
 
     /**
+     * Check if host running on FreeBSD (server util wrapper)
+     *
+     * @return bool True if host running on FreeBSD, false otherwise
+     */
+    public function isHostRunningOnFreeBSD(): bool
+    {
+        return strtolower(substr(PHP_OS, 0, 3)) == 'fre';
+    }
+
+    /**
+     * Get the sudo command path for the current operating system
+     *
+     * @return string The sudo command with trailing space
+     */
+    public function getSudoPath(): string
+    {
+        static $sudoPath = null;
+        if ($sudoPath === null) {
+            $sudoPath = $this->isHostRunningOnFreeBSD() ? '/usr/local/bin/sudo ' : 'sudo ';
+        }
+        return $sudoPath;
+    }
+
+    /**
+     * Get the sudoers file path for the current operating system
+     *
+     * @return string The sudoers file path
+     */
+    public function getSudoersPath(): string
+    {
+        return $this->isHostRunningOnFreeBSD() ? '/usr/local/etc/sudoers' : '/etc/sudoers';
+    }
+
+    /**
+     * Convert FreeBSD syslog line (e.g. "Aug  6 19:17:42 host tag[123]: msg")
+     * to journalctl short-iso format (e.g. "2026-08-06T19:17:42+0200 host tag[123]: msg")
+     *
+     * @param string $line The syslog line
+     *
+     * @return string The converted line (unchanged when format does not match)
+     */
+    public function formatSyslogLineToIso(string $line): string
+    {
+        if (preg_match('/^(\w{3})\s{1,2}(\d{1,2})\s(\d{2}):(\d{2}):(\d{2})\s+(.+)$/', $line, $matches)) {
+            $months = [
+                'Jan' => 1, 'Feb' => 2, 'Mar' => 3, 'Apr' => 4, 'May' => 5, 'Jun' => 6,
+                'Jul' => 7, 'Aug' => 8, 'Sep' => 9, 'Oct' => 10, 'Nov' => 11, 'Dec' => 12
+            ];
+
+            if (isset($months[$matches[1]])) {
+                return sprintf(
+                    '%04d-%02d-%02dT%02d:%02d:%02d%s %s',
+                    (int) date('Y'),
+                    $months[$matches[1]],
+                    (int) $matches[2],
+                    (int) $matches[3],
+                    (int) $matches[4],
+                    (int) $matches[5],
+                    date('O'),
+                    $matches[6]
+                );
+            }
+        }
+
+        return $line;
+    }
+
+    /**
      * Generate random key
      *
      * @param int $length The key length

@@ -397,8 +397,14 @@ class LogManager
      */
     public function getSshLoginsFromJournalctl(): array|null
     {
-        // build log get command
-        $cmd = 'sudo journalctl -u ssh --no-pager';
+        $sudoPath = $this->appUtil->getSudoPath();
+
+        // build log get command FreeBSD does not ship journalctl, ssh logins are logged to /var/log/auth.log there
+        if ($this->appUtil->isHostRunningOnFreeBSD()) {
+            $cmd = $sudoPath . '/usr/bin/grep Accepted /var/log/auth.log';
+        } else {
+            $cmd = $sudoPath . 'journalctl -u ssh --no-pager';
+        }
 
         // execute command
         try {
@@ -412,7 +418,7 @@ class LogManager
             $logins = [];
             foreach ($lines as $line) {
                 if (str_contains($line, 'Accepted')) {
-                    if (preg_match('/^(\w+\s+\d+\s+\d+:\d+:\d+)\s+(.*?)\s+sshd\[\d+\]:\s+Accepted\s+(\w+)\s+for\s+([\w\-]+)\s+from\s+([\d\.]+)\s+port\s+(\d+)/', $line, $matches)) {
+                    if (preg_match('/^(\w+\s+\d+\s+\d+:\d+:\d+)\s+([^\s]+)\s+sshd(?:-session)?\[\d+\]:\s+Accepted\s+([\w\-\/]+)\s+for\s+([\w\-]+)\s+from\s+([\d\.]+)\s+port\s+(\d+)/', $line, $matches)) {
                         $logins[] = [
                             'date'     => $matches[1],
                             'host'     => $matches[2],
